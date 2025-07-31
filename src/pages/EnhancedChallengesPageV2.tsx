@@ -17,6 +17,7 @@ import AdminCreateChallengeModal from '@/components/admin/AdminCreateChallengeMo
 import TrustScoreBadge from '@/components/TrustScoreBadge';
 import CompactStatCard from '@/components/challenges/CompactStatCard';
 import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
+import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
 
 import { toast } from 'sonner';
 import {
@@ -85,7 +86,10 @@ interface ChallengeStats {
 
 const EnhancedChallengesPageV2: React.FC = () => {
   const { user } = useAuth();
-  const { isDesktop, isMobile } = useResponsive();
+  const { isDesktop, isMobile, width } = useResponsive();
+  
+  // Debug log to check responsive state
+  console.log('Responsive state:', { isDesktop, isMobile, width });
   
   // Use the standardized hook
   const {
@@ -844,6 +848,9 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
   return (
     <>
+      {/* Debug Info - Remove in production */}
+      <ResponsiveDebugInfo />
+      
       {/* Responsive Layout Rendering */}
       {isDesktop ? <DesktopLayout /> : <MobileLayout />}
 
