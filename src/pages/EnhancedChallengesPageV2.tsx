@@ -14,6 +14,7 @@ import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
 import AdminCreateChallengeModal from '@/components/admin/AdminCreateChallengeModal';
 import TrustScoreBadge from '@/components/TrustScoreBadge';
+import SaboSystemTab from './challenges/components/tabs/SaboSystemTab';
 import { toast } from 'sonner';
 import {
   Plus,
@@ -650,7 +651,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
         {/* Challenges Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
+          <TabsList className="grid w-full grid-cols-4 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
             <TabsTrigger 
               value="my-challenges"
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
@@ -668,6 +669,12 @@ const EnhancedChallengesPageV2: React.FC = () => {
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
             >
               Thách đấu mở ({getFilteredChallenges(openChallenges).length})
+            </TabsTrigger>
+            <TabsTrigger 
+              value="sabo-system"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+            >
+              SABO System
             </TabsTrigger>
           </TabsList>
 
@@ -736,6 +743,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="sabo-system" className="space-y-6">
+            <SaboSystemTab />
           </TabsContent>
         </Tabs>
       </div>
