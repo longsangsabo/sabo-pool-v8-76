@@ -195,6 +195,49 @@
     transform: scale(1.05);
   }
 
+  /* Story reel styling */
+  .mobile-story-reel {
+    display: flex;
+    overflow-x: auto;
+    padding: 0 1rem;
+    gap: 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+  }
+
+  .mobile-story-reel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .story-item {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 80px;
+    transition: transform 0.2s ease;
+  }
+
+  .story-item:active {
+    transform: scale(0.95);
+  }
+
+  /* Feed optimizations */
+  .social-feed {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Touch feedback */
+  .mobile-nav-item:active,
+  .story-item:active,
+  .mobile-touch-feedback:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
