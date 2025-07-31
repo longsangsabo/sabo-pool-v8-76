@@ -2605,6 +2605,7 @@ export type Database = {
           matches_won: number | null
           physical_rewards: Json | null
           placement_type: string | null
+          position: number | null
           prize_amount: number | null
           spa_points_earned: number | null
           tournament_id: string
@@ -2622,6 +2623,7 @@ export type Database = {
           matches_won?: number | null
           physical_rewards?: Json | null
           placement_type?: string | null
+          position?: number | null
           prize_amount?: number | null
           spa_points_earned?: number | null
           tournament_id: string
@@ -2639,6 +2641,7 @@ export type Database = {
           matches_won?: number | null
           physical_rewards?: Json | null
           placement_type?: string | null
+          position?: number | null
           prize_amount?: number | null
           spa_points_earned?: number | null
           tournament_id?: string
