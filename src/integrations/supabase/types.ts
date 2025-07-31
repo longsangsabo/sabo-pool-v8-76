@@ -165,7 +165,7 @@ export type Database = {
           id: string
           is_open_challenge: boolean | null
           message: string | null
-          opponent_id: string
+          opponent_id: string | null
           race_to: number | null
           responded_at: string | null
           response_message: string | null
@@ -183,7 +183,7 @@ export type Database = {
           id?: string
           is_open_challenge?: boolean | null
           message?: string | null
-          opponent_id: string
+          opponent_id?: string | null
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
@@ -201,7 +201,7 @@ export type Database = {
           id?: string
           is_open_challenge?: boolean | null
           message?: string | null
-          opponent_id?: string
+          opponent_id?: string | null
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
@@ -1975,6 +1975,69 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      sabo_challenges: {
+        Row: {
+          accepted_at: string | null
+          challenger_final_score: number
+          challenger_id: string
+          created_at: string
+          expires_at: string
+          handicap_challenger: number
+          handicap_opponent: number
+          id: string
+          opponent_final_score: number
+          opponent_id: string
+          race_to: number
+          rack_history: Json
+          score_confirmation_timestamp: string | null
+          stake_amount: number
+          started_at: string | null
+          status: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          challenger_final_score?: number
+          challenger_id: string
+          created_at?: string
+          expires_at?: string
+          handicap_challenger?: number
+          handicap_opponent?: number
+          id?: string
+          opponent_final_score?: number
+          opponent_id: string
+          race_to?: number
+          rack_history?: Json
+          score_confirmation_timestamp?: string | null
+          stake_amount?: number
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          challenger_final_score?: number
+          challenger_id?: string
+          created_at?: string
+          expires_at?: string
+          handicap_challenger?: number
+          handicap_opponent?: number
+          id?: string
+          opponent_final_score?: number
+          opponent_id?: string
+          race_to?: number
+          rack_history?: Json
+          score_confirmation_timestamp?: string | null
+          stake_amount?: number
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: []
       }
       spa_points_log: {
         Row: {
@@ -4202,6 +4265,15 @@ export type Database = {
       }
       setup_semifinals_pairings: {
         Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      simulate_sabo_match_progress: {
+        Args: {
+          p_challenge_id: string
+          p_challenger_score: number
+          p_opponent_score: number
+          p_add_rack_result?: boolean
+        }
         Returns: Json
       }
       standardize_double_elimination_structure: {
