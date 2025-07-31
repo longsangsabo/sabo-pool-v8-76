@@ -842,10 +842,6 @@
     padding: 12px;
   }
 }
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   .fab-action {
     display: flex;
