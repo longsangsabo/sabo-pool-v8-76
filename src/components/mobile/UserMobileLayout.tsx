@@ -34,8 +34,8 @@ export const UserMobileLayout: React.FC<UserMobileLayoutProps> = ({
       />
 
       {/* Main Content with Social Feed Layout */}
-      <main className={`${showBottomNav ? 'pb-20' : 'pb-4'} pt-16`}>
-        <div className="social-feed">
+      <main className={`${showBottomNav ? 'pb-20' : 'pb-4'} pt-16 px-safe`}>
+        <div className="social-feed min-h-screen">
           {children}
         </div>
       </main>

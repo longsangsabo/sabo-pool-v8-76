@@ -151,6 +151,50 @@
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
+  /* Mobile safe areas */
+  .mobile-safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Mobile utility classes */
+  .px-safe {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Mobile navigation styling */
+  .mobile-nav-enhanced {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: hsl(var(--card));
+    border-top: 1px solid hsl(var(--border));
+    padding: calc(0.5rem + env(safe-area-inset-bottom)) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    z-index: 999;
+  }
+
+  .mobile-nav-item {
+    min-height: 44px;
+    min-width: 44px;
+    transition: all 0.2s ease;
+    border-radius: 0.5rem;
+  }
+
+  .mobile-nav-item:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-nav-item.active {
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    transform: scale(1.05);
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;

@@ -17,7 +17,7 @@ const UserMobileNavigation: React.FC = () => {
 
   return (
     <nav className="mobile-nav-enhanced">
-      <div className="flex justify-around items-center py-2 px-safe">
+      <div className="flex justify-around items-center py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path || 
@@ -28,13 +28,13 @@ const UserMobileNavigation: React.FC = () => {
               key={item.path}
               to={item.path}
               className={cn(
-                "mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 transition-colors",
+                "mobile-nav-item flex flex-col items-center gap-1 px-3 py-2",
                 isActive
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "active"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-6 w-6" />
               <span className="text-xs font-medium">{item.label}</span>
             </NavLink>
           );

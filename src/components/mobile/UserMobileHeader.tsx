@@ -23,7 +23,7 @@ const UserMobileHeader: React.FC<UserMobileHeaderProps> = ({
   const { user } = useAuth();
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-card border-b border-border px-4 py-3 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-card border-b border-border px-4 py-3 z-[1000] mobile-safe-area-top px-safe">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {onMenuClick && (
