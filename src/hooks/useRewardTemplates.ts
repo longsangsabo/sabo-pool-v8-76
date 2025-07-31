@@ -69,13 +69,20 @@ export const useRewardTemplates = () => {
         .eq('is_active', true);
 
       // Insert new template
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User must be authenticated to create templates');
+      }
+
       const templateData = {
         name: 'Default Reward Template',
         max_participants: 16,
         tournament_type: 'elimination',
         rank_category: 'all',
         reward_structure: rewards as any,
-        is_active: true
+        is_active: true,
+        created_by: user.id
       };
 
       const { data, error } = await supabase
