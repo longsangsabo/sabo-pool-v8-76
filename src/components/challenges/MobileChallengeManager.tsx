@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useChallenges } from '@/hooks/useChallenges';
 import { toast } from 'sonner';
-import { Calendar, Search, Trophy, Users, Zap } from 'lucide-react';
+import { Calendar, Search, Trophy, Users, Zap, RefreshCw } from 'lucide-react';
 import OpenChallengeCard from './OpenChallengeCard';
 import OngoingChallengeCard from './OngoingChallengeCard';
 import UpcomingChallengeCard from './UpcomingChallengeCard';
@@ -23,7 +23,8 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     loading,
     error,
     acceptChallenge,
-    declineChallenge
+    declineChallenge,
+    fetchChallenges
   } = useChallenges();
 
   // Convert challenge data to local format
@@ -44,7 +45,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     club: c.club || null,
   });
 
-  // Debug: Check what challenges we have
+  // Enhanced debug: Check what challenges we have with profile details
   console.log('🔍 [MobileChallengeManager] Detailed analysis:', {
     totalChallenges: challenges.length,
     currentUser: user?.id?.slice(-8),
@@ -58,34 +59,57 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
       otherUserOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user?.id).length
     },
     sampleChallenges: challenges.slice(0, 5).map(c => ({
-      id: c.id.slice(-8),
+      id: c.id?.slice(-8) || 'NO_ID',
       challenger_name: c.challenger_profile?.display_name || c.challenger_profile?.full_name || 'Unknown',
-      challenger_id: c.challenger_id?.slice(-8),
+      challenger_id: c.challenger_id?.slice(-8) || 'NO_CHALLENGER',
       opponent_id: c.opponent_id?.slice(-8) || 'NULL',
       status: c.status,
       isOpen: !c.opponent_id,
-      isMyChallenge: c.challenger_id === user?.id
+      isMyChallenge: c.challenger_id === user?.id,
+      hasProfile: !!c.challenger_profile,
+      profileData: c.challenger_profile ? {
+        name: c.challenger_profile.full_name,
+        display: c.challenger_profile.display_name,
+        rank: c.challenger_profile.verified_rank || c.challenger_profile.current_rank
+      } : null
     }))
   });
 
-  // Filter open challenges from other users
+  // Filter open challenges from other users with enhanced logging
   const openChallenges = challenges.filter(c => {
     const isOpen = !c.opponent_id && c.status === 'pending';
     const isNotMyChallenge = c.challenger_id !== user?.id;
-    return isOpen && isNotMyChallenge;
+    const shouldShow = isOpen && isNotMyChallenge;
+    
+    if (isOpen && !isNotMyChallenge) {
+      console.log('🔍 Filtering out my own challenge:', {
+        id: c.id?.slice(-8),
+        challenger: c.challenger_profile?.display_name || c.challenger_profile?.full_name,
+        isMyChallenge: c.challenger_id === user?.id
+      });
+    }
+    
+    return shouldShow;
   }).map(convertToLocalChallenge);
 
   console.log('✅ [MobileChallengeManager] Open challenges processing result:', {
     totalFiltered: openChallenges.length,
+    allOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending').length,
+    myOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id === user?.id).length,
+    othersOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user?.id).length,
     challenges: openChallenges.map(c => ({
       id: c.id?.slice(-8),
       challenger: c.challenger_profile?.display_name || c.challenger_profile?.full_name,
       betPoints: c.bet_points,
       raceTo: c.race_to,
       status: c.status,
-      hasProfile: !!c.challenger_profile
-    })),
-    rawOpenCount: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user?.id).length
+      hasProfile: !!c.challenger_profile,
+      profileComplete: c.challenger_profile ? {
+        hasName: !!(c.challenger_profile.full_name || c.challenger_profile.display_name),
+        hasAvatar: !!c.challenger_profile.avatar_url,
+        hasRank: !!(c.challenger_profile.verified_rank || c.challenger_profile.current_rank)
+      } : false
+    }))
   });
 
   // Get user's own open challenges
@@ -122,7 +146,20 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     myOpenCount: myOpenChallenges.length
   });
 
-  const [activeTab, setActiveTab] = useState('live');
+  const [activeTab, setActiveTab] = useState('find'); // Start with "find" tab to see open challenges
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await fetchChallenges();
+      toast.success('Đã làm mới dữ liệu thách đấu');
+    } catch (error) {
+      toast.error('Lỗi khi làm mới dữ liệu');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const joinOpenChallenge = async (challengeId: string) => {
     try {
@@ -192,18 +229,26 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
               <p className="text-sm text-gray-600">Tất cả thách đấu mở của người chơi khác</p>
             </div>
             {openChallenges.length > 0 ? (
-              openChallenges.map(challenge => (
-                <OpenChallengeCard
-                  key={challenge.id}
-                  challenge={challenge}
-                  onJoin={joinOpenChallenge}
-                  variant="compact"
-                />
-              ))
+              openChallenges.map(challenge => {
+                console.log('🎯 Rendering open challenge:', {
+                  id: challenge.id?.slice(-8),
+                  challenger: challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name,
+                  hasProfile: !!challenge.challenger_profile
+                });
+                return (
+                  <OpenChallengeCard
+                    key={challenge.id}
+                    challenge={challenge}
+                    onJoin={joinOpenChallenge}
+                    variant="compact"
+                  />
+                );
+              })
             ) : (
               <div className="text-center py-8 text-gray-500">
                 <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p>Không có thách đấu mở nào</p>
+                <p className="text-xs mt-2">Debug: Total challenges: {challenges.length}</p>
               </div>
             )}
           </div>
@@ -260,6 +305,19 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   return (
     <div className={`w-full ${className}`}>
       <div className="p-4">
+        {/* Header with refresh button */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">Thách Đấu</h2>
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing || loading}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Làm mới
+          </button>
+        </div>
+        
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="live" className="flex flex-col gap-1 p-3">

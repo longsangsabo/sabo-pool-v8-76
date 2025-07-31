@@ -14,7 +14,8 @@ interface OpenChallengeCardProps {
     challenge_type?: string;
     created_at: string;
     challenger_profile?: {
-      full_name: string;
+      full_name?: string;
+      display_name?: string;
       avatar_url?: string;
       current_rank?: string;
       verified_rank?: string;
@@ -77,7 +78,7 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
               </AvatarFallback>
             </Avatar>
             <div className={`${isCompact ? 'text-xs' : 'text-sm'} font-semibold truncate`}>
-              {challenge.challenger_profile?.full_name || 'Người thách đấu'}
+              {challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Người thách đấu'}
             </div>
             <div className={`${isCompact ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
               {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
