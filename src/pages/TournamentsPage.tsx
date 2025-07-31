@@ -98,7 +98,7 @@ const TournamentsPage = () => {
     }
     
     // Navigate to club management page tournaments tab (ClubTournamentManagement opens with create tab by default)
-    navigate('/club-dashboard#tournaments');
+    navigate('/club-management/tournaments');
   };
 
   const handleRegisterClub = () => {

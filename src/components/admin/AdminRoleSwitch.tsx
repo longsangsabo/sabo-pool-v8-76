@@ -13,7 +13,7 @@ export const AdminRoleSwitch: React.FC = () => {
   const { t } = useLanguage();
 
   const handleSwitchToClub = () => {
-    navigate('/club-dashboard');
+    navigate('/club-management');
   };
 
   // Only show if user has club owner privileges
