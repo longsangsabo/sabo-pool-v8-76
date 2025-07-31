@@ -41,8 +41,8 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({ collapsed = false, clubProfil
     {
       title: 'Thách đấu',
       icon: Swords,
-      href: '/club-management/challenges',
-      description: 'Quản lý thách đấu'
+      href: '/challenges',
+      description: 'Tham gia thách đấu'
     },
     {
       title: 'Xác thực hạng',
