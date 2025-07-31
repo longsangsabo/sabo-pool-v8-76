@@ -792,8 +792,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
   return (
     <>
-      {/* Debug Info - Remove in production */}
-      <ResponsiveDebugInfo />
+      {/* Debug Info - Only show on desktop in development */}
+      {isDesktop && process.env.NODE_ENV === 'development' && <ResponsiveDebugInfo />}
       
       {/* Responsive Layout Rendering */}
       {isDesktop ? <DesktopLayout /> : <MobileLayout />}
