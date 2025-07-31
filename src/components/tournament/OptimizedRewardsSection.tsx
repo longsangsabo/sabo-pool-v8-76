@@ -44,8 +44,39 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     refetch: refetchRewards
   } = useTournamentRewardsManager(tournamentId || '');
   
-  // Determine which rewards to use - prioritize database rewards if available
-  const activeRewards = tournamentId && dbRewards ? dbRewards : (currentRewards || rewards);
+  // Generate default rewards function
+  const generateDefaultRewards = (): TournamentRewards => {
+    // Generate simple default rewards for all positions
+    const positions = Array.from({ length: Math.min(maxParticipants, 16) }, (_, i) => {
+      const position = i + 1;
+      return {
+        position,
+        name: position === 1 ? 'Vô địch' : 
+              position === 2 ? 'Á quân' : 
+              position === 3 ? 'Hạng 3' : 
+              `Hạng ${position}`,
+        eloPoints: position <= 3 ? 100 - (position - 1) * 25 : 
+                  position <= 8 ? 25 : 10,
+        spaPoints: position <= 3 ? 1000 - (position - 1) * 200 : 
+                  position <= 8 ? 300 : 100,
+        cashPrize: 0,
+        items: position <= 3 ? ['Giấy chứng nhận'] : [],
+        isVisible: true
+      };
+    });
+
+    return {
+      totalPrize: 0,
+      showPrizes: false,
+      positions,
+      specialAwards: []
+    };
+  };
+  
+  // Determine which rewards to use - prioritize database rewards if available, fallback to default template
+  const activeRewards = tournamentId && dbRewards && dbRewards.positions.length > 0 
+    ? dbRewards 
+    : (currentRewards || rewards || generateDefaultRewards());
   
   // Update local state when props change
   useEffect(() => {
@@ -149,6 +180,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
       return '🎁';
     }).join(' ');
   };
+
 
   const generateTemplateRewards = (): TournamentRewards => {
     const positions = Array.from({ length: Math.min(maxParticipants, 16) }, (_, i) => i + 1);
@@ -501,39 +533,42 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                   </div>
                 ) : (
                   // Standard display format
-                  <div key={position.position} className="border rounded-lg p-4">
+                  <div key={positionNumber} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="font-bold text-primary">{position.position}</span>
+                          <span className="font-bold text-primary">{displayPosition.position}</span>
                         </div>
                         <div>
-                          <h4 className="font-semibold">{position.name}</h4>
-                          {displayRewards.showPrizes && position.cashPrize > 0 && (
+                          <h4 className="font-semibold">{displayPosition.name}</h4>
+                          {displayRewards.showPrizes && displayPosition.cashPrize > 0 && (
                             <p className="text-sm text-green-600 font-medium">
-                              {formatPrizeAmount(position.cashPrize)}
+                              {formatPrizeAmount(displayPosition.cashPrize)}
                             </p>
+                          )}
+                          {!position && (
+                            <p className="text-xs text-gray-400">Chưa có phần thưởng</p>
                           )}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="bg-blue-50 text-blue-700">
-                          {position.eloPoints} ELO
+                          {displayPosition.eloPoints} ELO
                         </Badge>
                         <Badge variant="secondary" className="bg-yellow-50 text-yellow-700">
-                          {position.spaPoints} SPA
+                          {displayPosition.spaPoints} SPA
                         </Badge>
                       </div>
                     </div>
                     
-                    {position.items?.length > 0 && (
+                    {displayPosition.items?.length > 0 && (
                       <div className="mt-2 space-y-1">
                         <div className="text-xs text-muted-foreground flex items-center gap-1">
                           <Gift className="w-3 h-3" />
                           Giải thưởng hiện vật:
                         </div>
                         <div className="flex flex-wrap gap-1">
-                          {position.items.map((item: string, index: number) => (
+                          {displayPosition.items.map((item: string, index: number) => (
                             <Badge key={index} variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
                               <Gift className="w-3 h-3 mr-1" />
                               {item}
