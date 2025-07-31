@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Search, Trophy, DollarSign, MapPin, Clock, Users, HelpCircle } from 'lucide-react';
+import { Search, Trophy, DollarSign, MapPin, Clock, Users, HelpCircle, Calculator } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { calculateSaboHandicap, type SaboRank, formatHandicapDisplay } from '@/utils/saboHandicap';
 import SaboInfoDialog from '@/components/sabo/SaboInfoDialog';
@@ -345,216 +345,277 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Trophy className="w-5 h-5" />
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-background via-background to-muted/20 border-0 shadow-2xl backdrop-blur-xl animate-scale-in">
+        <DialogHeader className="pb-6 border-b border-gradient-to-r from-transparent via-border to-transparent">
+          <DialogTitle className="flex items-center gap-3 text-xl font-semibold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+              <Trophy className="w-5 h-5 text-primary" />
+            </div>
             Tạo thách đấu mới
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Challenge Type Toggle */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
+        <div className="space-y-8 pt-2">
+          {/* Challenge Type Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-muted/30 to-muted/10 border border-border/50">
+              <Label className="flex items-center gap-3 text-base font-medium">
+                <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/20">
+                  <Users className="w-4 h-4 text-primary" />
+                </div>
                 Loại thách đấu
               </Label>
-              <div className="flex items-center gap-3">
-                <span className={`text-sm ${!isOpenChallenge ? 'font-medium' : 'text-gray-500'}`}>
+              <div className="flex items-center gap-4 bg-background/80 px-4 py-2 rounded-lg border border-border/50">
+                <span className={`text-sm transition-all duration-200 ${!isOpenChallenge ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>
                   Chọn đối thủ
                 </span>
                 <Switch
                   checked={isOpenChallenge}
                   onCheckedChange={setIsOpenChallenge}
+                  className="data-[state=checked]:bg-green-500"
                 />
-                <span className={`text-sm ${isOpenChallenge ? 'font-medium' : 'text-gray-500'}`}>
+                <span className={`text-sm transition-all duration-200 ${isOpenChallenge ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>
                   Thách đấu mở
                 </span>
               </div>
             </div>
             
             {/* SABO Mode Toggle */}
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-blue-100 text-blue-800">SABO</Badge>
-                <span className="text-sm font-medium">Chế độ SABO Professional</span>
-                {isSaboMode && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowSaboInfo(true)}
-                    className="h-6 w-6 p-0 text-blue-600 hover:bg-blue-100"
-                  >
-                    <HelpCircle className="w-4 h-4" />
-                  </Button>
-                )}
+            <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 via-blue-50/70 to-blue-100/30 border border-blue-200/50 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300 font-medium px-3 py-1">
+                    SABO
+                  </Badge>
+                  <span className="text-sm font-semibold text-blue-900">Chế độ SABO Professional</span>
+                  {isSaboMode && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowSaboInfo(true)}
+                      className="h-7 w-7 p-0 text-blue-600 hover:bg-blue-200/50 rounded-full transition-all duration-200 hover:scale-110"
+                    >
+                      <HelpCircle className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+                <Switch
+                  checked={isSaboMode}
+                  onCheckedChange={setIsSaboMode}
+                  disabled={isOpenChallenge}
+                  className="data-[state=checked]:bg-blue-500"
+                />
               </div>
-              <Switch
-                checked={isSaboMode}
-                onCheckedChange={setIsSaboMode}
-                disabled={isOpenChallenge}
-              />
+              
+              {isSaboMode && (
+                <div className="mt-3 p-3 bg-white/70 rounded-lg border border-blue-200/30 animate-fade-in">
+                  <div className="text-sm text-blue-800 leading-relaxed">
+                    <strong className="text-blue-900">Chế độ SABO:</strong> Hệ thống sẽ tự động tính toán handicap dựa trên chênh lệch hạng và mức cược
+                  </div>
+                </div>
+              )}
             </div>
             
-            {isSaboMode && (
-              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="text-sm text-blue-800">
-                  <strong>Chế độ SABO:</strong> Hệ thống sẽ tự động tính toán handicap dựa trên chênh lệch hạng và mức cược
-                </div>
-              </div>
-            )}
-            
             {isOpenChallenge && (
-              <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                <div className="text-sm text-green-800">
-                  <strong>Thách đấu mở:</strong> Bất kỳ người chơi nào cũng có thể chấp nhận thách đấu của bạn
+              <div className="p-4 bg-gradient-to-br from-green-50 via-green-50/70 to-green-100/30 rounded-xl border border-green-200/50 shadow-sm animate-fade-in">
+                <div className="text-sm text-green-800 leading-relaxed">
+                  <strong className="text-green-900">Thách đấu mở:</strong> Bất kỳ người chơi nào cũng có thể chấp nhận thách đấu của bạn
                 </div>
               </div>
             )}
           </div>
 
-          {/* Player Search - only show if not open challenge */}
+          {/* Player Search Section */}
           {!isOpenChallenge && (
-          <div className="space-y-2">
-            <Label>Tìm kiếm đối thủ</Label>
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-              <Input
-                placeholder="Nhập tên người chơi..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            {searchLoading && (
-              <div className="text-sm text-gray-500">Đang tìm kiếm...</div>
-            )}
-
-            {players.length > 0 && (
-              <div className="max-h-40 overflow-y-auto border rounded-lg">
-                {players.map((player) => (
-                  <div
-                    key={player.user_id}
-                    className={`p-3 cursor-pointer hover:bg-gray-50 flex items-center gap-3 ${
-                      selectedPlayer?.user_id === player.user_id ? 'bg-blue-50 border-blue-200' : ''
-                    }`}
-                    onClick={() => {
-                      console.log('Selecting player:', player);
-                      setSelectedPlayer(player);
-                    }}
-                  >
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={player.avatar_url} />
-                      <AvatarFallback>{player.full_name[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="font-medium">{player.full_name}</div>
-                      <div className="text-sm text-gray-500 flex items-center gap-2">
-                        <span>Hạng {player.current_rank} • {player.spa_points} SPA</span>
-                        {player.isClubMember && <span className="text-xs bg-blue-100 text-blue-800 px-1 rounded">CLB</span>}
-                        {player.hasRecentChallenges && <span className="text-xs bg-green-100 text-green-800 px-1 rounded">Hoạt động</span>}
-                      </div>
-                    </div>
-                    {selectedPlayer?.user_id === player.user_id && (
-                      <Badge variant="default">Đã chọn</Badge>
-                    )}
-                  </div>
-                ))}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+                <Search className="w-4 h-4 text-primary" />
+                <Label className="text-base font-semibold">Tìm kiếm đối thủ</Label>
               </div>
-            )}
+              
+              <div className="relative group">
+                <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
+                <Input
+                  placeholder="Nhập tên người chơi..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-11 h-12 bg-muted/30 border-border/50 focus:bg-background focus:border-primary/50 transition-all duration-200 rounded-lg text-base"
+                />
+              </div>
+              
+              {searchLoading && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground animate-pulse">
+                  <div className="w-1 h-1 bg-primary rounded-full animate-bounce"></div>
+                  <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <span className="ml-2">Đang tìm kiếm...</span>
+                </div>
+              )}
 
-            {selectedPlayer && (
-              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={selectedPlayer.avatar_url} />
-                    <AvatarFallback>{selectedPlayer.full_name[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="font-medium">Đối thủ: {selectedPlayer.full_name}</div>
-                    <div className="text-sm text-gray-600">
-                      Hạng {selectedPlayer.current_rank} • {selectedPlayer.spa_points} điểm SPA
-                    </div>
-                    
-                    {/* SABO Handicap Preview */}
-                    {isSaboMode && handicapPreview && (
-                      <div className="mt-2 p-2 bg-white rounded border">
-                        <div className="text-xs font-medium text-blue-700 mb-1">Handicap SABO:</div>
-                        <div className="text-sm">
-                          {handicapPreview.isValid ? (
-                            <span className={`font-medium ${
-                              handicapPreview.handicapChallenger > 0 ? 'text-green-600' : 
-                              handicapPreview.handicapOpponent > 0 ? 'text-orange-600' : 'text-gray-600'
-                            }`}>
-                              {handicapPreview.explanation}
-                            </span>
-                          ) : (
-                            <span className="text-red-600 font-medium">
-                              {handicapPreview.errorMessage}
-                            </span>
+              {players.length > 0 && (
+                <div className="max-h-48 overflow-y-auto rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm shadow-sm">
+                  {players.map((player, index) => (
+                    <div
+                      key={player.user_id}
+                      className={`p-4 cursor-pointer transition-all duration-200 flex items-center gap-4 hover-scale ${
+                        selectedPlayer?.user_id === player.user_id 
+                          ? 'bg-gradient-to-r from-primary/10 to-primary/5 border-l-4 border-primary shadow-sm' 
+                          : 'hover:bg-muted/50'
+                      } ${index !== players.length - 1 ? 'border-b border-border/30' : ''}`}
+                      onClick={() => {
+                        console.log('Selecting player:', player);
+                        setSelectedPlayer(player);
+                      }}
+                    >
+                      <Avatar className="w-10 h-10 ring-2 ring-background shadow-sm">
+                        <AvatarImage src={player.avatar_url} />
+                        <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">
+                          {player.full_name[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="font-semibold text-foreground">{player.full_name}</div>
+                        <div className="text-sm text-muted-foreground flex items-center gap-3">
+                          <span className="font-medium">Hạng {player.current_rank}</span>
+                          <span>•</span>
+                          <span>{player.spa_points} SPA</span>
+                          {player.isClubMember && (
+                            <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700 border-blue-200">
+                              CLB
+                            </Badge>
+                          )}
+                          {player.hasRecentChallenges && (
+                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 border-green-200">
+                              Hoạt động
+                            </Badge>
                           )}
                         </div>
                       </div>
-                    )}
+                      {selectedPlayer?.user_id === player.user_id && (
+                        <Badge className="bg-primary/10 text-primary border-primary/30 animate-scale-in">
+                          Đã chọn
+                        </Badge>
+                      )}
+                    </div>
+                  ))}
+                </div>
+            )}
+
+              {selectedPlayer && (
+                <div className="p-4 bg-gradient-to-br from-primary/5 via-primary/3 to-transparent rounded-xl border border-primary/20 shadow-sm animate-fade-in">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-12 h-12 ring-2 ring-primary/20 shadow-md">
+                      <AvatarImage src={selectedPlayer.avatar_url} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-bold text-lg">
+                        {selectedPlayer.full_name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="font-semibold text-lg text-foreground">
+                        Đối thủ: {selectedPlayer.full_name}
+                      </div>
+                      <div className="text-sm text-muted-foreground font-medium">
+                        Hạng {selectedPlayer.current_rank} • {selectedPlayer.spa_points} điểm SPA
+                      </div>
+                      
+                      {/* SABO Handicap Preview */}
+                      {isSaboMode && handicapPreview && (
+                        <div className="mt-3 p-3 bg-gradient-to-br from-amber-50 to-amber-100/30 rounded-lg border border-amber-200/50 animate-fade-in">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Calculator className="w-3 h-3 text-amber-600" />
+                            <span className="text-xs font-semibold text-amber-800">Handicap SABO:</span>
+                          </div>
+                          <div className="text-sm">
+                            {handicapPreview.isValid ? (
+                              <span className={`font-medium ${
+                                handicapPreview.handicapChallenger > 0 ? 'text-green-700' : 
+                                handicapPreview.handicapOpponent > 0 ? 'text-blue-700' : 'text-muted-foreground'
+                              }`}>
+                                {handicapPreview.explanation}
+                              </span>
+                            ) : (
+                              <span className="text-red-600 font-medium">
+                                {handicapPreview.errorMessage}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                      <Trophy className="w-5 h-5 text-primary" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           )}
 
           {/* Bet Configuration */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4" />
-              Mức cược & Luật chơi
-            </Label>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+              <DollarSign className="w-4 h-4 text-primary" />
+              <Label className="text-base font-semibold">Mức cược & Luật chơi</Label>
+            </div>
+            
             <Select value={betPoints.toString()} onValueChange={(value) => setBetPoints(parseInt(value))}>
-              <SelectTrigger>
+              <SelectTrigger className="h-12 bg-muted/30 border-border/50 focus:bg-background focus:border-primary/50 transition-all duration-200 rounded-lg">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl border-border/50 bg-background/95 backdrop-blur-sm shadow-lg">
                 {BET_CONFIGURATIONS.map((config) => (
-                  <SelectItem key={config.points} value={config.points.toString()}>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{config.points} điểm</span>
-                      <span className="text-sm text-gray-500">{config.description}</span>
+                  <SelectItem 
+                    key={config.points} 
+                    value={config.points.toString()}
+                    className="rounded-lg hover:bg-primary/5 focus:bg-primary/10 transition-colors duration-200"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Badge variant="outline" className="font-mono">
+                        {config.points}
+                      </Badge>
+                      <span>{config.description}</span>
                     </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            
             {selectedConfig && (
-              <div className="p-3 bg-yellow-50 rounded-lg">
-                <div className="text-sm">
-                  <strong>Luật chơi:</strong> Race to {selectedConfig.raceTO}
-                </div>
-                <div className="text-sm text-gray-600 mt-1">
-                  Người thắng nhận {selectedConfig.points} điểm, người thua mất {Math.floor(selectedConfig.points * 0.5)} điểm
+              <div className="p-4 bg-gradient-to-br from-amber-50 via-amber-50/70 to-yellow-100/30 rounded-xl border border-amber-200/50 shadow-sm animate-fade-in">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Trophy className="w-4 h-4 text-amber-600" />
+                    <span className="font-semibold text-amber-900">Race to {selectedConfig.raceTO}</span>
+                  </div>
+                  <div className="text-sm text-amber-800 leading-relaxed">
+                    Người thắng nhận <strong>{selectedConfig.points} điểm</strong>, người thua mất <strong>{Math.floor(selectedConfig.points * 0.5)} điểm</strong>
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
           {/* Club Selection */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              Câu lạc bộ (tùy chọn)
-            </Label>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+              <MapPin className="w-4 h-4 text-primary" />
+              <Label className="text-base font-semibold">Câu lạc bộ (tùy chọn)</Label>
+            </div>
+            
             <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger>
+              <SelectTrigger className="h-12 bg-muted/30 border-border/50 focus:bg-background focus:border-primary/50 transition-all duration-200 rounded-lg">
                 <SelectValue placeholder="Chọn câu lạc bộ..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl border-border/50 bg-background/95 backdrop-blur-sm shadow-lg">
                 {clubs.map((club) => (
-                  <SelectItem key={club.id} value={club.id}>
-                    <div>
-                      <div className="font-medium">{club.name}</div>
-                      <div className="text-sm text-gray-500">{club.address}</div>
+                  <SelectItem 
+                    key={club.id} 
+                    value={club.id}
+                    className="rounded-lg hover:bg-primary/5 focus:bg-primary/10 transition-colors duration-200"
+                  >
+                    <div className="flex flex-col items-start">
+                      <div className="font-semibold">{club.name}</div>
+                      <div className="text-sm text-muted-foreground">{club.address}</div>
                     </div>
                   </SelectItem>
                 ))}
@@ -563,42 +624,67 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
           </div>
 
           {/* Scheduled Time */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
-              Thời gian đề xuất (tùy chọn)
-            </Label>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+              <Clock className="w-4 h-4 text-primary" />
+              <Label className="text-base font-semibold">Thời gian đề xuất (tùy chọn)</Label>
+            </div>
+            
             <Input
               type="datetime-local"
               value={scheduledTime}
               onChange={(e) => setScheduledTime(e.target.value)}
               min={new Date().toISOString().slice(0, 16)}
+              className="h-12 bg-muted/30 border-border/50 focus:bg-background focus:border-primary/50 transition-all duration-200 rounded-lg"
             />
           </div>
 
           {/* Message */}
-          <div className="space-y-2">
-            <Label>Lời nhắn (tùy chọn)</Label>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+              <MapPin className="w-4 h-4 text-primary" />
+              <Label className="text-base font-semibold">Lời nhắn (tùy chọn)</Label>
+            </div>
+            
             <Textarea
               placeholder="Thêm lời nhắn cho đối thủ..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              rows={3}
+              rows={4}
+              className="bg-muted/30 border-border/50 focus:bg-background focus:border-primary/50 transition-all duration-200 rounded-lg resize-none"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4">
-            <Button variant="outline" onClick={handleClose} className="flex-1">
+          <div className="flex gap-4 pt-6 border-t border-border/30">
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              className="flex-1 h-12 rounded-lg border-border/50 hover:bg-muted/50 transition-all duration-200"
+              disabled={loading}
+            >
               Hủy
             </Button>
             <Button
               onClick={handleCreateChallenge}
-              disabled={!canCreateChallenge || !saboCompatible || loading}
-              className="flex-1"
+              disabled={loading || !canCreateChallenge || !saboCompatible}
+              className="flex-1 h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
             >
-              {loading ? 'Đang tạo...' : 
-               `Tạo thách đấu${isSaboMode ? ' SABO' : ''}${selectedConfig ? ` (${selectedConfig.points} điểm)` : ''}`}
+              {loading ? (
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                  <span>Đang tạo thách đấu...</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5" />
+                  <span>{`Tạo thách đấu${isSaboMode ? ' SABO' : ''}${selectedConfig ? ` (${selectedConfig.points} điểm)` : ''}`}</span>
+                </div>
+              )}
             </Button>
           </div>
         </div>
