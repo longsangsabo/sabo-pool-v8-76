@@ -34,7 +34,7 @@ const ClubTournamentManagementInternal: React.FC = () => {
   const [managementActiveTab, setManagementActiveTab] = useState('create');
   
   const tournamentManagementRef = useRef<TournamentManagementHubRef>(null);
-  const { selectedTournamentId, selectedTournament } = useTournamentState();
+  const { selectedTournamentId, selectedTournament, refreshAll } = useTournamentState();
   
   const handleTournamentSuccess = (tournament: any) => {
     console.log('✅ Tournament created successfully:', tournament);
@@ -204,7 +204,7 @@ const ClubTournamentManagementInternal: React.FC = () => {
                 <ManualResultsGenerator 
                   tournamentId={selectedTournamentId}
                   tournamentName={selectedTournament.name}
-                  onResultsGenerated={() => window.location.reload()}
+                  onResultsGenerated={refreshAll}
                 />
               )}
               
