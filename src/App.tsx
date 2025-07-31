@@ -121,8 +121,16 @@ const App = () => {
                      {/* Admin routes - use wildcard to let AdminRouter handle sub-routes */}
                      <Route path="/admin/*" element={<AdminRoute><AdminRouter /></AdminRoute>} />
 
-                     {/* Club management routes - protected and require club owner privileges */}
-                     <Route path="/club-dashboard" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      {/* Club management routes - protected and require club owner privileges */}
+                      <Route path="/club-management" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/tournaments" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/challenges" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/verification" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/members" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/notifications" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/schedule" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/payments" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
+                      <Route path="/club-management/settings" element={<ProtectedRoute><ClubManagementPage /></ProtectedRoute>} />
 
                      {/* Fallback route */}
                      <Route path="*" element={<NotFoundPage />} />

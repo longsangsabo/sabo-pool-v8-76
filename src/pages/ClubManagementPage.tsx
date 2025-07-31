@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useClubRole } from '@/hooks/useClubRole';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart3, Trophy, Users, Settings, UserCheck, Swords, AlertCircle } from 'lucide-react';
@@ -20,9 +20,20 @@ import { AppProviders } from '@/contexts/AppProviders';
 const ClubManagementPage = () => {
   const { user, loading: authLoading } = useAuth();
   const { isClubOwner, clubProfile, isLoading: clubLoading } = useClubRole();
+  const location = useLocation();
 
   // Enable rank update notifications
   useRankUpdates();
+
+  // Determine active tab based on URL
+  const getActiveTab = () => {
+    if (location.pathname.includes('/tournaments')) return 'tournaments';
+    if (location.pathname.includes('/challenges')) return 'challenges';
+    if (location.pathname.includes('/verification')) return 'verification';
+    if (location.pathname.includes('/members')) return 'members';
+    if (location.pathname.includes('/settings')) return 'settings';
+    return 'overview';
+  };
 
   // Debug current club info
   console.log('🏢 [ClubManagementPage] Debug:', {
@@ -82,7 +93,7 @@ const ClubManagementPage = () => {
         </p>
       </div>
 
-      <Tabs defaultValue={window.location.hash === '#tournaments' ? 'tournaments' : 'overview'} className="space-y-6">
+      <Tabs value={getActiveTab()} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-1">
           <TabsTrigger value="overview" className="flex items-center gap-2 px-3 py-2">
             <BarChart3 className="w-4 h-4" />
