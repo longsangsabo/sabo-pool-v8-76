@@ -14,6 +14,8 @@ import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
 import AdminCreateChallengeModal from '@/components/admin/AdminCreateChallengeModal';
 import TrustScoreBadge from '@/components/TrustScoreBadge';
+import CompactStatCard from '@/components/challenges/CompactStatCard';
+import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 
 import { toast } from 'sonner';
 import {
@@ -564,49 +566,50 @@ const EnhancedChallengesPageV2: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="group bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-200/30 hover:border-blue-300/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
-            <CardContent className="p-6 text-center">
-              <div className="p-3 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
-                <Trophy className="w-8 h-8 text-blue-600" />
-              </div>
-              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
-              <div className="text-sm font-medium text-muted-foreground">Tổng cộng</div>
-            </CardContent>
-          </Card>
-          <Card className="group bg-gradient-to-br from-amber-50/50 to-yellow-50/50 border border-amber-200/30 hover:border-amber-300/50 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
-            <CardContent className="p-6 text-center">
-              <div className="p-3 rounded-full bg-gradient-to-br from-amber-100 to-yellow-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
-                <Clock className="w-8 h-8 text-amber-600" />
-              </div>
-              <div className="text-2xl font-bold text-foreground">{stats.pending}</div>
-              <div className="text-sm font-medium text-muted-foreground">Chờ phản hồi</div>
-            </CardContent>
-          </Card>
-          <Card className="group bg-gradient-to-br from-emerald-50/50 to-green-50/50 border border-emerald-200/30 hover:border-emerald-300/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
-            <CardContent className="p-6 text-center">
-              <div className="p-3 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
-                <Zap className="w-8 h-8 text-emerald-600" />
-              </div>
-              <div className="text-2xl font-bold text-foreground">{stats.accepted}</div>
-              <div className="text-sm font-medium text-muted-foreground">Đã chấp nhận</div>
-            </CardContent>
-          </Card>
-          <Card className="group bg-gradient-to-br from-violet-50/50 to-purple-50/50 border border-violet-200/30 hover:border-violet-300/50 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
-            <CardContent className="p-6 text-center">
-              <div className="p-3 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
-                <Star className="w-8 h-8 text-violet-600" />
-              </div>
-              <div className="text-2xl font-bold text-foreground">{stats.completed}</div>
-              <div className="text-sm font-medium text-muted-foreground">Hoàn thành</div>
-            </CardContent>
-          </Card>
+        {/* Compact Stats Row - Takes 1/3 of space */}
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          <CompactStatCard
+            icon={Trophy}
+            value={stats.total}
+            label="Tổng cộng"
+            color="primary"
+          />
+          <CompactStatCard
+            icon={Clock}
+            value={stats.pending}
+            label="Chờ phản hồi"
+            color="warning"
+          />
+          <CompactStatCard
+            icon={Zap}
+            value={stats.accepted}
+            label="Đã chấp nhận"
+            color="success"
+          />
+          <CompactStatCard
+            icon={Star}
+            value={stats.completed}
+            label="Hoàn thành"
+            color="info"
+          />
         </div>
 
-        {/* Filters */}
-        <Card className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-sm">
-          <CardContent className="p-6">
+        {/* Live Activity Feed - Takes 2/3 of space */}
+        <LiveActivityFeed
+          openChallenges={openChallenges}
+          onJoinChallenge={handleJoinOpenChallenge}
+        />
+
+        {/* Legacy Tabs Section - Keep for backward compatibility but make it secondary */}
+        <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5" />
+              Quản lý thách đấu chi tiết
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Filters */}
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative group">
@@ -676,100 +679,99 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 </Button>
               </div>
             </div>
+
+            {/* Challenges Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
+                <TabsTrigger 
+                  value="my-challenges"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                >
+                  Thách đấu của tôi ({getFilteredChallenges(myChallenges).length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="active-challenges"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                >
+                  Đang diễn ra ({getFilteredChallenges(activeChallenges).length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="open-challenges"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                >
+                  Thách đấu mở ({getFilteredChallenges(openChallenges).length})
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="my-challenges" className="space-y-6">
+                {getFilteredChallenges(myChallenges).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {getFilteredChallenges(myChallenges).map(renderChallengeCard)}
+                  </div>
+                ) : (
+                  <Card className="bg-gradient-to-br from-slate-50/50 to-gray-50/50 border border-border/50">
+                    <CardContent className="p-16 text-center">
+                      <div className="p-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 w-fit mx-auto mb-6">
+                        <Target className="w-16 h-16 text-primary mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-foreground mb-3">Chưa có thách đấu nào</h3>
+                      <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                        Tạo thách đấu đầu tiên của bạn để bắt đầu cuộc phiêu lưu billiards!
+                      </p>
+                      <Button 
+                        onClick={() => setShowCreateModal(true)}
+                        className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold px-6 py-3 rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 transform hover:scale-105"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        🎯 Tạo thách đấu
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="active-challenges" className="space-y-6">
+                {getFilteredChallenges(activeChallenges).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {getFilteredChallenges(activeChallenges).map(renderChallengeCard)}
+                  </div>
+                ) : (
+                  <Card className="bg-gradient-to-br from-amber-50/50 to-orange-50/50 border border-amber-200/30">
+                    <CardContent className="p-16 text-center">
+                      <div className="p-4 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 w-fit mx-auto mb-6">
+                        <Zap className="w-16 h-16 text-amber-600 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-foreground mb-3">Không có trận đấu nào đang diễn ra</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Các trận đấu đã được chấp nhận sẽ hiển thị ở đây. Hãy chấp nhận một thách đấu để bắt đầu!
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="open-challenges" className="space-y-6">
+                {getFilteredChallenges(openChallenges).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {getFilteredChallenges(openChallenges).map(renderOpenChallengeCard)}
+                  </div>
+                ) : (
+                  <Card className="bg-gradient-to-br from-emerald-50/50 to-green-50/50 border border-emerald-200/30">
+                    <CardContent className="p-16 text-center">
+                      <div className="p-4 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 w-fit mx-auto mb-6">
+                        <Users className="w-16 h-16 text-emerald-600 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-foreground mb-3">Không có thách đấu mở nào</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Các thách đấu mở từ người chơi khác sẽ hiển thị ở đây. Hãy kiểm tra lại sau!
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
-
-        {/* Challenges Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
-            <TabsTrigger 
-              value="my-challenges"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
-            >
-              Thách đấu của tôi ({getFilteredChallenges(myChallenges).length})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="active-challenges"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
-            >
-              Đang diễn ra ({getFilteredChallenges(activeChallenges).length})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="open-challenges"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
-            >
-              Thách đấu mở ({getFilteredChallenges(openChallenges).length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="my-challenges" className="space-y-6">
-            {getFilteredChallenges(myChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {getFilteredChallenges(myChallenges).map(renderChallengeCard)}
-              </div>
-            ) : (
-              <Card className="bg-gradient-to-br from-slate-50/50 to-gray-50/50 border border-border/50">
-                <CardContent className="p-16 text-center">
-                  <div className="p-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 w-fit mx-auto mb-6">
-                    <Target className="w-16 h-16 text-primary mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Chưa có thách đấu nào</h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                    Tạo thách đấu đầu tiên của bạn để bắt đầu cuộc phiêu lưu billiards!
-                  </p>
-                  <Button 
-                    onClick={() => setShowCreateModal(true)}
-                    className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold px-6 py-3 rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 transform hover:scale-105"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    🎯 Tạo thách đấu
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          <TabsContent value="active-challenges" className="space-y-6">
-            {getFilteredChallenges(activeChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {getFilteredChallenges(activeChallenges).map(renderChallengeCard)}
-              </div>
-            ) : (
-              <Card className="bg-gradient-to-br from-amber-50/50 to-orange-50/50 border border-amber-200/30">
-                <CardContent className="p-16 text-center">
-                  <div className="p-4 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 w-fit mx-auto mb-6">
-                    <Zap className="w-16 h-16 text-amber-600 mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Không có trận đấu nào đang diễn ra</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">
-                    Các trận đấu đã được chấp nhận sẽ hiển thị ở đây. Hãy chấp nhận một thách đấu để bắt đầu!
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          <TabsContent value="open-challenges" className="space-y-6">
-            {getFilteredChallenges(openChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {getFilteredChallenges(openChallenges).map(renderOpenChallengeCard)}
-              </div>
-            ) : (
-              <Card className="bg-gradient-to-br from-emerald-50/50 to-green-50/50 border border-emerald-200/30">
-                <CardContent className="p-16 text-center">
-                  <div className="p-4 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 w-fit mx-auto mb-6">
-                    <Users className="w-16 h-16 text-emerald-600 mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Không có thách đấu mở nào</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">
-                    Các thách đấu mở từ người chơi khác sẽ hiển thị ở đây. Hãy kiểm tra lại sau!
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-        </Tabs>
       </div>
 
       {/* Modals */}
