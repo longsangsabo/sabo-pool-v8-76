@@ -3584,6 +3584,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      debug_apply_tournament_rewards: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
       debug_tournament_state: {
         Args: { p_tournament_id: string }
         Returns: Json
