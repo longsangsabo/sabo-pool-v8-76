@@ -235,6 +235,41 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       console.log("✅ Tournament created successfully:", result);
 
       if (result) {
+        console.log('✅ Tournament created:', result);
+        
+        // Auto-save default rewards to tournament_prize_tiers
+        if (mode === 'create' && tournament?.rewards?.positions?.length > 0) {
+          console.log('🏆 Auto-saving tournament rewards...');
+          try {
+            // Convert rewards to prize tiers format
+            const prizeTiers = tournament.rewards.positions.map(position => ({
+              tournament_id: result.id,
+              position: position.position,
+              position_name: position.name,
+              cash_amount: position.cashPrize || 0,
+              elo_points: position.eloPoints || 0,
+              spa_points: position.spaPoints || 0,
+              is_visible: position.isVisible !== false,
+              physical_items: (position.items || []).filter(item => item && item.trim())
+            }));
+
+            const { error: rewardsError } = await supabase
+              .from('tournament_prize_tiers')
+              .insert(prizeTiers);
+
+            if (rewardsError) {
+              console.error('❌ Failed to save rewards:', rewardsError);
+              toast.warning('Giải đấu đã tạo thành công nhưng không thể lưu phần thưởng tự động');
+            } else {
+              console.log('✅ Tournament rewards saved successfully');
+              toast.success('🏆 Phần thưởng đã được lưu tự động!');
+            }
+          } catch (rewardsError) {
+            console.error('❌ Error saving rewards:', rewardsError);
+            toast.warning('Giải đấu đã tạo thành công nhưng không thể lưu phần thưởng tự động');
+          }
+        }
+        
         // 🎯 Auto-generate bracket for tournaments after creation
         if (result && mode === 'create') {
           console.log('🏆 Auto-generating bracket for new tournament...', result.tournament_type);
