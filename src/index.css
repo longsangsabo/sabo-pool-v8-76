@@ -586,20 +586,19 @@
   align-items: center;
   padding: 40px 20px;
   position: relative;
+  gap: 30px;
 }
 
 .avatar-mirror {
   display: flex;
   align-items: center;
-  gap: -20px;
 }
 
 .avatar-mirror.left {
-  margin-right: 20px;
+  flex-direction: row;
 }
 
 .avatar-mirror.right {
-  margin-left: 20px;
   flex-direction: row-reverse;
 }
 
@@ -617,22 +616,42 @@
   border: 2px solid rgba(59, 130, 246, 0.3);
 }
 
-.avatar-fade-1 { 
+/* Left side fading (moving away from center) */
+.avatar-mirror.left .avatar-fade-1 { 
   opacity: 0.6; 
   transform: scale(0.8); 
-  margin-left: -20px;
+  margin-right: -25px;
 }
 
-.avatar-fade-2 { 
+.avatar-mirror.left .avatar-fade-2 { 
   opacity: 0.4; 
   transform: scale(0.7); 
-  margin-left: -20px;
+  margin-right: -25px;
 }
 
-.avatar-fade-3 { 
+.avatar-mirror.left .avatar-fade-3 { 
   opacity: 0.2; 
   transform: scale(0.6); 
-  margin-left: -20px;
+  margin-right: -25px;
+}
+
+/* Right side fading (moving away from center) */
+.avatar-mirror.right .avatar-fade-1 { 
+  opacity: 0.6; 
+  transform: scale(0.8); 
+  margin-left: -25px;
+}
+
+.avatar-mirror.right .avatar-fade-2 { 
+  opacity: 0.4; 
+  transform: scale(0.7); 
+  margin-left: -25px;
+}
+
+.avatar-mirror.right .avatar-fade-3 { 
+  opacity: 0.2; 
+  transform: scale(0.6); 
+  margin-left: -25px;
 }
 
 .avatar-main {
