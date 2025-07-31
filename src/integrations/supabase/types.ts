@@ -3398,6 +3398,10 @@ export type Database = {
         Args: { p_tournament_id: string }
         Returns: Json
       }
+      auto_apply_default_tournament_rewards: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
       auto_update_single_tournament_status: {
         Args: Record<PropertyKey, never>
         Returns: undefined
