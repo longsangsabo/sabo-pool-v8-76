@@ -223,10 +223,10 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
 
       case 'find':
         return (
-          <div className="space-y-4">
-            <div className="text-center py-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">ĐANG TÌM ĐỐI THỦ</h3>
-              <p className="text-sm text-gray-600">Tất cả thách đấu mở của người chơi khác</p>
+          <div className="space-y-3">
+            <div className="text-center py-4 mb-2">
+              <h3 className="text-lg font-bold text-gray-900 mb-1">ĐANG TÌM ĐỐI THỦ</h3>
+              <p className="text-sm text-gray-600">Thách đấu mở của người chơi khác</p>
             </div>
             {openChallenges.length > 0 ? (
               openChallenges.map(challenge => {
@@ -245,10 +245,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
                 );
               })
             ) : (
-              <div className="text-center py-8 text-gray-500">
-                <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                <p>Không có thách đấu mở nào</p>
-                <p className="text-xs mt-2">Debug: Total challenges: {challenges.length}</p>
+              <div className="text-center py-12 text-gray-500">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-8 h-8 text-gray-400" />
+                </div>
+                <h4 className="font-semibold text-gray-700 mb-2">Chưa có thách đấu mở</h4>
+                <p className="text-sm">Hãy thử làm mới hoặc quay lại sau</p>
               </div>
             )}
           </div>
@@ -307,51 +309,51 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
       <div className="p-4">
         {/* Header with refresh button */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Thách Đấu</h2>
+          <h1 className="text-xl font-bold text-gray-900">Thách Đấu</h1>
           <button
             onClick={handleRefresh}
             disabled={isRefreshing || loading}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50 mobile-touch-button"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            Làm mới
+            <span className="font-medium">Làm mới</span>
           </button>
         </div>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
-            <TabsTrigger value="live" className="flex flex-col gap-1 p-3">
+          <TabsList className="grid w-full grid-cols-4 mb-4 h-auto p-1 bg-gray-50 rounded-2xl">
+            <TabsTrigger value="live" className="flex flex-col gap-1 p-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Zap className="w-4 h-4" />
-              <span className="text-xs">Đang diễn ra</span>
+              <span className="text-xs font-semibold">Đang diễn ra</span>
               {ongoingChallenges.length > 0 && (
-                <Badge variant="destructive" className="text-xs px-1">
+                <Badge variant="destructive" className="text-xs px-1.5 py-0.5 rounded-full">
                   {ongoingChallenges.length}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="upcoming" className="flex flex-col gap-1 p-3">
+            <TabsTrigger value="upcoming" className="flex flex-col gap-1 p-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Calendar className="w-4 h-4" />
-              <span className="text-xs">Sắp diễn ra</span>
+              <span className="text-xs font-semibold">Sắp diễn ra</span>
               {upcomingChallenges.length > 0 && (
-                <Badge variant="secondary" className="text-xs px-1">
+                <Badge variant="secondary" className="text-xs px-1.5 py-0.5 rounded-full">
                   {upcomingChallenges.length}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="find" className="flex flex-col gap-1 p-3">
+            <TabsTrigger value="find" className="flex flex-col gap-1 p-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Search className="w-4 h-4" />
-              <span className="text-xs">Đang tìm đối thủ</span>
+              <span className="text-xs font-semibold">Tìm đối thủ</span>
               {openChallenges.length > 0 && (
-                <Badge className="text-xs px-1 bg-emerald-100 text-emerald-800">
+                <Badge className="text-xs px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
                   {openChallenges.length}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="completed" className="flex flex-col gap-1 p-3">
+            <TabsTrigger value="completed" className="flex flex-col gap-1 p-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Trophy className="w-4 h-4" />
-              <span className="text-xs">Mới hoàn thành</span>
+              <span className="text-xs font-semibold">Hoàn thành</span>
               {completedChallenges.length > 0 && (
-                <Badge variant="outline" className="text-xs px-1">
+                <Badge variant="outline" className="text-xs px-1.5 py-0.5 rounded-full">
                   {completedChallenges.length}
                 </Badge>
               )}

@@ -41,17 +41,17 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
   return (
     <Card className="bg-gradient-to-br from-emerald-50/70 to-green-50/70 border-emerald-200/50 hover:border-emerald-300/70 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-200">
       <CardContent className={isCompact ? "p-4" : "p-6"}>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
             <div className="relative">
-              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-              <div className="absolute inset-0 w-3 h-3 bg-emerald-500 rounded-full animate-ping"></div>
+              <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
+              <div className="absolute inset-0 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></div>
             </div>
-            <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300">
-              🌟 Mở - Chờ đối thủ
+            <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 text-xs px-2 py-0.5">
+              🌟 Mở
             </Badge>
             {challenge.challenge_type === 'sabo' && (
-              <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300">
+              <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300 text-xs px-1.5 py-0.5">
                 SABO
               </Badge>
             )}
@@ -59,58 +59,45 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
           
           <Button
             onClick={() => onJoin(challenge.id)}
-            className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white"
+            className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white mobile-touch-button"
             size={isCompact ? "sm" : "default"}
           >
-            <Users className="w-4 h-4 mr-2" />
-            THAM GIA
+            <Users className="w-3.5 h-3.5 mr-1.5" />
+            <span className="text-xs font-semibold">THAM GIA</span>
           </Button>
         </div>
 
         {/* Challenger Info */}
-        <div className={`grid ${isCompact ? 'grid-cols-3' : 'grid-cols-5'} gap-3 items-center mb-4`}>
+        <div className="flex items-center justify-between mb-3">
           {/* Challenger */}
-          <div className={`${isCompact ? 'col-span-1' : 'col-span-2'} text-center`}>
-            <Avatar className={`${isCompact ? 'w-10 h-10' : 'w-12 h-12'} mx-auto mb-2`}>
+          <div className="flex items-center gap-3">
+            <Avatar className="w-12 h-12 border-2 border-emerald-200">
               <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-              <AvatarFallback>
+              <AvatarFallback className="bg-emerald-100 text-emerald-700 font-bold">
                 {challenge.challenger_profile?.full_name?.[0] || 'C'}
               </AvatarFallback>
             </Avatar>
-            <div className={`${isCompact ? 'text-xs' : 'text-sm'} font-semibold truncate`}>
-              {challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Người thách đấu'}
-            </div>
-            <div className={`${isCompact ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
-              {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
-            </div>
-          </div>
-
-          {/* Bet Info */}
-          <div className={`${isCompact ? 'col-span-1' : 'col-span-1'} text-center`}>
-            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200/50 rounded-lg p-2">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <DollarSign className="w-3 h-3 text-amber-600" />
-                <span className={`${isCompact ? 'text-xs' : 'text-sm'} font-bold text-amber-800`}>
-                  {challenge.bet_points}
-                </span>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold text-gray-800 truncate">
+                {challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Người thách đấu'}
               </div>
-              <div className="text-xs text-amber-600">SPA điểm</div>
-            </div>
-            <div className="text-xs text-muted-foreground mt-1">
-              Race to {challenge.race_to || 5}
+              <div className="text-xs text-gray-500 font-medium">
+                {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
+              </div>
             </div>
           </div>
 
-          {/* Waiting for opponent */}
-          <div className={`${isCompact ? 'col-span-1' : 'col-span-2'} text-center`}>
-            <div className={`${isCompact ? 'w-10 h-10' : 'w-12 h-12'} mx-auto mb-2 rounded-full border-2 border-dashed border-emerald-300 flex items-center justify-center`}>
-              <Users className={`${isCompact ? 'w-4 h-4' : 'w-5 h-5'} text-emerald-500`} />
+          {/* Bet Info - Compact */}
+          <div className="text-right">
+            <div className="flex items-center gap-1 justify-end mb-1">
+              <DollarSign className="w-3.5 h-3.5 text-amber-600" />
+              <span className="text-lg font-black text-amber-800">
+                {challenge.bet_points}
+              </span>
             </div>
-            <div className={`${isCompact ? 'text-xs' : 'text-sm'} font-semibold text-emerald-600`}>
-              Đang tìm đối thủ
-            </div>
-            <div className={`${isCompact ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
-              Tham gia ngay!
+            <div className="text-xs text-amber-600 font-medium">SPA điểm</div>
+            <div className="text-xs text-gray-500 mt-0.5">
+              Race to {challenge.race_to || 5}
             </div>
           </div>
         </div>
