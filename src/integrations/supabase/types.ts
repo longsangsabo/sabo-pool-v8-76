@@ -2879,7 +2879,6 @@ export type Database = {
           min_rank_requirement: string | null
           name: string
           physical_prizes: Json | null
-          prize_distribution: Json | null
           prize_pool: number | null
           registration_end: string | null
           registration_start: string | null
@@ -2926,7 +2925,6 @@ export type Database = {
           min_rank_requirement?: string | null
           name: string
           physical_prizes?: Json | null
-          prize_distribution?: Json | null
           prize_pool?: number | null
           registration_end?: string | null
           registration_start?: string | null
@@ -2973,7 +2971,6 @@ export type Database = {
           min_rank_requirement?: string | null
           name?: string
           physical_prizes?: Json | null
-          prize_distribution?: Json | null
           prize_pool?: number | null
           registration_end?: string | null
           registration_start?: string | null

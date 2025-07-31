@@ -102,11 +102,10 @@ export function useTournamentRewardsManager(tournamentId: string) {
         if (insertError) throw insertError;
       }
 
-      // 3. Update tournament's prize_distribution for backward compatibility
+      // Update tournament timestamp for tracking
       const { error: updateError } = await supabase
         .from('tournaments')
         .update({ 
-          prize_distribution: rewards as any,
           updated_at: new Date().toISOString()
         })
         .eq('id', tournamentId);

@@ -34,7 +34,7 @@ interface Tournament {
   first_prize: number;
   second_prize: number;
   third_prize: number;
-  prize_distribution: any;
+  // Note: prize_distribution removed - using tournament_prize_tiers
   club_name: string;
   club_address: string;
   current_participants: number;
@@ -160,7 +160,7 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
       const { error } = await supabase
         .from('tournaments')
         .update({
-          prize_distribution: JSON.stringify(rewards),
+          // Note: saving to tournament_prize_tiers instead
           prize_pool: rewards.totalPrize,
           updated_at: new Date().toISOString()
         })
@@ -179,7 +179,7 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
           tournament.id === tournamentId
             ? { 
                 ...tournament, 
-                prize_distribution: JSON.stringify(rewards),
+                // Note: saving to tournament_prize_tiers instead
                 prize_pool: rewards.totalPrize,
                 updated_at: new Date().toISOString()
               }

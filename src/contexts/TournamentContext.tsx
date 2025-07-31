@@ -298,7 +298,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       // Fetch tournament with prize distribution
       const { data: tournament, error } = await supabase
         .from('tournaments')
-        .select('prize_distribution, prize_pool, entry_fee, max_participants')
+        .select('prize_pool, entry_fee, max_participants')
         .eq('id', tournamentId)
         .maybeSingle();
         
@@ -597,7 +597,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         max_rank_requirement: tournament.max_rank_requirement,
         min_rank_requirement: tournament.min_rank_requirement,
         // Store rewards in correct database fields
-        prize_distribution: prizeDistribution,
+        // Note: prize_distribution column removed - using tournament_prize_tiers table
         spa_points_config: spaPointsConfig,
         elo_points_config: eloPointsConfig,
         physical_prizes: physicalPrizes,

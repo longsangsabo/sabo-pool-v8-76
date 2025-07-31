@@ -69,7 +69,7 @@ export const TournamentGlobalProvider: React.FC<TournamentGlobalProviderProps> =
         .select(`
           *,
           club:club_profiles(*),
-          prize_distribution,
+          // Note: prize_distribution removed
           spa_points_config,
           elo_points_config
         `)
