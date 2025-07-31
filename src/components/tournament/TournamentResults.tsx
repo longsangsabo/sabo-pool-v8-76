@@ -110,67 +110,75 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
           </CardTitle>
         </CardHeader>
       )}
-      <CardContent className="space-y-4">
-        {displayResults.map((result) => (
-          <div
-            key={result.user_id}
-            className={`p-4 rounded-lg border ${getPositionColor(result.final_position)}`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
+      <CardContent className="p-0">
+        <div className="space-y-0">
+          {displayResults.map((result, index) => (
+            <div
+              key={result.user_id}
+              className={`flex items-center justify-between p-4 border-b last:border-b-0 ${
+                result.final_position === 1 ? 'bg-gradient-to-r from-yellow-50 to-transparent' :
+                result.final_position === 2 ? 'bg-gradient-to-r from-gray-50 to-transparent' :
+                result.final_position === 3 ? 'bg-gradient-to-r from-amber-50 to-transparent' :
+                index % 2 === 0 ? 'bg-muted/30' : 'bg-background'
+              }`}
+            >
+              {/* Left side: Position, Avatar, Name, Rank */}
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="flex items-center gap-2 min-w-[60px]">
                   {getPositionIcon(result.final_position)}
                   <span className="font-bold text-lg">#{result.final_position}</span>
                 </div>
                 
-                <Avatar className="h-10 w-10">
+                <Avatar className="h-10 w-10 shrink-0">
                   <AvatarImage src={result.avatar_url} alt={result.display_name} />
                   <AvatarFallback>
                     {result.display_name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 
-                <div>
-                  <p className="font-semibold">{result.display_name}</p>
-                  <p className="text-sm text-muted-foreground">{result.full_name}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold truncate">{result.display_name}</p>
+                  <p className="text-sm text-muted-foreground truncate">{result.full_name}</p>
                 </div>
                 
-                <Badge variant="outline" className="ml-2">
+                <Badge variant="outline" className="shrink-0 text-xs">
                   {result.verified_rank}
                 </Badge>
               </div>
 
-              <div className="flex items-center gap-4 text-sm">
-                <div className="text-center">
-                  <p className="font-semibold text-green-600">{result.wins}W</p>
+              {/* Right side: Stats */}
+              <div className="flex items-center gap-6 text-sm">
+                <div className="text-center min-w-[50px]">
+                  <p className="font-bold text-green-600 text-lg">{result.wins}W</p>
                   <p className="text-xs text-muted-foreground">Thắng</p>
                 </div>
                 
-                <div className="text-center">
-                  <p className="font-semibold text-red-600">{result.losses}L</p>
+                <div className="text-center min-w-[50px]">
+                  <p className="font-bold text-red-600 text-lg">{result.losses}L</p>
                   <p className="text-xs text-muted-foreground">Thua</p>
                 </div>
                 
-                <div className="text-center">
-                  <p className="font-semibold text-blue-600">{result.win_percentage?.toFixed(1) || '0.0'}%</p>
+                <div className="text-center min-w-[60px]">
+                  <p className="font-bold text-blue-600 text-lg">{result.win_percentage?.toFixed(1) || '0.0'}%</p>
                   <p className="text-xs text-muted-foreground">Tỷ lệ thắng</p>
                 </div>
                 
-                <div className="text-center">
-                  <p className="font-semibold text-purple-600">{result.spa_points_earned}</p>
+                <div className="text-center min-w-[60px]">
+                  <p className="font-bold text-purple-600 text-lg">{result.spa_points_earned}</p>
                   <p className="text-xs text-muted-foreground">SPA Points</p>
                 </div>
                 
-                <div className="text-center">
-                  <p className="font-semibold text-orange-600">{result.elo_points_awarded}</p>
+                <div className="text-center min-w-[50px]">
+                  <p className="font-bold text-orange-600 text-lg">{result.elo_points_awarded}</p>
                   <p className="text-xs text-muted-foreground">ELO</p>
                 </div>
                 
-                <div className="text-center">
-                  <p className="font-semibold text-green-700">
+                <div className="text-center min-w-[80px]">
+                  <p className="font-bold text-green-700 text-lg">
                     {result.prize_amount > 0 ? new Intl.NumberFormat('vi-VN', { 
                       style: 'currency', 
                       currency: 'VND',
+                      notation: 'compact',
                       minimumFractionDigits: 0
                     }).format(result.prize_amount) : '0₫'}
                   </p>
@@ -178,8 +186,8 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
                 </div>
                 
                 {result.physical_rewards && result.physical_rewards.length > 0 && (
-                  <div className="text-center">
-                    <Gift className="h-4 w-4 mx-auto text-amber-600" />
+                  <div className="text-center min-w-[60px]">
+                    <Gift className="h-5 w-5 mx-auto text-amber-600 mb-1" />
                     <p className="text-xs text-muted-foreground">
                       {result.physical_rewards.length} phần thưởng
                     </p>
@@ -187,11 +195,11 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
                 )}
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
         
         {maxResults && enhancedResults.length > maxResults && (
-          <div className="text-center text-sm text-muted-foreground">
+          <div className="text-center text-sm text-muted-foreground p-4 border-t">
             Hiển thị {maxResults} trong {enhancedResults.length} kết quả
           </div>
         )}
