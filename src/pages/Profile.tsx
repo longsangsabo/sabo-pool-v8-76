@@ -14,6 +14,8 @@ const Profile: React.FC = () => {
     userAgent: navigator.userAgent.includes('Mobile')
   });
   
+  console.log('🎯 [Profile] Rendering ResponsiveProfilePage (NOT ArenaProfilePage)');
+  
   // Use responsive profile page instead of arena
   return <ResponsiveProfilePage />;
 };
