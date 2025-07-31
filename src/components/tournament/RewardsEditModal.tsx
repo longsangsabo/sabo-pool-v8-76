@@ -10,10 +10,12 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Trash2, Trophy, DollarSign, AlertTriangle, Gift, X } from 'lucide-react';
+import { Plus, Trash2, Trophy, DollarSign, AlertTriangle, Gift, X, Zap } from 'lucide-react';
 import { TournamentRewards, RewardPosition } from '@/types/tournament-extended';
 import { formatPrizeAmount } from '@/utils/tournamentHelpers';
 import { toast } from 'sonner';
+import { SPA_TOURNAMENT_REWARDS } from '@/utils/eloConstants';
+import type { RankCode, TournamentPosition } from '@/utils/eloConstants';
 
 // Schema for form validation
 const rewardsSchema = z.object({
@@ -243,6 +245,56 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
     }
   };
 
+  // Auto-calculate SPA points using SABO tournament rewards (E+ tier)
+  const autoCalculateSPA = () => {
+    const positions = watchedPositions || [];
+    
+    if (positions.length === 0) {
+      toast.error('Không có vị trí nào để tính SPA');
+      return;
+    }
+
+    // Use E+ tier (highest tier) for maximum SPA rewards
+    const eRankRewards = SPA_TOURNAMENT_REWARDS['E+'];
+    
+    const updatedPositions = positions.map((pos) => {
+      let spaPoints = 0;
+      
+      // Map position to tournament position
+      switch (pos.position) {
+        case 1:
+          spaPoints = eRankRewards.CHAMPION; // 1600
+          break;
+        case 2:
+          spaPoints = eRankRewards.RUNNER_UP; // 1200
+          break;
+        case 3:
+          spaPoints = eRankRewards.THIRD_PLACE; // 1000
+          break;
+        case 4:
+          spaPoints = eRankRewards.FOURTH_PLACE; // 700
+          break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+          spaPoints = eRankRewards.TOP_8; // 350
+          break;
+        default:
+          spaPoints = eRankRewards.PARTICIPATION; // 130
+          break;
+      }
+      
+      return {
+        ...pos,
+        spaPoints
+      };
+    });
+    
+    setValue('positions', updatedPositions);
+    toast.success(`Đã áp dụng điểm SPA theo hạng E+ cho ${positions.length} vị trí`);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -290,15 +342,27 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
                         Vượt quá tổng giải thưởng!
                       </div>
                     )}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={autoDistributePrizes}
-                      className="mt-2"
-                    >
-                      Phân bố tự động (50%-30%-20%)
-                    </Button>
+                    <div className="flex gap-2 mt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={autoDistributePrizes}
+                      >
+                        Phân bố tự động (50%-30%-20%)
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline" 
+                        size="sm"
+                        onClick={autoCalculateSPA}
+                        className="flex items-center gap-1"
+                        disabled={!watchedPositions || watchedPositions.length === 0}
+                      >
+                        <Zap className="w-3 h-3" />
+                        Tự động SPA (Hạng E+)
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
