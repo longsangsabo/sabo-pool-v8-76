@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Building, Trophy, Users, Settings, Plus, Edit, Shield } from 'lucide-react';
@@ -19,6 +20,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
   className = '' 
 }) => {
   const { isMobile } = useOptimizedResponsive();
+  const navigate = useNavigate();
 
   const actions = [
     {
@@ -42,7 +44,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       title: 'Thách đấu',
       description: 'Tìm đối thủ và thách đấu',
       icon: Trophy,
-      onClick: () => {},
+      onClick: () => !isMobile && navigate('/challenges'),
       primary: false,
       variant: 'outline' as const,
     },
