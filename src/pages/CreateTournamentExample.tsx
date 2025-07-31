@@ -12,7 +12,7 @@ import { Users, DollarSign, Trophy, Calendar } from 'lucide-react';
 
 // Example Form Component
 const TournamentForm: React.FC = () => {
-  const { tournament, updateTournament, saveDraft, createTournament } = useTournament();
+  const { tournament, updateTournament, createTournament } = useTournament();
 
   const handleBasicInfoChange = (field: string, value: any) => {
     updateTournament({ [field]: value });
@@ -133,9 +133,6 @@ const TournamentForm: React.FC = () => {
 
       {/* Actions */}
       <div className="flex gap-4">
-        <Button variant="outline" onClick={saveDraft}>
-          Lưu nháp
-        </Button>
         <Button onClick={createTournament}>
           Tạo giải đấu
         </Button>

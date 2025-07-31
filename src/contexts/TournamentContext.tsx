@@ -20,8 +20,6 @@ interface TournamentContextType {
   updateRewards?: (rewards: TournamentRewards) => void;
   validateTournament?: () => boolean;
   resetTournament?: () => void;
-  saveDraft?: () => Promise<void>;
-  isDraft?: boolean;
   isValid?: boolean;
   validationErrors?: any;
   calculateRewards?: () => TournamentRewards;
@@ -29,10 +27,6 @@ interface TournamentContextType {
   setRecalculateOnChange?: (value: boolean) => void;
   createTournament?: () => Promise<any>;
   updateExistingTournament?: (id: string) => Promise<any>;
-  // Draft tournament management
-  draftTournamentId?: string | null;
-  createDraftTournament?: () => Promise<string>;
-  convertDraftToOfficial?: () => Promise<any>;
 }
 
 const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
@@ -42,7 +36,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rewards, setRewards] = useState<TournamentRewards | null>(null);
-  const [draftTournamentId, setDraftTournamentId] = useState<string | null>(null);
+  
   const { user } = useAuth();
 
   // Updated loadRewardsFromDatabase to work with new structure
@@ -265,113 +259,21 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, [loadRewardsFromDatabase]);
 
-  // Create draft tournament for immediate rewards editing
-  const createDraftTournament = useCallback(async (): Promise<string> => {
-    try {
-      console.log('🎯 Creating draft tournament...');
-      setLoading(true);
-      
-      if (!user) {
-        throw new Error('User must be authenticated to create draft tournament');
-      }
-
-      const draftData = {
-        name: `Draft Tournament ${new Date().toISOString().slice(0, 10)}`,
-        description: 'Draft tournament for reward configuration',
-        status: 'draft',
-        is_draft: true,
-        created_by: user.id,
-        tournament_type: 'double_elimination',
-        game_format: 'pool',
-        max_participants: 16,
-        tier_level: 1,
-        entry_fee: 0,
-        prize_pool: 0,
-        tournament_start: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        tournament_end: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(), // 8 days from now
-        registration_start: new Date().toISOString(),
-        registration_end: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days from now
-        venue_address: 'TBD'
-      };
-
-      const { data, error } = await supabase
-        .from('tournaments')
-        .insert(draftData)
-        .select()
-        .single();
-
-      if (error) throw error;
-      
-      console.log('✅ Draft tournament created:', data.id);
-      setDraftTournamentId(data.id);
-      setTournament(data);
-      
-      toast.success('Đã tạo bản nháp giải đấu để cấu hình phần thưởng');
-      return data.id;
-      
-    } catch (error) {
-      console.error('❌ Error creating draft tournament:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Lỗi khi tạo bản nháp';
-      toast.error(errorMessage);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  // Convert draft to official tournament
-  const convertDraftToOfficial = useCallback(async () => {
-    try {
-      if (!draftTournamentId || !tournament) {
-        throw new Error('No draft tournament to convert');
-      }
-
-      console.log('🎯 Converting draft to official tournament:', draftTournamentId);
-      
-      const { data, error } = await supabase
-        .from('tournaments')
-        .update({
-          status: 'upcoming',
-          is_draft: false,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', draftTournamentId)
-        .select()
-        .single();
-
-      if (error) throw error;
-      
-      console.log('✅ Draft converted to official tournament:', data);
-      setTournament(data);
-      setDraftTournamentId(null);
-      
-      return data;
-      
-    } catch (error) {
-      console.error('❌ Error converting draft tournament:', error);
-      throw error;
-    }
-  }, [draftTournamentId, tournament]);
 
   const value: TournamentContextType = {
     tournament,
     loading,
     error,
     rewards,
-    draftTournamentId,
     loadTournament,
     refreshTournament,
     saveTournamentRewards,
     loadRewards,
-    createDraftTournament,
-    convertDraftToOfficial,
     // Stub implementations for missing properties
     updateTournament: () => {},
     updateRewards: () => {},
     validateTournament: () => true,
     resetTournament: () => {},
-    saveDraft: async () => {},
-    isDraft: false,
     isValid: true,
     validationErrors: {},
     calculateRewards: calculateRewardsInternal,

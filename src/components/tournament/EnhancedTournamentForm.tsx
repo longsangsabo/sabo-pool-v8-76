@@ -58,8 +58,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     updateRewards,
     validateTournament,
     resetTournament,
-    saveDraft,
-    isDraft,
     isValid,
     validationErrors,
     calculateRewards,
@@ -67,9 +65,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     setRecalculateOnChange,
     createTournament,
     updateExistingTournament,
-    draftTournamentId,
-    createDraftTournament,
-    convertDraftToOfficial,
   } = useTournament();
 
   const { refreshTournaments } = useTournamentGlobal();
@@ -77,7 +72,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showQuickAllocation, setShowQuickAllocation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCreatingDraft, setIsCreatingDraft] = useState(false);
+  
 
   const form = useForm<TournamentFormData>({
     resolver: zodResolver(tournamentSchema),
@@ -95,7 +90,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   }, [tournament, form]);
 
 
-  // Auto-save draft - use debounced approach to prevent infinite loops
+  // Sync form data with context
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     
@@ -120,33 +115,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       }
     };
   }, [form, updateTournament]);
-
-  // Auto-create draft tournament when switching to financial tab
-  useEffect(() => {
-    const handleDraftCreation = async () => {
-      // Only create if we're in create mode, on financial tab, no existing IDs, and not already creating
-      if (
-        activeTab === 'financial' && 
-        mode === 'create' && 
-        !tournamentId && 
-        !draftTournamentId && 
-        !isCreatingDraft &&
-        createDraftTournament
-      ) {
-        try {
-          setIsCreatingDraft(true);
-          console.log('🎯 Auto-creating draft tournament for financial tab...');
-          await createDraftTournament();
-        } catch (error) {
-          console.error('❌ Failed to auto-create draft tournament:', error);
-        } finally {
-          setIsCreatingDraft(false);
-        }
-      }
-    };
-
-    handleDraftCreation();
-  }, [activeTab, mode, tournamentId, draftTournamentId, createDraftTournament]); // Removed isCreatingDraft from deps
 
   // Calculate completion percentage
   const getCompletionPercentage = (): number => {
@@ -213,9 +181,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       if (mode === 'edit' && tournamentId) {
         console.log('📝 Updating existing tournament:', tournamentId);
         result = await updateExistingTournament(tournamentId);
-      } else if (draftTournamentId && convertDraftToOfficial) {
-        console.log('🎯 Converting draft to official tournament:', draftTournamentId);
-        result = await convertDraftToOfficial();
       } else {
         console.log('🆕 Creating new tournament...');
         result = await createTournament();
@@ -363,12 +328,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
             {mode === 'edit' ? 'Chỉnh sửa giải đấu' : 'Tạo giải đấu mới'}
           </h3>
           <div className="flex items-center gap-2">
-            {isDraft && (
-              <Badge variant="secondary" className="text-xs h-6">
-                <Save className="w-3 h-3 mr-1" />
-                Nháp
-              </Badge>
-            )}
             <Badge variant={isValid ? 'default' : 'destructive'} className="text-xs h-6">
               {isValid ? (
                 <CheckCircle className="w-3 h-3 mr-1" />
@@ -754,17 +713,17 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                   <OptimizedRewardsSection 
                     isEditable={true}
                     rewards={tournament?.rewards}
-                    showAsTemplate={!tournamentId && !draftTournamentId}
+                    showAsTemplate={!tournamentId}
                     maxParticipants={tournament?.max_participants || 16}
                     entryFee={tournament?.entry_fee || 0}
-                    tournamentId={tournamentId || draftTournamentId || undefined}
+                    tournamentId={tournamentId}
                     onRewardsUpdated={(updatedRewards) => {
                       console.log('🔄 [EnhancedTournamentForm] Rewards updated:', updatedRewards);
                       // Update tournament context with new rewards immediately
                       updateRewards(updatedRewards);
                       
                       // Force refresh if it's an existing tournament
-                      if (tournamentId || draftTournamentId) {
+                      if (tournamentId) {
                         // The hook will automatically refresh via invalidation
                         console.log('✅ [EnhancedTournamentForm] Tournament/Draft exists, hook will refresh data');
                       }
@@ -786,32 +745,16 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
           <div className="flex items-center gap-2">
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => {
-                saveDraft();
-                toast.success('Đã lưu nháp');
+                resetTournament();
+                toast.success('Đã đặt lại form');
               }}
               className="h-8 text-xs"
             >
-              <Save className="w-3 h-3 mr-1" />
-              Lưu nháp
+              Đặt lại
             </Button>
-            
-            {isDraft && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  resetTournament();
-                  toast.success('Đã đặt lại form');
-                }}
-                className="h-8 text-xs"
-              >
-                Đặt lại
-              </Button>
-            )}
           </div>
 
           <div className="flex items-center gap-2">
