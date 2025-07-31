@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RefreshCw, Zap, AlertCircle } from 'lucide-react';
-import { useTournamentRewardsSync } from '@/hooks/useTournamentRewardsSync';
+import { useTournamentRewardSync } from '@/hooks/useTournamentRewardSync';
 import { toast } from 'sonner';
 
 interface TournamentRewardsSyncProps {
@@ -17,7 +17,7 @@ export const TournamentRewardsSync: React.FC<TournamentRewardsSyncProps> = ({
   tournamentName,
   onSyncCompleted
 }) => {
-  const { syncTournamentRewards, syncing, error } = useTournamentRewardsSync();
+  const { syncTournamentRewards, syncing, error } = useTournamentRewardSync();
 
   const handleSync = async (syncAll = false) => {
     try {
