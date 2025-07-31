@@ -794,6 +794,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                     maxParticipants={tournament?.max_participants || 16}
                     entryFee={tournament?.entry_fee || 0}
                     tournamentId={tournamentId}
+                    maxRankRequirement={form.getValues().max_rank_requirement}
                     onRewardsUpdated={(updatedRewards) => {
                       console.log('🔄 [EnhancedTournamentForm] Rewards updated:', updatedRewards);
                       // Update tournament context with new rewards immediately
@@ -1022,7 +1023,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
               toast.error('Lỗi khi lưu phần thưởng');
             }
           }}
-          
+          maxRankRequirement={form.getValues().max_rank_requirement}
         />
       )}
     </div>

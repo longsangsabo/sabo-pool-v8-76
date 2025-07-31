@@ -45,6 +45,7 @@ interface RewardsEditModalProps {
   onSave: (rewards: TournamentRewards) => Promise<void>;
   maxParticipants?: number;
   entryFee?: number;
+  maxRankRequirement?: RankCode;
   disabled?: boolean;
 }
 
@@ -86,6 +87,7 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
   onSave,
   maxParticipants,
   entryFee,
+  maxRankRequirement,
   disabled = false
 }) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -245,7 +247,7 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
     }
   };
 
-  // Auto-calculate SPA points using SABO tournament rewards (E+ tier)
+  // Auto-calculate SPA points using SABO tournament rewards (flexible by max rank)
   const autoCalculateSPA = () => {
     const positions = watchedPositions || [];
     
@@ -254,8 +256,9 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
       return;
     }
 
-    // Use E+ tier (highest tier) for maximum SPA rewards
-    const eRankRewards = SPA_TOURNAMENT_REWARDS['E+'];
+    // Use maxRankRequirement or fallback to 'K' (lowest rank)
+    const targetRank = maxRankRequirement || 'K';
+    const rankRewards = SPA_TOURNAMENT_REWARDS[targetRank];
     
     const updatedPositions = positions.map((pos) => {
       let spaPoints = 0;
@@ -263,25 +266,25 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
       // Map position to tournament position
       switch (pos.position) {
         case 1:
-          spaPoints = eRankRewards.CHAMPION; // 1600
+          spaPoints = rankRewards.CHAMPION;
           break;
         case 2:
-          spaPoints = eRankRewards.RUNNER_UP; // 1200
+          spaPoints = rankRewards.RUNNER_UP;
           break;
         case 3:
-          spaPoints = eRankRewards.THIRD_PLACE; // 1000
+          spaPoints = rankRewards.THIRD_PLACE;
           break;
         case 4:
-          spaPoints = eRankRewards.FOURTH_PLACE; // 700
+          spaPoints = rankRewards.FOURTH_PLACE;
           break;
         case 5:
         case 6:
         case 7:
         case 8:
-          spaPoints = eRankRewards.TOP_8; // 350
+          spaPoints = rankRewards.TOP_8;
           break;
         default:
-          spaPoints = eRankRewards.PARTICIPATION; // 130
+          spaPoints = rankRewards.PARTICIPATION;
           break;
       }
       
@@ -292,7 +295,7 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
     });
     
     setValue('positions', updatedPositions);
-    toast.success(`Đã áp dụng điểm SPA theo hạng E+ cho ${positions.length} vị trí`);
+    toast.success(`Đã áp dụng điểm SPA theo hạng ${targetRank} cho ${positions.length} vị trí`);
   };
 
   return (
@@ -360,7 +363,7 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
                         disabled={!watchedPositions || watchedPositions.length === 0}
                       >
                         <Zap className="w-3 h-3" />
-                        Tự động SPA (Hạng E+)
+                        Tự động SPA (Hạng {maxRankRequirement || 'K'})
                       </Button>
                     </div>
                   </div>

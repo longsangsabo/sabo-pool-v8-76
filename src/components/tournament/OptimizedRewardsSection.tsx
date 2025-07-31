@@ -5,6 +5,7 @@ import { Edit, Trophy, Medal, Award, Crown, Star, Gift, Coins, Target, Download,
 import { Badge } from '@/components/ui/badge';
 import { TournamentRewards } from '@/types/tournament-extended';
 import { RewardsEditModal } from './RewardsEditModal';
+import type { RankCode } from '@/utils/eloConstants';
 import { formatPrizeAmount } from '@/utils/tournamentHelpers';
 import { toast } from 'sonner';
 import { useTournamentRewardsManager } from '@/hooks/useTournamentRewardsManager';
@@ -21,6 +22,7 @@ interface OptimizedRewardsSectionProps {
   showFinancialSummary?: boolean;
   tournamentId?: string;
   onRewardsChange?: (rewards: TournamentRewards) => void;
+  maxRankRequirement?: RankCode;
 }
 
 export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = ({
@@ -33,7 +35,8 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
   onUseTemplate,
   showFinancialSummary = false,
   tournamentId,
-  onRewardsChange
+  onRewardsChange,
+  maxRankRequirement
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -399,6 +402,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
         rewards={rewards_state}
         onSave={handleSaveRewards}
         disabled={isSavingTemplate}
+        maxRankRequirement={maxRankRequirement}
       />
 
       {/* Return data for parent component usage */}
