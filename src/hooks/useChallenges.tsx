@@ -26,14 +26,25 @@ export const useChallenges = () => {
       setLoading(true);
       setError(null);
 
-      console.log('✅ Fetching challenges for user:', user.id);
+      console.log('✅ [useChallenges] Fetching challenges for user:', user.id);
 
-      // ✅ CRITICAL FIX: Include open challenges and user's challenges
+      // ✅ CRITICAL FIX: Fetch ALL challenges including open ones from other users
       const { data: challengesData, error: fetchError } = await supabase
         .from('challenges')
         .select('*')
-        .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id},opponent_id.is.null`)
         .order('created_at', { ascending: false });
+
+      console.log('📊 [useChallenges] Raw database response:', {
+        totalChallenges: challengesData?.length || 0,
+        error: fetchError,
+        firstFew: challengesData?.slice(0, 3).map(c => ({
+          id: c.id.slice(-8),
+          challenger_id: c.challenger_id?.slice(-8),
+          opponent_id: c.opponent_id?.slice(-8) || 'NULL',
+          status: c.status,
+          created_at: c.created_at
+        }))
+      });
 
       if (fetchError) {
         throw new Error(`Database error: ${fetchError.message}`);
@@ -126,6 +137,29 @@ export const useChallenges = () => {
           current_user_profile: profileMap.get(user.id)
         };
       }) || [];
+
+      // ✅ Enhanced logging for debugging
+      console.log('🔍 [useChallenges] Processing enriched challenges:', {
+        total: enrichedChallenges.length,
+        currentUser: user.id.slice(-8),
+        byStatus: {
+          pending: enrichedChallenges.filter(c => c.status === 'pending').length,
+          accepted: enrichedChallenges.filter(c => c.status === 'accepted').length,
+          completed: enrichedChallenges.filter(c => c.status === 'completed').length
+        },
+        openChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending').length,
+        myOpenChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id === user.id).length,
+        otherOpenChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user.id).length,
+        sampleOtherOpen: enrichedChallenges
+          .filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user.id)
+          .slice(0, 3)
+          .map(c => ({
+            id: c.id.slice(-8),
+            challenger: c.challenger_profile?.full_name || 'Unknown',
+            bet_points: c.bet_points,
+            race_to: c.race_to
+          }))
+      });
 
       setChallenges(enrichedChallenges as unknown as Challenge[]);
     } catch (err) {

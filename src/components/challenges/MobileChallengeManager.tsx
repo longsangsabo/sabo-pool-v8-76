@@ -81,14 +81,24 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   });
 
   // Debug: Check what challenges we have
-  console.log('🔍 [Mobile Challenges]', {
+  console.log('🔍 [MobileChallengeManager] Detailed analysis:', {
     totalChallenges: challenges.length,
-    currentUser: user?.id,
-    challengeTypes: challenges.map(c => ({
+    currentUser: user?.id?.slice(-8),
+    challengeBreakdown: {
+      pending: challenges.filter(c => c.status === 'pending').length,
+      accepted: challenges.filter(c => c.status === 'accepted').length,
+      withOpponent: challenges.filter(c => c.opponent_id).length,
+      openChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending').length,
+      myOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id === user?.id).length,
+      otherUserOpenChallenges: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user?.id).length
+    },
+    sampleChallenges: challenges.slice(0, 5).map(c => ({
       id: c.id.slice(-8),
-      challenger: c.challenger_profile?.display_name || 'Unknown',
-      isOpen: !c.opponent_id,
+      challenger_name: c.challenger_profile?.display_name || c.challenger_profile?.full_name || 'Unknown',
+      challenger_id: c.challenger_id?.slice(-8),
+      opponent_id: c.opponent_id?.slice(-8) || 'NULL',
       status: c.status,
+      isOpen: !c.opponent_id,
       isMyChallenge: c.challenger_id === user?.id
     }))
   });
@@ -100,14 +110,17 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     return isOpen && isNotMyChallenge;
   }).map(convertToLocalChallenge);
 
-  console.log('✅ [Open Challenges Result]', {
-    count: openChallenges.length,
+  console.log('✅ [MobileChallengeManager] Open challenges processing result:', {
+    totalFiltered: openChallenges.length,
     challenges: openChallenges.map(c => ({
       id: c.id?.slice(-8),
-      challenger: c.challenger_profile?.display_name,
+      challenger: c.challenger_profile?.display_name || c.challenger_profile?.full_name,
       betPoints: c.bet_points,
-      raceTo: c.race_to
-    }))
+      raceTo: c.race_to,
+      status: c.status,
+      hasProfile: !!c.challenger_profile
+    })),
+    rawOpenCount: challenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user?.id).length
   });
 
   // Get user's own open challenges

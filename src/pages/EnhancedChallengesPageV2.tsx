@@ -19,6 +19,7 @@ import CompactStatCard from '@/components/challenges/CompactStatCard';
 import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
+import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
 
 import { toast } from 'sonner';
 import {
@@ -101,7 +102,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
     error,
     acceptChallenge,
     declineChallenge,
-    cancelChallenge
+    cancelChallenge,
+    fetchChallenges
   } = useChallenges();
   
   const [activeTab, setActiveTab] = useState('my-challenges');
@@ -784,6 +786,9 @@ const EnhancedChallengesPageV2: React.FC = () => {
   // Mobile Layout Component - Enhanced with MobileChallengeManager
   const MobileLayout = () => (
     <div className="min-h-screen bg-background">
+      <div className="px-4 py-4">
+        <ChallengeDebugPanel onRefresh={fetchChallenges} />
+      </div>
       <div className="px-0 py-0">
         <MobileChallengeManager className="h-screen" />
       </div>
