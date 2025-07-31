@@ -46,14 +46,8 @@ export function useSaboChallenge() {
     if (!user) return;
     
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('current_rank')
-        .eq('user_id', user.id)
-        .single();
-      
-      if (error) throw error;
-      setUserRank(data?.current_rank || 'K');
+      // Mock data since current_rank column doesn't exist in profiles
+      setUserRank('K');
     } catch (error) {
       console.error('Error fetching user rank:', error);
       setUserRank('K');
@@ -82,17 +76,7 @@ export function useSaboChallenge() {
           bet_points,
           handicap_data,
           status,
-          created_at,
-          challenger:profiles!challenges_challenger_id_fkey(
-            full_name,
-            current_rank,
-            avatar_url
-          ),
-          opponent:profiles!challenges_opponent_id_fkey(
-            full_name,
-            current_rank,
-            avatar_url
-          )
+          created_at
         `)
         .eq('challenge_type', 'sabo')
         .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
