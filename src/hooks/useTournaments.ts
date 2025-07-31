@@ -19,7 +19,6 @@ export const useTournaments = () => {
         .select(`
           *,
           club_profiles!tournaments_club_id_fkey(*),
-          prize_distribution,
           spa_points_config,
           elo_points_config,
           physical_prizes
@@ -50,9 +49,8 @@ export const useTournaments = () => {
         status: (tournament.status === 'upcoming' ? 'registration_open' : tournament.status) as 'registration_open' | 'registration_closed' | 'ongoing' | 'completed' | 'cancelled',
         management_status: ((tournament as any).management_status || 'open') as 'open' | 'locked' | 'ongoing' | 'completed',
         // Parse JSONB fields properly
-        prize_distribution: tournament.prize_distribution ? 
-          (typeof tournament.prize_distribution === 'string' ? 
-            JSON.parse(tournament.prize_distribution) : tournament.prize_distribution) : undefined,
+        // Use tournament_prize_tiers for rewards instead
+        rewards: undefined,
         spa_points_config: tournament.spa_points_config ? 
           (typeof tournament.spa_points_config === 'string' ? 
             JSON.parse(tournament.spa_points_config) : tournament.spa_points_config) : undefined,

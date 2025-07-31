@@ -37,12 +37,7 @@ export interface Tournament {
   // Extended properties for tournament configuration
   tier?: string;
   tier_level?: number;
-  prize_distribution?: {
-    first_place?: number;
-    second_place?: number;
-    third_place?: number;
-    participation?: number;
-  };
+  // Note: prize_distribution removed - using tournament_prize_tiers table
   spa_points_config?: {
     champion?: number;
     runner_up?: number;

@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { TournamentRewards } from '@/types/tournament-extended';
-import { RankCode, getDefaultRank } from '@/utils/eloConstants';
+import { RankCode } from '@/utils/eloConstants';
 import { calculateRewards } from '@/utils/tournamentRewards';
 
 interface TournamentContextType {
@@ -76,7 +76,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, []);
   
-  const calculateRewards = useCallback((): TournamentRewards => {
+  const calculateRewardsInternal = useCallback((): TournamentRewards => {
     if (!tournament) {
       return {
         totalPrize: 0,
@@ -271,5 +271,7 @@ export const useTournamentContext = () => {
   }
   return context;
 };
+
+export const useTournament = useTournamentContext;
 
 export default TournamentContext;

@@ -29,7 +29,6 @@ export const useRealtimeTournaments = ({
         .from('tournaments')
         .select(`
           *,
-          prize_distribution,
           physical_prizes,
           spa_points_config,
           elo_points_config
