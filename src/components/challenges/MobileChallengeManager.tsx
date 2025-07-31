@@ -60,18 +60,38 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   const [showFilters, setShowFilters] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Get open challenges (challenges where opponent_id is null)
+  // Convert hook data to local Challenge format (same as desktop)
+  const convertToLocalChallenge = (c: any) => ({
+    id: c.id,
+    challenger_id: c.challenger_id,
+    opponent_id: c.opponent_id,
+    club_id: c.club_id,
+    bet_points: c.bet_points || 0,
+    race_to: c.race_to || 5,
+    status: c.status,
+    message: c.message,
+    scheduled_time: c.scheduled_time,
+    created_at: c.created_at,
+    expires_at: c.expires_at,
+    challenge_type: c.challenge_type,
+    challenger_profile: c.challenger_profile,
+    opponent_profile: c.opponent_profile,
+    club_profiles: c.club_profiles || null,
+    club: c.club || null,
+  });
+
+  // Use same logic as desktop - get open challenges with proper data transformation
   const openChallenges = challenges.filter(c => 
     !c.opponent_id && 
     c.status === 'pending'
-  );
+  ).map(convertToLocalChallenge);
 
   // Get user's own open challenges
   const userOpenChallenges = challenges.filter(c =>
     !c.opponent_id &&
     c.challenger_id === user?.id &&
     c.status === 'pending'
-  );
+  ).map(convertToLocalChallenge);
 
   const getStatusColor = (status: string) => {
     switch (status) {
