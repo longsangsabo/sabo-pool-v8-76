@@ -14,7 +14,7 @@ import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
 import AdminCreateChallengeModal from '@/components/admin/AdminCreateChallengeModal';
 import TrustScoreBadge from '@/components/TrustScoreBadge';
-import SaboSystemTab from './challenges/components/tabs/SaboSystemTab';
+
 import { toast } from 'sonner';
 import {
   Plus,
@@ -33,6 +33,7 @@ import {
   ArrowUp,
   ArrowDown,
   Shield,
+  Sword,
 } from 'lucide-react';
 
 // Use simplified Challenge interface based on the database
@@ -95,6 +96,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   } = useChallenges();
   
   const [activeTab, setActiveTab] = useState('my-challenges');
+  const [challengeTypeFilter, setChallengeTypeFilter] = useState<'all' | 'standard' | 'sabo'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
@@ -172,17 +174,28 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
   const getFilteredChallenges = (challengeList: Challenge[]) => {
     return challengeList.filter(challenge => {
-      if (!searchTerm) return true;
-      
-      const challengerName = challenge.challenger_profile?.full_name?.toLowerCase() || '';
-      const opponentName = challenge.opponent_profile?.full_name?.toLowerCase() || '';
-      const clubName = challenge.club_profiles?.club_name?.toLowerCase() || '';
-      
-      return (
-        challengerName.includes(searchTerm.toLowerCase()) ||
-        opponentName.includes(searchTerm.toLowerCase()) ||
-        clubName.includes(searchTerm.toLowerCase())
-      );
+      // Search filter
+      const matchesSearch = !searchTerm || (() => {
+        const challengerName = challenge.challenger_profile?.full_name?.toLowerCase() || '';
+        const opponentName = challenge.opponent_profile?.full_name?.toLowerCase() || '';
+        const clubName = challenge.club_profiles?.club_name?.toLowerCase() || '';
+        
+        return (
+          challengerName.includes(searchTerm.toLowerCase()) ||
+          opponentName.includes(searchTerm.toLowerCase()) ||
+          clubName.includes(searchTerm.toLowerCase())
+        );
+      })();
+
+      // Status filter
+      const matchesStatus = statusFilter === 'all' || challenge.status === statusFilter;
+
+      // Challenge type filter
+      const matchesType = challengeTypeFilter === 'all' || 
+        (challengeTypeFilter === 'sabo' && challenge.challenge_type === 'sabo') ||
+        (challengeTypeFilter === 'standard' && (challenge.challenge_type === 'standard' || !challenge.challenge_type));
+
+      return matchesSearch && matchesStatus && matchesType;
     });
   };
 
@@ -608,6 +621,23 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </div>
               
               <div className="flex gap-3">
+                {/* Challenge Type Filter */}
+                <Select value={challengeTypeFilter} onValueChange={(value: 'all' | 'standard' | 'sabo') => setChallengeTypeFilter(value)}>
+                  <SelectTrigger className="w-40 bg-white border-border/30">
+                    <SelectValue placeholder="Loại thách đấu" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tất cả</SelectItem>
+                    <SelectItem value="standard">Thường</SelectItem>
+                    <SelectItem value="sabo">
+                      <div className="flex items-center gap-2">
+                        <Sword className="w-4 h-4" />
+                        SABO
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-40 border-border/50 hover:border-primary/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200">
                     <SelectValue />
@@ -651,7 +681,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
         {/* Challenges Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
+          <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
             <TabsTrigger 
               value="my-challenges"
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
@@ -669,12 +699,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
             >
               Thách đấu mở ({getFilteredChallenges(openChallenges).length})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="sabo-system"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
-            >
-              SABO System
             </TabsTrigger>
           </TabsList>
 
@@ -745,9 +769,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="sabo-system" className="space-y-6">
-            <SaboSystemTab />
-          </TabsContent>
         </Tabs>
       </div>
 

@@ -22,6 +22,16 @@ interface EnhancedChallengeCardProps {
     challenged_id: string;
     status: string;
     bet_points: number;
+    race_to?: number;
+    challenge_type?: string;
+    handicap_data?: {
+      challenger_rank: string;
+      opponent_rank: string;
+      handicap_challenger: number;
+      handicap_opponent: number;
+      rank_difference: number;
+      explanation: string;
+    };
     proposed_datetime: string;
     confirmed_datetime?: string;
     message?: string;
@@ -154,12 +164,19 @@ export const EnhancedChallengeCard: React.FC<EnhancedChallengeCardProps> = ({
             <Badge className={getStatusColor(challenge.status)}>
               {getStatusText(challenge.status)}
             </Badge>
+            {challenge.challenge_type === 'sabo' && (
+              <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">
+                SABO
+              </Badge>
+            )}
           </div>
           <div className='text-right'>
             <div className='text-sm font-semibold text-orange-600'>
               {challenge.bet_points} điểm
             </div>
-            <div className='text-xs text-gray-500'>Tiền cược</div>
+            <div className='text-xs text-gray-500'>
+              {challenge.race_to ? `Race to ${challenge.race_to}` : 'Tiền cược'}
+            </div>
           </div>
         </div>
 
@@ -198,8 +215,18 @@ export const EnhancedChallengeCard: React.FC<EnhancedChallengeCardProps> = ({
             )}
           </div>
 
+          {/* SABO Handicap Info */}
+          {challenge.challenge_type === 'sabo' && challenge.handicap_data && (
+            <div className='mt-3 p-2 bg-blue-50 rounded border-l-4 border-blue-500'>
+              <div className='text-xs font-medium text-blue-700 mb-1'>Handicap SABO:</div>
+              <p className='text-sm text-blue-800 font-medium'>
+                {challenge.handicap_data.explanation}
+              </p>
+            </div>
+          )}
+
           {challenge.message && (
-            <div className='mt-3 p-2 bg-white rounded border-l-4 border-blue-500'>
+            <div className='mt-3 p-2 bg-white rounded border-l-4 border-gray-500'>
               <p className='text-sm text-gray-700'>"{challenge.message}"</p>
             </div>
           )}

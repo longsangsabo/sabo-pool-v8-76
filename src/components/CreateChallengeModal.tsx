@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { Search, Trophy, DollarSign, MapPin, Clock, Users } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { calculateSaboHandicap, type SaboRank, formatHandicapDisplay } from '@/utils/saboHandicap';
 
 interface CreateChallengeModalProps {
   isOpen: boolean;
@@ -59,14 +60,34 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
   const [message, setMessage] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
   const [isOpenChallenge, setIsOpenChallenge] = useState(false);
+  const [isSaboMode, setIsSaboMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [userRank, setUserRank] = useState<SaboRank>('K');
 
   useEffect(() => {
     if (isOpen) {
       fetchClubs();
+      fetchUserRank();
     }
   }, [isOpen]);
+
+  const fetchUserRank = async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('current_rank')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (error) throw error;
+      setUserRank(data?.current_rank || 'K');
+    } catch (error) {
+      console.error('Error fetching user rank:', error);
+      setUserRank('K');
+    }
+  };
 
   useEffect(() => {
     if (isOpenChallenge) {
@@ -217,11 +238,40 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
     try {
       const selectedConfig = BET_CONFIGURATIONS.find(config => config.points === betPoints);
       
+      // Calculate SABO handicap if in SABO mode
+      let handicapData = null;
+      if (isSaboMode && selectedPlayer?.current_rank) {
+        const handicapResult = calculateSaboHandicap(
+          userRank,
+          selectedPlayer.current_rank as SaboRank,
+          betPoints
+        );
+        
+        if (!handicapResult.isValid) {
+          toast.error(handicapResult.errorMessage || 'Không thể tạo thách đấu SABO');
+          setLoading(false);
+          return;
+        }
+        
+        handicapData = {
+          challenger_rank: handicapResult.challengerRank,
+          opponent_rank: handicapResult.opponentRank,
+          handicap_challenger: handicapResult.handicapChallenger,
+          handicap_opponent: handicapResult.handicapOpponent,
+          rank_difference: handicapResult.rankDifference,
+          explanation: handicapResult.explanation
+        };
+      }
+
       const { error } = await supabase
         .from('challenges')
         .insert({
           challenger_id: user.id,
           opponent_id: isOpenChallenge ? null : selectedPlayer?.user_id,
+          challenge_type: isSaboMode ? 'sabo' : 'standard',
+          bet_points: betPoints,
+          race_to: selectedConfig?.raceTO || 8,
+          handicap_data: handicapData,
           challenge_message: message || null,
           status: 'pending',
         });
@@ -274,12 +324,22 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
     setMessage('');
     setScheduledTime('');
     setIsOpenChallenge(false);
+    setIsSaboMode(false);
     onClose();
   };
 
   const selectedConfig = BET_CONFIGURATIONS.find(config => config.points === betPoints);
 
+  // Calculate SABO handicap preview
+  const handicapPreview = isSaboMode && selectedPlayer?.current_rank 
+    ? calculateSaboHandicap(userRank, selectedPlayer.current_rank as SaboRank, betPoints)
+    : null;
+
   const canCreateChallenge = isOpenChallenge || (selectedPlayer && selectedPlayer.user_id && selectedPlayer.user_id.trim() !== '');
+  
+  // For SABO challenges, also check rank compatibility
+  const saboCompatible = !isSaboMode || !selectedPlayer?.current_rank || 
+    calculateSaboHandicap(userRank, selectedPlayer.current_rank as SaboRank, betPoints).isValid;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -312,6 +372,28 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                 </span>
               </div>
             </div>
+            
+            {/* SABO Mode Toggle */}
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-blue-100 text-blue-800">SABO</Badge>
+                <span className="text-sm font-medium">Chế độ SABO Professional</span>
+              </div>
+              <Switch
+                checked={isSaboMode}
+                onCheckedChange={setIsSaboMode}
+                disabled={isOpenChallenge}
+              />
+            </div>
+            
+            {isSaboMode && (
+              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-sm text-blue-800">
+                  <strong>Chế độ SABO:</strong> Hệ thống sẽ tự động tính toán handicap dựa trên chênh lệch hạng và mức cược
+                </div>
+              </div>
+            )}
+            
             {isOpenChallenge && (
               <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                 <div className="text-sm text-green-800">
@@ -379,11 +461,32 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
                     <AvatarImage src={selectedPlayer.avatar_url} />
                     <AvatarFallback>{selectedPlayer.full_name[0]}</AvatarFallback>
                   </Avatar>
-                  <div>
+                  <div className="flex-1">
                     <div className="font-medium">Đối thủ: {selectedPlayer.full_name}</div>
                     <div className="text-sm text-gray-600">
                       Hạng {selectedPlayer.current_rank} • {selectedPlayer.spa_points} điểm SPA
                     </div>
+                    
+                    {/* SABO Handicap Preview */}
+                    {isSaboMode && handicapPreview && (
+                      <div className="mt-2 p-2 bg-white rounded border">
+                        <div className="text-xs font-medium text-blue-700 mb-1">Handicap SABO:</div>
+                        <div className="text-sm">
+                          {handicapPreview.isValid ? (
+                            <span className={`font-medium ${
+                              handicapPreview.handicapChallenger > 0 ? 'text-green-600' : 
+                              handicapPreview.handicapOpponent > 0 ? 'text-orange-600' : 'text-gray-600'
+                            }`}>
+                              {handicapPreview.explanation}
+                            </span>
+                          ) : (
+                            <span className="text-red-600 font-medium">
+                              {handicapPreview.errorMessage}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -479,10 +582,11 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
             </Button>
             <Button
               onClick={handleCreateChallenge}
-              disabled={loading || !canCreateChallenge}
+              disabled={!canCreateChallenge || !saboCompatible || loading}
               className="flex-1"
             >
-              {loading ? 'Đang tạo...' : 'Tạo thách đấu'}
+              {loading ? 'Đang tạo...' : 
+               `Tạo thách đấu${isSaboMode ? ' SABO' : ''}${selectedConfig ? ` (${selectedConfig.points} điểm)` : ''}`}
             </Button>
           </div>
         </div>
