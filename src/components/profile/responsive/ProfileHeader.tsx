@@ -69,39 +69,45 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   if (isMobile) {
     return (
-      <TechCard className={`mx-4 my-6 ${className}`} variant="premium">
-        <div className="text-center space-y-4">
-          <div className="relative inline-block">
-            <Avatar className="w-20 h-20 sabo-tech-avatar">
-              <AvatarImage 
-                src={profile?.avatar_url} 
-                alt={profile?.display_name || profile?.full_name}
-                className="object-cover"
-              />
-              <AvatarFallback className="text-2xl font-semibold bg-primary/20">
-                {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border-2 border-primary">
-              <Star className="w-3 h-3 text-primary" />
+      <div className={`sabo-tech-card ${className}`}>
+        <div className="tech-card-border"></div>
+        <div className="tech-card-content">
+          <div className="text-center space-y-4">
+            <div className="relative inline-block">
+              <Avatar className="w-20 h-20 border-2 border-primary shadow-lg">
+                <AvatarImage 
+                  src={profile?.avatar_url} 
+                  alt={profile?.display_name || profile?.full_name}
+                  className="object-cover"
+                />
+                <AvatarFallback className="text-2xl font-semibold bg-primary/20 text-primary">
+                  {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute -bottom-1 -right-1 bg-card rounded-full p-1 border-2 border-primary shadow-lg">
+                <Star className="w-3 h-3 text-primary" />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h2 className="tech-header-title text-xl">
+                {profile?.display_name || profile?.full_name || 'Người dùng'}
+              </h2>
+              <div className="sabo-tech-button tech-btn-sm" data-variant="primary">
+                <div className="tech-btn-border"></div>
+                <span className="tech-btn-text">{profile?.verified_rank || 'Chưa xác thực'}</span>
+                <div className="tech-btn-glow"></div>
+              </div>
+              {profile?.bio && (
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                  {profile.bio}
+                </p>
+              )}
             </div>
           </div>
-          
-          <div className="space-y-2">
-            <h2 className="text-xl font-bold text-foreground">
-              {profile?.display_name || profile?.full_name || 'Người dùng'}
-            </h2>
-            <Badge className="sabo-tech-border-rank-e bg-primary/20 text-primary border-primary">
-              {profile?.verified_rank || 'Chưa xác thực'}
-            </Badge>
-            {profile?.bio && (
-              <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                {profile.bio}
-              </p>
-            )}
-          </div>
         </div>
-      </TechCard>
+        <div className="tech-card-corners"></div>
+      </div>
     );
   }
 
