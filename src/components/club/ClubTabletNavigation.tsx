@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 const tabletNavItems = [
   { icon: BarChart3, path: '/club-management', label: 'Tổng quan' },
   { icon: Trophy, path: '/club-management/tournaments', label: 'Giải đấu' },
-  { icon: Swords, path: '/club-management/challenges', label: 'Thách đấu' },
+  { icon: Swords, path: '/challenges', label: 'Thách đấu' },
   { icon: UserCheck, path: '/club-management/verification', label: 'Xác thực' },
   { icon: Users, path: '/club-management/members', label: 'Thành viên' },
   { icon: Bell, path: '/club-management/notifications', label: 'Thông báo' },
