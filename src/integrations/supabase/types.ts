@@ -3322,6 +3322,10 @@ export type Database = {
       }
     }
     Functions: {
+      accept_challenge: {
+        Args: { p_challenge_id: string; p_user_id: string }
+        Returns: boolean
+      }
       add_third_place_match_to_existing_tournament: {
         Args: { p_tournament_id: string }
         Returns: Json
@@ -3538,6 +3542,15 @@ export type Database = {
         Args: { p_tournament_id: string; p_user_id: string }
         Returns: boolean
       }
+      complete_challenge: {
+        Args: {
+          p_challenge_id: string
+          p_winner_id: string
+          p_challenger_score: number
+          p_opponent_score: number
+        }
+        Returns: Json
+      }
       complete_challenge_match: {
         Args: {
           p_match_id: string
@@ -3573,6 +3586,16 @@ export type Database = {
           p_priority?: string
         }
         Returns: number
+      }
+      create_challenge: {
+        Args: {
+          p_challenger_id: string
+          p_opponent_id: string
+          p_bet_points?: number
+          p_race_to?: number
+          p_message?: string
+        }
+        Returns: string
       }
       create_club_zero_data: {
         Args: { p_club_id: string; p_user_id: string }
