@@ -307,17 +307,29 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   return (
     <div className={`w-full ${className}`}>
       <div className="p-4">
-        {/* Header with refresh button */}
+        {/* Header with refresh button and create challenge button */}
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-xl font-bold text-gray-900">Thách Đấu</h1>
-          <button
-            onClick={handleRefresh}
-            disabled={isRefreshing || loading}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50 mobile-touch-button"
-          >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span className="font-medium">Làm mới</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing || loading}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50 mobile-touch-button"
+            >
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <span className="font-medium">Làm mới</span>
+            </button>
+            <button
+              onClick={() => {
+                // Navigate to create challenge page or open modal
+                window.location.href = '/create-challenge';
+              }}
+              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-xl transition-all mobile-touch-button font-semibold"
+            >
+              <span className="text-lg">+</span>
+              <span className="text-sm">Tạo thách đấu</span>
+            </button>
+          </div>
         </div>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
