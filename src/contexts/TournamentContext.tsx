@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { TournamentRewards } from '@/types/tournament-extended';
 import { RankCode } from '@/utils/eloConstants';
 import { calculateRewards } from '@/utils/tournamentRewards';
+import { useRewardTemplates } from '@/hooks/useRewardTemplates';
 
 interface TournamentContextType {
   tournament: any | null;
@@ -37,8 +38,11 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rewards, setRewards] = useState<TournamentRewards | null>(null);
+  const [recalculateOnChange, setRecalculateOnChange] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<any>({});
   
   const { user } = useAuth();
+  const { templates, convertTemplatesToRewards, copyTemplateToTournament } = useRewardTemplates();
 
   // Updated loadRewardsFromDatabase to work with new structure
   const loadRewardsFromDatabase = useCallback(async (tournament: any, rank: RankCode = 'K') => {
@@ -341,6 +345,184 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, [user]);
 
+  // Update tournament data
+  const updateTournament = useCallback((data: Partial<any>) => {
+    setTournament(prev => {
+      const updated = { ...prev, ...data };
+      
+      // Auto-calculate rewards if enabled
+      if (recalculateOnChange && updated.tier_level && updated.max_participants) {
+        const newRewards = calculateRewardsInternal();
+        setRewards(newRewards);
+      }
+      
+      return updated;
+    });
+  }, [recalculateOnChange, calculateRewardsInternal]);
+
+  // Update rewards
+  const updateRewards = useCallback((newRewards: TournamentRewards) => {
+    setRewards(newRewards);
+    if (tournament) {
+      setTournament(prev => ({ ...prev, rewards: newRewards }));
+    }
+  }, [tournament]);
+
+  // Validate tournament
+  const validateTournament = useCallback(() => {
+    const errors: any = {};
+    
+    if (!tournament?.name) errors.name = 'Tên giải đấu là bắt buộc';
+    if (!tournament?.tier_level) errors.tier_level = 'Hạng thi đấu là bắt buộc';
+    if (!tournament?.max_participants) errors.max_participants = 'Số người tham gia là bắt buộc';
+    if (!tournament?.venue_address) errors.venue_address = 'Địa chỉ tổ chức là bắt buộc';
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  }, [tournament]);
+
+  // Reset tournament
+  const resetTournament = useCallback(() => {
+    setTournament(null);
+    setRewards(null);
+    setValidationErrors({});
+    setError(null);
+  }, []);
+
+  // Create tournament
+  const createTournament = useCallback(async () => {
+    try {
+      if (!user) {
+        throw new Error('Bạn cần đăng nhập để tạo giải đấu');
+      }
+
+      if (!validateTournament()) {
+        throw new Error('Vui lòng điền đầy đủ thông tin bắt buộc');
+      }
+
+      setLoading(true);
+      setError(null);
+
+      // Prepare tournament data
+      const tournamentData = {
+        name: tournament.name,
+        description: tournament.description || '',
+        tournament_type: tournament.tournament_type || 'double_elimination',
+        game_format: tournament.game_format || 'billiards_pool_8',
+        tier_level: tournament.tier_level,
+        max_participants: tournament.max_participants,
+        entry_fee: tournament.entry_fee || 0,
+        prize_pool: tournament.prize_pool || 0,
+        venue_address: tournament.venue_address,
+        contact_info: tournament.contact_info || '',
+        rules: tournament.rules || '',
+        registration_start: tournament.registration_start || new Date().toISOString(),
+        registration_end: tournament.registration_end || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        tournament_start: tournament.tournament_start || new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
+        tournament_end: tournament.tournament_end || new Date(Date.now() + 9 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'registration_open',
+        created_by: user.id,
+        current_participants: 0,
+        allow_all_ranks: tournament.allow_all_ranks !== false,
+        eligible_ranks: tournament.eligible_ranks || ['K', 'I', 'H', 'G'],
+        requires_approval: tournament.requires_approval || false,
+        is_public: tournament.is_public !== false,
+        has_third_place_match: tournament.has_third_place_match || false
+      };
+
+      // Create tournament in database
+      const { data: newTournament, error: tournamentError } = await supabase
+        .from('tournaments')
+        .insert([tournamentData])
+        .select()
+        .single();
+
+      if (tournamentError) {
+        throw tournamentError;
+      }
+
+      // Apply reward template if available
+      if (templates.length > 0) {
+        const templateRewards = convertTemplatesToRewards(templates);
+        const success = await copyTemplateToTournament(newTournament.id, templateRewards);
+        
+        if (success) {
+          console.log('✅ Reward template applied successfully');
+        } else {
+          console.warn('⚠️ Failed to apply reward template, but tournament created');
+        }
+      }
+
+      // Update local state
+      setTournament(newTournament);
+      
+      toast.success('Tạo giải đấu thành công!');
+      return newTournament;
+
+    } catch (err) {
+      console.error('❌ Error creating tournament:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Lỗi không xác định';
+      setError(errorMessage);
+      toast.error(`Lỗi khi tạo giải đấu: ${errorMessage}`);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [user, tournament, validateTournament, templates, convertTemplatesToRewards, copyTemplateToTournament]);
+
+  // Update existing tournament
+  const updateExistingTournament = useCallback(async (id: string) => {
+    try {
+      if (!user) {
+        throw new Error('Bạn cần đăng nhập để cập nhật giải đấu');
+      }
+
+      if (!validateTournament()) {
+        throw new Error('Vui lòng điền đầy đủ thông tin bắt buộc');
+      }
+
+      setLoading(true);
+      setError(null);
+
+      const updateData = {
+        name: tournament.name,
+        description: tournament.description || '',
+        tier_level: tournament.tier_level,
+        max_participants: tournament.max_participants,
+        entry_fee: tournament.entry_fee || 0,
+        prize_pool: tournament.prize_pool || 0,
+        venue_address: tournament.venue_address,
+        contact_info: tournament.contact_info || '',
+        rules: tournament.rules || '',
+        updated_at: new Date().toISOString()
+      };
+
+      const { data: updatedTournament, error: updateError } = await supabase
+        .from('tournaments')
+        .update(updateData)
+        .eq('id', id)
+        .eq('created_by', user.id) // Ensure user owns the tournament
+        .select()
+        .single();
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      setTournament(updatedTournament);
+      toast.success('Cập nhật giải đấu thành công!');
+      return updatedTournament;
+
+    } catch (err) {
+      console.error('❌ Error updating tournament:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Lỗi không xác định';
+      setError(errorMessage);
+      toast.error(`Lỗi khi cập nhật giải đấu: ${errorMessage}`);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [user, tournament, validateTournament]);
 
   const value: TournamentContextType = {
     tournament,
@@ -352,18 +534,18 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     saveTournamentRewards,
     loadRewards,
     loadLatestTournament,
-    // Stub implementations for missing properties
-    updateTournament: () => {},
-    updateRewards: () => {},
-    validateTournament: () => true,
-    resetTournament: () => {},
-    isValid: true,
-    validationErrors: {},
+    // Enhanced implementations
+    updateTournament,
+    updateRewards,
+    validateTournament,
+    resetTournament,
+    isValid: Object.keys(validationErrors).length === 0,
+    validationErrors,
     calculateRewards: calculateRewardsInternal,
-    recalculateOnChange: false,
-    setRecalculateOnChange: () => {},
-    createTournament: async () => null,
-    updateExistingTournament: async () => null
+    recalculateOnChange,
+    setRecalculateOnChange,
+    createTournament,
+    updateExistingTournament
   };
 
   return (
