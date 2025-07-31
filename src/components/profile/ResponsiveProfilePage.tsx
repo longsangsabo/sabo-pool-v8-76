@@ -83,8 +83,8 @@ const ResponsiveProfilePage: React.FC = () => {
   const renderContent = () => {
     if (isMobile) {
       return (
-        <div className="min-h-screen bg-background">
-          <div className="container mx-auto px-4 py-6 space-y-6">
+        <div className="min-h-screen bg-background tech-theme">
+          <div className="container mx-auto pb-20">
             {/* Mobile Header */}
             <ProfileHeader profile={profile} />
             
@@ -109,6 +109,28 @@ const ResponsiveProfilePage: React.FC = () => {
             {activeTab === 'activities' && (
               <ProfileActivities activities={profile?.recent_activities || []} />
             )}
+          </div>
+          
+          {/* Tech Mobile Navigation */}
+          <div className="fixed bottom-0 left-0 right-0 z-50">
+            <div className="sabo-tech-navigation">
+              <div className="tech-nav-border"></div>
+              <div className="tech-nav-items">
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">🏠</div>
+                  <span className="nav-item-label">Trang chủ</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">🏆</div>
+                  <span className="nav-item-label">Thách đấu</span>
+                </div>
+                <div className="tech-nav-item active">
+                  <div className="nav-item-glow"></div>
+                  <div className="nav-item-icon">👤</div>
+                  <span className="nav-item-label">Hồ sơ</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );

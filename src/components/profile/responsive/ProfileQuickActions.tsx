@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { TechCard, TechButton, TechListItem } from '@/components/ui/sabo-tech-global';
 import { Building, Trophy, Users, Settings, Plus, Edit, Shield } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
@@ -29,7 +28,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       icon: Shield,
       onClick: onNavigateToRankTab,
       primary: true,
-      variant: 'default' as const,
+      variant: 'primary' as const,
       highlighted: !profile?.verified_rank,
     },
     {
@@ -38,7 +37,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       icon: Building,
       onClick: onNavigateToClubTab,
       primary: false,
-      variant: 'outline' as const,
+      variant: 'secondary' as const,
     },
     {
       title: 'Thách đấu',
@@ -46,7 +45,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       icon: Trophy,
       onClick: () => !isMobile && navigate('/challenges'),
       primary: false,
-      variant: 'outline' as const,
+      variant: 'success' as const,
     },
     {
       title: 'Bạn bè',
@@ -54,57 +53,56 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       icon: Users,
       onClick: () => {},
       primary: false,
-      variant: 'outline' as const,
+      variant: 'secondary' as const,
     },
   ];
 
   if (isMobile) {
-    const primaryActions = actions.slice(0, 2); // Only show edit and settings
     return (
-      <div className={`profile-actions-mobile ${className}`}>
-        <Button className="btn-primary-mobile">
-          <Edit className="w-4 h-4 mr-2" />
-          Chỉnh sửa
-        </Button>
-        <Button className="btn-secondary-mobile">
-          <Settings className="w-4 h-4 mr-2" />
-          Cài đặt
-        </Button>
+      <div className={`space-y-3 px-4 ${className}`}>
+        <div className="grid grid-cols-2 gap-3">
+          <TechButton variant="primary" size="md" fullWidth>
+            <Edit className="w-4 h-4 mr-2" />
+            Chỉnh sửa
+          </TechButton>
+          <TechButton variant="secondary" size="md" fullWidth>
+            <Settings className="w-4 h-4 mr-2" />
+            Cài đặt
+          </TechButton>
+        </div>
       </div>
     );
   }
 
   return (
-    <Card className={`bg-card border-border ${className}`}>
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
+    <TechCard className={className} variant="default">
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
           <Plus className="w-5 h-5 text-primary" />
           Thao tác nhanh
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {actions.map((action, index) => {
-          const Icon = action.icon;
-          return (
-            <Button
-              key={index}
-              variant={action.variant}
-              className="w-full justify-start gap-3 h-auto p-4"
-              onClick={action.onClick}
-            >
-              <div className="p-2 rounded-lg bg-muted">
-                <Icon className="w-5 h-5" />
-              </div>
-              <div className="flex-1 text-left">
-                <div className="font-medium">{action.title}</div>
-                <div className="text-sm text-muted-foreground mt-1">
-                  {action.description}
+        </div>
+        
+        <div className="space-y-2">
+          {actions.map((action, index) => {
+            const Icon = action.icon;
+            return (
+              <TechListItem
+                key={index}
+                onClick={action.onClick}
+                leftIcon={<Icon className="w-5 h-5" />}
+                className="cursor-pointer"
+              >
+                <div className="flex-1">
+                  <div className="font-medium text-foreground">{action.title}</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {action.description}
+                  </div>
                 </div>
-              </div>
-            </Button>
-          );
-        })}
-      </CardContent>
-    </Card>
+              </TechListItem>
+            );
+          })}
+        </div>
+      </div>
+    </TechCard>
   );
 };

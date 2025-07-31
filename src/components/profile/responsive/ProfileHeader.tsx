@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { TechCard, TechHeader } from '@/components/ui/sabo-tech-global';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, Shield, Trophy, Users, Camera, Upload } from 'lucide-react';
@@ -70,40 +70,48 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   if (isMobile) {
     return (
-      <div className={`profile-header-mobile ${className}`}>
-        <div className="profile-avatar-section">
-          <Avatar className="profile-avatar-large">
-            <AvatarImage 
-              src={profile?.avatar_url} 
-              alt={profile?.display_name || profile?.full_name}
-              className="object-cover"
-            />
-            <AvatarFallback className="text-2xl font-semibold">
-              {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <h2 className="profile-name">
-            {profile?.display_name || profile?.full_name || 'Người dùng'}
-          </h2>
-          <Badge className="profile-rank-badge">
-            {profile?.verified_rank || 'Chưa xác thực'}
-          </Badge>
-          {profile?.bio && (
-            <p className="profile-bio">
-              {profile.bio}
-            </p>
-          )}
+      <TechCard className={`${className}`} variant="premium">
+        <div className="text-center space-y-4">
+          <div className="relative inline-block">
+            <Avatar className="w-20 h-20 sabo-tech-avatar">
+              <AvatarImage 
+                src={profile?.avatar_url} 
+                alt={profile?.display_name || profile?.full_name}
+                className="object-cover"
+              />
+              <AvatarFallback className="text-2xl font-semibold bg-primary/20">
+                {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border-2 border-primary">
+              <Star className="w-3 h-3 text-primary" />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-foreground">
+              {profile?.display_name || profile?.full_name || 'Người dùng'}
+            </h2>
+            <Badge className="sabo-tech-border-rank-e bg-primary/20 text-primary border-primary">
+              {profile?.verified_rank || 'Chưa xác thực'}
+            </Badge>
+            {profile?.bio && (
+              <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                {profile.bio}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </TechCard>
     );
   }
 
   return (
-    <Card className={`overflow-hidden bg-card border-border ${className}`}>
-      {/* Cover Image with Upload */}
+    <TechCard className={`overflow-hidden ${className}`} variant="premium">
+      {/* Tech Cover Image with Upload */}
       <div 
         {...getRootProps()}
-        className={`h-36 bg-gradient-to-r from-primary/20 to-primary/5 relative overflow-hidden cursor-pointer transition-all duration-300 ${
+        className={`h-36 bg-gradient-to-r from-primary/20 to-accent-blue/20 relative overflow-hidden cursor-pointer transition-all duration-300 ${
           isDragActive ? 'ring-2 ring-primary ring-offset-2' : ''
         } ${isUploading ? 'opacity-50' : ''}`}
       >
@@ -115,21 +123,21 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5" />
+          <div className="w-full h-full bg-gradient-to-r from-primary/20 to-accent-blue/20" />
         )}
         
-        {/* Upload Overlay */}
+        {/* Tech Upload Overlay */}
         <div className={`absolute inset-0 bg-black/10 transition-opacity duration-300 ${
           isDragActive ? 'bg-black/30' : 'hover:bg-black/20'
         }`}>
           {user && user.id === profile?.user_id && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className={`bg-black/50 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-opacity duration-300 ${
+              <div className={`sabo-tech-card bg-card/80 text-foreground px-4 py-2 flex items-center gap-2 transition-opacity duration-300 ${
                 isDragActive || isUploading ? 'opacity-100' : 'opacity-0 hover:opacity-100'
               }`}>
                 {isUploading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                     <span>Đang tải lên...</span>
                   </>
                 ) : isDragActive ? (
@@ -149,41 +157,41 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
         </div>
       </div>
       
-      <CardHeader className="pt-0">
-        <div className="flex items-center space-x-6 -mt-8 relative z-10">
+      <div className="p-6">
+        <div className="flex items-center space-x-6 -mt-12 relative z-10">
           <div className="relative">
-            <Avatar className="w-20 h-20 border-4 border-background shadow-lg">
+            <Avatar className="w-20 h-20 sabo-tech-avatar border-4 border-background shadow-lg">
               <AvatarImage 
                 src={profile?.avatar_url} 
                 alt={profile?.display_name || profile?.full_name}
                 className="object-cover"
               />
-              <AvatarFallback className="text-xl bg-primary/10">
+              <AvatarFallback className="text-xl bg-primary/20">
                 {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-2 -right-2 bg-background rounded-full p-1.5 border-2 border-border shadow-sm">
+            <div className="absolute -bottom-2 -right-2 bg-background rounded-full p-1.5 border-2 border-primary shadow-sm">
               <Star className="w-4 h-4 text-primary" />
             </div>
           </div>
           
           <div className="flex-1 space-y-2">
             <div>
-              <h1 className="text-2xl font-bold text-foreground drop-shadow-sm">
+              <h1 className="text-2xl font-bold text-foreground tech-header-title" style={{ fontSize: '20px', textShadow: '0 0 10px hsl(var(--primary) / 0.5)' }}>
                 {profile?.display_name || profile?.full_name || 'Người dùng'}
               </h1>
-              <div className="flex items-center gap-2 mt-1.5">
-                <Badge variant="secondary" className="bg-primary/90 text-white border border-primary shadow-sm">
+              <div className="flex items-center gap-2 mt-2">
+                <Badge className="sabo-tech-border-rank-e bg-primary/20 text-primary border-primary">
                   {profile?.verified_rank || 'Chưa xác thực'}
                 </Badge>
                 {profile?.role === 'admin' && (
-                  <Badge variant="destructive" className="shadow-sm">
+                  <Badge className="sabo-tech-border-warning bg-accent-red/20 text-accent-red border-accent-red">
                     <Shield className="w-3 h-3 mr-1" />
                     Admin
                   </Badge>
                 )}
                 {profile?.club_profile && (
-                  <Badge variant="outline" className="bg-background/90 shadow-sm">
+                  <Badge className="sabo-tech-border-secondary bg-accent-blue/20 text-accent-blue border-accent-blue">
                     <Users className="w-3 h-3 mr-1" />
                     CLB Owner
                   </Badge>
@@ -192,22 +200,21 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
             </div>
             
             {profile?.bio && (
-              <p className="text-foreground/80 max-w-2xl text-sm drop-shadow-sm">
+              <p className="text-muted-foreground max-w-2xl text-sm">
                 {profile.bio}
               </p>
             )}
             
-            <div className="flex items-center gap-3 text-xs text-foreground/70">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
               {profile?.city && (
-                <span className="bg-background/80 px-2 py-1 rounded shadow-sm">📍 {profile.city}</span>
+                <span className="sabo-tech-card px-2 py-1">📍 {profile.city}</span>
               )}
               {profile?.completion_percentage && (
-                <span className="bg-background/80 px-2 py-1 rounded shadow-sm">📊 Profile: {profile.completion_percentage}%</span>
+                <span className="sabo-tech-card px-2 py-1">📊 Profile: {profile.completion_percentage}%</span>
               )}
             </div>
           </div>
         </div>
-      </CardHeader>
-    </Card>
-  );
+      </div>
+    </TechCard>
 };

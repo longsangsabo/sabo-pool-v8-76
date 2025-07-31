@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { TechStatCard } from '@/components/ui/sabo-tech-global';
 import { Trophy, Target, Users, Star, TrendingUp } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
@@ -17,28 +17,40 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className =
       title: 'SPA Points',
       value: profile?.spa_points || 0,
       subtitle: 'Điểm',
+      icon: <Star />,
+      variant: 'primary' as const,
     },
     {
       title: 'Trận thắng',
       value: profile?.matches_won || 0,
       subtitle: 'Thắng',
+      icon: <Trophy />,
+      variant: 'success' as const,
     },
     {
       title: 'Tỷ lệ thắng',
       value: `${profile?.win_percentage || 0}%`,
       subtitle: 'Tỷ lệ',
+      icon: <TrendingUp />,
+      variant: 'primary' as const,
     },
   ];
 
   if (isMobile) {
     return (
-      <div className={`profile-stats-mobile ${className}`}>
-        {stats.map((stat, index) => (
-          <div key={index} className="stat-item">
-            <span className="stat-number">{stat.value}</span>
-            <span className="stat-label">{stat.subtitle}</span>
-          </div>
-        ))}
+      <div className={`px-4 ${className}`}>
+        <div className="grid grid-cols-3 gap-3">
+          {stats.map((stat, index) => (
+            <TechStatCard
+              key={index}
+              label={stat.subtitle}
+              value={stat.value}
+              icon={stat.icon}
+              variant={stat.variant}
+              className="text-center"
+            />
+          ))}
+        </div>
       </div>
     );
   }
@@ -49,37 +61,29 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className =
       title: 'Xếp hạng',
       value: profile?.current_ranking || 'N/A',
       subtitle: 'Vị trí hiện tại',
+      icon: <Target />,
+      variant: 'warning' as const,
     },
     {
       title: 'Giải đấu',
       value: profile?.tournaments_joined || 0,
       subtitle: 'Đã tham gia',
+      icon: <Users />,
+      variant: 'primary' as const,
     },
   ];
 
   return (
     <div className={`grid grid-cols-5 gap-4 ${className}`}>
-      {allStats.map((stat, index) => {
-        return (
-          <Card key={index} className="bg-card border-border">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="text-3xl font-bold text-foreground">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {stat.subtitle}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {stat.title}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+      {allStats.map((stat, index) => (
+        <TechStatCard
+          key={index}
+          label={stat.subtitle}
+          value={stat.value}
+          icon={stat.icon}
+          variant={stat.variant}
+        />
+      ))}
     </div>
   );
 };
