@@ -65,6 +65,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     setRecalculateOnChange,
     createTournament,
     updateExistingTournament,
+    loadLatestTournament,
   } = useTournament();
 
   const { refreshTournaments } = useTournamentGlobal();
@@ -72,6 +73,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showQuickAllocation, setShowQuickAllocation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingLatest, setIsLoadingLatest] = useState(false);
   
 
   const form = useForm<TournamentFormData>({
@@ -115,6 +117,27 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       }
     };
   }, [form, updateTournament]);
+
+  // Handle auto-fill from latest tournament
+  const handleAutoFill = async () => {
+    if (!loadLatestTournament) return;
+    
+    try {
+      setIsLoadingLatest(true);
+      const latestData = await loadLatestTournament();
+      
+      if (latestData) {
+        // Reset form with latest data
+        form.reset(latestData);
+        // Update context
+        updateTournament(latestData);
+      }
+    } catch (error) {
+      console.error('❌ Error auto-filling from latest tournament:', error);
+    } finally {
+      setIsLoadingLatest(false);
+    }
+  };
 
   // Calculate completion percentage
   const getCompletionPercentage = (): number => {
@@ -328,6 +351,23 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
             {mode === 'edit' ? 'Chỉnh sửa giải đấu' : 'Tạo giải đấu mới'}
           </h3>
           <div className="flex items-center gap-2">
+            {mode === 'create' && loadLatestTournament && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleAutoFill}
+                disabled={isLoadingLatest}
+                className="h-7 text-xs"
+              >
+                {isLoadingLatest ? (
+                  <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                ) : (
+                  <Zap className="h-3 w-3 mr-1" />
+                )}
+                Dùng data gần nhất
+              </Button>
+            )}
             <Badge variant={isValid ? 'default' : 'destructive'} className="text-xs h-6">
               {isValid ? (
                 <CheckCircle className="w-3 h-3 mr-1" />

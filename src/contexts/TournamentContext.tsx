@@ -27,6 +27,7 @@ interface TournamentContextType {
   setRecalculateOnChange?: (value: boolean) => void;
   createTournament?: () => Promise<any>;
   updateExistingTournament?: (id: string) => Promise<any>;
+  loadLatestTournament?: () => Promise<any>;
 }
 
 const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
@@ -259,6 +260,87 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, [loadRewardsFromDatabase]);
 
+  // Load latest tournament data for auto-fill
+  const loadLatestTournament = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      if (!user) {
+        throw new Error('User must be authenticated');
+      }
+
+      console.log('🔍 Loading latest tournament for user:', user.id);
+
+      const { data, error: fetchError } = await supabase
+        .from('tournaments')
+        .select(`
+          name,
+          description,
+          tournament_type,
+          game_format,
+          max_participants,
+          tier_level,
+          entry_fee,
+          prize_pool,
+          venue_address,
+          contact_info,
+          rules,
+          requires_approval,
+          allow_all_ranks,
+          eligible_ranks,
+          is_public
+        `)
+        .eq('created_by', user.id)
+        .neq('status', 'draft')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (fetchError) {
+        console.error('Error fetching latest tournament:', fetchError);
+        throw fetchError;
+      }
+
+      if (!data) {
+        console.log('ℹ️ No previous tournaments found for user');
+        toast.info('Không tìm thấy giải đấu trước đó để sao chép dữ liệu');
+        return null;
+      }
+
+      console.log('✅ Latest tournament loaded:', data);
+      
+      // Create template data with updated dates
+      const now = new Date();
+      const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const nextWeekEnd = new Date(nextWeek.getTime() + 1 * 24 * 60 * 60 * 1000);
+      const registrationEnd = new Date(nextWeek.getTime() - 1 * 24 * 60 * 60 * 1000);
+
+      const templateData = {
+        ...data,
+        name: `${data.name} - Copy`,
+        tournament_start: nextWeek.toISOString(),
+        tournament_end: nextWeekEnd.toISOString(),
+        registration_start: now.toISOString(),
+        registration_end: registrationEnd.toISOString(),
+      };
+
+      setTournament(templateData);
+      toast.success('Đã tải dữ liệu từ giải đấu gần nhất! Vui lòng kiểm tra và cập nhật thông tin.');
+      
+      return templateData;
+
+    } catch (err) {
+      console.error('❌ Error loading latest tournament:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Lỗi không xác định';
+      setError(errorMessage);
+      toast.error(`Lỗi khi tải dữ liệu: ${errorMessage}`);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
 
   const value: TournamentContextType = {
     tournament,
@@ -269,6 +351,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     refreshTournament,
     saveTournamentRewards,
     loadRewards,
+    loadLatestTournament,
     // Stub implementations for missing properties
     updateTournament: () => {},
     updateRewards: () => {},
