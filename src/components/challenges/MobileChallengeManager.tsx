@@ -526,40 +526,76 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
           </div>
         )}
 
-        {/* Open Challenges in Activity */}
+        {/* Open Challenges in Activity - Show ALL with full info like desktop */}
         {openChallenges.filter(c => c.challenger_id !== user?.id).length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Users className="w-3 h-3 text-emerald-600" />
-              <span className="text-xs font-medium text-emerald-600">ĐANG TÌM ĐỐI THỦ ({openChallenges.filter(c => c.challenger_id !== user?.id).length})</span>
+              <Target className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-medium text-emerald-600">THÁCH ĐẤU MỞ ({openChallenges.filter(c => c.challenger_id !== user?.id).length})</span>
             </div>
             {openChallenges
               .filter(c => c.challenger_id !== user?.id)
-              .slice(0, 3)
               .map(challenge => (
                 <Card key={challenge.id} className="border border-emerald-200/50 bg-gradient-to-r from-emerald-50/30 to-green-50/30">
                   <CardContent className="p-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <Avatar className="w-6 h-6">
-                          <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-                          <AvatarFallback className="text-xs">
-                            {challenge.challenger_profile?.full_name?.[0] || 'C'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
+                        <div className="relative">
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={challenge.challenger_profile?.avatar_url} />
+                            <AvatarFallback className="text-xs">
+                              {challenge.challenger_profile?.full_name?.[0] || 'C'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        </div>
+                        <div className="flex-1">
                           <p className="text-xs font-semibold">
-                            {challenge.challenger_profile?.full_name || 'Người thách đấu'}
+                            {challenge.challenger_profile?.full_name || 'Unknown'}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {challenge.bet_points} SPA điểm • Race to {challenge.race_to || 5}
+                            {challenge.challenger_profile?.verified_rank || 'K'} • {challenge.challenger_profile?.player_rankings?.[0]?.spa_points || 0} SPA
                           </p>
                         </div>
                       </div>
-                      <Button size="sm" onClick={() => handleJoinOpenChallenge(challenge.id)} className="h-7 px-2 bg-emerald-600 hover:bg-emerald-700 text-white">
-                        <span className="text-xs">Tham gia</span>
-                      </Button>
+                      <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 text-xs px-2">
+                        🌟 Mở
+                      </Badge>
                     </div>
+                    
+                    {/* Challenge Details */}
+                    <div className="flex items-center gap-2 mb-2 p-2 bg-emerald-50/50 rounded-lg">
+                      <DollarSign className="w-3 h-3 text-emerald-600" />
+                      <span className="text-xs font-semibold text-emerald-800">{challenge.bet_points} SPA</span>
+                      <span className="text-xs text-emerald-600">→ Race to {challenge.race_to || 5}</span>
+                    </div>
+
+                    {/* Club and Message */}
+                    {(challenge.club?.name || challenge.message) && (
+                      <div className="space-y-1 mb-2">
+                        {challenge.club?.name && (
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">{challenge.club.name}</span>
+                          </div>
+                        )}
+                        {challenge.message && (
+                          <div className="flex items-start gap-1">
+                            <MessageSquare className="w-3 h-3 mt-0.5 text-muted-foreground" />
+                            <p className="text-xs text-muted-foreground italic">"{challenge.message}"</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <Button
+                      size="sm"
+                      onClick={() => handleJoinOpenChallenge(challenge.id)}
+                      className="w-full h-7 bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
+                    >
+                      <Users className="w-3 h-3 mr-1" />
+                      Tham gia thách đấu
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
