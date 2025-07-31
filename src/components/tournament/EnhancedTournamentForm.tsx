@@ -67,6 +67,9 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     setRecalculateOnChange,
     createTournament,
     updateExistingTournament,
+    draftTournamentId,
+    createDraftTournament,
+    convertDraftToOfficial,
   } = useTournament();
 
   const { refreshTournaments } = useTournamentGlobal();
@@ -74,6 +77,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showQuickAllocation, setShowQuickAllocation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCreatingDraft, setIsCreatingDraft] = useState(false);
 
   const form = useForm<TournamentFormData>({
     resolver: zodResolver(tournamentSchema),
@@ -116,6 +120,27 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       }
     };
   }, [form, updateTournament]);
+
+  // Auto-create draft tournament when switching to financial tab
+  useEffect(() => {
+    const handleDraftCreation = async () => {
+      if (activeTab === 'financial' && mode === 'create' && !tournamentId && !draftTournamentId && createDraftTournament) {
+        if (isCreatingDraft) return; // Prevent multiple calls
+        
+        try {
+          setIsCreatingDraft(true);
+          console.log('🎯 Auto-creating draft tournament for financial tab...');
+          await createDraftTournament();
+        } catch (error) {
+          console.error('❌ Failed to auto-create draft tournament:', error);
+        } finally {
+          setIsCreatingDraft(false);
+        }
+      }
+    };
+
+    handleDraftCreation();
+  }, [activeTab, mode, tournamentId, draftTournamentId, createDraftTournament, isCreatingDraft]);
 
   // Calculate completion percentage
   const getCompletionPercentage = (): number => {
@@ -182,6 +207,9 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       if (mode === 'edit' && tournamentId) {
         console.log('📝 Updating existing tournament:', tournamentId);
         result = await updateExistingTournament(tournamentId);
+      } else if (draftTournamentId && convertDraftToOfficial) {
+        console.log('🎯 Converting draft to official tournament:', draftTournamentId);
+        result = await convertDraftToOfficial();
       } else {
         console.log('🆕 Creating new tournament...');
         result = await createTournament();
@@ -720,19 +748,19 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                   <OptimizedRewardsSection 
                     isEditable={true}
                     rewards={tournament?.rewards}
-                    showAsTemplate={!tournamentId}
+                    showAsTemplate={!tournamentId && !draftTournamentId}
                     maxParticipants={tournament?.max_participants || 16}
                     entryFee={tournament?.entry_fee || 0}
-                    tournamentId={tournamentId}
+                    tournamentId={tournamentId || draftTournamentId || undefined}
                     onRewardsUpdated={(updatedRewards) => {
                       console.log('🔄 [EnhancedTournamentForm] Rewards updated:', updatedRewards);
                       // Update tournament context with new rewards immediately
                       updateRewards(updatedRewards);
                       
                       // Force refresh if it's an existing tournament
-                      if (tournamentId) {
+                      if (tournamentId || draftTournamentId) {
                         // The hook will automatically refresh via invalidation
-                        console.log('✅ [EnhancedTournamentForm] Existing tournament, hook will refresh data');
+                        console.log('✅ [EnhancedTournamentForm] Tournament/Draft exists, hook will refresh data');
                       }
                     }}
                     onUseTemplate={(templateRewards) => {

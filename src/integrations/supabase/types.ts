@@ -2871,6 +2871,7 @@ export type Database = {
           game_format: string | null
           has_third_place_match: boolean | null
           id: string
+          is_draft: boolean | null
           is_public: boolean | null
           is_visible: boolean | null
           management_status: string | null
@@ -2917,6 +2918,7 @@ export type Database = {
           game_format?: string | null
           has_third_place_match?: boolean | null
           id?: string
+          is_draft?: boolean | null
           is_public?: boolean | null
           is_visible?: boolean | null
           management_status?: string | null
@@ -2963,6 +2965,7 @@ export type Database = {
           game_format?: string | null
           has_third_place_match?: boolean | null
           id?: string
+          is_draft?: boolean | null
           is_public?: boolean | null
           is_visible?: boolean | null
           management_status?: string | null

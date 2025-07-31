@@ -248,14 +248,23 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
   };
 
   const handleRefresh = async () => {
-    if (tournamentId && refetchRewards) {
-      try {
+    console.log('🔄 [OptimizedRewardsSection] Manual refresh triggered');
+    try {
+      if (tournamentId && refetchRewards) {
+        console.log('📡 [OptimizedRewardsSection] Calling refetch for tournament:', tournamentId);
         await refetchRewards();
-        toast.success('Đã cập nhật dữ liệu thành công!');
-      } catch (error) {
-        console.error('Failed to refresh rewards:', error);
-        toast.error('Lỗi khi cập nhật dữ liệu');
+        console.log('✅ [OptimizedRewardsSection] Refetch completed');
+        toast.success('Đã cập nhật dữ liệu phần thưởng từ database');
+      } else if (!tournamentId) {
+        console.log('⚠️ [OptimizedRewardsSection] No tournament ID, skipping refresh');
+        toast.info('Chưa có tournament ID để tải dữ liệu');
+      } else {
+        console.log('⚠️ [OptimizedRewardsSection] No refetch function available');
+        toast.warning('Không thể tải lại dữ liệu');
       }
+    } catch (error) {
+      console.error('❌ [OptimizedRewardsSection] Error during refresh:', error);
+      toast.error('Lỗi khi tải lại dữ liệu');
     }
   };
 
