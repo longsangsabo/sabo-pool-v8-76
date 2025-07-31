@@ -3617,12 +3617,19 @@ export type Database = {
         Returns: Json
       }
       credit_spa_points: {
-        Args: {
-          p_user_id: string
-          p_points: number
-          p_description: string
-          p_admin_id?: string
-        }
+        Args:
+          | {
+              p_user_id: string
+              p_points: number
+              p_category: string
+              p_description: string
+            }
+          | {
+              p_user_id: string
+              p_points: number
+              p_description: string
+              p_admin_id?: string
+            }
         Returns: Json
       }
       debug_and_fix_bracket_advancement: {
