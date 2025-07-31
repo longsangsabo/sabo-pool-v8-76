@@ -3675,6 +3675,10 @@ export type Database = {
         Args: { p_tournament_id: string }
         Returns: Json
       }
+      fix_tournament_positions: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
       fix_tournament_test6_progression: {
         Args: Record<PropertyKey, never>
         Returns: Json
