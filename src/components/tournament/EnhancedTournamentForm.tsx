@@ -124,9 +124,15 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   // Auto-create draft tournament when switching to financial tab
   useEffect(() => {
     const handleDraftCreation = async () => {
-      if (activeTab === 'financial' && mode === 'create' && !tournamentId && !draftTournamentId && createDraftTournament) {
-        if (isCreatingDraft) return; // Prevent multiple calls
-        
+      // Only create if we're in create mode, on financial tab, no existing IDs, and not already creating
+      if (
+        activeTab === 'financial' && 
+        mode === 'create' && 
+        !tournamentId && 
+        !draftTournamentId && 
+        !isCreatingDraft &&
+        createDraftTournament
+      ) {
         try {
           setIsCreatingDraft(true);
           console.log('🎯 Auto-creating draft tournament for financial tab...');
@@ -140,7 +146,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     };
 
     handleDraftCreation();
-  }, [activeTab, mode, tournamentId, draftTournamentId, createDraftTournament, isCreatingDraft]);
+  }, [activeTab, mode, tournamentId, draftTournamentId, createDraftTournament]); // Removed isCreatingDraft from deps
 
   // Calculate completion percentage
   const getCompletionPercentage = (): number => {
