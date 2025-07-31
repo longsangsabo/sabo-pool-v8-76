@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { MobileReactionBar } from './MobileReactionBar';
+import { MobileLiveIndicator } from '../common/MobileLiveIndicator';
 
 interface FeedPost {
   id: string;
@@ -101,22 +103,24 @@ export const MobileFeedCard: React.FC<MobileFeedCardProps> = ({
     }
   };
 
+  const isLiveContent = post.type === 'match_result' && Math.random() > 0.7; // Mock live status
+
   return (
-    <Card className="w-full border-0 bg-card shadow-sm">
+    <Card className="mobile-feed-card w-full border-0 bg-card shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
       <CardContent className="p-4 space-y-3">
         {/* User Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
+          <div className="flex items-center gap-3 flex-1">
+            <Avatar className="h-12 w-12 ring-2 ring-border ring-offset-2 ring-offset-background">
               <AvatarImage src={post.user.avatar} />
-              <AvatarFallback>
+              <AvatarFallback className="text-sm font-semibold">
                 {post.user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">{post.user.name}</span>
-                <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                <span className="font-semibold text-sm text-foreground">{post.user.name}</span>
+                <Badge variant="secondary" className="text-xs px-2 py-0.5 font-medium">
                   {post.user.rank}
                 </Badge>
                 {getPostIcon()}
@@ -131,6 +135,15 @@ export const MobileFeedCard: React.FC<MobileFeedCardProps> = ({
               </div>
             </div>
           </div>
+          
+          {/* Live Indicator */}
+          {isLiveContent && (
+            <MobileLiveIndicator
+              type="live_match"
+              viewers={Math.floor(Math.random() * 500) + 50}
+              status="LIVE"
+            />
+          )}
         </div>
 
         {/* Post Content */}
@@ -174,45 +187,18 @@ export const MobileFeedCard: React.FC<MobileFeedCardProps> = ({
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-border/50">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onLike?.(post.id)}
-              className={`flex items-center gap-1.5 px-2 ${
-                post.isLiked 
-                  ? 'text-red-500 hover:text-red-600' 
-                  : 'text-muted-foreground hover:text-red-500'
-              }`}
-            >
-              <Heart 
-                className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} 
-              />
-              <span className="text-xs">{post.stats?.likes || 0}</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onComment?.(post.id)}
-              className="flex items-center gap-1.5 px-2 text-muted-foreground hover:text-blue-500"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span className="text-xs">{post.stats?.comments || 0}</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onShare?.(post.id)}
-              className="flex items-center gap-1.5 px-2 text-muted-foreground hover:text-green-500"
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="text-xs">{post.stats?.shares || 0}</span>
-            </Button>
-          </div>
+        {/* Enhanced Reaction Bar */}
+        <div className="flex items-center justify-between pt-3 border-t border-border/30">
+          <MobileReactionBar
+            likes={post.stats?.likes || 0}
+            comments={post.stats?.comments || 0}
+            shares={post.stats?.shares || 0}
+            isLiked={post.isLiked || false}
+            onLike={() => onLike?.(post.id)}
+            onComment={() => onComment?.(post.id)}
+            onShare={() => onShare?.(post.id)}
+            timeAgo={post.timestamp}
+          />
 
           {/* Action Button */}
           {getActionButton()}

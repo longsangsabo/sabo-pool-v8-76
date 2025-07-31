@@ -224,6 +224,160 @@
     transform: scale(0.95);
   }
 
+  /* Enhanced Mobile Feed Card */
+  .mobile-feed-card {
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+  }
+
+  .mobile-feed-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Mobile Reaction Bar */
+  .mobile-reaction-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .reaction-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .reaction-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  .reaction-btn:active {
+    transform: scale(0.95);
+  }
+
+  .reaction-btn.liked {
+    color: hsl(var(--destructive));
+    background: hsl(var(--destructive) / 0.1);
+  }
+
+  .heart-animation {
+    animation: heartBeat 0.6s ease-in-out;
+  }
+
+  @keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  /* Mobile Live Indicator */
+  .mobile-live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Mobile Floating Action Button */
+  .mobile-fab-container {
+    position: fixed;
+    bottom: 88px;
+    right: 16px;
+    z-index: 998;
+  }
+
+  .mobile-fab-primary {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-foreground)));
+    color: white;
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.4);
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-fab-primary:hover {
+    box-shadow: 0 6px 16px hsl(var(--primary) / 0.5);
+    transform: translateY(-2px);
+  }
+
+  .mobile-fab-primary:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-fab-secondary {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fab-action {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    min-height: 44px;
+    transition: all 0.2s ease;
+  }
+
+  .fab-action:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-fab-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+  }
+
   /* Feed optimizations */
   .social-feed {
     scroll-behavior: smooth;

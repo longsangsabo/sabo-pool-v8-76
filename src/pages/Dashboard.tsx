@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MobileLayout from '../components/MobileLayout';
 import MobileStoryReel from '../components/mobile/cards/MobileStoryReel';
 import MobileFeedCard from '../components/mobile/cards/MobileFeedCard';
+import MobileFloatingActionButton from '../components/mobile/common/MobileFloatingActionButton';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useProgressiveLoading } from '../hooks/useProgressiveLoading';
@@ -161,6 +162,10 @@ const Dashboard = () => {
     }
   }, []);
 
+  const handleFABAction = useCallback(() => {
+    toast.info('Tính năng tạo nội dung đang phát triển');
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -225,6 +230,9 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+
+          {/* Floating Action Button */}
+          <MobileFloatingActionButton primaryAction={handleFABAction} />
         </div>
       </MobileLayout>
     </>
