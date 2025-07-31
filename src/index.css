@@ -1,8 +1,8 @@
+@import './styles/tablet-enhancements.css';
+@import './styles/mobile-enhancements.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './styles/tablet-enhancements.css';
-@import './styles/mobile-enhancements.css';
 
 /* Mobile Safe Area CSS Classes */
 .mobile-safe-area-top { 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../../styles/profile-mobile-fixes.css';
+import '../../styles/profile-mobile-fixes.css';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { useUnifiedProfile } from '@/hooks/useUnifiedProfile';
 import { ProfileHeader } from './responsive/ProfileHeader';
