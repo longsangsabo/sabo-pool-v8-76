@@ -9,6 +9,7 @@ import OpenChallengeCard from './OpenChallengeCard';
 import OngoingChallengeCard from './OngoingChallengeCard';
 import UpcomingChallengeCard from './UpcomingChallengeCard';
 import CompletedChallengeCard from './CompletedChallengeCard';
+import CreateChallengeModal from '../CreateChallengeModal';
 
 interface MobileChallengeManagerProps {
   className?: string;
@@ -148,6 +149,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
 
   const [activeTab, setActiveTab] = useState('find'); // Start with "find" tab to see open challenges
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -169,6 +171,16 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
       console.error('Error joining challenge:', error);
       toast.error('Lỗi khi tham gia thách đấu');
     }
+  };
+
+  const handleCreateChallenge = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleChallengeCreated = () => {
+    setIsCreateModalOpen(false);
+    fetchChallenges(); // Refresh challenges list
+    toast.success('Thách đấu đã được tạo thành công!');
   };
 
   const renderTabContent = () => {
@@ -320,10 +332,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
               <span className="font-medium">Làm mới</span>
             </button>
             <button
-              onClick={() => {
-                // Navigate to create challenge page or open modal
-                window.location.href = '/create-challenge';
-              }}
+              onClick={handleCreateChallenge}
               className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-xl transition-all mobile-touch-button font-semibold"
             >
               <span className="text-lg">+</span>
@@ -389,6 +398,13 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Create Challenge Modal */}
+      <CreateChallengeModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onChallengeCreated={handleChallengeCreated}
+      />
     </div>
   );
 };
