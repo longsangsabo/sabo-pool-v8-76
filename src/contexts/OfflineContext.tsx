@@ -54,13 +54,15 @@ export const OfflineProvider: React.FC<OfflineProviderProps> = ({
     isRegistered: false,
     isInstalling: false,
     updateAvailable: false,
-    registration: null,
-    registerServiceWorker: async () => {},
-    updateServiceWorker: async () => {},
-    sendMessage: () => {},
+    registration: null as ServiceWorkerRegistration | null,
+    registerServiceWorker: async (): Promise<ServiceWorkerRegistration> => {
+      throw new Error('ServiceWorker not implemented');
+    },
+    updateServiceWorker: async (): Promise<void> => {},
+    sendMessage: (message: any) => {},
     cacheApiResponse: () => {},
     clearCache: () => {},
-    getCacheSize: async () => 0
+    getCacheSize: async (): Promise<number> => 0
   };
 
   const enableOfflineMode = async () => {
