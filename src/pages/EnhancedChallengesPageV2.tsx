@@ -52,12 +52,14 @@ interface Challenge {
     full_name: string;
     avatar_url?: string;
     current_rank?: string;
+    verified_rank?: string;
     spa_points?: number;
   };
   opponent_profile?: {
     full_name: string;
     avatar_url?: string;
     current_rank?: string;
+    verified_rank?: string;
     spa_points?: number;
   };
   club_profiles?: {
@@ -286,7 +288,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   {challenge.challenger_profile?.full_name || 'Thách đấu'}
                 </div>
                 <div className="text-muted-foreground font-medium">
-                  Hạng {challenge.challenger_profile?.current_rank || 'K'}
+                  {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
                 </div>
               </div>
               {challenge.challenger_id && (
@@ -333,7 +335,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   {challenge.opponent_profile?.full_name || 'Đối thủ'}
                 </div>
                 <div className="text-muted-foreground font-medium">
-                  Hạng {challenge.opponent_profile?.current_rank || 'K'}
+                  {challenge.opponent_profile?.verified_rank || challenge.opponent_profile?.current_rank || 'K'}
                 </div>
               </div>
               {challenge.opponent_id && (
@@ -375,7 +377,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
             <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-border/30">
               <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
-              <span>HH: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
+              <span>Hết hạn: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
             </div>
           </div>
         </CardContent>
@@ -427,7 +429,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 {challenge.challenger_profile?.full_name || 'Thách đấu'}
               </div>
               <div className="text-sm text-muted-foreground font-medium">
-                Hạng: {challenge.challenger_profile?.current_rank || 'K'}
+                {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
               </div>
             </div>
             {challenge.challenger_id && (
@@ -482,7 +484,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
           <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-emerald-200/30">
             <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
-            <span>HH: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
+            <span>Hết hạn: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
           </div>
 
           <Button 
