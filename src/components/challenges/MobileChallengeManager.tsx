@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useChallenges } from '@/hooks/useChallenges';
 import { useAuth } from '@/hooks/useAuth';
+import { useRealMatches } from '@/hooks/useRealMatches';
 import CreateChallengeModal from '@/components/CreateChallengeModal';
 import { toast } from 'sonner';
 import {
@@ -26,7 +27,12 @@ import {
   MapPin,
   Calendar,
   MoreVertical,
-  ArrowRight
+  ArrowRight,
+  RefreshCw,
+  Play,
+  Bell,
+  Eye,
+  Zap
 } from 'lucide-react';
 
 interface MobileChallengeManagerProps {
@@ -45,10 +51,14 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     cancelChallenge
   } = useChallenges();
 
-  const [activeTab, setActiveTab] = useState('received');
+  // Add live activity data
+  const { liveMatches, upcomingMatches, recentResults, loading: activityLoading, refreshAll } = useRealMatches();
+
+  const [activeTab, setActiveTab] = useState('activity');
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Get open challenges (challenges where opponent_id is null)
   const openChallenges = challenges.filter(c => 
@@ -384,6 +394,194 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     );
   };
 
+  const handleRefreshActivity = async () => {
+    setIsRefreshing(true);
+    await refreshAll();
+    setIsRefreshing(false);
+    toast.success('Đã cập nhật hoạt động mới nhất');
+  };
+
+  const handleWatchMatch = (matchId: string) => {
+    toast.info(`Đang mở trận đấu ${matchId}...`);
+  };
+
+  const handleRemindMatch = (matchId: string) => {
+    toast.success('Đã đặt nhắc nhở cho trận đấu');
+  };
+
+  const handleViewResult = (resultId: string) => {
+    toast.info(`Đang xem kết quả trận ${resultId}...`);
+  };
+
+  const renderLiveActivityTab = () => {
+    return (
+      <div className="space-y-4">
+        {/* Activity Header */}
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-sm">Hoạt động trực tiếp</h3>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefreshActivity}
+            disabled={isRefreshing || activityLoading}
+            className="h-8 px-2"
+          >
+            <RefreshCw className={`w-3 h-3 ${isRefreshing || activityLoading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
+
+        {/* Live Matches */}
+        {liveMatches.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <span className="text-xs font-medium text-red-600">ĐANG DIỄN RA ({liveMatches.length})</span>
+            </div>
+            {liveMatches.map(match => (
+              <Card key={match.id} className="border border-red-200/50 bg-gradient-to-r from-red-50/30 to-pink-50/30">
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <p className="text-xs font-semibold">
+                          {match.player1?.name || 'Player 1'} vs {match.player2?.name || 'Player 2'}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {match.score?.player1 || 0} - {match.score?.player2 || 0}
+                        </p>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => handleWatchMatch(match.id)} className="h-7 px-2">
+                      <Eye className="w-3 h-3 mr-1" />
+                      <span className="text-xs">Xem</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Upcoming Matches */}
+        {upcomingMatches.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Clock className="w-3 h-3 text-amber-600" />
+              <span className="text-xs font-medium text-amber-600">SẮP DIỄN RA ({upcomingMatches.length})</span>
+            </div>
+            {upcomingMatches.map(match => (
+              <Card key={match.id} className="border border-amber-200/50 bg-gradient-to-r from-amber-50/30 to-yellow-50/30">
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold">
+                        {match.player1?.name || 'Player 1'} vs {match.player2?.name || 'Player 2'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {match.scheduledTime ? new Date(match.scheduledTime).toLocaleTimeString('vi-VN', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        }) : 'Chưa có lịch'}
+                      </p>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => handleRemindMatch(match.id)} className="h-7 px-2">
+                      <Bell className="w-3 h-3 mr-1" />
+                      <span className="text-xs">Nhắc</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Recent Results */}
+        {recentResults.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Trophy className="w-3 h-3 text-green-600" />
+              <span className="text-xs font-medium text-green-600">MỚI HOÀN THÀNH ({recentResults.length})</span>
+            </div>
+            {recentResults.map(result => (
+              <Card key={result.id} className="border border-green-200/50 bg-gradient-to-r from-green-50/30 to-emerald-50/30">
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold">
+                        {result.player1?.name || 'Player 1'} vs {result.player2?.name || 'Player 2'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {result.finalScore?.player1 || 0} - {result.finalScore?.player2 || 0} • {result.completedAt ? new Date(result.completedAt).toLocaleDateString('vi-VN') : 'Gần đây'}
+                      </p>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => handleViewResult(result.id)} className="h-7 px-2">
+                      <Eye className="w-3 h-3 mr-1" />
+                      <span className="text-xs">Xem</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Open Challenges in Activity */}
+        {openChallenges.filter(c => c.challenger_id !== user?.id).length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Users className="w-3 h-3 text-emerald-600" />
+              <span className="text-xs font-medium text-emerald-600">ĐANG TÌM ĐỐI THỦ ({openChallenges.filter(c => c.challenger_id !== user?.id).length})</span>
+            </div>
+            {openChallenges
+              .filter(c => c.challenger_id !== user?.id)
+              .slice(0, 3)
+              .map(challenge => (
+                <Card key={challenge.id} className="border border-emerald-200/50 bg-gradient-to-r from-emerald-50/30 to-green-50/30">
+                  <CardContent className="p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="w-6 h-6">
+                          <AvatarImage src={challenge.challenger_profile?.avatar_url} />
+                          <AvatarFallback className="text-xs">
+                            {challenge.challenger_profile?.full_name?.[0] || 'C'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-xs font-semibold">
+                            {challenge.challenger_profile?.full_name || 'Người thách đấu'}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {challenge.bet_points} SPA điểm • Race to {challenge.race_to || 5}
+                          </p>
+                        </div>
+                      </div>
+                      <Button size="sm" onClick={() => handleJoinOpenChallenge(challenge.id)} className="h-7 px-2 bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <span className="text-xs">Tham gia</span>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {liveMatches.length === 0 && upcomingMatches.length === 0 && recentResults.length === 0 && openChallenges.filter(c => c.challenger_id !== user?.id).length === 0 && (
+          <Card className="border-dashed border-2 border-muted-foreground/20">
+            <CardContent className="p-6 text-center">
+              <div className="text-muted-foreground">
+                <div className="text-3xl mb-2">🎱</div>
+                <div className="font-medium text-sm">Chưa có hoạt động nào</div>
+                <div className="text-xs">Hoạt động trực tiếp sẽ hiển thị ở đây</div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -439,7 +637,11 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-4">
+        <TabsList className="grid w-full grid-cols-5 mb-4">
+          <TabsTrigger value="activity" className="text-xs">
+            <Zap className="w-3 h-3 mr-1" />
+            Hoạt động
+          </TabsTrigger>
           <TabsTrigger value="received" className="text-xs">
             Nhận ({receivedChallenges.length})
           </TabsTrigger>
@@ -453,6 +655,10 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             Mở ({userOpenChallenges.length})
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="activity" className="space-y-0">
+          {renderLiveActivityTab()}
+        </TabsContent>
 
         <TabsContent value="received" className="space-y-0">
           {receivedChallenges.length === 0 ? (
