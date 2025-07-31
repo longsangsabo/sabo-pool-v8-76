@@ -366,20 +366,18 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
               </CardDescription>
             </div>
             <div className="flex gap-2">
-              {/* Refresh Button - Only show if tournamentId exists */}
-              {tournamentId && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleRefresh}
-                  disabled={isLoadingRewards || isSaving}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                  title="Cập nhật dữ liệu từ database"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isLoadingRewards ? 'animate-spin' : ''}`} />
-                  {isLoadingRewards ? 'Đang tải...' : 'Làm mới'}
-                </Button>
-              )}
+              {/* Refresh Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={isLoadingRewards || isSaving}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                title="Cập nhật dữ liệu từ database"
+              >
+                <RefreshCw className={`w-4 h-4 ${isLoadingRewards ? 'animate-spin' : ''}`} />
+                {isLoadingRewards ? 'Đang tải...' : 'Làm mới'}
+              </Button>
               
               {isEditable && (
                 <Button
