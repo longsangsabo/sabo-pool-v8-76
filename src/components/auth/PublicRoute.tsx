@@ -9,7 +9,7 @@ interface PublicRouteProps {
 }
 
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, session } = useAuth();
 
   if (loading) {
     return (
@@ -22,7 +22,8 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
     );
   }
 
-  if (user) {
+  if (user && session) {
+    console.log('🔧 PublicRoute: User already authenticated, redirecting to dashboard');
     // If user is already authenticated, redirect to dashboard
     return <Navigate to="/dashboard" replace />;
   }

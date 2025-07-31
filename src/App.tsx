@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/sonner';
-import { AuthProvider } from '@/hooks/useAuth';
 import { CombinedProviders } from '@/contexts/CombinedProviders';
 import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
@@ -79,10 +78,9 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
           <Router>
-            <AuthProvider>
-              <CombinedProviders>
-                <div className="min-h-screen bg-background">
-                  <Suspense fallback={<AppLoadingFallback />}>
+            <CombinedProviders>
+              <div className="min-h-screen bg-background">
+                <Suspense fallback={<AppLoadingFallback />}>
                    <Routes>
                      {/* Public routes - no authentication required */}
                      <Route path="/" element={<HomePage />} />
@@ -137,10 +135,9 @@ const App = () => {
                      {/* Fallback route */}
                      <Route path="*" element={<NotFoundPage />} />
                    </Routes>
-                  </Suspense>
-                </div>
-              </CombinedProviders>
-            </AuthProvider>
+                </Suspense>
+              </div>
+            </CombinedProviders>
             <Toaster />
           </Router>
         </HelmetProvider>

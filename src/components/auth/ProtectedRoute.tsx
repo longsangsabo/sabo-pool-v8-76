@@ -9,9 +9,10 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, session } = useAuth();
   const location = useLocation();
 
+  // Extended loading state check
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -23,7 +24,19 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  if (!user) {
+  // Check for both user and session for stronger authentication
+  if (!user || !session) {
+    console.log('🔧 ProtectedRoute: No user or session, redirecting to auth', { 
+      hasUser: !!user, 
+      hasSession: !!session,
+      path: location.pathname 
+    });
+    
+    // Clear any corrupted auth data
+    if (!session) {
+      localStorage.removeItem('supabase.auth.token');
+    }
+    
     // Redirect to auth with return URL
     return <Navigate to={`/auth?redirect=${encodeURIComponent(location.pathname)}`} replace />;
   }
