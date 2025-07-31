@@ -426,6 +426,20 @@ export const useChallenges = () => {
       .on(
         'postgres_changes',
         {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'challenges',
+          filter: `opponent_id.is.null`,
+        },
+        (payload) => {
+          console.log('🔄 New open challenge created, refreshing:', payload);
+          // Refresh to show new open challenges
+          setTimeout(() => fetchChallenges(), 100);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'UPDATE',
           schema: 'public',
           table: 'profiles',

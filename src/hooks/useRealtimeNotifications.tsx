@@ -38,7 +38,7 @@ export const useRealtimeNotifications = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'challenges',
-          filter: `challenged_id=eq.${user.id}`,
+          filter: `opponent_id=eq.${user.id}`,
         },
         payload => {
           // ...removed console.log('New challenge received:', payload)
