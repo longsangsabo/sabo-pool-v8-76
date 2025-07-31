@@ -4118,8 +4118,16 @@ export type Database = {
         }
         Returns: Json
       }
+      sync_all_completed_tournament_rewards: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       sync_tournament_points_to_rankings: {
         Args: { p_tournament_id?: string }
+        Returns: Json
+      }
+      sync_tournament_rewards_from_tiers: {
+        Args: { p_tournament_id: string }
         Returns: Json
       }
       test_auto_advancement: {

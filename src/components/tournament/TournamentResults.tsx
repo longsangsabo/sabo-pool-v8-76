@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useTournamentResults } from '@/hooks/useTournamentResults';
-import { useTournamentPrizeTiers } from '@/hooks/useTournamentPrizeTiers';
 import { TournamentResultWithPlayer } from '@/types/tournamentResults';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -20,27 +19,17 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
   maxResults 
 }) => {
   const { results, loading, error } = useTournamentResults(tournamentId);
-  const { prizeTiers } = useTournamentPrizeTiers(tournamentId);
 
-  // Combine results with prize tier configuration
-  const enhancedResults = results.map(result => {
-    const prizeTier = prizeTiers.find(tier => tier.position === result.final_position);
-    return {
-      ...result,
-      // Override with prize tier configuration if available
-      spa_points_earned: prizeTier?.spa_points || result.spa_points_earned,
-      elo_points_awarded: prizeTier?.elo_points || result.elo_points_awarded,
-      prize_amount: prizeTier?.cash_amount || result.prize_amount,
-      physical_rewards: prizeTier?.physical_items || result.physical_rewards || [],
-      // Fix verified_rank display
-      verified_rank: result.verified_rank || 'Unranked',
-      position_name: prizeTier?.position_name || 
-        (result.final_position === 1 ? 'Vô địch' : 
-         result.final_position === 2 ? 'Á quân' : 
-         result.final_position === 3 ? 'Hạng 3' : 
-         `Hạng ${result.final_position}`)
-    };
-  });
+  // Simple data formatting - no complex merging needed anymore
+  const enhancedResults = results.map(result => ({
+    ...result,
+    verified_rank: result.verified_rank || 'Unranked',
+    position_name: result.placement_type || 
+      (result.final_position === 1 ? 'Vô địch' : 
+       result.final_position === 2 ? 'Á quân' : 
+       result.final_position === 3 ? 'Hạng 3' : 
+       `Hạng ${result.final_position}`)
+  }));
 
   if (loading) {
     return (
