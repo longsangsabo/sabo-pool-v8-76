@@ -245,15 +245,16 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     // Update local state immediately for instant UI update
     setCurrentRewards(updatedRewards);
     
-    // Save to database if tournamentId is provided
-    if (tournamentId && saveRewards) {
+    // ALWAYS save to database if we have the tournament_prize_tiers manager
+    if (saveRewards) {
       try {
         await saveRewards(updatedRewards);
-        console.log('✅ Rewards saved to database successfully');
+        console.log('✅ Rewards saved to tournament_prize_tiers successfully');
       } catch (error) {
-        console.error('❌ Failed to save rewards to database:', error);
+        console.error('❌ Failed to save rewards to tournament_prize_tiers:', error);
         // Revert local state on error
         setCurrentRewards(activeRewards);
+        toast.error('Lỗi khi lưu phần thưởng vào database');
         return; // Don't close modal or show success message
       }
     }
@@ -265,8 +266,8 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     
     setIsEditModalOpen(false);
     
-    // Success message is already shown by the mutation
-    if (!tournamentId) {
+    // Success message is already shown by the saveRewards mutation
+    if (!saveRewards) {
       toast.success('Đã cập nhật phần thưởng thành công!');
     }
   };
