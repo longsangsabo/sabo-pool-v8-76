@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { Tournament } from '@/types/tournament';
 import { TournamentParticipantsTab } from './TournamentParticipantsTab';
-import { BracketVisualization } from './BracketVisualization';
+import { TournamentBracket } from './TournamentBracket';
 import { TournamentResults } from './TournamentResults';
 import { TournamentRealTimeSync } from './TournamentRealTimeSync';
 import { useTournamentRegistrations } from '@/hooks/useTournamentRegistrations';
@@ -72,6 +72,19 @@ const getStatusText = (status: string) => {
     default:
       return status || 'Không xác định';
   }
+};
+
+const formatSafeDate = (dateString: string | null | undefined) => {
+  if (!dateString) return 'Chưa xác định';
+  
+  const date = new Date(dateString);
+  
+  // Check if the date is valid and not the epoch date (1970-01-01)
+  if (isNaN(date.getTime()) || date.getFullYear() === 1970) {
+    return 'Chưa xác định';
+  }
+  
+  return date.toLocaleString('vi-VN');
 };
 
 export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsModalProps> = ({
@@ -131,7 +144,7 @@ export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsM
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Tổng quan</TabsTrigger>
             <TabsTrigger value="participants">
               Người tham gia {!registrationsLoading && `(${confirmedParticipants})`}
@@ -142,7 +155,6 @@ export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsM
             <TabsTrigger value="results">
               Kết quả {!resultsLoading && results.length > 0 && `(${results.length})`}
             </TabsTrigger>
-            <TabsTrigger value="awards">Giải thưởng</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -197,28 +209,28 @@ export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsM
                     <Clock className="h-4 w-4 text-blue-500" />
                     <span className="text-muted-foreground">Mở đăng ký:</span>
                     <span className="font-medium ml-auto">
-                      {new Date(tournament.registration_start).toLocaleString('vi-VN')}
+                      {formatSafeDate(tournament.registration_start)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-orange-500" />
                     <span className="text-muted-foreground">Đóng đăng ký:</span>
                     <span className="font-medium ml-auto">
-                      {new Date(tournament.registration_end).toLocaleString('vi-VN')}
+                      {formatSafeDate(tournament.registration_end)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Zap className="h-4 w-4 text-green-500" />
                     <span className="text-muted-foreground">Bắt đầu:</span>
                     <span className="font-medium ml-auto">
-                      {new Date(tournament.tournament_start).toLocaleString('vi-VN')}
+                      {formatSafeDate(tournament.tournament_start)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Trophy className="h-4 w-4 text-amber-500" />
                     <span className="text-muted-foreground">Kết thúc:</span>
                     <span className="font-medium ml-auto">
-                      {new Date(tournament.tournament_end).toLocaleString('vi-VN')}
+                      {formatSafeDate(tournament.tournament_end)}
                     </span>
                   </div>
                 </div>
@@ -313,115 +325,16 @@ export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsM
           </TabsContent>
 
           <TabsContent value="bracket">
-          <BracketVisualization 
-            tournamentId={tournament.id}
-          />
+            <TournamentBracket 
+              tournamentId={tournament.id}
+              adminMode={false}
+            />
           </TabsContent>
 
           <TabsContent value="results">
             <TournamentResults tournamentId={tournament.id} />
           </TabsContent>
 
-          <TabsContent value="awards" className="space-y-6">
-            {/* Prize Configuration */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Gift className="h-5 w-5 text-amber-500" />
-                <h3 className="text-lg font-semibold">Cấu hình giải thưởng</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Prize Money Distribution */}
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h4 className="font-medium flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-green-600" />
-                    Giải thưởng tiền mặt
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-muted/50 rounded">
-                      <span className="font-medium">Tổng giải thưởng:</span>
-                      <span className="font-bold text-green-600">
-                        {formatCurrency(calculateTotalPrizePool(tournament))}
-                      </span>
-                    </div>
-                    <div className="space-y-1">
-                      {formatPrizeDistribution(tournament).map((prize, index) => (
-                        <div key={index} className="flex justify-between items-center p-2 rounded text-sm">
-                          <span className="text-muted-foreground">{prize.position}:</span>
-                          <span className="font-medium">{formatCurrency(prize.amount)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* SPA & ELO Points */}
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h4 className="font-medium flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-blue-600" />
-                    Điểm thưởng
-                  </h4>
-                  <div className="space-y-3">
-                    {tournament.spa_points_config && (
-                      <div>
-                        <span className="text-sm font-medium text-blue-600">SPA Points:</span>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Cấu hình điểm SPA theo vị trí hoàn thành
-                        </p>
-                      </div>
-                    )}
-                    {tournament.elo_points_config && (
-                      <div>
-                        <span className="text-sm font-medium text-purple-600">ELO Points:</span>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Cấu hình điểm ELO theo kết quả trận đấu
-                        </p>
-                      </div>
-                    )}
-                    {(!tournament.spa_points_config && !tournament.elo_points_config) && (
-                      <p className="text-sm text-muted-foreground">
-                        Chưa cấu hình điểm thưởng
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Physical Prizes */}
-                {tournament.physical_prizes && Array.isArray(tournament.physical_prizes) && tournament.physical_prizes.length > 0 && (
-                  <div className="space-y-4 p-4 border rounded-lg lg:col-span-2">
-                    <h4 className="font-medium flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-amber-600" />
-                      Giải thưởng vật phẩm
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {tournament.physical_prizes.map((prize: any, index: number) => (
-                        <div key={index} className="p-3 bg-muted/50 rounded text-sm">
-                          <div className="font-medium">{prize.name || `Giải ${index + 1}`}</div>
-                          {prize.description && (
-                            <div className="text-muted-foreground mt-1">{prize.description}</div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Tournament Results (if completed) */}
-            {tournament.status === 'completed' && (
-              <div className="border-t pt-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Award className="h-5 w-5 text-green-500" />
-                  <h3 className="text-lg font-semibold">Kết quả cuối cùng</h3>
-                </div>
-                <TournamentResults 
-                  tournamentId={tournament.id} 
-                  showTitle={false}
-                />
-              </div>
-            )}
-          </TabsContent>
         </Tabs>
       </DialogContent>
     </Dialog>
