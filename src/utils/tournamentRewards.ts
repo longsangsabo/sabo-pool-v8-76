@@ -84,58 +84,168 @@ export const calculateRewards = (
 
   const playerSpaPoints = spaPointsMap[playerRank] || spaPointsMap['K'];
 
+  // Calculate cash prizes for all 16 positions based on percentage distribution
+  const prizeDistribution16 = {
+    1: Math.floor(totalPrize * 0.40), // 40% for 1st place
+    2: Math.floor(totalPrize * 0.24), // 24% for 2nd place  
+    3: Math.floor(totalPrize * 0.16), // 16% for 3rd place
+    4: Math.floor(totalPrize * 0.08), // 8% for 4th place
+    5: Math.floor(totalPrize * 0.04), // 4% for 5th-6th place
+    6: Math.floor(totalPrize * 0.04), // 4% for 5th-6th place
+    7: Math.floor(totalPrize * 0.02), // 2% for 7th-8th place
+    8: Math.floor(totalPrize * 0.02), // 2% for 7th-8th place
+    9: Math.floor(totalPrize * 0.01125), // 1.125% for 9th-12th place
+    10: Math.floor(totalPrize * 0.01125), // 1.125% for 9th-12th place
+    11: Math.floor(totalPrize * 0.01125), // 1.125% for 9th-12th place
+    12: Math.floor(totalPrize * 0.01125), // 1.125% for 9th-12th place
+    13: Math.floor(totalPrize * 0.005625), // 0.5625% for 13th-16th place
+    14: Math.floor(totalPrize * 0.005625), // 0.5625% for 13th-16th place
+    15: Math.floor(totalPrize * 0.005625), // 0.5625% for 13th-16th place
+    16: Math.floor(totalPrize * 0.005625), // 0.5625% for 13th-16th place
+  };
+
   const positions = [
     {
       position: 1,
       name: 'Vô địch',
-      eloPoints: eloPoints[1],
+      eloPoints: 100,
       spaPoints: playerSpaPoints[1],
-      cashPrize: prizeDistribution[1],
+      cashPrize: prizeDistribution16[1],
       items: ['Cúp vô địch'],
       isVisible: true
     },
     {
       position: 2,
       name: 'Á quân',
-      eloPoints: eloPoints[2],
+      eloPoints: 75,
       spaPoints: playerSpaPoints[2],
-      cashPrize: prizeDistribution[2],
+      cashPrize: prizeDistribution16[2],
       items: ['Huy chương bạc'],
       isVisible: true
     },
     {
       position: 3,
-      name: 'Hạng ba',
-      eloPoints: eloPoints[3],
+      name: 'Hạng 3',
+      eloPoints: 50,
       spaPoints: playerSpaPoints[3],
-      cashPrize: prizeDistribution[3],
+      cashPrize: prizeDistribution16[3],
       items: ['Huy chương đồng'],
       isVisible: true
     },
     {
       position: 4,
-      name: 'Hạng tư',
-      eloPoints: eloPoints[4],
+      name: 'Hạng 4',
+      eloPoints: 40,
       spaPoints: playerSpaPoints[4],
-      cashPrize: 0,
+      cashPrize: prizeDistribution16[4],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 5,
+      name: 'Hạng 5-6',
+      eloPoints: 30,
+      spaPoints: playerSpaPoints[4],
+      cashPrize: prizeDistribution16[5],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 6,
+      name: 'Hạng 5-6',
+      eloPoints: 30,
+      spaPoints: playerSpaPoints[4],
+      cashPrize: prizeDistribution16[6],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 7,
+      name: 'Hạng 7-8',
+      eloPoints: 25,
+      spaPoints: playerSpaPoints[8],
+      cashPrize: prizeDistribution16[7],
       items: [],
       isVisible: true
     },
     {
       position: 8,
-      name: 'Top 8',
-      eloPoints: eloPoints[8],
+      name: 'Hạng 7-8',
+      eloPoints: 25,
       spaPoints: playerSpaPoints[8],
-      cashPrize: 0,
+      cashPrize: prizeDistribution16[8],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 9,
+      name: 'Hạng 9-12',
+      eloPoints: 20,
+      spaPoints: playerSpaPoints[8],
+      cashPrize: prizeDistribution16[9],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 10,
+      name: 'Hạng 9-12',
+      eloPoints: 20,
+      spaPoints: playerSpaPoints[8],
+      cashPrize: prizeDistribution16[10],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 11,
+      name: 'Hạng 9-12',
+      eloPoints: 20,
+      spaPoints: playerSpaPoints[8],
+      cashPrize: prizeDistribution16[11],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 12,
+      name: 'Hạng 9-12',
+      eloPoints: 20,
+      spaPoints: playerSpaPoints[8],
+      cashPrize: prizeDistribution16[12],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 13,
+      name: 'Hạng 13-16',
+      eloPoints: 15,
+      spaPoints: playerSpaPoints[16],
+      cashPrize: prizeDistribution16[13],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 14,
+      name: 'Hạng 13-16',
+      eloPoints: 15,
+      spaPoints: playerSpaPoints[16],
+      cashPrize: prizeDistribution16[14],
+      items: [],
+      isVisible: true
+    },
+    {
+      position: 15,
+      name: 'Hạng 13-16',
+      eloPoints: 15,
+      spaPoints: playerSpaPoints[16],
+      cashPrize: prizeDistribution16[15],
       items: [],
       isVisible: true
     },
     {
       position: 16,
-      name: 'Top 16',
-      eloPoints: eloPoints[16],
+      name: 'Hạng 13-16',
+      eloPoints: 15,
       spaPoints: playerSpaPoints[16],
-      cashPrize: 0,
+      cashPrize: prizeDistribution16[16],
       items: [],
       isVisible: true
     },
