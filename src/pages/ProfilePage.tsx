@@ -1,9 +1,10 @@
 
 import React from 'react';
-import HybridArenaProfile from '@/components/profile/HybridArenaProfile';
+import ResponsiveProfilePage from '@/components/profile/ResponsiveProfilePage';
 
 const ProfilePage: React.FC = () => {
-  return <HybridArenaProfile />;
+  console.log('🎯 [ProfilePage] Rendering ResponsiveProfilePage with white background');
+  return <ResponsiveProfilePage />;
 };
 
 export default ProfilePage;
