@@ -200,6 +200,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
               </p>
             )}
             
+            {/* Hidden city and completion info 
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               {profile?.city && (
                 <span className="sabo-tech-card px-2 py-1">📍 {profile.city}</span>
@@ -208,6 +209,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
                 <span className="sabo-tech-card px-2 py-1">📊 Profile: {profile.completion_percentage}%</span>
               )}
             </div>
+            */}
           </div>
         </div>
       </div>
