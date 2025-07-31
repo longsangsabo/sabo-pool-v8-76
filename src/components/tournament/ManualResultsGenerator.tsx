@@ -25,7 +25,7 @@ export const ManualResultsGenerator = ({
     setLastResult(null);
 
     try {
-      const { data, error } = await (supabase as any).rpc('force_generate_tournament_results', {
+      const { data, error } = await (supabase as any).rpc('process_tournament_completion', {
         p_tournament_id: tournamentId
       });
 
