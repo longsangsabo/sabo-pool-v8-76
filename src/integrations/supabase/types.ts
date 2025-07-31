@@ -3359,6 +3359,10 @@ export type Database = {
           pattern_description: string
         }[]
       }
+      apply_tournament_reward_template: {
+        Args: { p_tournament_id: string; p_template_id: string }
+        Returns: Json
+      }
       approve_rank_verification: {
         Args: { p_request_id: string }
         Returns: Json
@@ -3504,6 +3508,10 @@ export type Database = {
         Returns: Json
       }
       complete_tournament_automatically: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
+      complete_tournament_workflow: {
         Args: { p_tournament_id: string }
         Returns: Json
       }
@@ -3719,6 +3727,10 @@ export type Database = {
         Args: { p_tournament_id: string }
         Returns: Json
       }
+      generate_tournament_results_from_tiers: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
       get_15_task_system_status: {
         Args: Record<PropertyKey, never> | { p_tournament_id: string }
         Returns: {
@@ -3805,6 +3817,10 @@ export type Database = {
           message: string
           matches_created: number
         }[]
+      }
+      initialize_tournament_rewards: {
+        Args: { p_tournament_id: string; p_tier_level?: number }
+        Returns: Json
       }
       is_final_match: {
         Args: { p_match_id: string }
