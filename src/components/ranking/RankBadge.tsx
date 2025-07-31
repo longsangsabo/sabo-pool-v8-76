@@ -61,6 +61,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({
 
   const badgeClasses = `
     inline-flex items-center justify-center rounded-lg border-2 font-bold
+    sabo-tech-border-rank-${rankInfo.code.charAt(0).toLowerCase()}
     ${getRankColor(rankInfo.code)}
     ${getSizeClasses()}
   `;

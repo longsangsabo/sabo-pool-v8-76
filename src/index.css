@@ -484,6 +484,250 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  /* ========================
+     SABO TECH BORDER SYSTEM
+     ======================== */
+  
+  /* Core SABO Tech Border Definitions */
+  .sabo-tech-border {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+  
+  /* Primary Tech Border - Golden with animated pulse */
+  .sabo-tech-border-primary {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--primary));
+    box-shadow: 
+      0 0 20px hsl(var(--primary) / 0.3),
+      inset 0 0 20px hsl(var(--primary) / 0.1);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--primary) / 0.05) 100%);
+  }
+  
+  .sabo-tech-border-primary::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--primary-glow)) 25%, 
+      hsl(var(--primary)) 50%, 
+      hsl(var(--primary-glow)) 75%, 
+      hsl(var(--primary)) 100%);
+    border-radius: var(--radius);
+    z-index: -1;
+    animation: sabo-border-pulse 3s ease-in-out infinite;
+  }
+  
+  /* Secondary Tech Border - Blue with tech lines */
+  .sabo-tech-border-secondary {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--accent-blue));
+    box-shadow: 
+      0 0 15px hsl(var(--accent-blue) / 0.3),
+      inset 0 0 15px hsl(var(--accent-blue) / 0.1);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--accent-blue) / 0.05) 100%);
+  }
+  
+  .sabo-tech-border-secondary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(90deg, transparent 0%, hsl(var(--accent-blue) / 0.1) 50%, transparent 100%),
+      linear-gradient(0deg, transparent 0%, hsl(var(--accent-blue) / 0.1) 50%, transparent 100%);
+    background-size: 50px 50px, 50px 50px;
+    animation: sabo-tech-lines 4s linear infinite;
+    pointer-events: none;
+  }
+  
+  /* Success Tech Border - Green with data flow */
+  .sabo-tech-border-success {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--accent-green));
+    box-shadow: 
+      0 0 15px hsl(var(--accent-green) / 0.3),
+      inset 0 0 15px hsl(var(--accent-green) / 0.1);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--accent-green) / 0.05) 100%);
+  }
+  
+  /* Warning Tech Border - Orange with alert pulse */
+  .sabo-tech-border-warning {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--accent-red));
+    box-shadow: 
+      0 0 15px hsl(var(--accent-red) / 0.3),
+      inset 0 0 15px hsl(var(--accent-red) / 0.1);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--accent-red) / 0.05) 100%);
+    animation: sabo-warning-pulse 2s ease-in-out infinite alternate;
+  }
+  
+  /* Premium Tech Border - Purple with premium glow */
+  .sabo-tech-border-premium {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--accent-purple));
+    box-shadow: 
+      0 0 25px hsl(var(--accent-purple) / 0.4),
+      inset 0 0 25px hsl(var(--accent-purple) / 0.1),
+      0 0 50px hsl(var(--accent-purple) / 0.2);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--accent-purple) / 0.1) 100%);
+  }
+  
+  .sabo-tech-border-premium::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: conic-gradient(
+      hsl(var(--accent-purple)) 0deg,
+      hsl(var(--primary)) 90deg,
+      hsl(var(--accent-purple)) 180deg,
+      hsl(var(--primary)) 270deg,
+      hsl(var(--accent-purple)) 360deg
+    );
+    border-radius: var(--radius);
+    z-index: -1;
+    animation: sabo-premium-rotate 6s linear infinite;
+  }
+  
+  /* Rank-specific Tech Borders */
+  .sabo-tech-border-rank-k {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(0 0% 60%);
+    box-shadow: 0 0 10px hsl(0 0% 60% / 0.3);
+  }
+  
+  .sabo-tech-border-rank-i {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(45 90% 60%);
+    box-shadow: 0 0 15px hsl(45 90% 60% / 0.3);
+  }
+  
+  .sabo-tech-border-rank-h {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(120 60% 50%);
+    box-shadow: 0 0 15px hsl(120 60% 50% / 0.3);
+  }
+  
+  .sabo-tech-border-rank-g {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(210 80% 60%);
+    box-shadow: 0 0 20px hsl(210 80% 60% / 0.4);
+  }
+  
+  .sabo-tech-border-rank-f {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(280 70% 60%);
+    box-shadow: 0 0 20px hsl(280 70% 60% / 0.4);
+  }
+  
+  .sabo-tech-border-rank-e {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(0 80% 60%);
+    box-shadow: 
+      0 0 25px hsl(0 80% 60% / 0.5),
+      0 0 50px hsl(0 80% 60% / 0.3);
+  }
+  
+  /* Interactive Tech Borders */
+  .sabo-tech-border-interactive {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .sabo-tech-border-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 0 30px hsl(var(--primary) / 0.4),
+      0 10px 25px hsl(var(--primary) / 0.2);
+  }
+  
+  .sabo-tech-border-interactive:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+  }
+  
+  /* Button specific borders */
+  .sabo-tech-button {
+    @apply sabo-tech-border-primary sabo-tech-border-interactive;
+    padding: 12px 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: hsl(var(--primary-foreground));
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--primary-glow)) 100%);
+  }
+  
+  .sabo-tech-button:hover {
+    color: hsl(var(--primary-foreground));
+    box-shadow: 
+      0 0 30px hsl(var(--primary) / 0.6),
+      0 10px 25px hsl(var(--primary) / 0.3);
+  }
+  
+  /* Card specific borders */
+  .sabo-tech-card {
+    @apply sabo-tech-border-secondary;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .sabo-tech-card-premium {
+    @apply sabo-tech-border-premium;
+    padding: 24px;
+    backdrop-filter: blur(15px);
+  }
+  
+  /* Input specific borders */
+  .sabo-tech-input {
+    @apply sabo-tech-border;
+    border: 2px solid hsl(var(--border));
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+  }
+  
+  .sabo-tech-input:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: 
+      0 0 20px hsl(var(--primary) / 0.3),
+      inset 0 0 20px hsl(var(--primary) / 0.1);
+    outline: none;
+  }
+  
+  /* Avatar borders with tech enhancement */
+  .sabo-tech-avatar {
+    @apply sabo-tech-border-primary;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .sabo-tech-avatar-rank {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
   /* Mobile navigation styling */
   .mobile-nav-enhanced {
     position: fixed;

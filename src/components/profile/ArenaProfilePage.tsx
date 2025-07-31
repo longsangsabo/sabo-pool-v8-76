@@ -52,21 +52,21 @@ const ArenaProfilePage: React.FC = () => {
           <span className="rank-text">{profile.verified_rank || 'Rookie'}</span>
         </div>
         
-        {/* Arena Stats */}
-        <div className="arena-stats">
-          <div className="stat-circle">
-            <span className="stat-number">{profile.spa_points || 0}</span>
-            <span className="stat-label">SPA Points</span>
-          </div>
-          <div className="stat-circle">
-            <span className="stat-number">{profile.matches_won || 0}</span>
-            <span className="stat-label">Victories</span>
-          </div>
-          <div className="stat-circle">
-            <span className="stat-number">{profile.win_percentage || 0}%</span>
-            <span className="stat-label">Win Rate</span>
-          </div>
+      {/* Arena Stats with SABO Tech Borders */}
+      <div className="arena-stats">
+        <div className="stat-circle sabo-tech-border-secondary sabo-tech-border-interactive">
+          <span className="stat-number">{profile.spa_points || 0}</span>
+          <span className="stat-label">SPA Points</span>
         </div>
+        <div className="stat-circle sabo-tech-border-success sabo-tech-border-interactive">
+          <span className="stat-number">{profile.matches_won || 0}</span>
+          <span className="stat-label">Victories</span>
+        </div>
+        <div className="stat-circle sabo-tech-border-primary sabo-tech-border-interactive">
+          <span className="stat-number">{profile.win_percentage || 0}%</span>
+          <span className="stat-label">Win Rate</span>
+        </div>
+      </div>
       </div>
       
       {/* Arena Navigation */}
