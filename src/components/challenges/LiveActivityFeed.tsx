@@ -108,133 +108,139 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
         </Button>
       </div>
 
-      {/* Live Matches Section */}
-      <div>
-        <SectionHeader
-          icon="🔴"
-          title="ĐANG DIỄN RA"
-          count={mockLiveMatches.length}
-          subtitle="Các trận đấu đang thi đấu"
-        />
-        
-        {mockLiveMatches.length > 0 ? (
-          <div className="grid gap-4">
-            {mockLiveMatches.map(match => (
-              <LiveMatchCard
-                key={match.id}
-                match={match}
-                onWatch={handleWatchMatch}
-              />
-            ))}
-          </div>
-        ) : (
-          <Card className="border-dashed border-2 border-muted-foreground/20">
-            <CardContent className="p-8 text-center">
-              <div className="text-muted-foreground">
-                <div className="text-4xl mb-2">🎱</div>
-                <div className="font-medium">Hiện tại không có trận đấu nào đang diễn ra</div>
-                <div className="text-sm">Các trận đấu live sẽ hiển thị ở đây</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+      {/* Top Row - Live and Upcoming Matches */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Live Matches Section */}
+        <div className="space-y-4">
+          <SectionHeader
+            icon="🔴"
+            title="ĐANG DIỄN RA"
+            count={mockLiveMatches.length}
+            subtitle="Các trận đấu đang thi đấu"
+          />
+          
+          {mockLiveMatches.length > 0 ? (
+            <div className="grid gap-3">
+              {mockLiveMatches.map(match => (
+                <LiveMatchCard
+                  key={match.id}
+                  match={match}
+                  onWatch={handleWatchMatch}
+                />
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed border-2 border-muted-foreground/20">
+              <CardContent className="p-6 text-center">
+                <div className="text-muted-foreground">
+                  <div className="text-3xl mb-2">🎱</div>
+                  <div className="font-medium text-sm">Không có trận đấu nào đang diễn ra</div>
+                  <div className="text-xs">Các trận đấu live sẽ hiển thị ở đây</div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* Upcoming Matches Section */}
+        <div className="space-y-4">
+          <SectionHeader
+            icon="⏰"
+            title="SẮP DIỄN RA"
+            count={mockUpcomingMatches.length}
+            subtitle="Các trận đấu đã được lên lịch"
+          />
+          
+          {mockUpcomingMatches.length > 0 ? (
+            <div className="grid gap-3">
+              {mockUpcomingMatches.map(match => (
+                <UpcomingMatchCard
+                  key={match.id}
+                  match={match}
+                  onRemind={handleRemindMatch}
+                />
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed border-2 border-muted-foreground/20">
+              <CardContent className="p-6 text-center">
+                <div className="text-muted-foreground">
+                  <div className="text-3xl mb-2">📅</div>
+                  <div className="font-medium text-sm">Chưa có trận đấu nào được lên lịch</div>
+                  <div className="text-xs">Các trận đấu sắp tới sẽ hiển thị ở đây</div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
 
-      {/* Upcoming Matches Section */}
-      <div>
-        <SectionHeader
-          icon="⏰"
-          title="SẮP DIỄN RA"
-          count={mockUpcomingMatches.length}
-          subtitle="Các trận đấu đã được lên lịch"
-        />
-        
-        {mockUpcomingMatches.length > 0 ? (
-          <div className="grid gap-4">
-            {mockUpcomingMatches.map(match => (
-              <UpcomingMatchCard
-                key={match.id}
-                match={match}
-                onRemind={handleRemindMatch}
-              />
-            ))}
-          </div>
-        ) : (
-          <Card className="border-dashed border-2 border-muted-foreground/20">
-            <CardContent className="p-8 text-center">
-              <div className="text-muted-foreground">
-                <div className="text-4xl mb-2">📅</div>
-                <div className="font-medium">Chưa có trận đấu nào được lên lịch</div>
-                <div className="text-sm">Các trận đấu sắp tới sẽ hiển thị ở đây</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      {/* Bottom Row - Open Challenges and Recent Results */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Open Challenges Section */}
+        <div className="space-y-4">
+          <SectionHeader
+            icon="👀"
+            title="ĐANG TÌM ĐỐI THỦ"
+            count={openChallenges.length}
+            subtitle="Thách đấu mở đang chờ người tham gia"
+          />
+          
+          {openChallenges.length > 0 ? (
+            <div className="grid gap-3">
+              {openChallenges.map(challenge => (
+                <OpenChallengeCard
+                  key={challenge.id}
+                  challenge={challenge}
+                  onJoin={() => onJoinChallenge(challenge.id)}
+                  variant="compact"
+                />
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed border-2 border-muted-foreground/20">
+              <CardContent className="p-6 text-center">
+                <div className="text-muted-foreground">
+                  <div className="text-3xl mb-2">🎯</div>
+                  <div className="font-medium text-sm">Hiện tại không có thách đấu mở nào</div>
+                  <div className="text-xs">Tạo thách đấu mở để tìm đối thủ ngay!</div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
-      {/* Open Challenges Section */}
-      <div>
-        <SectionHeader
-          icon="👀"
-          title="ĐANG TÌM ĐỐI THỦ"
-          count={openChallenges.length}
-          subtitle="Thách đấu mở đang chờ người tham gia"
-        />
-        
-        {openChallenges.length > 0 ? (
-          <div className="grid gap-4">
-            {openChallenges.map(challenge => (
-              <OpenChallengeCard
-                key={challenge.id}
-                challenge={challenge}
-                onJoin={() => onJoinChallenge(challenge.id)}
-                variant="compact"
-              />
-            ))}
-          </div>
-        ) : (
-          <Card className="border-dashed border-2 border-muted-foreground/20">
-            <CardContent className="p-8 text-center">
-              <div className="text-muted-foreground">
-                <div className="text-4xl mb-2">🎯</div>
-                <div className="font-medium">Hiện tại không có thách đấu mở nào</div>
-                <div className="text-sm">Tạo thách đấu mở để tìm đối thủ ngay!</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Recent Results Section */}
-      <div>
-        <SectionHeader
-          icon="✅"
-          title="MỚI HOÀN THÀNH"
-          count={mockRecentResults.length}
-          subtitle="Kết quả các trận đấu gần đây"
-        />
-        
-        {mockRecentResults.length > 0 ? (
-          <div className="grid gap-4">
-            {mockRecentResults.map(result => (
-              <RecentResultCard
-                key={result.id}
-                result={result}
-                onView={handleViewResult}
-              />
-            ))}
-          </div>
-        ) : (
-          <Card className="border-dashed border-2 border-muted-foreground/20">
-            <CardContent className="p-8 text-center">
-              <div className="text-muted-foreground">
-                <div className="text-4xl mb-2">🏆</div>
-                <div className="font-medium">Chưa có kết quả trận đấu nào gần đây</div>
-                <div className="text-sm">Kết quả các trận đấu sẽ hiển thị ở đây</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {/* Recent Results Section */}
+        <div className="space-y-4">
+          <SectionHeader
+            icon="✅"
+            title="MỚI HOÀN THÀNH"
+            count={mockRecentResults.length}
+            subtitle="Kết quả các trận đấu gần đây"
+          />
+          
+          {mockRecentResults.length > 0 ? (
+            <div className="grid gap-3">
+              {mockRecentResults.map(result => (
+                <RecentResultCard
+                  key={result.id}
+                  result={result}
+                  onView={handleViewResult}
+                />
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed border-2 border-muted-foreground/20">
+              <CardContent className="p-6 text-center">
+                <div className="text-muted-foreground">
+                  <div className="text-3xl mb-2">🏆</div>
+                  <div className="font-medium text-sm">Chưa có kết quả trận đấu nào gần đây</div>
+                  <div className="text-xs">Kết quả các trận đấu sẽ hiển thị ở đây</div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
     </div>
   );
