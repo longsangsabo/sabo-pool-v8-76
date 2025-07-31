@@ -7,6 +7,7 @@ import { Calendar, MapPin, Users, Trophy, DollarSign, Info, Eye } from 'lucide-r
 import { EnhancedTournament } from '@/types/tournament-extended';
 import TournamentDetailsInfoModal from './tournament/TournamentDetailsInfoModal';
 import { calculateTotalPrizePool, formatCurrency } from '@/utils/prizeUtils';
+import { formatSafeDate } from '@/utils/dateUtils';
 
 interface TournamentCardProps {
   tournament: EnhancedTournament;
@@ -107,10 +108,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-muted-foreground" />
               <span className="text-muted-foreground">
-                {tournament.tournament_start ? 
-                  new Date(tournament.tournament_start).toLocaleDateString('vi-VN') : 
-                  'Chưa xác định'
-                }
+                {formatSafeDate(tournament.tournament_start, (tournament as any).start_date)}
               </span>
             </div>
 

@@ -6,6 +6,7 @@ import { Calendar, MapPin, Users, Trophy, DollarSign } from 'lucide-react';
 import { EnhancedTournament } from '@/types/tournament-extended';
 import { formatPrizeDistribution, calculateTotalPrizePool, formatCurrency } from '@/utils/prizeUtils';
 import { TournamentAdapter } from '@/utils/tournamentAdapter';
+import { formatSafeDate, formatSafeDateWithTime } from '@/utils/dateUtils';
 
 interface TournamentDetailsInfoModalProps {
   tournament: EnhancedTournament | any; // Accept both types for compatibility
@@ -70,10 +71,7 @@ const TournamentDetailsInfoModal: React.FC<TournamentDetailsInfoModalProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Ngày bắt đầu</p>
                 <p className="font-medium">
-                  {tournament.tournament_start ? 
-                    new Date(tournament.tournament_start).toLocaleDateString('vi-VN') : 
-                    'Chưa xác định'
-                  }
+                  {formatSafeDate(tournament.tournament_start, tournament.start_date)}
                 </p>
               </div>
             </div>
@@ -173,13 +171,7 @@ const TournamentDetailsInfoModal: React.FC<TournamentDetailsInfoModalProps> = ({
                 <div>
                   <p className="text-sm text-blue-600">Hạn chót đăng ký</p>
                   <p className="font-medium text-blue-800">
-                    {new Date(tournament.registration_end).toLocaleDateString('vi-VN', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {formatSafeDateWithTime(tournament.registration_end)}
                   </p>
                 </div>
               </div>

@@ -30,6 +30,7 @@ import { useTournamentRegistrations } from '@/hooks/useTournamentRegistrations';
 import { useTournamentMatches } from '@/hooks/useTournamentMatches';
 import { useTournamentResults } from '@/hooks/useTournamentResults';
 import { calculateTotalPrizePool, formatPrizeDistribution, formatCurrency } from '@/utils/prizeUtils';
+import { formatSafeDate as formatSafeDateUtil } from '@/utils/dateUtils';
 
 export interface EnhancedTournamentDetailsModalProps {
   tournament: Tournament | null;
@@ -117,7 +118,7 @@ export const EnhancedTournamentDetailsModal: React.FC<EnhancedTournamentDetailsM
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  {new Date(tournament.tournament_start).toLocaleDateString('vi-VN')}
+                  {formatSafeDateUtil(tournament.tournament_start, (tournament as any).start_date)}
                 </div>
                 <div className="flex items-center gap-1">
                   <MapPin className="h-4 w-4" />
