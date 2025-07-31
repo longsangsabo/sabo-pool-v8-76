@@ -63,6 +63,11 @@ export function useTournamentRewardsManager(tournamentId: string) {
 
   // Convert TournamentRewards to prize tiers format
   const convertToPrizeTiers = (rewards: TournamentRewards): Omit<TournamentPrizeTier, 'id'>[] => {
+    if (!tournamentId || tournamentId.trim() === '') {
+      console.warn('⚠️ Cannot convert to prize tiers without tournamentId');
+      return [];
+    }
+    
     return rewards.positions.map(position => ({
       tournament_id: tournamentId,
       position: position.position,
@@ -78,8 +83,10 @@ export function useTournamentRewardsManager(tournamentId: string) {
   // Save rewards mutation
   const saveRewardsMutation = useMutation({
     mutationFn: async (rewards: TournamentRewards) => {
+      // If no tournamentId, skip database save but return success for UI consistency
       if (!tournamentId || tournamentId.trim() === '') {
-        throw new Error('Tournament ID is required to save rewards');
+        console.log('⏸️ No tournamentId provided, skipping database save for now');
+        return rewards;
       }
       
       // Start transaction-like operation
@@ -95,11 +102,13 @@ export function useTournamentRewardsManager(tournamentId: string) {
       // 2. Insert new prize tiers
       if (rewards.positions.length > 0) {
         const newTiers = convertToPrizeTiers(rewards);
-        const { error: insertError } = await supabase
-          .from('tournament_prize_tiers')
-          .insert(newTiers);
-        
-        if (insertError) throw insertError;
+        if (newTiers.length > 0) { // Only insert if we have valid tiers
+          const { error: insertError } = await supabase
+            .from('tournament_prize_tiers')
+            .insert(newTiers);
+          
+          if (insertError) throw insertError;
+        }
       }
 
       // Update tournament timestamp for tracking
