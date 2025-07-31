@@ -1,7 +1,6 @@
 
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import MobileLayout from '../components/MobileLayout';
 import MobileStoryReel from '../components/mobile/cards/MobileStoryReel';
 import MobileFeedCard from '../components/mobile/cards/MobileFeedCard';
 import MobileFloatingActionButton from '../components/mobile/common/MobileFloatingActionButton';
