@@ -30,7 +30,7 @@ const UserProfileHeader = () => {
           .from('profiles')
           .select('*')
           .eq('user_id', user.id)
-          .single(),
+          .maybeSingle(),
         supabase
           .from('player_rankings')
           .select('*')

@@ -83,7 +83,7 @@ export const useProfile = () => {
         .update(profileData)
         .eq('user_id', userData.user.id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (updateError) {
         throw updateError;
