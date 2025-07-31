@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Bell, Search, Menu } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Bell, Search, Menu, User, Settings, LogOut } from 'lucide-react';
 
 interface UserMobileHeaderProps {
   title?: string;
@@ -20,7 +21,7 @@ const UserMobileHeader: React.FC<UserMobileHeaderProps> = ({
   showNotifications = true,
   onMenuClick
 }) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-card border-b border-border px-4 py-3 z-[1000] mobile-safe-area-top px-safe">
@@ -37,7 +38,7 @@ const UserMobileHeader: React.FC<UserMobileHeaderProps> = ({
             </Button>
           )}
           
-          <h1 className="text-lg font-bold">{title || 'Social App'}</h1>
+          <h1 className="text-lg font-bold">{title || 'SABO ARENA'}</h1>
         </div>
 
         <div className="flex items-center gap-2">
@@ -54,12 +55,51 @@ const UserMobileHeader: React.FC<UserMobileHeaderProps> = ({
           )}
 
           {showProfile && (
-            <Avatar className="h-7 w-7">
-              <AvatarImage src={user?.user_metadata?.avatar_url} />
-              <AvatarFallback className="text-xs">
-                {user?.user_metadata?.full_name?.charAt(0) || user?.email?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                  <Avatar className="h-7 w-7">
+                    <AvatarImage src={user?.user_metadata?.avatar_url} />
+                    <AvatarFallback className="text-xs">
+                      {user?.user_metadata?.full_name?.charAt(0) || user?.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                className="w-56 bg-card border border-border shadow-lg z-[1001]" 
+                align="end"
+                forceMount
+              >
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    <p className="font-medium text-sm text-foreground">
+                      {user?.user_metadata?.full_name || user?.email}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {user?.email}
+                    </p>
+                  </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Hồ sơ</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Cài đặt</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                  onClick={() => signOut()}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Đăng xuất</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       </div>
