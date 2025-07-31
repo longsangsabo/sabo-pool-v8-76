@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/useResponsive';
 import { useChallenges } from '@/hooks/useChallenges';
 import CreateChallengeModal from '@/components/CreateChallengeModal';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
@@ -84,6 +85,7 @@ interface ChallengeStats {
 
 const EnhancedChallengesPageV2: React.FC = () => {
   const { user } = useAuth();
+  const { isDesktop, isMobile } = useResponsive();
   
   // Use the standardized hook
   const {
@@ -540,24 +542,28 @@ const EnhancedChallengesPageV2: React.FC = () => {
     );
   }
 
-  return (
+  // Desktop Layout Component
+  const DesktopLayout = () => (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 space-y-6 max-w-6xl">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Thách đấu</h1>
-            <p className="text-muted-foreground">
-              Quản lý và tham gia các thách đấu billiards
+      {/* Desktop Container - Optimized for wider screens */}
+      <div className="challenges-desktop max-w-[1400px] mx-auto px-8 py-6 space-y-8">
+        {/* Premium Header Section */}
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              Thách đấu
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Quản lý và tham gia các thách đấu billiards chuyên nghiệp
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <CreateChallengeButton onCreateClick={() => setShowCreateModal(true)} />
             {isAdmin && (
               <Button 
                 onClick={() => setShowAdminCreateModal(true)}
                 variant="outline"
-                className="border-red-200 text-red-600 hover:bg-red-50"
+                className="border-red-200 text-red-600 hover:bg-red-50 shadow-sm"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Admin: Tạo thách đấu
@@ -566,8 +572,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
           </div>
         </div>
 
-        {/* Compact Stats Row - Takes 1/3 of space */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        {/* Compact Statistics Row - Professional Design */}
+        <div className="grid grid-cols-4 gap-6 mb-8">
           <CompactStatCard
             icon={Trophy}
             value={stats.total}
@@ -594,24 +600,24 @@ const EnhancedChallengesPageV2: React.FC = () => {
           />
         </div>
 
-        {/* Live Activity Feed - Takes 2/3 of space */}
+        {/* Live Activity Feed - Main Content Area */}
         <LiveActivityFeed
           openChallenges={openChallenges}
           onJoinChallenge={handleJoinOpenChallenge}
         />
 
-        {/* Legacy Tabs Section - Keep for backward compatibility but make it secondary */}
-        <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="w-5 h-5" />
-              Quản lý thách đấu chi tiết
+        {/* Advanced Management Section - Desktop Optimized */}
+        <Card className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-3 text-xl">
+              <Target className="w-6 h-6" />
+              Quản lý thách đấu nâng cao
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
+            {/* Desktop-Optimized Filters */}
+            <div className="flex gap-4 items-center">
+              <div className="flex-1 max-w-md">
                 <div className="relative group">
                   <Search className="w-4 h-4 absolute left-3 top-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <Input
@@ -624,9 +630,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </div>
               
               <div className="flex gap-3">
-                {/* Challenge Type Filter */}
                 <Select value={challengeTypeFilter} onValueChange={(value: 'all' | 'standard' | 'sabo') => setChallengeTypeFilter(value)}>
-                  <SelectTrigger className="w-40 bg-white border-border/30">
+                  <SelectTrigger className="w-40 bg-background border-border/50">
                     <SelectValue placeholder="Loại thách đấu" />
                   </SelectTrigger>
                   <SelectContent>
@@ -642,10 +647,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 </Select>
 
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-40 border-border/50 hover:border-primary/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200">
+                  <SelectTrigger className="w-40 border-border/50 hover:border-primary/30">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-card/95 backdrop-blur-sm border border-border/50">
+                  <SelectContent>
                     <SelectItem value="all">Tất cả</SelectItem>
                     <SelectItem value="pending">Chờ phản hồi</SelectItem>
                     <SelectItem value="accepted">Đã chấp nhận</SelectItem>
@@ -655,10 +660,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 </Select>
 
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-32 border-border/50 hover:border-primary/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200">
+                  <SelectTrigger className="w-32 border-border/50 hover:border-primary/30">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-card/95 backdrop-blur-sm border border-border/50">
+                  <SelectContent>
                     <SelectItem value="created_at">Ngày tạo</SelectItem>
                     <SelectItem value="bet_points">Mức cược</SelectItem>
                     <SelectItem value="expires_at">Hết hạn</SelectItem>
@@ -669,35 +674,31 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   variant="outline"
                   size="icon"
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                  className="border-border/50 hover:border-primary/30 hover:bg-primary/5 hover:scale-105 transition-all duration-200"
+                  className="border-border/50 hover:border-primary/30 hover:scale-105 transition-all duration-200"
                 >
-                  {sortOrder === 'asc' ? (
-                    <ArrowUp className="w-4 h-4" />
-                  ) : (
-                    <ArrowDown className="w-4 h-4" />
-                  )}
+                  {sortOrder === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
                 </Button>
               </div>
             </div>
 
-            {/* Challenges Tabs */}
+            {/* Enhanced Tabs for Desktop */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
+              <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm h-12">
                 <TabsTrigger 
                   value="my-challenges"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
                 >
                   Thách đấu của tôi ({getFilteredChallenges(myChallenges).length})
                 </TabsTrigger>
                 <TabsTrigger 
                   value="active-challenges"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
                 >
                   Đang diễn ra ({getFilteredChallenges(activeChallenges).length})
                 </TabsTrigger>
                 <TabsTrigger 
                   value="open-challenges"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
                 >
                   Thách đấu mở ({getFilteredChallenges(openChallenges).length})
                 </TabsTrigger>
@@ -705,7 +706,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
               <TabsContent value="my-challenges" className="space-y-6">
                 {getFilteredChallenges(myChallenges).length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {getFilteredChallenges(myChallenges).map(renderChallengeCard)}
                   </div>
                 ) : (
@@ -720,7 +721,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                       </p>
                       <Button 
                         onClick={() => setShowCreateModal(true)}
-                        className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold px-6 py-3 rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 transform hover:scale-105"
+                        className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         🎯 Tạo thách đấu
@@ -732,7 +733,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
               <TabsContent value="active-challenges" className="space-y-6">
                 {getFilteredChallenges(activeChallenges).length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {getFilteredChallenges(activeChallenges).map(renderChallengeCard)}
                   </div>
                 ) : (
@@ -752,7 +753,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
               <TabsContent value="open-challenges" className="space-y-6">
                 {getFilteredChallenges(openChallenges).length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {getFilteredChallenges(openChallenges).map(renderOpenChallengeCard)}
                   </div>
                 ) : (
@@ -773,6 +774,78 @@ const EnhancedChallengesPageV2: React.FC = () => {
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+
+  // Mobile Layout Component (simplified version)
+  const MobileLayout = () => (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-6 space-y-6 max-w-6xl">
+        {/* Mobile Header */}
+        <div className="flex flex-col gap-4 items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Thách đấu</h1>
+            <p className="text-muted-foreground">
+              Quản lý và tham gia các thách đấu billiards
+            </p>
+          </div>
+          <div className="flex gap-2 w-full">
+            <CreateChallengeButton onCreateClick={() => setShowCreateModal(true)} />
+            {isAdmin && (
+              <Button 
+                onClick={() => setShowAdminCreateModal(true)}
+                variant="outline"
+                size="sm"
+                className="border-red-200 text-red-600 hover:bg-red-50"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Admin
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Stats - Stacked version */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <CompactStatCard
+            icon={Trophy}
+            value={stats.total}
+            label="Tổng cộng"
+            color="primary"
+          />
+          <CompactStatCard
+            icon={Clock}
+            value={stats.pending}
+            label="Chờ phản hồi"
+            color="warning"
+          />
+          <CompactStatCard
+            icon={Zap}
+            value={stats.accepted}
+            label="Đã chấp nhận"
+            color="success"
+          />
+          <CompactStatCard
+            icon={Star}
+            value={stats.completed}
+            label="Hoàn thành"
+            color="info"
+          />
+        </div>
+
+        {/* Mobile Activity Feed */}
+        <LiveActivityFeed
+          openChallenges={openChallenges}
+          onJoinChallenge={handleJoinOpenChallenge}
+        />
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Responsive Layout Rendering */}
+      {isDesktop ? <DesktopLayout /> : <MobileLayout />}
 
       {/* Modals */}
       <CreateChallengeModal
@@ -804,7 +877,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
           // Data will refresh automatically via the hook
         }}
       />
-    </div>
+    </>
   );
 };
 
