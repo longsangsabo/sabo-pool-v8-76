@@ -3200,6 +3200,45 @@ export type Database = {
           },
         ]
       }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          match_id: string | null
+          status: string | null
+          tournament_id: string | null
+          transaction_type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          match_id?: string | null
+          status?: string | null
+          tournament_id?: string | null
+          transaction_type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          match_id?: string | null
+          status?: string | null
+          tournament_id?: string | null
+          transaction_type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       wallets: {
         Row: {
           balance: number | null
@@ -4158,6 +4197,10 @@ export type Database = {
       }
       sync_all_completed_tournament_rewards: {
         Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      sync_tournament_player_rewards: {
+        Args: { p_tournament_id: string }
         Returns: Json
       }
       sync_tournament_points_to_rankings: {
