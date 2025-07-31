@@ -14,8 +14,18 @@ export const EnhancedOfflineIndicator: React.FC<EnhancedOfflineIndicatorProps> =
   showDetails = false
 }) => {
   const { isOnline } = useNetworkStatus();
-  const { queueManager } = useOffline();
-  const stats = queueManager.getStats();
+  
+  // Safely handle offline context - it might not be available
+  let queueManager = null;
+  try {
+    const offlineContext = useOffline();
+    queueManager = offlineContext?.queueManager;
+  } catch (error) {
+    // OfflineProvider not available, use fallback
+    console.log('OfflineProvider not available, using basic network indicator');
+  }
+  
+  const stats = queueManager?.getStats() || { total: 0, pending: 0 };
 
   if (isOnline && stats.total === 0) return null;
 
