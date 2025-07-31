@@ -75,7 +75,7 @@ export function EnhancedSPALeaderboard() {
 
       // Apply rank filter
       if (rankFilter !== 'all') {
-        query = query.eq('profiles.current_rank', rankFilter);
+        query = query.eq('profiles.current_rank', rankFilter as any);
       }
 
       const { data } = await query.order('spa_points', { ascending: false });

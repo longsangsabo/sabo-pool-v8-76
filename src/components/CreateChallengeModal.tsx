@@ -112,7 +112,8 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
           full_name,
           avatar_url,
           elo,
-          verified_rank
+          verified_rank,
+          current_rank
         `)
         .neq('user_id', user.id)
         .ilike('full_name', `%${searchTerm}%`)
@@ -142,7 +143,7 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
           user_id: player.user_id,
           full_name: player.full_name || 'Người chơi',
           avatar_url: player.avatar_url,
-          current_rank: player.verified_rank || 'K',
+          current_rank: player.current_rank || player.verified_rank || 'K',
           spa_points: player.elo || 1000,
           isClubMember: clubMemberIds.includes(player.user_id),
           hasRecentChallenges: recentChallengerIds.includes(player.user_id),

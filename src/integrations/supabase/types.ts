@@ -156,12 +156,14 @@ export type Database = {
         Row: {
           bet_points: number | null
           challenge_message: string | null
+          challenge_type: string | null
           challenger_id: string
           completed_at: string | null
           created_at: string
           expires_at: string | null
           handicap_05_rank: string | null
           handicap_1_rank: string | null
+          handicap_data: Json | null
           id: string
           is_open_challenge: boolean | null
           message: string | null
@@ -174,12 +176,14 @@ export type Database = {
         Insert: {
           bet_points?: number | null
           challenge_message?: string | null
+          challenge_type?: string | null
           challenger_id: string
           completed_at?: string | null
           created_at?: string
           expires_at?: string | null
           handicap_05_rank?: string | null
           handicap_1_rank?: string | null
+          handicap_data?: Json | null
           id?: string
           is_open_challenge?: boolean | null
           message?: string | null
@@ -192,12 +196,14 @@ export type Database = {
         Update: {
           bet_points?: number | null
           challenge_message?: string | null
+          challenge_type?: string | null
           challenger_id?: string
           completed_at?: string | null
           created_at?: string
           expires_at?: string | null
           handicap_05_rank?: string | null
           handicap_1_rank?: string | null
+          handicap_data?: Json | null
           id?: string
           is_open_challenge?: boolean | null
           message?: string | null
@@ -1519,6 +1525,7 @@ export type Database = {
           completion_percentage: number | null
           cover_image_url: string | null
           created_at: string
+          current_rank: Database["public"]["Enums"]["sabo_rank"] | null
           display_name: string | null
           district: string | null
           elo: number | null
@@ -1548,6 +1555,7 @@ export type Database = {
           completion_percentage?: number | null
           cover_image_url?: string | null
           created_at?: string
+          current_rank?: Database["public"]["Enums"]["sabo_rank"] | null
           display_name?: string | null
           district?: string | null
           elo?: number | null
@@ -1577,6 +1585,7 @@ export type Database = {
           completion_percentage?: number | null
           cover_image_url?: string | null
           created_at?: string
+          current_rank?: Database["public"]["Enums"]["sabo_rank"] | null
           display_name?: string | null
           district?: string | null
           elo?: number | null
@@ -3534,6 +3543,14 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: Json
       }
+      calculate_sabo_handicap: {
+        Args: {
+          p_challenger_rank: Database["public"]["Enums"]["sabo_rank"]
+          p_opponent_rank: Database["public"]["Enums"]["sabo_rank"]
+          p_stake_amount: number
+        }
+        Returns: Json
+      }
       calculate_tournament_results: {
         Args: { p_tournament_id: string }
         Returns: Json
@@ -4428,6 +4445,19 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "club_owner" | "user"
+      sabo_rank:
+        | "K"
+        | "K+"
+        | "I"
+        | "I+"
+        | "H"
+        | "H+"
+        | "G"
+        | "G+"
+        | "F"
+        | "F+"
+        | "E"
+        | "E+"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4556,6 +4586,20 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "club_owner", "user"],
+      sabo_rank: [
+        "K",
+        "K+",
+        "I",
+        "I+",
+        "H",
+        "H+",
+        "G",
+        "G+",
+        "F",
+        "F+",
+        "E",
+        "E+",
+      ],
     },
   },
 } as const
