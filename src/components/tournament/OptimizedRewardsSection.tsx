@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit, Trophy, Medal, Award, Crown, Star, Gift, Coins, Target, Download, DollarSign, Info } from 'lucide-react';
+import { Edit, Trophy, Medal, Award, Crown, Star, Gift, Coins, Target, Download, DollarSign, Info, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { TournamentRewards } from '@/types/tournament-extended';
 import { RewardsEditModal } from './RewardsEditModal';
@@ -40,7 +40,8 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     rewards: dbRewards,
     isLoading: isLoadingRewards,
     saveRewards,
-    isSaving
+    isSaving,
+    refetch: refetchRewards
   } = useTournamentRewardsManager(tournamentId || '');
   
   // Determine which rewards to use - prioritize database rewards if available
@@ -246,6 +247,18 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     }
   };
 
+  const handleRefresh = async () => {
+    if (tournamentId && refetchRewards) {
+      try {
+        await refetchRewards();
+        toast.success('Đã cập nhật dữ liệu thành công!');
+      } catch (error) {
+        console.error('Failed to refresh rewards:', error);
+        toast.error('Lỗi khi cập nhật dữ liệu');
+      }
+    }
+  };
+
   // Financial calculations
   const totalRevenue = entryFee * maxParticipants;
   const clubProfit = totalRevenue - displayRewards.totalPrize;
@@ -325,11 +338,18 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
               <CardTitle className="flex items-center gap-2 text-yellow-600">
                 <Trophy className="w-5 h-5" />
                 {showAsTemplate ? 'Bảng phần thưởng' : 'Phần thưởng giải đấu'}
-                {!showAsTemplate && rewards && (
-                  <Badge variant="secondary" className="ml-2">Đã lưu</Badge>
+                {!showAsTemplate && activeRewards && (
+                  <Badge variant="secondary" className="ml-2">
+                    {tournamentId && dbRewards ? 'Database' : 'Đã lưu'}
+                  </Badge>
                 )}
                 {showAsTemplate && (
                   <Badge variant="outline" className="ml-2">Template</Badge>
+                )}
+                {tournamentId && !isLoadingRewards && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-green-50 text-green-700 border-green-200">
+                    Real-time
+                  </Badge>
                 )}
               </CardTitle>
               <CardDescription>
@@ -338,12 +358,29 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                     Tổng giải thưởng: <span className="font-semibold text-yellow-600">{formatCurrency(displayRewards.totalPrize)}</span>
                     {entryFee > 0 && <span className="ml-2 text-xs text-blue-600">(Từ phí đăng ký: {formatCurrency(entryFee)} × {maxParticipants})</span>}
                   </>
+                ) : tournamentId && dbRewards ? (
+                  <span className="text-green-600">Dữ liệu từ database • Cập nhật thời gian thực</span>
                 ) : (
                   'Phần thưởng được cấu hình cho giải đấu này'
                 )}
               </CardDescription>
             </div>
             <div className="flex gap-2">
+              {/* Refresh Button - Only show if tournamentId exists */}
+              {tournamentId && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={isLoadingRewards || isSaving}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                  title="Cập nhật dữ liệu từ database"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isLoadingRewards ? 'animate-spin' : ''}`} />
+                  {isLoadingRewards ? 'Đang tải...' : 'Làm mới'}
+                </Button>
+              )}
+              
               {isEditable && (
                 <Button
                   variant="outline"

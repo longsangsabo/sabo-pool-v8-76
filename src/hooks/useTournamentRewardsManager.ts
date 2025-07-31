@@ -20,7 +20,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
   const queryClient = useQueryClient();
 
   // Fetch current tournament prize tiers
-  const { data: prizeTiers = [], isLoading } = useQuery({
+  const { data: prizeTiers = [], isLoading, refetch } = useQuery({
     queryKey: ['tournament-prize-tiers', tournamentId],
     queryFn: async () => {
       if (!tournamentId || tournamentId.trim() === '') {
@@ -189,6 +189,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
     // Actions
     saveRewards: saveRewardsMutation.mutate,
     deletePosition: deletePositionMutation.mutate,
+    refetch, // Add refetch function
     
     // Status
     isSaving: saveRewardsMutation.isPending,
