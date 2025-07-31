@@ -1,9 +1,9 @@
 
 import React from 'react';
-import ArenaProfilePage from '@/components/profile/ArenaProfilePage';
+import HybridArenaProfile from '@/components/profile/HybridArenaProfile';
 
 const ProfilePage: React.FC = () => {
-  return <ArenaProfilePage />;
+  return <HybridArenaProfile />;
 };
 
 export default ProfilePage;
