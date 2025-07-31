@@ -4146,6 +4146,10 @@ export type Database = {
         Args: { p_tournament_id: string }
         Returns: Json
       }
+      sync_tournament_rewards_simple: {
+        Args: { p_tournament_id: string }
+        Returns: Json
+      }
       test_auto_advancement: {
         Args: { p_tournament_id: string; p_match_number?: number }
         Returns: Json
