@@ -258,10 +258,12 @@ export const useChallenges = () => {
   // Accept challenge (handles both specific and open challenges)
   const acceptChallenge = async (challengeId: string) => {
     if (!user) {
-      throw new Error('User not authenticated');
+      throw new Error('Bạn cần đăng nhập để tham gia thách đấu');
     }
 
     try {
+      console.log('🎯 Attempting to accept challenge:', challengeId, 'User:', user.id);
+
       // First, get the challenge to check if it's open or specific
       const { data: challengeData, error: fetchError } = await supabase
         .from('challenges')
@@ -271,37 +273,52 @@ export const useChallenges = () => {
         .maybeSingle();
 
       if (fetchError) {
-        throw new Error(`Failed to fetch challenge: ${fetchError.message}`);
+        console.error('❌ Error fetching challenge:', fetchError);
+        throw new Error(`Không thể tải thông tin thách đấu: ${fetchError.message}`);
       }
 
       if (!challengeData) {
-        throw new Error('Challenge not found or already processed');
+        console.error('❌ Challenge not found:', challengeId);
+        throw new Error('Thách đấu không tồn tại hoặc đã được xử lý');
       }
+
+      console.log('📋 Challenge data:', challengeData);
 
       // Check if user can accept this challenge
       const isOpenChallenge = !challengeData.opponent_id;
       const isSpecificChallenge = challengeData.opponent_id === user.id;
       const isMyOwnChallenge = challengeData.challenger_id === user.id;
 
+      console.log('🔍 Challenge analysis:', {
+        isOpenChallenge,
+        isSpecificChallenge,
+        isMyOwnChallenge,
+        challenger_id: challengeData.challenger_id,
+        opponent_id: challengeData.opponent_id,
+        user_id: user.id
+      });
+
       if (isMyOwnChallenge) {
-        throw new Error('Cannot accept your own challenge');
+        throw new Error('Bạn không thể tham gia thách đấu của chính mình');
       }
 
       if (!isOpenChallenge && !isSpecificChallenge) {
-        throw new Error('You are not the intended opponent for this challenge');
+        throw new Error('Bạn không phải là đối thủ được chỉ định cho thách đấu này');
       }
 
       // Update challenge based on type
       const updateData = isOpenChallenge 
         ? {
-            status: 'accepted',
-            opponent_id: user.id, // Set the user as opponent for open challenges
+            status: 'accepted' as const,
+            opponent_id: user.id,
             responded_at: new Date().toISOString(),
           }
         : {
-            status: 'accepted',
+            status: 'accepted' as const,
             responded_at: new Date().toISOString(),
           };
+
+      console.log('📤 Updating challenge with data:', updateData);
 
       const { data, error } = await supabase
         .from('challenges')
@@ -312,45 +329,28 @@ export const useChallenges = () => {
         .maybeSingle();
 
       if (error) {
-        throw new Error(`Failed to accept challenge: ${error.message}`);
+        console.error('❌ Error updating challenge:', error);
+        throw new Error(`Không thể tham gia thách đấu: ${error.message}`);
       }
 
       if (!data) {
-        throw new Error('Challenge not found or already processed');
+        console.error('❌ No data returned from update');
+        throw new Error('Thách đấu đã được người khác tham gia');
       }
 
-      // Fetch profile data separately for consistency
-      const { data: challengerProfile } = await supabase
-        .from('profiles')
-        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
-        .eq('user_id', data.challenger_id)
-        .maybeSingle();
+      console.log('✅ Challenge accepted successfully:', data);
 
-      const { data: opponentProfile } = await supabase
-        .from('profiles')
-        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
-        .eq('user_id', data.opponent_id)
-        .maybeSingle();
+      // Update local state to remove the challenge from open challenges (for open challenges)
+      // or update status (for specific challenges) 
+      setChallenges(prev => prev.filter(c => c.id !== challengeId));
       
-      const enrichedChallenge = {
-        ...data,
-        challenger_profile: challengerProfile,
-        opponent_profile: opponentProfile,
-        current_user_profile: opponentProfile
-      };
-
-      // Update local state with type assertion
-      setChallenges(prev => 
-        prev.map(challenge => 
-          challenge.id === challengeId ? (enrichedChallenge as unknown as Challenge) : challenge
-        )
-      );
-
-      toast.success('Challenge accepted!');
-      return enrichedChallenge;
+      // Refetch challenges to update the list with latest data
+      await fetchChallenges();
+      
+      return data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to accept challenge';
-      toast.error(errorMessage);
+      const errorMessage = err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
+      console.error('❌ Accept challenge error:', err);
       throw new Error(errorMessage);
     }
   };

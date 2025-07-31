@@ -148,7 +148,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
                 <OpenChallengeCard
                   key={challenge.id}
                   challenge={challenge}
-                  onJoin={() => onJoinChallenge(challenge.id)}
+                  onJoin={async () => await onJoinChallenge(challenge.id)}
                   variant="compact"
                 />
               ))}

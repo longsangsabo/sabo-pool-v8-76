@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Users, DollarSign, MapPin, Clock, Trophy } from 'lucide-react';
+import { Users, DollarSign, MapPin, Clock, Trophy, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 interface OpenChallengeCardProps {
   challenge: {
@@ -27,7 +29,7 @@ interface OpenChallengeCardProps {
     };
     message?: string;
   };
-  onJoin: (challengeId: string) => void;
+  onJoin: (challengeId: string) => Promise<void>;
   variant?: 'default' | 'compact';
 }
 
@@ -37,6 +39,34 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
   variant = 'default' 
 }) => {
   const isCompact = variant === 'compact';
+  const { user } = useAuth();
+  const [isJoining, setIsJoining] = useState(false);
+
+  const handleJoin = async () => {
+    if (isJoining) return; // Prevent double-click
+    
+    if (!user) {
+      toast.error('Bạn cần đăng nhập để tham gia thách đấu');
+      return;
+    }
+
+    if (challenge.challenger_id === user.id) {
+      toast.error('Bạn không thể tham gia thách đấu của chính mình');
+      return;
+    }
+
+    setIsJoining(true);
+    try {
+      await onJoin(challenge.id);
+      toast.success('Đã tham gia thách đấu thành công!');
+    } catch (error) {
+      console.error('Error joining challenge:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Có lỗi xảy ra khi tham gia thách đấu';
+      toast.error(errorMessage);
+    } finally {
+      setIsJoining(false);
+    }
+  };
 
   return (
     <Card className="bg-gradient-to-br from-emerald-50/70 to-green-50/70 border-emerald-200/50 hover:border-emerald-300/70 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-200">
@@ -58,12 +88,19 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
           </div>
           
           <Button
-            onClick={() => onJoin(challenge.id)}
-            className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white mobile-touch-button"
+            onClick={handleJoin}
+            disabled={isJoining || !user || challenge.challenger_id === user?.id}
+            className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white mobile-touch-button disabled:opacity-50 disabled:cursor-not-allowed"
             size={isCompact ? "sm" : "default"}
           >
-            <Users className="w-3.5 h-3.5 mr-1.5" />
-            <span className="text-xs font-semibold">THAM GIA</span>
+            {isJoining ? (
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+            ) : (
+              <Users className="w-3.5 h-3.5 mr-1.5" />
+            )}
+            <span className="text-xs font-semibold">
+              {isJoining ? 'ĐANG THAM GIA...' : 'THAM GIA'}
+            </span>
           </Button>
         </div>
 
