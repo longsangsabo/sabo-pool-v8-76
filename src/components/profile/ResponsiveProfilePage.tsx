@@ -10,6 +10,7 @@ import ProfileErrorBoundary from './ProfileErrorBoundary';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { TechButton, TechCard } from '@/components/mobile/TechMobileComponents';
 
 const ResponsiveProfilePage: React.FC = () => {
   const { isMobile } = useOptimizedResponsive();
