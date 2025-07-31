@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { TechCard, TechHeader } from '@/components/ui/sabo-tech-global';
 import { Badge } from '@/components/ui/badge';
@@ -40,13 +39,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: publicUrl } as any) // Temporary fix for cover_image_url
+        .update({ avatar_url: publicUrl } as any)
         .eq('user_id', user.id);
 
       if (updateError) throw updateError;
 
       toast.success('Cập nhật ảnh bìa thành công!');
-      window.location.reload(); // Refresh to show new cover
+      window.location.reload();
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Lỗi khi tải ảnh bìa lên');
@@ -70,7 +69,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   if (isMobile) {
     return (
-      <TechCard className={`${className}`} variant="premium">
+      <TechCard className={`mx-4 my-6 ${className}`} variant="premium">
         <div className="text-center space-y-4">
           <div className="relative inline-block">
             <Avatar className="w-20 h-20 sabo-tech-avatar">
@@ -108,7 +107,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   return (
     <TechCard className={`overflow-hidden ${className}`} variant="premium">
-      {/* Tech Cover Image with Upload */}
       <div 
         {...getRootProps()}
         className={`h-36 bg-gradient-to-r from-primary/20 to-accent-blue/20 relative overflow-hidden cursor-pointer transition-all duration-300 ${
@@ -126,11 +124,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
           <div className="w-full h-full bg-gradient-to-r from-primary/20 to-accent-blue/20" />
         )}
         
-        {/* Tech Upload Overlay */}
-        <div className={`absolute inset-0 bg-black/10 transition-opacity duration-300 ${
-          isDragActive ? 'bg-black/30' : 'hover:bg-black/20'
-        }`}>
-          {user && user.id === profile?.user_id && (
+        {user && user.id === profile?.user_id && (
+          <div className="absolute inset-0 bg-black/10 hover:bg-black/20 transition-opacity duration-300">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className={`sabo-tech-card bg-card/80 text-foreground px-4 py-2 flex items-center gap-2 transition-opacity duration-300 ${
                 isDragActive || isUploading ? 'opacity-100' : 'opacity-0 hover:opacity-100'
@@ -153,8 +148,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       
       <div className="p-6">
@@ -217,4 +212,5 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
         </div>
       </div>
     </TechCard>
+  );
 };

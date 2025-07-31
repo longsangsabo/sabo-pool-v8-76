@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { useUnifiedProfile } from '@/hooks/useUnifiedProfile';
@@ -16,6 +15,14 @@ const ResponsiveProfilePage: React.FC = () => {
   const { isMobile } = useOptimizedResponsive();
   const { data: profile, isLoading, error, refetch } = useUnifiedProfile();
   const [activeTab, setActiveTab] = useState('activities');
+
+  // Apply tech theme to body when mobile
+  useEffect(() => {
+    if (isMobile) {
+      document.body.classList.add('tech-theme');
+      return () => document.body.classList.remove('tech-theme');
+    }
+  }, [isMobile]);
 
   // Handle URL tab navigation
   useEffect(() => {
@@ -83,15 +90,15 @@ const ResponsiveProfilePage: React.FC = () => {
   const renderContent = () => {
     if (isMobile) {
       return (
-        <div className="min-h-screen bg-background tech-theme">
-          <div className="container mx-auto pb-20">
-            {/* Mobile Header */}
+        <div className="min-h-screen bg-background">
+          <div className="container mx-auto pb-24 space-y-0">
+            {/* Mobile Header với Tech Styling */}
             <ProfileHeader profile={profile} />
             
-            {/* Mobile Stats */}
+            {/* Mobile Stats với Tech Cards */}
             <ProfileStats profile={profile} />
             
-            {/* Mobile Quick Actions */}
+            {/* Mobile Quick Actions với Tech Elements */}
             <ProfileQuickActions 
               profile={profile} 
               onNavigateToClubTab={handleNavigateToClubTab}
@@ -128,6 +135,14 @@ const ResponsiveProfilePage: React.FC = () => {
                   <div className="nav-item-glow"></div>
                   <div className="nav-item-icon">👤</div>
                   <span className="nav-item-label">Hồ sơ</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">📅</div>
+                  <span className="nav-item-label">Lịch</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">📊</div>
+                  <span className="nav-item-label">Xếp hạng</span>
                 </div>
               </div>
             </div>
