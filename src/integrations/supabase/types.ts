@@ -2603,7 +2603,7 @@ export type Database = {
           matches_lost: number | null
           matches_played: number | null
           matches_won: number | null
-          physical_rewards: Json | null
+          physical_rewards: string[] | null
           placement_type: string | null
           points_earned: number | null
           position: number | null
@@ -2622,7 +2622,7 @@ export type Database = {
           matches_lost?: number | null
           matches_played?: number | null
           matches_won?: number | null
-          physical_rewards?: Json | null
+          physical_rewards?: string[] | null
           placement_type?: string | null
           points_earned?: number | null
           position?: number | null
@@ -2641,7 +2641,7 @@ export type Database = {
           matches_lost?: number | null
           matches_played?: number | null
           matches_won?: number | null
-          physical_rewards?: Json | null
+          physical_rewards?: string[] | null
           placement_type?: string | null
           points_earned?: number | null
           position?: number | null
