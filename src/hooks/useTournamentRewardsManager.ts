@@ -34,6 +34,33 @@ export function useTournamentRewardsManager(tournamentId: string) {
         .order('position');
       
       if (error) throw error;
+      
+      // If no prize tiers exist, create default ones
+      if (!data || data.length === 0) {
+        console.log('🔧 No prize tiers found, creating default ones for tournament:', tournamentId);
+        
+        // Call the populate function to create default rewards
+        const { error: functionError } = await supabase
+          .rpc('populate_default_tournament_rewards', { 
+            tournament_id_param: tournamentId 
+          });
+        
+        if (functionError) {
+          console.error('Error creating default rewards:', functionError);
+        } else {
+          // Fetch again after creating defaults
+          const { data: newData, error: newError } = await supabase
+            .from('tournament_prize_tiers')
+            .select('*')
+            .eq('tournament_id', tournamentId)
+            .order('position');
+          
+          if (!newError && newData) {
+            return newData as TournamentPrizeTier[];
+          }
+        }
+      }
+      
       return data as TournamentPrizeTier[];
     },
     enabled: !!tournamentId && tournamentId.trim() !== ''
