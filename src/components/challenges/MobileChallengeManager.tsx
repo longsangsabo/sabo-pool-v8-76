@@ -80,41 +80,34 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     club: c.club || null,
   });
 
-  // Debug logging to understand data flow
-  console.log('🔍 [Mobile Challenges Debug]', {
+  // Debug: Check what challenges we have
+  console.log('🔍 [Mobile Challenges]', {
     totalChallenges: challenges.length,
-    currentUserId: user?.id,
-    challengesData: challenges.slice(0, 3), // First 3 for inspection
-    rawChallenges: challenges.map(c => ({
-      id: c.id,
-      challenger_id: c.challenger_id,
-      opponent_id: c.opponent_id,
+    currentUser: user?.id,
+    challengeTypes: challenges.map(c => ({
+      id: c.id.slice(-8),
+      challenger: c.challenger_profile?.display_name || 'Unknown',
+      isOpen: !c.opponent_id,
       status: c.status,
-      challenger_name: c.challenger_profile?.display_name || c.challenger_profile?.full_name
+      isMyChallenge: c.challenger_id === user?.id
     }))
   });
 
-  // Filter open challenges (exclude user's own challenges)
-  const allOpenChallenges = challenges.filter(c => {
+  // Filter open challenges from other users
+  const openChallenges = challenges.filter(c => {
     const isOpen = !c.opponent_id && c.status === 'pending';
-    return isOpen;
-  });
-
-  const openChallenges = allOpenChallenges.filter(c => {
     const isNotMyChallenge = c.challenger_id !== user?.id;
-    return isNotMyChallenge;
+    return isOpen && isNotMyChallenge;
   }).map(convertToLocalChallenge);
 
-  console.log('🎯 [Open Challenges Analysis]', {
-    allOpenChallengesCount: allOpenChallenges.length,
-    allOpenChallenges: allOpenChallenges.map(c => ({
-      id: c.id,
-      challenger_id: c.challenger_id,
-      challenger_name: c.challenger_profile?.display_name || c.challenger_profile?.full_name,
-      isMyChallenge: c.challenger_id === user?.id
-    })),
-    openChallengesCount: openChallenges.length,
-    openChallengesData: openChallenges.slice(0, 3)
+  console.log('✅ [Open Challenges Result]', {
+    count: openChallenges.length,
+    challenges: openChallenges.map(c => ({
+      id: c.id?.slice(-8),
+      challenger: c.challenger_profile?.display_name,
+      betPoints: c.bet_points,
+      raceTo: c.race_to
+    }))
   });
 
   // Get user's own open challenges
