@@ -70,56 +70,31 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   if (isMobile) {
     return (
-      <Card className={`bg-card border-border ${className}`}>
-        <CardContent className="pt-6">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="relative">
-              <Avatar className="w-20 h-20">
-                <AvatarImage 
-                  src={profile?.avatar_url} 
-                  alt={profile?.display_name || profile?.full_name}
-                  className="object-cover"
-                />
-                <AvatarFallback className="text-xl bg-primary/10">
-                  {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute -bottom-2 -right-2 bg-background rounded-full p-1 border-2 border-border">
-                <Star className="w-4 h-4 text-primary" />
-              </div>
-            </div>
-            
-            <div className="text-center space-y-2">
-              <h1 className="text-2xl font-bold text-foreground">
-                {profile?.display_name || profile?.full_name || 'Người dùng'}
-              </h1>
-              <div className="flex flex-wrap justify-center gap-2">
-                <Badge variant="secondary" className="bg-primary/10 text-primary">
-                  {profile?.verified_rank || 'Chưa xác thực'}
-                </Badge>
-                {profile?.role === 'admin' && (
-                  <Badge variant="destructive">
-                    <Shield className="w-3 h-3 mr-1" />
-                    Admin
-                  </Badge>
-                )}
-                {profile?.club_profile && (
-                  <Badge variant="outline">
-                    <Users className="w-3 h-3 mr-1" />
-                    CLB Owner
-                  </Badge>
-                )}
-              </div>
-              
-              {profile?.bio && (
-                <p className="text-sm text-muted-foreground mt-2 max-w-xs">
-                  {profile.bio}
-                </p>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className={`profile-header-mobile ${className}`}>
+        <div className="profile-avatar-section">
+          <Avatar className="profile-avatar-large">
+            <AvatarImage 
+              src={profile?.avatar_url} 
+              alt={profile?.display_name || profile?.full_name}
+              className="object-cover"
+            />
+            <AvatarFallback className="text-2xl font-semibold">
+              {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <h2 className="profile-name">
+            {profile?.display_name || profile?.full_name || 'Người dùng'}
+          </h2>
+          <Badge className="profile-rank-badge">
+            {profile?.verified_rank || 'Chưa xác thực'}
+          </Badge>
+          {profile?.bio && (
+            <p className="profile-bio">
+              {profile.bio}
+            </p>
+          )}
+        </div>
+      </div>
     );
   }
 

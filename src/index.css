@@ -24,6 +24,186 @@
   padding-right: max(env(safe-area-inset-right), 0px);
 }
 
+/* Profile Mobile Optimization Styles */
+.profile-header-mobile {
+  padding: 24px 16px;
+  text-align: center;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: hsl(var(--foreground));
+}
+
+.profile-rank-badge {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+}
+
+.profile-bio {
+  font-size: 14px;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin: 8px 0 0 0;
+  max-width: 280px;
+  line-height: 1.4;
+}
+
+.profile-stats-mobile {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 16px;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-number {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-actions-mobile {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.btn-primary-mobile {
+  flex: 1;
+  padding: 12px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 8px;
+  font-weight: 500;
+  min-height: 44px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-mobile:hover {
+  background: hsl(var(--primary) / 0.9);
+}
+
+.btn-secondary-mobile {
+  flex: 1;
+  padding: 12px;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-radius: 8px;
+  font-weight: 500;
+  min-height: 44px;
+  border: 1px solid hsl(var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-mobile:hover {
+  background: hsl(var(--secondary) / 0.8);
+}
+
+.profile-activity-mobile {
+  padding: 16px;
+  background: hsl(var(--background));
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 16px;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-item-simple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: hsl(var(--card));
+  border-radius: 8px;
+  border: 1px solid hsl(var(--border));
+}
+
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  background: hsl(var(--muted));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--muted-foreground));
+  flex-shrink: 0;
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  margin: 0 0 4px 0;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+}
+
 /* SABO ARENA - Modern Mobile-First Design System with Light/Dark Mode */
 @layer base {
   :root {

@@ -59,22 +59,17 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
   ];
 
   if (isMobile) {
+    const primaryActions = actions.slice(0, 2); // Only show edit and settings
     return (
-      <div className={`grid grid-cols-2 gap-3 ${className}`}>
-        {actions.map((action, index) => {
-          const Icon = action.icon;
-          return (
-            <Button
-              key={index}
-              variant={action.variant}
-              onClick={action.onClick}
-              className="h-auto p-4 flex flex-col items-center gap-2"
-            >
-              <Icon className="w-5 h-5" />
-              <span className="text-xs text-center">{action.title}</span>
-            </Button>
-          );
-        })}
+      <div className={`profile-actions-mobile ${className}`}>
+        <Button className="btn-primary-mobile">
+          <Edit className="w-4 h-4 mr-2" />
+          Chỉnh sửa
+        </Button>
+        <Button className="btn-secondary-mobile">
+          <Settings className="w-4 h-4 mr-2" />
+          Cài đặt
+        </Button>
       </div>
     );
   }

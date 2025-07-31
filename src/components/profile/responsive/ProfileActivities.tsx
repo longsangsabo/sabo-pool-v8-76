@@ -67,35 +67,28 @@ export const ProfileActivities: React.FC<ProfileActivitiesProps> = ({
 
   if (isMobile) {
     return (
-      <div className={`space-y-3 ${className}`}>
-        <h3 className="text-lg font-semibold text-foreground">Hoạt động gần đây</h3>
-        {activities.slice(0, 5).map((activity, index) => {
-          const Icon = getActivityIcon(activity.type);
-          return (
-            <Card key={index} className="bg-card border-border">
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-full bg-muted">
-                    <Icon className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium text-foreground">
-                        {formatActivityTitle(activity)}
-                      </span>
-                      <Badge variant="secondary" className={`text-xs ${getActivityColor(activity.type, activity.status)}`}>
-                        {activity.status}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true, locale: vi })}
-                    </p>
-                  </div>
+      <div className={`profile-activity-mobile ${className}`}>
+        <h3 className="section-title">Hoạt động gần đây</h3>
+        <div className="activity-list">
+          {activities.slice(0, 3).map((activity, index) => {
+            const Icon = getActivityIcon(activity.type);
+            return (
+              <div key={index} className="activity-item-simple">
+                <div className="activity-icon">
+                  <Icon className="w-4 h-4" />
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                <div className="activity-content">
+                  <p className="activity-text">
+                    {formatActivityTitle(activity)}
+                  </p>
+                  <span className="activity-time">
+                    {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true, locale: vi })}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
