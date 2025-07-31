@@ -19,20 +19,12 @@ const HeroSection = () => {
       <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
         {/* Logo area */}
         <div className='mb-8'>
-          <div className='inline-flex items-center gap-4 mb-6'>
-            <div className='w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl'>
-              <div className='w-12 h-12 bg-white rounded-full flex items-center justify-center'>
-                <span className='text-2xl font-black text-green-800'>8</span>
-              </div>
-            </div>
-            <div className='text-left'>
-              <h1 className='text-5xl md:text-7xl font-black text-white gold-glow'>
-                SABO
-              </h1>
-              <p className='text-xl text-yellow-400 font-bold -mt-2'>
-                ARENA
-              </p>
-            </div>
+          <div className='flex justify-center mb-6'>
+            <img 
+              src="/lovable-uploads/5edec650-8645-4f77-a54a-e6d9bfc42ee6.png" 
+              alt="SABO ARENA Logo"
+              className="h-20 md:h-24 w-auto object-contain"
+            />
           </div>
         </div>
 
