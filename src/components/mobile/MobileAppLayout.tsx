@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { SocialMobileLayout } from './SocialMobileLayout';
+import { UserMobileLayout } from './UserMobileLayout';
 
 interface MobileAppLayoutProps {
   children: ReactNode;
@@ -8,8 +8,8 @@ interface MobileAppLayoutProps {
 
 export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({ children }) => {
   return (
-    <SocialMobileLayout>
+    <UserMobileLayout>
       {children}
-    </SocialMobileLayout>
+    </UserMobileLayout>
   );
 };

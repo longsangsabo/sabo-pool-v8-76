@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useMobileOptimization } from '@/hooks/useMobileOptimization';
+import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { AlertAnalyzer } from './AlertAnalyzer';
 // Temporarily disable CacheManager to fix React error
@@ -79,7 +79,7 @@ type JobStatus = 'Running' | 'Completed' | 'Paused' | 'Error' | 'Scheduled';
 const AutomationMonitor = () => {
   const { user } = useAuth();
   // CRITICAL: All hooks MUST be called at the top level BEFORE any returns
-  const { isMobile } = useMobileOptimization();
+  const { isMobile } = useOptimizedResponsive();
   const { getStats, getTasks, batchTranslate, clearTasks } = useAutoTranslation();
   const { scanAndTranslate } = useTranslationScanner();
   

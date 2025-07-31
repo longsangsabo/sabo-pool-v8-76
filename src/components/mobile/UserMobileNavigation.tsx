@@ -12,7 +12,7 @@ const navItems = [
   { icon: Calendar, path: '/calendar', label: 'Lịch' },
 ];
 
-const SocialMobileNav: React.FC = () => {
+const UserMobileNavigation: React.FC = () => {
   const location = useLocation();
 
   return (
@@ -44,4 +44,4 @@ const SocialMobileNav: React.FC = () => {
   );
 };
 
-export default SocialMobileNav;
+export default UserMobileNavigation;

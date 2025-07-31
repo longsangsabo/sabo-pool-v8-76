@@ -2,7 +2,7 @@
 import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { DesktopLayout } from '../desktop/DesktopLayout';
-import { SocialMobileLayout } from '../mobile/SocialMobileLayout';
+import { UserMobileLayout } from '../mobile/UserMobileLayout';
 import { TabletLayout } from '../tablet/TabletLayout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
@@ -17,9 +17,9 @@ const ResponsiveLayoutBase: React.FC<ResponsiveLayoutProps> = ({ children }) => 
   if (isMobile) {
     return (
       <div data-testid="mobile-layout">
-        <SocialMobileLayout>
+        <UserMobileLayout>
           {children}
-        </SocialMobileLayout>
+        </UserMobileLayout>
       </div>
     );
   }

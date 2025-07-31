@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useMobileOptimization } from '@/hooks/useMobileOptimization';
+import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { Eye, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
@@ -33,7 +33,7 @@ const MobileOptimizedTable: React.FC<MobileOptimizedTableProps> = ({
   loading = false,
   emptyMessage = 'No data available'
 }) => {
-  const { isMobile } = useMobileOptimization();
+  const { isMobile } = useOptimizedResponsive();
 
   if (loading) {
     return (

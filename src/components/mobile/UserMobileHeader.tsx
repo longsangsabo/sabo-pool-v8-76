@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Bell, Search, Menu } from 'lucide-react';
 
-interface SocialHeaderProps {
+interface UserMobileHeaderProps {
   title?: string;
   showSearch?: boolean;
   showProfile?: boolean;
@@ -13,7 +13,7 @@ interface SocialHeaderProps {
   onMenuClick?: () => void;
 }
 
-const SocialHeader: React.FC<SocialHeaderProps> = ({
+const UserMobileHeader: React.FC<UserMobileHeaderProps> = ({
   title,
   showSearch = true,
   showProfile = true,
@@ -67,4 +67,4 @@ const SocialHeader: React.FC<SocialHeaderProps> = ({
   );
 };
 
-export default SocialHeader;
+export default UserMobileHeader;

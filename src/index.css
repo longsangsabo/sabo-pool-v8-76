@@ -4,6 +4,26 @@
 @import './styles/tablet-enhancements.css';
 @import './styles/mobile-enhancements.css';
 
+/* Mobile Safe Area CSS Classes */
+.mobile-safe-area-top { 
+  padding-top: max(env(safe-area-inset-top), 0px);
+}
+.mobile-safe-area-bottom { 
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+}
+.mobile-safe-area-left { 
+  padding-left: max(env(safe-area-inset-left), 0px);
+}
+.mobile-safe-area-right { 
+  padding-right: max(env(safe-area-inset-right), 0px);
+}
+.mobile-safe-area {
+  padding-top: max(env(safe-area-inset-top), 0px);
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+  padding-left: max(env(safe-area-inset-left), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
+}
+
 /* SABO ARENA - Modern Mobile-First Design System with Light/Dark Mode */
 @layer base {
   :root {

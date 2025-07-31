@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { DesktopLayout } from '../desktop/DesktopLayout';
-import { SocialMobileLayout } from '../mobile/SocialMobileLayout';
+import { UserMobileLayout } from '../mobile/UserMobileLayout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface LayoutProps {
@@ -14,7 +14,7 @@ const OptimizedResponsiveLayoutBase: React.FC<LayoutProps> = ({ children }) => {
   // Early return pattern - only render one layout
   if (isMobile || isTablet) {
     return (
-    <SocialMobileLayout children={children} />
+    <UserMobileLayout children={children} />
     );
   }
 

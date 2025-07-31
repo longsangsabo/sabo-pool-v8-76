@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
-import SocialHeader from './SocialHeader';
-import SocialMobileNav from './SocialMobileNav';
+import UserMobileHeader from './UserMobileHeader';
+import UserMobileNavigation from './UserMobileNavigation';
 import { EnhancedOfflineIndicator } from '@/components/offline';
 
-interface SocialMobileLayoutProps {
+interface UserMobileLayoutProps {
   children: ReactNode;
   title?: string;
   showSearch?: boolean;
@@ -13,7 +13,7 @@ interface SocialMobileLayoutProps {
   onMenuClick?: () => void;
 }
 
-export const SocialMobileLayout: React.FC<SocialMobileLayoutProps> = ({
+export const UserMobileLayout: React.FC<UserMobileLayoutProps> = ({
   children,
   title,
   showSearch = true,
@@ -25,7 +25,7 @@ export const SocialMobileLayout: React.FC<SocialMobileLayoutProps> = ({
   return (
     <div className="min-h-screen bg-background">
       {/* Social Header with Theme Toggle */}
-      <SocialHeader
+      <UserMobileHeader
         title={title}
         showSearch={showSearch}
         showProfile={showProfile}
@@ -41,7 +41,7 @@ export const SocialMobileLayout: React.FC<SocialMobileLayoutProps> = ({
       </main>
 
       {/* Social Mobile Bottom Navigation */}
-      {showBottomNav && <SocialMobileNav />}
+      {showBottomNav && <UserMobileNavigation />}
       
       {/* Enhanced Offline Indicator */}
       <EnhancedOfflineIndicator position="top-right" />
