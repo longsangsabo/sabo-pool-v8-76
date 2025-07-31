@@ -485,18 +485,284 @@
   }
 
   /* ===========================
-     GLOBAL SABO TECH VARIABLES
+     SABO REFINED DESIGN SYSTEM
      =========================== */
   :root {
-    --sabo-primary: #00E5FF;
-    --sabo-secondary: #FF6A00;
-    --sabo-accent: #999999;
-    --sabo-gold: #FFD700;
-    --sabo-dark: #0f172a;
-    --sabo-darker: #020617;
-    --tech-border-width: 2px;
-    --tech-corner-size: 12px;
-    --tech-glow-blur: 8px;
+    /* REFINED SABO COLOR PALETTE - Professional & Muted */
+    --sabo-primary: hsl(217, 91%, 60%);        /* Refined blue */
+    --sabo-primary-light: hsl(217, 91%, 67%);  /* Lighter blue */
+    --sabo-secondary: hsl(43, 96%, 56%);       /* Muted amber */
+    --sabo-accent: hsl(215, 16%, 47%);         /* Neutral gray */
+    
+    /* Status Colors - Softer */
+    --sabo-success: hsl(156, 72%, 67%);        /* Muted green */
+    --sabo-warning: hsl(43, 96%, 56%);         /* Muted amber */
+    --sabo-danger: hsl(0, 84%, 60%);           /* Muted red */
+    --sabo-info: hsl(188, 94%, 43%);           /* Muted cyan */
+    
+    /* Background Colors - Subtle */
+    --sabo-bg-primary: hsl(210, 20%, 98%);     /* Light gray */
+    --sabo-bg-secondary: hsl(214, 32%, 91%);   /* Slightly darker gray */
+    --sabo-bg-card: hsl(0, 0%, 100%);          /* Pure white */
+    --sabo-bg-overlay: hsl(222, 84%, 5%, 0.05); /* Subtle overlay */
+    
+    /* Text Colors - Readable */
+    --sabo-text-primary: hsl(222, 84%, 5%);    /* Dark gray */
+    --sabo-text-secondary: hsl(215, 25%, 27%); /* Medium gray */
+    --sabo-text-muted: hsl(215, 16%, 47%);     /* Light gray */
+    
+    /* Border & Divider */
+    --sabo-border: hsl(214, 32%, 91%);         /* Light border */
+    --sabo-divider: hsl(210, 20%, 98%);        /* Subtle divider */
+  }
+
+  /* ELEGANT BUTTON SYSTEM */
+  .sabo-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-height: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .sabo-button.primary {
+    background: var(--sabo-primary);
+    color: white;
+    box-shadow: 0 1px 3px hsl(217, 91%, 60%, 0.2);
+  }
+
+  .sabo-button.primary:hover {
+    background: var(--sabo-primary-light);
+    box-shadow: 0 2px 6px hsl(217, 91%, 60%, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .sabo-button.secondary {
+    background: var(--sabo-bg-card);
+    color: var(--sabo-text-primary);
+    border: 1px solid var(--sabo-border);
+    box-shadow: 0 1px 2px hsl(0, 0%, 0%, 0.05);
+  }
+
+  .sabo-button.secondary:hover {
+    background: var(--sabo-bg-secondary);
+    border-color: var(--sabo-primary);
+    box-shadow: 0 2px 4px hsl(0, 0%, 0%, 0.1);
+  }
+
+  .sabo-button.success {
+    background: var(--sabo-success);
+    color: white;
+    box-shadow: 0 1px 3px hsl(156, 72%, 67%, 0.2);
+  }
+
+  .sabo-button.warning {
+    background: var(--sabo-warning);
+    color: white;
+    box-shadow: 0 1px 3px hsl(43, 96%, 56%, 0.2);
+  }
+
+  .sabo-button.danger {
+    background: var(--sabo-danger);
+    color: white;
+    box-shadow: 0 1px 3px hsl(0, 84%, 60%, 0.2);
+  }
+
+  .sabo-button.compact {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+
+  .sabo-button.pill {
+    border-radius: 20px;
+    padding: 8px 16px;
+  }
+
+  /* ELEGANT CARD SYSTEM */
+  .sabo-card {
+    background: var(--sabo-bg-card);
+    border: 1px solid var(--sabo-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px hsl(0, 0%, 0%, 0.05);
+    padding: 20px;
+    margin: 12px;
+    transition: all 0.2s ease;
+  }
+
+  .sabo-card:hover {
+    box-shadow: 0 4px 12px hsl(0, 0%, 0%, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--sabo-primary);
+  }
+
+  .challenge-card-refined {
+    background: var(--sabo-bg-card);
+    border: 2px solid var(--sabo-border);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 16px;
+    box-shadow: 0 2px 8px hsl(0, 0%, 0%, 0.06);
+    transition: all 0.3s ease;
+  }
+
+  .challenge-card-refined:hover {
+    border-color: var(--sabo-primary);
+    box-shadow: 0 8px 24px hsl(217, 91%, 60%, 0.12);
+    transform: translateY(-4px);
+  }
+
+  .tournament-card-refined {
+    background: var(--sabo-bg-card);
+    border: 1px solid var(--sabo-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px hsl(0, 0%, 0%, 0.06);
+    transition: all 0.2s ease;
+  }
+
+  .tournament-card-refined:hover {
+    box-shadow: 0 6px 20px hsl(0, 0%, 0%, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* ELEGANT CHIPS */
+  .sabo-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--sabo-bg-secondary);
+    color: var(--sabo-text-secondary);
+    border: 1px solid var(--sabo-border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .sabo-chip:hover {
+    background: var(--sabo-primary);
+    color: white;
+    border-color: var(--sabo-primary);
+    transform: scale(1.02);
+  }
+
+  .sabo-chip.active {
+    background: var(--sabo-primary);
+    color: white;
+    border-color: var(--sabo-primary);
+    box-shadow: 0 2px 4px hsl(217, 91%, 60%, 0.2);
+  }
+
+  .sabo-chip.ranked {
+    background: hsl(217, 91%, 60%, 0.1);
+    color: var(--sabo-primary);
+    border-color: hsl(217, 91%, 60%, 0.2);
+  }
+
+  .sabo-chip.casual {
+    background: hsl(156, 72%, 67%, 0.1);
+    color: var(--sabo-success);
+    border-color: hsl(156, 72%, 67%, 0.2);
+  }
+
+  /* ELEGANT INPUT FIELDS */
+  .sabo-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--sabo-bg-card);
+    border: 1px solid var(--sabo-border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--sabo-text-primary);
+    transition: all 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .sabo-input:focus {
+    outline: none;
+    border-color: var(--sabo-primary);
+    box-shadow: 0 0 0 3px hsl(217, 91%, 60%, 0.1);
+    background: white;
+  }
+
+  .sabo-input::placeholder {
+    color: var(--sabo-text-muted);
+  }
+
+  /* ELEGANT STATS CARDS */
+  .stats-card-refined {
+    background: var(--sabo-bg-card);
+    border: 1px solid var(--sabo-border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px hsl(0, 0%, 0%, 0.05);
+  }
+
+  .stats-card-refined:hover {
+    border-color: var(--sabo-primary);
+    box-shadow: 0 4px 12px hsl(217, 91%, 60%, 0.1);
+  }
+
+  .stats-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--sabo-text-primary);
+    margin-bottom: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .stats-label {
+    font-size: 12px;
+    color: var(--sabo-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  /* ELEGANT BOTTOM NAVIGATION */
+  .sabo-navigation {
+    background: var(--sabo-bg-card);
+    border-top: 1px solid var(--sabo-border);
+    padding: 8px 0;
+    box-shadow: 0 -2px 8px hsl(0, 0%, 0%, 0.05);
+  }
+
+  .nav-item-refined {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    color: var(--sabo-text-muted);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-item-refined.active {
+    color: var(--sabo-primary);
+    background: hsl(217, 91%, 60%, 0.05);
+  }
+
+  .nav-item-refined:hover {
+    color: var(--sabo-primary);
+    background: hsl(217, 91%, 60%, 0.05);
   }
 
   /* ============================
