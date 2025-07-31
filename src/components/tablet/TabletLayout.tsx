@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { MobileHeader } from '../mobile/MobileHeader';
 import { MobileNavigation } from '../mobile/MobileNavigation';
-import { EnhancedOfflineIndicator } from '@/components/offline';
 
 interface TabletLayoutProps {
   children: ReactNode;
@@ -57,9 +56,6 @@ export const TabletLayout: React.FC<TabletLayoutProps> = ({
           </div>
         </div>
       )}
-      
-      {/* Enhanced Offline Indicator */}
-      <EnhancedOfflineIndicator position="top-right" />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { MobileHeader } from './MobileHeader';
 import { MobileNavigation } from './MobileNavigation';
-import { EnhancedOfflineIndicator } from '@/components/offline';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -43,9 +42,6 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
 
       {/* Mobile Bottom Navigation */}
       {showBottomNav && <MobileNavigation />}
-      
-      {/* Enhanced Offline Indicator */}
-      <EnhancedOfflineIndicator position="top-right" />
     </div>
   );
 };
