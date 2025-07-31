@@ -61,21 +61,11 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
     return (
       <div className={`space-y-3 px-4 ${className}`}>
         <div className="grid grid-cols-2 gap-3">
-          <TechButton 
-            variant="primary" 
-            size="md" 
-            fullWidth
-            onClick={() => console.log('Edit clicked')}
-          >
+          <TechButton variant="primary" size="md" fullWidth>
             <Edit className="w-4 h-4 mr-2" />
             Chỉnh sửa
           </TechButton>
-          <TechButton 
-            variant="secondary" 
-            size="md" 
-            fullWidth
-            onClick={() => console.log('Settings clicked')}
-          >
+          <TechButton variant="secondary" size="md" fullWidth>
             <Settings className="w-4 h-4 mr-2" />
             Cài đặt
           </TechButton>
