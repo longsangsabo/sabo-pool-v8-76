@@ -41,6 +41,9 @@ interface RewardsEditModalProps {
   onClose: () => void;
   rewards: TournamentRewards;
   onSave: (rewards: TournamentRewards) => Promise<void>;
+  maxParticipants?: number;
+  entryFee?: number;
+  disabled?: boolean;
 }
 
 // Default positions to add when modal opens with no positions
@@ -78,7 +81,10 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
   isOpen,
   onClose,
   rewards,
-  onSave
+  onSave,
+  maxParticipants,
+  entryFee,
+  disabled = false
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [localRewards, setLocalRewards] = useState<TournamentRewards>(rewards);
@@ -477,14 +483,14 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
         </div>
 
         <DialogFooter className="flex justify-between">
-          <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
+          <Button type="button" variant="outline" onClick={onClose} disabled={isSaving || disabled}>
             Hủy
           </Button>
           <div className="flex gap-2">
             <Button 
               type="button" 
               onClick={handleSave}
-              disabled={isSaving || hasValidationErrors()}
+              disabled={isSaving || hasValidationErrors() || disabled}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
             >
               {isSaving && <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" />}
@@ -503,7 +509,7 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
                   // Error handled by parent
                 }
               }}
-              disabled={isSaving || hasValidationErrors()}
+              disabled={isSaving || hasValidationErrors() || disabled}
               variant="outline"
               className="flex items-center gap-2 border-green-500 text-green-600 hover:bg-green-50"
             >

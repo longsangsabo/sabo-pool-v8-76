@@ -7,6 +7,7 @@ import { TournamentRewards } from '@/types/tournament-extended';
 import { RewardsEditModal } from './RewardsEditModal';
 import { formatPrizeAmount } from '@/utils/tournamentHelpers';
 import { toast } from 'sonner';
+import { useTournamentRewardsManager } from '@/hooks/useTournamentRewardsManager';
 
 interface OptimizedRewardsSectionProps {
   rewards?: TournamentRewards;
@@ -34,23 +35,46 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentRewards, setCurrentRewards] = useState<TournamentRewards | null>(null);
   
+  // Use tournament rewards manager if tournamentId is provided
+  const {
+    rewards: dbRewards,
+    isLoading: isLoadingRewards,
+    saveRewards,
+    isSaving
+  } = useTournamentRewardsManager(tournamentId || '');
+  
+  // Determine which rewards to use - prioritize database rewards if available
+  const activeRewards = tournamentId && dbRewards ? dbRewards : (currentRewards || rewards);
+  
   // Update local state when props change
   useEffect(() => {
-    if (rewards) {
+    if (rewards && !tournamentId) {
       setCurrentRewards(rewards);
-      console.log('🔄 OptimizedRewardsSection: Rewards props updated', rewards);
+      console.log('🔄 OptimizedRewardsSection: Using props rewards', rewards);
     }
-  }, [rewards]);
+  }, [rewards, tournamentId]);
+  
+  // Update local state when database rewards change
+  useEffect(() => {
+    if (tournamentId && dbRewards) {
+      setCurrentRewards(dbRewards);
+      console.log('🔄 OptimizedRewardsSection: Using database rewards', dbRewards);
+    }
+  }, [dbRewards, tournamentId]);
   
   // Add debug logging
   console.log('🎯 OptimizedRewardsSection render:', {
     hasRewards: !!rewards,
     hasCurrentRewards: !!currentRewards,
+    hasDbRewards: !!dbRewards,
+    tournamentId,
+    isLoadingRewards,
     rewardsPositions: rewards?.positions?.length || 0,
     currentRewardsPositions: currentRewards?.positions?.length || 0,
+    dbRewardsPositions: dbRewards?.positions?.length || 0,
     showAsTemplate,
     isEditable,
-    tournamentId
+    usingSource: tournamentId && dbRewards ? 'database' : 'props'
   });
 
   // Template reward generation functions
@@ -164,7 +188,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
 
   // Use current rewards state for display, fallback to props, then template/default
   const displayRewards = showAsTemplate ? generateTemplateRewards() : 
-    (currentRewards || rewards || {
+    (activeRewards || {
       totalPrize: 0,
       showPrizes: false,
       positions: [],
@@ -176,9 +200,10 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     positionsCount: displayRewards.positions?.length || 0,
     usingTemplate: showAsTemplate,
     source: showAsTemplate ? 'template' : 
-           (currentRewards ? 'current-state' : 
-           (rewards ? 'props' : 'default')),
-    firstPosition: displayRewards.positions?.[0]
+           (tournamentId && dbRewards ? 'database' :
+           (activeRewards ? 'active-rewards' : 'default')),
+    firstPosition: displayRewards.positions?.[0],
+    isLoadingRewards
   });
 
   const handleSaveRewards = async (updatedRewards: TournamentRewards) => {
@@ -187,15 +212,30 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
     // Update local state immediately for instant UI update
     setCurrentRewards(updatedRewards);
     
-    // Call parent callback to save to database/state
+    // Save to database if tournamentId is provided
+    if (tournamentId && saveRewards) {
+      try {
+        await saveRewards(updatedRewards);
+        console.log('✅ Rewards saved to database successfully');
+      } catch (error) {
+        console.error('❌ Failed to save rewards to database:', error);
+        // Revert local state on error
+        setCurrentRewards(activeRewards);
+        return; // Don't close modal or show success message
+      }
+    }
+    
+    // Call parent callback for additional handling (context updates, etc.)
     if (onRewardsUpdated) {
       onRewardsUpdated(updatedRewards);
     }
     
     setIsEditModalOpen(false);
     
-    // Show success message
-    toast.success('Đã cập nhật phần thưởng thành công!');
+    // Success message is already shown by the mutation
+    if (!tournamentId) {
+      toast.success('Đã cập nhật phần thưởng thành công!');
+    }
   };
 
   const handleUseTemplate = () => {
@@ -212,8 +252,21 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
 
   return (
     <div className="space-y-6">
-      {/* Quick Stats - Enhanced Mode Only */}
-      {showFinancialSummary && (
+      {/* Loading State */}
+      {isLoadingRewards && tournamentId && (
+        <div className="flex items-center justify-center p-8">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            Đang tải phần thưởng...
+          </div>
+        </div>
+      )}
+
+      {/* Skip loading section if loading */}
+      {(!isLoadingRewards || !tournamentId) && (
+        <>
+          {/* Quick Stats - Enhanced Mode Only */}
+          {showFinancialSummary && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
             <CardContent className="p-4">
@@ -296,10 +349,11 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                   variant="outline"
                   size="sm"
                   onClick={() => setIsEditModalOpen(true)}
+                  disabled={isSaving || isLoadingRewards}
                   className="flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50"
                 >
                   <Edit className="w-4 h-4" />
-                  Chỉnh sửa
+                  {isSaving ? 'Đang lưu...' : 'Chỉnh sửa'}
                 </Button>
               )}
               {showAsTemplate && onUseTemplate && (
@@ -539,12 +593,19 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
       </Card>
 
       {/* Edit Modal */}
-      <RewardsEditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        rewards={displayRewards}
-        onSave={handleSaveRewards}
-      />
+      {isEditModalOpen && (
+        <RewardsEditModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          rewards={activeRewards || generateTemplateRewards()}
+          onSave={handleSaveRewards}
+          maxParticipants={maxParticipants}
+          entryFee={entryFee}
+          disabled={isSaving}
+        />
+      )}
+        </>
+      )}
     </div>
   );
 };
