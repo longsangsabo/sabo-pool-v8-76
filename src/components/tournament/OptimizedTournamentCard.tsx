@@ -9,6 +9,7 @@ import { getTournamentTypeText, getTierText, formatTournamentDateTime } from '@/
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
 interface OptimizedTournamentCardProps {
   tournament: Tournament;
@@ -24,6 +25,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
   showActions = true
 }) => {
   const { user } = useAuth();
+  const { isMobile } = useOptimizedResponsive();
   const [isRegistered, setIsRegistered] = useState(false);
   const [registrationLoading, setRegistrationLoading] = useState(false);
   const [checkingRegistration, setCheckingRegistration] = useState(false);
@@ -306,9 +308,9 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
 
   return (
     <Card className="w-full max-w-md mx-auto hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-      <CardHeader className="pb-3">
+      <CardHeader className={isMobile ? 'pb-2 px-4 pt-4' : 'pb-3'}>
         <div className="flex items-start justify-between">
-          <CardTitle className="text-lg font-bold text-gray-900 line-clamp-2 flex-1 mr-2">
+          <CardTitle className={`${isMobile ? 'text-base' : 'text-lg'} font-bold text-gray-900 line-clamp-2 flex-1 mr-2`}>
             {tournament.name}
           </CardTitle>
           <Badge className={`${statusInfo.color} text-white text-xs px-2 py-1 rounded-full whitespace-nowrap`}>
@@ -316,18 +318,18 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           </Badge>
         </div>
         
-        {tournament.description && (
+        {tournament.description && !isMobile && (
           <p className="text-sm text-gray-600 line-clamp-2 mt-1">
             {tournament.description}
           </p>
         )}
       </CardHeader>
 
-      <CardContent className="pt-0 space-y-3">
+      <CardContent className={`pt-0 ${isMobile ? 'space-y-2 px-4 pb-4' : 'space-y-3'}`}>
         {/* Tournament Format & Type */}
-        <div className="flex items-center justify-between text-sm">
+        <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
           <div className="flex items-center space-x-2">
-            <Trophy className="w-4 h-4 text-amber-500" />
+            <Trophy className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-amber-500`} />
             <span className="font-medium text-gray-700">
               {getTournamentTypeText(tournament.tournament_type)}
             </span>
@@ -340,9 +342,9 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
         </div>
 
         {/* Participants */}
-        <div className="flex items-center justify-between text-sm">
+        <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
           <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-blue-500" />
+            <Users className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-blue-500`} />
             <span className="text-gray-700">
               {currentParticipants}/{tournament.max_participants} người
             </span>
@@ -350,7 +352,10 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           <span className={`text-xs px-2 py-1 rounded-full ${
             (tournament.max_participants - currentParticipants) > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
           }`}>
-            {(tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants} chỗ` : 'Hết chỗ'}
+            {isMobile 
+              ? (tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants}` : 'Hết'
+              : (tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants} chỗ` : 'Hết chỗ'
+            }
           </span>
         </div>
 
@@ -387,10 +392,10 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           }
           
           return (
-            <div className="flex items-center justify-between text-sm">
+            <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
               <div className="flex items-center space-x-2">
-                <Star className="w-4 h-4 text-purple-500" />
-                <span className="text-gray-700">Hạng tham gia:</span>
+                <Star className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-purple-500`} />
+                <span className="text-gray-700">{isMobile ? 'Hạng:' : 'Hạng tham gia:'}</span>
               </div>
               <span className="text-purple-600 font-medium">{rankRange}</span>
             </div>
@@ -398,22 +403,24 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
         })()}
 
         {/* Entry Fee */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-700">Lệ phí tham gia:</span>
+        <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
+          <span className="text-gray-700">{isMobile ? 'Lệ phí:' : 'Lệ phí tham gia:'}</span>
           <span className="font-medium text-gray-900">
             {tournament.entry_fee ? formatCurrency(tournament.entry_fee) : 'Miễn phí'}
           </span>
         </div>
 
         {/* Prize Pool - Make this prominent */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-3 border border-amber-200">
+        <div className={`bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg ${isMobile ? 'p-2' : 'p-3'} border border-amber-200`}>
           <div className="text-center">
-            <div className="text-xs text-amber-700 font-medium mb-1">TỔNG GIẢI THƯỞNG</div>
-            <div className="text-2xl font-bold text-amber-800 mb-2">
+            <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-amber-700 font-medium mb-1`}>
+              {isMobile ? 'GIẢI THƯỞNG' : 'TỔNG GIẢI THƯỞNG'}
+            </div>
+            <div className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-amber-800 ${isMobile ? 'mb-1' : 'mb-2'}`}>
               {realTimePrizeInfo.totalPrize > 0 ? formatCurrency(realTimePrizeInfo.totalPrize) : 'Miễn phí tham gia'}
             </div>
             {realTimePrizeInfo.spaPoints > 0 && (
-              <div className="text-sm text-amber-700">
+              <div className={`${isMobile ? 'text-xs' : 'text-sm'} text-amber-700`}>
                 + {realTimePrizeInfo.spaPoints.toLocaleString()} điểm SPA
               </div>
             )}
@@ -426,23 +433,23 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
         </div>
 
         {/* Tournament Date */}
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
-          <CalendarDays className="w-4 h-4" />
+        <div className={`flex items-center space-x-2 ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>
+          <CalendarDays className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />
           <span>
             {formatTournamentDateTime(tournament.tournament_start || (tournament as any).start_date)}
           </span>
         </div>
 
-        {/* Location */}
-        {tournament.venue_address && (
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <MapPin className="w-4 h-4" />
+        {/* Location - Only show on desktop or if very short */}
+        {tournament.venue_address && (!isMobile || tournament.venue_address.length < 30) && (
+          <div className={`flex items-center space-x-2 ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>
+            <MapPin className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />
             <span className="line-clamp-1">{tournament.venue_address}</span>
           </div>
         )}
 
-        {/* Registration Deadline */}
-        {tournament.registration_end && (
+        {/* Registration Deadline - Only show on desktop */}
+        {tournament.registration_end && !isMobile && (
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Clock className="w-4 h-4" />
             <span>
@@ -453,12 +460,12 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
 
         {/* Action Buttons */}
         {showActions && (
-          <div className="flex space-x-2 pt-2">
+          <div className={`flex space-x-2 ${isMobile ? 'pt-1' : 'pt-2'}`}>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={onViewDetails}
-              className="flex-1"
+              className={`flex-1 ${isMobile ? 'text-xs h-8' : ''}`}
             >
               Chi tiết
             </Button>
@@ -467,7 +474,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
                 size="sm" 
                 onClick={handleRegisterClick}
                 disabled={checkingRegistration || registrationLoading}
-                className={`flex-1 flex items-center gap-2 ${
+                className={`flex-1 flex items-center gap-2 ${isMobile ? 'text-xs h-8' : ''} ${
                   isRegistered 
                     ? 'bg-red-600 hover:bg-red-700 text-white' 
                     : 'bg-blue-600 hover:bg-blue-700'
@@ -476,12 +483,12 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
                 {registrationLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    {isRegistered ? 'Đang hủy...' : 'Đang đăng ký...'}
+                    {isRegistered ? (isMobile ? 'Hủy...' : 'Đang hủy...') : (isMobile ? 'Đăng ký...' : 'Đang đăng ký...')}
                   </>
                 ) : isRegistered ? (
                   <>
-                    <AlertTriangle className="w-4 h-4" />
-                    Hủy đăng ký
+                    <AlertTriangle className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />
+                    {isMobile ? 'Hủy' : 'Hủy đăng ký'}
                   </>
                 ) : (
                   'Đăng ký'

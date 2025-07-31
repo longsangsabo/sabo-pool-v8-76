@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { Search, Filter, Plus, Calendar, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
 const TournamentsPage = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -28,6 +29,7 @@ const TournamentsPage = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { isMobile } = useOptimizedResponsive();
 
   useEffect(() => {
     fetchTournaments();
@@ -187,7 +189,7 @@ const TournamentsPage = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className={`container mx-auto px-4 ${isMobile ? 'py-4' : 'py-8'}`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">Đang tải danh sách giải đấu...</p>
@@ -197,40 +199,53 @@ const TournamentsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+    <div className={`container mx-auto px-4 ${isMobile ? 'py-4' : 'py-8'}`}>
+      <div className={`flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 ${isMobile ? 'mb-4' : 'mb-8'}`}>
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Giải Đấu Billiards</h1>
-          <p className="text-muted-foreground">Tham gia các giải đấu hấp dẫn và thử thách bản thân</p>
+          <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-foreground mb-2`}>
+            {isMobile ? 'Giải Đấu' : 'Giải Đấu Billiards'}
+          </h1>
+          {!isMobile && (
+            <p className="text-muted-foreground">Tham gia các giải đấu hấp dẫn và thử thách bản thân</p>
+          )}
         </div>
-        <div className="flex gap-2">
-          <Button onClick={handleCreateTournament} className="flex items-center gap-2">
+        <div className={`flex gap-2 ${isMobile ? 'w-full' : ''}`}>
+          <Button 
+            onClick={handleCreateTournament} 
+            className={`flex items-center gap-2 ${isMobile ? 'flex-1 text-sm' : ''}`}
+            size={isMobile ? 'sm' : 'default'}
+          >
             <Plus className="w-4 h-4" />
-            Tạo giải đấu
+            {isMobile ? 'Tạo' : 'Tạo giải đấu'}
           </Button>
-          <Button onClick={handleRegisterClub} variant="outline" className="flex items-center gap-2">
+          <Button 
+            onClick={handleRegisterClub} 
+            variant="outline" 
+            className={`flex items-center gap-2 ${isMobile ? 'flex-1 text-sm' : ''}`}
+            size={isMobile ? 'sm' : 'default'}
+          >
             <Shield className="w-4 h-4" />
-            Đăng ký CLB
+            {isMobile ? 'CLB' : 'Đăng ký CLB'}
           </Button>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <Card className="mb-6">
-        <CardContent className="pt-6">
-          <div className="flex flex-col lg:flex-row gap-4">
+      <Card className={isMobile ? 'mb-3' : 'mb-6'}>
+        <CardContent className={isMobile ? 'pt-4 pb-4' : 'pt-6'}>
+          <div className={`flex ${isMobile ? 'flex-col gap-3' : 'flex-col lg:flex-row gap-4'}`}>
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
-                  placeholder="Tìm kiếm giải đấu..."
+                  placeholder={isMobile ? "Tìm kiếm..." : "Tìm kiếm giải đấu..."}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
             </div>
-            <div className="lg:w-48">
+            <div className={isMobile ? 'w-full' : 'lg:w-48'}>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
                   <SelectValue placeholder="Trạng thái" />
@@ -248,59 +263,61 @@ const TournamentsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Tournament Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              <div>
-                <p className="text-sm text-muted-foreground">Tổng giải đấu</p>
-                <p className="text-2xl font-bold">{tournaments.length}</p>
+      {/* Tournament Stats - Hidden on Mobile */}
+      {!isMobile && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Tổng giải đấu</p>
+                  <p className="text-2xl font-bold">{tournaments.length}</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-green-600">Mở</Badge>
-              <div>
-                <p className="text-sm text-muted-foreground">Đang mở đăng ký</p>
-                <p className="text-2xl font-bold">
-                  {tournaments.filter(t => t.status === 'registration_open').length}
-                </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-green-600">Mở</Badge>
+                <div>
+                  <p className="text-sm text-muted-foreground">Đang mở đăng ký</p>
+                  <p className="text-2xl font-bold">
+                    {tournaments.filter(t => t.status === 'registration_open').length}
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-blue-600">Đang diễn ra</Badge>
-              <div>
-                <p className="text-sm text-muted-foreground">Đang thi đấu</p>
-                <p className="text-2xl font-bold">
-                  {tournaments.filter(t => t.status === 'ongoing').length}
-                </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-blue-600">Đang diễn ra</Badge>
+                <div>
+                  <p className="text-sm text-muted-foreground">Đang thi đấu</p>
+                  <p className="text-2xl font-bold">
+                    {tournaments.filter(t => t.status === 'ongoing').length}
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-gray-600">Hoàn thành</Badge>
-              <div>
-                <p className="text-sm text-muted-foreground">Đã kết thúc</p>
-                <p className="text-2xl font-bold">
-                  {tournaments.filter(t => t.status === 'completed').length}
-                </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-gray-600">Hoàn thành</Badge>
+                <div>
+                  <p className="text-sm text-muted-foreground">Đã kết thúc</p>
+                  <p className="text-2xl font-bold">
+                    {tournaments.filter(t => t.status === 'completed').length}
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Tournament List */}
       {filteredTournaments.length === 0 ? (
@@ -319,7 +336,7 @@ const TournamentsPage = () => {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid grid-cols-1 ${isMobile ? 'gap-3' : 'md:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
           {filteredTournaments.map((tournament) => (
             <OptimizedTournamentCard
               key={tournament.id}
