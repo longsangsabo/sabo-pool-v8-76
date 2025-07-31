@@ -18,6 +18,7 @@ import TrustScoreBadge from '@/components/TrustScoreBadge';
 import CompactStatCard from '@/components/challenges/CompactStatCard';
 import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
+import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 
 import { toast } from 'sonner';
 import {
@@ -781,67 +782,11 @@ const EnhancedChallengesPageV2: React.FC = () => {
     </div>
   );
 
-  // Mobile Layout Component (simplified version)
+  // Mobile Layout Component - Enhanced with MobileChallengeManager
   const MobileLayout = () => (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 space-y-6 max-w-6xl">
-        {/* Mobile Header */}
-        <div className="flex flex-col gap-4 items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Thách đấu</h1>
-            <p className="text-muted-foreground">
-              Quản lý và tham gia các thách đấu billiards
-            </p>
-          </div>
-          <div className="flex gap-2 w-full">
-            <CreateChallengeButton onCreateClick={() => setShowCreateModal(true)} />
-            {isAdmin && (
-              <Button 
-                onClick={() => setShowAdminCreateModal(true)}
-                variant="outline"
-                size="sm"
-                className="border-red-200 text-red-600 hover:bg-red-50"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile Stats - Stacked version */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <CompactStatCard
-            icon={Trophy}
-            value={stats.total}
-            label="Tổng cộng"
-            color="primary"
-          />
-          <CompactStatCard
-            icon={Clock}
-            value={stats.pending}
-            label="Chờ phản hồi"
-            color="warning"
-          />
-          <CompactStatCard
-            icon={Zap}
-            value={stats.accepted}
-            label="Đã chấp nhận"
-            color="success"
-          />
-          <CompactStatCard
-            icon={Star}
-            value={stats.completed}
-            label="Hoàn thành"
-            color="info"
-          />
-        </div>
-
-        {/* Mobile Activity Feed */}
-        <LiveActivityFeed
-          openChallenges={openChallenges}
-          onJoinChallenge={handleJoinOpenChallenge}
-        />
+      <div className="px-0 py-0">
+        <MobileChallengeManager className="h-screen" />
       </div>
     </div>
   );

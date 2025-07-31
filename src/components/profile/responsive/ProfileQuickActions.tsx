@@ -43,7 +43,7 @@ export const ProfileQuickActions: React.FC<ProfileQuickActionsProps> = ({
       title: 'Thách đấu',
       description: 'Tìm đối thủ và thách đấu',
       icon: Trophy,
-      onClick: () => !isMobile && navigate('/challenges'),
+      onClick: () => navigate('/challenges'),
       primary: false,
       variant: 'success' as const,
     },

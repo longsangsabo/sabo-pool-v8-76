@@ -28,11 +28,11 @@ export const useChallenges = () => {
 
       console.log('✅ Fetching challenges for user:', user.id);
 
-      // ✅ CRITICAL FIX: Use simple select without relationships
+      // ✅ CRITICAL FIX: Include open challenges and user's challenges
       const { data: challengesData, error: fetchError } = await supabase
         .from('challenges')
         .select('*')
-        .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
+        .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id},opponent_id.is.null`)
         .order('created_at', { ascending: false });
 
       if (fetchError) {
