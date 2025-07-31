@@ -69,39 +69,50 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
 
   if (isMobile) {
     return (
-      <TechCard className={`mx-4 my-6 ${className}`} variant="premium">
-        <div className="text-center space-y-4">
-          <div className="relative inline-block">
-            <Avatar className="w-20 h-20 sabo-tech-avatar">
-              <AvatarImage 
-                src={profile?.avatar_url} 
-                alt={profile?.display_name || profile?.full_name}
-                className="object-cover"
-              />
-              <AvatarFallback className="text-2xl font-semibold bg-primary/20">
-                {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border-2 border-primary">
-              <Star className="w-3 h-3 text-primary" />
+      <div className={`relative ${className}`}>
+        <div className="theme-toggle-container">
+          <button className="theme-toggle-btn" onClick={() => document.documentElement.classList.toggle('dark')}>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+        
+        <TechCard className="mx-4 my-6" variant="premium">
+          <div className="text-center space-y-4">
+            <div className="relative inline-block">
+              <Avatar className="w-20 h-20 sabo-tech-avatar">
+                <AvatarImage 
+                  src={profile?.avatar_url} 
+                  alt={profile?.display_name || profile?.full_name}
+                  className="object-cover"
+                />
+                <AvatarFallback className="text-2xl font-semibold bg-primary/20">
+                  {(profile?.display_name || profile?.full_name || 'U').charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border-2 border-primary">
+                <Star className="w-3 h-3 text-primary" />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              {profile?.bio && (
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                  {profile.bio}
+                </p>
+              )}
             </div>
           </div>
-          
-          <div className="space-y-2">
-            <h2 className="text-xl font-bold text-foreground">
-              {profile?.display_name || profile?.full_name || 'Người dùng'}
-            </h2>
-            <Badge className="sabo-tech-border-rank-e bg-primary/20 text-primary border-primary">
-              {profile?.verified_rank || 'Chưa xác thực'}
-            </Badge>
-            {profile?.bio && (
-              <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                {profile.bio}
-              </p>
-            )}
+        </TechCard>
+        
+        <div className="user-info-section">
+          <h1 className="username-display">{profile?.display_name || profile?.full_name || 'Người dùng'}</h1>
+          <div className="rank-badge-simple">
+            <span className="rank-text">{profile?.verified_rank || 'BRONZE'}</span>
           </div>
         </div>
-      </TechCard>
+      </div>
     );
   }
 

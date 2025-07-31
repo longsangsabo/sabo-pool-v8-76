@@ -38,19 +38,13 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className =
 
   if (isMobile) {
     return (
-      <div className={`px-4 ${className}`}>
-        <div className="grid grid-cols-3 gap-3">
-          {stats.map((stat, index) => (
-            <TechStatCard
-              key={index}
-              label={stat.subtitle}
-              value={stat.value}
-              icon={stat.icon}
-              variant={stat.variant}
-              className="text-center"
-            />
-          ))}
-        </div>
+      <div className={`profile-stats-horizontal ${className}`}>
+        {stats.map((stat, index) => (
+          <div key={index} className="stat-card-compact">
+            <div className="stat-number">{stat.value}</div>
+            <div className="stat-label">{stat.subtitle}</div>
+          </div>
+        ))}
       </div>
     );
   }
