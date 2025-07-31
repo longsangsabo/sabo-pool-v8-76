@@ -3966,6 +3966,10 @@ export type Database = {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
       }
+      has_admin_role: {
+        Args: { user_uuid: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -3988,6 +3992,10 @@ export type Database = {
       initialize_tournament_rewards: {
         Args: { p_tournament_id: string; p_tier_level?: number }
         Returns: Json
+      }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       is_final_match: {
         Args: { p_match_id: string }
