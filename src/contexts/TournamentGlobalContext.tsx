@@ -69,7 +69,6 @@ export const TournamentGlobalProvider: React.FC<TournamentGlobalProviderProps> =
         .select(`
           *,
           club:club_profiles(*),
-          // Note: prize_distribution removed
           spa_points_config,
           elo_points_config
         `)
@@ -101,40 +100,10 @@ export const TournamentGlobalProvider: React.FC<TournamentGlobalProviderProps> =
           address: tournament.club.address || ''
         } : undefined,
         rewards: (() => {
-          // ✅ ENHANCED: Parse prize_distribution with better validation and logging
-          console.log('🔍 [TournamentGlobal] Parsing rewards for tournament:', tournament.id, tournament.name);
-          console.log('🔍 [TournamentGlobal] Raw prize_distribution:', tournament.prize_distribution);
+          // Load totalPrize from tournament_prize_tiers table
+          // This will be handled by the useTournamentRewardsManager hook
           
-          if (tournament.prize_distribution && typeof tournament.prize_distribution === 'object') {
-            const prizeData = tournament.prize_distribution as any;
-            
-            // ✅ Validate positions array structure
-            const positions = Array.isArray(prizeData.positions) ? prizeData.positions.map((pos: any, index: number) => {
-              if (typeof pos === 'object' && pos !== null) {
-                return {
-                  position: pos.position || (index + 1),
-                  name: pos.name || `Vị trí ${pos.position || (index + 1)}`,
-                  cashPrize: typeof pos.cashPrize === 'number' ? pos.cashPrize : 0,
-                  spaPoints: typeof pos.spaPoints === 'number' ? pos.spaPoints : 0,
-                  eloPoints: typeof pos.eloPoints === 'number' ? pos.eloPoints : 0,
-                  isVisible: pos.isVisible !== false
-                };
-              }
-              return null;
-            }).filter(Boolean) : [];
-            
-            const parsedRewards = {
-              totalPrize: prizeData.totalPrize || tournament.prize_pool || 0,
-              showPrizes: prizeData.showPrizes !== false,
-              positions: positions,
-              specialAwards: Array.isArray(prizeData.specialAwards) ? prizeData.specialAwards : []
-            };
-            
-            console.log('✅ [TournamentGlobal] Parsed rewards:', parsedRewards);
-            return parsedRewards;
-          }
-          
-          // Default fallback if no prize_distribution
+          // Default fallback calculation
           const defaultRewards = {
             totalPrize: tournament.prize_pool || 0,
             showPrizes: true,

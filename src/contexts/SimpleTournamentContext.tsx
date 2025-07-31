@@ -114,30 +114,24 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
       return { positions: [], specialAwards: [], totalPrize: 0, showPrizes: true }; // Simple fallback
     }
 
-    // Check if tournament already has rewards configured
-    if (tournament.prize_distribution) {
-      try {
-        const existingRewards = typeof tournament.prize_distribution === 'string' 
-          ? JSON.parse(tournament.prize_distribution) 
-          : tournament.prize_distribution;
-        
-        // Return existing rewards directly
-        return existingRewards;
-      } catch (error) {
-        console.error('Error parsing existing rewards:', error);
-      }
+    // Use the TournamentRewardsManager hook to load rewards from tournament_prize_tiers
+    console.log('🔄 [SimpleTournamentContext] Loading rewards from tournament_prize_tiers');
+    
+    function calculateDefaultRewards(tournament: Tournament): TournamentRewards {
+      return {
+        positions: [
+          { position: 1, name: 'Vô địch', cashPrize: tournament.prize_pool * 0.5, eloPoints: 100, spaPoints: 500, items: [], isVisible: true },
+          { position: 2, name: 'Á quân', cashPrize: tournament.prize_pool * 0.3, eloPoints: 75, spaPoints: 300, items: [], isVisible: true }
+        ],
+        specialAwards: [],
+        totalPrize: tournament.prize_pool || 0,
+        showPrizes: true
+      };
     }
+    
+    const calculatedRewards = calculateDefaultRewards(tournament);
+    return calculatedRewards;
 
-    // Generate standard rewards fallback
-    return {
-      positions: [
-        { position: 1, name: 'Vô địch', cashPrize: tournament.prize_pool * 0.5, eloPoints: 100, spaPoints: 500, items: [], isVisible: true },
-        { position: 2, name: 'Á quân', cashPrize: tournament.prize_pool * 0.3, eloPoints: 75, spaPoints: 300, items: [], isVisible: true }
-      ],
-      specialAwards: [],
-      totalPrize: tournament.prize_pool || 0,
-      showPrizes: true
-    };
   }, [tournaments]);
 
   // New function to save tournament rewards

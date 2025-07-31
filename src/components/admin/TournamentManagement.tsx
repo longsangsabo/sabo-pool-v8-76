@@ -68,15 +68,13 @@ const TournamentManagement: React.FC = () => {
       
       // Transform database data to EnhancedTournament format
       const enhancedTournaments = (data || []).map(tournament => {
-        // Parse rewards from prize_distribution
-        let rewards;
-        try {
-          rewards = tournament.prize_distribution && typeof tournament.prize_distribution === 'object' 
-            ? tournament.prize_distribution as any
-            : { positions: [], specialAwards: [], totalPrize: tournament.prize_pool || 0, showPrizes: true };
-        } catch {
-          rewards = { positions: [], specialAwards: [], totalPrize: tournament.prize_pool || 0, showPrizes: true };
-        }
+        // Use tournament_prize_tiers instead of prize_distribution
+        let rewards = { 
+          positions: [], 
+          specialAwards: [], 
+          totalPrize: tournament.prize_pool || 0, 
+          showPrizes: true 
+        };
 
         return {
           ...tournament,
