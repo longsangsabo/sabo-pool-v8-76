@@ -28,33 +28,10 @@ export const useChallenges = () => {
 
       console.log('✅ Fetching challenges for user:', user.id);
 
-      // ✅ CRITICAL FIX: Use the same working query pattern as SaboSystemTab
+      // ✅ CRITICAL FIX: Use simple select without relationships
       const { data: challengesData, error: fetchError } = await supabase
         .from('challenges')
-        .select(`
-          *,
-          challenger:profiles!challenges_challenger_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          opponent:profiles!challenges_opponent_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          club:club_profiles(
-            id,
-            club_name,
-            address
-          )
-        `)
+        .select('*')
         .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
         .order('created_at', { ascending: false });
 
@@ -69,33 +46,38 @@ export const useChallenges = () => {
         if (challenge.opponent_id) userIds.add(challenge.opponent_id);
       });
 
-      // Also fetch current user's profile separately
-      const { data: currentUserProfile } = await supabase
-        .from('profiles')
-        .select(`
-          user_id, 
-          full_name, 
-          display_name, 
-          verified_rank, 
-          elo, 
-          avatar_url
-        `)
-        .eq('user_id', user.id)
-        .maybeSingle();
+      // Fetch all user profiles in one query
+      let profiles: any[] = [];
+      if (userIds.size > 0) {
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select(`
+            user_id, 
+            full_name, 
+            display_name, 
+            verified_rank, 
+            elo, 
+            avatar_url
+          `)
+          .in('user_id', Array.from(userIds));
+        
+        profiles = profilesData || [];
+      }
 
-      // Map challenges with consistent data structure (like SaboSystemTab)
+      // Create a map for quick profile lookup
+      const profileMap = new Map();
+      profiles.forEach(profile => {
+        profileMap.set(profile.user_id, profile);
+      });
+
+      // Map challenges with profile data
       const enrichedChallenges = challengesData?.map(challenge => ({
         ...challenge,
-        // Keep the relationship data from the query
-        challenger_profile: challenge.challenger,
-        opponent_profile: challenge.opponent,
-        // Add current user profile for UI consistency
-        current_user_profile: currentUserProfile,
-        // Add club data if available
-        club: challenge.club
+        challenger_profile: profileMap.get(challenge.challenger_id),
+        opponent_profile: profileMap.get(challenge.opponent_id),
+        current_user_profile: profileMap.get(user.id)
       })) || [];
 
-      // Type assertion to handle Supabase's complex return type
       setChallenges(enrichedChallenges as unknown as Challenge[]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
@@ -158,56 +140,24 @@ export const useChallenges = () => {
         throw new Error(`Failed to create challenge: ${insertError.message}`);
       }
 
-      // Fetch profile data for the new challenge using same pattern
-      const { data: newChallengeData, error: profileError } = await supabase
-        .from('challenges')
-        .select(`
-          *,
-          challenger:profiles!challenges_challenger_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          opponent:profiles!challenges_opponent_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          club:club_profiles(
-            id,
-            club_name,
-            address
-          )
-        `)
-        .eq('id', data.id)
-        .single();
-
-      // Also fetch current user's profile
-      const { data: currentUserProfile } = await supabase
+      // Fetch profile data separately for consistency
+      const { data: challengerProfile } = await supabase
         .from('profiles')
-        .select(`
-          user_id, 
-          full_name, 
-          display_name, 
-          verified_rank, 
-          elo, 
-          avatar_url
-        `)
+        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
         .eq('user_id', user.id)
+        .maybeSingle();
+
+      const { data: opponentProfile } = await supabase
+        .from('profiles')
+        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
+        .eq('user_id', challengeData.opponent_id)
         .maybeSingle();
       
       const enrichedChallenge = {
-        ...newChallengeData,
-        challenger_profile: newChallengeData.challenger,
-        opponent_profile: newChallengeData.opponent,
-        current_user_profile: currentUserProfile,
-        club: newChallengeData.club
+        ...data,
+        challenger_profile: challengerProfile,
+        opponent_profile: opponentProfile,
+        current_user_profile: challengerProfile
       };
 
       // Update local state with type assertion
@@ -249,56 +199,24 @@ export const useChallenges = () => {
         throw new Error('Challenge not found or already processed');
       }
 
-      // Fetch profile data for the updated challenge using same pattern
-      const { data: updatedChallengeData, error: profileError } = await supabase
-        .from('challenges')
-        .select(`
-          *,
-          challenger:profiles!challenges_challenger_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          opponent:profiles!challenges_opponent_id_fkey(
-            user_id,
-            full_name,
-            display_name,
-            verified_rank,
-            elo,
-            avatar_url
-          ),
-          club:club_profiles(
-            id,
-            club_name,
-            address
-          )
-        `)
-        .eq('id', data.id)
-        .single();
-
-      // Also fetch current user's profile
-      const { data: currentUserProfile } = await supabase
+      // Fetch profile data separately for consistency
+      const { data: challengerProfile } = await supabase
         .from('profiles')
-        .select(`
-          user_id, 
-          full_name, 
-          display_name, 
-          verified_rank, 
-          elo, 
-          avatar_url
-        `)
-        .eq('user_id', user.id)
+        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
+        .eq('user_id', data.challenger_id)
+        .maybeSingle();
+
+      const { data: opponentProfile } = await supabase
+        .from('profiles')
+        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
+        .eq('user_id', data.opponent_id)
         .maybeSingle();
       
       const enrichedChallenge = {
-        ...updatedChallengeData,
-        challenger_profile: updatedChallengeData.challenger,
-        opponent_profile: updatedChallengeData.opponent,
-        current_user_profile: currentUserProfile,
-        club: updatedChallengeData.club
+        ...data,
+        challenger_profile: challengerProfile,
+        opponent_profile: opponentProfile,
+        current_user_profile: opponentProfile
       };
 
       // Update local state with type assertion
