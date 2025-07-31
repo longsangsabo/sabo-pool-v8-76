@@ -23,11 +23,54 @@ export interface TournamentRewardsCalculation {
   }>;
 }
 
+// NEW: Function to calculate rewards from database prize tiers
+export const calculateRewardsFromTiers = async (
+  tournament: any,
+  prizeTiers?: any[]
+): Promise<TournamentRewardsCalculation> => {
+  console.log('🔍 calculateRewardsFromTiers input:', { 
+    tournament_id: tournament?.id,
+    prize_pool: tournament?.prize_pool,
+    prizeTiers: prizeTiers?.length 
+  });
+
+  // Get total prize from tournament or calculate
+  let totalPrize = 0;
+  if (tournament.prize_pool && tournament.prize_pool > 0) {
+    totalPrize = tournament.prize_pool;
+  } else if (tournament.entry_fee && tournament.max_participants) {
+    totalPrize = tournament.entry_fee * tournament.max_participants * 0.75;
+  }
+
+  // If we have prize tiers from database, use them
+  if (prizeTiers && prizeTiers.length > 0) {
+    const positions = prizeTiers.map(tier => ({
+      position: tier.position,
+      name: tier.position_name,
+      eloPoints: tier.elo_points,
+      spaPoints: tier.spa_points,
+      cashPrize: tier.cash_amount,
+      items: tier.physical_items || [],
+      isVisible: tier.is_visible
+    }));
+
+    return {
+      totalPrize,
+      showPrizes: totalPrize > 0,
+      positions,
+      specialAwards: []
+    };
+  }
+
+  // Fallback to old calculation if no prize tiers
+  return calculateRewards(tournament);
+};
+
 export const calculateRewards = (
   tournament: any,
   playerRank: RankCode = 'K'
 ): TournamentRewardsCalculation => {
-  console.log('🔍 calculateRewards input:', { 
+  console.log('🔍 calculateRewards (fallback) input:', { 
     tournament_id: tournament?.id,
     prize_pool: tournament?.prize_pool,
     entry_fee: tournament?.entry_fee, 
@@ -47,13 +90,6 @@ export const calculateRewards = (
   }
   
   console.log('🎯 Final totalPrize used:', totalPrize);
-
-  // Calculate prize distribution based on totalPrize
-  const prizeDistribution = {
-    1: Math.floor(totalPrize * 0.5), // 50% for 1st place
-    2: Math.floor(totalPrize * 0.3), // 30% for 2nd place
-    3: Math.floor(totalPrize * 0.2), // 20% for 3rd place
-  };
 
   // Default ELO points based on position
   const eloPoints = {

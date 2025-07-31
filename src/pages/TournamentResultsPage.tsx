@@ -4,6 +4,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { useTournamentResults } from '@/hooks/useTournamentResults';
 import { useTournament } from '@/hooks/useTournament';
 import { TournamentResults } from '@/components/tournament/TournamentResults';
+import { TournamentRewardsSync } from '@/components/admin/TournamentRewardsSync';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Trophy, Calendar, Users, MapPin } from 'lucide-react';
@@ -12,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 export const TournamentResultsPage: React.FC = () => {
   const { tournamentId } = useParams<{ tournamentId: string }>();
   const { tournaments } = useTournament();
-  const { results } = useTournamentResults(tournamentId);
+  const { results, refetch } = useTournamentResults(tournamentId);
 
   if (!tournamentId) {
     return <Navigate to="/tournaments" replace />;
@@ -138,6 +139,13 @@ export const TournamentResultsPage: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Rewards Sync (Debug Tool) */}
+      <TournamentRewardsSync 
+        tournamentId={tournamentId}
+        tournamentName={tournament?.name}
+        onSyncCompleted={refetch}
+      />
 
       {/* Tournament Results */}
       <TournamentResults 
