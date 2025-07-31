@@ -152,7 +152,7 @@ const ResponsiveProfilePage: React.FC = () => {
     }
 
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Desktop Left Sidebar */}

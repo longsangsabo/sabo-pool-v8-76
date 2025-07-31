@@ -14,8 +14,8 @@ const Profile: React.FC = () => {
     userAgent: navigator.userAgent.includes('Mobile')
   });
   
-  // TEMPORARILY FORCE ARENA PROFILE FOR TESTING
-  return <ArenaProfilePage />;
+  // Use responsive profile page instead of arena
+  return <ResponsiveProfilePage />;
 };
 
 export default Profile;
