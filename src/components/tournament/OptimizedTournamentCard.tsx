@@ -318,8 +318,8 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           </Badge>
         </div>
         
-        {tournament.description && !isMobile && (
-          <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+        {tournament.description && (
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-600 line-clamp-2 mt-1`}>
             {tournament.description}
           </p>
         )}
@@ -352,10 +352,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           <span className={`text-xs px-2 py-1 rounded-full ${
             (tournament.max_participants - currentParticipants) > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
           }`}>
-            {isMobile 
-              ? (tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants}` : 'Hết'
-              : (tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants} chỗ` : 'Hết chỗ'
-            }
+            {(tournament.max_participants - currentParticipants) > 0 ? `Còn ${tournament.max_participants - currentParticipants} chỗ` : 'Hết chỗ'}
           </span>
         </div>
 
@@ -395,7 +392,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
             <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
               <div className="flex items-center space-x-2">
                 <Star className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-purple-500`} />
-                <span className="text-gray-700">{isMobile ? 'Hạng:' : 'Hạng tham gia:'}</span>
+                <span className="text-gray-700">Hạng tham gia:</span>
               </div>
               <span className="text-purple-600 font-medium">{rankRange}</span>
             </div>
@@ -404,7 +401,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
 
         {/* Entry Fee */}
         <div className={`flex items-center justify-between ${isMobile ? 'text-xs' : 'text-sm'}`}>
-          <span className="text-gray-700">{isMobile ? 'Lệ phí:' : 'Lệ phí tham gia:'}</span>
+          <span className="text-gray-700">Lệ phí tham gia:</span>
           <span className="font-medium text-gray-900">
             {tournament.entry_fee ? formatCurrency(tournament.entry_fee) : 'Miễn phí'}
           </span>
@@ -414,7 +411,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
         <div className={`bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg ${isMobile ? 'p-2' : 'p-3'} border border-amber-200`}>
           <div className="text-center">
             <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-amber-700 font-medium mb-1`}>
-              {isMobile ? 'GIẢI THƯỞNG' : 'TỔNG GIẢI THƯỞNG'}
+              TỔNG GIẢI THƯỞNG
             </div>
             <div className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold text-amber-800 ${isMobile ? 'mb-1' : 'mb-2'}`}>
               {realTimePrizeInfo.totalPrize > 0 ? formatCurrency(realTimePrizeInfo.totalPrize) : 'Miễn phí tham gia'}
@@ -440,20 +437,20 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
           </span>
         </div>
 
-        {/* Location - Only show on desktop or if very short */}
-        {tournament.venue_address && (!isMobile || tournament.venue_address.length < 30) && (
+        {/* Location */}
+        {tournament.venue_address && (
           <div className={`flex items-center space-x-2 ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>
             <MapPin className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />
             <span className="line-clamp-1">{tournament.venue_address}</span>
           </div>
         )}
 
-        {/* Registration Deadline - Only show on desktop */}
-        {tournament.registration_end && !isMobile && (
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <Clock className="w-4 h-4" />
+        {/* Registration Deadline */}
+        {tournament.registration_end && (
+          <div className={`flex items-center space-x-2 ${isMobile ? 'text-xs' : 'text-sm'} text-gray-600`}>
+            <Clock className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />
             <span>
-              Hạn đăng ký: {formatTournamentDateTime(tournament.registration_end)}
+              {isMobile ? 'Hạn ĐK:' : 'Hạn đăng ký:'} {formatTournamentDateTime(tournament.registration_end)}
             </span>
           </div>
         )}
