@@ -80,11 +80,31 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
     club: c.club || null,
   });
 
+  // Debug logging to understand data flow
+  console.log('🔍 [Mobile Challenges Debug]', {
+    totalChallenges: challenges.length,
+    currentUserId: user?.id,
+    challengesData: challenges.slice(0, 3), // First 3 for inspection
+    rawChallenges: challenges.map(c => ({
+      id: c.id,
+      challenger_id: c.challenger_id,
+      opponent_id: c.opponent_id,
+      status: c.status,
+      challenger_name: c.challenger_profile?.display_name || c.challenger_profile?.full_name
+    }))
+  });
+
   // Use same logic as desktop - get open challenges with proper data transformation
-  const openChallenges = challenges.filter(c => 
-    !c.opponent_id && 
-    c.status === 'pending'
-  ).map(convertToLocalChallenge);
+  const openChallenges = challenges.filter(c => {
+    const isOpen = !c.opponent_id && c.status === 'pending';
+    const isNotMyChallenge = c.challenger_id !== user?.id;
+    return isOpen && isNotMyChallenge;
+  }).map(convertToLocalChallenge);
+
+  console.log('🎯 [Open Challenges Result]', {
+    openChallengesCount: openChallenges.length,
+    openChallengesData: openChallenges.slice(0, 3)
+  });
 
   // Get user's own open challenges
   const userOpenChallenges = challenges.filter(c =>
