@@ -26,7 +26,7 @@ export const ArenaQuickActions: React.FC<ArenaQuickActionsProps> = ({
       title: 'Chỉnh sửa',
       description: 'Cập nhật thông tin cá nhân',
       icon: Edit,
-      onClick: () => window.location.href = '/profile?tab=basic',
+      onClick: () => navigate('/profile?tab=basic'),
       variant: 'default' as const,
       color: 'text-blue-400',
       bgColor: 'bg-blue-400/10'
@@ -44,7 +44,7 @@ export const ArenaQuickActions: React.FC<ArenaQuickActionsProps> = ({
       title: 'Xếp hạng',
       description: 'Xác minh và nâng cấp hạng',
       icon: Shield,
-      onClick: onNavigateToRankTab || (() => window.location.href = '/profile?tab=rank'),
+      onClick: onNavigateToRankTab || (() => navigate('/profile?tab=rank')),
       variant: 'outline' as const,
       color: 'text-yellow-400',
       bgColor: 'bg-yellow-400/10'
@@ -71,7 +71,7 @@ export const ArenaQuickActions: React.FC<ArenaQuickActionsProps> = ({
       title: 'Club',
       description: 'Quản lý câu lạc bộ',
       icon: Building,
-      onClick: onNavigateToClubTab || (() => window.location.href = '/profile?tab=club'),
+      onClick: onNavigateToClubTab || (() => navigate('/profile?tab=club')),
       variant: 'outline' as const,
       color: 'text-purple-400',
       bgColor: 'bg-purple-400/10'
