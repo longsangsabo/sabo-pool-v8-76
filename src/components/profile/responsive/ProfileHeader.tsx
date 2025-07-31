@@ -170,23 +170,23 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, className
             </div>
           </div>
           
-          <div className="flex-1 space-y-2">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground tech-header-title" style={{ fontSize: '20px', textShadow: '0 0 10px hsl(var(--primary) / 0.5)' }}>
+          <div className="flex-1 space-y-3">
+            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-sm">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {profile?.display_name || profile?.full_name || 'Người dùng'}
               </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <Badge className="sabo-tech-border-rank-e bg-primary/20 text-primary border-primary">
+              <div className="flex items-center gap-2">
+                <Badge className="bg-blue-100 text-blue-800 border-blue-200">
                   {profile?.verified_rank || 'Chưa xác thực'}
                 </Badge>
                 {profile?.role === 'admin' && (
-                  <Badge className="sabo-tech-border-warning bg-accent-red/20 text-accent-red border-accent-red">
+                  <Badge className="bg-red-100 text-red-800 border-red-200">
                     <Shield className="w-3 h-3 mr-1" />
                     Admin
                   </Badge>
                 )}
                 {profile?.club_profile && (
-                  <Badge className="sabo-tech-border-secondary bg-accent-blue/20 text-accent-blue border-accent-blue">
+                  <Badge className="bg-green-100 text-green-800 border-green-200">
                     <Users className="w-3 h-3 mr-1" />
                     CLB Owner
                   </Badge>
