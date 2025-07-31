@@ -14,8 +14,8 @@ const Profile: React.FC = () => {
     userAgent: navigator.userAgent.includes('Mobile')
   });
   
-  // Use Arena profile for mobile, responsive profile for desktop
-  return isMobile ? <ArenaProfilePage /> : <ResponsiveProfilePage />;
+  // TEMPORARILY FORCE ARENA PROFILE FOR TESTING
+  return <ArenaProfilePage />;
 };
 
 export default Profile;
