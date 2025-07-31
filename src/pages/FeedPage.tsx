@@ -177,13 +177,28 @@ const FeedPage = () => {
             </div>
           ) : (
             feedPosts.map((post, index) => (
-              <SocialFeedCard 
-                key={`social-${index}`}
-                post={post}
-                onLike={handleLike}
-                onComment={handleComment}
-                onShare={handleShare}
-              />
+              <Card key={`social-${index}`} className='bg-white shadow-sm border border-gray-200'>
+                <CardContent className='p-4'>
+                  <div className='flex items-start gap-3'>
+                    <div className='w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm'>
+                      {post.author?.charAt(0) || 'U'}
+                    </div>
+                    <div className='flex-1'>
+                      <h4 className='font-semibold text-gray-900'>{post.author || 'Người dùng'}</h4>
+                      <p className='text-gray-700 mt-1'>{post.content}</p>
+                      <div className='flex items-center gap-4 mt-3 text-sm text-gray-500'>
+                        <button className='flex items-center gap-1 hover:text-blue-600'>
+                          <span>👍</span> {post.likes || 0}
+                        </button>
+                        <button className='flex items-center gap-1 hover:text-blue-600'>
+                          <span>💬</span> {post.comments || 0}
+                        </button>
+                        <span>{post.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))
           )}
         </TabsContent>
@@ -197,11 +212,20 @@ const FeedPage = () => {
             </div>
           ) : (
             filteredTournaments.map((tournament, index) => (
-              <TournamentFeedCard 
-                key={`tournament-${index}`}
-                tournament={tournament} 
-                onJoin={() => handleJoinTournament(tournament.id)}
-              />
+              <Card key={`tournament-${index}`} className='bg-white shadow-sm border border-gray-200'>
+                <CardContent className='p-4'>
+                  <h4 className='font-semibold text-gray-900'>{tournament.name}</h4>
+                  <p className='text-gray-600 text-sm mt-1'>{tournament.description}</p>
+                  <div className='flex items-center justify-between mt-3'>
+                    <span className='text-sm text-gray-500'>
+                      Giải thưởng: {tournament.prize_pool?.toLocaleString() || '0'} VNĐ
+                    </span>
+                    <Button size="sm" onClick={() => handleJoinTournament(tournament.id)}>
+                      Tham gia
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))
           )}
         </TabsContent>
@@ -215,33 +239,39 @@ const FeedPage = () => {
             </div>
           ) : (
             filteredChallenges.map((challenge, index) => (
-              <EnhancedChallengeCard 
-                key={`challenge-${index}`}
-                challenge={challenge} 
-                onAction={(action) => handleChallengeAction(action, challenge.id)}
-              />
+              <Card key={`challenge-${index}`} className='bg-white shadow-sm border border-gray-200'>
+                <CardContent className='p-4'>
+                  <h4 className='font-semibold text-gray-900'>
+                    Thách đấu {challenge.bet_points || 0} điểm
+                  </h4>
+                  <p className='text-gray-600 text-sm mt-1'>
+                    Từ: {challenge.challenger_profile?.full_name || 'Người chơi'}
+                  </p>
+                  <div className='flex gap-2 mt-3'>
+                    <Button size="sm" onClick={() => handleChallengeAction('accept', challenge.id)}>
+                      Chấp nhận
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => handleChallengeAction('decline', challenge.id)}>
+                      Từ chối
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))
           )}
         </TabsContent>
       </div>
 
-      {/* Floating Action Button */}
+      {/* Simple Create Post Button */}
       <div className='fixed bottom-20 right-4 z-50'>
         <Button 
           size="lg"
           className='w-14 h-14 rounded-full bg-primary hover:bg-primary/90'
-          onClick={() => setIsCreateModalOpen(true)}
+          onClick={() => toast.info('Tính năng tạo bài viết đang phát triển')}
         >
           <Plus className="h-6 w-6" />
         </Button>
       </div>
-
-      {/* Create Post Modal */}
-      <CreatePostModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreatePost}
-      />
     </div>
     </>
   );

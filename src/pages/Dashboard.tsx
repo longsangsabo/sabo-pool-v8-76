@@ -98,99 +98,97 @@ const Dashboard = () => {
         <meta name="description" content="Theo dõi hoạt động của cộng đồng billiards SABO Arena" />
       </Helmet>
 
-      <MobileLayout>
+      <div 
+        ref={combinedRef}
+        className="min-h-screen bg-background overflow-auto"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={getContainerStyle()}
+      >
+        {/* Pull to refresh indicator */}
         <div 
-          ref={combinedRef}
-          className="min-h-screen bg-background overflow-auto"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={getContainerStyle()}
+          className="flex justify-center items-center py-4"
+          style={getRefreshIndicatorStyle()}
         >
-          {/* Pull to refresh indicator */}
-          <div 
-            className="flex justify-center items-center py-4"
-            style={getRefreshIndicatorStyle()}
-          >
-            <RefreshCw 
-              className={`w-6 h-6 text-primary ${
-                isPullRefreshing || loading ? 'animate-spin' : ''
-              }`} 
-            />
-          </div>
-
-          {/* Story Reel with real data */}
-          <MobileStoryReel stories={stories} />
-
-          {/* Social Feed */}
-          <div className="px-4 space-y-4 pb-4">
-            {/* Loading state */}
-            {loading && feedPosts.length === 0 && (
-              <div className="text-center py-8">
-                <RefreshCw className="w-8 h-8 animate-spin mx-auto text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mt-2">Đang tải feed...</p>
-              </div>
-            )}
-
-            {/* Error state */}
-            {error && (
-              <div className="text-center py-8">
-                <p className="text-sm text-destructive">{error}</p>
-                <button 
-                  onClick={refreshFeed}
-                  className="text-sm text-primary hover:underline mt-2"
-                >
-                  Thử lại
-                </button>
-              </div>
-            )}
-
-            {/* Feed content */}
-            {!loading && !error && visibleItems.map((post) => (
-              <MobileFeedCard
-                key={post.id}
-                post={post}
-                onLike={handleLike}
-                onComment={handleComment}
-                onShare={handleShare}
-                onAction={handleAction}
-              />
-            ))}
-
-            {/* Load more indicator */}
-            {hasMore && !loading && (
-              <div className="text-center py-4">
-                <button
-                  onClick={loadMore}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {isLoadingMore ? 'Đang tải...' : 'Xem thêm'}
-                </button>
-              </div>
-            )}
-
-            {/* End of feed indicator */}
-            {!hasMore && feedPosts.length > 0 && !loading && (
-              <div className="text-center py-8 text-muted-foreground">
-                <div className="text-sm">🎱</div>
-                <div className="text-xs mt-2">Bạn đã xem hết feed rồi!</div>
-              </div>
-            )}
-
-            {/* Empty state */}
-            {!loading && !error && feedPosts.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-4xl mb-2">🎱</div>
-                <p className="text-sm text-muted-foreground">Chưa có hoạt động nào</p>
-                <p className="text-xs text-muted-foreground mt-1">Hãy tham gia một trận đấu hoặc tạo thách đấu!</p>
-              </div>
-            )}
-          </div>
-
-          {/* Floating Action Button */}
-          <MobileFloatingActionButton primaryAction={handleFABAction} />
+          <RefreshCw 
+            className={`w-6 h-6 text-primary ${
+              isPullRefreshing || loading ? 'animate-spin' : ''
+            }`} 
+          />
         </div>
-      </MobileLayout>
+
+        {/* Story Reel with real data */}
+        <MobileStoryReel stories={stories} />
+
+        {/* Social Feed */}
+        <div className="px-4 space-y-4 pb-4">
+          {/* Loading state */}
+          {loading && feedPosts.length === 0 && (
+            <div className="text-center py-8">
+              <RefreshCw className="w-8 h-8 animate-spin mx-auto text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mt-2">Đang tải feed...</p>
+            </div>
+          )}
+
+          {/* Error state */}
+          {error && (
+            <div className="text-center py-8">
+              <p className="text-sm text-destructive">{error}</p>
+              <button 
+                onClick={refreshFeed}
+                className="text-sm text-primary hover:underline mt-2"
+              >
+                Thử lại
+              </button>
+            </div>
+          )}
+
+          {/* Feed content */}
+          {!loading && !error && visibleItems.map((post) => (
+            <MobileFeedCard
+              key={post.id}
+              post={post}
+              onLike={handleLike}
+              onComment={handleComment}
+              onShare={handleShare}
+              onAction={handleAction}
+            />
+          ))}
+
+          {/* Load more indicator */}
+          {hasMore && !loading && (
+            <div className="text-center py-4">
+              <button
+                onClick={loadMore}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {isLoadingMore ? 'Đang tải...' : 'Xem thêm'}
+              </button>
+            </div>
+          )}
+
+          {/* End of feed indicator */}
+          {!hasMore && feedPosts.length > 0 && !loading && (
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="text-sm">🎱</div>
+              <div className="text-xs mt-2">Bạn đã xem hết feed rồi!</div>
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!loading && !error && feedPosts.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-4xl mb-2">🎱</div>
+              <p className="text-sm text-muted-foreground">Chưa có hoạt động nào</p>
+              <p className="text-xs text-muted-foreground mt-1">Hãy tham gia một trận đấu hoặc tạo thách đấu!</p>
+            </div>
+          )}
+        </div>
+
+        {/* Floating Action Button */}
+        <MobileFloatingActionButton primaryAction={handleFABAction} />
+      </div>
     </>
   );
 };
