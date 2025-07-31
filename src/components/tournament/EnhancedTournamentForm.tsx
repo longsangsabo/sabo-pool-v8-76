@@ -512,45 +512,47 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                    {/* Tournament Schedule */}
                    <div className="grid grid-cols-2 gap-3">
                      <div className="space-y-1">
-                       <Label htmlFor="tournament_start" className="text-sm font-medium flex items-center gap-1">
-                         <Calendar className="h-3 w-3 text-blue-600" />
-                         <span className="w-1 h-1 bg-destructive rounded-full"></span>
-                         Bắt đầu
-                       </Label>
-                       <DateTimePicker
-                         date={tournament?.tournament_start ? new Date(tournament.tournament_start) : undefined}
-                         onSelect={(date) => {
-                           const isoString = date ? date.toISOString() : '';
-                           setValue('tournament_start', isoString, { shouldValidate: true });
-                         }}
-                         placeholder="Chọn ngày bắt đầu"
-                         className={`${formErrors.tournament_start ? 'border-destructive' : ''}`}
-                       />
-                       {formErrors.tournament_start && (
-                         <p className="text-xs text-destructive">{String(formErrors.tournament_start.message)}</p>
-                       )}
-                     </div>
+                        <Label htmlFor="tournament_start" className="text-sm font-medium flex items-center gap-1">
+                          <Calendar className="h-3 w-3 text-blue-600" />
+                          <span className="w-1 h-1 bg-destructive rounded-full"></span>
+                          Bắt đầu
+                        </Label>
+                        <DateTimePicker
+                          date={form.watch('tournament_start') ? new Date(form.watch('tournament_start')) : undefined}
+                          onSelect={(date) => {
+                            const isoString = date ? date.toISOString() : '';
+                            setValue('tournament_start', isoString, { shouldValidate: true });
+                            updateTournament({ tournament_start: isoString });
+                          }}
+                          placeholder="Chọn ngày bắt đầu"
+                          className={`${formErrors.tournament_start ? 'border-destructive' : ''}`}
+                        />
+                        {formErrors.tournament_start && (
+                          <p className="text-xs text-destructive">{String(formErrors.tournament_start.message)}</p>
+                        )}
+                      </div>
 
-                     <div className="space-y-1">
-                       <Label htmlFor="tournament_end" className="text-sm font-medium flex items-center gap-1">
-                         <Calendar className="h-3 w-3 text-blue-600" />
-                         <span className="w-1 h-1 bg-destructive rounded-full"></span>
-                         Kết thúc
-                       </Label>
-                       <DateTimePicker
-                         date={tournament?.tournament_end ? new Date(tournament.tournament_end) : undefined}
-                         onSelect={(date) => {
-                           const isoString = date ? date.toISOString() : '';
-                           setValue('tournament_end', isoString, { shouldValidate: true });
-                         }}
-                         placeholder="Chọn ngày kết thúc"
-                         className={`${formErrors.tournament_end ? 'border-destructive' : ''}`}
-                       />
-                       {formErrors.tournament_end && (
-                         <p className="text-xs text-destructive">{String(formErrors.tournament_end.message)}</p>
-                       )}
-                     </div>
-                   </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="tournament_end" className="text-sm font-medium flex items-center gap-1">
+                          <Calendar className="h-3 w-3 text-blue-600" />
+                          <span className="w-1 h-1 bg-destructive rounded-full"></span>
+                          Kết thúc
+                        </Label>
+                        <DateTimePicker
+                          date={form.watch('tournament_end') ? new Date(form.watch('tournament_end')) : undefined}
+                          onSelect={(date) => {
+                            const isoString = date ? date.toISOString() : '';
+                            setValue('tournament_end', isoString, { shouldValidate: true });
+                            updateTournament({ tournament_end: isoString });
+                          }}
+                          placeholder="Chọn ngày kết thúc"
+                          className={`${formErrors.tournament_end ? 'border-destructive' : ''}`}
+                        />
+                        {formErrors.tournament_end && (
+                          <p className="text-xs text-destructive">{String(formErrors.tournament_end.message)}</p>
+                        )}
+                      </div>
+                    </div>
 
                    {/* Description */}
                    <div className="space-y-1">
