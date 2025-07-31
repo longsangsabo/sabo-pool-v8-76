@@ -204,7 +204,145 @@
   color: hsl(var(--muted-foreground));
 }
 
-/* SABO ARENA - Modern Mobile-First Design System with Light/Dark Mode */
+/* SABO ARENA - Fixed Mobile Layout Styles */
+/* Fixed SABO ARENA Header */
+.sabo-arena-header-fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 0;
+  position: relative;
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #e2e8f0;
+  text-shadow: 0 0 10px rgba(251, 146, 60, 0.5);
+}
+
+.logo-center-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sabo-triangle-icon {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 20px solid #fb923c;
+  filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.8));
+}
+
+/* Fixed Avatar Mirror Symmetry */
+.avatar-mirror-container-fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 8px;
+}
+
+.avatar-mirror-left, .avatar-mirror-right {
+  display: flex;
+  align-items: center;
+  gap: -10px;
+}
+
+.mirror-avatar-1 { 
+  width: 60px; height: 60px; opacity: 0.7; 
+  border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.3);
+}
+.mirror-avatar-2 { 
+  width: 50px; height: 50px; opacity: 0.5; 
+  border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.mirror-avatar-3 { 
+  width: 40px; height: 40px; opacity: 0.3; 
+  border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.avatar-main {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  border: 3px solid #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+/* User Info Section */
+.user-info-section {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.username-display {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.rank-badge-display {
+  display: inline-block;
+  background: linear-gradient(45deg, #fbbf24, #f59e0b);
+  color: #92400e;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* Horizontal Stats Layout */
+.arena-stats-horizontal {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 16px;
+  gap: 8px;
+}
+
+.stat-card-compact {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.stat-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.stat-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+  /* SABO ARENA - Modern Mobile-First Design System with Light/Dark Mode */
 @layer base {
   :root {
     /* Dark Theme (Default) - Enhanced contrast for better readability */

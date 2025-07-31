@@ -9,6 +9,7 @@ import { ArenaProfileContent } from './arena/ArenaProfileContent';
 import { ArenaQuickActions } from './arena/ArenaQuickActions';
 import { ArenaActivities } from './arena/ArenaActivities';
 import ProfileErrorBoundary from './ProfileErrorBoundary';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -88,7 +89,12 @@ const HybridArenaProfile: React.FC = () => {
   const renderContent = () => {
     if (isMobile) {
       return (
-        <div className="profile-page-arena">
+        <div className="profile-page-arena min-h-screen relative">
+          {/* Theme Toggle Button */}
+          <div className="theme-toggle-container">
+            <ThemeToggle />
+          </div>
+          
           <div className="container mx-auto px-4 py-6 space-y-6">
             {/* Arena Logo */}
             <ArenaLogo />
