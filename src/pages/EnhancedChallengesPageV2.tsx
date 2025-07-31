@@ -84,7 +84,196 @@ interface ChallengeStats {
   winRate: number;
 }
 
+// Mock challenge data for demo
+const mockChallenges = [
+  {
+    id: '1',
+    challenger: {
+      name: 'Nguyễn Văn A',
+      avatar: '/placeholder-avatar.png',
+      rank: 'PRO',
+      winRate: 85,
+      totalMatches: 120
+    },
+    type: 'ranked' as const,
+    stakes: 500000,
+    handicap: { challenger: 9, opponent: 8 },
+    timeRemaining: '2 giờ',
+    message: 'Thách đấu ai dám không? Tôi đang trong form tốt nhất!'
+  },
+  {
+    id: '2',
+    challenger: {
+      name: 'Trần Thị B',
+      avatar: '/placeholder-avatar.png',
+      rank: 'EXPERT',
+      winRate: 92,
+      totalMatches: 89
+    },
+    type: 'casual' as const,
+    stakes: 200000,
+    handicap: { challenger: 7, opponent: 7 },
+    timeRemaining: '45 phút',
+    message: 'Chơi thư giãn một ván nhé, ai thua mua cafe!'
+  }
+];
+
 const EnhancedChallengesPageV2: React.FC = () => {
+  const [challenges, setChallenges] = useState(mockChallenges);
+  const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
+  const [isCreatingChallenge, setIsCreatingChallenge] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    // Apply tech theme to body when component mounts
+    document.body.classList.add('tech-theme');
+    console.log('🎯 Tech theme applied to ChallengesPage');
+
+    return () => {
+      // Clean up - remove tech theme when component unmounts
+      document.body.classList.remove('tech-theme');
+      console.log('🔧 Tech theme removed from ChallengesPage');
+    };
+  }, []);
+
+  const handleSwipe = (direction: 'left' | 'right', challengeId: string) => {
+    const action = direction === 'right' ? 'CHẤP NHẬN' : 'TỪ CHỐI';
+    toast.success(`${action} thách đấu thành công!`);
+    
+    // Remove the swiped challenge and show next one
+    setChallenges(prev => prev.filter(c => c.id !== challengeId));
+    setCurrentChallengeIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const handleAccept = () => {
+    const currentChallenge = challenges[currentChallengeIndex];
+    if (currentChallenge) {
+      handleSwipe('right', currentChallenge.id);
+    }
+  };
+
+  const handleReject = () => {
+    const currentChallenge = challenges[currentChallengeIndex];
+    if (currentChallenge) {
+      handleSwipe('left', currentChallenge.id);
+    }
+  };
+
+  const handleCreateChallenge = () => {
+    if (!user) {
+      toast.error('Bạn cần đăng nhập để tạo thách đấu');
+      return;
+    }
+    setIsCreatingChallenge(true);
+    toast.info('Tính năng tạo thách đấu đang được phát triển');
+  };
+
+  const stats = [
+    {
+      label: 'THÁCH ĐẤU MỞ',
+      value: challenges.length,
+      icon: <Swords className="w-5 h-5" />,
+      variant: 'primary' as const
+    },
+    {
+      label: 'TỶ LỆ THẮNG',
+      value: '87%',
+      icon: <Trophy className="w-5 h-5" />,
+      variant: 'success' as const
+    },
+    {
+      label: 'TỔNG TRẬN',
+      value: 156,
+      icon: <Target className="w-5 h-5" />,
+      variant: 'warning' as const
+    },
+    {
+      label: 'XẾP HẠNG',
+      value: 'PRO',
+      icon: <Users className="w-5 h-5" />,
+      variant: 'danger' as const
+    }
+  ];
+
+  const currentChallenge = challenges[currentChallengeIndex];
+
+  return (
+    <div className="tech-challenges-page">
+      <TechChallengesHeader liveChallengesCount={challenges.length} />
+      
+      <TechChallengeFab onCreateChallenge={handleCreateChallenge} />
+
+      {/* Tech Stats Grid */}
+      <div className="tech-stats-grid">
+        {stats.map((stat, index) => (
+          <TechStatCard
+            key={index}
+            label={stat.label}
+            value={stat.value}
+            icon={stat.icon}
+            variant={stat.variant}
+          />
+        ))}
+      </div>
+
+      {/* Challenge Cards Container */}
+      <div className="tech-challenge-cards-container">
+        {challenges.length === 0 ? (
+          <div className="challenges-empty-state">
+            <Swords className="empty-state-icon" />
+            <h3 className="empty-state-title">KHÔNG CÓ THÁCH ĐẤU NÀO</h3>
+            <p className="empty-state-description">
+              Hiện tại không có thách đấu nào. Hãy tạo thách đấu mới để bắt đầu!
+            </p>
+            <TechButton
+              variant="primary"
+              onClick={handleCreateChallenge}
+              className="mt-4"
+            >
+              TẠO THÁCH ĐẤU ĐẦU TIÊN
+            </TechButton>
+          </div>
+        ) : (
+          <>
+            <div className="challenge-cards-stack">
+              {challenges.map((challenge, index) => (
+                <SwipeableChallengeCard
+                  key={challenge.id}
+                  challenge={challenge}
+                  onSwipe={handleSwipe}
+                  onAccept={handleAccept}
+                  onReject={handleReject}
+                  style={{ zIndex: challenges.length - index }}
+                  className={index === currentChallengeIndex ? 'active' : ''}
+                />
+              ))}
+            </div>
+
+            {/* Manual Action Buttons */}
+            <div className="challenge-action-buttons">
+              <TechButton
+                variant="danger"
+                size="lg"
+                onClick={handleReject}
+                className="reject-btn"
+              >
+                TỪ CHỐI
+              </TechButton>
+              
+              <TechButton
+                variant="success"
+                size="lg"
+                onClick={handleAccept}
+                className="accept-btn"
+              >
+                CHẤP NHẬN
+              </TechButton>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
   const { user } = useAuth();
   const { isDesktop, isMobile, width } = useResponsive();
   
