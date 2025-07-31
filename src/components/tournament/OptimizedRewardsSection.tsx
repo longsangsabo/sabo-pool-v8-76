@@ -431,21 +431,34 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
           <h3 className="font-semibold text-lg">Phần thưởng theo vị trí</h3>
           
           {(displayRewards.positions && displayRewards.positions.length > 0) ? (
-            <div className={showAsTemplate ? "space-y-2 max-h-96 overflow-y-auto" : "grid gap-4"}>
-              {displayRewards.positions.map((position) => {
-                const templateData = showAsTemplate ? getTemplateRewardData(position.position) : null;
+            <div className="space-y-2">
+              {/* Display all positions from 1 to 16 */}
+              {Array.from({ length: Math.min(maxParticipants, 16) }, (_, i) => i + 1).map((positionNumber) => {
+                const position = displayRewards.positions.find(p => p.position === positionNumber);
+                const templateData = showAsTemplate ? getTemplateRewardData(positionNumber) : null;
+                
+                // If no position data exists for this position, create default one
+                const displayPosition = position || {
+                  position: positionNumber,
+                  name: `Hạng ${positionNumber}`,
+                  eloPoints: positionNumber <= 8 ? 25 : 10,
+                  spaPoints: positionNumber <= 8 ? 300 : 100,
+                  cashPrize: 0,
+                  items: [],
+                  isVisible: true
+                };
                 
                 return showAsTemplate ? (
                   // Template display format
                   <div
-                    key={position.position}
+                    key={positionNumber}
                     className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                   >
                     <div className="flex items-center gap-3">
                       {templateData?.icon}
                       <div>
                         <Badge className={templateData?.badge.className}>
-                          {position.name}
+                          {displayPosition.name}
                         </Badge>
                       </div>
                     </div>
@@ -454,7 +467,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                       {/* Physical Rewards */}
                       <div className="text-center">
                         <div className="text-lg">
-                          {getPhysicalRewardIcons(position.items)}
+                          {getPhysicalRewardIcons(displayPosition.items)}
                         </div>
                         <p className="text-xs text-muted-foreground">Hiện vật</p>
                       </div>
@@ -462,7 +475,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                       {/* Prize Money */}
                       <div className="text-center">
                         <p className="font-semibold text-yellow-600">
-                          {formatCurrency(position.cashPrize)}
+                          {formatCurrency(displayPosition.cashPrize)}
                         </p>
                         <p className="text-xs text-muted-foreground">Tiền thưởng</p>
                       </div>
@@ -471,7 +484,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-blue-600">
                           <Coins className="w-4 h-4" />
-                          <span className="font-semibold">{position.spaPoints}</span>
+                          <span className="font-semibold">{displayPosition.spaPoints}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">SPA</p>
                       </div>
@@ -480,7 +493,7 @@ export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = (
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-green-600">
                           <Target className="w-4 h-4" />
-                          <span className="font-semibold">+{position.eloPoints}</span>
+                          <span className="font-semibold">+{displayPosition.eloPoints}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">ELO</p>
                       </div>
