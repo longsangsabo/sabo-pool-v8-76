@@ -32,6 +32,8 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
       elo_points_awarded: prizeTier?.elo_points || result.elo_points_awarded,
       prize_amount: prizeTier?.cash_amount || result.prize_amount,
       physical_rewards: prizeTier?.physical_items || result.physical_rewards || [],
+      // Fix verified_rank display
+      verified_rank: result.verified_rank || 'Unranked',
       position_name: prizeTier?.position_name || 
         (result.final_position === 1 ? 'Vô địch' : 
          result.final_position === 2 ? 'Á quân' : 
@@ -161,7 +163,7 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
                 </div>
                 
                 <div className="text-center">
-                  <p className="font-semibold text-blue-600">{result.win_percentage.toFixed(1)}%</p>
+                  <p className="font-semibold text-blue-600">{result.win_percentage?.toFixed(1) || '0.0'}%</p>
                   <p className="text-xs text-muted-foreground">Tỷ lệ thắng</p>
                 </div>
                 
@@ -177,10 +179,11 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
                 
                 <div className="text-center">
                   <p className="font-semibold text-green-700">
-                    {new Intl.NumberFormat('vi-VN', { 
+                    {result.prize_amount > 0 ? new Intl.NumberFormat('vi-VN', { 
                       style: 'currency', 
-                      currency: 'VND' 
-                    }).format(result.prize_amount)}
+                      currency: 'VND',
+                      minimumFractionDigits: 0
+                    }).format(result.prize_amount) : '0₫'}
                   </p>
                   <p className="text-xs text-muted-foreground">Tiền thưởng</p>
                 </div>
