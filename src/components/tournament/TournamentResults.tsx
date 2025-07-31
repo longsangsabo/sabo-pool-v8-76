@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useTournamentResults } from '@/hooks/useTournamentResults';
+import { useTournamentPrizeTiers } from '@/hooks/useTournamentPrizeTiers';
 import { TournamentResultWithPlayer } from '@/types/tournamentResults';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,25 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
   maxResults 
 }) => {
   const { results, loading, error } = useTournamentResults(tournamentId);
+  const { prizeTiers } = useTournamentPrizeTiers(tournamentId);
+
+  // Combine results with prize tier configuration
+  const enhancedResults = results.map(result => {
+    const prizeTier = prizeTiers.find(tier => tier.position === result.final_position);
+    return {
+      ...result,
+      // Override with prize tier configuration if available
+      spa_points_earned: prizeTier?.spa_points || result.spa_points_earned,
+      elo_points_awarded: prizeTier?.elo_points || result.elo_points_awarded,
+      prize_amount: prizeTier?.cash_amount || result.prize_amount,
+      physical_rewards: prizeTier?.physical_items || result.physical_rewards || [],
+      position_name: prizeTier?.position_name || 
+        (result.final_position === 1 ? 'Vô địch' : 
+         result.final_position === 2 ? 'Á quân' : 
+         result.final_position === 3 ? 'Hạng 3' : 
+         `Hạng ${result.final_position}`)
+    };
+  });
 
   if (loading) {
     return (
@@ -59,7 +79,7 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
     );
   }
 
-  const displayResults = maxResults ? results.slice(0, maxResults) : results;
+  const displayResults = maxResults ? enhancedResults.slice(0, maxResults) : enhancedResults;
 
   const getPositionIcon = (position: number) => {
     switch (position) {
@@ -178,9 +198,9 @@ export const TournamentResults: React.FC<TournamentResultsProps> = ({
           </div>
         ))}
         
-        {maxResults && results.length > maxResults && (
+        {maxResults && enhancedResults.length > maxResults && (
           <div className="text-center text-sm text-muted-foreground">
-            Hiển thị {maxResults} trong {results.length} kết quả
+            Hiển thị {maxResults} trong {enhancedResults.length} kết quả
           </div>
         )}
       </CardContent>
