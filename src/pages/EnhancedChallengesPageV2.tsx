@@ -224,112 +224,156 @@ const EnhancedChallengesPageV2: React.FC = () => {
     return (
       <Card
         key={challenge.id}
-        className="hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-l-primary/20"
+        className="group relative h-full bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer transform hover:-translate-y-1 hover:bg-card/80"
         onClick={() => handleChallengeClick(challenge)}
       >
-        <CardHeader className="pb-3">
+        {/* Status accent line */}
+        <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-lg ${
+          challenge.status === 'pending' ? 'bg-gradient-to-r from-amber-400 to-yellow-500' :
+          challenge.status === 'accepted' ? 'bg-gradient-to-r from-emerald-400 to-green-500' :
+          challenge.status === 'completed' ? 'bg-gradient-to-r from-blue-400 to-indigo-500' :
+          'bg-gradient-to-r from-gray-400 to-slate-500'
+        }`} />
+
+        <CardHeader className="pb-4 pt-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <StatusIcon className="w-4 h-4" />
-              <CardTitle className="text-base">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-full transition-colors duration-200 ${
+                challenge.status === 'pending' ? 'bg-amber-50 text-amber-600 group-hover:bg-amber-100' :
+                challenge.status === 'accepted' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100' :
+                challenge.status === 'completed' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-100' :
+                'bg-gray-50 text-gray-600 group-hover:bg-gray-100'
+              }`}>
+                <StatusIcon className="w-4 h-4" />
+              </div>
+              <CardTitle className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                 Thách đấu #{challenge.id.slice(-6)}
               </CardTitle>
             </div>
             <div className="flex items-center gap-2">
               {canRespond && (
-                <Bell className="w-4 h-4 text-amber-500 animate-pulse" />
+                <div className="animate-pulse">
+                  <Bell className="w-4 h-4 text-amber-500" />
+                </div>
               )}
-              <Badge className={statusInfo.color}>
+              <Badge className={`${statusInfo.color} border-0 font-medium shadow-sm`}>
                 {statusInfo.text}
               </Badge>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5 pb-6">
           {/* Players */}
-          <div className="grid grid-cols-3 gap-2 items-center">
+          <div className="grid grid-cols-3 gap-4 items-center">
             {/* Challenger */}
-            <div className="text-center space-y-1">
-              <Avatar className="w-10 h-10 mx-auto">
-                <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-                <AvatarFallback className="text-xs">
-                  {challenge.challenger_profile?.full_name?.[0] || 'C'}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-xs">
-                <div className="font-medium truncate">
+            <div className="text-center space-y-2">
+              <div className="relative">
+                <Avatar className="w-12 h-12 mx-auto ring-2 ring-border/20 transition-all duration-200 group-hover:ring-primary/30 group-hover:scale-105">
+                  <AvatarImage src={challenge.challenger_profile?.avatar_url} />
+                  <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-primary/10 to-primary/20 text-primary">
+                    {challenge.challenger_profile?.full_name?.[0] || 'C'}
+                  </AvatarFallback>
+                </Avatar>
+                {isChallenger && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">Me</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-xs space-y-0.5">
+                <div className="font-semibold text-foreground truncate">
                   {challenge.challenger_profile?.full_name || 'Thách đấu'}
                 </div>
-                <div className="text-gray-500">
-                  {challenge.challenger_profile?.current_rank || 'K'}
+                <div className="text-muted-foreground font-medium">
+                  Hạng {challenge.challenger_profile?.current_rank || 'K'}
                 </div>
               </div>
               {challenge.challenger_id && (
-                <TrustScoreBadge playerId={challenge.challenger_id} />
+                <div className="scale-90">
+                  <TrustScoreBadge playerId={challenge.challenger_id} />
+                </div>
               )}
             </div>
 
             {/* VS & Bet */}
-            <div className="text-center space-y-1">
-              <div className="text-lg font-bold text-gray-400">VS</div>
-              <div className="flex items-center justify-center gap-1 bg-yellow-50 rounded px-2 py-1">
-                <DollarSign className="w-3 h-3 text-yellow-600" />
-                <span className="text-xs font-bold text-yellow-800">
-                  {challenge.bet_points}
-                </span>
+            <div className="text-center space-y-2">
+              <div className="text-xl font-bold text-muted-foreground/60 tracking-wider">VS</div>
+              <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200/50 rounded-lg px-3 py-2 shadow-sm">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <DollarSign className="w-4 h-4 text-amber-600" />
+                  <span className="text-sm font-bold text-amber-800">
+                    {challenge.bet_points}
+                  </span>
+                </div>
+                <div className="text-xs font-medium text-amber-600">SPA điểm</div>
               </div>
-              <div className="text-xs text-gray-500">
-                Race {challenge.race_to || 5}
+              <div className="text-xs text-muted-foreground font-medium">
+                Race to {challenge.race_to || 5}
               </div>
             </div>
 
             {/* Opponent */}
-            <div className="text-center space-y-1">
-              <Avatar className="w-10 h-10 mx-auto">
-                <AvatarImage src={challenge.opponent_profile?.avatar_url} />
-                <AvatarFallback className="text-xs">
-                  {challenge.opponent_profile?.full_name?.[0] || 'O'}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-xs">
-                <div className="font-medium truncate">
+            <div className="text-center space-y-2">
+              <div className="relative">
+                <Avatar className="w-12 h-12 mx-auto ring-2 ring-border/20 transition-all duration-200 group-hover:ring-primary/30 group-hover:scale-105">
+                  <AvatarImage src={challenge.opponent_profile?.avatar_url} />
+                  <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-secondary/10 to-secondary/20 text-secondary-foreground">
+                    {challenge.opponent_profile?.full_name?.[0] || 'O'}
+                  </AvatarFallback>
+                </Avatar>
+                {!isChallenger && challenge.opponent_id === user?.id && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">Me</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-xs space-y-0.5">
+                <div className="font-semibold text-foreground truncate">
                   {challenge.opponent_profile?.full_name || 'Đối thủ'}
                 </div>
-                <div className="text-gray-500">
-                  {challenge.opponent_profile?.current_rank || 'K'}
+                <div className="text-muted-foreground font-medium">
+                  Hạng {challenge.opponent_profile?.current_rank || 'K'}
                 </div>
               </div>
               {challenge.opponent_id && (
-                <TrustScoreBadge playerId={challenge.opponent_id} />
+                <div className="scale-90">
+                  <TrustScoreBadge playerId={challenge.opponent_id} />
+                </div>
               )}
             </div>
           </div>
 
           {/* Details */}
-          <div className="space-y-2 text-xs text-gray-600">
+          <div className="space-y-3 pt-2 border-t border-border/50">
             {challenge.club_profiles && (
-              <div className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                <span className="truncate">{challenge.club_profiles.club_name}</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="p-1.5 rounded-md bg-secondary/30">
+                  <MapPin className="w-3.5 h-3.5" />
+                </div>
+                <span className="truncate font-medium">{challenge.club_profiles.club_name}</span>
               </div>
             )}
             
             {challenge.scheduled_time && (
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span>{new Date(challenge.scheduled_time).toLocaleDateString('vi-VN')}</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="p-1.5 rounded-md bg-secondary/30">
+                  <Calendar className="w-3.5 h-3.5" />
+                </div>
+                <span className="font-medium">{new Date(challenge.scheduled_time).toLocaleDateString('vi-VN')}</span>
               </div>
             )}
 
             {challenge.message && (
-              <div className="flex items-start gap-1">
-                <MessageSquare className="w-3 h-3 mt-0.5" />
-                <span className="truncate message-text">"{challenge.message}"</span>
+              <div className="bg-secondary/20 rounded-md p-3 border border-border/30">
+                <div className="flex items-start gap-2">
+                  <MessageSquare className="w-3.5 h-3.5 mt-0.5 text-muted-foreground" />
+                  <span className="text-sm text-foreground/90 italic line-clamp-2">"{challenge.message}"</span>
+                </div>
               </div>
             )}
 
-            <div className="flex justify-between text-gray-400">
+            <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-border/30">
               <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
               <span>HH: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
             </div>
@@ -343,90 +387,110 @@ const EnhancedChallengesPageV2: React.FC = () => {
     return (
       <Card
         key={challenge.id}
-        className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-green-400"
+        className="group relative h-full bg-gradient-to-br from-emerald-50/50 to-green-50/50 backdrop-blur-sm border border-emerald-200/50 hover:border-emerald-300/70 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:from-emerald-50/70 hover:to-green-50/70"
       >
-        <CardHeader className="pb-3">
+        {/* Gradient accent line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 rounded-t-lg" />
+        
+        {/* Open challenge indicator */}
+        <div className="absolute top-3 right-3 animate-pulse">
+          <div className="w-3 h-3 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/30"></div>
+        </div>
+
+        <CardHeader className="pb-4 pt-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-green-600" />
-              <CardTitle className="text-base text-green-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors duration-200">
+                <Users className="w-4 h-4" />
+              </div>
+              <CardTitle className="text-base font-semibold text-emerald-700 group-hover:text-emerald-800 transition-colors">
                 Thách đấu mở #{challenge.id.slice(-6)}
               </CardTitle>
             </div>
-            <Badge className="bg-green-100 text-green-800">
-              Mở - Chờ đối thủ
+            <Badge className="bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 border-0 font-medium shadow-sm">
+              🌟 Mở - Chờ đối thủ
             </Badge>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5 pb-6">
           {/* Challenger Info */}
-          <div className="flex items-center gap-3">
-            <Avatar className="w-12 h-12">
+          <div className="flex items-center gap-4 p-3 bg-white/50 rounded-lg border border-emerald-100/50">
+            <Avatar className="w-14 h-14 ring-2 ring-emerald-200/50 transition-all duration-200 group-hover:ring-emerald-300/70 group-hover:scale-105">
               <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-              <AvatarFallback>
+              <AvatarFallback className="text-base font-semibold bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-700">
                 {challenge.challenger_profile?.full_name?.[0] || 'C'}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1">
-              <div className="font-medium">
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-foreground text-base truncate">
                 {challenge.challenger_profile?.full_name || 'Thách đấu'}
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground font-medium">
                 Hạng: {challenge.challenger_profile?.current_rank || 'K'}
               </div>
             </div>
             {challenge.challenger_id && (
-              <TrustScoreBadge playerId={challenge.challenger_id} />
+              <div className="flex-shrink-0">
+                <TrustScoreBadge playerId={challenge.challenger_id} />
+              </div>
             )}
           </div>
 
           {/* Challenge Details */}
-          <div className="bg-green-50 rounded-lg p-3 space-y-2">
+          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50 rounded-lg p-4 space-y-3 shadow-sm">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold">Mức cược:</span>
-              <span className="font-bold text-green-600 text-lg">
-                {challenge.bet_points} điểm SPA
-              </span>
+              <span className="text-sm font-semibold text-emerald-700">Mức cược:</span>
+              <div className="flex items-center gap-1.5">
+                <DollarSign className="w-4 h-4 text-emerald-600" />
+                <span className="font-bold text-emerald-700 text-lg">
+                  {challenge.bet_points}
+                </span>
+                <span className="text-sm font-medium text-emerald-600">điểm SPA</span>
+              </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold">Thi đấu đến:</span>
-              <span className="font-medium">
+              <span className="text-sm font-semibold text-emerald-700">Thi đấu đến:</span>
+              <span className="font-bold text-emerald-600">
                 {challenge.race_to || 5} bida
               </span>
             </div>
           </div>
 
           {challenge.message && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <MessageSquare className="w-4 h-4 mt-0.5 text-gray-500" />
-                <div>
-                  <span className="text-sm font-semibold">Lời nhắn:</span>
-                  <p className="message-text mt-1">"{challenge.message}"</p>
+            <div className="bg-white/60 border border-border/30 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="p-1.5 rounded-md bg-secondary/30">
+                  <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-foreground">Lời nhắn:</span>
+                  <p className="text-sm text-muted-foreground mt-1 italic line-clamp-3">"{challenge.message}"</p>
                 </div>
               </div>
             </div>
           )}
 
           {challenge.club_profiles && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <MapPin className="w-4 h-4" />
-              <span>{challenge.club_profiles.club_name}</span>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground p-3 bg-white/30 rounded-lg border border-border/20">
+              <div className="p-1.5 rounded-md bg-secondary/30">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <span className="font-medium">{challenge.club_profiles.club_name}</span>
             </div>
           )}
 
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-emerald-200/30">
             <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
             <span>HH: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
           </div>
 
           <Button 
             onClick={() => handleJoinOpenChallenge(challenge.id)}
-            className="w-full bg-green-600 hover:bg-green-700"
+            className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold py-3 rounded-lg shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-200 transform hover:scale-[1.02]"
           >
             <Users className="w-4 h-4 mr-2" />
-            Tham gia thách đấu
+            🚀 Tham gia thách đấu
           </Button>
         </CardContent>
       </Card>
@@ -486,58 +550,66 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Trophy className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <div className="text-sm text-muted-foreground">Tổng cộng</div>
+          <Card className="group bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-200/30 hover:border-blue-300/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
+            <CardContent className="p-6 text-center">
+              <div className="p-3 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
+                <Trophy className="w-8 h-8 text-blue-600" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+              <div className="text-sm font-medium text-muted-foreground">Tổng cộng</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Clock className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">{stats.pending}</div>
-              <div className="text-sm text-muted-foreground">Chờ phản hồi</div>
+          <Card className="group bg-gradient-to-br from-amber-50/50 to-yellow-50/50 border border-amber-200/30 hover:border-amber-300/50 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
+            <CardContent className="p-6 text-center">
+              <div className="p-3 rounded-full bg-gradient-to-br from-amber-100 to-yellow-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
+                <Clock className="w-8 h-8 text-amber-600" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{stats.pending}</div>
+              <div className="text-sm font-medium text-muted-foreground">Chờ phản hồi</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Zap className="w-8 h-8 text-green-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">{stats.accepted}</div>
-              <div className="text-sm text-muted-foreground">Đã chấp nhận</div>
+          <Card className="group bg-gradient-to-br from-emerald-50/50 to-green-50/50 border border-emerald-200/30 hover:border-emerald-300/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
+            <CardContent className="p-6 text-center">
+              <div className="p-3 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
+                <Zap className="w-8 h-8 text-emerald-600" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{stats.accepted}</div>
+              <div className="text-sm font-medium text-muted-foreground">Đã chấp nhận</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Star className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">{stats.completed}</div>
-              <div className="text-sm text-muted-foreground">Hoàn thành</div>
+          <Card className="group bg-gradient-to-br from-violet-50/50 to-purple-50/50 border border-violet-200/30 hover:border-violet-300/50 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-300 transform hover:-translate-y-0.5">
+            <CardContent className="p-6 text-center">
+              <div className="p-3 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 w-fit mx-auto mb-3 group-hover:scale-110 transition-transform duration-200">
+                <Star className="w-8 h-8 text-violet-600" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{stats.completed}</div>
+              <div className="text-sm font-medium text-muted-foreground">Hoàn thành</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Filters */}
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-sm">
+          <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+                <div className="relative group">
+                  <Search className="w-4 h-4 absolute left-3 top-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <Input
                     placeholder="Tìm kiếm theo tên người chơi hoặc câu lạc bộ..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200"
                   />
                 </div>
               </div>
               
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger className="w-40 border-border/50 hover:border-primary/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-card/95 backdrop-blur-sm border border-border/50">
                     <SelectItem value="all">Tất cả</SelectItem>
                     <SelectItem value="pending">Chờ phản hồi</SelectItem>
                     <SelectItem value="accepted">Đã chấp nhận</SelectItem>
@@ -547,10 +619,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 </Select>
 
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-32">
+                  <SelectTrigger className="w-32 border-border/50 hover:border-primary/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all duration-200">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-card/95 backdrop-blur-sm border border-border/50">
                     <SelectItem value="created_at">Ngày tạo</SelectItem>
                     <SelectItem value="bet_points">Mức cược</SelectItem>
                     <SelectItem value="expires_at">Hết hạn</SelectItem>
@@ -561,6 +633,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   variant="outline"
                   size="icon"
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="border-border/50 hover:border-primary/30 hover:bg-primary/5 hover:scale-105 transition-all duration-200"
                 >
                   {sortOrder === 'asc' ? (
                     <ArrowUp className="w-4 h-4" />
@@ -574,71 +647,89 @@ const EnhancedChallengesPageV2: React.FC = () => {
         </Card>
 
         {/* Challenges Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="my-challenges">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm">
+            <TabsTrigger 
+              value="my-challenges"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+            >
               Thách đấu của tôi ({getFilteredChallenges(myChallenges).length})
             </TabsTrigger>
-            <TabsTrigger value="active-challenges">
+            <TabsTrigger 
+              value="active-challenges"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+            >
               Đang diễn ra ({getFilteredChallenges(activeChallenges).length})
             </TabsTrigger>
-            <TabsTrigger value="open-challenges">
+            <TabsTrigger 
+              value="open-challenges"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium"
+            >
               Thách đấu mở ({getFilteredChallenges(openChallenges).length})
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="my-challenges" className="space-y-4">
+          <TabsContent value="my-challenges" className="space-y-6">
             {getFilteredChallenges(myChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {getFilteredChallenges(myChallenges).map(renderChallengeCard)}
               </div>
             ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Target className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Chưa có thách đấu nào</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Tạo thách đấu đầu tiên của bạn để bắt đầu!
+              <Card className="bg-gradient-to-br from-slate-50/50 to-gray-50/50 border border-border/50">
+                <CardContent className="p-16 text-center">
+                  <div className="p-4 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 w-fit mx-auto mb-6">
+                    <Target className="w-16 h-16 text-primary mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Chưa có thách đấu nào</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Tạo thách đấu đầu tiên của bạn để bắt đầu cuộc phiêu lưu billiards!
                   </p>
-                  <Button onClick={() => setShowCreateModal(true)}>
+                  <Button 
+                    onClick={() => setShowCreateModal(true)}
+                    className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold px-6 py-3 rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 transform hover:scale-105"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
-                    Tạo thách đấu
+                    🎯 Tạo thách đấu
                   </Button>
                 </CardContent>
               </Card>
             )}
           </TabsContent>
 
-          <TabsContent value="active-challenges" className="space-y-4">
+          <TabsContent value="active-challenges" className="space-y-6">
             {getFilteredChallenges(activeChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {getFilteredChallenges(activeChallenges).map(renderChallengeCard)}
               </div>
             ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Zap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Không có trận đấu nào đang diễn ra</h3>
-                  <p className="text-muted-foreground">
-                    Các trận đấu đã được chấp nhận sẽ hiển thị ở đây
+              <Card className="bg-gradient-to-br from-amber-50/50 to-orange-50/50 border border-amber-200/30">
+                <CardContent className="p-16 text-center">
+                  <div className="p-4 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 w-fit mx-auto mb-6">
+                    <Zap className="w-16 h-16 text-amber-600 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Không có trận đấu nào đang diễn ra</h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Các trận đấu đã được chấp nhận sẽ hiển thị ở đây. Hãy chấp nhận một thách đấu để bắt đầu!
                   </p>
                 </CardContent>
               </Card>
             )}
           </TabsContent>
 
-          <TabsContent value="open-challenges" className="space-y-4">
+          <TabsContent value="open-challenges" className="space-y-6">
             {getFilteredChallenges(openChallenges).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {getFilteredChallenges(openChallenges).map(renderOpenChallengeCard)}
               </div>
             ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Không có thách đấu mở nào</h3>
-                  <p className="text-muted-foreground">
-                    Các thách đấu mở từ người chơi khác sẽ hiển thị ở đây
+              <Card className="bg-gradient-to-br from-emerald-50/50 to-green-50/50 border border-emerald-200/30">
+                <CardContent className="p-16 text-center">
+                  <div className="p-4 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 w-fit mx-auto mb-6">
+                    <Users className="w-16 h-16 text-emerald-600 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Không có thách đấu mở nào</h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Các thách đấu mở từ người chơi khác sẽ hiển thị ở đây. Hãy kiểm tra lại sau!
                   </p>
                 </CardContent>
               </Card>
