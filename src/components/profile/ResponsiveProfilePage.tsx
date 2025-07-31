@@ -10,64 +10,17 @@ import ProfileErrorBoundary from './ProfileErrorBoundary';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { TechButton, TechCard } from '@/components/mobile/TechMobileComponents';
 
 const ResponsiveProfilePage: React.FC = () => {
   const { isMobile } = useOptimizedResponsive();
   const { data: profile, isLoading, error, refetch } = useUnifiedProfile();
   const [activeTab, setActiveTab] = useState('activities');
 
-  // Apply tech theme to body when mobile with debugging
+  // Apply tech theme to body when mobile
   useEffect(() => {
     if (isMobile) {
       document.body.classList.add('tech-theme');
-      
-      // Force inject tech styles if not loaded
-      const techStyleCheck = document.querySelector('.sabo-tech-card');
-      if (!techStyleCheck) {
-        console.log('Forcing tech styles injection...');
-        const style = document.createElement('style');
-        style.textContent = `
-          .sabo-tech-card { 
-            position: relative !important; 
-            background: rgba(15, 23, 42, 0.9) !important; 
-            backdrop-filter: blur(10px) !important; 
-            border-radius: 8px !important;
-            border: 2px solid hsl(var(--primary)) !important;
-            box-shadow: 0 0 20px hsl(var(--primary) / 0.3) !important;
-          }
-          .tech-card-border {
-            position: absolute !important;
-            top: -2px !important; left: -2px !important; right: -2px !important; bottom: -2px !important;
-            background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent-blue)), hsl(var(--primary))) !important;
-            border-radius: 8px !important;
-            animation: tech-pulse 3s ease-in-out infinite alternate !important;
-          }
-          .tech-card-content {
-            position: relative !important;
-            padding: 20px !important;
-            background: hsl(var(--card)) !important;
-            border-radius: 6px !important;
-          }
-          .tech-header-title {
-            color: hsl(var(--primary)) !important;
-            text-shadow: 0 0 10px hsl(var(--primary) / 0.5) !important;
-            font-weight: 700 !important;
-            text-transform: uppercase !important;
-          }
-          @keyframes tech-pulse {
-            0% { opacity: 0.7; filter: brightness(1); }
-            100% { opacity: 1; filter: brightness(1.1); }
-          }
-        `;
-        document.head.appendChild(style);
-      }
-      
-      console.log('Tech theme applied - mobile detected, body classes:', document.body.classList.toString());
-      return () => {
-        document.body.classList.remove('tech-theme');
-        console.log('Tech theme removed');
-      };
+      return () => document.body.classList.remove('tech-theme');
     }
   }, [isMobile]);
 
@@ -137,7 +90,7 @@ const ResponsiveProfilePage: React.FC = () => {
   const renderContent = () => {
     if (isMobile) {
       return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-background">
           <div className="container mx-auto pb-24 space-y-0">
             {/* Mobile Header với Tech Styling */}
             <ProfileHeader profile={profile} />
@@ -166,29 +119,31 @@ const ResponsiveProfilePage: React.FC = () => {
           </div>
           
           {/* Tech Mobile Navigation */}
-          <div className="sabo-tech-navigation">
-            <div className="tech-nav-border"></div>
-            <div className="tech-nav-items">
-              <div className="tech-nav-item">
-                <div className="nav-item-icon">🏠</div>
-                <span className="nav-item-label">Trang chủ</span>
-              </div>
-              <div className="tech-nav-item">
-                <div className="nav-item-icon">🏆</div>
-                <span className="nav-item-label">Thách đấu</span>
-              </div>
-              <div className="tech-nav-item active">
-                <div className="nav-item-glow"></div>
-                <div className="nav-item-icon">👤</div>
-                <span className="nav-item-label">Hồ sơ</span>
-              </div>
-              <div className="tech-nav-item">
-                <div className="nav-item-icon">📅</div>
-                <span className="nav-item-label">Lịch</span>
-              </div>
-              <div className="tech-nav-item">
-                <div className="nav-item-icon">📊</div>
-                <span className="nav-item-label">Xếp hạng</span>
+          <div className="fixed bottom-0 left-0 right-0 z-50">
+            <div className="sabo-tech-navigation">
+              <div className="tech-nav-border"></div>
+              <div className="tech-nav-items">
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">🏠</div>
+                  <span className="nav-item-label">Trang chủ</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">🏆</div>
+                  <span className="nav-item-label">Thách đấu</span>
+                </div>
+                <div className="tech-nav-item active">
+                  <div className="nav-item-glow"></div>
+                  <div className="nav-item-icon">👤</div>
+                  <span className="nav-item-label">Hồ sơ</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">📅</div>
+                  <span className="nav-item-label">Lịch</span>
+                </div>
+                <div className="tech-nav-item">
+                  <div className="nav-item-icon">📊</div>
+                  <span className="nav-item-label">Xếp hạng</span>
+                </div>
               </div>
             </div>
           </div>

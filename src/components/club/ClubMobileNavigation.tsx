@@ -16,7 +16,7 @@ export const ClubMobileNavigation: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="sabo-navigation fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-safe-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-safe-bottom">
       <div className="flex justify-around items-center py-2">
         {quickAccessItems.map((item) => {
           const Icon = item.icon;
@@ -28,8 +28,10 @@ export const ClubMobileNavigation: React.FC = () => {
               key={item.path}
               to={item.path}
               className={cn(
-                "nav-item-refined flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors",
-                isActive && "active"
+                "flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors",
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               <Icon className="h-4 w-4" />
