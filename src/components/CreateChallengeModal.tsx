@@ -10,9 +10,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Search, Trophy, DollarSign, MapPin, Clock, Users } from 'lucide-react';
+import { Search, Trophy, DollarSign, MapPin, Clock, Users, HelpCircle } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { calculateSaboHandicap, type SaboRank, formatHandicapDisplay } from '@/utils/saboHandicap';
+import SaboInfoDialog from '@/components/sabo/SaboInfoDialog';
 
 interface CreateChallengeModalProps {
   isOpen: boolean;
@@ -64,6 +65,7 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [userRank, setUserRank] = useState<SaboRank>('K');
+  const [showSaboInfo, setShowSaboInfo] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -378,6 +380,16 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="bg-blue-100 text-blue-800">SABO</Badge>
                 <span className="text-sm font-medium">Chế độ SABO Professional</span>
+                {isSaboMode && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowSaboInfo(true)}
+                    className="h-6 w-6 p-0 text-blue-600 hover:bg-blue-100"
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                  </Button>
+                )}
               </div>
               <Switch
                 checked={isSaboMode}
@@ -591,6 +603,12 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
           </div>
         </div>
       </DialogContent>
+      
+      {/* SABO Info Dialog */}
+      <SaboInfoDialog 
+        isOpen={showSaboInfo} 
+        onClose={() => setShowSaboInfo(false)} 
+      />
     </Dialog>
   );
 };
