@@ -3869,6 +3869,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      populate_default_tournament_rewards: {
+        Args: { tournament_id_param: string }
+        Returns: Json
+      }
       populate_sabo_tournament_players: {
         Args: { p_tournament_id: string }
         Returns: Json
