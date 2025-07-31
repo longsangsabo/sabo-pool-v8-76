@@ -255,24 +255,61 @@ export const useChallenges = () => {
     }
   };
 
-  // Accept challenge
+  // Accept challenge (handles both specific and open challenges)
   const acceptChallenge = async (challengeId: string) => {
     if (!user) {
       throw new Error('User not authenticated');
     }
 
     try {
+      // First, get the challenge to check if it's open or specific
+      const { data: challengeData, error: fetchError } = await supabase
+        .from('challenges')
+        .select('*')
+        .eq('id', challengeId)
+        .eq('status', 'pending')
+        .maybeSingle();
+
+      if (fetchError) {
+        throw new Error(`Failed to fetch challenge: ${fetchError.message}`);
+      }
+
+      if (!challengeData) {
+        throw new Error('Challenge not found or already processed');
+      }
+
+      // Check if user can accept this challenge
+      const isOpenChallenge = !challengeData.opponent_id;
+      const isSpecificChallenge = challengeData.opponent_id === user.id;
+      const isMyOwnChallenge = challengeData.challenger_id === user.id;
+
+      if (isMyOwnChallenge) {
+        throw new Error('Cannot accept your own challenge');
+      }
+
+      if (!isOpenChallenge && !isSpecificChallenge) {
+        throw new Error('You are not the intended opponent for this challenge');
+      }
+
+      // Update challenge based on type
+      const updateData = isOpenChallenge 
+        ? {
+            status: 'accepted',
+            opponent_id: user.id, // Set the user as opponent for open challenges
+            responded_at: new Date().toISOString(),
+          }
+        : {
+            status: 'accepted',
+            responded_at: new Date().toISOString(),
+          };
+
       const { data, error } = await supabase
         .from('challenges')
-        .update({
-          status: 'accepted',
-          responded_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('id', challengeId)
-        .eq('opponent_id', user.id) // Only opponent can accept
-        .eq('status', 'pending') // Only pending challenges can be accepted
+        .eq('status', 'pending')
         .select('*')
-        .single();
+        .maybeSingle();
 
       if (error) {
         throw new Error(`Failed to accept challenge: ${error.message}`);
