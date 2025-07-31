@@ -18,10 +18,7 @@ export const useTournaments = () => {
         .from('tournaments')
         .select(`
           *,
-          club_profiles!tournaments_club_id_fkey(*),
-          spa_points_config,
-          elo_points_config,
-          physical_prizes
+          club_profiles!tournaments_club_id_fkey(*)
         `)
         .is('deleted_at', null) // Filter out soft deleted tournaments
         .in('status', ['completed', 'registration_open', 'registration_closed', 'ongoing']) // Show valid tournament statuses
@@ -51,12 +48,8 @@ export const useTournaments = () => {
         // Parse JSONB fields properly
         // Use tournament_prize_tiers for rewards instead
         rewards: undefined,
-        spa_points_config: tournament.spa_points_config ? 
-          (typeof tournament.spa_points_config === 'string' ? 
-            JSON.parse(tournament.spa_points_config) : tournament.spa_points_config) : undefined,
-        elo_points_config: tournament.elo_points_config ? 
-          (typeof tournament.elo_points_config === 'string' ? 
-            JSON.parse(tournament.elo_points_config) : tournament.elo_points_config) : undefined,
+        spa_points_config: null, // Column doesn't exist yet
+        elo_points_config: null, // Column doesn't exist yet
       }));
       setTournaments(transformedData);
     } catch (err) {

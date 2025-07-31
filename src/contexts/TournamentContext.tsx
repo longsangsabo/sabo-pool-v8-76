@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { TournamentRewards } from '@/types/tournament-extended';
-import { RankCode } from '@/utils/eloConstants';
+import { RankCode, getDefaultRank } from '@/utils/eloConstants';
 import { calculateRewards } from '@/utils/tournamentRewards';
 import { useRewardTemplates } from '@/hooks/useRewardTemplates';
 
@@ -45,7 +45,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const { templates, convertTemplatesToRewards, copyTemplateToTournament } = useRewardTemplates();
 
   // Updated loadRewardsFromDatabase to work with new structure
-  const loadRewardsFromDatabase = useCallback(async (tournament: any, rank: RankCode = 'K') => {
+  const loadRewardsFromDatabase = useCallback(async (tournament: any, rank: RankCode = getDefaultRank()) => {
     try {
       console.log('🔍 Loading rewards from database for tournament:', tournament.id);
       

@@ -127,5 +127,8 @@ export const SPA_TOURNAMENT_REWARDS = {
 
 // SPA Challenge rewards have been removed as they contained incorrect information
 
+// Helper function to get default rank
+export const getDefaultRank = (): RankCode => 'K';
+
 export type RankCode = keyof typeof RANK_ELO;
 export type TournamentPosition = keyof typeof TOURNAMENT_ELO_REWARDS;

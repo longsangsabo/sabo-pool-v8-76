@@ -23,18 +23,21 @@ export const useRealtimeTournament = ({
       
       const { data, error: fetchError } = await supabase
         .from('tournaments')
-        .select(`
-          *,
-          physical_prizes,
-          spa_points_config,
-          elo_points_config
-        `)
+        .select('*')
         .eq('id', id)
         .single();
 
       if (fetchError) throw fetchError;
       
-      setTournament(data as Tournament);
+      // Handle missing columns gracefully
+      const transformedData = {
+        ...data,
+        physical_prizes: null,
+        spa_points_config: null,
+        elo_points_config: null,
+      };
+      
+      setTournament(transformedData as Tournament);
     } catch (err) {
       console.error('❌ Error fetching tournament:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch tournament');
