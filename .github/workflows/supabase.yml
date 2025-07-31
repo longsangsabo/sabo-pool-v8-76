@@ -1,0 +1,104 @@
+name: Supabase CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'supabase/**'
+      - 'package.json'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'supabase/**'
+
+env:
+  SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+jobs:
+  supabase-migrations:
+    name: Database Migrations
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Supabase CLI
+        run: npm install -g supabase
+        
+      - name: Check database migrations
+        run: supabase db diff --schema public
+        
+      - name: Run database tests
+        run: supabase db test
+        
+      - name: Deploy migrations (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: supabase db push --project-ref $SUPABASE_PROJECT_REF
+
+  supabase-functions:
+    name: Edge Functions
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Supabase CLI
+        run: npm install -g supabase
+        
+      - name: Deploy Edge Functions
+        run: |
+          supabase functions deploy --project-ref $SUPABASE_PROJECT_REF
+          
+      - name: Test Edge Functions
+        run: |
+          supabase functions test --project-ref $SUPABASE_PROJECT_REF
+
+  supabase-health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    needs: [supabase-migrations, supabase-functions]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run health checks
+        run: |
+          # Test database connection
+          npm run db:health
+          
+          # Test Edge Functions
+          npm run functions:health
+          
+          # Test real-time subscriptions
+          npm run realtime:health 

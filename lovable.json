@@ -1,0 +1,27 @@
+{
+  "name": "sabo-pool-arena-hub",
+  "description": "A comprehensive pool arena management system with VNPAY payment integration",
+  "version": "1.0.0",
+  "build": {
+    "command": "npm run build",
+    "output": "dist",
+    "install": "npm install"
+  },
+  "deploy": {
+    "command": "npm start",
+    "port": 3000
+  },
+  "environment": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  },
+  "domains": [
+    "sabo-pool-arena-hub.lovable.dev"
+  ],
+  "features": {
+    "autoDeploy": true,
+    "previewDeployments": true,
+    "customDomains": true,
+    "ssl": true
+  }
+} 

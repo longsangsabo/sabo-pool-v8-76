@@ -1,0 +1,1043 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './styles/tablet-enhancements.css';
+@import './styles/mobile-enhancements.css';
+
+/* SABO ARENA - Modern Mobile-First Design System with Light/Dark Mode */
+@layer base {
+  :root {
+    /* Dark Theme (Default) - Enhanced contrast for better readability */
+    --background: 218 25% 8%;     /* #121826 - Deep dark background */
+    --foreground: 210 40% 98%;    /* #F8FAFC - Ultra bright white text */
+    
+    /* UI Colors - Dramatically improved contrast */
+    --card: 220 15% 15%;          /* #243347 - Much lighter card background */
+    --card-foreground: 210 20% 95%; /* #F1F5F9 - Brighter text on cards */
+    --popover: 220 15% 15%;       /* Consistent with cards */
+    --popover-foreground: 210 20% 95%;
+    
+    /* Primary Brand Colors - More vibrant in dark mode */
+    --primary: 45 100% 60%;       /* #FFC700 - Brighter SABO Yellow for dark mode */
+    --primary-foreground: 218 25% 8%;
+    --primary-glow: 45 100% 70%;  /* Even brighter glow */
+    
+    /* Secondary Colors - Much better visibility */
+    --secondary: 220 12% 20%;     /* #2A3441 - Lighter for better input visibility */
+    --secondary-foreground: 210 15% 90%;
+    
+    /* Accent Colors - Enhanced for dark theme */
+    --accent: 220 12% 20%;
+    --accent-foreground: 210 15% 90%;
+    --accent-green: 142 70% 50%;  /* #10b981 - Brighter success green */
+    --accent-blue: 217 85% 60%;   /* #3b82f6 - Brighter info blue */
+    --accent-red: 0 85% 65%;      /* #f59e0b - Brighter error red */
+    --accent-purple: 262 80% 70%; /* #a855f7 - Brighter premium purple */
+    --gold: 45 100% 60%;          /* Brighter gold for dark mode */
+    
+    /* Tournament specific colors */
+    --tournament-gold: 43 96% 56%;
+    --tournament-silver: 0 0% 70%;
+    --tournament-bronze: 28 85% 53%;
+    --tournament-accent: 142 71% 45%;
+    
+    /* Tournament gradients */
+    --gradient-tournament-gold: linear-gradient(135deg, hsl(43, 96%, 56%), hsl(45, 100%, 51%));
+    --gradient-tournament-silver: linear-gradient(135deg, hsl(0, 0%, 75%), hsl(0, 0%, 60%));
+    --gradient-tournament-bronze: linear-gradient(135deg, hsl(28, 85%, 53%), hsl(30, 90%, 48%));
+    
+    /* Tournament shadows */
+    --shadow-tournament-glow: 0 0 30px hsl(43, 96%, 56% / 0.4);
+    --shadow-tournament-subtle: 0 4px 20px hsl(0, 0%, 0% / 0.15);
+    
+    /* Muted Colors - Significantly improved visibility */
+    --muted: 220 12% 22%;         /* #3A4553 - Much lighter muted background */
+    --muted-foreground: 220 8% 75%; /* #94A3B8 - Much brighter muted text */
+    
+    /* Border Colors - Enhanced visibility */
+    --border: 220 10% 30%;        /* #475569 - Much more visible borders */
+    --input: 220 10% 30%;         /* Consistent input borders */
+    --ring: 45 100% 60%;          /* Brighter yellow focus ring */
+    
+    /* States */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* Radius */
+    --radius: 0.75rem; /* 12px - Rounded modern look */
+  }
+
+  /* Light Theme */
+  .light {
+    --background: 210 40% 98%;    /* #f8fafc - Light background */
+    --foreground: 220 23% 7%;     /* #0a0e17 - Dark text */
+    
+    /* UI Colors */
+    --card: 0 0% 100%;            /* #ffffff - White cards */
+    --card-foreground: 220 23% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 23% 7%;
+    
+    /* Primary stays the same for brand consistency */
+    --primary: 45 96% 55%;        /* #FFB800 - SABO Yellow */
+    --primary-foreground: 220 23% 7%;
+    --primary-glow: 45 100% 65%;
+    
+    /* Secondary Colors */
+    --secondary: 210 20% 95%;     /* #f1f5f9 - Light secondary */
+    --secondary-foreground: 220 23% 7%;
+    
+    /* Accent Colors remain the same */
+    --accent: 210 20% 95%;
+    --accent-foreground: 220 23% 7%;
+    /* Keep accent colors for consistency */
+    
+    /* Muted Colors */
+    --muted: 210 20% 95%;         /* #f1f5f9 - Light muted */
+    --muted-foreground: 215 25% 27%; /* #334155 - Dark muted text */
+    
+    /* Border Colors */
+    --border: 214 32% 91%;        /* #e2e8f0 - Light borders */
+    --input: 214 32% 91%;
+    --ring: 45 96% 55%;           /* Keep yellow focus ring */
+    
+    /* States */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-outfit;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Safe area support for mobile devices */
+  .safe-area-pt {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-pb {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/30;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Enhanced Dark Mode Form Styles */
+  .enhanced-input {
+    @apply bg-secondary border-2 border-border/50 text-foreground placeholder:text-muted-foreground;
+    @apply focus:border-primary focus:ring-2 focus:ring-primary/20 focus:ring-offset-0;
+    @apply transition-all duration-200 px-4 py-3 rounded-xl;
+    @apply hover:border-border;
+  }
+
+  .enhanced-input:focus {
+    @apply bg-secondary/80;
+  }
+
+  /* Dark mode input field improvements */
+  .dark .enhanced-input {
+    @apply bg-secondary border-border text-card-foreground;
+    @apply shadow-sm hover:shadow-md;
+  }
+
+  .dark .enhanced-input::placeholder {
+    @apply text-muted-foreground/70;
+  }
+
+  /* Enhanced select elements */
+  .enhanced-select {
+    @apply bg-secondary border-2 border-border/50 text-foreground;
+    @apply focus:border-primary focus:ring-2 focus:ring-primary/20;
+    @apply transition-all duration-200 px-4 py-3 rounded-xl;
+    @apply hover:border-border cursor-pointer;
+  }
+
+  /* Enhanced buttons for dark mode */
+  .enhanced-button-primary {
+    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground;
+    @apply font-semibold rounded-xl px-6 py-3;
+    @apply hover:from-primary/90 hover:to-primary-glow/90;
+    @apply focus:ring-2 focus:ring-primary/30 focus:outline-none;
+    @apply transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+
+  .enhanced-button-secondary {
+    @apply bg-secondary border-2 border-border text-secondary-foreground;
+    @apply font-medium rounded-xl px-6 py-3;
+    @apply hover:bg-muted hover:border-border/70;
+    @apply focus:ring-2 focus:ring-primary/20 focus:outline-none;
+    @apply transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+
+  /* Enhanced card styles for better contrast */
+  .enhanced-card {
+    @apply bg-card rounded-2xl border border-border shadow-sm;
+    @apply hover:shadow-md transition-all duration-200;
+  }
+
+  .dark .enhanced-card {
+    @apply bg-card border-border/50 shadow-lg;
+    @apply hover:shadow-xl hover:border-border/70;
+  }
+
+  /* Progress indicators with better visibility */
+  .enhanced-progress {
+    @apply w-full bg-secondary rounded-full h-3 overflow-hidden;
+    @apply border border-border/30;
+  }
+
+  .enhanced-progress-fill {
+    @apply h-full bg-gradient-to-r from-primary to-primary-glow rounded-full;
+    @apply transition-all duration-500 shadow-sm;
+  }
+
+  /* Warning and info boxes */
+  .enhanced-warning {
+    @apply bg-accent-red/10 border border-accent-red/30 text-foreground rounded-xl p-4;
+    @apply shadow-sm;
+  }
+
+  .dark .enhanced-warning {
+    @apply bg-accent-red/20 border-accent-red/40;
+  }
+
+  .enhanced-info {
+    @apply bg-accent-blue/10 border border-accent-blue/30 text-foreground rounded-xl p-4;
+    @apply shadow-sm;
+  }
+
+  .dark .enhanced-info {
+    @apply bg-accent-blue/20 border-accent-blue/40;
+  }
+
+  .enhanced-success {
+    @apply bg-accent-green/10 border border-accent-green/30 text-foreground rounded-xl p-4;
+    @apply shadow-sm;
+  }
+
+  .dark .enhanced-success {
+    @apply bg-accent-green/20 border-accent-green/40;
+  }
+
+  /* Enhanced text styles for better readability */
+  .enhanced-label {
+    @apply text-foreground font-semibold text-sm mb-2 block;
+  }
+
+  .dark .enhanced-label {
+    @apply text-card-foreground font-semibold;
+  }
+
+  .enhanced-description {
+    @apply text-muted-foreground text-sm leading-relaxed;
+  }
+
+  .dark .enhanced-description {
+    @apply text-muted-foreground/90;
+  }
+
+  /* Enhanced radio and checkbox styles */
+  .enhanced-radio {
+    @apply w-5 h-5 text-primary bg-secondary border-2 border-border;
+    @apply focus:ring-2 focus:ring-primary/30 focus:ring-offset-0;
+    @apply transition-all duration-200;
+  }
+
+  .enhanced-checkbox {
+    @apply w-5 h-5 text-primary bg-secondary border-2 border-border rounded;
+    @apply focus:ring-2 focus:ring-primary/30 focus:ring-offset-0;
+    @apply transition-all duration-200;
+  }
+
+  /* Modal and overlay improvements */
+  .enhanced-modal {
+    @apply bg-background border border-border rounded-2xl shadow-2xl;
+    @apply backdrop-blur-sm;
+  }
+
+  .dark .enhanced-modal {
+    @apply bg-card border-border/50 shadow-2xl;
+  }
+
+  .enhanced-overlay {
+    @apply bg-background/80 backdrop-blur-sm;
+  }
+
+  .dark .enhanced-overlay {
+    @apply bg-background/90;
+  }
+}
+
+@layer components {
+  /* SABO ARENA Typography System - Updated for Non-Italic Design */
+  
+  /* Brand Typography - Bebas Neue (All Large Titles) */
+  .brand-logo {
+    @apply font-bebas text-3xl md:text-4xl lg:text-5xl tracking-wide uppercase;
+    font-weight: 400;
+    line-height: 1;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .brand-title {
+    @apply font-bebas text-2xl md:text-3xl lg:text-4xl tracking-wide uppercase;
+    font-weight: 400;
+    line-height: 1.1;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .tournament-name {
+    @apply font-bebas text-xl md:text-2xl lg:text-3xl tracking-wide uppercase;
+    font-weight: 400;
+    line-height: 1.1;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  /* Heading Typography - Epilogue (All Subtitles, NO ITALIC) */
+  .heading-primary {
+    @apply font-epilogue text-2xl md:text-3xl lg:text-4xl font-bold;
+    line-height: 1.2;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .heading-secondary {
+    @apply font-epilogue text-xl md:text-2xl lg:text-3xl font-semibold;
+    line-height: 1.3;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .heading-tertiary {
+    @apply font-epilogue text-lg md:text-xl lg:text-2xl font-medium;
+    line-height: 1.4;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  /* Challenge/Secondary Title - Epilogue Non-Italic */
+  .challenge-title {
+    @apply font-epilogue text-lg md:text-xl font-semibold;
+    line-height: 1.3;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  /* Body Typography - Outfit (Always Normal, Never Italic) */
+  .body-large {
+    @apply font-outfit text-lg font-normal;
+    line-height: 1.6;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .body-normal {
+    @apply font-outfit text-base font-normal;
+    line-height: 1.6;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .body-small {
+    @apply font-outfit text-sm font-normal;
+    line-height: 1.5;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .body-xs {
+    @apply font-outfit text-xs font-normal;
+    line-height: 1.4;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  /* Stats Typography - Racing Sans One (Always Normal) */
+  .stats-large {
+    @apply font-racing text-3xl md:text-4xl lg:text-5xl font-normal;
+    line-height: 1;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .stats-medium {
+    @apply font-racing text-xl md:text-2xl lg:text-3xl font-normal;
+    line-height: 1.1;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+  
+  .stats-small {
+    @apply font-racing text-lg md:text-xl font-normal;
+    line-height: 1.2;
+    font-style: normal; /* Explicitly ensure no italic */
+  }
+
+  /* Message Typography - Non-Italic Emphasis */
+  .message-text {
+    @apply font-outfit text-sm font-medium;
+    line-height: 1.5;
+    font-style: normal; /* Explicitly ensure no italic */
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Social Network Components */
+  
+  /* Modern Card System */
+  .social-card {
+    @apply bg-card rounded-2xl backdrop-blur-sm transition-all duration-300;
+    @apply hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  /* Dark mode cards - shadow */
+  .dark .social-card {
+    @apply border border-border/50 shadow-lg hover:shadow-xl;
+  }
+
+  /* Light mode cards - border */
+  .light .social-card {
+    @apply border border-border shadow-sm hover:shadow-md;
+  }
+
+  .social-card-content {
+    @apply p-4 space-y-4;
+  }
+
+  .social-card-header {
+    @apply flex items-start justify-between;
+  }
+
+  /* Interactive Elements */
+  .social-button-primary {
+    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground;
+    @apply font-epilogue font-semibold rounded-xl px-6 py-3;
+    @apply hover:scale-105 active:scale-95 transition-transform duration-200;
+    @apply focus:ring-2 focus:ring-primary/30 focus:outline-none;
+  }
+
+  .social-button-secondary {
+    @apply bg-secondary border border-border text-secondary-foreground;
+    @apply font-epilogue font-medium rounded-xl px-6 py-3;
+    @apply hover:bg-muted active:scale-95 transition-all duration-200;
+    @apply focus:ring-2 focus:ring-ring/30 focus:outline-none;
+  }
+
+  /* Feed Layout */
+  .social-feed {
+    @apply space-y-4 px-4 py-6;
+  }
+
+  .social-feed-item {
+    @apply social-card;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-epilogue font-semibold;
+  }
+
+  .status-live {
+    @apply status-badge bg-accent-red text-white animate-pulse;
+  }
+
+  .status-hot {
+    @apply status-badge bg-accent-red/90 text-white;
+  }
+
+  .status-new {
+    @apply status-badge bg-accent-green text-white;
+  }
+
+  .status-premium {
+    @apply status-badge bg-accent-purple text-white;
+  }
+
+  /* Progress Bars */
+  .progress-bar {
+    @apply w-full bg-muted rounded-full h-2 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full;
+    @apply transition-all duration-500;
+  }
+
+  /* Avatar System */
+  .avatar-small {
+    @apply w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-glow;
+    @apply flex items-center justify-center;
+  }
+
+  .avatar-medium {
+    @apply w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-glow;
+    @apply flex items-center justify-center;
+  }
+
+  .avatar-large {
+    @apply w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-glow;
+    @apply flex items-center justify-center;
+  }
+
+  /* Loading States */
+  .skeleton {
+    @apply animate-pulse bg-muted/50 rounded-xl;
+  }
+
+  .skeleton-text {
+    @apply skeleton h-4 w-full;
+  }
+
+  .skeleton-circle {
+    @apply skeleton rounded-full;
+  }
+
+  /* Ripple Effect */
+  .ripple-effect {
+    @apply relative overflow-hidden;
+  }
+
+  .ripple-effect::after {
+    content: '';
+    @apply absolute inset-0 bg-primary/10 rounded-2xl;
+    @apply opacity-0 transition-opacity duration-150;
+    @apply pointer-events-none;
+  }
+
+  .ripple-effect:active::after {
+    @apply opacity-100;
+  }
+}
+
+@layer utilities {
+  /* Modern Gradients */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+  }
+
+  .gradient-card {
+    background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--secondary)));
+  }
+
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--card)));
+  }
+
+  /* Modern Shadows */
+  .shadow-glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+
+  .shadow-card {
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+  }
+
+  .shadow-intense {
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Text Utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Animation Utilities */
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.3);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--primary) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.8), 0 0 30px hsl(var(--primary) / 0.6);
+    }
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+
+  /* Mobile-First Responsive Utilities */
+  @media (max-width: 639px) {
+    .mobile\:text-sm { @apply text-sm; }
+    .mobile\:text-base { @apply text-base; }
+    .mobile\:text-lg { @apply text-lg; }
+    .mobile\:px-3 { @apply px-3; }
+    .mobile\:py-2 { @apply py-2; }
+    .mobile\:space-y-3 > * + * { @apply mt-3; }
+  }
+
+  /* Tablet Optimizations */
+  @media (min-width: 640px) and (max-width: 1279px) {
+    .tablet\:text-lg { @apply text-lg; }
+    .tablet\:text-xl { @apply text-xl; }
+    .tablet\:text-2xl { @apply text-2xl; }
+    .tablet\:text-3xl { @apply text-3xl; }
+    .tablet\:text-4xl { @apply text-4xl; }
+    .tablet\:text-5xl { @apply text-5xl; }
+    .tablet\:grid-cols-2 { @apply grid-cols-2; }
+    .tablet\:grid-cols-3 { @apply grid-cols-3; }
+    .tablet\:gap-6 { @apply gap-6; }
+    .tablet\:gap-8 { @apply gap-8; }
+    .tablet\:p-6 { @apply p-6; }
+    .tablet\:p-8 { @apply p-8; }
+    .tablet\:px-8 { @apply px-8; }
+    .tablet\:py-8 { @apply py-8; }
+    .tablet\:max-w-4xl { @apply max-w-4xl; }
+    .tablet\:max-w-5xl { @apply max-w-5xl; }
+  }
+
+  /* Touch Improvements */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  .touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  /* ULTRA-COMPACT TOURNAMENT BRACKET STYLES */
+  /* Tournament Bracket Container */
+  .tournament-bracket-viewer {
+    @apply p-2;
+  }
+
+  /* Tournament Info Header - Compressed */
+  .tournament-info-header {
+    @apply mb-2;
+  }
+
+  /* Ultra-Compact Bracket Card */
+  .ultra-compact-bracket-card {
+    @apply min-h-[60px] max-h-[60px] border border-border/50 rounded-md;
+    /* Fixed ultra-compact height */
+  }
+
+  /* Minimal Match Info */
+  .minimal-match-info {
+    @apply py-0 my-0;
+  }
+
+  /* Tight Players Section */
+  .tight-players-section {
+    @apply space-y-0;
+  }
+
+  /* Compact Player Slot */
+  .compact-player-slot {
+    @apply h-[20px] py-0.5 px-1;
+    /* Fixed row height for ultra-compact */
+  }
+
+  /* Compact Player Name */
+  .compact-player-name {
+    @apply flex-1 mx-1 overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+
+  /* Compact Score */
+  .compact-score {
+    @apply min-w-[16px] text-center;
+  }
+
+  /* Minimal VS Divider */
+  .minimal-vs {
+    @apply my-0 py-0;
+  }
+
+  /* Bracket Grid - Responsive Layout */
+  .bracket-grid {
+    @apply grid gap-2;
+    /* Desktop: 4 columns, Tablet: 2 columns, Mobile: 1 column */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  /* Bracket Round Container */
+  .bracket-round-container {
+    @apply mb-2 p-1;
+  }
+
+  /* Round Header - Compressed */
+  .round-header {
+    @apply p-1 mb-1;
+  }
+
+  /* Matches Container */
+  .matches-container {
+    @apply space-y-1;
+  }
+
+  /* Responsive Breakpoints for Ultra-Compact */
+  @media (min-width: 1024px) {
+    .ultra-compact-bracket-card {
+      @apply min-h-[55px] max-h-[55px];
+    }
+    
+    .bracket-grid {
+      grid-template-columns: repeat(4, 1fr);
+      @apply gap-1.5;
+    }
+    
+    .compact-player-slot {
+      @apply h-[18px];
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .ultra-compact-bracket-card {
+      @apply min-h-[60px] max-h-[60px];
+    }
+    
+    .bracket-grid {
+      grid-template-columns: repeat(2, 1fr);
+      @apply gap-2;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ultra-compact-bracket-card {
+      @apply min-h-[65px] max-h-[65px];
+    }
+    
+    .bracket-grid {
+      grid-template-columns: 1fr;
+      @apply gap-1;
+    }
+    
+    .tournament-bracket-viewer {
+      @apply p-1;
+    }
+  }
+  }
+/* Ultra-compact table cards for club management */
+.ultra-compact-table-card {
+  min-height: 80px !important;
+  max-height: 90px !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+}
+
+.ultra-compact-table-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.1);
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+/* Responsive grid for table cards */
+@media (max-width: 640px) {
+  .ultra-compact-table-card {
+    min-height: 70px !important;
+    max-height: 80px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ultra-compact-table-card {
+    min-height: 85px !important;
+    max-height: 95px !important;
+  }
+}
+
+/* Ultra-compact stats cards for dashboard */
+.ultra-compact-stats-card {
+  min-height: 80px !important;
+  max-height: 90px !important;
+  transition: all 0.2s ease;
+}
+
+.ultra-compact-stats-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px hsl(var(--primary) / 0.1);
+}
+
+/* Ultra-compact content cards */
+.ultra-compact-content-card {
+  max-height: 280px !important;
+  overflow: hidden;
+}
+
+.ultra-compact-content-card .space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+/* Responsive adjustments for compact cards */
+@media (max-width: 640px) {
+  .ultra-compact-stats-card {
+    min-height: 75px !important;
+    max-height: 85px !important;
+  }
+  
+  .ultra-compact-content-card {
+    max-height: 250px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ultra-compact-stats-card {
+    min-height: 85px !important;
+    max-height: 95px !important;
+  }
+  
+  .ultra-compact-content-card {
+    max-height: 300px !important;
+  }
+}
+
+/* Hyper-Compact Bracket Styles - Ultra Space Efficient */
+.hyper-compact-match-card {
+  @apply border border-border/30 rounded-sm p-1.5 bg-card/50 hover:bg-card transition-colors cursor-pointer;
+  min-height: 42px;
+  max-height: 42px;
+  font-size: 10px;
+}
+
+.hyper-compact-content {
+  @apply flex items-center justify-between gap-2 h-full;
+}
+
+.match-micro-header {
+  @apply flex flex-col items-center gap-0.5 min-w-[24px];
+}
+
+.match-label {
+  @apply text-[9px] font-bold text-muted-foreground leading-none;
+}
+
+.status-dot {
+  @apply w-2 h-2 rounded-full;
+}
+
+.players-horizontal {
+  @apply flex items-center gap-2 flex-1 justify-center;
+}
+
+.player-micro {
+  @apply flex items-center gap-1;
+}
+
+.player-initial {
+  @apply w-5 h-5 rounded-full bg-primary/10 text-[8px] font-bold flex items-center justify-center text-primary;
+}
+
+.player-name-micro {
+  @apply text-[10px] font-medium truncate max-w-[60px];
+}
+
+.score-micro {
+  @apply text-[12px] font-bold text-foreground min-w-[12px] text-center;
+}
+
+.vs-micro {
+  @apply text-[8px] text-muted-foreground font-medium;
+}
+
+.table-micro {
+  @apply text-[8px] bg-accent text-accent-foreground px-1 py-0.5 rounded-sm font-medium;
+}
+
+/* Ultra-Compact Bracket Styles (Legacy Support) */
+.ultra-compact-bracket-card {
+  @apply p-2 border rounded-lg bg-card transition-all duration-200 hover:shadow-sm;
+  min-height: 55px;
+  max-height: 70px;
+}
+
+.ultra-compact-bracket-content {
+  @apply space-y-1;
+}
+
+/* Hyper-efficient tournament grid */
+.hyper-compact-tournament-grid {
+  @apply grid gap-3;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.hyper-round-section {
+  @apply space-y-2;
+}
+
+.hyper-round-title {
+  @apply text-sm font-semibold text-center py-1 px-2 rounded-md bg-muted/50 text-muted-foreground flex items-center justify-center gap-2;
+}
+
+.matches-count {
+  @apply text-xs font-normal opacity-70;
+}
+
+.hyper-matches-grid {
+  @apply grid gap-1;
+  grid-template-columns: 1fr;
+}
+
+/* Responsive optimizations for hyper-compact mode */
+@media (min-width: 768px) {
+  .hyper-compact-tournament-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    @apply gap-4;
+  }
+  
+  .hyper-matches-grid {
+    @apply gap-1.5;
+  }
+  
+  .hyper-compact-match-card {
+    min-height: 40px;
+    max-height: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hyper-compact-tournament-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    @apply gap-6;
+  }
+  
+  .hyper-matches-grid {
+    grid-template-columns: repeat(2, 1fr);
+    @apply gap-2;
+  }
+  
+  .hyper-compact-match-card {
+    min-height: 38px;
+    max-height: 38px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hyper-compact-tournament-grid {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+  
+  .hyper-matches-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.minimal-match-info {
+  @apply text-xs;
+}
+
+.tight-players-section {
+  @apply space-y-0.5;
+}
+
+.compact-player-slot {
+  @apply flex items-center justify-between py-0.5;
+}
+
+.compact-player-name {
+  @apply text-xs font-medium truncate max-w-[120px];
+}
+
+.compact-score {
+  @apply text-sm font-bold min-w-[20px] text-center;
+}
+
+.minimal-vs {
+  @apply h-px bg-border opacity-30;
+}
+
+.ultra-compact-bracket-grid {
+  @apply grid gap-4 overflow-x-auto;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.bracket-round-container {
+  @apply space-y-2;
+}
+
+.round-header {
+  @apply text-center;
+}
+
+.matches-container {
+  @apply space-y-1;
+}
+
+/* Tournament Info Header for Compact Mode */
+.tournament-info-header {
+  @apply border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10;
+}
+
+/* Responsive grid for bracket rounds */
+@media (min-width: 768px) {
+  .ultra-compact-bracket-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .ultra-compact-bracket-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}

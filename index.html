@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SABO ARENA - Cộng Đồng Billiards Chuyên Nghiệp</title>
+    <meta name="description" content="Hệ thống đặt bàn billiards trực tuyến cho SABO ARENA" />
+    <meta name="author" content="SABO ARENA" />
+
+    <meta property="og:title" content="SABO ARENA" />
+    <meta property="og:description" content="Hệ thống đặt bàn bi-a trực tuyến" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- SABO ARENA Typography - Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Epilogue:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Racing+Sans+One&display=swap" rel="stylesheet">
+
+    <!-- Enhanced Critical CSS -->
+    <style>
+      /* Reset and base styles */
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #1a5d4a, #166534, #1a5d4a);
+        color: white;
+        line-height: 1.4;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      .loading-fallback {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a5d4a, #166534, #1a5d4a);
+        color: white;
+        padding: 20px;
+      }
+      
+      .loading-content {
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(251, 191, 36, 0.2);
+        border-top: 3px solid #fbbf24;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      
+      .loading-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fbbf24;
+        margin-bottom: 12px;
+      }
+      
+      .loading-text {
+        font-size: 16px;
+        color: #d1fae5;
+        margin-bottom: 20px;
+      }
+      
+      .loading-progress {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 15px;
+      }
+      
+      .loading-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        border-radius: 2px;
+        animation: progress 3s ease-in-out infinite;
+      }
+      
+      .loading-status {
+        font-size: 14px;
+        color: #a7f3d0;
+        opacity: 0.8;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+      }
+      
+      .error-fallback {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #7f1d1d, #991b1b, #7f1d1d);
+        color: white;
+        padding: 20px;
+      }
+      
+      .error-content {
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+      }
+      
+      .error-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #fbbf24;
+        margin-bottom: 16px;
+      }
+      
+      .error-button {
+        background: #fbbf24;
+        color: #1a5d4a;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 5px;
+        font-size: 14px;
+      }
+      
+      .error-button:hover {
+        background: #f59e0b;
+      }
+      
+      .debug-info {
+        font-size: 12px;
+        color: #a7f3d0;
+        margin-top: 20px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        text-align: left;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root">
+      <!-- Enhanced loading state -->
+      <div class="loading-fallback" id="loading-screen">
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <div class="loading-title">🎱 SABO ARENA</div>
+          <div class="loading-text">Đang khởi động hệ thống...</div>
+          <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+          </div>
+          <div class="loading-status" id="loading-status">Đang tải các thành phần...</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Enhanced fallback and monitoring script -->
+    <script>
+      // Loading status updates
+      const statusElement = document.getElementById('loading-status');
+      const loadingSteps = [
+        'Đang tải các thành phần...',
+        'Đang kết nối cơ sở dữ liệu...',
+        'Đang khởi tạo giao diện...',
+        'Đang hoàn tất...'
+      ];
+      
+      let stepIndex = 0;
+      const updateStatus = () => {
+        if (statusElement && stepIndex < loadingSteps.length) {
+          statusElement.textContent = loadingSteps[stepIndex];
+          stepIndex++;
+        }
+      };
+      
+      // Update loading status every 800ms
+      const statusInterval = setInterval(updateStatus, 800);
+      
+      // Monitor loading progress
+      let loadStartTime = Date.now();
+      console.log('🚀 Page load started at:', new Date().toISOString());
+      
+      // Clear loading screen when React takes over
+      const clearLoadingScreen = () => {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+          loadingScreen.style.opacity = '0';
+          loadingScreen.style.transition = 'opacity 0.5s ease-out';
+          setTimeout(() => {
+            if (loadingScreen.parentNode) {
+              loadingScreen.parentNode.removeChild(loadingScreen);
+            }
+          }, 500);
+        }
+        clearInterval(statusInterval);
+        console.log('✅ Loading screen cleared after:', Date.now() - loadStartTime, 'ms');
+      };
+      
+      // Check if React has mounted (more reliable detection)
+      const checkReactMount = () => {
+        const reactElements = document.querySelectorAll('[data-reactroot], [data-react-class], .react-component');
+        const hasReactContent = document.body.innerHTML.includes('SABO Billiards') && !document.getElementById('loading-screen');
+        
+        if (reactElements.length > 0 || hasReactContent) {
+          clearLoadingScreen();
+          return true;
+        }
+        return false;
+      };
+      
+      // Check every 100ms for React mount
+      const mountCheckInterval = setInterval(() => {
+        if (checkReactMount()) {
+          clearInterval(mountCheckInterval);
+        }
+      }, 100);
+      
+      // Fallback timeout - show error if app doesn't load within 15 seconds
+      const errorTimeout = setTimeout(function() {
+        const root = document.getElementById('root');
+        const loadingScreen = document.getElementById('loading-screen');
+        
+        // Only show error if still showing loading screen
+        if (root && loadingScreen) {
+          clearInterval(statusInterval);
+          clearInterval(mountCheckInterval);
+          
+          console.error('⚠️ App failed to load within timeout period');
+          
+          root.innerHTML = `
+            <div class="error-fallback">
+              <div class="error-content">
+                <div class="error-title">⚠️ Lỗi Tải Trang</div>
+                <p style="margin-bottom: 20px; font-size: 16px;">
+                  Trang web không thể tải trong thời gian cho phép. Vui lòng thử các cách sau:
+                </p>
+                
+                <div style="margin: 20px 0;">
+                  <button class="error-button" onclick="location.reload()">
+                    🔄 Tải Lại Trang
+                  </button>
+                  <button class="error-button" onclick="window.location.href='/system-audit'">
+                    🔍 Kiểm Tra Hệ Thống
+                  </button>
+                  <button class="error-button" onclick="clearCacheAndReload()">
+                    🗑️ Xóa Cache
+                  </button>
+                </div>
+                
+                <div class="debug-info">
+                  <strong>Thông tin debug:</strong><br>
+                  Thời gian load: ${Date.now() - loadStartTime}ms<br>
+                  URL hiện tại: ${window.location.href}<br>
+                  User Agent: ${navigator.userAgent.substring(0, 50)}...<br>
+                  Kết nối: ${navigator.onLine ? 'Online' : 'Offline'}<br>
+                  Thời gian: ${new Date().toLocaleString('vi-VN')}
+                </div>
+                
+                <details style="margin-top: 15px; color: #a7f3d0;">
+                  <summary style="cursor: pointer;">💡 Hướng dẫn khắc phục chi tiết</summary>
+                  <div style="margin-top: 10px; text-align: left; font-size: 14px;">
+                    <p><strong>Các bước thử:</strong></p>
+                    <ol style="padding-left: 20px;">
+                      <li>Tải lại trang (F5)</li>
+                      <li>Xóa cache trình duyệt (Ctrl+Shift+Delete)</li>
+                      <li>Kiểm tra kết nối internet</li>
+                      <li>Thử trình duyệt khác (Chrome, Firefox, Edge)</li>
+                      <li>Tắt các extension trình duyệt</li>
+                      <li>Chạy kiểm tra hệ thống để biết chi tiết</li>
+                    </ol>
+                  </div>
+                </details>
+              </div>
+            </div>
+          `;
+        }
+      }, 15000);
+      
+      // Clear cache function
+      window.clearCacheAndReload = function() {
+        try {
+          // Clear various storage types
+          if (typeof localStorage !== 'undefined') {
+            localStorage.clear();
+          }
+          if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.clear();
+          }
+          
+          // Force reload with cache bypass
+          window.location.reload(true);
+        } catch (e) {
+          // Fallback to normal reload
+          window.location.reload();
+        }
+      };
+      
+      // Global error monitoring
+      window.addEventListener('error', function(e) {
+        console.error('🚨 Global error detected:', {
+          message: e.message,
+          filename: e.filename,
+          lineno: e.lineno,
+          colno: e.colno,
+          timestamp: new Date().toISOString()
+        });
+      });
+      
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('🚨 Unhandled promise rejection:', e.reason);
+      });
+    </script>
+  </body>
+</html>

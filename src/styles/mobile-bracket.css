@@ -1,0 +1,152 @@
+/* Ultra-Compact Mobile Tournament Bracket Styles */
+
+@media (max-width: 768px) {
+  /* Ultra-compact match cards */
+  .ultra-compact-mobile {
+    padding: 3px 4px !important;
+    margin: 1px 0 !important;
+    border-radius: 3px !important;
+    min-height: 48px !important;
+    max-height: 56px;
+  }
+  
+  /* Minimal header */
+  .minimal-header {
+    padding: 0 !important;
+    margin-bottom: 2px !important;
+    font-size: 9px !important;
+  }
+  
+  /* Tight player rows */
+  .condensed-row {
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 2px !important;
+    min-height: 20px;
+  }
+  
+  /* Tight player section */
+  .tight-players {
+    gap: 0 !important;
+  }
+  
+  /* Truncated names */
+  .truncate-name {
+    font-size: 9px !important;
+    max-width: 55px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.1;
+  }
+  
+  /* Compact scores */
+  .mobile-score {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    min-width: 14px !important;
+    text-align: center;
+  }
+  
+  /* Minimal VS line */
+  .vs-line {
+    height: 1px !important;
+    margin: 1px 0 !important;
+    opacity: 0.3;
+  }
+  
+  /* Mobile avatars */
+  .mobile-avatar {
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 8px !important;
+    border-width: 1px;
+  }
+  
+  /* Mobile status dots */
+  .mobile-status-dot {
+    width: 4px !important;
+    height: 4px !important;
+  }
+  
+  /* Container optimizations */
+  .mobile-bracket-container {
+    padding: 2px !important;
+    gap: 4px !important;
+  }
+  
+  /* Tournament header */
+  .mobile-tournament-header {
+    padding: 4px 6px !important;
+    margin-bottom: 2px !important;
+  }
+  
+  /* Mobile section spacing */
+  .mobile-section-spacing {
+    margin-bottom: 4px !important;
+  }
+  
+  /* Micro round headers */
+  .micro-round-header {
+    padding: 1px 4px !important;
+    margin-bottom: 2px !important;
+    font-size: 8px !important;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+  }
+}
+
+/* Extra small screens - even more compact */
+@media (max-width: 480px) {
+  .ultra-compact-mobile {
+    padding: 2px 3px !important;
+    min-height: 42px !important;
+    max-height: 48px !important;
+  }
+  
+  .truncate-name {
+    max-width: 45px !important;
+    font-size: 8px !important;
+  }
+  
+  .mobile-score {
+    font-size: 10px !important;
+    min-width: 12px !important;
+  }
+  
+  .mobile-avatar {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 7px !important;
+  }
+  
+  .condensed-row {
+    gap: 1px !important;
+    min-height: 16px !important;
+  }
+}
+
+/* Very small screens - ultra minimal */
+@media (max-width: 380px) {
+  .ultra-compact-mobile {
+    padding: 1px 2px !important;
+    min-height: 38px !important;
+    max-height: 42px !important;
+  }
+  
+  .truncate-name {
+    max-width: 35px !important;
+    font-size: 7px !important;
+  }
+  
+  .mobile-score {
+    font-size: 9px !important;
+    min-width: 10px !important;
+  }
+  
+  .minimal-header {
+    font-size: 7px !important;
+    margin-bottom: 1px !important;
+  }
+}

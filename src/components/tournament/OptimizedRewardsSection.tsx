@@ -1,0 +1,552 @@
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Edit, Trophy, Medal, Award, Crown, Star, Gift, Coins, Target, Download, DollarSign, Info } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { TournamentRewards } from '@/types/tournament-extended';
+import { RewardsEditModal } from './RewardsEditModal';
+import { formatPrizeAmount } from '@/utils/tournamentHelpers';
+import { toast } from 'sonner';
+
+interface OptimizedRewardsSectionProps {
+  rewards?: TournamentRewards;
+  isEditable?: boolean;
+  onRewardsUpdated?: (rewards: TournamentRewards) => void;
+  showAsTemplate?: boolean;
+  maxParticipants?: number;
+  entryFee?: number;
+  onUseTemplate?: (rewards: TournamentRewards) => void;
+  showFinancialSummary?: boolean;
+  tournamentId?: string; // Add tournamentId to enable database save
+}
+
+export const OptimizedRewardsSection: React.FC<OptimizedRewardsSectionProps> = ({
+  rewards,
+  isEditable = false,
+  onRewardsUpdated,
+  showAsTemplate = false,
+  maxParticipants = 16,
+  entryFee = 0,
+  onUseTemplate,
+  showFinancialSummary = false,
+  tournamentId
+}) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentRewards, setCurrentRewards] = useState<TournamentRewards | null>(null);
+  
+  // Update local state when props change
+  useEffect(() => {
+    if (rewards) {
+      setCurrentRewards(rewards);
+      console.log('🔄 OptimizedRewardsSection: Rewards props updated', rewards);
+    }
+  }, [rewards]);
+  
+  // Add debug logging
+  console.log('🎯 OptimizedRewardsSection render:', {
+    hasRewards: !!rewards,
+    hasCurrentRewards: !!currentRewards,
+    rewardsPositions: rewards?.positions?.length || 0,
+    currentRewardsPositions: currentRewards?.positions?.length || 0,
+    showAsTemplate,
+    isEditable,
+    tournamentId
+  });
+
+  // Template reward generation functions
+  const getTemplateRewardData = (position: number) => {
+    switch (position) {
+      case 1:
+        return {
+          spaPoints: 1000,
+          eloPoints: 100,
+          prizeMoney: 2000000,
+          physicalRewards: ['Cúp vô địch', 'Huy chương vàng', 'Giấy chứng nhận'],
+          icon: <Crown className="w-5 h-5 text-yellow-500" />,
+          badge: { text: 'Vô địch', className: 'bg-yellow-500 text-white' }
+        };
+      case 2:
+        return {
+          spaPoints: 700,
+          eloPoints: 75,
+          prizeMoney: 1200000,
+          physicalRewards: ['Huy chương bạc', 'Giấy chứng nhận'],
+          icon: <Medal className="w-5 h-5 text-gray-400" />,
+          badge: { text: 'Á quân', className: 'bg-gray-400 text-white' }
+        };
+      case 3:
+        return {
+          spaPoints: 500,
+          eloPoints: 50,
+          prizeMoney: 800000,
+          physicalRewards: ['Huy chương đồng', 'Giấy chứng nhận'],
+          icon: <Award className="w-5 h-5 text-amber-600" />,
+          badge: { text: 'Hạng 3', className: 'bg-amber-600 text-white' }
+        };
+      default:
+        if (position <= 8) {
+          return {
+            spaPoints: 300,
+            eloPoints: 25,
+            prizeMoney: 400000,
+            physicalRewards: ['Giấy chứng nhận'],
+            icon: <Star className="w-5 h-5 text-blue-500" />,
+            badge: { text: `Top ${position}`, className: 'bg-blue-500 text-white' }
+          };
+        } else {
+          return {
+            spaPoints: 100,
+            eloPoints: 10,
+            prizeMoney: 100000,
+            physicalRewards: ['Giấy chứng nhận'],
+            icon: <Gift className="w-5 h-5 text-gray-500" />,
+            badge: { text: `Hạng ${position}`, className: 'bg-gray-500 text-white' }
+          };
+        }
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  };
+
+  const getPhysicalRewardIcons = (rewardItems?: string[]) => {
+    if (!rewardItems) return '';
+    return rewardItems.map((reward) => {
+      if (reward.includes('Cúp')) return '🏆';
+      if (reward.includes('Huy chương bạc')) return '🥈';
+      if (reward.includes('Huy chương đồng')) return '🥉';
+      if (reward.includes('Huy chương vàng')) return '🥇';
+      if (reward.includes('Giấy chứng nhận')) return '📜';
+      return '🎁';
+    }).join(' ');
+  };
+
+  const generateTemplateRewards = (): TournamentRewards => {
+    const positions = Array.from({ length: Math.min(maxParticipants, 16) }, (_, i) => i + 1);
+    const calculatedTotalPrize = entryFee > 0 ? entryFee * maxParticipants * 0.75 : 0;
+    
+    const rewardPositions = positions.map((position) => {
+      const reward = getTemplateRewardData(position);
+      let calculatedCashPrize = reward.prizeMoney;
+      
+      // Use entry fee calculation if available
+      if (calculatedTotalPrize > 0) {
+        if (position === 1) calculatedCashPrize = Math.floor(calculatedTotalPrize * 0.5);
+        else if (position === 2) calculatedCashPrize = Math.floor(calculatedTotalPrize * 0.3);
+        else if (position === 3) calculatedCashPrize = Math.floor(calculatedTotalPrize * 0.2);
+        else calculatedCashPrize = 0;
+      }
+      
+      return {
+        position,
+        name: reward.badge.text,
+        eloPoints: reward.eloPoints,
+        spaPoints: reward.spaPoints,
+        cashPrize: calculatedCashPrize,
+        items: reward.physicalRewards,
+        isVisible: true
+      };
+    });
+
+    const totalPrizeMoney = calculatedTotalPrize || positions.reduce((total, pos) => total + getTemplateRewardData(pos).prizeMoney, 0);
+
+    return {
+      totalPrize: totalPrizeMoney,
+      showPrizes: totalPrizeMoney > 0,
+      positions: rewardPositions,
+      specialAwards: []
+    };
+  };
+
+  // Use current rewards state for display, fallback to props, then template/default
+  const displayRewards = showAsTemplate ? generateTemplateRewards() : 
+    (currentRewards || rewards || {
+      totalPrize: 0,
+      showPrizes: false,
+      positions: [],
+      specialAwards: []
+    });
+  
+  console.log('📊 Display rewards final:', {
+    totalPrize: displayRewards.totalPrize,
+    positionsCount: displayRewards.positions?.length || 0,
+    usingTemplate: showAsTemplate,
+    source: showAsTemplate ? 'template' : 
+           (currentRewards ? 'current-state' : 
+           (rewards ? 'props' : 'default')),
+    firstPosition: displayRewards.positions?.[0]
+  });
+
+  const handleSaveRewards = async (updatedRewards: TournamentRewards) => {
+    console.log('💾 OptimizedRewardsSection save rewards:', updatedRewards);
+    
+    // Update local state immediately for instant UI update
+    setCurrentRewards(updatedRewards);
+    
+    // Call parent callback to save to database/state
+    if (onRewardsUpdated) {
+      onRewardsUpdated(updatedRewards);
+    }
+    
+    setIsEditModalOpen(false);
+    
+    // Show success message
+    toast.success('Đã cập nhật phần thưởng thành công!');
+  };
+
+  const handleUseTemplate = () => {
+    if (onUseTemplate) {
+      const templateRewards = generateTemplateRewards();
+      onUseTemplate(templateRewards);
+      toast.success('Đã áp dụng template phần thưởng!');
+    }
+  };
+
+  // Financial calculations
+  const totalRevenue = entryFee * maxParticipants;
+  const clubProfit = totalRevenue - displayRewards.totalPrize;
+
+  return (
+    <div className="space-y-6">
+      {/* Quick Stats - Enhanced Mode Only */}
+      {showFinancialSummary && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Trophy className="w-4 h-4 text-yellow-600" />
+                <span className="text-sm font-medium text-yellow-800">Tổng giải thưởng</span>
+              </div>
+              <p className="text-2xl font-bold text-yellow-900">
+                {displayRewards.totalPrize.toLocaleString('vi-VN')}₫
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Coins className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-800">Điểm ELO cao nhất</span>
+              </div>
+              <p className="text-2xl font-bold text-blue-900">
+                +{displayRewards.positions.length > 0 ? Math.max(...displayRewards.positions.map(p => p.eloPoints)) : 0}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Star className="w-4 h-4 text-purple-600" />
+                <span className="text-sm font-medium text-purple-800">Điểm SPA cao nhất</span>
+              </div>
+              <p className="text-2xl font-bold text-purple-900">
+                +{displayRewards.positions.length > 0 ? Math.max(...displayRewards.positions.map(p => p.spaPoints)).toLocaleString() : 0}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Gift className="w-4 h-4 text-green-600" />
+                <span className="text-sm font-medium text-green-800">Vị trí có thưởng</span>
+              </div>
+              <p className="text-2xl font-bold text-green-900">
+                {displayRewards.positions.filter(p => p.isVisible).length}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-yellow-600">
+                <Trophy className="w-5 h-5" />
+                {showAsTemplate ? 'Bảng phần thưởng' : 'Phần thưởng giải đấu'}
+                {!showAsTemplate && rewards && (
+                  <Badge variant="secondary" className="ml-2">Đã lưu</Badge>
+                )}
+                {showAsTemplate && (
+                  <Badge variant="outline" className="ml-2">Template</Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                {showAsTemplate ? (
+                  <>
+                    Tổng giải thưởng: <span className="font-semibold text-yellow-600">{formatCurrency(displayRewards.totalPrize)}</span>
+                    {entryFee > 0 && <span className="ml-2 text-xs text-blue-600">(Từ phí đăng ký: {formatCurrency(entryFee)} × {maxParticipants})</span>}
+                  </>
+                ) : (
+                  'Phần thưởng được cấu hình cho giải đấu này'
+                )}
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              {isEditable && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50"
+                >
+                  <Edit className="w-4 h-4" />
+                  Chỉnh sửa
+                </Button>
+              )}
+              {showAsTemplate && onUseTemplate && (
+                <Button 
+                  onClick={handleUseTemplate} 
+                  size="sm" 
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Áp dụng template
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+        {/* Prize Pool Summary */}
+        {displayRewards.showPrizes && displayRewards.totalPrize > 0 && (
+          <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <div className="flex items-center gap-2 mb-2">
+              <Trophy className="w-5 h-5 text-yellow-600" />
+              <span className="font-semibold text-yellow-800">
+                Tổng giải thưởng: {formatPrizeAmount(displayRewards.totalPrize)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Position Rewards */}
+        <div className="space-y-4">
+          <h3 className="font-semibold text-lg">Phần thưởng theo vị trí</h3>
+          
+          {(displayRewards.positions && displayRewards.positions.length > 0) ? (
+            <div className={showAsTemplate ? "space-y-2 max-h-96 overflow-y-auto" : "grid gap-4"}>
+              {displayRewards.positions.map((position) => {
+                const templateData = showAsTemplate ? getTemplateRewardData(position.position) : null;
+                
+                return showAsTemplate ? (
+                  // Template display format
+                  <div
+                    key={position.position}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                  >
+                    <div className="flex items-center gap-3">
+                      {templateData?.icon}
+                      <div>
+                        <Badge className={templateData?.badge.className}>
+                          {position.name}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-4 items-center text-sm">
+                      {/* Physical Rewards */}
+                      <div className="text-center">
+                        <div className="text-lg">
+                          {getPhysicalRewardIcons(position.items)}
+                        </div>
+                        <p className="text-xs text-muted-foreground">Hiện vật</p>
+                      </div>
+
+                      {/* Prize Money */}
+                      <div className="text-center">
+                        <p className="font-semibold text-yellow-600">
+                          {formatCurrency(position.cashPrize)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">Tiền thưởng</p>
+                      </div>
+
+                      {/* SPA Points */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-blue-600">
+                          <Coins className="w-4 h-4" />
+                          <span className="font-semibold">{position.spaPoints}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">SPA</p>
+                      </div>
+
+                      {/* ELO Points */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-green-600">
+                          <Target className="w-4 h-4" />
+                          <span className="font-semibold">+{position.eloPoints}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">ELO</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  // Standard display format
+                  <div key={position.position} className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                          <span className="font-bold text-primary">{position.position}</span>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{position.name}</h4>
+                          {displayRewards.showPrizes && position.cashPrize > 0 && (
+                            <p className="text-sm text-green-600 font-medium">
+                              {formatPrizeAmount(position.cashPrize)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+                          {position.eloPoints} ELO
+                        </Badge>
+                        <Badge variant="secondary" className="bg-yellow-50 text-yellow-700">
+                          {position.spaPoints} SPA
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    {position.items?.length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        <div className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Gift className="w-3 h-3" />
+                          Giải thưởng hiện vật:
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {position.items.map((item: string, index: number) => (
+                            <Badge key={index} variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
+                              <Gift className="w-3 h-3 mr-1" />
+                              {item}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <Trophy className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>Chưa có phần thưởng nào được cấu hình</p>
+              {isEditable && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="mt-4"
+                >
+                  Thiết lập phần thưởng
+                </Button>
+              )}
+            </div>
+          )}
+          
+          {showAsTemplate && maxParticipants > 16 && (
+            <p className="text-xs text-muted-foreground mt-3 text-center">
+              * Chỉ hiển thị top 16 vị trí có phần thưởng
+            </p>
+          )}
+        </div>
+        </CardContent>
+      </Card>
+
+      {/* Financial Summary - Enhanced Mode Only */}
+      {showFinancialSummary && entryFee > 0 && maxParticipants > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <DollarSign className="w-5 h-5 text-green-500" />
+              Tổng quan tài chính
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalRevenue.toLocaleString('vi-VN')}₫
+                </div>
+                <div className="text-sm text-blue-700">Tổng thu</div>
+                <div className="text-xs text-muted-foreground">
+                  {maxParticipants} × {entryFee.toLocaleString('vi-VN')}₫
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                <div className="text-2xl font-bold text-yellow-600">
+                  {displayRewards.totalPrize.toLocaleString('vi-VN')}₫
+                </div>
+                <div className="text-sm text-yellow-700">Giải thưởng</div>
+                <div className="text-xs text-muted-foreground">
+                  {totalRevenue > 0 ? ((displayRewards.totalPrize / totalRevenue) * 100).toFixed(1) : 0}% tổng thu
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className={`text-2xl font-bold ${clubProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {clubProfit.toLocaleString('vi-VN')}₫
+                </div>
+                <div className="text-sm text-green-700">Lợi nhuận CLB</div>
+                <div className="text-xs text-muted-foreground">
+                  {totalRevenue > 0 ? ((clubProfit / totalRevenue) * 100).toFixed(1) : 0}% tổng thu
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Information */}
+      <Card className="bg-primary/5 border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base text-primary">
+            <Info className="w-4 h-4" />
+            Thông tin quan trọng
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-start gap-2">
+              <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">ELO</Badge>
+              <span>Điểm chính thức, ảnh hưởng trực tiếp đến hạng của bạn</span>
+            </div>
+            
+            <div className="flex items-start gap-2">
+              <Badge variant="secondary" className="bg-yellow-100 text-yellow-700 text-xs">SPA</Badge>
+              <span>Điểm "vui", không ảnh hưởng hạng chính thức nhưng có thể đổi quà</span>
+            </div>
+            
+            <div className="flex items-start gap-2">
+              <Badge variant="outline" className="text-xs">Hạng</Badge>
+              <span>Điểm SPA phụ thuộc vào hạng hiện tại - hạng cao hơn = SPA nhiều hơn</span>
+            </div>
+            
+            <div className="flex items-start gap-2">
+              <Badge variant="outline" className="text-xs">Vị trí</Badge>
+              <span>Điểm ELO cố định theo vị trí cuối cùng trong giải đấu</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Edit Modal */}
+      <RewardsEditModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        rewards={displayRewards}
+        onSave={handleSaveRewards}
+      />
+    </div>
+  );
+};
+
+export default OptimizedRewardsSection;

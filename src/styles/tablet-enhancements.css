@@ -1,0 +1,71 @@
+/* Tablet-specific CSS enhancements */
+
+.tablet-optimized-container {
+  @apply min-h-screen;
+}
+
+.tablet-enhanced-grid {
+  gap: 2rem;
+}
+
+.tablet-enhanced-card {
+  @apply shadow-lg;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.tablet-enhanced-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-2px);
+}
+
+.tablet-enhanced-button {
+  @apply px-8 py-4;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  /* Enhanced touch targets for tablets */
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.tablet-enhanced-button:active {
+  transform: scale(0.98);
+}
+
+/* Tablet navigation enhancements */
+.tablet-nav-enhanced {
+  @apply h-20;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid hsl(var(--border) / 0.3);
+}
+
+.tablet-nav-enhanced .nav-item {
+  @apply px-6 py-4;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.tablet-nav-enhanced .nav-item:active {
+  transform: scale(0.95);
+}
+
+/* Tablet typography enhancements */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-enhanced-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .tablet-enhanced-heading {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tablet-enhanced-spacing {
+    padding: 2rem;
+    margin: 1.5rem 0;
+  }
+}

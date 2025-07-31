@@ -1,0 +1,192 @@
+-- Thêm các config fields vào tournaments table
+ALTER TABLE public.tournaments 
+ADD COLUMN IF NOT EXISTS spa_points_config JSONB DEFAULT '{
+  "1": 1000, "2": 700, "3": 500, "4": 400, 
+  "5": 300, "6": 300, "7": 300, "8": 300,
+  "9": 200, "10": 200, "11": 200, "12": 200, "13": 200, "14": 200, "15": 200, "16": 200,
+  "default": 100
+}',
+ADD COLUMN IF NOT EXISTS elo_points_config JSONB DEFAULT '{
+  "1": 100, "2": 50, "3": 25, "4": 12,
+  "5": 6, "6": 6, "7": 6, "8": 6,
+  "9": 3, "10": 3, "11": 3, "12": 3, "13": 3, "14": 3, "15": 3, "16": 3,
+  "default": 1
+}',
+ADD COLUMN IF NOT EXISTS prize_distribution JSONB DEFAULT '{
+  "1": 5000000, "2": 3000000, "3": 2000000, "4": 1000000,
+  "5": 500000, "6": 500000, "7": 500000, "8": 500000,
+  "default": 0
+}',
+ADD COLUMN IF NOT EXISTS physical_prizes JSONB DEFAULT '{
+  "1": {"icon": "🏆", "name": "Cúp vô địch", "color": "text-tournament-gold"},
+  "2": {"icon": "🥈", "name": "Huy chương bạc", "color": "text-tournament-silver"},
+  "3": {"icon": "🥉", "name": "Huy chương đồng", "color": "text-tournament-bronze"},
+  "4": {"icon": "🎖️", "name": "Chứng nhận hạng 4", "color": "text-muted-foreground"},
+  "default": {"icon": "📜", "name": "Chứng nhận tham gia", "color": "text-muted-foreground"}
+}';
+
+-- Cập nhật process_tournament_results_manual function để sử dụng config
+CREATE OR REPLACE FUNCTION public.process_tournament_results_manual(tournament_id_param UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO ''
+AS $function$
+DECLARE
+  v_tournament RECORD;
+  v_participant RECORD;
+  v_spa_points INTEGER;
+  v_elo_points INTEGER;
+  v_prize_money NUMERIC;
+  v_multiplier NUMERIC;
+  v_final_match_winner UUID;
+  v_final_match_loser UUID;
+BEGIN
+  -- Get tournament with config
+  SELECT * INTO v_tournament FROM public.tournaments WHERE id = tournament_id_param;
+  
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Tournament not found: %', tournament_id_param;
+  END IF;
+  
+  -- Get tournament type multiplier for SPA points
+  v_multiplier := CASE 
+    WHEN v_tournament.tournament_type = 'season' THEN 1.5
+    WHEN v_tournament.tournament_type = 'open' THEN 2.0
+    ELSE 1.0
+  END;
+  
+  -- Get final match results to determine 1st and 2nd place  
+  SELECT winner_id, 
+         CASE WHEN winner_id = player1_id THEN player2_id ELSE player1_id END as loser_id
+  INTO v_final_match_winner, v_final_match_loser
+  FROM public.tournament_matches tm
+  WHERE tm.tournament_id = tournament_id_param 
+    AND tm.round_number = (
+      SELECT MAX(round_number) 
+      FROM public.tournament_matches 
+      WHERE tournament_id = tournament_id_param
+    )
+    AND tm.status = 'completed'
+    AND tm.winner_id IS NOT NULL
+  LIMIT 1;
+  
+  RAISE NOTICE 'Final match winner: %, loser: %', v_final_match_winner, v_final_match_loser;
+  
+  -- Process all tournament participants with position calculation
+  FOR v_participant IN 
+    WITH player_stats AS (
+      SELECT 
+        tr.user_id,
+        p.full_name,
+        COUNT(CASE WHEN tm.winner_id = tr.user_id THEN 1 END) as wins,
+        COUNT(CASE WHEN tm.status = 'completed' AND tm.winner_id IS NOT NULL 
+                   AND (tm.player1_id = tr.user_id OR tm.player2_id = tr.user_id) 
+                   AND tm.winner_id != tr.user_id THEN 1 END) as losses,
+        COUNT(CASE WHEN tm.status = 'completed' AND tm.winner_id IS NOT NULL 
+                   AND (tm.player1_id = tr.user_id OR tm.player2_id = tr.user_id) THEN 1 END) as total_matches
+      FROM public.tournament_registrations tr
+      LEFT JOIN public.profiles p ON tr.user_id = p.user_id
+      LEFT JOIN public.tournament_matches tm ON 
+        (tm.player1_id = tr.user_id OR tm.player2_id = tr.user_id)
+        AND tm.tournament_id = tournament_id_param
+      WHERE tr.tournament_id = tournament_id_param 
+        AND tr.registration_status = 'confirmed'
+        AND tr.user_id IS NOT NULL
+      GROUP BY tr.user_id, p.full_name
+    )
+    SELECT 
+      user_id,
+      full_name,
+      wins,
+      losses,
+      total_matches,
+      CASE 
+        WHEN user_id = v_final_match_winner THEN 1
+        WHEN user_id = v_final_match_loser THEN 2
+        ELSE ROW_NUMBER() OVER (ORDER BY wins DESC, total_matches DESC, losses ASC) + 2
+      END as position
+    FROM player_stats
+    ORDER BY 
+      CASE 
+        WHEN user_id = v_final_match_winner THEN 1
+        WHEN user_id = v_final_match_loser THEN 2
+        ELSE ROW_NUMBER() OVER (ORDER BY wins DESC, total_matches DESC, losses ASC) + 2
+      END
+  LOOP
+    -- Get SPA points from tournament config
+    v_spa_points := COALESCE(
+      (v_tournament.spa_points_config->>v_participant.position::text)::INTEGER,
+      (v_tournament.spa_points_config->>'default')::INTEGER,
+      100
+    );
+    
+    -- Apply multiplier to SPA points
+    v_spa_points := ROUND(v_spa_points * v_multiplier);
+    
+    -- Get ELO points from tournament config (no multiplier)
+    v_elo_points := COALESCE(
+      (v_tournament.elo_points_config->>v_participant.position::text)::INTEGER,
+      (v_tournament.elo_points_config->>'default')::INTEGER,
+      1
+    );
+    
+    -- Get prize money from tournament config
+    v_prize_money := COALESCE(
+      (v_tournament.prize_distribution->>v_participant.position::text)::NUMERIC,
+      (v_tournament.prize_distribution->>'default')::NUMERIC,
+      0
+    );
+    
+    RAISE NOTICE 'Player % (%) position % gets % SPA points, % ELO points, %đ prize', 
+      v_participant.full_name, v_participant.user_id, v_participant.position, v_spa_points, v_elo_points, v_prize_money;
+    
+    -- Award tournament results
+    INSERT INTO public.tournament_results (
+      tournament_id, 
+      user_id, 
+      final_position,
+      matches_played,
+      matches_won,
+      matches_lost,
+      spa_points_earned,
+      elo_points_earned,
+      prize_money,
+      created_at
+    ) VALUES (
+      tournament_id_param,
+      v_participant.user_id,
+      v_participant.position,
+      v_participant.total_matches,
+      v_participant.wins,
+      v_participant.losses,
+      v_spa_points,
+      v_elo_points,
+      v_prize_money,
+      NOW()
+    )
+    ON CONFLICT (tournament_id, user_id) DO UPDATE SET
+      final_position = EXCLUDED.final_position,
+      matches_played = EXCLUDED.matches_played,
+      matches_won = EXCLUDED.matches_won,
+      matches_lost = EXCLUDED.matches_lost,
+      spa_points_earned = EXCLUDED.spa_points_earned,
+      elo_points_earned = EXCLUDED.elo_points_earned,
+      prize_money = EXCLUDED.prize_money,
+      updated_at = NOW();
+    
+    -- Update player rankings
+    INSERT INTO public.player_rankings (user_id, spa_points, elo_points, total_matches, wins, losses)
+    VALUES (v_participant.user_id, v_spa_points, v_elo_points, v_participant.total_matches, v_participant.wins, v_participant.losses)
+    ON CONFLICT (user_id) DO UPDATE SET
+      spa_points = COALESCE(player_rankings.spa_points, 0) + v_spa_points,
+      elo_points = COALESCE(player_rankings.elo_points, 1000) + v_elo_points,
+      total_matches = COALESCE(player_rankings.total_matches, 0) + v_participant.total_matches,
+      wins = COALESCE(player_rankings.wins, 0) + v_participant.wins,
+      losses = COALESCE(player_rankings.losses, 0) + v_participant.losses,
+      updated_at = NOW();
+  END LOOP;
+  
+  RAISE NOTICE 'Tournament % reprocessing completed using configuration', v_tournament.name;
+END;
+$function$;

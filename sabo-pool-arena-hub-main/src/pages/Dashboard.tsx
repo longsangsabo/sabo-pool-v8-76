@@ -1,0 +1,3 @@
+import MobileLayout from '../components/MobileLayout';
+
+// ... existing code ...
