@@ -11,41 +11,51 @@ import { useProgressiveLoading } from '../hooks/useProgressiveLoading';
 import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Mock feed data
-const generateMockFeedData = (count: number = 20) => {
-  const users = [
-    { id: '1', name: 'Duc Nguyen', avatar: '/api/placeholder/40/40', rank: 'Expert' },
-    { id: '2', name: 'Minh Tran', avatar: '/api/placeholder/40/40', rank: 'Pro' },
-    { id: '3', name: 'Lan Pham', avatar: '/api/placeholder/40/40', rank: 'Master' },
-    { id: '4', name: 'Tuan Le', avatar: '/api/placeholder/40/40', rank: 'Advanced' },
-    { id: '5', name: 'Nam Vo', avatar: '/api/placeholder/40/40', rank: 'Expert' }
-  ];
+// Mock data - optimized for mobile performance
+const MOCK_USERS = [
+  { id: '1', name: 'Duc Nguyen', avatar: '/api/placeholder/40/40', rank: 'Expert' },
+  { id: '2', name: 'Minh Tran', avatar: '/api/placeholder/40/40', rank: 'Pro' },
+  { id: '3', name: 'Lan Pham', avatar: '/api/placeholder/40/40', rank: 'Master' },
+  { id: '4', name: 'Tuan Le', avatar: '/api/placeholder/40/40', rank: 'Advanced' },
+  { id: '5', name: 'Nam Vo', avatar: '/api/placeholder/40/40', rank: 'Expert' }
+];
 
-  const postTypes = ['match_result', 'achievement', 'challenge', 'tournament_update'] as const;
+const POST_TYPES = ['match_result', 'achievement', 'challenge', 'tournament_update'] as const;
+
+const CONTENT_TEMPLATES = {
+  match_result: (user: any) => `Vừa thắng ${user.name === 'Duc Nguyen' ? 'Player2' : 'Player1'} với tỷ số thuyết phục! 🎱`,
+  achievement: (user: any) => `Chính thức lên rank ${user.rank}! Cảm ơn mọi người đã ủng hộ 🏆`,
+  challenge: () => `Ai dám nhận thách đấu với tôi không? Đặt cược 100K! 🔥`,
+  tournament_update: (user: any, index: number) => `SABO Arena Open #${index + 1} sắp bắt đầu! Đăng ký ngay để nhận vị trí tốt nhất 🎯`
+};
+
+// Optimized mock data generation - reduce initial load
+const generateMockFeedData = (count: number = 10) => {
   const posts = [];
-
+  
   for (let i = 0; i < count; i++) {
-    const user = users[Math.floor(Math.random() * users.length)];
-    const type = postTypes[Math.floor(Math.random() * postTypes.length)];
+    const user = MOCK_USERS[i % MOCK_USERS.length];
+    const type = POST_TYPES[i % POST_TYPES.length];
+    const baseStats: any = { 
+      likes: 15 + (i * 3), 
+      comments: 5 + (i * 2), 
+      shares: 2 + i 
+    };
     
-    let content = '';
-    let stats: any = { likes: Math.floor(Math.random() * 50), comments: Math.floor(Math.random() * 20), shares: Math.floor(Math.random() * 10) };
+    let content = CONTENT_TEMPLATES[type](user, i);
+    let stats: any = { ...baseStats };
 
     switch (type) {
       case 'match_result':
-        content = `Vừa thắng ${user.name === 'Duc Nguyen' ? 'Player2' : 'Player1'} với tỷ số thuyết phục! 🎱`;
         stats = { ...stats, score: '8-6', opponent: user.name === 'Duc Nguyen' ? 'Player2' : 'Player1' };
         break;
       case 'achievement':
-        content = `Chính thức lên rank ${user.rank}! Cảm ơn mọi người đã ủng hộ 🏆`;
         stats = { ...stats, achievement: `Rank ${user.rank}` };
         break;
       case 'challenge':
-        content = `Ai dám nhận thách đấu với tôi không? Đặt cược 100K! 🔥`;
         stats = { ...stats, challenge_type: 'Thách đấu 8-ball' };
         break;
       case 'tournament_update':
-        content = `SABO Arena Open #${i + 1} sắp bắt đầu! Đăng ký ngay để nhận vị trí tốt nhất 🎯`;
         stats = { ...stats, tournament_name: `SABO Arena Open #${i + 1}` };
         break;
     }
@@ -55,9 +65,9 @@ const generateMockFeedData = (count: number = 20) => {
       type,
       user,
       content,
-      timestamp: `${Math.floor(Math.random() * 24)}h trước`,
+      timestamp: `${(i + 1) * 2}h trước`,
       stats,
-      isLiked: Math.random() > 0.7
+      isLiked: i % 4 === 0
     });
   }
 
@@ -65,7 +75,7 @@ const generateMockFeedData = (count: number = 20) => {
 };
 
 const Dashboard = () => {
-  const [feedData, setFeedData] = useState(() => generateMockFeedData(15));
+  const [feedData, setFeedData] = useState(() => generateMockFeedData(8));
   const [refreshing, setRefreshing] = useState(false);
 
   // Progressive loading for smooth UX
@@ -81,7 +91,7 @@ const Dashboard = () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Generate new feed data
-    const newFeedData = generateMockFeedData(15);
+    const newFeedData = generateMockFeedData(8);
     setFeedData(newFeedData);
     setRefreshing(false);
     toast.success('Đã làm mới feed!');
@@ -109,7 +119,7 @@ const Dashboard = () => {
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // Add more items to feed
-    const moreData = generateMockFeedData(10);
+    const moreData = generateMockFeedData(5);
     setFeedData(prev => [...prev, ...moreData]);
   }, [hasMore]);
 

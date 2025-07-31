@@ -2,6 +2,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/hooks/useAuth';
 import { CombinedProviders } from '@/contexts/CombinedProviders';
@@ -76,11 +77,12 @@ const App = () => {
   return (
     <AppErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <AuthProvider>
-            <CombinedProviders>
-              <div className="min-h-screen bg-background">
-                <Suspense fallback={<AppLoadingFallback />}>
+        <HelmetProvider>
+          <Router>
+            <AuthProvider>
+              <CombinedProviders>
+                <div className="min-h-screen bg-background">
+                  <Suspense fallback={<AppLoadingFallback />}>
                    <Routes>
                      {/* Public routes - no authentication required */}
                      <Route path="/" element={<HomePage />} />
@@ -135,12 +137,13 @@ const App = () => {
                      {/* Fallback route */}
                      <Route path="*" element={<NotFoundPage />} />
                    </Routes>
-                </Suspense>
-              </div>
-            </CombinedProviders>
-          </AuthProvider>
-          <Toaster />
-        </Router>
+                  </Suspense>
+                </div>
+              </CombinedProviders>
+            </AuthProvider>
+            <Toaster />
+          </Router>
+        </HelmetProvider>
       </QueryClientProvider>
     </AppErrorBoundary>
   );
