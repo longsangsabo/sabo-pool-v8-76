@@ -50,10 +50,16 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get open challenges (challenges where opponent_id is null and not created by current user)
+  // Get open challenges (challenges where opponent_id is null)
   const openChallenges = challenges.filter(c => 
     !c.opponent_id && 
-    c.challenger_id !== user?.id && 
+    c.status === 'pending'
+  );
+
+  // Get user's own open challenges
+  const userOpenChallenges = challenges.filter(c =>
+    !c.opponent_id &&
+    c.challenger_id === user?.id &&
     c.status === 'pending'
   );
 
@@ -171,6 +177,17 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             </div>
           )}
 
+          {/* SPA Points & Rank Info */}
+          <div className="flex items-center gap-2 mb-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+            <Star className="w-4 h-4 text-blue-600" />
+            <span className="text-xs text-blue-600">
+              {isChallenger 
+                ? challenge.opponent_profile?.spa_points || 0
+                : challenge.challenger_profile?.spa_points || 0
+              } SPA điểm
+            </span>
+          </div>
+
           {/* Location and time */}
           <div className="space-y-1 mb-3 text-xs text-muted-foreground">
             {challenge.club_profiles?.club_name && (
@@ -185,6 +202,10 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
                 <span>{new Date(challenge.scheduled_time).toLocaleDateString('vi-VN')}</span>
               </div>
             )}
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
+            </div>
           </div>
 
           {/* Actions */}
@@ -253,6 +274,22 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             <span className="text-xs text-emerald-600">Race to {challenge.race_to || 5}</span>
           </div>
 
+          {/* SPA Points Info */}
+          <div className="flex items-center gap-2 mb-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+            <Star className="w-4 h-4 text-blue-600" />
+            <span className="text-xs text-blue-600">
+              {challenge.challenger_profile?.spa_points || 0} SPA điểm
+            </span>
+          </div>
+
+          {/* Location info */}
+          {challenge.club_profiles?.club_name && (
+            <div className="flex items-center gap-1 mb-3 text-xs text-muted-foreground">
+              <MapPin className="w-3 h-3" />
+              <span>{challenge.club_profiles.club_name}</span>
+            </div>
+          )}
+
           {/* Message */}
           {challenge.message && (
             <div className="mb-3 p-2 bg-emerald-50/50 rounded-lg border border-emerald-200/30">
@@ -270,6 +307,77 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
           >
             <Users className="w-4 h-4 mr-2" />
             Tham gia thách đấu
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const renderUserOpenChallengeCard = (challenge: any) => {
+    return (
+      <Card key={challenge.id} className="mb-3 overflow-hidden border border-blue-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
+        <CardContent className="p-4">
+          {/* Header with user's open indicator */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src={challenge.challenger_profile?.avatar_url} />
+                  <AvatarFallback>
+                    {challenge.challenger_profile?.full_name?.[0] || 'M'}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-sm">
+                  Thách đấu mở của bạn
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {challenge.challenger_profile?.verified_rank || 'K'}
+                </p>
+              </div>
+            </div>
+            <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
+              🎯 Đang mở
+            </Badge>
+          </div>
+
+          {/* Bet amount */}
+          <div className="flex items-center gap-2 mb-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+            <DollarSign className="w-4 h-4 text-blue-600" />
+            <span className="font-bold text-blue-800">{challenge.bet_points}</span>
+            <span className="text-xs text-blue-600">SPA điểm</span>
+            <ArrowRight className="w-3 h-3 text-blue-600 mx-1" />
+            <span className="text-xs text-blue-600">Race to {challenge.race_to || 5}</span>
+          </div>
+
+          {/* Message */}
+          {challenge.message && (
+            <div className="mb-3 p-2 bg-blue-50/50 rounded-lg border border-blue-200/30">
+              <div className="flex items-start gap-2">
+                <MessageSquare className="w-3 h-3 mt-0.5 text-blue-600" />
+                <p className="text-xs text-blue-800 italic">"{challenge.message}"</p>
+              </div>
+            </div>
+          )}
+
+          {/* Time info */}
+          <div className="text-xs text-muted-foreground mb-3">
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
+            </div>
+          </div>
+
+          {/* Action */}
+          <Button
+            variant="outline"
+            onClick={() => cancelChallenge(challenge.id)}
+            className="w-full h-9 border-red-300 text-red-600 hover:bg-red-50"
+          >
+            <XCircle className="w-4 h-4 mr-2" />
+            Hủy thách đấu
           </Button>
         </CardContent>
       </Card>
@@ -331,7 +439,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-4">
+        <TabsList className="grid w-full grid-cols-4 mb-4">
           <TabsTrigger value="received" className="text-xs">
             Nhận ({receivedChallenges.length})
           </TabsTrigger>
@@ -339,7 +447,10 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             Gửi ({sentChallenges.length})
           </TabsTrigger>
           <TabsTrigger value="open" className="text-xs">
-            Mở ({openChallenges.length})
+            Tìm ({openChallenges.length})
+          </TabsTrigger>
+          <TabsTrigger value="user_open" className="text-xs">
+            Mở ({userOpenChallenges.length})
           </TabsTrigger>
         </TabsList>
 
@@ -378,17 +489,34 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
         </TabsContent>
 
         <TabsContent value="open" className="space-y-0">
-          {openChallenges.length === 0 ? (
+          {openChallenges.filter(c => c.challenger_id !== user?.id).length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
                 <Users className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">Không có thách đấu mở nào</p>
+                <p className="text-sm text-muted-foreground">Không có thách đấu mở nào từ người khác</p>
               </CardContent>
             </Card>
           ) : (
             <div>
-              {openChallenges.map(challenge => 
-                renderOpenChallengeCard(challenge)
+              {openChallenges
+                .filter(c => c.challenger_id !== user?.id)
+                .map(challenge => renderOpenChallengeCard(challenge))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="user_open" className="space-y-0">
+          {userOpenChallenges.length === 0 ? (
+            <Card>
+              <CardContent className="p-6 text-center">
+                <Target className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">Bạn chưa tạo thách đấu mở nào</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div>
+              {userOpenChallenges.map(challenge => 
+                renderUserOpenChallengeCard(challenge)
               )}
             </div>
           )}

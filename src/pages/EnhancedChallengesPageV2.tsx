@@ -134,16 +134,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
     challenge_type: c.challenge_type,
     challenger_profile: c.challenger_profile,
     opponent_profile: c.opponent_profile,
-    club_profiles: c.club_profiles,
+    club_profiles: c.club_profiles || null,
   });
 
   // Derived data from hook - filter data safely
   const myChallenges = [...receivedChallenges, ...sentChallenges].map(convertToLocalChallenge);
   const activeChallenges = challenges.filter(c => c.status === 'accepted').map(convertToLocalChallenge);
   const openChallenges = challenges.filter(c => 
-    (c as any).challenge_type === 'open' && 
-    c.status === 'pending' && 
-    c.challenger_id !== user?.id
+    !c.opponent_id && 
+    c.status === 'pending'
   ).map(convertToLocalChallenge);
   
   // Calculate stats from derived data

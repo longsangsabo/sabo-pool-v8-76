@@ -46,8 +46,11 @@ export const useChallenges = () => {
         if (challenge.opponent_id) userIds.add(challenge.opponent_id);
       });
 
-      // Fetch all user profiles in one query
+      // Fetch all user profiles with SPA points in one query
       let profiles: any[] = [];
+      let playerRankings: any[] = [];
+      let clubProfiles: any[] = [];
+      
       if (userIds.size > 0) {
         const { data: profilesData } = await supabase
           .from('profiles')
@@ -57,26 +60,72 @@ export const useChallenges = () => {
             display_name, 
             verified_rank, 
             elo, 
-            avatar_url
+            avatar_url,
+            current_rank
           `)
           .in('user_id', Array.from(userIds));
         
         profiles = profilesData || [];
+
+        // Fetch player rankings for SPA points
+        const { data: rankingsData } = await supabase
+          .from('player_rankings')
+          .select('user_id, spa_points, elo_points')
+          .in('user_id', Array.from(userIds));
+        
+        playerRankings = rankingsData || [];
       }
 
-      // Create a map for quick profile lookup
+      // Note: Club profiles integration will be added when club_id field is available in challenges table
+      // For now, we'll skip club data fetching
+      clubProfiles = [];
+
+      // Create maps for quick lookups
       const profileMap = new Map();
+      const rankingMap = new Map();
+      const clubMap = new Map();
+      
       profiles.forEach(profile => {
         profileMap.set(profile.user_id, profile);
       });
+      
+      playerRankings.forEach(ranking => {
+        rankingMap.set(ranking.user_id, ranking);
+      });
+      
+      clubProfiles.forEach(club => {
+        clubMap.set(club.id, club);
+      });
 
-      // Map challenges with profile data
-      const enrichedChallenges = challengesData?.map(challenge => ({
-        ...challenge,
-        challenger_profile: profileMap.get(challenge.challenger_id),
-        opponent_profile: profileMap.get(challenge.opponent_id),
-        current_user_profile: profileMap.get(user.id)
-      })) || [];
+      // Map challenges with enriched profile and club data
+      const enrichedChallenges = challengesData?.map(challenge => {
+        const challengerProfile = profileMap.get(challenge.challenger_id);
+        const opponentProfile = profileMap.get(challenge.opponent_id);
+        const challengerRanking = rankingMap.get(challenge.challenger_id);
+        const opponentRanking = rankingMap.get(challenge.opponent_id);
+        // const clubProfile = clubMap.get(challenge.club_id); // TODO: Add when club_id field exists
+        const clubProfile = null;
+
+        return {
+          ...challenge,
+          challenger_profile: challengerProfile ? {
+            ...challengerProfile,
+            spa_points: challengerRanking?.spa_points || 0,
+            elo_points: challengerRanking?.elo_points || 1000
+          } : null,
+          opponent_profile: opponentProfile ? {
+            ...opponentProfile,
+            spa_points: opponentRanking?.spa_points || 0,
+            elo_points: opponentRanking?.elo_points || 1000
+          } : null,
+          club_profiles: clubProfile ? {
+            club_name: clubProfile.club_name,
+            address: clubProfile.address,
+            phone: clubProfile.phone
+          } : null,
+          current_user_profile: profileMap.get(user.id)
+        };
+      }) || [];
 
       setChallenges(enrichedChallenges as unknown as Challenge[]);
     } catch (err) {

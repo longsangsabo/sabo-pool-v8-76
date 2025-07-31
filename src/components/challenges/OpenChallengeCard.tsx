@@ -118,7 +118,7 @@ const OpenChallengeCard: React.FC<OpenChallengeCardProps> = ({
           <>
             {/* Details */}
             <div className="space-y-2 pt-3 border-t border-emerald-200/50">
-              {challenge.club_profiles && (
+              {challenge.club_profiles?.club_name && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="w-3 h-3" />
                   <span className="truncate">{challenge.club_profiles.club_name}</span>
