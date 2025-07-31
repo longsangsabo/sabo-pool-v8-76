@@ -39,7 +39,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className =
   if (isMobile) {
     return (
       <div className={`px-4 ${className}`}>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {stats.map((stat, index) => (
             <TechStatCard
               key={index}
@@ -47,7 +47,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className =
               value={stat.value}
               icon={stat.icon}
               variant={stat.variant}
-              className="text-center"
+              className="text-center scale-50 origin-top"
             />
           ))}
         </div>
