@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
@@ -7,8 +7,7 @@ import LiveMatchCard from './LiveMatchCard';
 import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
 import OpenChallengeCard from './OpenChallengeCard';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useRealMatches } from '@/hooks/useRealMatches';
 import { toast } from 'sonner';
 
 interface LiveActivityFeedProps {
@@ -16,62 +15,19 @@ interface LiveActivityFeedProps {
   onJoinChallenge: (challengeId: string) => void;
 }
 
-// Mock data for demo purposes - in production these would come from real-time subscriptions
-const mockLiveMatches = [
-  {
-    id: '1',
-    player1: { name: 'Nguyễn Văn A', avatar: '', rank: 'H+' },
-    player2: { name: 'Trần Thị B', avatar: '', rank: 'G' },
-    score: { player1: 8, player2: 6 },
-    raceToTarget: 12,
-    location: 'CLB Saigon Pool',
-    startTime: new Date(Date.now() - 45 * 60000).toISOString(), // 45 minutes ago
-    betPoints: 500
-  }
-];
-
-const mockUpcomingMatches = [
-  {
-    id: '2',
-    player1: { name: 'Lê Văn C', avatar: '', rank: 'F' },
-    player2: { name: 'Phạm Thị D', avatar: '', rank: 'E+' },
-    scheduledTime: new Date(Date.now() + 2 * 60 * 60000).toISOString(), // 2 hours from now
-    raceToTarget: 16,
-    location: 'CLB Billiards Pro',
-    betPoints: 800
-  }
-];
-
-const mockRecentResults = [
-  {
-    id: '3',
-    player1: { name: 'Hoàng Văn E', avatar: '', rank: 'G+' },
-    player2: { name: 'Vũ Thị F', avatar: '', rank: 'G' },
-    finalScore: { player1: 14, player2: 11 },
-    winner: 'player1' as const,
-    raceToTarget: 14,
-    completedAt: new Date(Date.now() - 30 * 60000).toISOString(), // 30 minutes ago
-    duration: '1h 45m',
-    location: 'CLB Champion',
-    betPoints: 600,
-    eloChanges: { player1: +25, player2: -15 }
-  }
-];
 
 const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({ 
   openChallenges, 
   onJoinChallenge 
 }) => {
-  const { user } = useAuth();
+  const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useRealMatches();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate refresh delay
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast.success('Đã cập nhật dữ liệu mới nhất');
-    }, 1000);
+    await refreshAll();
+    setIsRefreshing(false);
+    toast.success('Đã cập nhật dữ liệu mới nhất');
   };
 
   const handleWatchMatch = (matchId: string) => {
@@ -100,10 +56,10 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           variant="outline"
           size="sm"
           onClick={handleRefresh}
-          disabled={isRefreshing}
+          disabled={isRefreshing || loading}
           className="gap-2"
         >
-          <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${isRefreshing || loading ? 'animate-spin' : ''}`} />
           Làm mới
         </Button>
       </div>
@@ -115,13 +71,13 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           <SectionHeader
             icon="🔴"
             title="ĐANG DIỄN RA"
-            count={mockLiveMatches.length}
+            count={liveMatches.length}
             subtitle="Các trận đấu đang thi đấu"
           />
           
-          {mockLiveMatches.length > 0 ? (
+          {liveMatches.length > 0 ? (
             <div className="grid gap-3">
-              {mockLiveMatches.map(match => (
+              {liveMatches.map(match => (
                 <LiveMatchCard
                   key={match.id}
                   match={match}
@@ -147,13 +103,13 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           <SectionHeader
             icon="⏰"
             title="SẮP DIỄN RA"
-            count={mockUpcomingMatches.length}
+            count={upcomingMatches.length}
             subtitle="Các trận đấu đã được lên lịch"
           />
           
-          {mockUpcomingMatches.length > 0 ? (
+          {upcomingMatches.length > 0 ? (
             <div className="grid gap-3">
-              {mockUpcomingMatches.map(match => (
+              {upcomingMatches.map(match => (
                 <UpcomingMatchCard
                   key={match.id}
                   match={match}
@@ -215,13 +171,13 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           <SectionHeader
             icon="✅"
             title="MỚI HOÀN THÀNH"
-            count={mockRecentResults.length}
+            count={recentResults.length}
             subtitle="Kết quả các trận đấu gần đây"
           />
           
-          {mockRecentResults.length > 0 ? (
+          {recentResults.length > 0 ? (
             <div className="grid gap-3">
-              {mockRecentResults.map(result => (
+              {recentResults.map(result => (
                 <RecentResultCard
                   key={result.id}
                   result={result}
