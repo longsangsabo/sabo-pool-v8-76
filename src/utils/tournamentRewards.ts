@@ -4,6 +4,7 @@ import { RankCode } from '@/utils/eloConstants';
 
 export interface TournamentRewardsCalculation {
   totalPrize: number;
+  showPrizes: boolean;
   positions: Array<{
     position: number;
     name: string;
@@ -151,6 +152,7 @@ export const calculateRewards = (
 
   const result = {
     totalPrize,
+    showPrizes: totalPrize > 0,
     positions,
     specialAwards: []
   };

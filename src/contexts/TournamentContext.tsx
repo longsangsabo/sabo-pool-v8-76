@@ -15,6 +15,20 @@ interface TournamentContextType {
   refreshTournament: () => Promise<void>;
   saveTournamentRewards: (tournamentId: string, rewards: TournamentRewards) => Promise<void>;
   loadRewards: (tournamentId: string, rank?: RankCode) => Promise<TournamentRewards | null>;
+  // Additional properties for enhanced form
+  updateTournament?: (data: Partial<any>) => void;
+  updateRewards?: (rewards: TournamentRewards) => void;
+  validateTournament?: () => boolean;
+  resetTournament?: () => void;
+  saveDraft?: () => Promise<void>;
+  isDraft?: boolean;
+  isValid?: boolean;
+  validationErrors?: any;
+  calculateRewards?: () => TournamentRewards;
+  recalculateOnChange?: boolean;
+  setRecalculateOnChange?: (value: boolean) => void;
+  createTournament?: () => Promise<any>;
+  updateExistingTournament?: (id: string) => Promise<any>;
 }
 
 const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
@@ -254,7 +268,21 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     loadTournament,
     refreshTournament,
     saveTournamentRewards,
-    loadRewards
+    loadRewards,
+    // Stub implementations for missing properties
+    updateTournament: () => {},
+    updateRewards: () => {},
+    validateTournament: () => true,
+    resetTournament: () => {},
+    saveDraft: async () => {},
+    isDraft: false,
+    isValid: true,
+    validationErrors: {},
+    calculateRewards: calculateRewardsInternal,
+    recalculateOnChange: false,
+    setRecalculateOnChange: () => {},
+    createTournament: async () => null,
+    updateExistingTournament: async () => null
   };
 
   return (

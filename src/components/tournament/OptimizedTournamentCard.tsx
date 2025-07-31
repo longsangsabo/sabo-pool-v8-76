@@ -244,20 +244,7 @@ const OptimizedTournamentCard: React.FC<OptimizedTournamentCardProps> = ({
       totalPrize = tournament.entry_fee * tournament.max_participants;
     }
 
-    // Get total prize from prize_distribution if still 0
-    if (totalPrize === 0 && tournament.prize_distribution) {
-      const prizeData = typeof tournament.prize_distribution === 'string' 
-        ? JSON.parse(tournament.prize_distribution) 
-        : tournament.prize_distribution;
-      
-      if (prizeData && Object.keys(prizeData).length > 0) {
-        Object.entries(prizeData).forEach(([key, value]) => {
-          if (typeof value === 'number' && key !== 'participation') {
-            totalPrize += value;
-          }
-        });
-      }
-    }
+    // Note: prize_distribution removed - using tournament_prize_tiers table
 
     // Get SPA points
     if (tournament.spa_points_config) {
