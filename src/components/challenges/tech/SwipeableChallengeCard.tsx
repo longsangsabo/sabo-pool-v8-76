@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { TechCard } from '@/components/ui/sabo-tech-global';
-import { Check, X, Clock, Trophy, Users, Target } from 'lucide-react';
+import { Check, X, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Challenge {
@@ -112,11 +112,10 @@ export const SwipeableChallengeCard: React.FC<SwipeableChallengeCardProps> = ({
   };
 
   return (
-    <TechCard
+    <div
       ref={cardRef}
-      variant="active"
-      interactive
       className={cn(
+        'sabo-tech-card tech-card-active tech-card-interactive',
         'tech-challenge-card swipeable',
         getTypeColor(challenge.type),
         isDragging && 'swiping',
@@ -125,6 +124,8 @@ export const SwipeableChallengeCard: React.FC<SwipeableChallengeCardProps> = ({
       style={style}
       onMouseDown={handleMouseDown}
     >
+      <div className="tech-card-border"></div>
+      <div className="tech-card-content">
       {/* Challenge Header */}
       <div className="challenge-card-header">
         <div className="challenger-info">
@@ -187,6 +188,8 @@ export const SwipeableChallengeCard: React.FC<SwipeableChallengeCardProps> = ({
           <span>CHẤP NHẬN</span>
         </div>
       </div>
-    </TechCard>
+      </div>
+      <div className="tech-card-corners"></div>
+    </div>
   );
 };
