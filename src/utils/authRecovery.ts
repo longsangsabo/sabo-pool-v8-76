@@ -31,8 +31,10 @@ export const emergencyAuthRecovery = () => {
     
     console.log('✅ Emergency auth recovery completed');
     
-    // Redirect to auth page
-    window.location.href = '/auth?recovery=true';
+    // Force redirect to auth page
+    setTimeout(() => {
+      window.location.href = '/auth?recovery=true';
+    }, 500);
     
   } catch (error) {
     console.error('❌ Emergency auth recovery failed:', error);
