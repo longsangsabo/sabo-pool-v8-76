@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { 
   Trophy, Calendar, Users, Settings, Eye, ArrowLeft, RefreshCw, 
   Play, Target, Clock, Shuffle, Save, User, Hash, Gavel, Medal, 
-  Star, Crown, Plus, Check, MapPin, X, Edit, Loader2, Wrench
+  Star, Crown, Plus, Check, MapPin, X, Edit, Loader2, Wrench, CreditCard
 } from 'lucide-react';
 import TournamentCompletionButton from './TournamentCompletionButton';
 import ForceStartTournamentButton from './ForceStartTournamentButton';
@@ -608,6 +608,9 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>((props, r
           registration_date,
           payment_status,
           notes,
+          tournaments!tournament_registrations_tournament_id_fkey (
+            entry_fee
+          ),
           profiles!tournament_registrations_user_id_fkey (
             user_id,
             full_name,
@@ -662,6 +665,29 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>((props, r
     } catch (error) {
       console.error('Error confirming participant:', error);
       toast.error('Lỗi khi xác nhận thành viên');
+    }
+  };
+
+  const confirmPayment = async (registrationId: string) => {
+    try {
+      const { error } = await supabase
+        .from('tournament_registrations')
+        .update({
+          payment_status: 'paid'
+        })
+        .eq('id', registrationId);
+
+      if (error) throw error;
+
+      toast.success('Đã xác nhận thanh toán!');
+      
+      // Refresh participants list
+      if (selectedTournament) {
+        await handleViewParticipants(selectedTournament);
+      }
+    } catch (error) {
+      console.error('Error confirming payment:', error);
+      toast.error('Lỗi khi xác nhận thanh toán');
     }
   };
 
@@ -1986,8 +2012,30 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>((props, r
         <DialogContent className="sm:max-w-2xl max-h-[600px]">
           <DialogHeader>
             <DialogTitle>Danh sách thành viên - {selectedTournament?.name}</DialogTitle>
-            <div className="text-sm text-muted-foreground">
-              Tổng cộng: {tournamentParticipants.length} người đăng ký
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div className="text-center">
+                <div className="font-semibold text-foreground">Tổng số</div>
+                <div className="text-muted-foreground">{tournamentParticipants.length}</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-green-600">Đã xác nhận</div>
+                <div className="text-muted-foreground">
+                  {tournamentParticipants.filter(p => p.registration_status === 'confirmed').length}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-blue-600">Đã thanh toán</div>
+                <div className="text-muted-foreground">
+                  {tournamentParticipants.filter(p => p.payment_status === 'paid').length}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-primary">Tổng thu</div>
+                <div className="text-muted-foreground">
+                  {(tournamentParticipants.filter(p => p.payment_status === 'paid').length * 
+                    (tournamentParticipants[0]?.tournaments?.entry_fee || 0)).toLocaleString('vi-VN')} VND
+                </div>
+              </div>
             </div>
           </DialogHeader>
           
@@ -2002,46 +2050,74 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>((props, r
                 <Card key={participant.id} className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <UserAvatar 
-                        userId={participant.user_id} 
-                        size="md"
-                        showRank={true}
-                        showName={false}
-                      />
-                      <div>
-                        <div className="font-semibold">
-                          {participant.profiles?.display_name || participant.profiles?.full_name || 'Chưa có tên'}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          📞 {participant.profiles?.phone || 'Chưa có SĐT'}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          📅 {format(new Date(participant.registration_date), 'dd/MM/yyyy HH:mm', { locale: vi })}
-                        </div>
-                      </div>
-                    </div>
+                       <UserAvatar 
+                         userId={participant.user_id} 
+                         size="md"
+                         showRank={true}
+                         showName={false}
+                       />
+                       <div>
+                         <div className="font-semibold">
+                           {participant.profiles?.display_name || participant.profiles?.full_name || 'Chưa có tên'}
+                         </div>
+                         <div className="text-sm text-muted-foreground">
+                           📞 {participant.profiles?.phone || 'Chưa có SĐT'}
+                         </div>
+                         <div className="text-xs text-muted-foreground">
+                           📅 {format(new Date(participant.registration_date), 'dd/MM/yyyy HH:mm', { locale: vi })}
+                         </div>
+                         <div className="text-xs text-muted-foreground">
+                           💰 Phí: {(participant.tournaments?.entry_fee || 0).toLocaleString('vi-VN')} VND
+                         </div>
+                       </div>
+                     </div>
                     
-                    <div className="flex items-center gap-2">
-                      <Badge variant={
-                        participant.registration_status === 'confirmed' ? 'default' :
-                        participant.registration_status === 'pending' ? 'secondary' : 'outline'
-                      }>
-                        {participant.registration_status === 'confirmed' ? '✅ Đã xác nhận' :
-                         participant.registration_status === 'pending' ? '⏳ Chờ xác nhận' : 
-                         participant.registration_status}
-                      </Badge>
-                      
-                      {participant.registration_status === 'pending' && (
-                        <Button 
-                          size="sm"
-                          onClick={() => confirmParticipant(participant.id)}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          <Check className="w-4 h-4 mr-1" />
-                          Xác nhận
-                        </Button>
-                      )}
-                    </div>
+                     <div className="flex flex-col gap-2">
+                       <div className="flex items-center gap-2">
+                         <Badge variant={
+                           participant.registration_status === 'confirmed' ? 'default' :
+                           participant.registration_status === 'pending' ? 'secondary' : 'outline'
+                         }>
+                           {participant.registration_status === 'confirmed' ? '✅ Đã xác nhận' :
+                            participant.registration_status === 'pending' ? '⏳ Chờ xác nhận' : 
+                            participant.registration_status}
+                         </Badge>
+                         
+                         <Badge variant={
+                           participant.payment_status === 'paid' ? 'default' :
+                           participant.payment_status === 'pending' ? 'secondary' : 'destructive'
+                         }>
+                           {participant.payment_status === 'paid' ? '✅ Đã thanh toán' :
+                            participant.payment_status === 'pending' ? '⏳ Chờ thanh toán' :
+                            participant.payment_status === 'unpaid' ? '❌ Chưa thanh toán' :
+                            participant.payment_status}
+                         </Badge>
+                       </div>
+                       
+                       <div className="flex items-center gap-2">
+                         {participant.registration_status === 'pending' && (
+                           <Button 
+                             size="sm"
+                             onClick={() => confirmParticipant(participant.id)}
+                             className="bg-green-600 hover:bg-green-700"
+                           >
+                             <Check className="w-4 h-4 mr-1" />
+                             Xác nhận ĐK
+                           </Button>
+                         )}
+                         
+                         {(participant.payment_status === 'pending' || participant.payment_status === 'unpaid') && (
+                           <Button 
+                             size="sm"
+                             onClick={() => confirmPayment(participant.id)}
+                             className="bg-blue-600 hover:bg-blue-700"
+                           >
+                             <CreditCard className="w-4 h-4 mr-1" />
+                             Xác nhận TT
+                           </Button>
+                         )}
+                       </div>
+                     </div>
                   </div>
                   
                   {participant.notes && (
