@@ -256,15 +256,6 @@ const CreateChallengeModal: React.FC<CreateChallengeModalProps> = ({
 
       onChallengeCreated();
       handleClose();
-      
-      // Navigate to challenges page or club page based on selection
-      setTimeout(() => {
-        if (selectedClub) {
-          window.location.href = `/club/${selectedClub}`;
-        } else {
-          window.location.href = '/challenges';
-        }
-      }, 1000);
     } catch (error: any) {
       console.error('Error creating challenge:', error);
       toast.error('Lỗi khi tạo thách đấu: ' + error.message);
