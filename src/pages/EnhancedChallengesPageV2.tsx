@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
+import { useState as useStateForMatches } from 'react';
 import CreateChallengeModal from '@/components/CreateChallengeModal';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
@@ -100,7 +101,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
     declineChallenge,
     fetchChallenges
   } = useOptimizedChallenges();
-  
+
+  // Hook để lấy matches từ challenges đã được accept
+  const [matchesData, setMatchesData] = useStateForMatches<any[]>([]);
+  const [loadingMatches, setLoadingMatches] = useState(false);
   const [activeTab, setActiveTab] = useState('my-challenges');
   const [challengeTypeFilter, setChallengeTypeFilter] = useState<'all' | 'standard' | 'sabo'>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -179,6 +183,59 @@ const EnhancedChallengesPageV2: React.FC = () => {
     }
   }, [user]);
 
+  // Fetch matches for accepted challenges
+  const fetchMatches = async () => {
+    if (!user) return;
+    
+    setLoadingMatches(true);
+    try {
+      const { data: matches, error } = await supabase
+        .from('matches')
+        .select(`
+          *,
+          player1:player1_id(user_id, full_name, display_name, avatar_url, verified_rank, current_rank),
+          player2:player2_id(user_id, full_name, display_name, avatar_url, verified_rank, current_rank)
+        `)
+        .or(`player1_id.eq.${user.id},player2_id.eq.${user.id}`)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setMatchesData(matches || []);
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+    } finally {
+      setLoadingMatches(false);
+    }
+  };
+
+  // Load matches when component mounts or user changes
+  useEffect(() => {
+    fetchMatches();
+  }, [user]);
+
+  // Function to get match for a challenge
+  const getMatchForChallenge = (challengeId: string) => {
+    return matchesData.find(match => match.challenge_id === challengeId);
+  };
+
+  // Function to update match status
+  const handleAcceptMatch = async (matchId: string) => {
+    try {
+      const { error } = await supabase
+        .from('matches')
+        .update({ status: 'confirmed' })
+        .eq('id', matchId);
+
+      if (error) throw error;
+      
+      toast.success('Đã xác nhận trận đấu!');
+      fetchMatches(); // Refresh matches
+    } catch (error) {
+      console.error('Error accepting match:', error);
+      toast.error('Có lỗi xảy ra khi xác nhận trận đấu');
+    }
+  };
+
   const getFilteredChallenges = (challengeList: Challenge[]) => {
     return challengeList.filter(challenge => {
       // Search filter
@@ -243,6 +300,11 @@ const EnhancedChallengesPageV2: React.FC = () => {
     const StatusIcon = statusInfo.icon;
     const isChallenger = user?.id === challenge.challenger_id;
     const canRespond = !isChallenger && challenge.status === 'pending';
+    
+    // Get associated match for this challenge
+    const associatedMatch = getMatchForChallenge(challenge.id);
+    const hasMatch = !!associatedMatch;
+    const canAcceptMatch = hasMatch && associatedMatch.status === 'scheduled' && isChallenger;
 
     return (
       <Card
@@ -393,6 +455,51 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   <MessageSquare className="w-3.5 h-3.5 mt-0.5 text-muted-foreground" />
                   <span className="text-sm text-foreground/90 italic line-clamp-2">"{challenge.message}"</span>
                 </div>
+              </div>
+            )}
+
+            {/* Match Info Section - Show when challenge has been accepted */}
+            {hasMatch && (
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-lg p-4 space-y-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <Trophy className="w-4 h-4 text-blue-600" />
+                  <span className="font-semibold text-blue-800">Trận đấu đã được tạo</span>
+                  <Badge className={associatedMatch.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}>
+                    {associatedMatch.status === 'scheduled' ? 'Chờ xác nhận' : 'Đã xác nhận'}
+                  </Badge>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Trận đấu ID:</span>
+                    <div className="font-mono text-blue-700">#{associatedMatch.id.slice(-8)}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Tạo lúc:</span>
+                    <div className="font-medium">{new Date(associatedMatch.created_at).toLocaleString('vi-VN')}</div>
+                  </div>
+                </div>
+
+                {canAcceptMatch && (
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAcceptMatch(associatedMatch.id);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-all duration-200"
+                  >
+                    <Trophy className="w-4 h-4 mr-2" />
+                    ✅ Xác nhận trận đấu
+                  </Button>
+                )}
+
+                {hasMatch && !canAcceptMatch && associatedMatch.status === 'confirmed' && (
+                  <div className="text-center py-2">
+                    <Badge className="bg-green-100 text-green-800 font-medium">
+                      ✅ Trận đấu đã sẵn sàng
+                    </Badge>
+                  </div>
+                )}
               </div>
             )}
 
