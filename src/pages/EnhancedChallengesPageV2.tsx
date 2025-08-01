@@ -303,7 +303,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
       skipStatusFilter
     });
     
-    return challengeList.filter(challenge => {
+    const filtered = challengeList.filter(challenge => {
       // Search filter
       const matchesSearch = !searchTerm || (() => {
         const challengerName = challenge.challenger_profile?.full_name?.toLowerCase() || '';
@@ -320,25 +320,49 @@ const EnhancedChallengesPageV2: React.FC = () => {
       // Status filter - skip for active challenges tab
       const matchesStatus = skipStatusFilter || statusFilter === 'all' || challenge.status === statusFilter;
 
-      // Challenge type filter
+      // Challenge type filter - FIXED LOGIC for null/undefined challenge_type
       const matchesType = challengeTypeFilter === 'all' || 
         (challengeTypeFilter === 'sabo' && challenge.challenge_type === 'sabo') ||
-        (challengeTypeFilter === 'standard' && (challenge.challenge_type === 'standard' || !challenge.challenge_type));
+        (challengeTypeFilter === 'standard' && (challenge.challenge_type === 'standard' || challenge.challenge_type === null || challenge.challenge_type === undefined));
 
       const result = matchesSearch && matchesStatus && matchesType;
+      
+      // Detailed logging for each challenge and filter condition
+      console.log(`🔍 Challenge ${challenge.id} (${challenge.status}):`, {
+        challenge_type: challenge.challenge_type,
+        challengeTypeFilter,
+        matchesSearch,
+        matchesStatus, 
+        matchesType,
+        finalResult: result,
+        searchTerm,
+        skipStatusFilter
+      });
       
       if (!result) {
         console.log('🚫 Challenge filtered out:', {
           id: challenge.id,
           status: challenge.status,
+          challenge_type: challenge.challenge_type,
           matchesSearch,
           matchesStatus,
-          matchesType
+          matchesType,
+          reason: !matchesSearch ? 'search' : !matchesStatus ? 'status' : !matchesType ? 'type' : 'unknown'
         });
       }
 
       return result;
     });
+
+    console.log('🎯 getFilteredChallenges result:', {
+      inputCount: challengeList.length,
+      outputCount: filtered.length,
+      statusFilter,
+      challengeTypeFilter,
+      skipStatusFilter
+    });
+
+    return filtered;
   };
 
   const handleJoinOpenChallenge = async (challengeId: string) => {
