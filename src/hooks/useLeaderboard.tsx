@@ -28,7 +28,7 @@ export interface LeaderboardEntry {
 }
 
 export interface LeaderboardFilters {
-  sortBy: 'elo' | 'wins' | 'win_rate' | 'matches_played';
+  sortBy: 'elo' | 'wins' | 'win_rate' | 'matches_played' | 'ranking_points';
   sortOrder: 'asc' | 'desc';
   page: number;
   pageSize: number;
@@ -106,6 +106,7 @@ export const useLeaderboard = () => {
 
       // Apply sorting
       const sortColumn = currentFilters.sortBy === 'elo' ? 'elo_points' : 
+                        currentFilters.sortBy === 'ranking_points' ? 'spa_points' :
                         currentFilters.sortBy === 'wins' ? 'wins' :
                         currentFilters.sortBy === 'win_rate' ? 'win_rate' : 'total_matches';
       
@@ -125,8 +126,8 @@ export const useLeaderboard = () => {
         id: item.id,
         username: item.profiles?.display_name || item.profiles?.full_name || 'Unknown',
         full_name: item.profiles?.full_name || '',
-        current_rank: item.profiles?.verified_rank || 'Unranked',
-        ranking_points: item.elo_points || 0,
+        current_rank: item.profiles?.verified_rank || 'Nghiệp dư',
+        ranking_points: item.spa_points || 0,
         total_matches: item.total_matches || 0,
         avatar_url: item.profiles?.avatar_url || '',
         elo: item.elo_points || 1000,

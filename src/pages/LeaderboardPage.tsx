@@ -7,13 +7,16 @@ import Footer from '@/components/Footer';
 import PageLayout from '@/components/layout/PageLayout';
 import { EnhancedLeaderboard } from '@/components/EnhancedLeaderboard';
 import ClubStatsDashboard from '@/components/ClubStatsDashboard';
+import MobileLeaderboard from '@/components/mobile/MobileLeaderboard';
 import { useLeaderboard } from '@/hooks/useLeaderboard';
 import { useSystemStats } from '@/hooks/useSystemStats';
+import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { TrendingUp, Building2, Users } from 'lucide-react';
 
 const LeaderboardPage = () => {
   const { leaderboard, loading, error } = useLeaderboard();
   const systemStats = useSystemStats();
+  const { isMobile } = useOptimizedResponsive();
 
   // Transform leaderboard data to match EnhancedLeaderboard interface
   const transformedPlayers = leaderboard.map(player => ({
@@ -74,7 +77,9 @@ const LeaderboardPage = () => {
           </TabsList>
 
           <TabsContent value="leaderboard">
-            {loading ? (
+            {isMobile ? (
+              <MobileLeaderboard />
+            ) : loading ? (
               <div className="flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               </div>
