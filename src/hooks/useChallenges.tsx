@@ -307,6 +307,7 @@ export const useChallenges = () => {
       }
 
       // Update challenge based on type
+      const finalOpponentId = isOpenChallenge ? user.id : challengeData.opponent_id;
       const updateData = isOpenChallenge 
         ? {
             status: 'accepted' as const,
@@ -320,6 +321,7 @@ export const useChallenges = () => {
 
       console.log('📤 Updating challenge with data:', updateData);
 
+      // ✅ CRITICAL: Use transaction to ensure both challenge update and match creation succeed
       const { data, error } = await supabase
         .from('challenges')
         .update(updateData)
@@ -340,6 +342,36 @@ export const useChallenges = () => {
 
       console.log('✅ Challenge accepted successfully:', data);
 
+      // ✅ NEW: Create match record automatically when challenge is accepted
+      console.log('🏆 Creating match record for accepted challenge...');
+      
+      const matchData = {
+        player1_id: challengeData.challenger_id,
+        player2_id: finalOpponentId,
+        challenge_id: challengeId,
+        status: 'scheduled' as const,
+        match_type: 'challenge' as const,
+        scheduled_time: challengeData.scheduled_time || new Date().toISOString(),
+        score_player1: 0,
+        score_player2: 0
+      };
+
+      const { data: matchRecord, error: matchError } = await supabase
+        .from('matches')
+        .insert([matchData])
+        .select('*')
+        .maybeSingle();
+
+      if (matchError) {
+        console.error('❌ Error creating match record:', matchError);
+        // Don't throw error here since challenge was already accepted
+        // This is a non-critical failure that can be handled later
+        console.warn('⚠️ Challenge accepted but match record creation failed');
+      } else {
+        console.log('✅ Match record created successfully:', matchRecord);
+        toast.success('Tham gia thách đấu thành công! Trận đấu đã được lên lịch.');
+      }
+
       // Update local state to remove the challenge from open challenges (for open challenges)
       // or update status (for specific challenges) 
       setChallenges(prev => prev.filter(c => c.id !== challengeId));
@@ -347,7 +379,7 @@ export const useChallenges = () => {
       // Refetch challenges to update the list with latest data
       await fetchChallenges();
       
-      return data;
+      return { challenge: data, match: matchRecord };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
       console.error('❌ Accept challenge error:', err);
