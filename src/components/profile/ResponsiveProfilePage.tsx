@@ -138,8 +138,12 @@ const ResponsiveProfilePage: React.FC = () => {
                   <span className="nav-item-label">Hồ sơ</span>
                 </div>
                 <div className="tech-nav-item">
+                  <div className="nav-item-icon">📅</div>
+                  <span className="nav-item-label">Lịch</span>
+                </div>
+                <div className="tech-nav-item">
                   <div className="nav-item-icon">📊</div>
-                  <span className="nav-item-label">BXH</span>
+                  <span className="nav-item-label">Xếp hạng</span>
                 </div>
               </div>
             </div>
