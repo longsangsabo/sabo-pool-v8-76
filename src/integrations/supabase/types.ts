@@ -275,6 +275,7 @@ export type Database = {
           scheduled_time: string | null
           started_at: string | null
           status: string
+          updated_at: string | null
           winner_id: string | null
         }
         Insert: {
@@ -301,6 +302,7 @@ export type Database = {
           scheduled_time?: string | null
           started_at?: string | null
           status?: string
+          updated_at?: string | null
           winner_id?: string | null
         }
         Update: {
@@ -327,6 +329,7 @@ export type Database = {
           scheduled_time?: string | null
           started_at?: string | null
           status?: string
+          updated_at?: string | null
           winner_id?: string | null
         }
         Relationships: [
