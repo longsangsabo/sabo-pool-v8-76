@@ -249,6 +249,31 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         console.log('✅ Match record created successfully:', matchRecord);
       }
 
+      // ✅ Send notification to challenger when someone joins their open challenge
+      if (isOpenChallenge) {
+        try {
+          console.log('📬 Sending notification to challenger...');
+          
+          const { error: notificationError } = await supabase.functions.invoke('send-notification', {
+            body: {
+              user_id: challengeData.challenger_id,
+              type: 'challenge_accepted',
+              title: '🎯 Có người tham gia thách đấu!',
+              message: `Có người vừa tham gia thách đấu mở của bạn. Trận đấu đã được tạo và sẵn sàng diễn ra!`,
+              priority: 'high'
+            }
+          });
+
+          if (notificationError) {
+            console.error('❌ Error sending notification:', notificationError);
+          } else {
+            console.log('✅ Notification sent successfully to challenger');
+          }
+        } catch (notificationErr) {
+          console.error('❌ Failed to send notification:', notificationErr);
+        }
+      }
+
       await fetchChallenges(); // Refresh to update state
       return { challenge: data, match: matchRecord };
     } catch (err) {
