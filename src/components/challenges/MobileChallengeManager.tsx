@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { useChallenges } from '@/hooks/useChallenges';
+import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
 import { toast } from 'sonner';
 import { Calendar, Search, Trophy, Users, Zap, RefreshCw } from 'lucide-react';
 import UnifiedChallengeCard from './UnifiedChallengeCard';
@@ -18,14 +18,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
   const { user } = useAuth();
   const {
     challenges,
-    receivedChallenges,
-    sentChallenges,
     loading,
     error,
     acceptChallenge,
     declineChallenge,
     fetchChallenges
-  } = useChallenges();
+  } = useOptimizedChallenges();
 
   // Convert challenge data to local format
   const convertToLocalChallenge = (c: any) => ({
@@ -70,8 +68,11 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
       profileData: c.challenger_profile ? {
         name: c.challenger_profile.full_name,
         display: c.challenger_profile.display_name,
-        rank: c.challenger_profile.verified_rank || c.challenger_profile.current_rank
-      } : null
+        rank: c.challenger_profile.verified_rank || c.challenger_profile.current_rank,
+        spa_points: c.challenger_profile.spa_points || 0
+      } : null,
+      challenger_spa: c.challenger_profile?.spa_points || 0,
+      opponent_spa: c.opponent_profile?.spa_points || 0
     }))
   });
 

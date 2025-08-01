@@ -47,14 +47,14 @@ export const ActiveChallengeHighlight: React.FC<ActiveChallengeHighlightProps> =
   const getPlayerInfo = (challenge: any, isChallenger: boolean) => {
     if (isChallenger) {
       return {
-        name: challenge.challenger_profile?.full_name || 'Challenger',
-        spa: challenge.challenger_spa || 0,
+        name: challenge.challenger_profile?.full_name || challenge.challenger_profile?.display_name || 'Challenger',
+        spa: challenge.challenger_profile?.spa_points || 0,
         avatar: challenge.challenger_profile?.avatar_url
       };
     } else {
       return {
-        name: challenge.opponent_profile?.full_name || 'Opponent', 
-        spa: challenge.opponent_spa || 0,
+        name: challenge.opponent_profile?.full_name || challenge.opponent_profile?.display_name || 'Opponent', 
+        spa: challenge.opponent_profile?.spa_points || 0,
         avatar: challenge.opponent_profile?.avatar_url
       };
     }

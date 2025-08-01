@@ -208,9 +208,12 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
             {playerName}
             {isCurrentUser && <span className="text-primary ml-1">(Bạn)</span>}
           </p>
-          <p className="text-xs text-muted-foreground">
-            {profile?.verified_rank || 'Chưa xác định'}
-          </p>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{profile?.verified_rank || 'Chưa xác định'}</span>
+            <span className="text-orange-600 font-semibold">
+              {profile?.spa_points || 0} SPA
+            </span>
+          </div>
         </div>
       </div>
     );
