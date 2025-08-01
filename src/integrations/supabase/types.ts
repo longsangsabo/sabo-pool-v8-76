@@ -152,6 +152,97 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_conversations: {
+        Row: {
+          challenge_id: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          sender_id: string
+        }
+        Insert: {
+          challenge_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          sender_id: string
+        }
+        Update: {
+          challenge_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_conversations_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenge_matches: {
+        Row: {
+          challenge_id: string
+          challenger_confirmed: boolean | null
+          challenger_score: number | null
+          club_confirmed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          opponent_confirmed: boolean | null
+          opponent_score: number | null
+          started_at: string | null
+          status: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          challenge_id: string
+          challenger_confirmed?: boolean | null
+          challenger_score?: number | null
+          club_confirmed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          opponent_confirmed?: boolean | null
+          opponent_score?: number | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          challenge_id?: string
+          challenger_confirmed?: boolean | null
+          challenger_score?: number | null
+          club_confirmed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          opponent_confirmed?: boolean | null
+          opponent_score?: number | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_matches_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       challenges: {
         Row: {
           bet_points: number | null
@@ -172,6 +263,7 @@ export type Database = {
           race_to: number | null
           responded_at: string | null
           response_message: string | null
+          scheduled_time: string | null
           status: string
         }
         Insert: {
@@ -193,6 +285,7 @@ export type Database = {
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
+          scheduled_time?: string | null
           status?: string
         }
         Update: {
@@ -214,6 +307,7 @@ export type Database = {
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
+          scheduled_time?: string | null
           status?: string
         }
         Relationships: [
