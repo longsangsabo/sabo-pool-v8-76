@@ -279,9 +279,10 @@ export const useChallenges = () => {
         throw new Error(`Không thể tham gia thách đấu: ${error.message}`);
       }
 
-      if (!result.success) {
-        console.error('❌ Challenge acceptance failed:', result.error);
-        throw new Error(result.error || 'Không thể tham gia thách đấu');
+      if (result && typeof result === 'object' && 'success' in result && !result.success) {
+        const errorMsg = 'error' in result ? String(result.error) : 'Không thể tham gia thách đấu';
+        console.error('❌ Challenge acceptance failed:', errorMsg);
+        throw new Error(errorMsg);
       }
 
       console.log('✅ Challenge accepted successfully:', result);

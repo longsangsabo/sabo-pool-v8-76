@@ -85,7 +85,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
   // Modals
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(true);
   const [showAdminCreateModal, setShowAdminCreateModal] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
