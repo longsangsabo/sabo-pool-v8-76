@@ -6,8 +6,10 @@ import SectionHeader from './SectionHeader';
 import LiveMatchCard from './LiveMatchCard';
 import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
+import { CompletedChallengeCard } from './CompletedChallengeCard';
 import UnifiedChallengeCard from './UnifiedChallengeCard';
 import { useOptimizedMatches } from '@/hooks/useOptimizedMatches';
+import { useCompletedChallenges } from '@/hooks/useCompletedChallenges';
 import { toast } from 'sonner';
 
 interface LiveActivityFeedProps {
@@ -21,6 +23,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
   onJoinChallenge 
 }) => {
   const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
+  const { data: completedChallenges = [], isLoading: completedLoading } = useCompletedChallenges();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Debug logging removed for production
@@ -202,22 +205,31 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           )}
         </div>
 
-        {/* Recent Results Section */}
+        {/* Recent Results Section - Using Real Completed Challenges */}
         <div className="space-y-4">
           <SectionHeader
             icon="✅"
             title="MỚI HOÀN THÀNH"
-            count={recentResults.length}
+            count={completedChallenges.length}
             subtitle="Kết quả các trận đấu gần đây"
           />
           
-          {recentResults.length > 0 ? (
+          {completedLoading ? (
+            <Card className="border-dashed border-2 border-muted-foreground/20">
+              <CardContent className="p-6 text-center">
+                <div className="text-muted-foreground">
+                  <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
+                  <div className="font-medium text-sm">Đang tải kết quả...</div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : completedChallenges.length > 0 ? (
             <div className="grid gap-3">
-              {recentResults.map(result => (
-                <RecentResultCard
-                  key={result.id}
-                  result={result}
-                  onView={handleViewResult}
+              {completedChallenges.map(challenge => (
+                <CompletedChallengeCard
+                  key={challenge.id}
+                  challenge={challenge}
+                  onView={() => handleViewResult(challenge.id)}
                 />
               ))}
             </div>
@@ -227,7 +239,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
                 <div className="text-muted-foreground">
                   <div className="text-3xl mb-2">🏆</div>
                   <div className="font-medium text-sm">Chưa có kết quả trận đấu nào gần đây</div>
-                  <div className="text-xs">Kết quả các trận đấu sẽ hiển thị ở đây</div>
+                  <div className="text-xs">Kết quả các trận đấu hoàn thành sẽ hiển thị ở đây</div>
                 </div>
               </CardContent>
             </Card>
