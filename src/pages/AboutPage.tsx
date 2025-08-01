@@ -36,7 +36,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <PageLayout variant="full" className="bg-gray-50">
+    <PageLayout variant='full' className='bg-gray-50'>
       <Navigation />
 
       <div className='pt-16'>

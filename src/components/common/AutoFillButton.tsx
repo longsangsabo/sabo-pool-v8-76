@@ -13,52 +13,58 @@ interface AutoFillButtonProps {
   disabled?: boolean;
 }
 
-export const AutoFillButton: React.FC<AutoFillButtonProps> = ({ 
-  formRef, 
-  type, 
+export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
+  formRef,
+  type,
   className = '',
   size = 'default',
   variant = 'outline',
   onClick,
-  disabled
+  disabled,
 }) => {
-  const { autoFillPlayerInfo, autoFillClubInfo, autoFillAll, hasPlayerProfile, hasClubProfile } = useAutoFill();
-  
+  const {
+    autoFillPlayerInfo,
+    autoFillClubInfo,
+    autoFillAll,
+    hasPlayerProfile,
+    hasClubProfile,
+  } = useAutoFill();
+
   // Determine button state based on type and available profiles
-  const isDisabled = disabled ?? (
-    (type === 'player' && !hasPlayerProfile) || 
-    (type === 'club' && !hasClubProfile) ||
-    (type === 'all' && !hasPlayerProfile)
-  );
-  
+  const isDisabled =
+    disabled ??
+    ((type === 'player' && !hasPlayerProfile) ||
+      (type === 'club' && !hasClubProfile) ||
+      (type === 'all' && !hasPlayerProfile));
+
   // Determine button text and icon
   const getButtonContent = () => {
     switch (type) {
-      case 'player': 
+      case 'player':
         return {
           text: 'Điền thông tin cá nhân',
-          icon: <User className="h-4 w-4" />
+          icon: <User className='h-4 w-4' />,
         };
-      case 'club': 
+      case 'club':
         return {
           text: 'Điền thông tin CLB',
-          icon: <Building className="h-4 w-4" />
+          icon: <Building className='h-4 w-4' />,
         };
-      case 'all': 
+      case 'all':
         return {
           text: 'Tự động điền thông tin',
-          icon: <Zap className="h-4 w-4" />
+          icon: <Zap className='h-4 w-4' />,
         };
-      default: 
+      default:
         return {
           text: 'Tự động điền',
-          icon: <Zap className="h-4 w-4" />
+          icon: <Zap className='h-4 w-4' />,
         };
     }
   };
-  
+
   const { text, icon } = getButtonContent();
-  
+
   // Handle click
   const handleClick = () => {
     if (onClick) {
@@ -77,10 +83,10 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
       }
     }
   };
-  
+
   return (
     <Button
-      type="button"
+      type='button'
       onClick={handleClick}
       disabled={isDisabled}
       className={`auto-fill-button ${className}`}
@@ -88,7 +94,7 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
       size={size}
     >
       {icon}
-      <span className="ml-2">{text}</span>
+      <span className='ml-2'>{text}</span>
     </Button>
   );
 };

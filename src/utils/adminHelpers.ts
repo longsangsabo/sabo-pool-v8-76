@@ -1,14 +1,8 @@
 import { supabase } from '@/integrations/supabase/client';
 
 const ADMIN_IDENTIFIERS = {
-  emails: [
-    'longsangsabo@gmail.com',
-    'longsang063@gmail.com'
-  ],
-  phones: [
-    '0961167717',
-    '0798893333'
-  ]
+  emails: ['longsangsabo@gmail.com', 'longsang063@gmail.com'],
+  phones: ['0961167717', '0798893333'],
 };
 
 export function isAdminUser(email?: string, phone?: string): boolean {
@@ -36,11 +30,11 @@ export async function checkUserAdminStatus(userId: string): Promise<boolean> {
 
     // If no profile exists or is_admin is false, check auth.users email
     const { data: authUser, error: authError } = await supabase.auth.getUser();
-    
+
     if (!authError && authUser.user && authUser.user.id === userId) {
       const userEmail = authUser.user.email;
       const userPhone = authUser.user.phone;
-      
+
       return isAdminUser(userEmail, userPhone);
     }
 
@@ -51,9 +45,13 @@ export async function checkUserAdminStatus(userId: string): Promise<boolean> {
   }
 }
 
-export async function updateUserAdminStatus(userId: string, email?: string, phone?: string): Promise<void> {
+export async function updateUserAdminStatus(
+  userId: string,
+  email?: string,
+  phone?: string
+): Promise<void> {
   const isAdmin = isAdminUser(email, phone);
-  
+
   try {
     const { error } = await supabase
       .from('profiles')

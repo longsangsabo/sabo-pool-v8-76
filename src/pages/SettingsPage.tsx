@@ -85,9 +85,7 @@ const SettingsPage = () => {
   if (!user) {
     return (
       <div className='flex items-center justify-center min-h-screen'>
-        <p className='text-gray-600'>
-          Vui lòng đăng nhập để truy cập cài đặt
-        </p>
+        <p className='text-gray-600'>Vui lòng đăng nhập để truy cập cài đặt</p>
       </div>
     );
   }
@@ -101,19 +99,23 @@ const SettingsPage = () => {
       <div className='p-4 space-y-6'>
         {/* Notifications */}
         <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-4'>
-          <h2 className='text-lg font-semibold text-gray-900 mb-4'>Thông báo</h2>
-          
+          <h2 className='text-lg font-semibold text-gray-900 mb-4'>
+            Thông báo
+          </h2>
+
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
               <div>
                 <Label htmlFor='notifications'>Thông báo push</Label>
-                <p className='text-sm text-gray-500'>Nhận thông báo về thách đấu và giải đấu</p>
+                <p className='text-sm text-gray-500'>
+                  Nhận thông báo về thách đấu và giải đấu
+                </p>
               </div>
               <Switch
                 id='notifications'
                 checked={notifications.push}
-                onCheckedChange={(checked) => 
-                  setNotifications(prev => ({...prev, push: checked}))
+                onCheckedChange={checked =>
+                  setNotifications(prev => ({ ...prev, push: checked }))
                 }
               />
             </div>
@@ -121,13 +123,15 @@ const SettingsPage = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <Label htmlFor='email-notifications'>Thông báo email</Label>
-                <p className='text-sm text-gray-500'>Nhận email về hoạt động quan trọng</p>
+                <p className='text-sm text-gray-500'>
+                  Nhận email về hoạt động quan trọng
+                </p>
               </div>
               <Switch
                 id='email-notifications'
                 checked={notifications.email}
-                onCheckedChange={(checked) => 
-                  setNotifications(prev => ({...prev, email: checked}))
+                onCheckedChange={checked =>
+                  setNotifications(prev => ({ ...prev, email: checked }))
                 }
               />
             </div>
@@ -136,19 +140,23 @@ const SettingsPage = () => {
 
         {/* Privacy */}
         <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-4'>
-          <h2 className='text-lg font-semibold text-gray-900 mb-4'>Quyền riêng tư</h2>
-          
+          <h2 className='text-lg font-semibold text-gray-900 mb-4'>
+            Quyền riêng tư
+          </h2>
+
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
               <div>
                 <Label htmlFor='public-profile'>Hồ sơ công khai</Label>
-                <p className='text-sm text-gray-500'>Cho phép người khác xem hồ sơ của bạn</p>
+                <p className='text-sm text-gray-500'>
+                  Cho phép người khác xem hồ sơ của bạn
+                </p>
               </div>
               <Switch
                 id='public-profile'
                 checked={privacy.profileVisible}
-                onCheckedChange={(checked) => 
-                  setPrivacy(prev => ({...prev, profileVisible: checked}))
+                onCheckedChange={checked =>
+                  setPrivacy(prev => ({ ...prev, profileVisible: checked }))
                 }
               />
             </div>
@@ -156,13 +164,15 @@ const SettingsPage = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <Label htmlFor='show-online'>Hiển thị trạng thái online</Label>
-                <p className='text-sm text-gray-500'>Cho người khác biết khi bạn đang online</p>
+                <p className='text-sm text-gray-500'>
+                  Cho người khác biết khi bạn đang online
+                </p>
               </div>
               <Switch
                 id='show-online'
                 checked={privacy.onlineStatus}
-                onCheckedChange={(checked) => 
-                  setPrivacy(prev => ({...prev, onlineStatus: checked}))
+                onCheckedChange={checked =>
+                  setPrivacy(prev => ({ ...prev, onlineStatus: checked }))
                 }
               />
             </div>
@@ -171,27 +181,29 @@ const SettingsPage = () => {
 
         {/* Account Actions */}
         <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-4'>
-          <h2 className='text-lg font-semibold text-gray-900 mb-4'>Tài khoản</h2>
-          
+          <h2 className='text-lg font-semibold text-gray-900 mb-4'>
+            Tài khoản
+          </h2>
+
           <div className='space-y-3'>
-            <Button 
-              variant='outline' 
+            <Button
+              variant='outline'
               className='w-full justify-start'
               onClick={handleChangePassword}
             >
               Đổi mật khẩu
             </Button>
-            
-            <Button 
-              variant='outline' 
+
+            <Button
+              variant='outline'
               className='w-full justify-start'
               onClick={handleExportData}
             >
               Xuất dữ liệu
             </Button>
-            
-            <Button 
-              variant='destructive' 
+
+            <Button
+              variant='destructive'
               className='w-full justify-start'
               onClick={handleLogout}
             >
@@ -202,8 +214,8 @@ const SettingsPage = () => {
 
         {/* Save Button */}
         <div className='pb-6'>
-          <Button 
-            onClick={handleSaveSettings} 
+          <Button
+            onClick={handleSaveSettings}
             className='w-full bg-blue-600 hover:bg-blue-700'
           >
             Lưu thay đổi

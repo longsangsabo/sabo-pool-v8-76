@@ -15,7 +15,7 @@ export const TableBadge: React.FC<TableBadgeProps> = ({
   tableName,
   tableStatus = 'available',
   matchStatus = 'scheduled',
-  className = ''
+  className = '',
 }) => {
   // Determine badge variant and color based on table and match status
   const getBadgeVariant = () => {
@@ -49,14 +49,14 @@ export const TableBadge: React.FC<TableBadgeProps> = ({
   };
 
   return (
-    <Badge 
-      variant={getBadgeVariant()} 
+    <Badge
+      variant={getBadgeVariant()}
       className={`flex items-center gap-1.5 text-xs font-medium ${className}`}
     >
       {getStatusIcon()}
       <span>Bàn {tableNumber}</span>
       {tableName && (
-        <span className="text-muted-foreground">({tableName})</span>
+        <span className='text-muted-foreground'>({tableName})</span>
       )}
     </Badge>
   );

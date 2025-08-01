@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 interface FeatureFlags {
   optimizedResponsive: boolean;
@@ -19,7 +25,9 @@ interface FeatureFlagsContextType {
   environment: 'development' | 'staging' | 'production';
 }
 
-const FeatureFlagsContext = createContext<FeatureFlagsContextType | undefined>(undefined);
+const FeatureFlagsContext = createContext<FeatureFlagsContextType | undefined>(
+  undefined
+);
 
 export const useFeatureFlags = () => {
   const context = useContext(FeatureFlagsContext);
@@ -34,31 +42,33 @@ interface FeatureFlagsProviderProps {
   environment?: 'development' | 'staging' | 'production';
 }
 
-export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({ 
-  children, 
-  environment = 'development' 
+export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
+  children,
+  environment = 'development',
 }) => {
   // Default feature flags configuration
   const [flags, setFlags] = useState<FeatureFlags>({
-    optimizedResponsive: true,     // Always enabled - core feature
-    mobileEnhancements: true,      // Mobile optimizations
-    tabletOptimizations: true,     // Tablet-specific features
+    optimizedResponsive: true, // Always enabled - core feature
+    mobileEnhancements: true, // Mobile optimizations
+    tabletOptimizations: true, // Tablet-specific features
     performanceMonitoring: environment !== 'production', // Development only by default
-    responsiveAnalytics: false,    // Opt-in for production
-    experimentalLayouts: environment === 'development' // Development only
+    responsiveAnalytics: false, // Opt-in for production
+    experimentalLayouts: environment === 'development', // Development only
   });
 
   const [rolloutPercentage, setRolloutPercentage] = useState(100);
-  const [userGroup, setUserGroup] = useState<'control' | 'treatment'>('treatment');
+  const [userGroup, setUserGroup] = useState<'control' | 'treatment'>(
+    'treatment'
+  );
 
   // Generate consistent user group based on session
   useEffect(() => {
     const userId = localStorage.getItem('userId') || generateUserId();
     const hash = simpleHash(userId);
     const percentage = hash % 100;
-    
+
     setUserGroup(percentage < rolloutPercentage ? 'treatment' : 'control');
-    
+
     // Load feature flags from server/localStorage for production
     if (environment === 'production') {
       loadProductionFlags();
@@ -75,7 +85,7 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash);
@@ -86,7 +96,7 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
       // In production, load from API
       // const response = await fetch('/api/feature-flags');
       // const productionFlags = await response.json();
-      
+
       // For demo, load from localStorage
       const savedFlags = localStorage.getItem('featureFlags');
       if (savedFlags) {
@@ -100,34 +110,36 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
   const isEnabled = (flag: keyof FeatureFlags): boolean => {
     // Core responsive system is always enabled
     if (flag === 'optimizedResponsive') return true;
-    
+
     // Check user group for gradual rollouts
     if (userGroup === 'control') {
-      return ['mobileEnhancements', 'tabletOptimizations'].includes(flag) ? false : flags[flag];
+      return ['mobileEnhancements', 'tabletOptimizations'].includes(flag)
+        ? false
+        : flags[flag];
     }
-    
+
     return flags[flag];
   };
 
   const enableFlag = (flag: keyof FeatureFlags) => {
     const newFlags = { ...flags, [flag]: true };
     setFlags(newFlags);
-    
+
     if (environment === 'production') {
       localStorage.setItem('featureFlags', JSON.stringify(newFlags));
     }
-    
+
     console.log(`🚀 Feature flag enabled: ${flag}`);
   };
 
   const disableFlag = (flag: keyof FeatureFlags) => {
     const newFlags = { ...flags, [flag]: false };
     setFlags(newFlags);
-    
+
     if (environment === 'production') {
       localStorage.setItem('featureFlags', JSON.stringify(newFlags));
     }
-    
+
     console.log(`🔒 Feature flag disabled: ${flag}`);
   };
 
@@ -138,7 +150,7 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
     disableFlag,
     rolloutPercentage,
     userGroup,
-    environment
+    environment,
   };
 
   return (
@@ -156,16 +168,16 @@ export const withFeatureFlag = <P extends object>(
 ) => {
   return (props: P) => {
     const { isEnabled } = useFeatureFlags();
-    
+
     if (isEnabled(flag)) {
       return <WrappedComponent {...props} />;
     }
-    
+
     if (fallback) {
       const FallbackComponent = fallback;
       return <FallbackComponent {...props} />;
     }
-    
+
     return null;
   };
 };
@@ -173,7 +185,7 @@ export const withFeatureFlag = <P extends object>(
 // Hook for A/B testing
 export const useABTest = (testName: string) => {
   const { userGroup, environment } = useFeatureFlags();
-  
+
   useEffect(() => {
     // Track A/B test exposure
     if (environment === 'production') {
@@ -181,10 +193,10 @@ export const useABTest = (testName: string) => {
       console.log(`📊 A/B Test Exposure: ${testName} - Group: ${userGroup}`);
     }
   }, [testName, userGroup, environment]);
-  
+
   return {
     group: userGroup,
     isControl: userGroup === 'control',
-    isTreatment: userGroup === 'treatment'
+    isTreatment: userGroup === 'treatment',
   };
 };

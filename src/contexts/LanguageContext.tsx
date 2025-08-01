@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'vi' | 'en';
@@ -10,7 +9,9 @@ interface LanguageContextType {
   interpolate: (template: string, params?: Record<string, any>) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 // Simple translations
 const translations = {
@@ -48,7 +49,9 @@ const translations = {
   },
 };
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [language, setLanguage] = useState<Language>('vi');
 
   useEffect(() => {
@@ -67,14 +70,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return translations[language][key] || key;
   };
 
-  const interpolate = (template: string, params: Record<string, any> = {}): string => {
+  const interpolate = (
+    template: string,
+    params: Record<string, any> = {}
+  ): string => {
     return Object.keys(params).reduce((result, key) => {
       return result.replace(new RegExp(`{${key}}`, 'g'), params[key]);
     }, template);
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t, interpolate }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage: handleSetLanguage, t, interpolate }}
+    >
       {children}
     </LanguageContext.Provider>
   );

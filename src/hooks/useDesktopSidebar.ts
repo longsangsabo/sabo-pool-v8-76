@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export const useDesktopSidebar = () => {
@@ -8,7 +7,10 @@ export const useDesktopSidebar = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('desktop-sidebar-collapsed', JSON.stringify(isCollapsed));
+    localStorage.setItem(
+      'desktop-sidebar-collapsed',
+      JSON.stringify(isCollapsed)
+    );
   }, [isCollapsed]);
 
   const toggle = () => {
@@ -27,6 +29,6 @@ export const useDesktopSidebar = () => {
     isCollapsed,
     toggle,
     collapse,
-    expand
+    expand,
   };
 };

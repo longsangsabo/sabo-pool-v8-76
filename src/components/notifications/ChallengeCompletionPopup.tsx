@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { StarRating } from '@/components/ui/star-rating';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,11 +32,9 @@ interface ChallengeCompletionPopupProps {
   onClose: () => void;
 }
 
-export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> = ({
-  notification,
-  isOpen,
-  onClose
-}) => {
+export const ChallengeCompletionPopup: React.FC<
+  ChallengeCompletionPopupProps
+> = ({ notification, isOpen, onClose }) => {
   const [opponentRating, setOpponentRating] = useState(0);
   const [clubRating, setClubRating] = useState(0);
   const [opponentComment, setOpponentComment] = useState('');
@@ -51,11 +54,11 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
         .select('user_id, full_name, display_name, avatar_url')
         .eq('user_id', notification.metadata.opponent_id)
         .single();
-      
+
       if (error) throw error;
       return data;
     },
-    enabled: !!notification.metadata.opponent_id
+    enabled: !!notification.metadata.opponent_id,
   });
 
   // Get club data
@@ -67,11 +70,11 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
         .select('id, club_name, address')
         .eq('id', notification.metadata.club_id)
         .single();
-      
+
       if (error) throw error;
       return data;
     },
-    enabled: !!notification.metadata.club_id
+    enabled: !!notification.metadata.club_id,
   });
 
   // Submit ratings mutation
@@ -85,7 +88,7 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
         console.log('Rating submission:', {
           rated_user: notification.metadata.opponent_id,
           rating: ratings.opponentRating.rating,
-          comment: ratings.opponentRating.comment
+          comment: ratings.opponentRating.comment,
         });
       }
 
@@ -95,7 +98,7 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
         console.log('Club rating submission:', {
           rated_club: notification.metadata.club_id,
           rating: ratings.clubRating.rating,
-          comment: ratings.clubRating.comment
+          comment: ratings.clubRating.comment,
         });
       }
 
@@ -112,28 +115,28 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
     },
     onSuccess: () => {
       toast({
-        title: "Cảm ơn bạn đã đánh giá!",
-        description: "Đánh giá của bạn đã được gửi thành công.",
+        title: 'Cảm ơn bạn đã đánh giá!',
+        description: 'Đánh giá của bạn đã được gửi thành công.',
       });
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       onClose();
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error submitting ratings:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể gửi đánh giá. Vui lòng thử lại.",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không thể gửi đánh giá. Vui lòng thử lại.',
+        variant: 'destructive',
       });
-    }
+    },
   });
 
   const handleSubmitRatings = async () => {
     if (opponentRating === 0 && clubRating === 0) {
       toast({
-        title: "Vui lòng đánh giá",
-        description: "Hãy đánh giá ít nhất đối thủ hoặc CLB.",
-        variant: "destructive"
+        title: 'Vui lòng đánh giá',
+        description: 'Hãy đánh giá ít nhất đối thủ hoặc CLB.',
+        variant: 'destructive',
       });
       return;
     }
@@ -143,12 +146,12 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
       await submitRatingsMutation.mutateAsync({
         opponentRating: {
           rating: opponentRating,
-          comment: opponentComment
+          comment: opponentComment,
         },
         clubRating: {
           rating: clubRating,
-          comment: clubComment
-        }
+          comment: clubComment,
+        },
       });
     } finally {
       setIsSubmitting(false);
@@ -161,7 +164,7 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
         .from('notifications')
         .update({ is_read: true, auto_popup: false })
         .eq('id', notification.id);
-      
+
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       onClose();
     } catch (error) {
@@ -172,62 +175,62 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <Trophy className="w-6 h-6 text-yellow-500" />
+          <DialogTitle className='flex items-center gap-2 text-xl'>
+            <Trophy className='w-6 h-6 text-yellow-500' />
             Trận đấu đã hoàn thành!
           </DialogTitle>
-          <div className="text-center py-2">
-            <div className="text-2xl font-bold text-primary">
+          <div className='text-center py-2'>
+            <div className='text-2xl font-bold text-primary'>
               {notification.metadata.final_score}
             </div>
-            <p className="text-muted-foreground">Tỷ số cuối cùng</p>
+            <p className='text-muted-foreground'>Tỷ số cuối cùng</p>
           </div>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Opponent Rating Section */}
           {opponentData && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
+                <CardTitle className='flex items-center gap-2'>
+                  <User className='w-5 h-5' />
                   Đánh giá đối thủ
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Avatar className="w-12 h-12">
+              <CardContent className='space-y-4'>
+                <div className='flex items-center gap-3'>
+                  <Avatar className='w-12 h-12'>
                     <AvatarImage src={opponentData.avatar_url} />
                     <AvatarFallback>
                       {opponentData.full_name?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">
+                    <div className='font-medium'>
                       {opponentData.full_name || opponentData.display_name}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className='text-sm text-muted-foreground'>
                       Đối thủ của bạn
                     </div>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">Đánh giá:</span>
-                    <StarRating 
-                      value={opponentRating} 
+
+                <div className='space-y-2'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-sm font-medium'>Đánh giá:</span>
+                    <StarRating
+                      value={opponentRating}
                       onChange={setOpponentRating}
-                      size="md"
+                      size='md'
                     />
                   </div>
                   <Textarea
-                    placeholder="Đối thủ chơi fair, lịch sự, kỹ thuật tốt..."
+                    placeholder='Đối thủ chơi fair, lịch sự, kỹ thuật tốt...'
                     value={opponentComment}
-                    onChange={(e) => setOpponentComment(e.target.value)}
-                    className="min-h-[80px]"
+                    onChange={e => setOpponentComment(e.target.value)}
+                    className='min-h-[80px]'
                   />
                 </div>
               </CardContent>
@@ -238,38 +241,38 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
           {clubData && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building className="w-5 h-5" />
+                <CardTitle className='flex items-center gap-2'>
+                  <Building className='w-5 h-5' />
                   Đánh giá CLB
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Building className="w-6 h-6 text-primary" />
+              <CardContent className='space-y-4'>
+                <div className='flex items-center gap-3'>
+                  <div className='w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center'>
+                    <Building className='w-6 h-6 text-primary' />
                   </div>
                   <div>
-                    <div className="font-medium">{clubData.club_name}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className='font-medium'>{clubData.club_name}</div>
+                    <div className='text-sm text-muted-foreground'>
                       {clubData.address}
                     </div>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">Đánh giá:</span>
-                    <StarRating 
-                      value={clubRating} 
+
+                <div className='space-y-2'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-sm font-medium'>Đánh giá:</span>
+                    <StarRating
+                      value={clubRating}
                       onChange={setClubRating}
-                      size="md"
+                      size='md'
                     />
                   </div>
                   <Textarea
-                    placeholder="CLB có không gian thoải mái, nhân viên nhiệt tình, bàn chơi tốt..."
+                    placeholder='CLB có không gian thoải mái, nhân viên nhiệt tình, bàn chơi tốt...'
                     value={clubComment}
-                    onChange={(e) => setClubComment(e.target.value)}
-                    className="min-h-[80px]"
+                    onChange={e => setClubComment(e.target.value)}
+                    className='min-h-[80px]'
                   />
                 </div>
               </CardContent>
@@ -279,18 +282,20 @@ export const ChallengeCompletionPopup: React.FC<ChallengeCompletionPopupProps> =
           <Separator />
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-end">
-            <Button 
-              variant="ghost" 
+          <div className='flex flex-col sm:flex-row gap-3 justify-end'>
+            <Button
+              variant='ghost'
               onClick={handleSkip}
               disabled={isSubmitting}
             >
               Bỏ qua
             </Button>
-            <Button 
+            <Button
               onClick={handleSubmitRatings}
-              disabled={isSubmitting || (opponentRating === 0 && clubRating === 0)}
-              className="bg-primary hover:bg-primary/90"
+              disabled={
+                isSubmitting || (opponentRating === 0 && clubRating === 0)
+              }
+              className='bg-primary hover:bg-primary/90'
             >
               {isSubmitting ? 'Đang gửi...' : 'Gửi đánh giá'}
             </Button>

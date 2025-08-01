@@ -35,8 +35,11 @@ interface TournamentBracketData {
 }
 
 export const useCompletedTournamentTemplates = () => {
-  const [completedTournaments, setCompletedTournaments] = useState<CompletedTournament[]>([]);
-  const [selectedTournamentData, setSelectedTournamentData] = useState<TournamentBracketData | null>(null);
+  const [completedTournaments, setCompletedTournaments] = useState<
+    CompletedTournament[]
+  >([]);
+  const [selectedTournamentData, setSelectedTournamentData] =
+    useState<TournamentBracketData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -67,7 +70,7 @@ export const useCompletedTournamentTemplates = () => {
         created_at: tournament.created_at || '',
         duration_hours: 0,
         total_matches: 0,
-        completion_rate: 100
+        completion_rate: 100,
       }));
 
       setCompletedTournaments(completedData);
@@ -80,7 +83,9 @@ export const useCompletedTournamentTemplates = () => {
   };
 
   // Load specific tournament bracket data
-  const loadTournamentBracketData = async (tournamentId: string): Promise<TournamentBracketData | null> => {
+  const loadTournamentBracketData = async (
+    tournamentId: string
+  ): Promise<TournamentBracketData | null> => {
     setIsLoading(true);
     try {
       // Simple query without complex joins
@@ -98,7 +103,7 @@ export const useCompletedTournamentTemplates = () => {
         ...match,
         player1: { full_name: 'Player 1', display_name: 'Player 1' },
         player2: { full_name: 'Player 2', display_name: 'Player 2' },
-        assigned_table: null
+        assigned_table: null,
       }));
 
       // Fetch tournament results
@@ -129,8 +134,8 @@ export const useCompletedTournamentTemplates = () => {
           completion_rate: 100,
           duration_hours: 0,
           prize_distributed: 0,
-          spa_awarded: 0
-        }
+          spa_awarded: 0,
+        },
       };
 
       setSelectedTournamentData(bracketData);
@@ -153,22 +158,25 @@ export const useCompletedTournamentTemplates = () => {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'tournaments'
+          table: 'tournaments',
         },
-        (payload) => {
+        payload => {
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
-          
+
           // Check if tournament just completed
-          if (oldRecord?.status !== 'completed' && newRecord?.status === 'completed') {
+          if (
+            oldRecord?.status !== 'completed' &&
+            newRecord?.status === 'completed'
+          ) {
             toast.success(`🏆 Giải đấu "${newRecord.name}" vừa hoàn thành!`, {
               description: 'Dữ liệu đã được cập nhật trong template.',
               duration: 5000,
             });
-            
+
             // Refresh completed tournaments list
             fetchCompletedTournaments();
-            
+
             // If this tournament is currently being viewed in template, reload its data
             if (selectedTournamentData?.tournament_id === newRecord.id) {
               loadTournamentBracketData(newRecord.id);
@@ -176,7 +184,7 @@ export const useCompletedTournamentTemplates = () => {
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
           console.log('✅ Real-time sync connected for completed tournaments');
@@ -200,7 +208,7 @@ export const useCompletedTournamentTemplates = () => {
       displayName: 'Player',
       rank: 'A',
       avatarUrl: null,
-      elo: 1200
+      elo: 1200,
     }));
 
     const matches = bracketData.matches.map(match => ({
@@ -213,7 +221,7 @@ export const useCompletedTournamentTemplates = () => {
       player1_score: match.score_player1 || 0,
       player2_score: match.score_player2 || 0,
       status: match.status,
-      completed: match.status === 'completed'
+      completed: match.status === 'completed',
     }));
 
     return {
@@ -221,7 +229,7 @@ export const useCompletedTournamentTemplates = () => {
       matches,
       results: bracketData.results,
       statistics: bracketData.statistics,
-      isCompleted: true
+      isCompleted: true,
     };
   };
 
@@ -232,6 +240,6 @@ export const useCompletedTournamentTemplates = () => {
     isConnected,
     fetchCompletedTournaments,
     loadTournamentBracketData,
-    convertToTemplateFormat
+    convertToTemplateFormat,
   };
 };

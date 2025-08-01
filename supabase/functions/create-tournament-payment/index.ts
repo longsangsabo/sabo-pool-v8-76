@@ -45,15 +45,15 @@ async function createSecureHash(
   const dataToSign = encoder.encode(signData);
 
   const key = await crypto.subtle.importKey(
-    'raw', 
-    keyData, 
-    { name: 'HMAC', hash: 'SHA-512' }, 
-    false, 
+    'raw',
+    keyData,
+    { name: 'HMAC', hash: 'SHA-512' },
+    false,
     ['sign']
   );
-  
+
   const signature = await crypto.subtle.sign('HMAC', key, dataToSign);
-  
+
   return Array.from(new Uint8Array(signature))
     .map(b => b.toString(16).padStart(2, '0'))
     .join('');
@@ -75,7 +75,7 @@ serve(async req => {
       userId,
       tournamentId,
       registrationId,
-      amount
+      amount,
     }: TournamentPaymentRequest = await req.json();
 
     if (!userId || !tournamentId || !registrationId || !amount) {
@@ -135,7 +135,7 @@ serve(async req => {
       .from('tournament_registrations')
       .update({
         payment_transaction_ref: transactionRef,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', registrationId);
 

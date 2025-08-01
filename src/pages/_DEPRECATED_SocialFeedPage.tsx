@@ -39,64 +39,71 @@ const SocialFeedPage = () => {
     <>
       <Helmet>
         <title>Feed Cộng Đồng - SABO Billiards</title>
-        <meta name="description" content="Chia sẻ và theo dõi thành tích của cộng đồng bi-a" />
+        <meta
+          name='description'
+          content='Chia sẻ và theo dõi thành tích của cộng đồng bi-a'
+        />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
-        <div className="container mx-auto px-4 max-w-2xl">
+      <div className='min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8'>
+        <div className='container mx-auto px-4 max-w-2xl'>
           {/* Header */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className='mb-6'>
+            <div className='flex items-center justify-between mb-4'>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className='text-2xl font-bold text-gray-900'>
                   Feed Cộng Đồng
                 </h1>
-                <p className="text-gray-600">
+                <p className='text-gray-600'>
                   Chia sẻ và theo dõi hoạt động của cộng đồng
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${
-                  isConnected ? 'bg-green-500' : 'bg-red-500'
-                }`} />
-                <span className="text-sm text-gray-500">
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                />
+                <span className='text-sm text-gray-500'>
                   {isConnected ? 'Trực tuyến' : 'Ngoại tuyến'}
                 </span>
               </div>
             </div>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-3">
+            <div className='flex items-center gap-3'>
               <Button
                 onClick={() => setIsCreateModalOpen(true)}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
               >
-                <Plus className="w-4 h-4" />
+                <Plus className='w-4 h-4' />
                 Tạo bài viết
               </Button>
               <Button
-                variant="outline"
+                variant='outline'
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
               >
-                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+                />
                 Làm mới
               </Button>
             </div>
           </div>
 
           {/* Feed content */}
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {feedPosts.length === 0 ? (
               <Card>
-                <CardContent className="p-8 text-center">
-                  <div className="text-gray-500 mb-4">
-                    <Plus className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <h3 className="text-lg font-medium mb-2">
+                <CardContent className='p-8 text-center'>
+                  <div className='text-gray-500 mb-4'>
+                    <Plus className='w-12 h-12 mx-auto mb-4 opacity-50' />
+                    <h3 className='text-lg font-medium mb-2'>
                       Chưa có bài viết nào
                     </h3>
-                    <p className="text-sm">
+                    <p className='text-sm'>
                       Hãy là người đầu tiên chia sẻ thành tích của mình!
                     </p>
                   </div>
@@ -106,7 +113,7 @@ const SocialFeedPage = () => {
                 </CardContent>
               </Card>
             ) : (
-              feedPosts.map((post) => (
+              feedPosts.map(post => (
                 <SocialFeedCard
                   key={post.id}
                   post={post}
@@ -121,8 +128,8 @@ const SocialFeedPage = () => {
 
           {/* Load more indicator */}
           {feedPosts.length > 0 && (
-            <div className="text-center py-8">
-              <Button variant="outline" onClick={handleRefresh}>
+            <div className='text-center py-8'>
+              <Button variant='outline' onClick={handleRefresh}>
                 Tải thêm bài viết
               </Button>
             </div>

@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,9 +22,26 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useChallenges } from '@/hooks/useChallenges';
 import { toast } from 'sonner';
-import { Search, Trophy, MapPin, Clock, Users, HelpCircle, Calculator, Loader2, Globe, Target, Shield, Star } from 'lucide-react';
+import {
+  Search,
+  Trophy,
+  MapPin,
+  Clock,
+  Users,
+  HelpCircle,
+  Calculator,
+  Loader2,
+  Globe,
+  Target,
+  Shield,
+  Star,
+} from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { calculateSaboHandicap, type SaboRank, formatHandicapDisplay } from '@/utils/saboHandicap';
+import {
+  calculateSaboHandicap,
+  type SaboRank,
+  formatHandicapDisplay,
+} from '@/utils/saboHandicap';
 import SaboInfoDialog from '@/components/sabo/SaboInfoDialog';
 
 interface UnifiedCreateChallengeModalProps {
@@ -48,18 +76,17 @@ const BET_CONFIGURATIONS = [
   { points: 600, raceTO: 22, description: 'Thách đấu cao cấp - Race to 22' },
 ];
 
-const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = ({
-  isOpen,
-  onClose,
-  onChallengeCreated,
-  variant = 'standard'
-}) => {
+const UnifiedCreateChallengeModal: React.FC<
+  UnifiedCreateChallengeModalProps
+> = ({ isOpen, onClose, onChallengeCreated, variant = 'standard' }) => {
   const { user } = useAuth();
   const { createChallenge } = useChallenges();
   const [loading, setLoading] = useState(false);
-  const [challengeType, setChallengeType] = useState<'direct' | 'open'>('direct');
+  const [challengeType, setChallengeType] = useState<'direct' | 'open'>(
+    'direct'
+  );
   const [showSaboInfo, setShowSaboInfo] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     opponent_id: '',
     opponent_search: '',
@@ -70,7 +97,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     scheduled_time: '',
     is_sabo: false,
     handicap_1_rank: 0,
-    handicap_05_rank: 0
+    handicap_05_rank: 0,
   });
 
   const [searchResults, setSearchResults] = useState<Player[]>([]);
@@ -90,14 +117,14 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
   const fetchCurrentUserProfile = async () => {
     if (!user?.id) return;
-    
+
     try {
       const { data, error } = await supabase
         .from('player_rankings')
         .select('current_rank, spa_points')
         .eq('user_id', user.id)
         .single();
-      
+
       if (error) throw error;
       setCurrentUserProfile(data);
     } catch (error) {
@@ -111,15 +138,16 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
         .from('club_profiles')
         .select('id, club_name, address')
         .order('club_name');
-      
+
       if (error) throw error;
-      
-      const clubData = data?.map(club => ({
-        id: club.id,
-        name: club.club_name,
-        address: club.address
-      })) || [];
-      
+
+      const clubData =
+        data?.map(club => ({
+          id: club.id,
+          name: club.club_name,
+          address: club.address,
+        })) || [];
+
       setClubs(clubData);
     } catch (error) {
       console.error('Error fetching clubs:', error);
@@ -137,32 +165,36 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           user_id,
           full_name,
           avatar_url
-        `)
+        `
+        )
         .or(`full_name.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%`)
         .neq('user_id', user?.id)
         .limit(10);
 
       if (error) throw error;
-      
+
       // Get ranking data separately and merge
-      const playersWithRanking = await Promise.all((data || []).map(async (player) => {
-        const { data: ranking } = await supabase
-          .from('player_rankings')
-          .select('current_rank, spa_points')
-          .eq('user_id', player.user_id)
-          .single();
-        
-        return {
-          ...player,
-          current_rank: ranking?.current_rank,
-          spa_points: ranking?.spa_points || 0
-        };
-      }));
-      
+      const playersWithRanking = await Promise.all(
+        (data || []).map(async player => {
+          const { data: ranking } = await supabase
+            .from('player_rankings')
+            .select('current_rank, spa_points')
+            .eq('user_id', player.user_id)
+            .single();
+
+          return {
+            ...player,
+            current_rank: ranking?.current_rank,
+            spa_points: ranking?.spa_points || 0,
+          };
+        })
+      );
+
       setSearchResults(playersWithRanking);
     } catch (error) {
       console.error('Error searching players:', error);
@@ -177,7 +209,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     setFormData(prev => ({
       ...prev,
       opponent_id: player.user_id,
-      opponent_search: player.full_name
+      opponent_search: player.full_name,
     }));
     setSearchResults([]);
   };
@@ -188,19 +220,24 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
       setFormData(prev => ({
         ...prev,
         bet_points: points,
-        race_to: config.raceTO
+        race_to: config.raceTO,
       }));
     }
   };
 
   const calculateHandicap = () => {
-    if (!formData.is_sabo || !currentUserProfile || !selectedPlayer) return null;
-    
+    if (!formData.is_sabo || !currentUserProfile || !selectedPlayer)
+      return null;
+
     const challengerRank = currentUserProfile.current_rank as SaboRank;
     const opponentRank = selectedPlayer.current_rank as SaboRank;
-    
+
     try {
-      return calculateSaboHandicap(challengerRank, opponentRank, formData.bet_points);
+      return calculateSaboHandicap(
+        challengerRank,
+        opponentRank,
+        formData.bet_points
+      );
     } catch (error) {
       console.error('Error calculating handicap:', error);
       return null;
@@ -209,7 +246,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (challengeType === 'direct' && !formData.opponent_id) {
       toast.error('Vui lòng chọn đối thủ');
       return;
@@ -229,7 +266,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
         message: formData.message || null,
         club_id: formData.club_id,
         scheduled_time: formData.scheduled_time || null,
-        is_sabo: formData.is_sabo
+        is_sabo: formData.is_sabo,
       };
 
       // For direct challenges, set opponent_id. For open challenges, set to 'open'
@@ -251,11 +288,11 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
       await createChallenge(challengeData);
 
       toast.success(
-        challengeType === 'direct' 
-          ? 'Thách đấu đã được gửi thành công!' 
+        challengeType === 'direct'
+          ? 'Thách đấu đã được gửi thành công!'
           : 'Thách đấu mở đã được tạo thành công!'
       );
-      
+
       resetForm();
       onChallengeCreated();
       onClose();
@@ -278,7 +315,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
       scheduled_time: '',
       is_sabo: false,
       handicap_1_rank: 0,
-      handicap_05_rank: 0
+      handicap_05_rank: 0,
     });
     setSelectedPlayer(null);
     setSearchResults([]);
@@ -290,37 +327,43 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="pb-4">
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              {variant === 'admin' ? <Shield className="w-5 h-5" /> : <Trophy className="w-5 h-5" />}
-              {variant === 'admin' ? 'Tạo thách đấu (Admin)' : 'Tạo thách đấu mới'}
+        <DialogContent className='max-w-lg max-h-[90vh] overflow-y-auto'>
+          <DialogHeader className='pb-4'>
+            <DialogTitle className='flex items-center gap-2 text-lg'>
+              {variant === 'admin' ? (
+                <Shield className='w-5 h-5' />
+              ) : (
+                <Trophy className='w-5 h-5' />
+              )}
+              {variant === 'admin'
+                ? 'Tạo thách đấu (Admin)'
+                : 'Tạo thách đấu mới'}
             </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className='space-y-4'>
             {/* Challenge Type Selection - Compact */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Loại thách đấu</Label>
-              <div className="grid grid-cols-2 gap-2">
+            <div className='space-y-2'>
+              <Label className='text-sm font-medium'>Loại thách đấu</Label>
+              <div className='grid grid-cols-2 gap-2'>
                 <Button
-                  type="button"
+                  type='button'
                   variant={challengeType === 'direct' ? 'default' : 'outline'}
                   onClick={() => setChallengeType('direct')}
-                  className="h-10 text-sm"
-                  size="sm"
+                  className='h-10 text-sm'
+                  size='sm'
                 >
-                  <Target className="w-4 h-4 mr-1" />
+                  <Target className='w-4 h-4 mr-1' />
                   Thách đấu trực tiếp
                 </Button>
                 <Button
-                  type="button"
+                  type='button'
                   variant={challengeType === 'open' ? 'default' : 'outline'}
                   onClick={() => setChallengeType('open')}
-                  className="h-10 text-sm"
-                  size="sm"
+                  className='h-10 text-sm'
+                  size='sm'
                 >
-                  <Globe className="w-4 h-4 mr-1" />
+                  <Globe className='w-4 h-4 mr-1' />
                   Thách đấu mở
                 </Button>
               </div>
@@ -328,43 +371,53 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
             {/* Opponent Search - Only for direct challenges */}
             {challengeType === 'direct' && (
-              <div className="space-y-2">
-                <Label htmlFor="opponent-search" className="text-sm">Tìm đối thủ</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <div className='space-y-2'>
+                <Label htmlFor='opponent-search' className='text-sm'>
+                  Tìm đối thủ
+                </Label>
+                <div className='relative'>
+                  <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4' />
                   <Input
-                    id="opponent-search"
-                    placeholder="Nhập tên hoặc ID người chơi..."
+                    id='opponent-search'
+                    placeholder='Nhập tên hoặc ID người chơi...'
                     value={formData.opponent_search}
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
-                      setFormData(prev => ({ ...prev, opponent_search: value }));
+                      setFormData(prev => ({
+                        ...prev,
+                        opponent_search: value,
+                      }));
                       searchPlayers(value);
                     }}
-                    className="pl-10 h-10"
+                    className='pl-10 h-10'
                   />
                   {searching && (
-                    <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin" />
+                    <Loader2 className='absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin' />
                   )}
                 </div>
 
                 {/* Search Results - Compact */}
                 {searchResults.length > 0 && (
-                  <div className="border rounded-lg p-2 bg-background max-h-32 overflow-y-auto">
-                    {searchResults.map((player) => (
+                  <div className='border rounded-lg p-2 bg-background max-h-32 overflow-y-auto'>
+                    {searchResults.map(player => (
                       <div
                         key={player.user_id}
-                        className="flex items-center gap-2 p-2 rounded hover:bg-muted cursor-pointer"
+                        className='flex items-center gap-2 p-2 rounded hover:bg-muted cursor-pointer'
                         onClick={() => handlePlayerSelect(player)}
                       >
-                        <Avatar className="w-6 h-6">
+                        <Avatar className='w-6 h-6'>
                           <AvatarImage src={player.avatar_url} />
-                          <AvatarFallback className="text-xs">{player.full_name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className='text-xs'>
+                            {player.full_name.charAt(0)}
+                          </AvatarFallback>
                         </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{player.full_name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {player.current_rank || 'K'} • {player.spa_points || 0} SPA
+                        <div className='flex-1 min-w-0'>
+                          <p className='text-sm font-medium truncate'>
+                            {player.full_name}
+                          </p>
+                          <p className='text-xs text-muted-foreground'>
+                            {player.current_rank || 'K'} •{' '}
+                            {player.spa_points || 0} SPA
                           </p>
                         </div>
                       </div>
@@ -374,26 +427,35 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
                 {/* Selected Player - Compact */}
                 {selectedPlayer && (
-                  <div className="flex items-center gap-2 p-2 bg-muted rounded-lg">
-                    <Avatar className="w-8 h-8">
+                  <div className='flex items-center gap-2 p-2 bg-muted rounded-lg'>
+                    <Avatar className='w-8 h-8'>
                       <AvatarImage src={selectedPlayer.avatar_url} />
-                      <AvatarFallback className="text-sm">{selectedPlayer.full_name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className='text-sm'>
+                        {selectedPlayer.full_name.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{selectedPlayer.full_name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {selectedPlayer.current_rank || 'K'} • {selectedPlayer.spa_points || 0} SPA
+                    <div className='flex-1 min-w-0'>
+                      <p className='text-sm font-medium truncate'>
+                        {selectedPlayer.full_name}
+                      </p>
+                      <p className='text-xs text-muted-foreground'>
+                        {selectedPlayer.current_rank || 'K'} •{' '}
+                        {selectedPlayer.spa_points || 0} SPA
                       </p>
                     </div>
                     <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
+                      type='button'
+                      variant='ghost'
+                      size='sm'
                       onClick={() => {
                         setSelectedPlayer(null);
-                        setFormData(prev => ({ ...prev, opponent_id: '', opponent_search: '' }));
+                        setFormData(prev => ({
+                          ...prev,
+                          opponent_id: '',
+                          opponent_search: '',
+                        }));
                       }}
-                      className="h-6 w-6 p-0"
+                      className='h-6 w-6 p-0'
                     >
                       ✕
                     </Button>
@@ -403,81 +465,105 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
             )}
 
             {/* Bet Configuration - More Compact Grid */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Cấu hình cược</Label>
-              <div className="grid grid-cols-3 gap-2">
-                {BET_CONFIGURATIONS.map((config) => (
+            <div className='space-y-2'>
+              <Label className='text-sm font-medium'>Cấu hình cược</Label>
+              <div className='grid grid-cols-3 gap-2'>
+                {BET_CONFIGURATIONS.map(config => (
                   <Button
                     key={config.points}
-                    type="button"
-                    variant={formData.bet_points === config.points ? 'default' : 'outline'}
+                    type='button'
+                    variant={
+                      formData.bet_points === config.points
+                        ? 'default'
+                        : 'outline'
+                    }
                     onClick={() => handleBetChange(config.points)}
-                    className="h-16 p-2 flex flex-col items-center text-center"
-                    size="sm"
+                    className='h-16 p-2 flex flex-col items-center text-center'
+                    size='sm'
                   >
-                    <div className="flex items-center gap-1 mb-1">
-                      <Star className="w-3 h-3" />
-                      <span className="font-bold text-sm">{config.points}</span>
+                    <div className='flex items-center gap-1 mb-1'>
+                      <Star className='w-3 h-3' />
+                      <span className='font-bold text-sm'>{config.points}</span>
                     </div>
-                    <div className="text-xs opacity-75">Race to {config.raceTO}</div>
+                    <div className='text-xs opacity-75'>
+                      Race to {config.raceTO}
+                    </div>
                   </Button>
                 ))}
               </div>
             </div>
 
             {/* SABO Toggle - Compact */}
-            <div className="flex items-center justify-between p-3 border rounded-lg">
-              <div className="space-y-0">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="sabo-mode" className="text-sm">Chế độ SABO</Label>
+            <div className='flex items-center justify-between p-3 border rounded-lg'>
+              <div className='space-y-0'>
+                <div className='flex items-center gap-2'>
+                  <Label htmlFor='sabo-mode' className='text-sm'>
+                    Chế độ SABO
+                  </Label>
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
+                    type='button'
+                    variant='ghost'
+                    size='sm'
                     onClick={() => setShowSaboInfo(true)}
-                    className="h-6 w-6 p-0"
+                    className='h-6 w-6 p-0'
                   >
-                    <HelpCircle className="w-3 h-3" />
+                    <HelpCircle className='w-3 h-3' />
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className='text-xs text-muted-foreground'>
                   Bật handicap dựa trên rank
                 </p>
               </div>
               <Switch
-                id="sabo-mode"
+                id='sabo-mode'
                 checked={formData.is_sabo}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_sabo: checked }))}
+                onCheckedChange={checked =>
+                  setFormData(prev => ({ ...prev, is_sabo: checked }))
+                }
               />
             </div>
 
             {/* SABO Handicap Info - Compact */}
             {formData.is_sabo && handicapInfo && selectedPlayer && (
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calculator className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-800">Thông tin Handicap</span>
+              <div className='p-3 bg-blue-50 border border-blue-200 rounded-lg'>
+                <div className='flex items-center gap-2 mb-1'>
+                  <Calculator className='w-4 h-4 text-blue-600' />
+                  <span className='text-sm font-medium text-blue-800'>
+                    Thông tin Handicap
+                  </span>
                 </div>
-                <div className="text-xs space-y-1">
+                <div className='text-xs space-y-1'>
                   <div>Handicap được áp dụng cho trận đấu SABO</div>
-                  <div className="text-blue-600 font-medium">{currentUserProfile?.current_rank || 'K'} vs {selectedPlayer.current_rank || 'K'}</div>
+                  <div className='text-blue-600 font-medium'>
+                    {currentUserProfile?.current_rank || 'K'} vs{' '}
+                    {selectedPlayer.current_rank || 'K'}
+                  </div>
                 </div>
               </div>
             )}
 
             {/* Club Selection - Compact */}
-            <div className="space-y-2">
-              <Label htmlFor="club" className="text-sm">Câu lạc bộ</Label>
-              <Select value={formData.club_id} onValueChange={(value) => setFormData(prev => ({ ...prev, club_id: value }))}>
-                <SelectTrigger className="h-10">
-                  <SelectValue placeholder="Chọn câu lạc bộ" />
+            <div className='space-y-2'>
+              <Label htmlFor='club' className='text-sm'>
+                Câu lạc bộ
+              </Label>
+              <Select
+                value={formData.club_id}
+                onValueChange={value =>
+                  setFormData(prev => ({ ...prev, club_id: value }))
+                }
+              >
+                <SelectTrigger className='h-10'>
+                  <SelectValue placeholder='Chọn câu lạc bộ' />
                 </SelectTrigger>
                 <SelectContent>
-                  {clubs.map((club) => (
+                  {clubs.map(club => (
                     <SelectItem key={club.id} value={club.id}>
                       <div>
-                        <div className="font-medium text-sm">{club.name}</div>
-                        <div className="text-xs text-muted-foreground">{club.address}</div>
+                        <div className='font-medium text-sm'>{club.name}</div>
+                        <div className='text-xs text-muted-foreground'>
+                          {club.address}
+                        </div>
                       </div>
                     </SelectItem>
                   ))}
@@ -486,47 +572,62 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
             </div>
 
             {/* Scheduled Time - Compact */}
-            <div className="space-y-2">
-              <Label htmlFor="scheduled-time" className="text-sm">Thời gian dự kiến (tùy chọn)</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='scheduled-time' className='text-sm'>
+                Thời gian dự kiến (tùy chọn)
+              </Label>
               <Input
-                id="scheduled-time"
-                type="datetime-local"
+                id='scheduled-time'
+                type='datetime-local'
                 value={formData.scheduled_time}
-                onChange={(e) => setFormData(prev => ({ ...prev, scheduled_time: e.target.value }))}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    scheduled_time: e.target.value,
+                  }))
+                }
                 min={new Date().toISOString().slice(0, 16)}
-                className="h-10"
+                className='h-10'
               />
             </div>
 
             {/* Message - Compact */}
-            <div className="space-y-2">
-              <Label htmlFor="message" className="text-sm">Tin nhắn (tùy chọn)</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='message' className='text-sm'>
+                Tin nhắn (tùy chọn)
+              </Label>
               <Textarea
-                id="message"
-                placeholder="Thêm tin nhắn cho thách đấu..."
+                id='message'
+                placeholder='Thêm tin nhắn cho thách đấu...'
                 value={formData.message}
-                onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                onChange={e =>
+                  setFormData(prev => ({ ...prev, message: e.target.value }))
+                }
                 rows={2}
-                className="text-sm"
+                className='text-sm'
               />
             </div>
 
             {/* Action Buttons - Compact */}
-            <div className="flex gap-2 pt-2">
+            <div className='flex gap-2 pt-2'>
               <Button
-                type="button"
-                variant="outline"
+                type='button'
+                variant='outline'
                 onClick={onClose}
-                className="flex-1 h-10"
+                className='flex-1 h-10'
               >
                 Hủy
               </Button>
               <Button
-                type="submit"
-                disabled={loading || (challengeType === 'direct' && !formData.opponent_id) || !formData.club_id}
-                className="flex-1 h-10"
+                type='submit'
+                disabled={
+                  loading ||
+                  (challengeType === 'direct' && !formData.opponent_id) ||
+                  !formData.club_id
+                }
+                className='flex-1 h-10'
               >
-                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {loading && <Loader2 className='w-4 h-4 mr-2 animate-spin' />}
                 {challengeType === 'direct' ? 'Gửi thách đấu' : 'Gửi thách đấu'}
               </Button>
             </div>

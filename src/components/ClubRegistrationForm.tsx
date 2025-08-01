@@ -7,7 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Building, MapPin, Phone, Clock, Users, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import {
+  Building,
+  MapPin,
+  Phone,
+  Clock,
+  Users,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+} from 'lucide-react';
 
 interface ClubProfile {
   id: string;
@@ -39,7 +48,7 @@ const ClubRegistrationForm = () => {
     basic_price: 0,
     email: '',
     manager_name: '',
-    manager_phone: ''
+    manager_phone: '',
   });
 
   useEffect(() => {
@@ -71,7 +80,7 @@ const ClubRegistrationForm = () => {
           basic_price: 0,
           email: '',
           manager_name: '',
-          manager_phone: ''
+          manager_phone: '',
         });
         setClubProfile({
           id: clubData.id,
@@ -82,7 +91,7 @@ const ClubRegistrationForm = () => {
           number_of_tables: 1,
           verification_status: clubData.status || 'pending',
           verification_notes: null,
-          created_at: clubData.created_at
+          created_at: clubData.created_at,
         });
       } else {
         // No existing club
@@ -96,11 +105,16 @@ const ClubRegistrationForm = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'table_count' || name === 'basic_price' ? parseInt(value) || 0 : value
+      [name]:
+        name === 'table_count' || name === 'basic_price'
+          ? parseInt(value) || 0
+          : value,
     }));
   };
 
@@ -113,34 +127,36 @@ const ClubRegistrationForm = () => {
       // Create new club
       const { data, error } = await supabase
         .from('clubs')
-        .insert([{
-          name: formData.club_name,
-          address: formData.address,
-          contact_info: formData.phone,
-          owner_id: user.id,
-          status: 'pending'
-        }])
+        .insert([
+          {
+            name: formData.club_name,
+            address: formData.address,
+            contact_info: formData.phone,
+            owner_id: user.id,
+            status: 'pending',
+          },
+        ])
         .select()
         .single();
 
       if (error) throw error;
 
       // Create notification
-      await supabase
-        .from('notifications')
-        .insert({
-          user_id: user.id,
-          type: 'club_registration_submitted',
-          title: 'Đăng ký CLB thành công!',
-          message: `Bạn đã gửi đăng ký câu lạc bộ "${formData.club_name}" thành công. Chúng tôi sẽ xem xét và thông báo kết quả sớm nhất.`,
-          action_url: '/profile?tab=club'
-        });
+      await supabase.from('notifications').insert({
+        user_id: user.id,
+        type: 'club_registration_submitted',
+        title: 'Đăng ký CLB thành công!',
+        message: `Bạn đã gửi đăng ký câu lạc bộ "${formData.club_name}" thành công. Chúng tôi sẽ xem xét và thông báo kết quả sớm nhất.`,
+        action_url: '/profile?tab=club',
+      });
 
       toast.success('Đăng ký CLB thành công! Vui lòng chờ admin xét duyệt.');
       await fetchClubProfile(); // Refresh data
     } catch (error: any) {
       console.error('Error registering club:', error);
-      toast.error('Có lỗi xảy ra khi đăng ký CLB: ' + (error.message || 'Unknown error'));
+      toast.error(
+        'Có lỗi xảy ra khi đăng ký CLB: ' + (error.message || 'Unknown error')
+      );
     } finally {
       setSaving(false);
     }
@@ -149,11 +165,11 @@ const ClubRegistrationForm = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'approved':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
+        return <CheckCircle className='w-5 h-5 text-green-500' />;
       case 'rejected':
-        return <XCircle className="w-5 h-5 text-red-500" />;
+        return <XCircle className='w-5 h-5 text-red-500' />;
       default:
-        return <AlertCircle className="w-5 h-5 text-yellow-500" />;
+        return <AlertCircle className='w-5 h-5 text-yellow-500' />;
     }
   };
 
@@ -185,11 +201,11 @@ const ClubRegistrationForm = () => {
 
   if (loading) {
     return (
-      <Card className="bg-card text-card-foreground">
-        <CardContent className="pt-6">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Đang tải thông tin...</p>
+      <Card className='bg-card text-card-foreground'>
+        <CardContent className='pt-6'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
+            <p className='text-muted-foreground'>Đang tải thông tin...</p>
           </div>
         </CardContent>
       </Card>
@@ -197,30 +213,34 @@ const ClubRegistrationForm = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Existing Club Status */}
       {clubProfile && (
-        <Card className="bg-card text-card-foreground border-border">
+        <Card className='bg-card text-card-foreground border-border'>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <CardTitle className='flex items-center justify-between'>
+              <div className='flex items-center gap-2'>
                 {getStatusIcon(clubProfile.verification_status)}
                 Trạng thái đăng ký
               </div>
-              <Badge className={getStatusColor(clubProfile.verification_status)}>
+              <Badge
+                className={getStatusColor(clubProfile.verification_status)}
+              >
                 {getStatusText(clubProfile.verification_status)}
               </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <div>
-                <p className="font-medium">{clubProfile.club_name}</p>
-                <p className="text-sm text-muted-foreground">{clubProfile.address}</p>
+                <p className='font-medium'>{clubProfile.club_name}</p>
+                <p className='text-sm text-muted-foreground'>
+                  {clubProfile.address}
+                </p>
               </div>
               {clubProfile.verification_notes && (
-                <div className="p-3 bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground">
+                <div className='p-3 bg-muted rounded-lg'>
+                  <p className='text-sm text-muted-foreground'>
                     <strong>Ghi chú:</strong> {clubProfile.verification_notes}
                   </p>
                 </div>
@@ -232,44 +252,50 @@ const ClubRegistrationForm = () => {
 
       {/* Registration Form */}
       {!clubProfile && (
-        <Card className="bg-card text-card-foreground border-border">
+        <Card className='bg-card text-card-foreground border-border'>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building className="w-5 h-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Building className='w-5 h-5' />
               Đăng ký Câu lạc bộ
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className='space-y-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
-                  <label htmlFor="club_name" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor='club_name'
+                    className='block text-sm font-medium mb-2'
+                  >
                     Tên câu lạc bộ *
                   </label>
                   <Input
-                    id="club_name"
-                    name="club_name"
+                    id='club_name'
+                    name='club_name'
                     value={formData.club_name}
                     onChange={handleInputChange}
-                    placeholder="Ví dụ: SABO Billiards"
+                    placeholder='Ví dụ: SABO Billiards'
                     required
-                    className="bg-background border-border"
+                    className='bg-background border-border'
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor='phone'
+                    className='block text-sm font-medium mb-2'
+                  >
                     Số điện thoại *
                   </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className='relative'>
+                    <Phone className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
                     <Input
-                      id="phone"
-                      name="phone"
+                      id='phone'
+                      name='phone'
                       value={formData.phone}
                       onChange={handleInputChange}
-                      placeholder="Nhập số điện thoại"
-                      className="pl-10 bg-background border-border"
+                      placeholder='Nhập số điện thoại'
+                      className='pl-10 bg-background border-border'
                       required
                     />
                   </div>
@@ -277,82 +303,90 @@ const ClubRegistrationForm = () => {
               </div>
 
               <div>
-                <label htmlFor="address" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor='address'
+                  className='block text-sm font-medium mb-2'
+                >
                   Địa chỉ *
                 </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className='relative'>
+                  <MapPin className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
                   <Textarea
-                    id="address"
-                    name="address"
+                    id='address'
+                    name='address'
                     value={formData.address}
                     onChange={handleInputChange}
-                    placeholder="Nhập địa chỉ đầy đủ của câu lạc bộ"
-                    className="pl-10 min-h-[80px] bg-background border-border"
+                    placeholder='Nhập địa chỉ đầy đủ của câu lạc bộ'
+                    className='pl-10 min-h-[80px] bg-background border-border'
                     required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                 <div>
-                  <label htmlFor="table_count" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor='table_count'
+                    className='block text-sm font-medium mb-2'
+                  >
                     Số bàn bi-a
                   </label>
-                  <div className="relative">
-                    <Users className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className='relative'>
+                    <Users className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
                     <Input
-                      id="table_count"
-                      name="table_count"
-                      type="number"
-                      min="1"
+                      id='table_count'
+                      name='table_count'
+                      type='number'
+                      min='1'
                       value={formData.table_count}
                       onChange={handleInputChange}
-                      className="pl-10 bg-background border-border"
+                      className='pl-10 bg-background border-border'
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="opening_time" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor='opening_time'
+                    className='block text-sm font-medium mb-2'
+                  >
                     Giờ mở cửa
                   </label>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className='relative'>
+                    <Clock className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
                     <Input
-                      id="opening_time"
-                      name="opening_time"
-                      type="time"
+                      id='opening_time'
+                      name='opening_time'
+                      type='time'
                       value={formData.opening_time}
                       onChange={handleInputChange}
-                      className="pl-10 bg-background border-border"
+                      className='pl-10 bg-background border-border'
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="closing_time" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor='closing_time'
+                    className='block text-sm font-medium mb-2'
+                  >
                     Giờ đóng cửa
                   </label>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className='relative'>
+                    <Clock className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
                     <Input
-                      id="closing_time"
-                      name="closing_time"
-                      type="time"
+                      id='closing_time'
+                      name='closing_time'
+                      type='time'
                       value={formData.closing_time}
                       onChange={handleInputChange}
-                      className="pl-10 bg-background border-border"
+                      className='pl-10 bg-background border-border'
                     />
                   </div>
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
-                disabled={saving}
-                className="w-full"
-              >
+              <Button type='submit' disabled={saving} className='w-full'>
                 {saving ? 'Đang gửi...' : 'Gửi đăng ký'}
               </Button>
             </form>

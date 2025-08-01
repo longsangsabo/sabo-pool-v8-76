@@ -7,5 +7,5 @@ interface MatchVerificationCardProps {
 }
 
 export const MatchVerificationCard = (props: MatchVerificationCardProps) => {
-  return <DisabledMatchComponent title="Match Verification Card" />;
+  return <DisabledMatchComponent title='Match Verification Card' />;
 };

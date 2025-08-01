@@ -1,4 +1,8 @@
-import { User as SupabaseUser, Session as SupabaseSession, AuthError } from '@supabase/supabase-js';
+import {
+  User as SupabaseUser,
+  Session as SupabaseSession,
+  AuthError,
+} from '@supabase/supabase-js';
 
 // Authentication Types
 export type User = SupabaseUser;
@@ -32,11 +36,26 @@ export interface AuthContextType {
   session: SupabaseSession | null;
   profile: UserProfile | null;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
-  signUp: (email: string, password: string, fullName: string, referralCode?: string) => Promise<AuthResponse>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    referralCode?: string
+  ) => Promise<AuthResponse>;
   signInWithEmail: (email: string, password: string) => Promise<AuthResponse>;
   signInWithPhone: (phone: string, password: string) => Promise<AuthResponse>;
-  signUpWithEmail: (email: string, password: string, fullName: string, referralCode?: string) => Promise<AuthResponse>;
-  signUpWithPhone: (phone: string, password: string, fullName: string, referralCode?: string) => Promise<AuthResponse>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    fullName: string,
+    referralCode?: string
+  ) => Promise<AuthResponse>;
+  signUpWithPhone: (
+    phone: string,
+    password: string,
+    fullName: string,
+    referralCode?: string
+  ) => Promise<AuthResponse>;
   signInWithFacebook: () => Promise<AuthResponse>;
   signInWithGoogle: () => Promise<AuthResponse>;
   signOut: () => Promise<void>;

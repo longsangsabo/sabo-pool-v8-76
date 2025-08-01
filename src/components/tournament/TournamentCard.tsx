@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -54,73 +53,78 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
 
   return (
     <>
-      <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer border-border/50 hover:border-border">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+      <Card className='group hover:shadow-lg transition-all duration-200 cursor-pointer border-border/50 hover:border-border'>
+        <CardHeader className='pb-3'>
+          <div className='flex items-start justify-between'>
+            <CardTitle className='text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2'>
               {tournament.name}
             </CardTitle>
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant='outline'
               className={`ml-2 flex-shrink-0 ${getStatusColor(tournament.status)}`}
             >
               {getStatusText(tournament.status)}
             </Badge>
           </div>
         </CardHeader>
-        
-        <CardContent className="space-y-3">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <CalendarIcon className="h-4 w-4 mr-2 flex-shrink-0" />
+
+        <CardContent className='space-y-3'>
+          <div className='flex items-center text-sm text-muted-foreground'>
+            <CalendarIcon className='h-4 w-4 mr-2 flex-shrink-0' />
             <span>
-              {tournament.tournament_start 
-                ? format(new Date(tournament.tournament_start), 'dd/MM/yyyy HH:mm', { locale: vi })
-                : 'Chưa xác định'
-              }
+              {tournament.tournament_start
+                ? format(
+                    new Date(tournament.tournament_start),
+                    'dd/MM/yyyy HH:mm',
+                    { locale: vi }
+                  )
+                : 'Chưa xác định'}
             </span>
           </div>
-          
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MapPinIcon className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span className="line-clamp-1">
+
+          <div className='flex items-center text-sm text-muted-foreground'>
+            <MapPinIcon className='h-4 w-4 mr-2 flex-shrink-0' />
+            <span className='line-clamp-1'>
               {tournament.venue_address || 'Chưa xác định địa điểm'}
             </span>
           </div>
-          
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center text-muted-foreground">
-              <UsersIcon className="h-4 w-4 mr-2" />
-              <span>{tournament.current_participants || 0}/{tournament.max_participants}</span>
+
+          <div className='flex items-center justify-between text-sm'>
+            <div className='flex items-center text-muted-foreground'>
+              <UsersIcon className='h-4 w-4 mr-2' />
+              <span>
+                {tournament.current_participants || 0}/
+                {tournament.max_participants}
+              </span>
             </div>
-          <div className="flex items-center text-muted-foreground">
-            <TrophyIcon className="h-4 w-4 mr-2" />
-            <span className="font-medium">
-              {tournament.prize_pool 
-                ? `${tournament.prize_pool.toLocaleString('vi-VN')}đ`
-                : 'Chưa công bố'
-              }
-            </span>
+            <div className='flex items-center text-muted-foreground'>
+              <TrophyIcon className='h-4 w-4 mr-2' />
+              <span className='font-medium'>
+                {tournament.prize_pool
+                  ? `${tournament.prize_pool.toLocaleString('vi-VN')}đ`
+                  : 'Chưa công bố'}
+              </span>
+            </div>
           </div>
-          </div>
-          
+
           {tournament.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
+            <p className='text-sm text-muted-foreground line-clamp-2 mt-2'>
               {tournament.description}
             </p>
           )}
-          
-          <div className="flex gap-2 mt-4">
-            <Button 
+
+          <div className='flex gap-2 mt-4'>
+            <Button
               onClick={() => setIsDetailsModalOpen(true)}
-              className="flex-1"
-              variant="outline"
+              className='flex-1'
+              variant='outline'
             >
               Chi tiết
             </Button>
             {tournament.status === 'registration_open' && (
-              <Button 
+              <Button
                 onClick={() => setIsRegistrationModalOpen(true)}
-                className="flex-1"
+                className='flex-1'
               >
                 Đăng ký
               </Button>
@@ -134,7 +138,7 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
         open={isDetailsModalOpen}
         onOpenChange={setIsDetailsModalOpen}
       />
-      
+
       <TournamentRegistrationModal
         tournament={tournament}
         isOpen={isRegistrationModalOpen}

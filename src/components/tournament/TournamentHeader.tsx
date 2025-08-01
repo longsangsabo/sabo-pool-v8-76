@@ -14,7 +14,7 @@ export const TournamentHeader: FC<TournamentHeaderProps> = ({
   status,
   totalMatches,
   completedMatches,
-  progressPercentage = 0
+  progressPercentage = 0,
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -48,27 +48,27 @@ export const TournamentHeader: FC<TournamentHeaderProps> = ({
 
   return (
     <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <h1 className="text-lg font-semibold">Double Elimination 16</h1>
-            <Badge variant="secondary" className={getStatusColor(status)}>
+      <CardContent className='p-4'>
+        <div className='flex items-center justify-between mb-4'>
+          <div className='flex items-center space-x-3'>
+            <h1 className='text-lg font-semibold'>Double Elimination 16</h1>
+            <Badge variant='secondary' className={getStatusColor(status)}>
               {getStatusText(status)}
             </Badge>
           </div>
-          
-          <div className="text-sm text-muted-foreground">
+
+          <div className='text-sm text-muted-foreground'>
             {completedMatches}/{totalMatches} trận đấu
           </div>
         </div>
-        
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
+
+        <div className='space-y-2'>
+          <div className='flex items-center justify-between text-sm'>
             <span>Tiến độ:</span>
-            <span className="font-medium">{progressPercentage}%</span>
+            <span className='font-medium'>{progressPercentage}%</span>
           </div>
-          
-          <Progress value={progressPercentage} className="h-2" />
+
+          <Progress value={progressPercentage} className='h-2' />
         </div>
       </CardContent>
     </Card>

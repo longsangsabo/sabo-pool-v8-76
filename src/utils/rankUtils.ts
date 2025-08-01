@@ -1,7 +1,20 @@
 import { RANK_ELO, type RankCode } from './eloConstants';
 
 // Danh sách các hạng theo thứ tự
-export const RANK_ORDER: RankCode[] = ['K', 'K+', 'I', 'I+', 'H', 'H+', 'G', 'G+', 'F', 'F+', 'E', 'E+'];
+export const RANK_ORDER: RankCode[] = [
+  'K',
+  'K+',
+  'I',
+  'I+',
+  'H',
+  'H+',
+  'G',
+  'G+',
+  'F',
+  'F+',
+  'E',
+  'E+',
+];
 
 // Export RankCode type for external use
 export type { RankCode };
@@ -46,7 +59,7 @@ export function getRankByElo(elo: number): RankCode {
  * Kiểm tra đủ điều kiện thăng hạng - Đơn giản hóa: chỉ cần ELO đủ
  */
 export function isEligibleForPromotion(
-  currentElo: number, 
+  currentElo: number,
   currentRank: RankCode
 ): boolean {
   // Kiểm tra điểm ELO đủ để thăng hạng
@@ -54,7 +67,7 @@ export function isEligibleForPromotion(
   if (!nextRank) {
     return false; // Đã ở hạng cao nhất
   }
-  
+
   return currentElo >= RANK_ELO[nextRank];
 }
 
@@ -62,14 +75,15 @@ export function isEligibleForPromotion(
  * Tính ELO mới sau trận đấu - Đơn giản hóa với K-factor cố định
  */
 export function calculateNewElo(
-  playerElo: number, 
-  opponentElo: number, 
+  playerElo: number,
+  opponentElo: number,
   result: number // 1 = thắng, 0.5 = hòa, 0 = thua
 ): number {
-  const expectedResult = 1 / (1 + Math.pow(10, (opponentElo - playerElo) / 400));
+  const expectedResult =
+    1 / (1 + Math.pow(10, (opponentElo - playerElo) / 400));
   // ELO calculation removed due to incorrect formula
   const eloChange = 0;
-  
+
   return Math.round(playerElo + eloChange);
 }
 
@@ -77,11 +91,12 @@ export function calculateNewElo(
  * Tính thay đổi ELO (không áp dụng vào ELO hiện tại)
  */
 export function calculateEloChange(
-  playerElo: number, 
-  opponentElo: number, 
+  playerElo: number,
+  opponentElo: number,
   result: number
 ): number {
-  const expectedResult = 1 / (1 + Math.pow(10, (opponentElo - playerElo) / 400));
+  const expectedResult =
+    1 / (1 + Math.pow(10, (opponentElo - playerElo) / 400));
   // ELO calculation removed due to incorrect formula
   return 0;
 }
@@ -89,7 +104,10 @@ export function calculateEloChange(
 /**
  * Tính phần trăm tiến độ đến hạng tiếp theo
  */
-export function calculateRankProgress(currentElo: number, currentRank: RankCode): {
+export function calculateRankProgress(
+  currentElo: number,
+  currentRank: RankCode
+): {
   currentRankElo: number;
   nextRankElo: number | null;
   progress: number;
@@ -97,27 +115,27 @@ export function calculateRankProgress(currentElo: number, currentRank: RankCode)
 } {
   const currentRankElo = RANK_ELO[currentRank];
   const nextRank = getNextRank(currentRank);
-  
+
   if (!nextRank) {
     return {
       currentRankElo,
       nextRankElo: null,
       progress: 100,
-      pointsNeeded: 0
+      pointsNeeded: 0,
     };
   }
-  
+
   const nextRankElo = RANK_ELO[nextRank];
   const totalPointsNeeded = nextRankElo - currentRankElo;
   const pointsEarned = Math.max(0, currentElo - currentRankElo);
   const progress = Math.min(100, (pointsEarned / totalPointsNeeded) * 100);
   const pointsNeeded = Math.max(0, nextRankElo - currentElo);
-  
+
   return {
     currentRankElo,
     nextRankElo,
     progress,
-    pointsNeeded
+    pointsNeeded,
   };
 }
 
@@ -126,20 +144,20 @@ export function calculateRankProgress(currentElo: number, currentRank: RankCode)
  */
 export function formatRankDisplay(rank: RankCode): string {
   const rankNames = {
-    'K': 'Hạng K',
+    K: 'Hạng K',
     'K+': 'Hạng K+',
-    'I': 'Hạng I',
+    I: 'Hạng I',
     'I+': 'Hạng I+',
-    'H': 'Hạng H',
+    H: 'Hạng H',
     'H+': 'Hạng H+',
-    'G': 'Hạng G',
+    G: 'Hạng G',
     'G+': 'Hạng G+',
-    'F': 'Hạng F',
+    F: 'Hạng F',
     'F+': 'Hạng F+',
-    'E': 'Hạng E',
-    'E+': 'Hạng E+'
+    E: 'Hạng E',
+    'E+': 'Hạng E+',
   };
-  
+
   return rankNames[rank] || rank;
 }
 
@@ -148,19 +166,19 @@ export function formatRankDisplay(rank: RankCode): string {
  */
 export function getRankColor(rank: RankCode): string {
   const colors = {
-    'K': 'text-slate-600',
-    'K+': 'text-slate-500', 
-    'I': 'text-amber-600',
+    K: 'text-slate-600',
+    'K+': 'text-slate-500',
+    I: 'text-amber-600',
     'I+': 'text-amber-500',
-    'H': 'text-green-600', 
+    H: 'text-green-600',
     'H+': 'text-green-500',
-    'G': 'text-blue-600',
+    G: 'text-blue-600',
     'G+': 'text-blue-500',
-    'F': 'text-purple-600',
+    F: 'text-purple-600',
     'F+': 'text-purple-500',
-    'E': 'text-red-600',
-    'E+': 'text-red-500'
+    E: 'text-red-600',
+    'E+': 'text-red-500',
   };
-  
+
   return colors[rank] || 'text-slate-600';
 }

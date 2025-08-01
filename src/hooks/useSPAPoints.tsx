@@ -28,11 +28,14 @@ export const useSPAPoints = () => {
   const queryClient = useQueryClient();
 
   // Calculate SPA points with all bonuses
-  const calculateSPAPoints = async (result: ChallengeResult): Promise<SPAPointsCalculation> => {
+  const calculateSPAPoints = async (
+    result: ChallengeResult
+  ): Promise<SPAPointsCalculation> => {
     // Get winner's profile and ranking
     const { data: winnerProfile } = await supabase
       .from('profiles')
-      .select(`
+      .select(
+        `
         skill_level,
         verified_rank,
         player_rankings (
@@ -40,13 +43,14 @@ export const useSPAPoints = () => {
           wins,
           total_matches
         )
-      `)
+      `
+      )
       .eq('user_id', result.winnerId)
       .single();
 
     // Base points calculation
     let basePoints = 50; // Default base points
-    
+
     // Game type bonus
     if (result.gameType === 'ranked') {
       basePoints = 100;
@@ -67,11 +71,13 @@ export const useSPAPoints = () => {
 
     // Win streak bonus (simplified without win_streak field)
     let winStreakBonus = 0;
-    const playerRankings = Array.isArray(winnerProfile?.player_rankings) ? winnerProfile.player_rankings[0] : winnerProfile?.player_rankings;
+    const playerRankings = Array.isArray(winnerProfile?.player_rankings)
+      ? winnerProfile.player_rankings[0]
+      : winnerProfile?.player_rankings;
     const wins = playerRankings?.wins || 0;
     const totalMatches = playerRankings?.total_matches || 0;
     const winRate = totalMatches > 0 ? wins / totalMatches : 0;
-    
+
     if (winRate >= 0.8 && wins >= 5) {
       winStreakBonus = 50;
     } else if (winRate >= 0.7 && wins >= 3) {
@@ -101,7 +107,8 @@ export const useSPAPoints = () => {
       rankBonus = 20;
     }
 
-    const totalPoints = basePoints + skillBonus + winStreakBonus + firstWinBonus + rankBonus;
+    const totalPoints =
+      basePoints + skillBonus + winStreakBonus + firstWinBonus + rankBonus;
 
     return {
       basePoints,
@@ -110,7 +117,7 @@ export const useSPAPoints = () => {
       firstWinBonus,
       rankBonus,
       totalPoints,
-      description: `Base: ${basePoints} + Skill: ${skillBonus} + Streak: ${winStreakBonus} + First Win: ${firstWinBonus} + Rank: ${rankBonus} = ${totalPoints} SPA points`
+      description: `Base: ${basePoints} + Skill: ${skillBonus} + Streak: ${winStreakBonus} + First Win: ${firstWinBonus} + Rank: ${rankBonus} = ${totalPoints} SPA points`,
     };
   };
 
@@ -118,12 +125,12 @@ export const useSPAPoints = () => {
   const creditSPAPoints = useMutation({
     mutationFn: async (result: ChallengeResult) => {
       const calculation = await calculateSPAPoints(result);
-      
+
       // Update wallet balance with SPA points
       const { error } = await supabase.rpc('update_wallet_balance', {
         p_user_id: result.winnerId,
         p_amount: calculation.totalPoints,
-        p_transaction_type: 'spa_points'
+        p_transaction_type: 'spa_points',
       });
 
       if (error) throw error;
@@ -136,23 +143,20 @@ export const useSPAPoints = () => {
       queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
       queryClient.invalidateQueries({ queryKey: ['challenges'] });
 
-      toast.success(
-        `🎯 +${data.totalPoints} SPA điểm!`,
-        {
-          description: data.description,
-          duration: 5000
-        }
-      );
+      toast.success(`🎯 +${data.totalPoints} SPA điểm!`, {
+        description: data.description,
+        duration: 5000,
+      });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error crediting SPA points:', error);
       toast.error('Lỗi khi tính điểm SPA');
-    }
+    },
   });
 
   return {
     calculateSPAPoints,
     creditSPAPoints: creditSPAPoints.mutateAsync,
-    isCrediting: creditSPAPoints.isPending
+    isCrediting: creditSPAPoints.isPending,
   };
 };

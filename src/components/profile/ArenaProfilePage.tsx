@@ -11,9 +11,9 @@ const ArenaProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="profile-page-arena">
-        <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className='profile-page-arena'>
+        <div className='flex justify-center items-center min-h-screen'>
+          <Loader2 className='w-8 h-8 animate-spin text-primary' />
         </div>
       </div>
     );
@@ -21,9 +21,9 @@ const ArenaProfilePage: React.FC = () => {
 
   if (error || !profile) {
     return (
-      <div className="profile-page-arena">
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="text-white text-center">
+      <div className='profile-page-arena'>
+        <div className='flex justify-center items-center min-h-screen'>
+          <div className='text-white text-center'>
             <p>Không thể tải thông tin người chơi</p>
           </div>
         </div>
@@ -32,47 +32,48 @@ const ArenaProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="profile-page-arena">
+    <div className='profile-page-arena'>
       {/* SABO ARENA Header */}
       <ArenaLogo />
-      
+
       {/* Mirror Avatar Effect */}
-      <MirrorAvatar 
+      <MirrorAvatar
         avatarUrl={profile.avatar_url}
         username={profile.display_name || profile.full_name || 'Champion'}
         rank={profile.verified_rank || 'Rookie'}
       />
-      
+
       {/* User Info Section */}
-      <div className="user-info-section">
-        <h1 className="username">
+      <div className='user-info-section'>
+        <h1 className='username'>
           {profile.display_name || profile.full_name || 'Arena Champion'}
         </h1>
-        <div className="rank-badge" data-rank={profile.verified_rank || 'Rookie'}>
-          <span className="rank-text">{profile.verified_rank || 'Rookie'}</span>
+        <div
+          className='rank-badge'
+          data-rank={profile.verified_rank || 'Rookie'}
+        >
+          <span className='rank-text'>{profile.verified_rank || 'Rookie'}</span>
         </div>
-        
-      {/* Arena Stats with SABO Tech Borders */}
-      <div className="arena-stats">
-        <div className="stat-circle sabo-tech-border-secondary sabo-tech-border-interactive">
-          <span className="stat-number">{profile.spa_points || 0}</span>
-          <span className="stat-label">SPA Points</span>
-        </div>
-        <div className="stat-circle sabo-tech-border-success sabo-tech-border-interactive">
-          <span className="stat-number">{profile.matches_won || 0}</span>
-          <span className="stat-label">Victories</span>
-        </div>
-        <div className="stat-circle sabo-tech-border-primary sabo-tech-border-interactive">
-          <span className="stat-number">{profile.win_percentage || 0}%</span>
-          <span className="stat-label">Win Rate</span>
+
+        {/* Arena Stats with SABO Tech Borders */}
+        <div className='arena-stats'>
+          <div className='stat-circle sabo-tech-border-secondary sabo-tech-border-interactive'>
+            <span className='stat-number'>{profile.spa_points || 0}</span>
+            <span className='stat-label'>SPA Points</span>
+          </div>
+          <div className='stat-circle sabo-tech-border-success sabo-tech-border-interactive'>
+            <span className='stat-number'>{profile.matches_won || 0}</span>
+            <span className='stat-label'>Victories</span>
+          </div>
+          <div className='stat-circle sabo-tech-border-primary sabo-tech-border-interactive'>
+            <span className='stat-number'>{profile.win_percentage || 0}%</span>
+            <span className='stat-label'>Win Rate</span>
+          </div>
         </div>
       </div>
-      </div>
-      
+
       {/* Mobile Navigation */}
-      <div className="pb-20">
-        {/* Spacing for fixed bottom nav */}
-      </div>
+      <div className='pb-20'>{/* Spacing for fixed bottom nav */}</div>
     </div>
   );
 };

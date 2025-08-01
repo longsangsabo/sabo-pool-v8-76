@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +16,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { useProfile } from '@/hooks/useProfile';
 import { usePayment } from '@/hooks/usePayment';
 import { UserProfile } from '@/types/common';
-
 
 interface MembershipPlan {
   id: string;
@@ -96,7 +94,7 @@ const PaymentMembershipPage = () => {
       };
 
       await depositFunds(paymentData.amount, paymentData.description);
-      
+
       toast({
         title: 'Thanh toán thành công',
         description: `Đã nâng cấp tài khoản lên ${selectedPlan.name}`,
@@ -113,73 +111,71 @@ const PaymentMembershipPage = () => {
     }
   };
 
-    <div className='container py-8'>
-      <Card>
-        <CardHeader className='pb-4'>
-          <CardTitle className='text-2xl font-bold'>
-            Nâng Cấp Tài Khoản
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-4'>
-          {/* Membership Plan Selection */}
-          <div>
-            <Label htmlFor='plan'>Chọn Gói</Label>
-            <Select
-              onValueChange={value => {
-                const plan = plans.find(p => p.id === value);
-                setSelectedPlan(plan || null);
-              }}
-            >
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Chọn gói thành viên' />
-              </SelectTrigger>
-              <SelectContent>
-                {plans.map(plan => (
-                  <SelectItem key={plan.id} value={plan.id}>
-                    {plan.name} - {plan.price.toLocaleString()} VNĐ
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Selected Plan Details */}
-          {selectedPlan && (
-            <div className='border rounded-md p-4'>
-              <h3 className='text-lg font-semibold'>{selectedPlan.name}</h3>
-              <p className='text-gray-500'>{selectedPlan.description}</p>
-              <ul className='list-none space-y-2 mt-2'>
-                {selectedPlan.features.map((feature, index) => (
-                  <li key={index} className='flex items-center gap-2'>
-                    <CheckCircle className='w-4 h-4 text-green-500' />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <div className='mt-4 font-bold text-xl'>
-                Giá: {selectedPlan.price.toLocaleString()} VNĐ
-              </div>
-            </div>
-          )}
-
-          {/* Payment Button */}
-          <Button
-            className='w-full'
-            onClick={handlePayment}
-            disabled={!selectedPlan || isProcessing}
+  <div className='container py-8'>
+    <Card>
+      <CardHeader className='pb-4'>
+        <CardTitle className='text-2xl font-bold'>Nâng Cấp Tài Khoản</CardTitle>
+      </CardHeader>
+      <CardContent className='space-y-4'>
+        {/* Membership Plan Selection */}
+        <div>
+          <Label htmlFor='plan'>Chọn Gói</Label>
+          <Select
+            onValueChange={value => {
+              const plan = plans.find(p => p.id === value);
+              setSelectedPlan(plan || null);
+            }}
           >
-            {isProcessing ? (
-              <>
-                Đang Xử Lý...
-                <Loader2 className='ml-2 h-4 w-4 animate-spin' />
-              </>
-            ) : (
-              'Thanh Toán'
-            )}
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='Chọn gói thành viên' />
+            </SelectTrigger>
+            <SelectContent>
+              {plans.map(plan => (
+                <SelectItem key={plan.id} value={plan.id}>
+                  {plan.name} - {plan.price.toLocaleString()} VNĐ
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Selected Plan Details */}
+        {selectedPlan && (
+          <div className='border rounded-md p-4'>
+            <h3 className='text-lg font-semibold'>{selectedPlan.name}</h3>
+            <p className='text-gray-500'>{selectedPlan.description}</p>
+            <ul className='list-none space-y-2 mt-2'>
+              {selectedPlan.features.map((feature, index) => (
+                <li key={index} className='flex items-center gap-2'>
+                  <CheckCircle className='w-4 h-4 text-green-500' />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div className='mt-4 font-bold text-xl'>
+              Giá: {selectedPlan.price.toLocaleString()} VNĐ
+            </div>
+          </div>
+        )}
+
+        {/* Payment Button */}
+        <Button
+          className='w-full'
+          onClick={handlePayment}
+          disabled={!selectedPlan || isProcessing}
+        >
+          {isProcessing ? (
+            <>
+              Đang Xử Lý...
+              <Loader2 className='ml-2 h-4 w-4 animate-spin' />
+            </>
+          ) : (
+            'Thanh Toán'
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  </div>;
 };
 
 export default PaymentMembershipPage;

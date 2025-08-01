@@ -3,7 +3,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Camera, Calendar, Trophy, Target, Zap, CheckCircle, Clock, XCircle, Building2, ArrowRight } from 'lucide-react';
+import {
+  Camera,
+  Calendar,
+  Trophy,
+  Target,
+  Zap,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Building2,
+  ArrowRight,
+} from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import TrustScoreBadgeMock from '@/components/TrustScoreBadgeMock';
@@ -54,13 +65,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   avatarUrl,
   uploading,
   onAvatarUpload,
-  skillLevels
+  skillLevels,
 }) => {
   const { user } = useAuth();
   const [stats, setStats] = useState<PlayerStats | null>(null);
-  const [verificationStatus, setVerificationStatus] = useState<RankVerificationStatus>({
-    status: 'none'
-  });
+  const [verificationStatus, setVerificationStatus] =
+    useState<RankVerificationStatus>({
+      status: 'none',
+    });
   const [loading, setLoading] = useState(true);
   const [hasClubProfile, setHasClubProfile] = useState(false);
   const [clubLoading, setClubLoading] = useState(true);
@@ -91,13 +103,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       const matches_played = statsData?.total_matches || 0;
       const matches_won = statsData?.wins || 0;
       const losses = matches_played - matches_won;
-      const win_rate = matches_played > 0 ? (matches_won / matches_played) * 100 : 0;
+      const win_rate =
+        matches_played > 0 ? (matches_won / matches_played) * 100 : 0;
 
       setStats({
         matches_played,
         matches_won,
         current_streak: 0, // We'll need to calculate this separately if needed
-        win_rate: Math.round(win_rate)
+        win_rate: Math.round(win_rate),
       });
     } catch (error) {
       console.error('Error fetching player stats:', error);
@@ -114,7 +127,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       if (profile.verified_rank) {
         setVerificationStatus({
           status: 'verified',
-          current_rank: profile.verified_rank
+          current_rank: profile.verified_rank,
         });
         return;
       }
@@ -156,10 +169,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     const url = new URL(window.location.href);
     url.searchParams.set('tab', 'club');
     window.history.pushState({}, '', url.toString());
-    
+
     // Trigger a popstate event to notify the ProfileTabs component
     window.dispatchEvent(new PopStateEvent('popstate'));
-    
+
     // Scroll to the tabs area
     setTimeout(() => {
       window.scrollTo({ top: 600, behavior: 'smooth' });
@@ -169,11 +182,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const getVerificationIcon = () => {
     switch (verificationStatus.status) {
       case 'verified':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
+        return <CheckCircle className='w-4 h-4 text-green-600' />;
       case 'pending':
-        return <Clock className="w-4 h-4 text-yellow-600" />;
+        return <Clock className='w-4 h-4 text-yellow-600' />;
       default:
-        return <XCircle className="w-4 h-4 text-gray-400" />;
+        return <XCircle className='w-4 h-4 text-gray-400' />;
     }
   };
 
@@ -207,160 +220,180 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   };
 
   return (
-    <Card className="mb-6">
-      <CardContent className="p-6">
+    <Card className='mb-6'>
+      <CardContent className='p-6'>
         {/* Horizontal Header Layout */}
-        <div className="flex flex-col lg:flex-row items-start gap-6">
+        <div className='flex flex-col lg:flex-row items-start gap-6'>
           {/* Avatar Section - Compact */}
-          <div className="flex items-center gap-4 lg:min-w-fit">
-            <div className="relative">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={avatarUrl || profile.avatar_url} alt="Avatar" />
-                <AvatarFallback className="text-lg">
+          <div className='flex items-center gap-4 lg:min-w-fit'>
+            <div className='relative'>
+              <Avatar className='w-20 h-20'>
+                <AvatarImage
+                  src={avatarUrl || profile.avatar_url}
+                  alt='Avatar'
+                />
+                <AvatarFallback className='text-lg'>
                   {profile.display_name?.charAt(0) || '👤'}
                 </AvatarFallback>
               </Avatar>
-              <label className="absolute bottom-0 right-0 bg-primary rounded-full p-1.5 cursor-pointer hover:bg-primary/90 transition-colors">
-                <Camera className="w-3 h-3 text-primary-foreground" />
+              <label className='absolute bottom-0 right-0 bg-primary rounded-full p-1.5 cursor-pointer hover:bg-primary/90 transition-colors'>
+                <Camera className='w-3 h-3 text-primary-foreground' />
                 <input
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
+                  type='file'
+                  className='hidden'
+                  accept='image/*'
                   onChange={onAvatarUpload}
                   disabled={uploading}
                 />
               </label>
             </div>
-            
+
             {/* Basic Info - Inline */}
-            <div className="min-w-0">
-              <h2 className="text-xl font-semibold text-foreground mb-1">
+            <div className='min-w-0'>
+              <h2 className='text-xl font-semibold text-foreground mb-1'>
                 {profile.display_name || 'Chưa đặt tên'}
               </h2>
-              <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className='flex flex-wrap items-center gap-2 mb-2'>
                 <Badge className={skillLevels[profile.skill_level].color}>
-                  <Trophy className="w-3 h-3 mr-1" />
+                  <Trophy className='w-3 h-3 mr-1' />
                   {skillLevels[profile.skill_level].label}
                 </Badge>
-                <TrustScoreBadgeMock 
+                <TrustScoreBadgeMock
                   playerId={profile.user_id}
                   showFullDetails={false}
                 />
               </div>
               {profile.member_since && (
-                <p className="text-xs text-muted-foreground flex items-center">
-                  <Calendar className="w-3 h-3 mr-1" />
-                  Tham gia {new Date(profile.member_since).toLocaleDateString('vi-VN')}
+                <p className='text-xs text-muted-foreground flex items-center'>
+                  <Calendar className='w-3 h-3 mr-1' />
+                  Tham gia{' '}
+                  {new Date(profile.member_since).toLocaleDateString('vi-VN')}
                 </p>
               )}
               {uploading && (
-                <p className="text-xs text-primary mt-1">Đang tải ảnh...</p>
+                <p className='text-xs text-primary mt-1'>Đang tải ảnh...</p>
               )}
             </div>
           </div>
 
           {/* Current Rank - Prominent */}
-          <div className="flex-1 lg:max-w-xs">
-            <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
-              <div className="flex items-center justify-between">
+          <div className='flex-1 lg:max-w-xs'>
+            <div className='bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20'>
+              <div className='flex items-center justify-between'>
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Hạng hiện tại</p>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-primary">
+                  <p className='text-xs text-muted-foreground mb-1'>
+                    Hạng hiện tại
+                  </p>
+                  <div className='flex items-center space-x-2'>
+                    <span className='text-lg font-bold text-primary'>
                       {getCurrentRank()}
                     </span>
                     {getVerificationIcon()}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-xs text-muted-foreground mt-1'>
                     {getVerificationText()}
                   </p>
                   {getNewUserMessage() && (
-                    <p className="text-xs text-orange-600 mt-1 font-medium leading-tight">
+                    <p className='text-xs text-orange-600 mt-1 font-medium leading-tight'>
                       {getNewUserMessage()}
                     </p>
                   )}
                 </div>
-                <Trophy className="w-6 h-6 text-primary" />
+                <Trophy className='w-6 h-6 text-primary' />
               </div>
             </div>
           </div>
 
           {/* Stats Grid - Larger */}
-          <div className="flex-1">
+          <div className='flex-1'>
             {loading || clubLoading ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className='grid grid-cols-2 lg:grid-cols-4 gap-3'>
                 {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="bg-muted/50 p-4 rounded-lg animate-pulse">
-                    <div className="h-3 bg-muted rounded w-3/4 mb-2"></div>
-                    <div className="h-5 bg-muted rounded w-1/2"></div>
+                  <div
+                    key={i}
+                    className='bg-muted/50 p-4 rounded-lg animate-pulse'
+                  >
+                    <div className='h-3 bg-muted rounded w-3/4 mb-2'></div>
+                    <div className='h-5 bg-muted rounded w-1/2'></div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200 hover:shadow-sm transition-shadow">
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs text-green-600 font-medium">Trận đấu</p>
-                      <Target className="w-4 h-4 text-green-500" />
+              <div className='grid grid-cols-2 lg:grid-cols-4 gap-3'>
+                <div className='bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200 hover:shadow-sm transition-shadow'>
+                  <div className='flex flex-col'>
+                    <div className='flex items-center justify-between mb-2'>
+                      <p className='text-xs text-green-600 font-medium'>
+                        Trận đấu
+                      </p>
+                      <Target className='w-4 h-4 text-green-500' />
                     </div>
-                    <p className="text-xl font-bold text-green-700">
+                    <p className='text-xl font-bold text-green-700'>
                       {stats?.matches_played || 0}
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 hover:shadow-sm transition-shadow">
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs text-blue-600 font-medium">Tỷ lệ thắng</p>
-                      <Trophy className="w-4 h-4 text-blue-500" />
+                <div className='bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 hover:shadow-sm transition-shadow'>
+                  <div className='flex flex-col'>
+                    <div className='flex items-center justify-between mb-2'>
+                      <p className='text-xs text-blue-600 font-medium'>
+                        Tỷ lệ thắng
+                      </p>
+                      <Trophy className='w-4 h-4 text-blue-500' />
                     </div>
-                    <p className="text-xl font-bold text-blue-700">
+                    <p className='text-xl font-bold text-blue-700'>
                       {stats?.win_rate?.toFixed(0) || 0}%
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200 hover:shadow-sm transition-shadow">
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-xs text-orange-600 font-medium">Chuỗi thắng</p>
-                      <Zap className="w-4 h-4 text-orange-500" />
+                <div className='bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200 hover:shadow-sm transition-shadow'>
+                  <div className='flex flex-col'>
+                    <div className='flex items-center justify-between mb-2'>
+                      <p className='text-xs text-orange-600 font-medium'>
+                        Chuỗi thắng
+                      </p>
+                      <Zap className='w-4 h-4 text-orange-500' />
                     </div>
-                    <p className="text-xl font-bold text-orange-700">
+                    <p className='text-xl font-bold text-orange-700'>
                       {stats?.current_streak || 0}
                     </p>
                   </div>
                 </div>
 
                 {!hasClubProfile && (
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200 cursor-pointer hover:shadow-md transition-all" onClick={handleClubRegistrationClick}>
-                    <div className="flex flex-col justify-between h-full">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs text-purple-600 font-medium">Đăng ký CLB</p>
-                        <Building2 className="w-4 h-4 text-purple-500" />
+                  <div
+                    className='bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200 cursor-pointer hover:shadow-md transition-all'
+                    onClick={handleClubRegistrationClick}
+                  >
+                    <div className='flex flex-col justify-between h-full'>
+                      <div className='flex items-center justify-between mb-2'>
+                        <p className='text-xs text-purple-600 font-medium'>
+                          Đăng ký CLB
+                        </p>
+                        <Building2 className='w-4 h-4 text-purple-500' />
                       </div>
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs text-purple-500 leading-tight">
+                      <div className='flex items-center justify-between'>
+                        <p className='text-xs text-purple-500 leading-tight'>
                           Quản lý CLB
                         </p>
-                        <ArrowRight className="w-3 h-3 text-purple-500" />
+                        <ArrowRight className='w-3 h-3 text-purple-500' />
                       </div>
                     </div>
                   </div>
                 )}
 
                 {hasClubProfile && (
-                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg border border-emerald-200 hover:shadow-sm transition-shadow">
-                    <div className="flex flex-col">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs text-emerald-600 font-medium">CLB</p>
-                        <Building2 className="w-4 h-4 text-emerald-500" />
+                  <div className='bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg border border-emerald-200 hover:shadow-sm transition-shadow'>
+                    <div className='flex flex-col'>
+                      <div className='flex items-center justify-between mb-2'>
+                        <p className='text-xs text-emerald-600 font-medium'>
+                          CLB
+                        </p>
+                        <Building2 className='w-4 h-4 text-emerald-500' />
                       </div>
-                      <p className="text-xl font-bold text-emerald-700">
-                        ✓
-                      </p>
+                      <p className='text-xl font-bold text-emerald-700'>✓</p>
                     </div>
                   </div>
                 )}

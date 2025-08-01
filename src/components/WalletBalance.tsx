@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Coins, TrendingUp, Clock, ArrowUpRight } from 'lucide-react';
@@ -24,9 +23,11 @@ export const WalletBalance: React.FC = () => {
   const [walletData, setWalletData] = useState<WalletData>({
     balance: 0,
     total_earned: 0,
-    total_spent: 0
+    total_spent: 0,
   });
-  const [recentTransactions, setRecentTransactions] = useState<RecentTransaction[]>([]);
+  const [recentTransactions, setRecentTransactions] = useState<
+    RecentTransaction[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,14 +53,13 @@ export const WalletBalance: React.FC = () => {
           setWalletData({
             balance: walletData.points_balance || 0,
             total_earned: walletData.total_earned || 0,
-            total_spent: walletData.total_spent || 0
+            total_spent: walletData.total_spent || 0,
           });
         }
 
         // Since wallet_transactions table doesn't exist, skip loading transactions for now
         // This can be implemented later when the table is added
         setRecentTransactions([]);
-
       } catch (error) {
         console.error('Error fetching wallet data:', error);
       } finally {
@@ -80,7 +80,7 @@ export const WalletBalance: React.FC = () => {
           table: 'wallets',
           filter: `user_id=eq.${user?.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('Wallet updated via realtime:', payload);
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
@@ -88,8 +88,10 @@ export const WalletBalance: React.FC = () => {
               setWalletData(prev => ({
                 ...prev,
                 balance: newData.points_balance as number,
-                total_earned: (newData.total_earned as number) || prev.total_earned,
-                total_spent: (newData.total_spent as number) || prev.total_spent
+                total_earned:
+                  (newData.total_earned as number) || prev.total_earned,
+                total_spent:
+                  (newData.total_spent as number) || prev.total_spent,
               }));
             }
           }
@@ -110,15 +112,15 @@ export const WalletBalance: React.FC = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Coins className="w-5 h-5 mr-2" />
+          <CardTitle className='flex items-center'>
+            <Coins className='w-5 h-5 mr-2' />
             Ví SPA Points
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="text-sm text-gray-500 mt-2">Đang tải...</p>
+          <div className='text-center py-4'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
+            <p className='text-sm text-gray-500 mt-2'>Đang tải...</p>
           </div>
         </CardContent>
       </Card>
@@ -128,58 +130,74 @@ export const WalletBalance: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center">
-          <Coins className="w-5 h-5 mr-2" />
+        <CardTitle className='flex items-center'>
+          <Coins className='w-5 h-5 mr-2' />
           Ví SPA Points
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-6'>
           {/* Current Balance */}
-          <div className="text-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-700">{walletData.balance}</div>
-            <div className="text-sm text-green-600">Số dư hiện tại</div>
+          <div className='text-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg'>
+            <div className='text-2xl font-bold text-green-700'>
+              {walletData.balance}
+            </div>
+            <div className='text-sm text-green-600'>Số dư hiện tại</div>
           </div>
 
           {/* Total Earned */}
-          <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-sky-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-700">{walletData.total_earned}</div>
-            <div className="text-sm text-blue-600">Tổng đã kiếm</div>
+          <div className='text-center p-4 bg-gradient-to-r from-blue-50 to-sky-50 rounded-lg'>
+            <div className='text-2xl font-bold text-blue-700'>
+              {walletData.total_earned}
+            </div>
+            <div className='text-sm text-blue-600'>Tổng đã kiếm</div>
           </div>
 
           {/* Total Spent */}
-          <div className="text-center p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg">
-            <div className="text-2xl font-bold text-orange-700">{walletData.total_spent}</div>
-            <div className="text-sm text-orange-600">Tổng đã chi</div>
+          <div className='text-center p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg'>
+            <div className='text-2xl font-bold text-orange-700'>
+              {walletData.total_spent}
+            </div>
+            <div className='text-sm text-orange-600'>Tổng đã chi</div>
           </div>
         </div>
 
         {/* Recent Transactions */}
         {recentTransactions.length > 0 && (
           <div>
-            <h4 className="font-semibold mb-3 flex items-center">
-              <Clock className="w-4 h-4 mr-2" />
+            <h4 className='font-semibold mb-3 flex items-center'>
+              <Clock className='w-4 h-4 mr-2' />
               Giao dịch gần đây
             </h4>
-            <div className="space-y-2">
-              {recentTransactions.map((transaction) => (
-                <div key={transaction.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div className="flex-1">
-                    <div className="text-sm font-medium">{transaction.description}</div>
-                    <div className="text-xs text-gray-500">
-                      {new Date(transaction.created_at).toLocaleDateString('vi-VN')}
+            <div className='space-y-2'>
+              {recentTransactions.map(transaction => (
+                <div
+                  key={transaction.id}
+                  className='flex items-center justify-between p-2 bg-gray-50 rounded'
+                >
+                  <div className='flex-1'>
+                    <div className='text-sm font-medium'>
+                      {transaction.description}
+                    </div>
+                    <div className='text-xs text-gray-500'>
+                      {new Date(transaction.created_at).toLocaleDateString(
+                        'vi-VN'
+                      )}
                     </div>
                   </div>
-                  <div className={`flex items-center ${
-                    transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
+                  <div
+                    className={`flex items-center ${
+                      transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
                     {transaction.amount > 0 ? (
-                      <TrendingUp className="w-3 h-3 mr-1" />
+                      <TrendingUp className='w-3 h-3 mr-1' />
                     ) : (
-                      <ArrowUpRight className="w-3 h-3 mr-1 rotate-45" />
+                      <ArrowUpRight className='w-3 h-3 mr-1 rotate-45' />
                     )}
-                    <span className="font-medium">
-                      {transaction.amount > 0 ? '+' : ''}{transaction.amount}
+                    <span className='font-medium'>
+                      {transaction.amount > 0 ? '+' : ''}
+                      {transaction.amount}
                     </span>
                   </div>
                 </div>
@@ -189,9 +207,9 @@ export const WalletBalance: React.FC = () => {
         )}
 
         {recentTransactions.length === 0 && (
-          <div className="text-center py-4 text-gray-500">
-            <Coins className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p className="text-sm">Chưa có giao dịch nào</p>
+          <div className='text-center py-4 text-gray-500'>
+            <Coins className='w-8 h-8 mx-auto mb-2 opacity-50' />
+            <p className='text-sm'>Chưa có giao dịch nào</p>
           </div>
         )}
       </CardContent>

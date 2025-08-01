@@ -5,7 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Users, UserPlus, Database, RefreshCw, Trash2, AlertTriangle } from 'lucide-react';
+import {
+  Users,
+  UserPlus,
+  Database,
+  RefreshCw,
+  Trash2,
+  AlertTriangle,
+} from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { faker } from '@faker-js/faker';
 
@@ -36,7 +43,9 @@ const AdminDevelopment: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, user_id, email, full_name, phone, verified_rank, elo, skill_level, is_demo_user, created_at')
+        .select(
+          'id, user_id, email, full_name, phone, verified_rank, elo, skill_level, is_demo_user, created_at'
+        )
         .eq('is_demo_user', true)
         .order('created_at', { ascending: false });
 
@@ -47,7 +56,7 @@ const AdminDevelopment: React.FC = () => {
       toast({
         title: 'Lỗi',
         description: 'Không thể tải danh sách demo users',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -55,33 +64,40 @@ const AdminDevelopment: React.FC = () => {
   const generateRandomUser = () => {
     const ranks = ['K', 'I', 'H', 'G', 'F', 'E'];
     const skillLevels = ['beginner', 'intermediate', 'advanced'];
-    
+
     return {
       email: faker.internet.email().toLowerCase(),
       password: 'demo123456',
       full_name: faker.person.fullName(),
-      phone: `09${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`,
+      phone: `09${Math.floor(Math.random() * 100000000)
+        .toString()
+        .padStart(8, '0')}`,
       current_rank: faker.helpers.arrayElement(ranks),
       elo: faker.number.int({ min: 1000, max: 2000 }),
       skill_level: faker.helpers.arrayElement(skillLevels),
       bio: faker.lorem.sentence(),
-      is_demo_user: true
+      is_demo_user: true,
     };
   };
 
   const createDemoUsers = async () => {
     setLoading(true);
-    
+
     try {
-      const users = Array.from({ length: userCount }, () => generateRandomUser());
-      
+      const users = Array.from({ length: userCount }, () =>
+        generateRandomUser()
+      );
+
       // Call edge function to create users
-      const { data, error } = await supabase.functions.invoke('create-admin-user', {
-        body: {
-          users: users,
-          batch_create: true
+      const { data, error } = await supabase.functions.invoke(
+        'create-admin-user',
+        {
+          body: {
+            users: users,
+            batch_create: true,
+          },
         }
-      });
+      );
 
       if (error) {
         console.error('Edge function error:', error);
@@ -89,7 +105,7 @@ const AdminDevelopment: React.FC = () => {
       }
 
       console.log('Demo users created:', data);
-      
+
       toast({
         title: 'Thành công!',
         description: `Đã tạo ${userCount} demo users`,
@@ -97,13 +113,12 @@ const AdminDevelopment: React.FC = () => {
 
       // Reload demo users list
       await loadDemoUsers();
-
     } catch (error: any) {
       console.error('Error creating demo users:', error);
       toast({
         title: 'Lỗi tạo demo users',
         description: error.message || 'Vui lòng kiểm tra edge function',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -112,9 +127,9 @@ const AdminDevelopment: React.FC = () => {
 
   const cleanupDemoUsers = async () => {
     if (!confirm('Bạn có chắc muốn xóa tất cả demo users?')) return;
-    
+
     setLoading(true);
-    
+
     try {
       // First delete from profiles table
       const { error: profileError } = await supabase
@@ -125,11 +140,14 @@ const AdminDevelopment: React.FC = () => {
       if (profileError) throw profileError;
 
       // Then delete auth users through edge function
-      const { error: functionError } = await supabase.functions.invoke('create-admin-user', {
-        body: {
-          action: 'cleanup_demo_users'
+      const { error: functionError } = await supabase.functions.invoke(
+        'create-admin-user',
+        {
+          body: {
+            action: 'cleanup_demo_users',
+          },
         }
-      });
+      );
 
       if (functionError) {
         console.warn('Edge function cleanup warning:', functionError);
@@ -141,13 +159,12 @@ const AdminDevelopment: React.FC = () => {
       });
 
       await loadDemoUsers();
-
     } catch (error: any) {
       console.error('Error cleaning up demo users:', error);
       toast({
         title: 'Lỗi',
         description: error.message || 'Không thể xóa demo users',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -155,16 +172,22 @@ const AdminDevelopment: React.FC = () => {
   };
 
   const resetDatabase = async () => {
-    if (!confirm('CẢNH BÁO: Thao tác này sẽ xóa TẤT CẢ dữ liệu trong database. Bạn có chắc chắn?')) return;
-    if (!confirm('Xác nhận lần cuối: Bạn THỰC SỰ muốn reset toàn bộ database?')) return;
-    
+    if (
+      !confirm(
+        'CẢNH BÁO: Thao tác này sẽ xóa TẤT CẢ dữ liệu trong database. Bạn có chắc chắn?'
+      )
+    )
+      return;
+    if (!confirm('Xác nhận lần cuối: Bạn THỰC SỰ muốn reset toàn bộ database?'))
+      return;
+
     setLoading(true);
-    
+
     try {
       const { error } = await supabase.functions.invoke('create-admin-user', {
         body: {
-          action: 'reset_database'
-        }
+          action: 'reset_database',
+        },
       });
 
       if (error) throw error;
@@ -175,13 +198,12 @@ const AdminDevelopment: React.FC = () => {
       });
 
       await loadDemoUsers();
-
     } catch (error: any) {
       console.error('Error resetting database:', error);
       toast({
         title: 'Lỗi',
         description: error.message || 'Không thể reset database',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -189,62 +211,64 @@ const AdminDevelopment: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+    <div className='p-6 max-w-6xl mx-auto'>
+      <div className='mb-6'>
+        <h1 className='text-3xl font-bold text-foreground mb-2'>
           🛠️ Admin Development Tools
         </h1>
-        <p className="text-muted-foreground">
+        <p className='text-muted-foreground'>
           Công cụ phát triển và test cho admin
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
         {/* Demo User Creation */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <UserPlus className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <UserPlus className='h-5 w-5' />
               Tạo Demo Users
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className='space-y-4'>
             <div>
-              <Label htmlFor="userCount">Số lượng users</Label>
+              <Label htmlFor='userCount'>Số lượng users</Label>
               <Input
-                id="userCount"
-                type="number"
+                id='userCount'
+                type='number'
                 value={userCount}
-                onChange={(e) => setUserCount(Math.max(1, parseInt(e.target.value) || 1))}
-                min="1"
-                max="50"
-                className="mt-1"
+                onChange={e =>
+                  setUserCount(Math.max(1, parseInt(e.target.value) || 1))
+                }
+                min='1'
+                max='50'
+                className='mt-1'
               />
             </div>
-            
-            <Button 
+
+            <Button
               onClick={createDemoUsers}
               disabled={loading}
-              className="w-full"
+              className='w-full'
             >
               {loading ? (
                 <>
-                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  <RefreshCw className='mr-2 h-4 w-4 animate-spin' />
                   Đang tạo...
                 </>
               ) : (
                 <>
-                  <UserPlus className="mr-2 h-4 w-4" />
+                  <UserPlus className='mr-2 h-4 w-4' />
                   Tạo {userCount} Demo Users
                 </>
               )}
             </Button>
 
-            <div className="pt-2 border-t">
-              <p className="text-sm text-muted-foreground mb-2">
+            <div className='pt-2 border-t'>
+              <p className='text-sm text-muted-foreground mb-2'>
                 Demo users sẽ có:
               </p>
-              <ul className="text-xs text-muted-foreground space-y-1">
+              <ul className='text-xs text-muted-foreground space-y-1'>
                 <li>• Email và tên ngẫu nhiên</li>
                 <li>• Password: demo123456</li>
                 <li>• ELO từ 1000-2000</li>
@@ -258,40 +282,45 @@ const AdminDevelopment: React.FC = () => {
         {/* Demo Users List */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+            <CardTitle className='flex items-center justify-between'>
+              <span className='flex items-center gap-2'>
+                <Users className='h-5 w-5' />
                 Demo Users ({demoUsers.length})
               </span>
               <Button
-                variant="destructive"
-                size="sm"
+                variant='destructive'
+                size='sm'
                 onClick={cleanupDemoUsers}
                 disabled={loading || demoUsers.length === 0}
               >
-                <Trash2 className="mr-2 h-4 w-4" />
+                <Trash2 className='mr-2 h-4 w-4' />
                 Xóa tất cả
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="max-h-96 overflow-y-auto space-y-2">
+            <div className='max-h-96 overflow-y-auto space-y-2'>
               {demoUsers.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">
+                <p className='text-sm text-muted-foreground text-center py-4'>
                   Chưa có demo users nào
                 </p>
               ) : (
-                demoUsers.map((user) => (
-                  <div key={user.id} className="flex items-center justify-between p-2 border rounded">
+                demoUsers.map(user => (
+                  <div
+                    key={user.id}
+                    className='flex items-center justify-between p-2 border rounded'
+                  >
                     <div>
-                      <p className="font-medium text-sm">{user.full_name}</p>
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                      <p className='font-medium text-sm'>{user.full_name}</p>
+                      <p className='text-xs text-muted-foreground'>
+                        {user.email}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs">
+                    <div className='flex items-center gap-2'>
+                      <Badge variant='outline' className='text-xs'>
                         {user.verified_rank || 'K'}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
+                      <span className='text-xs text-muted-foreground'>
                         {user.elo}
                       </span>
                     </div>
@@ -303,26 +332,27 @@ const AdminDevelopment: React.FC = () => {
         </Card>
 
         {/* Dangerous Operations */}
-        <Card className="border-red-200">
+        <Card className='border-red-200'>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-600">
-              <AlertTriangle className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2 text-red-600'>
+              <AlertTriangle className='h-5 w-5' />
               Nguy hiểm - Chỉ dùng khi phát triển
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className='space-y-4'>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={resetDatabase}
               disabled={loading}
-              className="w-full"
+              className='w-full'
             >
-              <Database className="mr-2 h-4 w-4" />
+              <Database className='mr-2 h-4 w-4' />
               Reset Toàn Bộ Database
             </Button>
-            
-            <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
-              ⚠️ Thao tác này sẽ xóa TẤT CẢ dữ liệu trong database và không thể khôi phục!
+
+            <div className='text-xs text-red-600 bg-red-50 p-2 rounded'>
+              ⚠️ Thao tác này sẽ xóa TẤT CẢ dữ liệu trong database và không thể
+              khôi phục!
             </div>
           </CardContent>
         </Card>
@@ -330,25 +360,25 @@ const AdminDevelopment: React.FC = () => {
         {/* System Info */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Database className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Database className='h-5 w-5' />
               Thông tin hệ thống
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex justify-between text-sm">
+          <CardContent className='space-y-2'>
+            <div className='flex justify-between text-sm'>
               <span>Demo Users:</span>
-              <span className="font-medium">{demoUsers.length}</span>
+              <span className='font-medium'>{demoUsers.length}</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className='flex justify-between text-sm'>
               <span>Edge Functions:</span>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant='outline' className='text-xs'>
                 create-admin-user
               </Badge>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className='flex justify-between text-sm'>
               <span>Environment:</span>
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant='secondary' className='text-xs'>
                 Development
               </Badge>
             </div>

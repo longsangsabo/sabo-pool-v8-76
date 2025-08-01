@@ -14,31 +14,27 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   count,
   subtitle,
-  action
+  action,
 }) => {
   return (
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{icon}</span>
+    <div className='flex items-center justify-between mb-4'>
+      <div className='flex items-center gap-3'>
+        <span className='text-2xl'>{icon}</span>
         <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-bold text-foreground">{title}</h3>
+          <div className='flex items-center gap-2'>
+            <h3 className='text-lg font-bold text-foreground'>{title}</h3>
             {count !== undefined && (
-              <Badge variant="secondary" className="font-mono">
+              <Badge variant='secondary' className='font-mono'>
                 {count}
               </Badge>
             )}
           </div>
           {subtitle && (
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
+            <p className='text-sm text-muted-foreground'>{subtitle}</p>
           )}
         </div>
       </div>
-      {action && (
-        <div className="flex-shrink-0">
-          {action}
-        </div>
-      )}
+      {action && <div className='flex-shrink-0'>{action}</div>}
     </div>
   );
 };

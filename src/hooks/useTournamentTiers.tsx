@@ -23,20 +23,28 @@ export interface EloRule {
 }
 
 export const useTournamentTiers = () => {
-  const { data: tiers, isLoading: tiersLoading, error: tiersError } = useQuery({
+  const {
+    data: tiers,
+    isLoading: tiersLoading,
+    error: tiersError,
+  } = useQuery({
     queryKey: ['tournament-tiers'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tournament_tiers' as any)
         .select('*')
         .order('tier_level', { ascending: true });
-      
+
       if (error) throw error;
       return (data || []) as unknown as TournamentTier[];
     },
   });
 
-  const { data: eloRules, isLoading: rulesLoading, error: rulesError } = useQuery({
+  const {
+    data: eloRules,
+    isLoading: rulesLoading,
+    error: rulesError,
+  } = useQuery({
     queryKey: ['elo-rules'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -44,7 +52,7 @@ export const useTournamentTiers = () => {
         .select('*')
         .eq('is_active', true)
         .order('rule_type', { ascending: true });
-      
+
       if (error) throw error;
       return (data || []) as unknown as EloRule[];
     },
@@ -53,15 +61,14 @@ export const useTournamentTiers = () => {
   // Calculate SPA points for different positions and tiers
   const calculateSPAPoints = (tierLevel: number, position: string) => {
     if (!eloRules) return 0;
-    
+
     const tier = tiers?.find(t => t.tier_level === tierLevel);
-    const rule = eloRules.find(r => 
-      r.rule_type === 'tournament_position' && 
-      r.condition_key === position
+    const rule = eloRules.find(
+      r => r.rule_type === 'tournament_position' && r.condition_key === position
     );
-    
+
     if (!rule || !tier) return 0;
-    
+
     return Math.round(rule.points_base * tier.points_multiplier);
   };
 
@@ -73,20 +80,24 @@ export const useTournamentTiers = () => {
   // Get all SPA points for a tier
   const getTierSPABreakdown = (tierLevel: number) => {
     if (!eloRules || !tiers) return null;
-    
+
     const tier = getTierByLevel(tierLevel);
     if (!tier) return null;
 
-    const positionRules = eloRules.filter(r => r.rule_type === 'tournament_position');
-    
+    const positionRules = eloRules.filter(
+      r => r.rule_type === 'tournament_position'
+    );
+
     return {
       tier,
-      breakdown: positionRules.map(rule => ({
-        position: rule.condition_key,
-        description: rule.description,
-        points: Math.round(rule.points_base * tier.points_multiplier),
-        basePoints: rule.points_base,
-      })).sort((a, b) => b.points - a.points)
+      breakdown: positionRules
+        .map(rule => ({
+          position: rule.condition_key,
+          description: rule.description,
+          points: Math.round(rule.points_base * tier.points_multiplier),
+          basePoints: rule.points_base,
+        }))
+        .sort((a, b) => b.points - a.points),
     };
   };
 
@@ -98,7 +109,7 @@ export const useTournamentTiers = () => {
     // Base fees scale with tier level and multiplier
     const baseFee = 50000;
     const multiplier = tier.points_multiplier * tierLevel;
-    
+
     return {
       min: Math.round(baseFee * multiplier),
       max: Math.round(baseFee * multiplier * 4),

@@ -1,5 +1,10 @@
-
-import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  ChangeEvent,
+  KeyboardEvent,
+} from 'react';
 import { MessageCircle, Send, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -23,7 +28,7 @@ interface ChatWindowProps {
 export const ChatWindow: React.FC<ChatWindowProps> = ({
   chatId,
   currentUserId,
-  onClose
+  onClose,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -48,7 +53,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         content: newMessage,
         sender_id: currentUserId,
         sender_name: 'You',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       setMessages(prev => [...prev, message]);
@@ -68,24 +73,24 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   };
 
   return (
-    <Card className="h-96 flex flex-col">
-      <CardHeader className="flex-shrink-0 pb-3">
-        <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <MessageCircle className="h-5 w-5" />
+    <Card className='h-96 flex flex-col'>
+      <CardHeader className='flex-shrink-0 pb-3'>
+        <CardTitle className='flex items-center justify-between'>
+          <div className='flex items-center space-x-2'>
+            <MessageCircle className='h-5 w-5' />
             <span>Chat</span>
           </div>
           {onClose && (
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            <Button variant='ghost' size='sm' onClick={onClose}>
               ×
             </Button>
           )}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col space-y-4">
-        <div className="flex-1 overflow-y-auto space-y-2 max-h-64">
-          {messages.map((message) => (
+      <CardContent className='flex-1 flex flex-col space-y-4'>
+        <div className='flex-1 overflow-y-auto space-y-2 max-h-64'>
+          {messages.map(message => (
             <div
               key={message.id}
               className={`flex ${
@@ -101,8 +106,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     : 'bg-gray-200 text-gray-800'
                 }`}
               >
-                <p className="text-sm">{message.content}</p>
-                <p className="text-xs opacity-70 mt-1">
+                <p className='text-sm'>{message.content}</p>
+                <p className='text-xs opacity-70 mt-1'>
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </p>
               </div>
@@ -111,21 +116,23 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex space-x-2">
+        <div className='flex space-x-2'>
           <Textarea
-            placeholder="Type your message..."
+            placeholder='Type your message...'
             value={newMessage}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewMessage(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setNewMessage(e.target.value)
+            }
             onKeyPress={handleKeyPress}
-            className="flex-1 min-h-[40px] max-h-[100px]"
+            className='flex-1 min-h-[40px] max-h-[100px]'
             rows={2}
           />
           <Button
             onClick={handleSendMessage}
             disabled={!newMessage.trim() || loading}
-            size="sm"
+            size='sm'
           >
-            <Send className="h-4 w-4" />
+            <Send className='h-4 w-4' />
           </Button>
         </div>
       </CardContent>

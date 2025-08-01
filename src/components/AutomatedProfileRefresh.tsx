@@ -13,7 +13,10 @@ export const AutomatedProfileRefresh: React.FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log('[AutomatedProfileRefresh] Setting up rank approval listener for user:', user.id);
+    console.log(
+      '[AutomatedProfileRefresh] Setting up rank approval listener for user:',
+      user.id
+    );
 
     // Listen for rank approval notifications
     const notificationChannel = supabase
@@ -24,26 +27,30 @@ export const AutomatedProfileRefresh: React.FC = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
-          console.log('[AutomatedProfileRefresh] Notification received:', payload);
-          
+        payload => {
+          console.log(
+            '[AutomatedProfileRefresh] Notification received:',
+            payload
+          );
+
           const notification = payload.new;
-          
+
           // Check if it's a rank approval notification
-          if (notification.type === 'rank_approved' || 
-              notification.type === 'rank_verification_approved' ||
-              notification.message?.includes('được duyệt') ||
-              notification.message?.includes('approved')) {
-            
+          if (
+            notification.type === 'rank_approved' ||
+            notification.type === 'rank_verification_approved' ||
+            notification.message?.includes('được duyệt') ||
+            notification.message?.includes('approved')
+          ) {
             console.log('[AutomatedProfileRefresh] Rank approval detected');
-            
+
             // Show immediate feedback
             toast.success('🎉 Hạng của bạn đã được duyệt!', {
-              description: 'Đang cập nhật thông tin hồ sơ...'
+              description: 'Đang cập nhật thông tin hồ sơ...',
             });
-            
+
             // Force page reload to refresh all profile data
             setTimeout(() => {
               window.location.reload();
@@ -51,12 +58,17 @@ export const AutomatedProfileRefresh: React.FC = () => {
           }
         }
       )
-      .subscribe((status) => {
-        console.log('[AutomatedProfileRefresh] Notification subscription status:', status);
+      .subscribe(status => {
+        console.log(
+          '[AutomatedProfileRefresh] Notification subscription status:',
+          status
+        );
       });
 
     return () => {
-      console.log('[AutomatedProfileRefresh] Cleaning up notification listener');
+      console.log(
+        '[AutomatedProfileRefresh] Cleaning up notification listener'
+      );
       supabase.removeChannel(notificationChannel);
     };
   }, [user]);

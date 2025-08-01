@@ -15,7 +15,7 @@ interface State {
 
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -33,31 +33,36 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <Card className="m-4 border-destructive">
+        <Card className='m-4 border-destructive'>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-destructive">
-              <AlertTriangle className="w-5 h-5" />
+            <CardTitle className='flex items-center gap-2 text-destructive'>
+              <AlertTriangle className='w-5 h-5' />
               Something went wrong
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              An error occurred while loading this component. This is likely a temporary issue.
+          <CardContent className='space-y-4'>
+            <p className='text-muted-foreground'>
+              An error occurred while loading this component. This is likely a
+              temporary issue.
             </p>
             {this.state.error && (
-              <details className="text-sm">
-                <summary className="cursor-pointer font-medium">Error details</summary>
-                <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
+              <details className='text-sm'>
+                <summary className='cursor-pointer font-medium'>
+                  Error details
+                </summary>
+                <pre className='mt-2 p-2 bg-muted rounded text-xs overflow-auto'>
                   {this.state.error.message}
                 </pre>
               </details>
             )}
             <Button
-              onClick={() => this.setState({ hasError: false, error: undefined })}
-              variant="outline"
-              className="gap-2"
+              onClick={() =>
+                this.setState({ hasError: false, error: undefined })
+              }
+              variant='outline'
+              className='gap-2'
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className='w-4 h-4' />
               Try again
             </Button>
           </CardContent>

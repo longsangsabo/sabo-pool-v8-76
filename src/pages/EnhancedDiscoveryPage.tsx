@@ -312,7 +312,9 @@ const EnhancedDiscoveryPage = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.1 }}
-            onClick={() => handleSwipe('left', transformedPlayers[currentIndex])}
+            onClick={() =>
+              handleSwipe('left', transformedPlayers[currentIndex])
+            }
             className='w-14 h-14 bg-red-500 rounded-full shadow-lg flex items-center justify-center hover:bg-red-600 transition-colors'
           >
             <X className='w-6 h-6 text-white' />
@@ -330,7 +332,9 @@ const EnhancedDiscoveryPage = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.1 }}
-            onClick={() => handleSwipe('right', transformedPlayers[currentIndex])}
+            onClick={() =>
+              handleSwipe('right', transformedPlayers[currentIndex])
+            }
             className='w-16 h-16 bg-green-500 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-colors'
           >
             <Zap className='w-8 h-8 text-white' />

@@ -7,11 +7,11 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Trophy, 
-  Calendar, 
-  MapPin, 
-  Users, 
+import {
+  Trophy,
+  Calendar,
+  MapPin,
+  Users,
   DollarSign,
   User,
   CheckCircle,
@@ -19,7 +19,7 @@ import {
   CreditCard,
   Phone,
   Mail,
-  Clock
+  Clock,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -29,7 +29,7 @@ import {
   getDefaultRegistrationData,
   REGISTRATION_RANKS,
   PAYMENT_METHODS,
-  EXPERIENCE_LEVELS
+  EXPERIENCE_LEVELS,
 } from '@/schemas/tournamentRegistrationSchema';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -58,11 +58,15 @@ const STEPS = [
 export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
   preSelectedTournamentId,
   onSuccess,
-  onCancel
+  onCancel,
 }) => {
   const { user, profile } = useAuth();
-  const { tournaments, loading: tournamentsLoading, registerForTournament } = useTournaments();
-  
+  const {
+    tournaments,
+    loading: tournamentsLoading,
+    registerForTournament,
+  } = useTournaments();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedTournament, setSelectedTournament] = useState<any>(null);
   const [registrationLoading, setRegistrationLoading] = useState(false);
@@ -71,16 +75,21 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
   const form = useForm<TournamentRegistrationFormData>({
     resolver: zodResolver(tournamentRegistrationSchema),
     defaultValues: getDefaultRegistrationData(),
-    mode: 'onChange'
+    mode: 'onChange',
   });
 
-  const { watch, formState: { errors, isValid } } = form;
+  const {
+    watch,
+    formState: { errors, isValid },
+  } = form;
   const watchedData = watch();
 
   // Pre-select tournament if provided
   useEffect(() => {
     if (preSelectedTournamentId && tournaments.length > 0) {
-      const tournament = tournaments.find(t => t.id === preSelectedTournamentId);
+      const tournament = tournaments.find(
+        t => t.id === preSelectedTournamentId
+      );
       if (tournament) {
         setSelectedTournament(tournament);
         form.setValue('tournament_id', preSelectedTournamentId);
@@ -131,20 +140,26 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const checkRegistrationEligibility = (): { eligible: boolean; reason?: string } => {
+  const checkRegistrationEligibility = (): {
+    eligible: boolean;
+    reason?: string;
+  } => {
     if (!selectedTournament || !user) {
-      return { eligible: false, reason: 'Không tìm thấy thông tin giải đấu hoặc người dùng' };
+      return {
+        eligible: false,
+        reason: 'Không tìm thấy thông tin giải đấu hoặc người dùng',
+      };
     }
 
     // Check registration period
     const now = new Date();
     const regStart = new Date(selectedTournament.registration_start);
     const regEnd = new Date(selectedTournament.registration_end);
-    
+
     if (now < regStart) {
       return { eligible: false, reason: 'Chưa đến thời gian đăng ký' };
     }
-    
+
     if (now > regEnd) {
       return { eligible: false, reason: 'Đã hết hạn đăng ký' };
     }
@@ -152,35 +167,48 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
     // Check rank requirements
     const userRank = watchedData.current_rank;
     if (selectedTournament.min_rank_requirement && userRank) {
-      const minRank = REGISTRATION_RANKS.find(r => r.value === selectedTournament.min_rank_requirement);
+      const minRank = REGISTRATION_RANKS.find(
+        r => r.value === selectedTournament.min_rank_requirement
+      );
       const currentRank = REGISTRATION_RANKS.find(r => r.value === userRank);
-      
+
       if (minRank && currentRank) {
         const minIndex = REGISTRATION_RANKS.indexOf(minRank);
         const currentIndex = REGISTRATION_RANKS.indexOf(currentRank);
-        
+
         if (currentIndex < minIndex) {
-          return { eligible: false, reason: `Yêu cầu tối thiểu hạng ${selectedTournament.min_rank_requirement}` };
+          return {
+            eligible: false,
+            reason: `Yêu cầu tối thiểu hạng ${selectedTournament.min_rank_requirement}`,
+          };
         }
       }
     }
 
     if (selectedTournament.max_rank_requirement && userRank) {
-      const maxRank = REGISTRATION_RANKS.find(r => r.value === selectedTournament.max_rank_requirement);
+      const maxRank = REGISTRATION_RANKS.find(
+        r => r.value === selectedTournament.max_rank_requirement
+      );
       const currentRank = REGISTRATION_RANKS.find(r => r.value === userRank);
-      
+
       if (maxRank && currentRank) {
         const maxIndex = REGISTRATION_RANKS.indexOf(maxRank);
         const currentIndex = REGISTRATION_RANKS.indexOf(currentRank);
-        
+
         if (currentIndex > maxIndex) {
-          return { eligible: false, reason: `Vượt quá hạng tối đa ${selectedTournament.max_rank_requirement}` };
+          return {
+            eligible: false,
+            reason: `Vượt quá hạng tối đa ${selectedTournament.max_rank_requirement}`,
+          };
         }
       }
     }
 
     // Check available slots
-    if (selectedTournament.current_participants >= selectedTournament.max_participants) {
+    if (
+      selectedTournament.current_participants >=
+      selectedTournament.max_participants
+    ) {
       return { eligible: false, reason: 'Giải đấu đã đủ số lượng tham gia' };
     }
 
@@ -210,12 +238,12 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
           orderId,
           amount,
           orderInfo,
-          orderType: 'tournament_registration'
+          orderType: 'tournament_registration',
         }),
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         return data.paymentUrl;
       } else {
@@ -228,7 +256,9 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
     }
   };
 
-  const handleSubmitRegistration = async (data: TournamentRegistrationFormData) => {
+  const handleSubmitRegistration = async (
+    data: TournamentRegistrationFormData
+  ) => {
     if (!user || !selectedTournament) return;
 
     const eligibility = checkRegistrationEligibility();
@@ -246,7 +276,8 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
         .insert({
           tournament_id: data.tournament_id,
           user_id: user.id,
-          registration_status: data.payment_method === 'cash' ? 'pending_payment' : 'pending',
+          registration_status:
+            data.payment_method === 'cash' ? 'pending_payment' : 'pending',
           payment_status: data.payment_method === 'cash' ? 'pending' : 'unpaid',
           notes: data.notes,
           registration_date: new Date().toISOString(),
@@ -267,7 +298,9 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
           throw new Error('Không thể tạo liên kết thanh toán');
         }
       } else {
-        toast.success('Đăng ký thành công! Vui lòng thanh toán theo hướng dẫn.');
+        toast.success(
+          'Đăng ký thành công! Vui lòng thanh toán theo hướng dẫn.'
+        );
       }
 
       // Move to confirmation step
@@ -276,7 +309,6 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
       if (onSuccess) {
         onSuccess(registration);
       }
-
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Lỗi đăng ký: ' + (error as Error).message);
@@ -308,10 +340,7 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
         );
       case 3:
         return (
-          <PaymentStep
-            form={form}
-            selectedTournament={selectedTournament}
-          />
+          <PaymentStep form={form} selectedTournament={selectedTournament} />
         );
       case 4:
         return (
@@ -331,29 +360,31 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
   const progress = (currentStep / STEPS.length) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className='max-w-4xl mx-auto p-6 space-y-6'>
       {/* Header */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-primary" />
+          <CardTitle className='flex items-center gap-2'>
+            <Trophy className='h-6 w-6 text-primary' />
             Đăng ký tham gia giải đấu
           </CardTitle>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <currentStepData.icon className="h-4 w-4" />
-              <span className="text-sm font-medium">{currentStepData.title}</span>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <currentStepData.icon className='h-4 w-4' />
+              <span className='text-sm font-medium'>
+                {currentStepData.title}
+              </span>
             </div>
-            <span className="text-sm text-muted-foreground">
+            <span className='text-sm text-muted-foreground'>
               Bước {currentStep} / {STEPS.length}
             </span>
           </div>
-          <Progress value={progress} className="w-full" />
+          <Progress value={progress} className='w-full' />
         </CardHeader>
       </Card>
 
       {/* Steps indicator */}
-      <div className="flex justify-between">
+      <div className='flex justify-between'>
         {STEPS.map((step, index) => {
           const isActive = currentStep === step.id;
           const isCompleted = currentStep > step.id;
@@ -368,20 +399,24 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
                 isActive
                   ? 'bg-primary/10 text-primary'
                   : isCompleted
-                  ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-                  : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                    : 'text-muted-foreground hover:text-foreground'
               } ${isClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
             >
-              <div className={`p-2 rounded-full ${
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : isCompleted
-                  ? 'bg-green-500 text-white'
-                  : 'bg-muted'
-              }`}>
-                <step.icon className="h-4 w-4" />
+              <div
+                className={`p-2 rounded-full ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : isCompleted
+                      ? 'bg-green-500 text-white'
+                      : 'bg-muted'
+                }`}
+              >
+                <step.icon className='h-4 w-4' />
               </div>
-              <span className="text-xs font-medium text-center">{step.title}</span>
+              <span className='text-xs font-medium text-center'>
+                {step.title}
+              </span>
             </button>
           );
         })}
@@ -389,24 +424,22 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
 
       {/* Main content */}
       <Card>
-        <CardContent className="p-6">
-          {renderStep()}
-        </CardContent>
+        <CardContent className='p-6'>{renderStep()}</CardContent>
       </Card>
 
       {/* Navigation */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex justify-between">
+        <CardContent className='p-4'>
+          <div className='flex justify-between'>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={currentStep === 1 ? onCancel : handlePrevious}
               disabled={registrationLoading}
             >
               {currentStep === 1 ? 'Hủy' : 'Quay lại'}
             </Button>
-            
-            <div className="flex gap-2">
+
+            <div className='flex gap-2'>
               {currentStep < STEPS.length ? (
                 <Button
                   onClick={handleNext}
@@ -418,7 +451,7 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
                 <Button
                   onClick={handleSubmit}
                   disabled={!isValid || registrationLoading}
-                  className="bg-gradient-to-r from-primary to-primary/80"
+                  className='bg-gradient-to-r from-primary to-primary/80'
                 >
                   {registrationLoading ? 'Đang xử lý...' : 'Hoàn tất đăng ký'}
                 </Button>
@@ -430,34 +463,43 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
 
       {/* Tournament info sidebar (if tournament selected) */}
       {selectedTournament && currentStep > 1 && (
-        <Card className="fixed top-4 right-4 w-80 shadow-lg z-50 hidden lg:block">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Trophy className="h-5 w-5" />
+        <Card className='fixed top-4 right-4 w-80 shadow-lg z-50 hidden lg:block'>
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-lg flex items-center gap-2'>
+              <Trophy className='h-5 w-5' />
               {selectedTournament.name}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span>{new Date(selectedTournament.tournament_start).toLocaleDateString('vi-VN')}</span>
+          <CardContent className='space-y-3'>
+            <div className='flex items-center gap-2 text-sm'>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+              <span>
+                {new Date(
+                  selectedTournament.tournament_start
+                ).toLocaleDateString('vi-VN')}
+              </span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="truncate">{selectedTournament.venue_address}</span>
+            <div className='flex items-center gap-2 text-sm'>
+              <MapPin className='h-4 w-4 text-muted-foreground' />
+              <span className='truncate'>
+                {selectedTournament.venue_address}
+              </span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <span>{selectedTournament.current_participants}/{selectedTournament.max_participants} thí sinh</span>
+            <div className='flex items-center gap-2 text-sm'>
+              <Users className='h-4 w-4 text-muted-foreground' />
+              <span>
+                {selectedTournament.current_participants}/
+                {selectedTournament.max_participants} thí sinh
+              </span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">
+            <div className='flex items-center gap-2 text-sm'>
+              <DollarSign className='h-4 w-4 text-muted-foreground' />
+              <span className='font-medium'>
                 {selectedTournament.entry_fee?.toLocaleString('vi-VN')}đ
               </span>
             </div>
             <Separator />
-            <Badge variant="secondary">
+            <Badge variant='secondary'>
               Level {selectedTournament.tier_level || 1}
             </Badge>
           </CardContent>

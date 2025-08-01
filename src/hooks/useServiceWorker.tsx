@@ -26,7 +26,7 @@ export const useServiceWorker = () => {
 
     try {
       setState(prev => ({ ...prev, isInstalling: true }));
-      
+
       const registration = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'none', // Always check for updates
@@ -48,7 +48,7 @@ export const useServiceWorker = () => {
       });
 
       // Listen for messages from SW
-      navigator.serviceWorker.addEventListener('message', (event) => {
+      navigator.serviceWorker.addEventListener('message', event => {
         console.log('Message from SW:', event.data);
       });
 
@@ -62,11 +62,12 @@ export const useServiceWorker = () => {
   // Update service worker
   const updateServiceWorker = async () => {
     if (state.registration) {
-      const newWorker = state.registration.installing || state.registration.waiting;
-      
+      const newWorker =
+        state.registration.installing || state.registration.waiting;
+
       if (newWorker) {
         newWorker.postMessage({ type: 'SKIP_WAITING' });
-        
+
         // Wait for the new service worker to take control
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           window.location.reload();
@@ -86,7 +87,7 @@ export const useServiceWorker = () => {
   const cacheApiResponse = (request: Request, response: Response) => {
     sendMessage({
       type: 'CACHE_API_RESPONSE',
-      data: { request, response }
+      data: { request, response },
     });
   };
 
@@ -97,16 +98,16 @@ export const useServiceWorker = () => {
 
   // Get cache size
   const getCacheSize = (): Promise<number> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const messageChannel = new MessageChannel();
-      
-      messageChannel.port1.onmessage = (event) => {
+
+      messageChannel.port1.onmessage = event => {
         resolve(event.data.size);
       };
-      
+
       sendMessage({
         type: 'GET_CACHE_SIZE',
-        port: messageChannel.port2
+        port: messageChannel.port2,
       });
     });
   };

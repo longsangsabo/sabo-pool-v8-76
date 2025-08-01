@@ -1,4 +1,3 @@
-
 import { EnhancedTournament, TournamentFormData } from './tournament-extended';
 import { Tournament } from './tournament';
 
@@ -16,21 +15,21 @@ export interface UnifiedTournamentState {
   tournaments: EnhancedTournament[];
   selectedTournament: EnhancedTournament | null;
   selectedTournamentId: string | null;
-  
+
   // Loading states
   loading: boolean;
   tournamentsLoading: boolean;
   registrationsLoading: boolean;
   matchesLoading: boolean;
-  
+
   // Error states
   errors: Record<string, string[]>;
-  
+
   // Data collections
   registrations: any[];
   participants: any[];
   matches: any[];
-  
+
   // Actions
   setSelectedTournamentId: (id: string | null) => void;
   refreshAll: () => Promise<void>;
@@ -45,7 +44,7 @@ export interface TournamentOperationResult {
 }
 
 // Tournament status types (unified)
-export type TournamentStatusUnified = 
+export type TournamentStatusUnified =
   | 'draft'
   | 'upcoming'
   | 'registration_open'
@@ -55,7 +54,7 @@ export type TournamentStatusUnified =
   | 'cancelled';
 
 // Tournament registration status
-export type RegistrationStatusUnified = 
+export type RegistrationStatusUnified =
   | 'not_started'
   | 'open'
   | 'closed'

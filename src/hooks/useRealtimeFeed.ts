@@ -24,7 +24,7 @@ export const useRealtimeFeed = () => {
     handleComment: () => {},
     handleShare: () => {},
     handleChallenge: () => {},
-    createPost: (content?: string) => {}
+    createPost: (content?: string) => {},
   };
 };
 

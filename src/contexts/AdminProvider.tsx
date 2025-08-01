@@ -32,9 +32,7 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
   return (
     <QueryClientProvider client={adminQueryClient}>
       <AdminContext.Provider value={{ isAdminMode: true }}>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        <LanguageProvider>{children}</LanguageProvider>
       </AdminContext.Provider>
     </QueryClientProvider>
   );

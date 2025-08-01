@@ -1,10 +1,11 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import 'https://deno.land/x/xhr@0.1.0/mod.ts';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
@@ -21,7 +22,10 @@ interface UserMessage {
 }
 
 // Dynamic knowledge base fetcher
-async function getDynamicKnowledgeBase(intent: string, message: string): Promise<string> {
+async function getDynamicKnowledgeBase(
+  intent: string,
+  message: string
+): Promise<string> {
   try {
     const { data: knowledgeItems } = await supabase
       .from('admin_knowledge_base')
@@ -42,7 +46,10 @@ async function getDynamicKnowledgeBase(intent: string, message: string): Promise
         const lowerTitle = item.title.toLowerCase();
 
         // Direct title/content match
-        if (lowerTitle.includes(lowerMessage) || lowerMessage.includes(lowerTitle)) {
+        if (
+          lowerTitle.includes(lowerMessage) ||
+          lowerMessage.includes(lowerTitle)
+        ) {
           score += 10;
         }
 
@@ -56,10 +63,17 @@ async function getDynamicKnowledgeBase(intent: string, message: string): Promise
         }
 
         // Intent-based matching
-        if (intent === 'elo_system' && (lowerContent.includes('elo') || lowerContent.includes('điểm'))) {
+        if (
+          intent === 'elo_system' &&
+          (lowerContent.includes('elo') || lowerContent.includes('điểm'))
+        ) {
           score += 8;
         }
-        if (intent === 'tournament_info' && (lowerContent.includes('giải đấu') || lowerContent.includes('tournament'))) {
+        if (
+          intent === 'tournament_info' &&
+          (lowerContent.includes('giải đấu') ||
+            lowerContent.includes('tournament'))
+        ) {
           score += 8;
         }
 
@@ -75,7 +89,7 @@ async function getDynamicKnowledgeBase(intent: string, message: string): Promise
 
     // Build dynamic knowledge base
     let knowledgeBase = `# SABO Pool Arena - Hệ thống Billiards Hàng Đầu Việt Nam\n\n`;
-    
+
     relevantItems.forEach(item => {
       knowledgeBase += `## ${item.title}\n${item.content}\n\n`;
     });
@@ -133,32 +147,54 @@ async function analyzeUserIntent(message: string): Promise<{
   needsData: boolean;
 }> {
   const lowerMessage = message.toLowerCase();
-  
+
   // Simple intent matching for common user queries
-  if (lowerMessage.includes('đăng ký') || lowerMessage.includes('tournament') || lowerMessage.includes('giải đấu')) {
+  if (
+    lowerMessage.includes('đăng ký') ||
+    lowerMessage.includes('tournament') ||
+    lowerMessage.includes('giải đấu')
+  ) {
     return { intent: 'tournament_info', confidence: 0.9, needsData: false };
   }
-  
-  if (lowerMessage.includes('elo') || lowerMessage.includes('ranking') || lowerMessage.includes('xếp hạng')) {
+
+  if (
+    lowerMessage.includes('elo') ||
+    lowerMessage.includes('ranking') ||
+    lowerMessage.includes('xếp hạng')
+  ) {
     return { intent: 'elo_system', confidence: 0.9, needsData: false };
   }
-  
-  if (lowerMessage.includes('membership') || lowerMessage.includes('gói') || lowerMessage.includes('premium')) {
+
+  if (
+    lowerMessage.includes('membership') ||
+    lowerMessage.includes('gói') ||
+    lowerMessage.includes('premium')
+  ) {
     return { intent: 'membership_info', confidence: 0.9, needsData: false };
   }
-  
-  if (lowerMessage.includes('liên hệ') || lowerMessage.includes('support') || lowerMessage.includes('hỗ trợ')) {
+
+  if (
+    lowerMessage.includes('liên hệ') ||
+    lowerMessage.includes('support') ||
+    lowerMessage.includes('hỗ trợ')
+  ) {
     return { intent: 'support_contact', confidence: 0.9, needsData: false };
   }
-  
+
   return { intent: 'general_chat', confidence: 0.5, needsData: false };
 }
 
-async function generateAIResponse(userMessage: string, intent: string): Promise<string> {
+async function generateAIResponse(
+  userMessage: string,
+  intent: string
+): Promise<string> {
   try {
     // Get dynamic knowledge base
-    const dynamicKnowledgeBase = await getDynamicKnowledgeBase(intent, userMessage);
-    
+    const dynamicKnowledgeBase = await getDynamicKnowledgeBase(
+      intent,
+      userMessage
+    );
+
     const systemPrompt = `Bạn là AI assistant chính thức của SABO Pool Arena - nền tảng billiards hàng đầu Việt Nam.
 
 NHIỆM VỤ:
@@ -188,14 +224,14 @@ VÍ DỤ TRÁCH NHIỆM:
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        Authorization: `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'gpt-4.1-2025-04-14',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: userMessage }
+          { role: 'user', content: userMessage },
         ],
         max_tokens: 400, // Tăng lên để trả lời chi tiết hơn
         temperature: 0.3, // Giảm để ổn định hơn
@@ -214,7 +250,7 @@ VÍ DỤ TRÁCH NHIỆM:
   }
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -226,11 +262,18 @@ serve(async (req) => {
     if (!sessionId || !message || !userId) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
-    console.log('Processing user message:', { sessionId, userId, messageLength: message.length });
+    console.log('Processing user message:', {
+      sessionId,
+      userId,
+      messageLength: message.length,
+    });
 
     const startTime = Date.now();
 
@@ -239,20 +282,18 @@ serve(async (req) => {
     console.log('Intent analysis:', intentAnalysis);
 
     // Log user message to OpenAI usage statistics
-    await supabase
-      .from('openai_usage_logs')
-      .insert({
-        model_id: 'gpt-4.1-2025-04-14',
-        task_type: 'user_assistance',
-        prompt_tokens: Math.ceil(message.length / 4), // Rough estimate
-        completion_tokens: 0, // User message doesn't have completion
-        total_tokens: Math.ceil(message.length / 4),
-        cost_usd: 0.0001, // Minimal cost for processing user input
-        response_time_ms: 0,
-        success: true,
-        user_id: userId,
-        function_name: 'ai-user-assistant'
-      });
+    await supabase.from('openai_usage_logs').insert({
+      model_id: 'gpt-4.1-2025-04-14',
+      task_type: 'user_assistance',
+      prompt_tokens: Math.ceil(message.length / 4), // Rough estimate
+      completion_tokens: 0, // User message doesn't have completion
+      total_tokens: Math.ceil(message.length / 4),
+      cost_usd: 0.0001, // Minimal cost for processing user input
+      response_time_ms: 0,
+      success: true,
+      user_id: userId,
+      function_name: 'ai-user-assistant',
+    });
 
     // Save user message
     const { error: userMsgError } = await supabase
@@ -261,15 +302,15 @@ serve(async (req) => {
         session_id: sessionId,
         content: message,
         type: 'user',
-        metadata: { intent: intentAnalysis }
+        metadata: { intent: intentAnalysis },
       });
 
     if (userMsgError) {
       console.error('Error saving user message:', userMsgError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to save message' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Failed to save message' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Generate AI response
@@ -280,21 +321,18 @@ serve(async (req) => {
     const responseTime = endTime - startTime;
 
     // Log AI usage to OpenAI usage statistics
-    await supabase
-      .from('openai_usage_logs')
-      .insert({
-        model_id: 'gpt-4.1-2025-04-14',
-        task_type: 'user_assistance',
-        prompt_tokens: Math.ceil(userMessage.length / 4), // Rough estimate
-        completion_tokens: Math.ceil(aiResponse.length / 4), // Rough estimate  
-        total_tokens: Math.ceil((userMessage.length + aiResponse.length) / 4),
-        cost_usd: 0.001, // Estimated cost for nano model
-        response_time_ms: responseTime,
-        success: true,
-        user_id: userId,
-        function_name: 'ai-user-assistant'
-      });
-
+    await supabase.from('openai_usage_logs').insert({
+      model_id: 'gpt-4.1-2025-04-14',
+      task_type: 'user_assistance',
+      prompt_tokens: Math.ceil(userMessage.length / 4), // Rough estimate
+      completion_tokens: Math.ceil(aiResponse.length / 4), // Rough estimate
+      total_tokens: Math.ceil((userMessage.length + aiResponse.length) / 4),
+      cost_usd: 0.001, // Estimated cost for nano model
+      response_time_ms: responseTime,
+      success: true,
+      user_id: userId,
+      function_name: 'ai-user-assistant',
+    });
 
     // Save AI response
     const { error: aiMsgError } = await supabase
@@ -303,53 +341,53 @@ serve(async (req) => {
         session_id: sessionId,
         content: aiResponse,
         type: 'assistant',
-        metadata: { 
+        metadata: {
           intent: intentAnalysis.intent,
           model: 'gpt-4.1-2025-04-14',
           confidence: intentAnalysis.confidence,
-          response_time_ms: responseTime
-        }
+          response_time_ms: responseTime,
+        },
       });
 
     if (aiMsgError) {
       console.error('Error saving AI message:', aiMsgError);
       return new Response(
         JSON.stringify({ error: 'Failed to save AI response' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         response: aiResponse,
         intent: intentAnalysis.intent,
-        confidence: intentAnalysis.confidence
+        confidence: intentAnalysis.confidence,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Error in ai-user-assistant:', error);
-    
-    // Log error to OpenAI usage statistics
-    await supabase
-      .from('openai_usage_logs')
-      .insert({
-        model_id: 'gpt-4.1-2025-04-14',
-        task_type: 'user_assistance',
-        prompt_tokens: 0,
-        completion_tokens: 0,
-        total_tokens: 0,
-        cost_usd: 0,
-        response_time_ms: 0,
-        success: false,
-        error_message: error.message,
-        function_name: 'ai-user-assistant'
-      });
 
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    // Log error to OpenAI usage statistics
+    await supabase.from('openai_usage_logs').insert({
+      model_id: 'gpt-4.1-2025-04-14',
+      task_type: 'user_assistance',
+      prompt_tokens: 0,
+      completion_tokens: 0,
+      total_tokens: 0,
+      cost_usd: 0,
+      response_time_ms: 0,
+      success: false,
+      error_message: error.message,
+      function_name: 'ai-user-assistant',
+    });
+
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

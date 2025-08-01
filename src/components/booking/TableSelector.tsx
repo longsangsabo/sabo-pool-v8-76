@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { XCircle } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { XCircle } from 'lucide-react';
 
 interface TableSelectorProps {
   availableTables: number[];
@@ -12,28 +11,38 @@ interface TableSelectorProps {
   onSelectTable: (tableNumber: string) => void;
 }
 
-const TableSelector = ({ availableTables, selectedTable, loading, isHighContrast, onSelectTable }: TableSelectorProps) => {
+const TableSelector = ({
+  availableTables,
+  selectedTable,
+  loading,
+  isHighContrast,
+  onSelectTable,
+}: TableSelectorProps) => {
   return (
-    <div className="space-y-2">
-      <Label className={`${isHighContrast ? 'text-white' : 'text-white'} text-lg font-medium`}>
+    <div className='space-y-2'>
+      <Label
+        className={`${isHighContrast ? 'text-white' : 'text-white'} text-lg font-medium`}
+      >
         Chọn bàn *
       </Label>
       {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
-          <span className="ml-3 text-white">Đang kiểm tra bàn trống...</span>
+        <div className='flex items-center justify-center py-8'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400'></div>
+          <span className='ml-3 text-white'>Đang kiểm tra bàn trống...</span>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-3">
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((table) => {
+        <div className='grid grid-cols-4 gap-3'>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map(table => {
             const isAvailable = availableTables.includes(table);
             return (
               <Button
                 key={table}
-                type="button"
-                variant={selectedTable === table.toString() ? 'default' : 'outline'}
+                type='button'
+                variant={
+                  selectedTable === table.toString() ? 'default' : 'outline'
+                }
                 className={`min-h-[44px] text-lg font-medium ${
-                  isAvailable 
+                  isAvailable
                     ? selectedTable === table.toString()
                       ? 'bg-yellow-400 text-green-900 hover:bg-yellow-500'
                       : isHighContrast
@@ -45,7 +54,7 @@ const TableSelector = ({ availableTables, selectedTable, loading, isHighContrast
                 disabled={!isAvailable}
               >
                 Bàn {table}
-                {!isAvailable && <XCircle className="ml-1 h-4 w-4" />}
+                {!isAvailable && <XCircle className='ml-1 h-4 w-4' />}
               </Button>
             );
           })}

@@ -3,15 +3,49 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Plus, Search, UserCheck, UserX, Clock, Calendar } from 'lucide-react';
+import {
+  Users,
+  Plus,
+  Search,
+  UserCheck,
+  UserX,
+  Clock,
+  Calendar,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClubMember {
@@ -36,21 +70,23 @@ interface ClubMember {
 const addMemberSchema = z.object({
   user_id: z.string().min(1, 'Vui lòng chọn thành viên'),
   membership_type: z.string().min(1, 'Vui lòng chọn loại thành viên'),
-  membership_fee: z.coerce.number().min(0, 'Phí thành viên phải >= 0')
+  membership_fee: z.coerce.number().min(0, 'Phí thành viên phải >= 0'),
 });
 
 const statusColors = {
   active: 'bg-green-100 text-green-800',
   inactive: 'bg-yellow-100 text-yellow-800',
   suspended: 'bg-red-100 text-red-800',
-  expired: 'bg-gray-100 text-gray-800'
+  expired: 'bg-gray-100 text-gray-800',
 };
 
 interface MemberManagementTabProps {
   clubId: string;
 }
 
-const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => {
+const MemberManagementTab: React.FC<MemberManagementTabProps> = ({
+  clubId,
+}) => {
   const { toast } = useToast();
   const [members, setMembers] = useState<ClubMember[]>([]);
   const [availableUsers, setAvailableUsers] = useState<any[]>([]);
@@ -62,8 +98,8 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
     resolver: zodResolver(addMemberSchema),
     defaultValues: {
       membership_type: 'regular',
-      membership_fee: 0
-    }
+      membership_fee: 0,
+    },
   });
 
   const fetchMembers = async () => {
@@ -72,38 +108,49 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
     try {
       const { data, error } = await supabase
         .from('club_members')
-        .select(`
+        .select(
+          `
           *,
           profiles:user_id (
             full_name,
             phone,
             verified_rank
           )
-        `)
+        `
+        )
         .eq('club_id', clubId)
         .order('join_date', { ascending: false });
 
       if (error) throw error;
       // Filter out any records with query errors and transform to proper ClubMember type
-      const validMembers = data?.filter(member => {
-        if (!member.profiles || typeof member.profiles !== 'object') return false;
-        if ('error' in (member.profiles as any) || member.profiles === null || Array.isArray(member.profiles)) return false;
-        return !!(member.profiles as any)?.full_name;
-      }).map(member => ({
-        ...member,
-        profiles: {
-          full_name: (member.profiles as any)?.full_name || '',
-          phone: (member.profiles as any)?.phone || '',
-          verified_rank: (member.profiles as any)?.verified_rank || ''
-        }
-      })) || [];
+      const validMembers =
+        data
+          ?.filter(member => {
+            if (!member.profiles || typeof member.profiles !== 'object')
+              return false;
+            if (
+              'error' in (member.profiles as any) ||
+              member.profiles === null ||
+              Array.isArray(member.profiles)
+            )
+              return false;
+            return !!(member.profiles as any)?.full_name;
+          })
+          .map(member => ({
+            ...member,
+            profiles: {
+              full_name: (member.profiles as any)?.full_name || '',
+              phone: (member.profiles as any)?.phone || '',
+              verified_rank: (member.profiles as any)?.verified_rank || '',
+            },
+          })) || [];
       setMembers(validMembers);
     } catch (error) {
       console.error('Error fetching members:', error);
       toast({
         title: 'Lỗi',
         description: 'Không thể tải danh sách thành viên',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -146,22 +193,20 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
     try {
       const membershipNumber = `CLB${clubId.slice(-6).toUpperCase()}${Date.now().toString().slice(-4)}`;
 
-      const { error } = await supabase
-        .from('club_members')
-        .insert({
-          club_id: clubId,
-          user_id: values.user_id,
-          membership_type: values.membership_type,
-          membership_number: membershipNumber,
-          membership_fee: values.membership_fee,
-          status: 'active'
-        });
+      const { error } = await supabase.from('club_members').insert({
+        club_id: clubId,
+        user_id: values.user_id,
+        membership_type: values.membership_type,
+        membership_number: membershipNumber,
+        membership_fee: values.membership_fee,
+        status: 'active',
+      });
 
       if (error) throw error;
 
       toast({
         title: 'Thành công',
-        description: 'Đã thêm thành viên mới'
+        description: 'Đã thêm thành viên mới',
       });
 
       setIsAddDialogOpen(false);
@@ -172,12 +217,15 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
       toast({
         title: 'Lỗi',
         description: 'Không thể thêm thành viên',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
 
-  const handleUpdateMemberStatus = async (memberId: string, newStatus: string) => {
+  const handleUpdateMemberStatus = async (
+    memberId: string,
+    newStatus: string
+  ) => {
     try {
       const { error } = await supabase
         .from('club_members')
@@ -188,7 +236,7 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
 
       toast({
         title: 'Thành công',
-        description: 'Đã cập nhật trạng thái thành viên'
+        description: 'Đã cập nhật trạng thái thành viên',
       });
 
       fetchMembers();
@@ -197,30 +245,37 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
       toast({
         title: 'Lỗi',
         description: 'Không thể cập nhật trạng thái',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
 
-  const filteredMembers = members.filter(member =>
-    member.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.profiles?.phone?.includes(searchTerm)
+  const filteredMembers = members.filter(
+    member =>
+      member.profiles?.full_name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      member.membership_number
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      member.profiles?.phone?.includes(searchTerm)
   );
 
   const stats = {
     total: members.length,
     active: members.filter(m => m.status === 'active').length,
-    thisMonth: members.filter(m => 
-      new Date(m.join_date).getMonth() === new Date().getMonth()
+    thisMonth: members.filter(
+      m => new Date(m.join_date).getMonth() === new Date().getMonth()
     ).length,
-    totalRevenue: members.reduce((sum, m) => sum + m.membership_fee, 0)
+    totalRevenue: members.reduce((sum, m) => sum + m.membership_fee, 0),
   };
 
   const getStatusBadge = (status: string) => {
-    const colorClass = statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800';
+    const colorClass =
+      statusColors[status as keyof typeof statusColors] ||
+      'bg-gray-100 text-gray-800';
     return (
-      <Badge variant="secondary" className={colorClass}>
+      <Badge variant='secondary' className={colorClass}>
         {status === 'active' && 'Hoạt động'}
         {status === 'inactive' && 'Không hoạt động'}
         {status === 'suspended' && 'Tạm ngưng'}
@@ -231,14 +286,14 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className='space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
-              <CardContent className="pt-6">
-                <div className="animate-pulse">
-                  <div className="h-8 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
+              <CardContent className='pt-6'>
+                <div className='animate-pulse'>
+                  <div className='h-8 bg-gray-200 rounded mb-2'></div>
+                  <div className='h-4 bg-gray-200 rounded'></div>
                 </div>
               </CardContent>
             </Card>
@@ -249,42 +304,50 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
         <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Users className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-              <p className="text-2xl font-bold">{stats.total}</p>
-              <p className="text-sm text-muted-foreground">Tổng thành viên</p>
+          <CardContent className='pt-6'>
+            <div className='text-center'>
+              <Users className='w-8 h-8 mx-auto mb-2 text-blue-500' />
+              <p className='text-2xl font-bold'>{stats.total}</p>
+              <p className='text-sm text-muted-foreground'>Tổng thành viên</p>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <UserCheck className="w-8 h-8 mx-auto mb-2 text-green-500" />
-              <p className="text-2xl font-bold">{stats.active}</p>
-              <p className="text-sm text-muted-foreground">Đang hoạt động</p>
+          <CardContent className='pt-6'>
+            <div className='text-center'>
+              <UserCheck className='w-8 h-8 mx-auto mb-2 text-green-500' />
+              <p className='text-2xl font-bold'>{stats.active}</p>
+              <p className='text-sm text-muted-foreground'>Đang hoạt động</p>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Calendar className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-              <p className="text-2xl font-bold">{stats.thisMonth}</p>
-              <p className="text-sm text-muted-foreground">Tham gia tháng này</p>
+          <CardContent className='pt-6'>
+            <div className='text-center'>
+              <Calendar className='w-8 h-8 mx-auto mb-2 text-purple-500' />
+              <p className='text-2xl font-bold'>{stats.thisMonth}</p>
+              <p className='text-sm text-muted-foreground'>
+                Tham gia tháng này
+              </p>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="w-8 h-8 mx-auto mb-2 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">₫</div>
-              <p className="text-2xl font-bold">{stats.totalRevenue.toLocaleString('vi-VN')}</p>
-              <p className="text-sm text-muted-foreground">Doanh thu thành viên</p>
+          <CardContent className='pt-6'>
+            <div className='text-center'>
+              <div className='w-8 h-8 mx-auto mb-2 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold'>
+                ₫
+              </div>
+              <p className='text-2xl font-bold'>
+                {stats.totalRevenue.toLocaleString('vi-VN')}
+              </p>
+              <p className='text-sm text-muted-foreground'>
+                Doanh thu thành viên
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -293,22 +356,22 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
       {/* Search and Add Member */}
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
             <CardTitle>Quản lý thành viên</CardTitle>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <div className='flex flex-col sm:flex-row gap-2 w-full sm:w-auto'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
                 <Input
-                  placeholder="Tìm kiếm thành viên..."
+                  placeholder='Tìm kiếm thành viên...'
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className='pl-10 w-full sm:w-64'
                 />
               </div>
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
                   <Button>
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className='w-4 h-4 mr-2' />
                     Thêm thành viên
                   </Button>
                 </DialogTrigger>
@@ -317,22 +380,31 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
                     <DialogTitle>Thêm thành viên mới</DialogTitle>
                   </DialogHeader>
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleAddMember)} className="space-y-4">
+                    <form
+                      onSubmit={form.handleSubmit(handleAddMember)}
+                      className='space-y-4'
+                    >
                       <FormField
                         control={form.control}
-                        name="user_id"
+                        name='user_id'
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Chọn người dùng</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Chọn người dùng" />
+                                  <SelectValue placeholder='Chọn người dùng' />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {availableUsers.map((user) => (
-                                  <SelectItem key={user.user_id} value={user.user_id}>
+                                {availableUsers.map(user => (
+                                  <SelectItem
+                                    key={user.user_id}
+                                    value={user.user_id}
+                                  >
                                     {user.full_name} ({user.phone})
                                   </SelectItem>
                                 ))}
@@ -342,23 +414,26 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
                           </FormItem>
                         )}
                       />
-                      
+
                       <FormField
                         control={form.control}
-                        name="membership_type"
+                        name='membership_type'
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Loại thành viên</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Chọn loại thành viên" />
+                                  <SelectValue placeholder='Chọn loại thành viên' />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="regular">Thường</SelectItem>
-                                <SelectItem value="vip">VIP</SelectItem>
-                                <SelectItem value="premium">Premium</SelectItem>
+                                <SelectItem value='regular'>Thường</SelectItem>
+                                <SelectItem value='vip'>VIP</SelectItem>
+                                <SelectItem value='premium'>Premium</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -368,25 +443,27 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
 
                       <FormField
                         control={form.control}
-                        name="membership_fee"
+                        name='membership_fee'
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Phí thành viên (VND)</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder="0" {...field} />
+                              <Input type='number' placeholder='0' {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      <div className="flex justify-end space-x-2">
-                        <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                      <div className='flex justify-end space-x-2'>
+                        <Button
+                          type='button'
+                          variant='outline'
+                          onClick={() => setIsAddDialogOpen(false)}
+                        >
                           Hủy
                         </Button>
-                        <Button type="submit">
-                          Thêm thành viên
-                        </Button>
+                        <Button type='submit'>Thêm thành viên</Button>
                       </div>
                     </form>
                   </Form>
@@ -397,10 +474,12 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
         </CardHeader>
         <CardContent>
           {filteredMembers.length === 0 ? (
-            <div className="text-center py-8">
-              <Users className="w-12 h-12 mx-auto mb-4 text-muted" />
-              <p className="text-muted-foreground">
-                {searchTerm ? 'Không tìm thấy thành viên phù hợp' : 'Chưa có thành viên nào'}
+            <div className='text-center py-8'>
+              <Users className='w-12 h-12 mx-auto mb-4 text-muted' />
+              <p className='text-muted-foreground'>
+                {searchTerm
+                  ? 'Không tìm thấy thành viên phù hợp'
+                  : 'Chưa có thành viên nào'}
               </p>
             </div>
           ) : (
@@ -419,19 +498,25 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredMembers.map((member) => (
+                {filteredMembers.map(member => (
                   <TableRow key={member.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{member.profiles?.full_name}</div>
-                        <div className="text-sm text-muted-foreground">{member.profiles?.phone}</div>
+                        <div className='font-medium'>
+                          {member.profiles?.full_name}
+                        </div>
+                        <div className='text-sm text-muted-foreground'>
+                          {member.profiles?.phone}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{member.membership_number}</Badge>
+                      <Badge variant='outline'>
+                        {member.membership_number}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary">
+                      <Badge variant='secondary'>
                         {member.membership_type === 'regular' && 'Thường'}
                         {member.membership_type === 'vip' && 'VIP'}
                         {member.membership_type === 'premium' && 'Premium'}
@@ -439,9 +524,11 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
                     </TableCell>
                     <TableCell>
                       {member.profiles?.verified_rank ? (
-                        <Badge variant="default">{member.profiles.verified_rank}</Badge>
+                        <Badge variant='default'>
+                          {member.profiles.verified_rank}
+                        </Badge>
                       ) : (
-                        <span className="text-muted-foreground">Chưa có</span>
+                        <span className='text-muted-foreground'>Chưa có</span>
                       )}
                     </TableCell>
                     <TableCell>{getStatusBadge(member.status)}</TableCell>
@@ -449,31 +536,36 @@ const MemberManagementTab: React.FC<MemberManagementTabProps> = ({ clubId }) => 
                       {new Date(member.join_date).toLocaleDateString('vi-VN')}
                     </TableCell>
                     <TableCell>
-                      {member.last_visit ? 
-                        new Date(member.last_visit).toLocaleDateString('vi-VN') : 
-                        'Chưa có'
-                      }
+                      {member.last_visit
+                        ? new Date(member.last_visit).toLocaleDateString(
+                            'vi-VN'
+                          )
+                        : 'Chưa có'}
                     </TableCell>
                     <TableCell>
                       {member.membership_fee.toLocaleString('vi-VN')} ₫
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-1">
+                      <div className='flex space-x-1'>
                         {member.status === 'active' ? (
                           <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleUpdateMemberStatus(member.id, 'suspended')}
+                            variant='outline'
+                            size='sm'
+                            onClick={() =>
+                              handleUpdateMemberStatus(member.id, 'suspended')
+                            }
                           >
-                            <UserX className="w-4 h-4" />
+                            <UserX className='w-4 h-4' />
                           </Button>
                         ) : (
                           <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleUpdateMemberStatus(member.id, 'active')}
+                            variant='outline'
+                            size='sm'
+                            onClick={() =>
+                              handleUpdateMemberStatus(member.id, 'active')
+                            }
                           >
-                            <UserCheck className="w-4 h-4" />
+                            <UserCheck className='w-4 h-4' />
                           </Button>
                         )}
                       </div>

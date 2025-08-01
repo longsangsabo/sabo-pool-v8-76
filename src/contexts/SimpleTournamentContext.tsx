@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -48,15 +54,27 @@ interface SimpleTournamentContextType {
   loading: boolean;
   error: string | null;
   refreshTournaments: () => Promise<void>;
-  calculateRewards: (tournamentId: string, rank?: RankCode) => TournamentRewards;
-  saveTournamentRewards: (tournamentId: string, rewards: TournamentRewards) => Promise<boolean>;
+  calculateRewards: (
+    tournamentId: string,
+    rank?: RankCode
+  ) => TournamentRewards;
+  saveTournamentRewards: (
+    tournamentId: string,
+    rewards: TournamentRewards
+  ) => Promise<boolean>;
 }
 
-const SimpleTournamentContext = createContext<SimpleTournamentContextType | undefined>(undefined);
+const SimpleTournamentContext = createContext<
+  SimpleTournamentContextType | undefined
+>(undefined);
 
-export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SimpleTournamentProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [selectedTournamentId, setSelectedTournamentId] = useState<string | null>(null);
+  const [selectedTournamentId, setSelectedTournamentId] = useState<
+    string | null
+  >(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
@@ -70,10 +88,12 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
 
       const { data, error: fetchError } = await supabase
         .from('tournaments')
-        .select(`
+        .select(
+          `
           *,
           registrations:tournament_registrations(count)
-        `)
+        `
+        )
         .eq('created_by', user.id)
         .order('created_at', { ascending: false });
 
@@ -85,13 +105,15 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
         club_name: 'Unknown Club',
         club_address: 'Unknown Address',
         banner_image: (tournament as any).banner_image || '',
-        allow_all_ranks: tournament.allow_all_ranks || false
+        allow_all_ranks: tournament.allow_all_ranks || false,
       }));
 
       setTournaments(processedTournaments);
     } catch (err) {
       console.error('Error fetching tournaments:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch tournaments');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch tournaments'
+      );
       toast.error('Lỗi khi tải danh sách giải đấu');
     } finally {
       setLoading(false);
@@ -107,91 +129,125 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
   }, [fetchTournaments]);
 
   // Updated calculateRewards to use RewardsService
-  const calculateRewards = useCallback((tournamentId: string, rank: RankCode = 'K'): TournamentRewards => {
-    const tournament = tournaments.find(t => t.id === tournamentId);
-    if (!tournament) {
-      console.warn('Tournament not found for rewards calculation:', tournamentId);
-      return { positions: [], specialAwards: [], totalPrize: 0, showPrizes: true }; // Simple fallback
-    }
-
-    // Use the TournamentRewardsManager hook to load rewards from tournament_prize_tiers
-    console.log('🔄 [SimpleTournamentContext] Loading rewards from tournament_prize_tiers');
-    
-    function calculateDefaultRewards(tournament: Tournament): TournamentRewards {
-      return {
-        positions: [
-          { position: 1, name: 'Vô địch', cashPrize: tournament.prize_pool * 0.5, eloPoints: 100, spaPoints: 500, items: [], isVisible: true },
-          { position: 2, name: 'Á quân', cashPrize: tournament.prize_pool * 0.3, eloPoints: 75, spaPoints: 300, items: [], isVisible: true }
-        ],
-        specialAwards: [],
-        totalPrize: tournament.prize_pool || 0,
-        showPrizes: true
-      };
-    }
-    
-    const calculatedRewards = calculateDefaultRewards(tournament);
-    return calculatedRewards;
-
-  }, [tournaments]);
-
-  // New function to save tournament rewards
-  const saveTournamentRewards = useCallback(async (
-    tournamentId: string, 
-    rewards: TournamentRewards
-  ): Promise<boolean> => {
-    try {
-      console.log('💾 Saving tournament rewards:', { tournamentId, rewards });
-      
-      // Simple validation
-      if (!rewards || typeof rewards !== 'object') {
-        console.error('❌ Invalid rewards data:', rewards);
-        toast.error('Dữ liệu phần thưởng không hợp lệ');
-        return false;
+  const calculateRewards = useCallback(
+    (tournamentId: string, rank: RankCode = 'K'): TournamentRewards => {
+      const tournament = tournaments.find(t => t.id === tournamentId);
+      if (!tournament) {
+        console.warn(
+          'Tournament not found for rewards calculation:',
+          tournamentId
+        );
+        return {
+          positions: [],
+          specialAwards: [],
+          totalPrize: 0,
+          showPrizes: true,
+        }; // Simple fallback
       }
 
-      console.log('✅ Rewards validation passed, updating database...');
-      
-      const { error } = await supabase
-        .from('tournaments')
-        .update({
-          // Note: saving to tournament_prize_tiers instead
-          prize_pool: rewards.totalPrize,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', tournamentId);
-
-      if (error) {
-        console.error('❌ Database update error:', error);
-        throw error;
-      }
-
-      console.log('✅ Database updated successfully');
-
-      // Update local state
-      setTournaments(prevTournaments => 
-        prevTournaments.map(tournament =>
-          tournament.id === tournamentId
-            ? { 
-                ...tournament, 
-                // Note: saving to tournament_prize_tiers instead
-                prize_pool: rewards.totalPrize,
-                updated_at: new Date().toISOString()
-              }
-            : tournament
-        )
+      // Use the TournamentRewardsManager hook to load rewards from tournament_prize_tiers
+      console.log(
+        '🔄 [SimpleTournamentContext] Loading rewards from tournament_prize_tiers'
       );
 
-      console.log('✅ Local state updated');
-      toast.success('Đã lưu phần thưởng giải đấu');
-      return true;
-    } catch (error) {
-      console.error('❌ Error saving tournament rewards:', error);
-      toast.error('Lỗi khi lưu phần thưởng giải đấu');
-      return false;
-    }
-  }, []);
+      function calculateDefaultRewards(
+        tournament: Tournament
+      ): TournamentRewards {
+        return {
+          positions: [
+            {
+              position: 1,
+              name: 'Vô địch',
+              cashPrize: tournament.prize_pool * 0.5,
+              eloPoints: 100,
+              spaPoints: 500,
+              items: [],
+              isVisible: true,
+            },
+            {
+              position: 2,
+              name: 'Á quân',
+              cashPrize: tournament.prize_pool * 0.3,
+              eloPoints: 75,
+              spaPoints: 300,
+              items: [],
+              isVisible: true,
+            },
+          ],
+          specialAwards: [],
+          totalPrize: tournament.prize_pool || 0,
+          showPrizes: true,
+        };
+      }
 
-  const selectedTournament = tournaments.find(t => t.id === selectedTournamentId) || null;
+      const calculatedRewards = calculateDefaultRewards(tournament);
+      return calculatedRewards;
+    },
+    [tournaments]
+  );
+
+  // New function to save tournament rewards
+  const saveTournamentRewards = useCallback(
+    async (
+      tournamentId: string,
+      rewards: TournamentRewards
+    ): Promise<boolean> => {
+      try {
+        console.log('💾 Saving tournament rewards:', { tournamentId, rewards });
+
+        // Simple validation
+        if (!rewards || typeof rewards !== 'object') {
+          console.error('❌ Invalid rewards data:', rewards);
+          toast.error('Dữ liệu phần thưởng không hợp lệ');
+          return false;
+        }
+
+        console.log('✅ Rewards validation passed, updating database...');
+
+        const { error } = await supabase
+          .from('tournaments')
+          .update({
+            // Note: saving to tournament_prize_tiers instead
+            prize_pool: rewards.totalPrize,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', tournamentId);
+
+        if (error) {
+          console.error('❌ Database update error:', error);
+          throw error;
+        }
+
+        console.log('✅ Database updated successfully');
+
+        // Update local state
+        setTournaments(prevTournaments =>
+          prevTournaments.map(tournament =>
+            tournament.id === tournamentId
+              ? {
+                  ...tournament,
+                  // Note: saving to tournament_prize_tiers instead
+                  prize_pool: rewards.totalPrize,
+                  updated_at: new Date().toISOString(),
+                }
+              : tournament
+          )
+        );
+
+        console.log('✅ Local state updated');
+        toast.success('Đã lưu phần thưởng giải đấu');
+        return true;
+      } catch (error) {
+        console.error('❌ Error saving tournament rewards:', error);
+        toast.error('Lỗi khi lưu phần thưởng giải đấu');
+        return false;
+      }
+    },
+    []
+  );
+
+  const selectedTournament =
+    tournaments.find(t => t.id === selectedTournamentId) || null;
 
   const value: SimpleTournamentContextType = {
     tournaments,
@@ -202,7 +258,7 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
     error,
     refreshTournaments,
     calculateRewards,
-    saveTournamentRewards
+    saveTournamentRewards,
   };
 
   return (
@@ -215,7 +271,9 @@ export const SimpleTournamentProvider: React.FC<{ children: React.ReactNode }> =
 export const useSimpleTournament = () => {
   const context = useContext(SimpleTournamentContext);
   if (!context) {
-    throw new Error('useSimpleTournament must be used within SimpleTournamentProvider');
+    throw new Error(
+      'useSimpleTournament must be used within SimpleTournamentProvider'
+    );
   }
   return context;
 };

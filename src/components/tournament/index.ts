@@ -1,4 +1,3 @@
-
 export { TournamentBracket } from './TournamentBracket';
 export { BracketMatch } from './BracketMatch';
 export { TournamentBracketFlow } from './TournamentBracketFlow';

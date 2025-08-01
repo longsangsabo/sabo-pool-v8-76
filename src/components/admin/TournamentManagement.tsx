@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { 
+import {
   Search,
   RefreshCw,
   Trophy,
@@ -15,7 +15,7 @@ import {
   DollarSign,
   Eye,
   Edit,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 // Tournament service removed - using direct Supabase calls instead
 import { TournamentActions } from './TournamentActions';
@@ -34,7 +34,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 
 const TournamentManagement: React.FC = () => {
   const [tournaments, setTournaments] = useState<EnhancedTournament[]>([]);
@@ -49,42 +49,49 @@ const TournamentManagement: React.FC = () => {
   const fetchTournaments = async () => {
     try {
       setLoading(true);
-      
+
       let query = supabase.from('tournaments').select('*');
-      
+
       if (showDeleted) {
         query = query.not('deleted_at', 'is', null);
       } else {
         query = query.is('deleted_at', null);
       }
-      
+
       if (searchTerm.trim()) {
         query = query.ilike('name', `%${searchTerm}%`);
       }
-      
-      const { data, error } = await query.limit(50).order('created_at', { ascending: false });
-      
+
+      const { data, error } = await query
+        .limit(50)
+        .order('created_at', { ascending: false });
+
       if (error) throw error;
-      
+
       // Transform database data to EnhancedTournament format
       const enhancedTournaments = (data || []).map(tournament => {
         // Use tournament_prize_tiers instead of prize_distribution
-        let rewards = { 
-          positions: [], 
-          specialAwards: [], 
-          totalPrize: tournament.prize_pool || 0, 
-          showPrizes: true 
+        const rewards = {
+          positions: [],
+          specialAwards: [],
+          totalPrize: tournament.prize_pool || 0,
+          showPrizes: true,
         };
 
         return {
           ...tournament,
           tournament_type: tournament.tournament_type as any,
           rewards,
-          available_slots: (tournament.max_participants || 0) - (tournament.current_participants || 0),
-          registration_status: tournament.status === 'registration_open' ? 'open' as const : 'closed' as const
+          available_slots:
+            (tournament.max_participants || 0) -
+            (tournament.current_participants || 0),
+          registration_status:
+            tournament.status === 'registration_open'
+              ? ('open' as const)
+              : ('closed' as const),
         };
       }) as unknown as EnhancedTournament[];
-      
+
       setTournaments(enhancedTournaments);
       console.log('Fetched tournaments:', enhancedTournaments.length);
     } catch (error) {
@@ -106,13 +113,19 @@ const TournamentManagement: React.FC = () => {
           max_participants: 16,
           current_participants: 8,
           registration_start: new Date().toISOString(),
-          registration_end: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_start: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_end: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000).toISOString(),
+          registration_end: new Date(
+            Date.now() + 6 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_start: new Date(
+            Date.now() + 10 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_end: new Date(
+            Date.now() + 10 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000
+          ).toISOString(),
           venue_address: 'CLB Billiards Sài Gòn, Quận 1, TP.HCM',
           entry_fee: 50000,
           prize_pool: 800000,
-          status: 'registration_open'
+          status: 'registration_open',
         },
         {
           name: 'Giải Pool 9 Ball Professional',
@@ -120,15 +133,23 @@ const TournamentManagement: React.FC = () => {
           tournament_type: 'double_elimination',
           max_participants: 32,
           current_participants: 12,
-          registration_start: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-          registration_end: new Date(Date.now() + 13 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_start: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_end: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000).toISOString(),
+          registration_start: new Date(
+            Date.now() + 3 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          registration_end: new Date(
+            Date.now() + 13 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_start: new Date(
+            Date.now() + 21 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_end: new Date(
+            Date.now() + 23 * 24 * 60 * 60 * 1000
+          ).toISOString(),
           venue_address: 'CLB Pool Arena, Quận 3, TP.HCM',
           entry_fee: 200000,
           prize_pool: 6400000,
-          status: 'upcoming'
-        }
+          status: 'upcoming',
+        },
       ];
 
       let successCount = 0;
@@ -141,7 +162,7 @@ const TournamentManagement: React.FC = () => {
           successCount++;
         }
       }
-      
+
       if (successCount > 0) {
         toast.success('Đã tạo dữ liệu giải đấu mẫu');
         // Refresh lại danh sách sau khi tạo thành công
@@ -157,7 +178,7 @@ const TournamentManagement: React.FC = () => {
   const permanentlyDeleteAllTournaments = async () => {
     try {
       setLoading(true);
-      
+
       // Bước 1: Lấy danh sách tournament IDs cần xóa
       const { data: tournamentsToDelete, error: fetchError } = await supabase
         .from('tournaments')
@@ -185,13 +206,18 @@ const TournamentManagement: React.FC = () => {
         .in('id', tournamentIds);
 
       if (tournamentError) {
-        console.error('Error permanently deleting tournaments:', tournamentError);
+        console.error(
+          'Error permanently deleting tournaments:',
+          tournamentError
+        );
         toast.error('Lỗi khi xóa vĩnh viễn giải đấu');
         return;
       }
 
-      toast.success(`Đã xóa vĩnh viễn ${tournamentIds.length} giải đấu và tất cả dữ liệu liên quan`);
-      
+      toast.success(
+        `Đã xóa vĩnh viễn ${tournamentIds.length} giải đấu và tất cả dữ liệu liên quan`
+      );
+
       // Refresh lại danh sách
       fetchTournaments();
     } catch (error) {
@@ -228,7 +254,7 @@ const TournamentManagement: React.FC = () => {
         amount = numAmount;
       }
     }
-    
+
     if (amount >= 1000000) {
       return `${(amount / 1000000).toFixed(1)}M VND`;
     } else if (amount >= 1000) {
@@ -266,18 +292,25 @@ const TournamentManagement: React.FC = () => {
       const now = new Date();
       const registrationEnd = new Date(tournament.registration_end);
       const tournamentStart = new Date(tournament.tournament_start);
-      
+
       // Nếu đã qua thời gian đăng ký và tournament chưa bắt đầu
-      if (now > registrationEnd && now < tournamentStart && status === 'registration_open') {
+      if (
+        now > registrationEnd &&
+        now < tournamentStart &&
+        status === 'registration_open'
+      ) {
         return 'Đã đóng đăng ký';
       }
-      
+
       // Nếu đã đến thời gian tournament bắt đầu
-      if (now >= tournamentStart && (status === 'registration_open' || status === 'registration_closed')) {
+      if (
+        now >= tournamentStart &&
+        (status === 'registration_open' || status === 'registration_closed')
+      ) {
         return 'Đang thi đấu';
       }
     }
-    
+
     switch (status) {
       case 'upcoming':
         return 'Sắp diễn ra';
@@ -298,41 +331,43 @@ const TournamentManagement: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className='flex items-center justify-center h-64'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className='flex justify-between items-center'>
             <div>
               <CardTitle>Quản lý giải đấu</CardTitle>
-              <p className="text-muted-foreground mt-1">
+              <p className='text-muted-foreground mt-1'>
                 Xem, xóa và khôi phục giải đấu
               </p>
             </div>
-            <Button onClick={fetchTournaments} variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
+            <Button onClick={fetchTournaments} variant='outline'>
+              <RefreshCw className='h-4 w-4 mr-2' />
               Làm mới
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {/* Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center space-x-2">
+          <div className='flex flex-col sm:flex-row gap-4 items-center justify-between'>
+            <div className='flex items-center gap-4'>
+              <div className='flex items-center space-x-2'>
                 <Switch
-                  id="show-deleted"
+                  id='show-deleted'
                   checked={showDeleted}
                   onCheckedChange={setShowDeleted}
                 />
-                <Label htmlFor="show-deleted">
-                  {showDeleted ? 'Hiển thị giải đấu đã xóa' : 'Hiển thị giải đấu hoạt động'}
+                <Label htmlFor='show-deleted'>
+                  {showDeleted
+                    ? 'Hiển thị giải đấu đã xóa'
+                    : 'Hiển thị giải đấu hoạt động'}
                 </Label>
               </div>
 
@@ -340,27 +375,33 @@ const TournamentManagement: React.FC = () => {
               {showDeleted && tournaments.length > 0 && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
-                      <Trash2 className="h-4 w-4 mr-2" />
+                    <Button variant='destructive' size='sm'>
+                      <Trash2 className='h-4 w-4 mr-2' />
                       Xóa vĩnh viễn tất cả
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>⚠️ Xác nhận xóa vĩnh viễn</AlertDialogTitle>
+                      <AlertDialogTitle>
+                        ⚠️ Xác nhận xóa vĩnh viễn
+                      </AlertDialogTitle>
                       <AlertDialogDescription>
-                        Bạn có chắc chắn muốn xóa vĩnh viễn tất cả {tournaments.length} giải đấu đã bị xóa?
+                        Bạn có chắc chắn muốn xóa vĩnh viễn tất cả{' '}
+                        {tournaments.length} giải đấu đã bị xóa?
                         <br />
-                        <strong className="text-red-600">Hành động này không thể hoàn tác!</strong>
+                        <strong className='text-red-600'>
+                          Hành động này không thể hoàn tác!
+                        </strong>
                         <br />
-                        Tất cả dữ liệu liên quan (matches, registrations, etc.) sẽ bị xóa khỏi database.
+                        Tất cả dữ liệu liên quan (matches, registrations, etc.)
+                        sẽ bị xóa khỏi database.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Hủy</AlertDialogCancel>
-                      <AlertDialogAction 
+                      <AlertDialogAction
                         onClick={permanentlyDeleteAllTournaments}
-                        className="bg-red-600 hover:bg-red-700"
+                        className='bg-red-600 hover:bg-red-700'
                       >
                         Xóa vĩnh viễn tất cả
                       </AlertDialogAction>
@@ -369,86 +410,96 @@ const TournamentManagement: React.FC = () => {
                 </AlertDialog>
               )}
             </div>
-            
-            <div className="flex gap-2">
+
+            <div className='flex gap-2'>
               <Input
-                placeholder="Tìm kiếm giải đấu..."
+                placeholder='Tìm kiếm giải đấu...'
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-64"
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onChange={e => setSearchTerm(e.target.value)}
+                className='w-64'
+                onKeyPress={e => e.key === 'Enter' && handleSearch()}
               />
-              <Button onClick={handleSearch} variant="outline">
-                <Search className="h-4 w-4" />
+              <Button onClick={handleSearch} variant='outline'>
+                <Search className='h-4 w-4' />
               </Button>
             </div>
           </div>
 
           {/* Tournament List */}
-          <div className="space-y-4">
-            {tournaments.map((tournament) => (
-              <Card key={tournament.id} className={`hover:shadow-md transition-shadow ${showDeleted ? 'bg-red-50 border-red-200' : ''}`}>
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="text-lg font-semibold">{tournament.name}</h3>
+          <div className='space-y-4'>
+            {tournaments.map(tournament => (
+              <Card
+                key={tournament.id}
+                className={`hover:shadow-md transition-shadow ${showDeleted ? 'bg-red-50 border-red-200' : ''}`}
+              >
+                <CardContent className='p-6'>
+                  <div className='flex items-start justify-between'>
+                    <div className='flex-1'>
+                      <div className='flex items-center gap-3 mb-3'>
+                        <h3 className='text-lg font-semibold'>
+                          {tournament.name}
+                        </h3>
                         <Badge className={getStatusColor(tournament.status)}>
                           {getStatusText(tournament.status, tournament)}
                         </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {tournament.tournament_type === 'double_elimination' ? 'Double Elimination' : 'Single Elimination'}
+                        <Badge variant='outline' className='text-xs'>
+                          {tournament.tournament_type === 'double_elimination'
+                            ? 'Double Elimination'
+                            : 'Single Elimination'}
                         </Badge>
                         {showDeleted && (
-                          <Badge variant="destructive">
-                            Đã xóa
-                          </Badge>
+                          <Badge variant='destructive'>Đã xóa</Badge>
                         )}
                       </div>
-                      
+
                       {tournament.description && (
-                        <p className="text-muted-foreground mb-3 line-clamp-2">
+                        <p className='text-muted-foreground mb-3 line-clamp-2'>
                           {tournament.description}
                         </p>
                       )}
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
+                        <div className='flex items-center gap-2'>
+                          <Calendar className='h-4 w-4 text-muted-foreground' />
                           <span>{formatDate(tournament.tournament_start)}</span>
                         </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-muted-foreground" />
+
+                        <div className='flex items-center gap-2'>
+                          <Users className='h-4 w-4 text-muted-foreground' />
                           <span>
-                            {tournament.current_participants}/{tournament.max_participants} người
+                            {tournament.current_participants}/
+                            {tournament.max_participants} người
                           </span>
                         </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="h-4 w-4 text-muted-foreground" />
+
+                        <div className='flex items-center gap-2'>
+                          <DollarSign className='h-4 w-4 text-muted-foreground' />
                           <span>{formatCurrency(tournament.prize_pool)}</span>
                         </div>
-                        
+
                         {tournament.venue_address && (
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <span className="truncate">{tournament.venue_address}</span>
+                          <div className='flex items-center gap-2'>
+                            <MapPin className='h-4 w-4 text-muted-foreground' />
+                            <span className='truncate'>
+                              {tournament.venue_address}
+                            </span>
                           </div>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className='flex items-center gap-2 ml-4'>
                       <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => window.open(`/tournaments/${tournament.id}`, '_blank')}
+                        variant='outline'
+                        size='sm'
+                        onClick={() =>
+                          window.open(`/tournaments/${tournament.id}`, '_blank')
+                        }
                       >
-                        <Eye className="w-4 h-4 mr-1" />
+                        <Eye className='w-4 h-4 mr-1' />
                         Xem
                       </Button>
-                      
+
                       {/* Force Start Button - for testing purposes */}
                       {!showDeleted && (
                         <ForceStartTournamentButton
@@ -458,7 +509,7 @@ const TournamentManagement: React.FC = () => {
                           onStatusChanged={handleTournamentUpdated}
                         />
                       )}
-                      
+
                       {/* Status Control Button - hiển thị nút điều khiển trạng thái */}
                       {!showDeleted && (
                         <TournamentStatusControlButton
@@ -468,8 +519,8 @@ const TournamentManagement: React.FC = () => {
                           onStatusChanged={handleTournamentUpdated}
                         />
                       )}
-                      
-                       <TournamentActions />
+
+                      <TournamentActions />
                     </div>
                   </div>
                 </CardContent>
@@ -479,20 +530,21 @@ const TournamentManagement: React.FC = () => {
 
           {tournaments.length === 0 && (
             <Card>
-              <CardContent className="p-8 text-center">
-                <Trophy className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">
-                  {showDeleted ? 'Không có giải đấu nào đã bị xóa' : 'Không có giải đấu nào'}
+              <CardContent className='p-8 text-center'>
+                <Trophy className='h-12 w-12 text-muted-foreground mx-auto mb-4' />
+                <h3 className='text-lg font-medium mb-2'>
+                  {showDeleted
+                    ? 'Không có giải đấu nào đã bị xóa'
+                    : 'Không có giải đấu nào'}
                 </h3>
-                <p className="text-muted-foreground mb-4">
-                  {showDeleted 
+                <p className='text-muted-foreground mb-4'>
+                  {showDeleted
                     ? 'Tất cả giải đấu đang hoạt động bình thường'
-                    : 'Hệ thống sẽ tự động tạo dữ liệu mẫu để bạn có thể thử nghiệm'
-                  }
+                    : 'Hệ thống sẽ tự động tạo dữ liệu mẫu để bạn có thể thử nghiệm'}
                 </p>
                 {!showDeleted && (
-                  <Button onClick={createSampleTournaments} variant="outline">
-                    <Trophy className="h-4 w-4 mr-2" />
+                  <Button onClick={createSampleTournaments} variant='outline'>
+                    <Trophy className='h-4 w-4 mr-2' />
                     Tạo dữ liệu mẫu
                   </Button>
                 )}

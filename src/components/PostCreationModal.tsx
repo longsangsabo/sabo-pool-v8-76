@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { X, Camera, Trophy, Zap, Star } from 'lucide-react';
 import {
@@ -126,7 +125,13 @@ const PostCreationModal = ({
           {/* Post Type Selection */}
           <Select
             value={postType}
-            onValueChange={(value: 'general' | 'match_result' | 'achievement' | 'tournament_win') => setPostType(value)}
+            onValueChange={(
+              value:
+                | 'general'
+                | 'match_result'
+                | 'achievement'
+                | 'tournament_win'
+            ) => setPostType(value)}
           >
             <SelectTrigger>
               <SelectValue placeholder='Chọn loại bài viết' />

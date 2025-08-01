@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { BREAKPOINTS, getBreakpoint, type Breakpoint } from '@/constants/breakpoints';
+import {
+  BREAKPOINTS,
+  getBreakpoint,
+  type Breakpoint,
+} from '@/constants/breakpoints';
 
 interface ResponsiveState {
   isMobile: boolean;
@@ -91,7 +95,7 @@ export const useOptimizedResponsive = (): ResponsiveState => {
 
     // Add event listener with debounced handler
     window.addEventListener('resize', debouncedUpdateState);
-    
+
     // Cleanup
     return () => {
       window.removeEventListener('resize', debouncedUpdateState);
@@ -104,7 +108,7 @@ export const useOptimizedResponsive = (): ResponsiveState => {
 // CSS-first responsive utilities using consistent breakpoints
 export const responsiveClasses = {
   mobileOnly: 'lg:hidden',
-  tabletOnly: 'hidden md:block lg:hidden', 
+  tabletOnly: 'hidden md:block lg:hidden',
   desktopOnly: 'hidden lg:block',
   mobileAndTablet: 'lg:hidden',
   tabletAndDesktop: 'hidden md:block',

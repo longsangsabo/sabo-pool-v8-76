@@ -50,14 +50,16 @@ export const usePlayerAvailability = () => {
   });
 
   // Fetch available players near user
-  const { data: availablePlayers = [], isLoading: isLoadingPlayers } = useQuery({
-    queryKey: ['available-players-nearby'],
-    queryFn: async () => {
-      if (!user?.id) return [];
+  const { data: availablePlayers = [], isLoading: isLoadingPlayers } = useQuery(
+    {
+      queryKey: ['available-players-nearby'],
+      queryFn: async () => {
+        if (!user?.id) return [];
 
-      const { data, error } = await supabase
-        .from('player_availability')
-        .select(`
+        const { data, error } = await supabase
+          .from('player_availability')
+          .select(
+            `
           *,
           profiles!player_availability_user_id_fkey (
             user_id,
@@ -67,20 +69,22 @@ export const usePlayerAvailability = () => {
             city,
             district
           )
-        `)
-        .neq('user_id', user.id)
-        .eq('is_active', true)
-        .limit(20);
+        `
+          )
+          .neq('user_id', user.id)
+          .eq('is_active', true)
+          .limit(20);
 
-      if (error) {
-        console.error('Error fetching available players:', error);
-        return [];
-      }
+        if (error) {
+          console.error('Error fetching available players:', error);
+          return [];
+        }
 
-      return data || [];
-    },
-    enabled: !!user?.id,
-  });
+        return data || [];
+      },
+      enabled: !!user?.id,
+    }
+  );
 
   // Update availability mutation
   const updateAvailabilityMutation = useMutation({
@@ -92,7 +96,7 @@ export const usePlayerAvailability = () => {
         .upsert({
           user_id: user.id,
           ...availability,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .select()
         .single();
@@ -105,7 +109,7 @@ export const usePlayerAvailability = () => {
       queryClient.invalidateQueries({ queryKey: ['available-players-nearby'] });
       toast.success('Đã cập nhật trạng thái!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Update availability error:', error);
       toast.error('Có lỗi xảy ra khi cập nhật trạng thái');
     },
@@ -113,7 +117,13 @@ export const usePlayerAvailability = () => {
 
   // Send practice invitation
   const sendInviteMutation = useMutation({
-    mutationFn: async ({ playerId, location }: { playerId: string; location: string }) => {
+    mutationFn: async ({
+      playerId,
+      location,
+    }: {
+      playerId: string;
+      location: string;
+    }) => {
       if (!user?.id) throw new Error('Must be logged in');
 
       const { data, error } = await supabase
@@ -122,7 +132,7 @@ export const usePlayerAvailability = () => {
           challenger_id: user.id,
           opponent_id: playerId,
           challenge_message: `Mời thách đấu tại ${location}`,
-          status: 'pending'
+          status: 'pending',
         })
         .select()
         .single();
@@ -133,7 +143,7 @@ export const usePlayerAvailability = () => {
     onSuccess: () => {
       toast.success('Đã gửi lời mời tập luyện!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Send invite error:', error);
       toast.error('Có lỗi xảy ra khi gửi lời mời');
     },
@@ -144,9 +154,9 @@ export const usePlayerAvailability = () => {
     availablePlayers,
     isLoading,
     isLoadingPlayers,
-    updateAvailability: (availability: AvailabilityUpdate) => 
+    updateAvailability: (availability: AvailabilityUpdate) =>
       updateAvailabilityMutation.mutate(availability),
-    sendInvite: (playerId: string, location: string) => 
+    sendInvite: (playerId: string, location: string) =>
       sendInviteMutation.mutate({ playerId, location }),
     isUpdating: updateAvailabilityMutation.isPending,
     isSendingInvite: sendInviteMutation.isPending,

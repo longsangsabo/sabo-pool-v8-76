@@ -67,14 +67,14 @@ export const useCoaches = () => {
           total_students: 50,
           available_times: {
             days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-            hours: ['09:00', '10:00', '14:00', '15:00', '16:00']
+            hours: ['09:00', '10:00', '14:00', '15:00', '16:00'],
           },
           status: 'active',
           verified: true,
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ];
-      
+
       setCoaches(mockCoaches);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch coaches');
@@ -102,10 +102,10 @@ export const useCoaches = () => {
           homework: 'Luyện tập stance 30 phút mỗi ngày',
           status: 'scheduled',
           payment_status: 'paid',
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ];
-      
+
       setMySessions(mockSessions);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch sessions');
@@ -123,7 +123,7 @@ export const useCoaches = () => {
         ...sessionData,
         id: Date.now().toString(),
         student_id: user.id,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
 
       console.log('Mock book session:', newSession);

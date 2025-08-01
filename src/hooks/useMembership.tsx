@@ -19,6 +19,6 @@ export const useMembership = () => {
     currentMembership: null,
     clubRegistration: null,
     membershipLoading: false,
-    clubLoading: false
+    clubLoading: false,
   };
 };

@@ -30,32 +30,38 @@ const initialState: WorkflowState = {
   selectedTournament: null,
   testResults: {},
   workflowStatus: 'not_started',
-  sharedData: {}
+  sharedData: {},
 };
 
 export const useTournamentWorkflow = () => {
   const [state, setState] = useState<WorkflowState>(initialState);
 
-  const updateSharedData = useCallback((key: keyof WorkflowState['sharedData'], data: any) => {
-    setState(prev => ({
-      ...prev,
-      sharedData: {
-        ...prev.sharedData,
-        [key]: data
-      }
-    }));
-  }, []);
+  const updateSharedData = useCallback(
+    (key: keyof WorkflowState['sharedData'], data: any) => {
+      setState(prev => ({
+        ...prev,
+        sharedData: {
+          ...prev.sharedData,
+          [key]: data,
+        },
+      }));
+    },
+    []
+  );
 
   const completeStep = useCallback((stepNumber: number, results: any) => {
     setState(prev => ({
       ...prev,
-      completedSteps: [...prev.completedSteps.filter(s => s !== stepNumber), stepNumber],
-      testResults: { 
-        ...prev.testResults, 
-        [getStepKey(stepNumber)]: results 
+      completedSteps: [
+        ...prev.completedSteps.filter(s => s !== stepNumber),
+        stepNumber,
+      ],
+      testResults: {
+        ...prev.testResults,
+        [getStepKey(stepNumber)]: results,
       },
       currentStep: stepNumber < 7 ? stepNumber + 1 : stepNumber,
-      workflowStatus: stepNumber === 7 ? 'completed' : 'in_progress'
+      workflowStatus: stepNumber === 7 ? 'completed' : 'in_progress',
     }));
   }, []);
 
@@ -63,18 +69,21 @@ export const useTournamentWorkflow = () => {
     if (canProceedToStep(stepNumber)) {
       setState(prev => ({
         ...prev,
-        currentStep: stepNumber
+        currentStep: stepNumber,
       }));
     }
   }, []);
 
-  const canProceedToStep = useCallback((stepNumber: number): boolean => {
-    if (stepNumber === 1) return true;
-    
-    // Check dependencies
-    const dependencies = getStepDependencies(stepNumber);
-    return dependencies.every(dep => state.completedSteps.includes(dep));
-  }, [state.completedSteps]);
+  const canProceedToStep = useCallback(
+    (stepNumber: number): boolean => {
+      if (stepNumber === 1) return true;
+
+      // Check dependencies
+      const dependencies = getStepDependencies(stepNumber);
+      return dependencies.every(dep => state.completedSteps.includes(dep));
+    },
+    [state.completedSteps]
+  );
 
   const resetWorkflow = useCallback(() => {
     setState(initialState);
@@ -84,7 +93,7 @@ export const useTournamentWorkflow = () => {
     setState(prev => ({
       ...prev,
       selectedTournament: tournamentId,
-      workflowStatus: tournamentId ? 'in_progress' : 'not_started'
+      workflowStatus: tournamentId ? 'in_progress' : 'not_started',
     }));
   }, []);
 
@@ -95,19 +104,19 @@ export const useTournamentWorkflow = () => {
     canProceedToStep,
     resetWorkflow,
     setSelectedTournament,
-    updateSharedData
+    updateSharedData,
   };
 };
 
 const getStepKey = (stepNumber: number): keyof WorkflowState['testResults'] => {
   const stepKeys = [
     'bracketVerification', // Step 1: Tournament Selection & Bracket Verification
-    'matchReporting',      // Step 2: Match Reporting Test
+    'matchReporting', // Step 2: Match Reporting Test
     'tournamentProgression', // Step 3: Tournament Progression
-    'adminControls',       // Step 4: Admin Controls
-    'userExperience',      // Step 5: User Experience Test
-    'scaleTesting',        // Step 6: Scale Testing
-    'dataCleanup'          // Step 7: Data Cleanup
+    'adminControls', // Step 4: Admin Controls
+    'userExperience', // Step 5: User Experience Test
+    'scaleTesting', // Step 6: Scale Testing
+    'dataCleanup', // Step 7: Data Cleanup
   ];
   return stepKeys[stepNumber - 1] as keyof WorkflowState['testResults'];
 };
@@ -120,7 +129,7 @@ const getStepDependencies = (stepNumber: number): number[] => {
     4: [1, 2, 3], // Admin Controls (needs tournament + matches + progression)
     5: [1, 2, 3, 4], // User Experience Test (needs all previous)
     6: [1, 2, 3, 4, 5], // Scale Testing (needs all previous)
-    7: [1, 2, 3, 4, 5, 6] // Data Cleanup (needs all previous steps)
+    7: [1, 2, 3, 4, 5, 6], // Data Cleanup (needs all previous steps)
   };
   return dependencies[stepNumber] || [];
 };

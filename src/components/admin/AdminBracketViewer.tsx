@@ -4,12 +4,28 @@ import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RefreshCw, PlayCircle, Trophy, Users, Table, Settings } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  RefreshCw,
+  PlayCircle,
+  Trophy,
+  Users,
+  Table,
+  Settings,
+} from 'lucide-react';
 import { EnhancedMatchCard } from '@/components/tournament/EnhancedMatchCard';
 import { EditScoreModal } from '@/components/tournament/EditScoreModal';
 import { TournamentBracket } from '@/components/tournament/TournamentBracket';
-import { useMatchManagement, TournamentMatch } from '@/hooks/useMatchManagement';
+import {
+  useMatchManagement,
+  TournamentMatch,
+} from '@/hooks/useMatchManagement';
 import { useAuth } from '@/hooks/useAuth';
 import { SABODoubleEliminationViewer } from '@/tournaments/sabo/SABODoubleEliminationViewer';
 
@@ -56,23 +72,28 @@ interface ClubTable {
   current_match_id?: string;
 }
 
-export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tournamentId }) => {
+export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
+  tournamentId,
+}) => {
   const [bracket, setBracket] = useState<any>(null);
   const [matches, setMatches] = useState<MatchData[]>([]);
   const [clubTables, setClubTables] = useState<ClubTable[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [autoAssigning, setAutoAssigning] = useState(false);
-  const [editingMatch, setEditingMatch] = useState<TournamentMatch | null>(null);
-  const [tournamentType, setTournamentType] = useState<string>('single_elimination');
-  
+  const [editingMatch, setEditingMatch] = useState<TournamentMatch | null>(
+    null
+  );
+  const [tournamentType, setTournamentType] =
+    useState<string>('single_elimination');
+
   const { user } = useAuth();
   const { editScore, isEditingScore } = useMatchManagement(tournamentId);
 
   useEffect(() => {
     loadBracket();
     loadClubTables();
-    
+
     // Set up real-time subscription
     const channel = supabase
       .channel('bracket-changes')
@@ -82,14 +103,14 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
           event: '*',
           schema: 'public',
           table: 'tournament_brackets',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
         () => {
           console.log('🔄 Bracket updated, reloading...');
           loadBracket();
         }
       )
-        // tournament_matches table subscription disabled - table doesn't exist
+      // tournament_matches table subscription disabled - table doesn't exist
       .subscribe();
 
     return () => {
@@ -99,8 +120,8 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
 
   const loadBracket = async () => {
     try {
-      console.log("📊 Loading bracket for tournament:", tournamentId);
-      
+      console.log('📊 Loading bracket for tournament:', tournamentId);
+
       // Load bracket data from tournament metadata instead
       const { data: tournamentData, error: bracketError } = await supabase
         .from('tournaments')
@@ -130,21 +151,25 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
         total_rounds: bracketData?.total_rounds || 0,
         current_round: 1, // Default to round 1
         status: bracketData ? 'generated' : 'not_generated',
-        bracket_type: tournamentData?.tournament_type || 'single_elimination'
+        bracket_type: tournamentData?.tournament_type || 'single_elimination',
       };
 
       // Set tournament type for conditional rendering
-      setTournamentType(tournamentData?.tournament_type || 'single_elimination');
+      setTournamentType(
+        tournamentData?.tournament_type || 'single_elimination'
+      );
 
       setBracket(combinedBracket);
       setMatches([]);
-      
-      console.log("✅ Loaded tournament:", tournamentData ? "exists" : "not found");
-      console.log("✅ Loaded matches:", 0);
-      
+
+      console.log(
+        '✅ Loaded tournament:',
+        tournamentData ? 'exists' : 'not found'
+      );
+      console.log('✅ Loaded matches:', 0);
     } catch (error) {
-      console.error("❌ Error loading bracket:", error);
-      toast.error("Lỗi tải bảng đấu");
+      console.error('❌ Error loading bracket:', error);
+      toast.error('Lỗi tải bảng đấu');
     } finally {
       setLoading(false);
     }
@@ -232,17 +257,22 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
   const autoAssignTables = async () => {
     setAutoAssigning(true);
     try {
-      const { data, error } = await supabase.functions.invoke('tournament-table-manager', {
-        body: {
-          action: 'auto_assign',
-          tournament_id: tournamentId
+      const { data, error } = await supabase.functions.invoke(
+        'tournament-table-manager',
+        {
+          body: {
+            action: 'auto_assign',
+            tournament_id: tournamentId,
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
       if (data?.success) {
-        toast.success(`Đã phân bàn tự động cho ${data.assigned_count} trận đấu`);
+        toast.success(
+          `Đã phân bàn tự động cho ${data.assigned_count} trận đấu`
+        );
         await loadBracket();
         await loadClubTables();
       } else {
@@ -259,15 +289,18 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
   const generateBracket = async () => {
     setGenerating(true);
     try {
-      console.log("🏆 Generating bracket for tournament:", tournamentId);
+      console.log('🏆 Generating bracket for tournament:', tournamentId);
 
       // Use the edge function instead of RPC
-      const { data: result, error } = await supabase.functions.invoke('generate-tournament-bracket', {
-        body: {
-          tournament_id: tournamentId,
-          seeding_method: 'elo_ranking'
+      const { data: result, error } = await supabase.functions.invoke(
+        'generate-tournament-bracket',
+        {
+          body: {
+            tournament_id: tournamentId,
+            seeding_method: 'elo_ranking',
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
@@ -276,12 +309,11 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
         throw new Error(bracketResult?.error || 'Failed to generate bracket');
       }
 
-      toast.success("🏆 Bảng đấu đã được tạo thành công!");
+      toast.success('🏆 Bảng đấu đã được tạo thành công!');
       await loadBracket();
-      
     } catch (error) {
-      console.error("❌ Error generating bracket:", error);
-      toast.error("Lỗi tạo bảng đấu: " + (error as Error).message);
+      console.error('❌ Error generating bracket:', error);
+      toast.error('Lỗi tạo bảng đấu: ' + (error as Error).message);
     } finally {
       setGenerating(false);
     }
@@ -289,12 +321,15 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
 
   const simulateResults = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('tournament-automation', {
-        body: {
-          action: 'simulate_results',
-          tournament_id: tournamentId
+      const { data, error } = await supabase.functions.invoke(
+        'tournament-automation',
+        {
+          body: {
+            action: 'simulate_results',
+            tournament_id: tournamentId,
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
@@ -310,13 +345,18 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
     }
   };
 
-  const handleEditScore = async (matchId: string, newPlayer1Score: number, newPlayer2Score: number, editorId: string) => {
+  const handleEditScore = async (
+    matchId: string,
+    newPlayer1Score: number,
+    newPlayer2Score: number,
+    editorId: string
+  ) => {
     try {
       await editScore({
         matchId,
         newPlayer1Score,
         newPlayer2Score,
-        editorId
+        editorId,
       });
       await loadBracket(); // Reload the bracket after edit
       setEditingMatch(null);
@@ -344,25 +384,29 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
       referee_id: match.referee_id,
       notes: match.notes,
       is_third_place_match: match.is_third_place_match || false,
-      player1: match.player1 ? {
-        user_id: match.player1_id!,
-        full_name: match.player1.full_name,
-        display_name: match.player1.display_name || match.player1.full_name
-      } : undefined,
-      player2: match.player2 ? {
-        user_id: match.player2_id!,
-        full_name: match.player2.full_name,
-        display_name: match.player2.display_name || match.player2.full_name
-      } : undefined
+      player1: match.player1
+        ? {
+            user_id: match.player1_id!,
+            full_name: match.player1.full_name,
+            display_name: match.player1.display_name || match.player1.full_name,
+          }
+        : undefined,
+      player2: match.player2
+        ? {
+            user_id: match.player2_id!,
+            full_name: match.player2.full_name,
+            display_name: match.player2.display_name || match.player2.full_name,
+          }
+        : undefined,
     };
     setEditingMatch(tournamentMatch);
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
-        <span className="ml-2">Đang tải bảng đấu...</span>
+      <div className='flex items-center justify-center p-8'>
+        <div className='animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full'></div>
+        <span className='ml-2'>Đang tải bảng đấu...</span>
       </div>
     );
   }
@@ -371,28 +415,28 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Trophy className='h-5 w-5' />
             Chưa có bảng đấu
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
+        <CardContent className='space-y-4'>
+          <p className='text-muted-foreground'>
             Bảng đấu chưa được tạo cho giải đấu này.
           </p>
-          <Button 
-            onClick={generateBracket} 
+          <Button
+            onClick={generateBracket}
             disabled={generating}
-            className="w-full"
+            className='w-full'
           >
             {generating ? (
-              <div className="flex items-center gap-2">
-                <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+              <div className='flex items-center gap-2'>
+                <div className='animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full'></div>
                 Đang tạo bảng đấu...
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4" />
+              <div className='flex items-center gap-2'>
+                <Trophy className='h-4 w-4' />
                 Tạo bảng đấu
               </div>
             )}
@@ -405,27 +449,31 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
   // If this is a double elimination tournament, use the enhanced double elimination viewer
   if (tournamentType === 'double_elimination') {
     return (
-      <div className="space-y-6">
+      <div className='space-y-6'>
         {/* Tournament Info */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Trophy className='h-5 w-5' />
               Double Elimination Tournament - Admin View
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-blue-500" />
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
+              <div className='flex items-center gap-2'>
+                <Users className='h-4 w-4 text-blue-500' />
                 <span>Total Matches: 27</span>
               </div>
-              <div className="flex items-center gap-2">
-                <PlayCircle className="h-4 w-4 text-green-500" />
+              <div className='flex items-center gap-2'>
+                <PlayCircle className='h-4 w-4 text-green-500' />
                 <span>Enhanced Double Elimination System</span>
               </div>
               <div>
-                <Badge variant={bracket.status === 'generated' ? 'default' : 'secondary'}>
+                <Badge
+                  variant={
+                    bracket.status === 'generated' ? 'default' : 'secondary'
+                  }
+                >
                   {bracket.status === 'generated' ? 'Đã tạo' : bracket.status}
                 </Badge>
               </div>
@@ -433,16 +481,21 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
                 Participants: {bracket.bracket_data?.total_participants || 0}
               </div>
             </div>
-            
+
             {/* Admin Controls */}
-            <div className="flex gap-2 mt-4 pt-4 border-t">
-              <Button onClick={generateBracket} disabled={generating} size="sm">
+            <div className='flex gap-2 mt-4 pt-4 border-t'>
+              <Button onClick={generateBracket} disabled={generating} size='sm'>
                 {generating ? 'Generating...' : 'Generate Bracket'}
               </Button>
-              <Button onClick={simulateResults} variant="outline" size="sm">
+              <Button onClick={simulateResults} variant='outline' size='sm'>
                 Simulate Results
               </Button>
-              <Button onClick={autoAssignTables} disabled={autoAssigning} variant="outline" size="sm">
+              <Button
+                onClick={autoAssignTables}
+                disabled={autoAssigning}
+                variant='outline'
+                size='sm'
+              >
                 {autoAssigning ? 'Assigning...' : 'Auto Assign Tables'}
               </Button>
             </div>
@@ -459,27 +512,31 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Bracket Header */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Trophy className='h-5 w-5' />
             Bảng đấu {bracket.bracket_type}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-500" />
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
+            <div className='flex items-center gap-2'>
+              <Users className='h-4 w-4 text-blue-500' />
               <span>Số vòng: {bracket.total_rounds}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <PlayCircle className="h-4 w-4 text-green-500" />
+            <div className='flex items-center gap-2'>
+              <PlayCircle className='h-4 w-4 text-green-500' />
               <span>Vòng hiện tại: {bracket.current_round}</span>
             </div>
             <div>
-              <Badge variant={bracket.status === 'generated' ? 'default' : 'secondary'}>
+              <Badge
+                variant={
+                  bracket.status === 'generated' ? 'default' : 'secondary'
+                }
+              >
                 {bracket.status === 'generated' ? 'Đã tạo' : bracket.status}
               </Badge>
             </div>
@@ -496,54 +553,47 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({ tourname
           <CardTitle>Sơ đồ bảng đấu</CardTitle>
         </CardHeader>
         <CardContent>
-          <TournamentBracket 
-            tournamentId={tournamentId}
-            adminMode={true}
-          />
+          <TournamentBracket tournamentId={tournamentId} adminMode={true} />
         </CardContent>
       </Card>
 
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className='flex items-center gap-2'>
             ⚡ Thao tác nhanh
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
-            <Button 
-              onClick={loadBracket}
-              variant="outline"
-              size="sm"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
+          <div className='flex flex-wrap gap-3'>
+            <Button onClick={loadBracket} variant='outline' size='sm'>
+              <RefreshCw className='w-4 h-4 mr-2' />
               Refresh
             </Button>
-            <Button 
+            <Button
               onClick={autoAssignTables}
               disabled={autoAssigning}
-              variant="outline"
-              size="sm"
-              className="bg-blue-50 hover:bg-blue-100 text-blue-700"
+              variant='outline'
+              size='sm'
+              className='bg-blue-50 hover:bg-blue-100 text-blue-700'
             >
               {autoAssigning ? (
-                <div className="flex items-center gap-2">
-                  <div className="animate-spin h-3 w-3 border border-blue-500 border-t-transparent rounded-full"></div>
+                <div className='flex items-center gap-2'>
+                  <div className='animate-spin h-3 w-3 border border-blue-500 border-t-transparent rounded-full'></div>
                   Đang phân bàn...
                 </div>
               ) : (
                 <>
-                  <Table className="w-4 h-4 mr-2" />
+                  <Table className='w-4 h-4 mr-2' />
                   Phân bàn tự động
                 </>
               )}
             </Button>
-            <Button 
+            <Button
               onClick={simulateResults}
-              variant="outline"
-              size="sm"
-              className="bg-green-50 hover:bg-green-100 text-green-700"
+              variant='outline'
+              size='sm'
+              className='bg-green-50 hover:bg-green-100 text-green-700'
             >
               🎲 Random kết quả (Test)
             </Button>

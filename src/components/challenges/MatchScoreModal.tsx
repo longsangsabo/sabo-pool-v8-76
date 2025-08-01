@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,14 +20,14 @@ interface MatchScoreModalProps {
   opponentName?: string;
 }
 
-export function MatchScoreModal({ 
-  open, 
-  onOpenChange, 
-  challengeId, 
-  isChallenger, 
+export function MatchScoreModal({
+  open,
+  onOpenChange,
+  challengeId,
+  isChallenger,
   raceTo,
   challengerName = 'Challenger',
-  opponentName = 'Opponent'
+  opponentName = 'Opponent',
 }: MatchScoreModalProps) {
   const { submitScore, isSubmittingScore } = useChallengeWorkflow();
   const [challengerScore, setChallengerScore] = useState(0);
@@ -30,7 +35,7 @@ export function MatchScoreModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (challengerScore === 0 && opponentScore === 0) {
       alert('Vui lòng nhập tỷ số hợp lệ');
       return;
@@ -42,12 +47,16 @@ export function MatchScoreModal({
     }
 
     try {
-      console.log('Submitting scores:', { challengerScore, opponentScore, raceTo });
+      console.log('Submitting scores:', {
+        challengerScore,
+        opponentScore,
+        raceTo,
+      });
       await submitScore({
         challengeId,
         challengerScore,
         opponentScore,
-        isChallenger
+        isChallenger,
       });
       onOpenChange(false);
       // Reset scores
@@ -58,83 +67,89 @@ export function MatchScoreModal({
     }
   };
 
-  const isValidScore = (challengerScore === raceTo && opponentScore < raceTo) || 
-                     (opponentScore === raceTo && challengerScore < raceTo);
+  const isValidScore =
+    (challengerScore === raceTo && opponentScore < raceTo) ||
+    (opponentScore === raceTo && challengerScore < raceTo);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" aria-describedby="score-modal-description">
+      <DialogContent
+        className='max-w-md'
+        aria-describedby='score-modal-description'
+      >
         <DialogHeader>
           <DialogTitle>Nhập tỷ số trận đấu</DialogTitle>
         </DialogHeader>
-        <div id="score-modal-description" className="sr-only">
+        <div id='score-modal-description' className='sr-only'>
           Modal để nhập tỷ số kết quả trận đấu giữa hai người chơi
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="text-center text-sm text-muted-foreground mb-4">
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <div className='text-center text-sm text-muted-foreground mb-4'>
             Trận đấu đầu tiên đạt {raceTo} điểm sẽ thắng
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className='grid grid-cols-2 gap-4'>
             <div>
-              <Label htmlFor="challenger-score">
-                {challengerName}
-              </Label>
+              <Label htmlFor='challenger-score'>{challengerName}</Label>
               <Input
-                id="challenger-score"
-                type="number"
+                id='challenger-score'
+                type='number'
                 value={challengerScore}
-                onChange={(e) => setChallengerScore(parseInt(e.target.value) || 0)}
+                onChange={e =>
+                  setChallengerScore(parseInt(e.target.value) || 0)
+                }
                 min={0}
                 max={raceTo}
-                className="text-center text-lg"
+                className='text-center text-lg'
               />
             </div>
 
             <div>
-              <Label htmlFor="opponent-score">
-                {opponentName}
-              </Label>
+              <Label htmlFor='opponent-score'>{opponentName}</Label>
               <Input
-                id="opponent-score"
-                type="number"
+                id='opponent-score'
+                type='number'
                 value={opponentScore}
-                onChange={(e) => setOpponentScore(parseInt(e.target.value) || 0)}
+                onChange={e => setOpponentScore(parseInt(e.target.value) || 0)}
                 min={0}
                 max={raceTo}
-                className="text-center text-lg"
+                className='text-center text-lg'
               />
             </div>
           </div>
 
           {challengerScore > 0 || opponentScore > 0 ? (
-            <div className="text-center text-sm">
+            <div className='text-center text-sm'>
               {challengerScore === raceTo ? (
-                <span className="text-green-600 font-medium">{challengerName} thắng!</span>
+                <span className='text-green-600 font-medium'>
+                  {challengerName} thắng!
+                </span>
               ) : opponentScore === raceTo ? (
-                <span className="text-green-600 font-medium">{opponentName} thắng!</span>
+                <span className='text-green-600 font-medium'>
+                  {opponentName} thắng!
+                </span>
               ) : (
-                <span className="text-amber-600">
+                <span className='text-amber-600'>
                   Chưa có ai đạt {raceTo} điểm
                 </span>
               )}
             </div>
           ) : null}
 
-          <div className="flex gap-2 pt-2">
+          <div className='flex gap-2 pt-2'>
             <Button
-              type="button"
-              variant="outline"
+              type='button'
+              variant='outline'
               onClick={() => onOpenChange(false)}
-              className="flex-1"
+              className='flex-1'
             >
               Hủy
             </Button>
             <Button
-              type="submit"
+              type='submit'
               disabled={!isValidScore || isSubmittingScore}
-              className="flex-1"
+              className='flex-1'
             >
               {isSubmittingScore ? 'Đang ghi...' : 'Ghi tỷ số'}
             </Button>

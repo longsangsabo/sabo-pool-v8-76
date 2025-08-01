@@ -61,6 +61,6 @@ export const useTournamentPrizeTiers = (tournamentId?: string) => {
     prizeTiers,
     loading,
     error,
-    refetch: fetchPrizeTiers
+    refetch: fetchPrizeTiers,
   };
 };

@@ -9,11 +9,11 @@ const PointsDisplay = () => {
 
   if (isLoading) {
     return (
-      <Card className="mb-4">
-        <CardContent className="p-4">
-          <div className="animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-32 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-24"></div>
+      <Card className='mb-4'>
+        <CardContent className='p-4'>
+          <div className='animate-pulse'>
+            <div className='h-6 bg-gray-200 rounded w-32 mb-2'></div>
+            <div className='h-4 bg-gray-200 rounded w-24'></div>
           </div>
         </CardContent>
       </Card>
@@ -23,73 +23,85 @@ const PointsDisplay = () => {
   if (!userStreak) return null;
 
   return (
-    <Card className="mb-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-              <Trophy className="w-5 h-5 text-yellow-600" />
+    <Card className='mb-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200'>
+      <CardContent className='p-4'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <div className='w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center'>
+              <Trophy className='w-5 h-5 text-yellow-600' />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className='font-semibold text-gray-900'>
                 Điểm của bạn: {userStreak.total_points}
               </h3>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="text-xs">
+              <div className='flex items-center gap-2 mt-1'>
+                <Badge variant='secondary' className='text-xs'>
                   🔥 Streak: {userStreak.current_streak} ngày
                 </Badge>
-                <Badge variant="outline" className="text-xs">
-                  <Star className="w-3 h-3 mr-1" />
+                <Badge variant='outline' className='text-xs'>
+                  <Star className='w-3 h-3 mr-1' />
                   Cao nhất: {userStreak.longest_streak}
                 </Badge>
               </div>
             </div>
           </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-500">Hôm nay</div>
-            <div className="text-lg font-bold text-yellow-600">
+
+          <div className='text-right'>
+            <div className='text-sm text-gray-500'>Hôm nay</div>
+            <div className='text-lg font-bold text-yellow-600'>
               +{userStreak.current_streak >= 7 ? '20' : '10'} điểm
             </div>
           </div>
         </div>
-        
+
         {/* Milestone progress */}
-        <div className="mt-4 space-y-2">
-          <div className="text-xs text-gray-500 mb-1">Cột mốc tiếp theo:</div>
+        <div className='mt-4 space-y-2'>
+          <div className='text-xs text-gray-500 mb-1'>Cột mốc tiếp theo:</div>
           {userStreak.current_streak < 30 && (
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(userStreak.current_streak / 30) * 100}%` }}
+            <div className='flex items-center gap-2'>
+              <div className='flex-1 bg-gray-200 rounded-full h-2'>
+                <div
+                  className='bg-yellow-400 h-2 rounded-full transition-all duration-300'
+                  style={{
+                    width: `${(userStreak.current_streak / 30) * 100}%`,
+                  }}
                 />
               </div>
-              <span className="text-xs text-gray-500">30 ngày (+50 điểm)</span>
+              <span className='text-xs text-gray-500'>30 ngày (+50 điểm)</span>
             </div>
           )}
-          {userStreak.current_streak >= 30 && userStreak.current_streak < 60 && (
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-orange-400 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${((userStreak.current_streak - 30) / 30) * 100}%` }}
-                />
+          {userStreak.current_streak >= 30 &&
+            userStreak.current_streak < 60 && (
+              <div className='flex items-center gap-2'>
+                <div className='flex-1 bg-gray-200 rounded-full h-2'>
+                  <div
+                    className='bg-orange-400 h-2 rounded-full transition-all duration-300'
+                    style={{
+                      width: `${((userStreak.current_streak - 30) / 30) * 100}%`,
+                    }}
+                  />
+                </div>
+                <span className='text-xs text-gray-500'>
+                  60 ngày (+50 điểm)
+                </span>
               </div>
-              <span className="text-xs text-gray-500">60 ngày (+50 điểm)</span>
-            </div>
-          )}
-          {userStreak.current_streak >= 60 && userStreak.current_streak < 90 && (
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-red-400 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${((userStreak.current_streak - 60) / 30) * 100}%` }}
-                />
+            )}
+          {userStreak.current_streak >= 60 &&
+            userStreak.current_streak < 90 && (
+              <div className='flex items-center gap-2'>
+                <div className='flex-1 bg-gray-200 rounded-full h-2'>
+                  <div
+                    className='bg-red-400 h-2 rounded-full transition-all duration-300'
+                    style={{
+                      width: `${((userStreak.current_streak - 60) / 30) * 100}%`,
+                    }}
+                  />
+                </div>
+                <span className='text-xs text-gray-500'>
+                  90 ngày (+50 điểm)
+                </span>
               </div>
-              <span className="text-xs text-gray-500">90 ngày (+50 điểm)</span>
-            </div>
-          )}
+            )}
         </div>
       </CardContent>
     </Card>

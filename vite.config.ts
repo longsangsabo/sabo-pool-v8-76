@@ -28,78 +28,97 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    // ✅ Performance optimizations
+    target: 'esnext',
+    minify: 'esbuild',
+    cssCodeSplit: true,
+    sourcemap: false, // Disable sourcemaps for faster build
     rollupOptions: {
+      // ✅ Optimize bundle size with better chunking
       output: {
         manualChunks: (id) => {
-          // Admin code splitting - separate chunk for admin
-          if (id.includes('/admin/') || id.includes('AdminRouter') || id.includes('AdminProvider')) {
+          // Vendor libraries - most stable, cache-friendly
+          if (id.includes('node_modules')) {
+            // Core React - highest priority
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            
+            // Router - high priority
+            if (id.includes('react-router-dom')) {
+              return 'router-vendor';
+            }
+            
+            // Data layer - medium priority  
+            if (id.includes('@tanstack/react-query') || 
+                id.includes('@supabase/supabase-js') ||
+                id.includes('@supabase/auth-js')) {
+              return 'data-vendor';
+            }
+            
+            // UI libraries - split by size
+            if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+              return 'ui-vendor';
+            }
+            
+            // Utilities - low priority
+            if (id.includes('date-fns') || 
+                id.includes('clsx') || 
+                id.includes('tailwind-merge') ||
+                id.includes('class-variance-authority')) {
+              return 'utils-vendor';
+            }
+            
+            // Animation/Heavy libs - lowest priority
+            if (id.includes('framer-motion') || 
+                id.includes('recharts') ||
+                id.includes('react-helmet-async')) {
+              return 'heavy-vendor';
+            }
+            
+            // Everything else
+            return 'vendor';
+          }
+          
+          // App code chunking
+          if (id.includes('/admin/') || 
+              id.includes('AdminRouter') || 
+              id.includes('AdminProvider')) {
             return 'admin';
           }
           
-          // Core React libraries
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-vendor';
+          if (id.includes('/tournament/') || 
+              id.includes('Tournament') ||
+              id.includes('bracket')) {
+            return 'tournaments';
           }
           
-          // Routing
-          if (id.includes('react-router-dom')) {
-            return 'router';
-          }
-          
-          // UI Components (split by usage frequency)
-          if (id.includes('@radix-ui/react-dialog') || 
-              id.includes('@radix-ui/react-dropdown-menu') || 
-              id.includes('@radix-ui/react-slot')) {
-            return 'ui-core';
-          }
-          
-          if (id.includes('@radix-ui/react-select') || 
-              id.includes('@radix-ui/react-checkbox') || 
-              id.includes('react-hook-form')) {
-            return 'ui-forms';
-          }
-          
-          if (id.includes('@radix-ui/react-tabs') || 
-              id.includes('@radix-ui/react-accordion') || 
-              id.includes('@radix-ui/react-navigation-menu')) {
-            return 'ui-advanced';
-          }
-          
-          // Data & State Management
-          if (id.includes('@tanstack/react-query') || id.includes('@supabase/supabase-js')) {
-            return 'data';
-          }
-          
-          // Utilities
-          if (id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) {
-            return 'utils';
-          }
-          
-          // Charts & Visualization
-          if (id.includes('recharts') || id.includes('d3')) {
-            return 'charts';
-          }
-          
-          // Performance & Virtualization
-          if (id.includes('react-window')) {
-            return 'performance';
-          }
-          
-          // Less frequently used libraries
-          if (id.includes('framer-motion') || id.includes('react-helmet-async')) {
-            return 'misc';
+          if (id.includes('/challenge/') || 
+              id.includes('Challenge') ||
+              id.includes('/pages/EnhancedChallengesPageV2')) {
+            return 'challenges';
           }
         },
       },
     },
     chunkSizeWarningLimit: 1000,
-    // Enable build optimizations
-    target: 'esnext',
-    minify: 'esbuild',
-    // Split CSS
-    cssCodeSplit: true,
   },
+  // ✅ Faster dependency optimization
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@tanstack/react-query',
+      '@supabase/supabase-js'
+    ],
+    // Force pre-bundling of heavy dependencies
+    force: false,
+  },
+  // ✅ Enable parallel processing
+  esbuild: {
+    target: 'esnext',
+    // Drop console/debugger in production
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
   },
 }));

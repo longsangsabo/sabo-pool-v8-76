@@ -47,10 +47,13 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
 
       // Fetch all profiles at once using cache
       const profiles = await getMultipleProfiles(Array.from(userIds));
-      const profileMap = profiles.reduce((acc, profile) => {
-        acc[profile.user_id] = profile;
-        return acc;
-      }, {} as Record<string, any>);
+      const profileMap = profiles.reduce(
+        (acc, profile) => {
+          acc[profile.user_id] = profile;
+          return acc;
+        },
+        {} as Record<string, any>
+      );
 
       // Map matches with cached profiles and convert to SABO format
       const matchesWithProfiles = (matchesData || []).map(match => ({
@@ -62,15 +65,22 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
         player2_id: match.player2_id,
         winner_id: match.winner_id,
         status: match.status as 'pending' | 'ready' | 'completed',
-        bracket_type: match.bracket_type as 'winners' | 'losers' | 'semifinals' | 'finals',
+        bracket_type: match.bracket_type as
+          | 'winners'
+          | 'losers'
+          | 'semifinals'
+          | 'finals',
         branch_type: match.branch_type as 'A' | 'B' | undefined,
         player1_score: match.score_player1, // Map database column to interface property
         player2_score: match.score_player2, // Map database column to interface property
         player1: match.player1_id ? profileMap[match.player1_id] || null : null,
-        player2: match.player2_id ? profileMap[match.player2_id] || null : null
+        player2: match.player2_id ? profileMap[match.player2_id] || null : null,
       })) as SABOMatch[];
 
-      console.log('✅ SABO matches with cached profiles:', matchesWithProfiles.length);
+      console.log(
+        '✅ SABO matches with cached profiles:',
+        matchesWithProfiles.length
+      );
       setMatches(matchesWithProfiles);
       setLastUpdateTime(new Date());
     } catch (err: any) {
@@ -85,14 +95,17 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up SABO real-time subscription for tournament:', tournamentId);
-    
+    console.log(
+      '🔄 Setting up SABO real-time subscription for tournament:',
+      tournamentId
+    );
+
     let debounceTimer: NodeJS.Timeout;
-    let updateQueue = new Set<string>();
+    const updateQueue = new Set<string>();
 
     const debouncedRefetch = (isUrgent = false) => {
       clearTimeout(debounceTimer);
-      
+
       // ✅ CRITICAL FIX: Immediate refresh for urgent updates (score submissions)
       if (isUrgent) {
         console.log('🚀 URGENT: Immediate SABO refresh triggered');
@@ -100,7 +113,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
         loadMatches();
         return;
       }
-      
+
       // Regular debounced refresh for less critical updates
       debounceTimer = setTimeout(() => {
         if (updateQueue.size > 0) {
@@ -119,66 +132,95 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
-          console.log('🔄 SABO match real-time update:', payload.eventType, payload.new);
-          
+        payload => {
+          console.log(
+            '🔄 SABO match real-time update:',
+            payload.eventType,
+            payload.new
+          );
+
           // Only process updates for SABO rounds
           if (payload.new && 'round_number' in payload.new) {
             const roundNumber = payload.new.round_number as number;
-            const isSABORound = [1, 2, 3, 101, 102, 103, 201, 202, 250, 300].includes(roundNumber);
-            
+            const isSABORound = [
+              1, 2, 3, 101, 102, 103, 201, 202, 250, 300,
+            ].includes(roundNumber);
+
             if (!isSABORound) {
               console.log('🚫 Ignoring non-SABO round update:', roundNumber);
               return;
             }
           }
-          
+
           // ✅ CRITICAL: Check if this is a score submission (urgent update)
-          const isScoreUpdate = payload.eventType === 'UPDATE' && 
-            payload.new && 
-            ('score_player1' in payload.new || 'score_player2' in payload.new || 'winner_id' in payload.new || 'status' in payload.new);
-            
+          const isScoreUpdate =
+            payload.eventType === 'UPDATE' &&
+            payload.new &&
+            ('score_player1' in payload.new ||
+              'score_player2' in payload.new ||
+              'winner_id' in payload.new ||
+              'status' in payload.new);
+
           if (isScoreUpdate) {
-            console.log('🚀 URGENT: Score/status update detected, immediate refresh!');
-            
+            console.log(
+              '🚀 URGENT: Score/status update detected, immediate refresh!'
+            );
+
             // ✅ IMMEDIATE UI UPDATE: Update state immediately for instant feedback
             if (payload.new && 'id' in payload.new) {
               setMatches(currentMatches => {
                 const updatedMatches = [...currentMatches];
-                const matchIndex = updatedMatches.findIndex(m => m.id === payload.new.id);
-                
+                const matchIndex = updatedMatches.findIndex(
+                  m => m.id === payload.new.id
+                );
+
                 if (matchIndex >= 0) {
                   // Merge the new data with existing match data
                   updatedMatches[matchIndex] = {
                     ...updatedMatches[matchIndex],
-                    status: payload.new.status || updatedMatches[matchIndex].status,
-                    player1_score: payload.new.score_player1 !== undefined ? payload.new.score_player1 : updatedMatches[matchIndex].player1_score,
-                    player2_score: payload.new.score_player2 !== undefined ? payload.new.score_player2 : updatedMatches[matchIndex].player2_score,
-                    winner_id: payload.new.winner_id !== undefined ? payload.new.winner_id : updatedMatches[matchIndex].winner_id,
+                    status:
+                      payload.new.status || updatedMatches[matchIndex].status,
+                    player1_score:
+                      payload.new.score_player1 !== undefined
+                        ? payload.new.score_player1
+                        : updatedMatches[matchIndex].player1_score,
+                    player2_score:
+                      payload.new.score_player2 !== undefined
+                        ? payload.new.score_player2
+                        : updatedMatches[matchIndex].player2_score,
+                    winner_id:
+                      payload.new.winner_id !== undefined
+                        ? payload.new.winner_id
+                        : updatedMatches[matchIndex].winner_id,
                   };
-                  
-                  console.log('✅ Immediate UI update applied for match:', payload.new.id);
+
+                  console.log(
+                    '✅ Immediate UI update applied for match:',
+                    payload.new.id
+                  );
                 }
-                
+
                 return updatedMatches;
               });
             }
-            
+
             // Also trigger full refresh after a short delay to get any related updates
             setTimeout(() => {
-              console.log('🔄 Following up with full refresh after score update');
+              console.log(
+                '🔄 Following up with full refresh after score update'
+              );
               loadMatches();
             }, 500);
             return;
           }
-          
+
           // Queue the update for less critical changes
           if (payload.new && 'id' in payload.new) {
             updateQueue.add(payload.new.id as string);
           }
-          
+
           debouncedRefetch();
         }
       )
@@ -188,13 +230,20 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
           event: 'INSERT',
           schema: 'public',
           table: 'tournament_automation_log',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           const logData = payload.new as any;
-          console.log('🤖 SABO automation event:', logData.automation_type, logData.status);
-          
-          if (logData.automation_type === 'sabo_advancement' && logData.status === 'completed') {
+          console.log(
+            '🤖 SABO automation event:',
+            logData.automation_type,
+            logData.status
+          );
+
+          if (
+            logData.automation_type === 'sabo_advancement' &&
+            logData.status === 'completed'
+          ) {
             // Immediate refresh for successful SABO automation
             setTimeout(() => loadMatches(), 200);
           }
@@ -218,6 +267,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
     isLoading,
     error,
     lastUpdateTime,
-    refresh: loadMatches
+    refresh: loadMatches,
   };
 };

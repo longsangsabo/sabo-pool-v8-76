@@ -8,8 +8,8 @@ const envSchema = z.object({
   VITE_VNP_PAYMENT_URL: z.string().optional(),
 
   // Supabase Configuration
-  VITE_SUPABASE_URL: z.string().optional(),
-  VITE_SUPABASE_ANON_KEY: z.string().optional(),
+  VITE_SUPABASE_URL: z.string().min(1, 'Supabase URL is required'),
+  VITE_SUPABASE_ANON_KEY: z.string().min(1, 'Supabase Anon Key is required'),
 
   // App Configuration
   VITE_APP_VERSION: z.string().default('1.0.0'),

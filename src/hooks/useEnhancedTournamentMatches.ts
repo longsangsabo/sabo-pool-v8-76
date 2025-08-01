@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { TournamentMatch } from './useTournamentMatches';
@@ -9,84 +8,101 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
-  
+
   const optimistic = useOptimisticTournamentUpdates();
   const debounceRef = useRef<NodeJS.Timeout>();
   const lastFetchRef = useRef<number>(0);
 
-  const fetchMatches = useCallback(async (skipDelay = false) => {
-    if (!tournamentId) {
-      setLoading(false);
-      return;
-    }
+  const fetchMatches = useCallback(
+    async (skipDelay = false) => {
+      if (!tournamentId) {
+        setLoading(false);
+        return;
+      }
 
-    // Debounce rapid requests
-    const now = Date.now();
-    if (!skipDelay && now - lastFetchRef.current < 500) {
-      return;
-    }
-    lastFetchRef.current = now;
+      // Debounce rapid requests
+      const now = Date.now();
+      if (!skipDelay && now - lastFetchRef.current < 500) {
+        return;
+      }
+      lastFetchRef.current = now;
 
-    try {
-      setError(null);
-      if (skipDelay) setLoading(true);
+      try {
+        setError(null);
+        if (skipDelay) setLoading(true);
 
-      console.log('🔄 Fetching enhanced matches for tournament:', tournamentId);
+        console.log(
+          '🔄 Fetching enhanced matches for tournament:',
+          tournamentId
+        );
 
-      const { data: matchesData, error: matchesError } = await supabase
-        .from('tournament_matches')
-        .select('*')
-        .eq('tournament_id', tournamentId)
-        .order('bracket_type', { ascending: true })
-        .order('round_number', { ascending: true })
-        .order('match_number', { ascending: true });
+        const { data: matchesData, error: matchesError } = await supabase
+          .from('tournament_matches')
+          .select('*')
+          .eq('tournament_id', tournamentId)
+          .order('bracket_type', { ascending: true })
+          .order('round_number', { ascending: true })
+          .order('match_number', { ascending: true });
 
-      if (matchesError) throw matchesError;
+        if (matchesError) throw matchesError;
 
-      // Fetch player profiles in parallel
-      const matchesWithProfiles = await Promise.all(
-        (matchesData || []).map(async (match) => {
-          const [player1Profile, player2Profile] = await Promise.all([
-            match.player1_id ? supabase
-              .from('profiles')
-              .select('user_id, full_name, display_name, avatar_url, verified_rank')
-              .eq('user_id', match.player1_id)
-              .single() : { data: null },
-            match.player2_id ? supabase
-              .from('profiles')
-              .select('user_id, full_name, display_name, avatar_url, verified_rank')
-              .eq('user_id', match.player2_id)
-              .single() : { data: null }
-          ]);
+        // Fetch player profiles in parallel
+        const matchesWithProfiles = await Promise.all(
+          (matchesData || []).map(async match => {
+            const [player1Profile, player2Profile] = await Promise.all([
+              match.player1_id
+                ? supabase
+                    .from('profiles')
+                    .select(
+                      'user_id, full_name, display_name, avatar_url, verified_rank'
+                    )
+                    .eq('user_id', match.player1_id)
+                    .single()
+                : { data: null },
+              match.player2_id
+                ? supabase
+                    .from('profiles')
+                    .select(
+                      'user_id, full_name, display_name, avatar_url, verified_rank'
+                    )
+                    .eq('user_id', match.player2_id)
+                    .single()
+                : { data: null },
+            ]);
 
-          return {
-            ...match,
-            player1: player1Profile.data,
-            player2: player2Profile.data
-          };
-        })
-      );
+            return {
+              ...match,
+              player1: player1Profile.data,
+              player2: player2Profile.data,
+            };
+          })
+        );
 
-      setMatches(matchesWithProfiles);
-      setLastUpdateTime(new Date());
-      console.log('✅ Enhanced matches loaded:', matchesWithProfiles.length);
-    } catch (err: any) {
-      console.error('❌ Error in enhanced fetchMatches:', err);
-      setError(err.message || 'Failed to fetch matches');
-    } finally {
-      setLoading(false);
-    }
-  }, [tournamentId]);
+        setMatches(matchesWithProfiles);
+        setLastUpdateTime(new Date());
+        console.log('✅ Enhanced matches loaded:', matchesWithProfiles.length);
+      } catch (err: any) {
+        console.error('❌ Error in enhanced fetchMatches:', err);
+        setError(err.message || 'Failed to fetch matches');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [tournamentId]
+  );
 
   // Enhanced real-time subscription with multiple event types
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up enhanced real-time subscription for:', tournamentId);
+    console.log(
+      '🔄 Setting up enhanced real-time subscription for:',
+      tournamentId
+    );
 
     const channel = supabase
       .channel(`enhanced-tournament-matches-${tournamentId}`)
-      
+
       // Listen to match updates
       .on(
         'postgres_changes',
@@ -94,35 +110,39 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Enhanced match update:', payload);
-          
+
           // Instant UI update for better UX
           if (payload.eventType === 'UPDATE' && payload.new) {
             setMatches(currentMatches => {
               const updatedMatches = [...currentMatches];
-              const matchIndex = updatedMatches.findIndex(m => m.id === payload.new.id);
-              
+              const matchIndex = updatedMatches.findIndex(
+                m => m.id === payload.new.id
+              );
+
               if (matchIndex >= 0) {
                 // Preserve profiles while updating match data
                 updatedMatches[matchIndex] = {
                   ...updatedMatches[matchIndex],
-                  ...payload.new
+                  ...payload.new,
                 };
-                
+
                 // Check if this confirms an optimistic update
-                const optimisticUpdate = optimistic.getOptimisticMatch(payload.new.id);
+                const optimisticUpdate = optimistic.getOptimisticMatch(
+                  payload.new.id
+                );
                 if (optimisticUpdate && payload.new.winner_id) {
                   optimistic.confirmOptimisticUpdate(payload.new.id);
                 }
               }
-              
+
               return updatedMatches;
             });
           }
-          
+
           // Debounced full refresh for accuracy
           if (debounceRef.current) clearTimeout(debounceRef.current);
           debounceRef.current = setTimeout(() => {
@@ -130,7 +150,7 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
           }, 1000);
         }
       )
-      
+
       // Listen to automation log for advancement feedback
       .on(
         'postgres_changes',
@@ -138,23 +158,26 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
           event: 'INSERT',
           schema: 'public',
           table: 'tournament_automation_log',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           const logData = payload.new as any;
           console.log('🤖 Automation log update:', logData);
-          
-          if (logData.action_type === 'auto_winner_advancement' && logData.status === 'completed') {
+
+          if (
+            logData.action_type === 'auto_winner_advancement' &&
+            logData.status === 'completed'
+          ) {
             // Automation completed successfully
             setLastUpdateTime(new Date());
-            
+
             // Trigger immediate refresh
             setTimeout(() => fetchMatches(true), 500);
           }
         }
       )
-      
-      .subscribe((status) => {
+
+      .subscribe(status => {
         console.log(`🔗 Enhanced subscription status: ${status}`);
         if (status === 'SUBSCRIBED') {
           console.log('✅ Enhanced real-time connected');
@@ -185,7 +208,7 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
           score_player2: optimisticUpdate.score2,
           status: 'completed',
           // Add visual indicator for pending advancement
-          _isPendingAdvancement: optimistic.isPendingAdvancement(match.id)
+          _isPendingAdvancement: optimistic.isPendingAdvancement(match.id),
         };
       }
       return match;
@@ -199,6 +222,6 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
     lastUpdateTime,
     refetch: () => fetchMatches(true),
     optimistic,
-    pendingAdvancements: optimistic.pendingCount
+    pendingAdvancements: optimistic.pendingCount,
   };
 };

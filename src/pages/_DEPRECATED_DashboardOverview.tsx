@@ -1,18 +1,18 @@
 /**
  * @deprecated This file has been consolidated into DashboardPage.tsx
- * 
+ *
  * Features from this file have been integrated into the main dashboard:
  * - Mobile-optimized horizontal scroll stats
- * - Recent activities section  
+ * - Recent activities section
  * - Upcoming schedule section
  * - Better responsive design patterns
  * - Welcome message with user name
- * 
+ *
  * REMOVAL PLAN: This file will be deleted in 2-4 weeks (target: end of month)
- * 
+ *
  * ACTION REQUIRED: None - all functionality has been moved to DashboardPage.tsx
  * Route redirects have been added in App.tsx: /dashboard-overview → /dashboard
- * 
+ *
  * Last updated: January 2025
  */
 

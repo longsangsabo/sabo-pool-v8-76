@@ -10,7 +10,9 @@ export interface BatchedProfile {
 }
 
 export class OptimizedQueryService {
-  static async getBatchedProfiles(userIds: string[]): Promise<BatchedProfile[]> {
+  static async getBatchedProfiles(
+    userIds: string[]
+  ): Promise<BatchedProfile[]> {
     console.log('Mock get batched profiles:', userIds);
     return userIds.map(id => ({
       user_id: id,
@@ -18,7 +20,7 @@ export class OptimizedQueryService {
       display_name: 'Mock',
       phone: '123-456-7890',
       email: 'mock@example.com',
-      avatar_url: '/default-avatar.png'
+      avatar_url: '/default-avatar.png',
     }));
   }
 
@@ -28,7 +30,7 @@ export class OptimizedQueryService {
       success: true,
       tournament: { id: tournamentId, name: 'Mock Tournament' },
       registrations: [],
-      participants: []
+      participants: [],
     };
   }
 
@@ -42,7 +44,7 @@ export class OptimizedQueryService {
     return {
       success: true,
       leaderboard: [],
-      total: 0
+      total: 0,
     };
   }
 }

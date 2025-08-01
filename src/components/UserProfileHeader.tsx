@@ -23,7 +23,7 @@ const UserProfileHeader = () => {
     setLoading(true);
     try {
       console.log('🔍 Loading complete profile data for user:', user.id);
-      
+
       // Get profile, rankings, and wallet data in parallel
       const [profileResult, rankingsResult, walletResult] = await Promise.all([
         supabase
@@ -40,7 +40,7 @@ const UserProfileHeader = () => {
           .from('wallets')
           .select('*')
           .eq('user_id', user.id)
-          .maybeSingle()
+          .maybeSingle(),
       ]);
 
       if (profileResult.error) {
@@ -51,11 +51,10 @@ const UserProfileHeader = () => {
       console.log('✅ Profile data loaded:', profileResult.data);
       console.log('✅ Rankings data loaded:', rankingsResult.data);
       console.log('✅ Wallet data loaded:', walletResult.data);
-      
+
       setProfile(profileResult.data);
       setRankings(rankingsResult.data);
       setWallet(walletResult.data);
-      
     } catch (error) {
       console.error('❌ Error loading profile data:', error);
     } finally {
@@ -82,9 +81,9 @@ const UserProfileHeader = () => {
           event: 'UPDATE',
           schema: 'public',
           table: 'profiles',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('📊 Profile updated via real-time:', payload);
           setProfile(payload.new);
         }
@@ -95,9 +94,9 @@ const UserProfileHeader = () => {
           event: '*',
           schema: 'public',
           table: 'player_rankings',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('🏆 Rankings updated via real-time:', payload);
           setRankings(payload.new);
         }
@@ -108,14 +107,14 @@ const UserProfileHeader = () => {
           event: 'UPDATE',
           schema: 'public',
           table: 'wallets',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('💰 Wallet updated via real-time:', payload);
           setWallet(payload.new);
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         console.log('🔔 Real-time subscription status:', status);
       });
 
@@ -127,13 +126,13 @@ const UserProfileHeader = () => {
 
   if (loading) {
     return (
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="flex items-center space-x-4">
-            <div className="h-16 w-16 bg-muted rounded-full animate-pulse"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-muted rounded w-32 animate-pulse"></div>
-              <div className="h-3 bg-muted rounded w-20 animate-pulse"></div>
+      <Card className='mb-6'>
+        <CardContent className='p-6'>
+          <div className='flex items-center space-x-4'>
+            <div className='h-16 w-16 bg-muted rounded-full animate-pulse'></div>
+            <div className='space-y-2'>
+              <div className='h-4 bg-muted rounded w-32 animate-pulse'></div>
+              <div className='h-3 bg-muted rounded w-20 animate-pulse'></div>
             </div>
           </div>
         </CardContent>
@@ -150,7 +149,7 @@ const UserProfileHeader = () => {
     id: profile.user_id,
     name: profile.display_name || profile.full_name || 'Chưa có tên',
     avatar: profile.avatar_url,
-    rank: profile.verified_rank || profile.current_rank
+    rank: profile.verified_rank || profile.current_rank,
   };
 
   const getRankColor = (rank: string) => {
@@ -161,57 +160,57 @@ const UserProfileHeader = () => {
   };
 
   return (
-    <Card className="mb-6 border-gradient-primary bg-gradient-subtle">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <UserAvatar 
-              user={userForAvatar} 
-              size="lg" 
-              showRank={false}
-            />
-            <div className="space-y-2">
+    <Card className='mb-6 border-gradient-primary bg-gradient-subtle'>
+      <CardContent className='p-6'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center space-x-4'>
+            <UserAvatar user={userForAvatar} size='lg' showRank={false} />
+            <div className='space-y-2'>
               <div>
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className='text-xl font-semibold text-foreground'>
                   {profile.display_name || profile.full_name || 'Chưa có tên'}
                 </h2>
-                <p className="text-muted-foreground text-sm">
+                <p className='text-muted-foreground text-sm'>
                   Quản lý Câu lạc bộ
                 </p>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className='flex items-center gap-2 flex-wrap'>
                 {profile.verified_rank && (
-                  <Badge 
-                    variant={getRankColor(profile.verified_rank)} 
-                    className="flex items-center gap-1"
+                  <Badge
+                    variant={getRankColor(profile.verified_rank)}
+                    className='flex items-center gap-1'
                   >
-                    <Crown className="w-3 h-3" />
+                    <Crown className='w-3 h-3' />
                     Hạng {profile.verified_rank}
                   </Badge>
                 )}
                 {rankings?.elo_points && (
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <Star className="w-3 h-3" />
+                  <Badge variant='outline' className='flex items-center gap-1'>
+                    <Star className='w-3 h-3' />
                     {rankings.elo_points} ELO
                   </Badge>
                 )}
                 {rankings?.spa_points && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <Coins className="w-3 h-3" />
+                  <Badge
+                    variant='secondary'
+                    className='flex items-center gap-1'
+                  >
+                    <Coins className='w-3 h-3' />
                     {rankings.spa_points} SPA
                   </Badge>
                 )}
               </div>
             </div>
           </div>
-          
-          <div className="text-right space-y-1">
-            <div className="text-sm text-muted-foreground">Tổng trận đấu</div>
-            <div className="text-2xl font-bold text-foreground">
+
+          <div className='text-right space-y-1'>
+            <div className='text-sm text-muted-foreground'>Tổng trận đấu</div>
+            <div className='text-2xl font-bold text-foreground'>
               {rankings?.total_matches || 0}
             </div>
-            <div className="text-xs text-muted-foreground">
-              {rankings?.wins || 0} thắng • {wallet?.points_balance || 0} SPA Points
+            <div className='text-xs text-muted-foreground'>
+              {rankings?.wins || 0} thắng • {wallet?.points_balance || 0} SPA
+              Points
             </div>
           </div>
         </div>

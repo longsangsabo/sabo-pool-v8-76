@@ -18,7 +18,9 @@ export const useAvatar = () => {
   return context;
 };
 
-export const AvatarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AvatarProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { user } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 

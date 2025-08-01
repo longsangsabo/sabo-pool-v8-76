@@ -4,8 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -27,7 +39,7 @@ import {
   Award,
   AlertCircle,
   Save,
-  X
+  X,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -85,19 +97,25 @@ interface EnhancedTournamentBracketProps {
   onMatchUpdate?: (match: TournamentMatch) => void;
 }
 
-export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps> = ({
+export const EnhancedTournamentBracket: React.FC<
+  EnhancedTournamentBracketProps
+> = ({
   tournamentId,
   isAdmin = false,
   canEditResults = false,
-  onMatchUpdate
+  onMatchUpdate,
 }) => {
   const [matches, setMatches] = useState<TournamentMatch[]>([]);
   const [bracket, setBracket] = useState<TournamentBracket | null>(null);
   const [participants, setParticipants] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRound, setSelectedRound] = useState<number>(1);
-  const [editingMatch, setEditingMatch] = useState<TournamentMatch | null>(null);
-  const [viewFormat, setViewFormat] = useState<'rounds' | 'bracket' | 'tree'>('rounds');
+  const [editingMatch, setEditingMatch] = useState<TournamentMatch | null>(
+    null
+  );
+  const [viewFormat, setViewFormat] = useState<'rounds' | 'bracket' | 'tree'>(
+    'rounds'
+  );
   const { toast } = useToast();
 
   useEffect(() => {
@@ -153,47 +171,65 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
       });
 
       // Transform matches with profile data
-      const transformedMatches = matchesData?.map(match => ({
-        ...match,
-        status: match.status as 'pending' | 'ongoing' | 'completed' | 'cancelled',
-        player1: match.player1_id ? {
-          id: match.player1_id,
-          username: profilesMap.get(match.player1_id)?.display_name || 'Unknown',
-          avatar_url: profilesMap.get(match.player1_id)?.avatar_url,
-          rank: profilesMap.get(match.player1_id)?.verified_rank || 'K'
-        } : undefined,
-        player2: match.player2_id ? {
-          id: match.player2_id,
-          username: profilesMap.get(match.player2_id)?.display_name || 'Unknown',
-          avatar_url: profilesMap.get(match.player2_id)?.avatar_url,
-          rank: profilesMap.get(match.player2_id)?.verified_rank || 'K'
-        } : undefined,
-        winner: match.winner_id ? {
-          id: match.winner_id,
-          username: profilesMap.get(match.winner_id)?.display_name || 'Unknown',
-          avatar_url: profilesMap.get(match.winner_id)?.avatar_url,
-          rank: profilesMap.get(match.winner_id)?.verified_rank || 'K'
-        } : undefined,
-        referee: undefined
-      })) || [];
+      const transformedMatches =
+        matchesData?.map(match => ({
+          ...match,
+          status: match.status as
+            | 'pending'
+            | 'ongoing'
+            | 'completed'
+            | 'cancelled',
+          player1: match.player1_id
+            ? {
+                id: match.player1_id,
+                username:
+                  profilesMap.get(match.player1_id)?.display_name || 'Unknown',
+                avatar_url: profilesMap.get(match.player1_id)?.avatar_url,
+                rank: profilesMap.get(match.player1_id)?.verified_rank || 'K',
+              }
+            : undefined,
+          player2: match.player2_id
+            ? {
+                id: match.player2_id,
+                username:
+                  profilesMap.get(match.player2_id)?.display_name || 'Unknown',
+                avatar_url: profilesMap.get(match.player2_id)?.avatar_url,
+                rank: profilesMap.get(match.player2_id)?.verified_rank || 'K',
+              }
+            : undefined,
+          winner: match.winner_id
+            ? {
+                id: match.winner_id,
+                username:
+                  profilesMap.get(match.winner_id)?.display_name || 'Unknown',
+                avatar_url: profilesMap.get(match.winner_id)?.avatar_url,
+                rank: profilesMap.get(match.winner_id)?.verified_rank || 'K',
+              }
+            : undefined,
+          referee: undefined,
+        })) || [];
 
       setMatches(transformedMatches as any[]);
 
       // Fetch participants first
-      const { data: participantsData, error: participantsError } = await supabase
-        .from('tournament_registrations')
-        .select(`
+      const { data: participantsData, error: participantsError } =
+        await supabase
+          .from('tournament_registrations')
+          .select(
+            `
           *,
           profiles!tournament_registrations_user_id_fkey(*)
-        `)
-        .eq('tournament_id', tournamentId)
-        .order('seed_number', { ascending: true });
+        `
+          )
+          .eq('tournament_id', tournamentId)
+          .order('seed_number', { ascending: true });
 
       if (participantsError) throw participantsError;
 
       // Get unique user IDs from participants
-      const participantUserIds = participantsData?.map(p => p.user_id).filter(Boolean) || [];
-      
+      const participantUserIds =
+        participantsData?.map(p => p.user_id).filter(Boolean) || [];
+
       // Fetch profiles for participants
       const { data: participantProfiles } = await supabase
         .from('profiles')
@@ -206,23 +242,24 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
         participantProfilesMap.set(profile.user_id, profile);
       });
 
-      const transformedParticipants = participantsData?.map(p => ({
-        id: p.user_id,
-        username: participantProfilesMap.get(p.user_id)?.display_name || 'Unknown',
-        avatar_url: participantProfilesMap.get(p.user_id)?.avatar_url,
-        rank: participantProfilesMap.get(p.user_id)?.verified_rank || 'K',
-        seed: p.bracket_position || 0,
-        spa_points: participantProfilesMap.get(p.user_id)?.elo || 0
-      })) || [];
+      const transformedParticipants =
+        participantsData?.map(p => ({
+          id: p.user_id,
+          username:
+            participantProfilesMap.get(p.user_id)?.display_name || 'Unknown',
+          avatar_url: participantProfilesMap.get(p.user_id)?.avatar_url,
+          rank: participantProfilesMap.get(p.user_id)?.verified_rank || 'K',
+          seed: p.bracket_position || 0,
+          spa_points: participantProfilesMap.get(p.user_id)?.elo || 0,
+        })) || [];
 
       setParticipants(transformedParticipants);
-
     } catch (error) {
       console.error('Error fetching tournament data:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể tải dữ liệu giải đấu",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không thể tải dữ liệu giải đấu',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -238,7 +275,7 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
         () => {
           fetchTournamentData();
@@ -254,62 +291,70 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
   const generateBracket = async () => {
     if (!participants.length) {
       toast({
-        title: "Lỗi",
-        description: "Không có người tham gia để tạo bracket",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không có người tham gia để tạo bracket',
+        variant: 'destructive',
       });
       return;
     }
 
     try {
       const participantIds = participants.map(p => p.id);
-      
-      const { data, error } = await supabase.rpc('generate_single_elimination_bracket', {
-        p_tournament_id: tournamentId
-      });
+
+      const { data, error } = await supabase.rpc(
+        'generate_single_elimination_bracket',
+        {
+          p_tournament_id: tournamentId,
+        }
+      );
 
       if (error) throw error;
 
       toast({
-        title: "Thành công",
-        description: "Đã tạo bracket giải đấu"
+        title: 'Thành công',
+        description: 'Đã tạo bracket giải đấu',
       });
 
       fetchTournamentData();
     } catch (error) {
       console.error('Error generating bracket:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể tạo bracket",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không thể tạo bracket',
+        variant: 'destructive',
       });
     }
   };
 
-  const updateMatchResult = async (matchId: string, result: {
-    score_player1: number;
-    score_player2: number;
-    winner_id: string;
-    status: string;
-    match_notes?: string;
-  }) => {
+  const updateMatchResult = async (
+    matchId: string,
+    result: {
+      score_player1: number;
+      score_player2: number;
+      winner_id: string;
+      status: string;
+      match_notes?: string;
+    }
+  ) => {
     try {
       const { error } = await supabase
         .from('tournament_matches')
         .update({
           ...result,
-          loser_id: result.winner_id === editingMatch?.player1_id 
-            ? editingMatch?.player2_id 
-            : editingMatch?.player1_id,
-          actual_end_time: result.status === 'completed' ? new Date().toISOString() : null
+          loser_id:
+            result.winner_id === editingMatch?.player1_id
+              ? editingMatch?.player2_id
+              : editingMatch?.player1_id,
+          actual_end_time:
+            result.status === 'completed' ? new Date().toISOString() : null,
         })
         .eq('id', matchId);
 
       if (error) throw error;
 
       toast({
-        title: "Thành công",
-        description: "Đã cập nhật kết quả trận đấu"
+        title: 'Thành công',
+        description: 'Đã cập nhật kết quả trận đấu',
       });
 
       setEditingMatch(null);
@@ -317,9 +362,9 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
     } catch (error) {
       console.error('Error updating match result:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể cập nhật kết quả",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không thể cập nhật kết quả',
+        variant: 'destructive',
       });
     }
   };
@@ -330,29 +375,29 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
         .from('tournament_matches')
         .update({
           status: 'ongoing',
-          actual_start_time: new Date().toISOString()
+          actual_start_time: new Date().toISOString(),
         })
         .eq('id', matchId);
 
       if (error) throw error;
 
       toast({
-        title: "Thành công",
-        description: "Đã bắt đầu trận đấu"
+        title: 'Thành công',
+        description: 'Đã bắt đầu trận đấu',
       });
     } catch (error) {
       console.error('Error starting match:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể bắt đầu trận đấu",
-        variant: "destructive"
+        title: 'Lỗi',
+        description: 'Không thể bắt đầu trận đấu',
+        variant: 'destructive',
       });
     }
   };
 
   const getRoundName = (round: number) => {
     if (!bracket) return `Vòng ${round}`;
-    
+
     const totalRounds = bracket.total_rounds;
     switch (totalRounds - round + 1) {
       case 1:
@@ -407,7 +452,9 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
       : 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50';
   };
 
-  const rounds = bracket ? Array.from({ length: bracket.total_rounds }, (_, i) => i + 1) : [];
+  const rounds = bracket
+    ? Array.from({ length: bracket.total_rounds }, (_, i) => i + 1)
+    : [];
 
   if (isLoading) {
     return (
@@ -425,15 +472,20 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
           <h2 className='text-2xl font-bold'>Bracket Giải Đấu</h2>
           {bracket && (
             <p className='text-muted-foreground'>
-              {bracket.bracket_type === 'single_elimination' ? 'Loại trực tiếp' : bracket.bracket_type} • 
-              {bracket.total_players} người chơi • {bracket.total_rounds} vòng
+              {bracket.bracket_type === 'single_elimination'
+                ? 'Loại trực tiếp'
+                : bracket.bracket_type}{' '}
+              •{bracket.total_players} người chơi • {bracket.total_rounds} vòng
             </p>
           )}
         </div>
 
         <div className='flex flex-wrap gap-2'>
           {/* View Format Selector */}
-          <Select value={viewFormat} onValueChange={(value: any) => setViewFormat(value)}>
+          <Select
+            value={viewFormat}
+            onValueChange={(value: any) => setViewFormat(value)}
+          >
             <SelectTrigger className='w-32'>
               <SelectValue />
             </SelectTrigger>
@@ -472,17 +524,23 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
               <Users className='h-4 w-4 text-muted-foreground' />
               <div>
                 <div className='text-sm text-muted-foreground'>Người chơi</div>
-                <div className='text-lg font-semibold'>{bracket.total_players}</div>
+                <div className='text-lg font-semibold'>
+                  {bracket.total_players}
+                </div>
               </div>
             </div>
           </Card>
-          
+
           <Card className='p-4'>
             <div className='flex items-center gap-2'>
               <Target className='h-4 w-4 text-muted-foreground' />
               <div>
-                <div className='text-sm text-muted-foreground'>Vòng hiện tại</div>
-                <div className='text-lg font-semibold'>{bracket.current_round}/{bracket.total_rounds}</div>
+                <div className='text-sm text-muted-foreground'>
+                  Vòng hiện tại
+                </div>
+                <div className='text-lg font-semibold'>
+                  {bracket.current_round}/{bracket.total_rounds}
+                </div>
               </div>
             </div>
           </Card>
@@ -493,7 +551,8 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
               <div>
                 <div className='text-sm text-muted-foreground'>Hoàn thành</div>
                 <div className='text-lg font-semibold'>
-                  {matches.filter(m => m.status === 'completed').length}/{matches.length}
+                  {matches.filter(m => m.status === 'completed').length}/
+                  {matches.length}
                 </div>
               </div>
             </div>
@@ -503,7 +562,9 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
             <div className='flex items-center gap-2'>
               <Play className='h-4 w-4 text-muted-foreground' />
               <div>
-                <div className='text-sm text-muted-foreground'>Đang diễn ra</div>
+                <div className='text-sm text-muted-foreground'>
+                  Đang diễn ra
+                </div>
                 <div className='text-lg font-semibold'>
                   {matches.filter(m => m.status === 'ongoing').length}
                 </div>
@@ -518,10 +579,9 @@ export const EnhancedTournamentBracket: React.FC<EnhancedTournamentBracketProps>
           <Trophy className='h-12 w-12 mx-auto mb-4 text-muted-foreground' />
           <h3 className='text-lg font-semibold mb-2'>Chưa có bracket</h3>
           <p className='text-muted-foreground mb-4'>
-            {participants.length > 0 
+            {participants.length > 0
               ? 'Nhấn "Tạo Bracket" để bắt đầu giải đấu'
-              : 'Cần có người tham gia trước khi tạo bracket'
-            }
+              : 'Cần có người tham gia trước khi tạo bracket'}
           </p>
           {isAdmin && participants.length > 0 && (
             <Button onClick={generateBracket}>
@@ -588,11 +648,21 @@ const MatchCard: React.FC<{
   getMatchStatusColor: (status: string) => string;
   getMatchStatusName: (status: string) => string;
   getWinnerStyle: (playerId: string, winnerId?: string) => string;
-}> = ({ match, canEdit, onEdit, onStart, getMatchStatusColor, getMatchStatusName, getWinnerStyle }) => {
+}> = ({
+  match,
+  canEdit,
+  onEdit,
+  onStart,
+  getMatchStatusColor,
+  getMatchStatusName,
+  getWinnerStyle,
+}) => {
   return (
-    <Card className={`transition-all duration-200 hover:shadow-md ${
-      match.status === 'ongoing' ? 'ring-2 ring-primary' : ''
-    }`}>
+    <Card
+      className={`transition-all duration-200 hover:shadow-md ${
+        match.status === 'ongoing' ? 'ring-2 ring-primary' : ''
+      }`}
+    >
       <CardContent className='p-4'>
         <div className='flex items-center justify-between mb-3'>
           <div className='flex items-center gap-2'>
@@ -617,7 +687,7 @@ const MatchCard: React.FC<{
                 day: '2-digit',
                 month: '2-digit',
                 hour: '2-digit',
-                minute: '2-digit'
+                minute: '2-digit',
               })}
             </div>
           )}
@@ -648,18 +718,25 @@ const MatchCard: React.FC<{
 
         {/* Match Actions */}
         <div className='flex gap-2 mt-4 pt-3 border-t'>
-          {match.status === 'pending' && match.player1 && match.player2 && canEdit && (
-            <Button size='sm' onClick={onStart} className='flex-1'>
-              <Play className='h-4 w-4 mr-2' />
-              Bắt đầu
-            </Button>
-          )}
-          
+          {match.status === 'pending' &&
+            match.player1 &&
+            match.player2 &&
+            canEdit && (
+              <Button size='sm' onClick={onStart} className='flex-1'>
+                <Play className='h-4 w-4 mr-2' />
+                Bắt đầu
+              </Button>
+            )}
+
           {match.status === 'ongoing' && (
             <>
               {match.live_stream_url && (
                 <Button size='sm' variant='outline' asChild>
-                  <a href={match.live_stream_url} target='_blank' rel='noopener noreferrer'>
+                  <a
+                    href={match.live_stream_url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
                     <Eye className='h-4 w-4 mr-2' />
                     Xem Live
                   </a>
@@ -701,18 +778,16 @@ const PlayerRow: React.FC<{
   style: string;
 }> = ({ player, score, isWinner, style }) => {
   return (
-    <div className={`flex items-center justify-between p-3 rounded-lg border ${style}`}>
+    <div
+      className={`flex items-center justify-between p-3 rounded-lg border ${style}`}
+    >
       <div className='flex items-center gap-3'>
         <Avatar className='h-8 w-8'>
           <AvatarImage src={player?.avatar_url} />
-          <AvatarFallback>
-            {player?.username?.[0] || 'T'}
-          </AvatarFallback>
+          <AvatarFallback>{player?.username?.[0] || 'T'}</AvatarFallback>
         </Avatar>
         <div>
-          <div className='font-medium'>
-            {player?.username || 'TBD'}
-          </div>
+          <div className='font-medium'>{player?.username || 'TBD'}</div>
           <div className='text-sm text-muted-foreground'>
             {player?.rank && `Hạng ${player.rank}`}
             {player?.seed && ` (#${player.seed})`}
@@ -722,13 +797,9 @@ const PlayerRow: React.FC<{
 
       <div className='flex items-center gap-2'>
         {score !== undefined && (
-          <span className='text-lg font-bold'>
-            {score}
-          </span>
+          <span className='text-lg font-bold'>{score}</span>
         )}
-        {isWinner && (
-          <Check className='h-5 w-5 text-green-600' />
-        )}
+        {isWinner && <Check className='h-5 w-5 text-green-600' />}
       </div>
     </div>
   );
@@ -748,13 +819,13 @@ const MatchEditDialog: React.FC<{
 
   const handleSave = () => {
     const winnerId = score1 > score2 ? match.player1_id : match.player2_id;
-    
+
     onSave(match.id, {
       score_player1: score1,
       score_player2: score2,
       winner_id: winnerId,
       status: status === 'ongoing' && score1 !== score2 ? 'completed' : status,
-      match_notes: notes
+      match_notes: notes,
     });
   };
 
@@ -779,20 +850,24 @@ const MatchEditDialog: React.FC<{
           {/* Scores */}
           <div className='grid grid-cols-2 gap-4'>
             <div>
-              <label className='text-sm font-medium'>{match.player1?.username}</label>
+              <label className='text-sm font-medium'>
+                {match.player1?.username}
+              </label>
               <Input
                 type='number'
                 value={score1}
-                onChange={(e) => setScore1(parseInt(e.target.value) || 0)}
+                onChange={e => setScore1(parseInt(e.target.value) || 0)}
                 className='mt-1'
               />
             </div>
             <div>
-              <label className='text-sm font-medium'>{match.player2?.username}</label>
+              <label className='text-sm font-medium'>
+                {match.player2?.username}
+              </label>
               <Input
                 type='number'
                 value={score2}
-                onChange={(e) => setScore2(parseInt(e.target.value) || 0)}
+                onChange={e => setScore2(parseInt(e.target.value) || 0)}
                 className='mt-1'
               />
             </div>
@@ -801,7 +876,10 @@ const MatchEditDialog: React.FC<{
           {/* Status */}
           <div>
             <label className='text-sm font-medium'>Trạng thái</label>
-            <Select value={status} onValueChange={(value: any) => setStatus(value)}>
+            <Select
+              value={status}
+              onValueChange={(value: any) => setStatus(value)}
+            >
               <SelectTrigger className='mt-1'>
                 <SelectValue />
               </SelectTrigger>
@@ -819,7 +897,7 @@ const MatchEditDialog: React.FC<{
             <label className='text-sm font-medium'>Ghi chú</label>
             <Textarea
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={e => setNotes(e.target.value)}
               placeholder='Thêm ghi chú về trận đấu...'
               className='mt-1'
             />

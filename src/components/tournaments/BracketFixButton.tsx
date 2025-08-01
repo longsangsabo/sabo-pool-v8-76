@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, Wrench } from 'lucide-react';
@@ -18,7 +17,7 @@ export const BracketFixButton: React.FC<BracketFixButtonProps> = ({
   onFixed,
   variant = 'outline',
   size = 'sm',
-  showIcon = true
+  showIcon = true,
 }) => {
   const [isFixing, setIsFixing] = useState(false);
 
@@ -28,7 +27,7 @@ export const BracketFixButton: React.FC<BracketFixButtonProps> = ({
 
     try {
       const result = await fixBracketProgression(tournamentId);
-      
+
       if (result.success) {
         toast.success('✅ ' + result.message);
         onFixed?.();
@@ -49,15 +48,14 @@ export const BracketFixButton: React.FC<BracketFixButtonProps> = ({
       disabled={isFixing}
       variant={variant}
       size={size}
-      className="gap-2"
+      className='gap-2'
     >
-      {showIcon && (
-        isFixing ? (
-          <RefreshCw className="w-4 h-4 animate-spin" />
+      {showIcon &&
+        (isFixing ? (
+          <RefreshCw className='w-4 h-4 animate-spin' />
         ) : (
-          <Wrench className="w-4 h-4" />
-        )
-      )}
+          <Wrench className='w-4 h-4' />
+        ))}
       {isFixing ? 'Đang sửa...' : 'Sửa Bracket'}
     </Button>
   );

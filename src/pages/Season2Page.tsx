@@ -27,12 +27,7 @@ import {
 } from 'lucide-react';
 
 export const Season2Page: React.FC = () => {
-  const {
-    seasonInfo,
-    prizes,
-    leaderboard,
-    loading,
-  } = useSeason2();
+  const { seasonInfo, prizes, leaderboard, loading } = useSeason2();
   const { user } = useAuth();
   const [userStats, setUserStats] = React.useState<any | null>(null);
   const [activeTab, setActiveTab] = React.useState('info');

@@ -1,4 +1,3 @@
-
 // Legacy component - redirects to enhanced version
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

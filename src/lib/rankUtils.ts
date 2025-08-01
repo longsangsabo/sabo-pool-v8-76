@@ -34,11 +34,11 @@ export function getRankDisplay(data: RankData & { club_verified?: boolean }): {
 } {
   const rank = getNormalizedRank(data);
   const isVerified = data.club_verified === true && hasValidRank(data);
-  
+
   return {
     rank,
     isVerified,
-    displayText: isVerified ? `${rank} ✓` : rank
+    displayText: isVerified ? `${rank} ✓` : rank,
   };
 }
 
@@ -47,28 +47,28 @@ export function getRankDisplay(data: RankData & { club_verified?: boolean }): {
  */
 export function getRankOrder(rank: string): number {
   const rankMap: Record<string, number> = {
-    'K': 1,
+    K: 1,
     'K+': 2,
-    'I': 3,
+    I: 3,
     'I+': 4,
-    'H': 5,
+    H: 5,
     'H+': 6,
-    'G': 7,
+    G: 7,
     'G+': 8,
-    'F': 9,
+    F: 9,
     'F+': 10,
-    'E': 11,
+    E: 11,
     'E+': 12,
-    'D': 13,
+    D: 13,
     'D+': 14,
-    'C': 15,
+    C: 15,
     'C+': 16,
-    'B': 17,
+    B: 17,
     'B+': 18,
-    'A': 19,
-    'A+': 20
+    A: 19,
+    'A+': 20,
   };
-  
+
   return rankMap[rank] || 0;
 }
 
@@ -84,11 +84,11 @@ export function compareRanks(rank1: string, rank2: string): number {
  */
 export const extractRankFromProfile = (profile: any): string => {
   if (!profile) return 'K';
-  
+
   return getNormalizedRank({
     verified_rank: profile.verified_rank,
     current_rank: profile.current_rank,
-    rank: profile.rank
+    rank: profile.rank,
   });
 };
 
@@ -101,6 +101,6 @@ export const debugRankData = (context: string, data: any): void => {
     current_rank: data?.current_rank,
     rank: data?.rank,
     normalized: getNormalizedRank(data || {}),
-    club_verified: data?.club_verified
+    club_verified: data?.club_verified,
   });
 };

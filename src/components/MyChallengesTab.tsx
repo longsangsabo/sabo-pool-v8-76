@@ -7,16 +7,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Calendar, 
-  MapPin, 
+import {
+  Clock,
+  CheckCircle,
+  XCircle,
+  Calendar,
+  MapPin,
   Timer,
   Trophy,
   Star,
-  MessageCircle
+  MessageCircle,
 } from 'lucide-react';
 import MatchCompletionModal from './MatchCompletionModal';
 
@@ -90,23 +90,25 @@ const MyChallengesTab = () => {
 
       // Fetch challenger profiles for incoming challenges
       const incomingWithProfiles = await Promise.all(
-        (incoming || []).map(async (challenge) => {
+        (incoming || []).map(async challenge => {
           const { data: profile } = await supabase
             .from('profiles')
             .select('full_name, avatar_url')
             .eq('user_id', challenge.challenger_id)
             .single();
-          
-            return {
-              ...challenge,
-              profiles: profile ? { 
-                full_name: profile.full_name, 
-                avatar_url: profile.avatar_url
-              } : { 
-                full_name: 'Unknown', 
-                avatar_url: ''
-              }
-            };
+
+          return {
+            ...challenge,
+            profiles: profile
+              ? {
+                  full_name: profile.full_name,
+                  avatar_url: profile.avatar_url,
+                }
+              : {
+                  full_name: 'Unknown',
+                  avatar_url: '',
+                },
+          };
         })
       );
 
@@ -120,23 +122,25 @@ const MyChallengesTab = () => {
       if (outgoingError) throw outgoingError;
 
       const outgoingWithProfiles = await Promise.all(
-        (outgoing || []).map(async (challenge) => {
+        (outgoing || []).map(async challenge => {
           const { data: profile } = await supabase
             .from('profiles')
             .select('full_name, avatar_url')
             .eq('user_id', challenge.opponent_id)
             .single();
-          
-            return {
-              ...challenge,
-              profiles: profile ? { 
-                full_name: profile.full_name, 
-                avatar_url: profile.avatar_url
-              } : { 
-                full_name: 'Unknown', 
-                avatar_url: ''
-              }
-            };
+
+          return {
+            ...challenge,
+            profiles: profile
+              ? {
+                  full_name: profile.full_name,
+                  avatar_url: profile.avatar_url,
+                }
+              : {
+                  full_name: 'Unknown',
+                  avatar_url: '',
+                },
+          };
         })
       );
 
@@ -155,13 +159,16 @@ const MyChallengesTab = () => {
     }
   };
 
-  const handleChallengeResponse = async (challengeId: string, status: 'accepted' | 'declined') => {
+  const handleChallengeResponse = async (
+    challengeId: string,
+    status: 'accepted' | 'declined'
+  ) => {
     try {
       const { error } = await supabase
         .from('challenges')
         .update({
           status,
-          responded_at: new Date().toISOString()
+          responded_at: new Date().toISOString(),
         })
         .eq('id', challengeId);
 
@@ -174,7 +181,11 @@ const MyChallengesTab = () => {
         console.log('Challenge accepted, would create match for:', challengeId);
       }
 
-      toast.success(status === 'accepted' ? 'Đã chấp nhận thách đấu!' : 'Đã từ chối thách đấu');
+      toast.success(
+        status === 'accepted'
+          ? 'Đã chấp nhận thách đấu!'
+          : 'Đã từ chối thách đấu'
+      );
       fetchChallengesAndMatches();
     } catch (error) {
       console.error('Error responding to challenge:', error);
@@ -186,9 +197,9 @@ const MyChallengesTab = () => {
     const now = new Date();
     const expires = new Date(expiresAt);
     const diff = expires.getTime() - now.getTime();
-    
+
     if (diff <= 0) return 'Đã hết hạn';
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60));
     if (hours < 1) {
       const minutes = Math.floor(diff / (1000 * 60));
@@ -209,8 +220,8 @@ const MyChallengesTab = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+      <div className='text-center py-8'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
         <p>Đang tải...</p>
       </div>
     );
@@ -218,35 +229,38 @@ const MyChallengesTab = () => {
 
   return (
     <>
-      <Tabs defaultValue="incoming" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="incoming" className="relative">
+      <Tabs defaultValue='incoming' className='w-full'>
+        <TabsList className='grid w-full grid-cols-4'>
+          <TabsTrigger value='incoming' className='relative'>
             Đến
             {incomingChallenges.length > 0 && (
-              <Badge className="ml-1 h-5 w-5 rounded-full p-0 text-xs bg-red-500">
+              <Badge className='ml-1 h-5 w-5 rounded-full p-0 text-xs bg-red-500'>
                 {incomingChallenges.length}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="outgoing">Đi</TabsTrigger>
-          <TabsTrigger value="upcoming">Sắp tới</TabsTrigger>
-          <TabsTrigger value="history">Lịch sử</TabsTrigger>
+          <TabsTrigger value='outgoing'>Đi</TabsTrigger>
+          <TabsTrigger value='upcoming'>Sắp tới</TabsTrigger>
+          <TabsTrigger value='history'>Lịch sử</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="incoming" className="space-y-4">
+        <TabsContent value='incoming' className='space-y-4'>
           {incomingChallenges.length === 0 ? (
-            <Card className="bg-white">
-              <CardContent className="text-center py-8">
-                <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Không có thách đấu nào</p>
+            <Card className='bg-white'>
+              <CardContent className='text-center py-8'>
+                <MessageCircle className='w-12 h-12 text-gray-300 mx-auto mb-4' />
+                <p className='text-gray-500'>Không có thách đấu nào</p>
               </CardContent>
             </Card>
           ) : (
             incomingChallenges.map(challenge => (
-              <Card key={challenge.id} className="border-l-4 border-l-blue-500 bg-white">
+              <Card
+                key={challenge.id}
+                className='border-l-4 border-l-blue-500 bg-white'
+              >
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-3">
+                  <div className='flex justify-between items-start'>
+                    <div className='flex items-center space-x-3'>
                       <Avatar>
                         <AvatarImage src={challenge.profiles?.avatar_url} />
                         <AvatarFallback>
@@ -254,62 +268,70 @@ const MyChallengesTab = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold">{challenge.profiles?.full_name}</h3>
-                         <p className="text-sm text-gray-600">
-                           {challenge.bet_points} điểm
-                         </p>
+                        <h3 className='font-semibold'>
+                          {challenge.profiles?.full_name}
+                        </h3>
+                        <p className='text-sm text-gray-600'>
+                          {challenge.bet_points} điểm
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="mb-2">
-                        <Clock className="w-3 h-3 mr-1" />
+                    <div className='text-right'>
+                      <Badge variant='outline' className='mb-2'>
+                        <Clock className='w-3 h-3 mr-1' />
                         {getTimeRemaining(challenge.expires_at)}
                       </Badge>
                     </div>
                   </div>
                 </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+
+                <CardContent className='space-y-4'>
+                  <div className='grid grid-cols-2 gap-4 text-sm'>
                     <div>
                       <strong>Cược:</strong> {getStakeDisplay(challenge)}
                     </div>
                     {challenge.scheduled_time && (
-                      <div className="flex items-center">
-                        <Calendar className="w-3 h-3 mr-1" />
-                        {new Date(challenge.scheduled_time).toLocaleDateString('vi-VN')}
+                      <div className='flex items-center'>
+                        <Calendar className='w-3 h-3 mr-1' />
+                        {new Date(challenge.scheduled_time).toLocaleDateString(
+                          'vi-VN'
+                        )}
                       </div>
                     )}
                     {challenge.location && (
-                      <div className="flex items-center col-span-2">
-                        <MapPin className="w-3 h-3 mr-1" />
+                      <div className='flex items-center col-span-2'>
+                        <MapPin className='w-3 h-3 mr-1' />
                         {challenge.location}
                       </div>
                     )}
                   </div>
 
                   {challenge.message && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <p className="message-text">"{challenge.message}"</p>
+                    <div className='bg-gray-50 p-3 rounded'>
+                      <p className='message-text'>"{challenge.message}"</p>
                     </div>
                   )}
 
-                  <div className="flex space-x-2">
-                    <Button 
-                      size="sm" 
-                      onClick={() => handleChallengeResponse(challenge.id, 'accepted')}
-                      className="flex-1"
+                  <div className='flex space-x-2'>
+                    <Button
+                      size='sm'
+                      onClick={() =>
+                        handleChallengeResponse(challenge.id, 'accepted')
+                      }
+                      className='flex-1'
                     >
-                      <CheckCircle className="w-4 h-4 mr-1" />
+                      <CheckCircle className='w-4 h-4 mr-1' />
                       Chấp nhận
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleChallengeResponse(challenge.id, 'declined')}
-                      className="flex-1"
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() =>
+                        handleChallengeResponse(challenge.id, 'declined')
+                      }
+                      className='flex-1'
                     >
-                      <XCircle className="w-4 h-4 mr-1" />
+                      <XCircle className='w-4 h-4 mr-1' />
                       Từ chối
                     </Button>
                   </div>
@@ -319,20 +341,20 @@ const MyChallengesTab = () => {
           )}
         </TabsContent>
 
-        <TabsContent value="outgoing" className="space-y-4">
+        <TabsContent value='outgoing' className='space-y-4'>
           {outgoingChallenges.length === 0 ? (
-            <Card className="bg-white">
-              <CardContent className="text-center py-8">
-                <Trophy className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Chưa gửi thách đấu nào</p>
+            <Card className='bg-white'>
+              <CardContent className='text-center py-8'>
+                <Trophy className='w-12 h-12 text-gray-300 mx-auto mb-4' />
+                <p className='text-gray-500'>Chưa gửi thách đấu nào</p>
               </CardContent>
             </Card>
           ) : (
             outgoingChallenges.map(challenge => (
-              <Card key={challenge.id} className="bg-white">
+              <Card key={challenge.id} className='bg-white'>
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-3">
+                  <div className='flex justify-between items-start'>
+                    <div className='flex items-center space-x-3'>
                       <Avatar>
                         <AvatarImage src={challenge.profiles?.avatar_url} />
                         <AvatarFallback>
@@ -340,34 +362,51 @@ const MyChallengesTab = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold">{challenge.profiles?.full_name}</h3>
-                         <p className="text-sm text-gray-600">
-                           {challenge.bet_points} điểm
-                         </p>
+                        <h3 className='font-semibold'>
+                          {challenge.profiles?.full_name}
+                        </h3>
+                        <p className='text-sm text-gray-600'>
+                          {challenge.bet_points} điểm
+                        </p>
                       </div>
                     </div>
-                    <Badge 
+                    <Badge
                       className={
-                        challenge.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        challenge.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                        'bg-red-100 text-red-800'
+                        challenge.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : challenge.status === 'accepted'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
                       }
                     >
-                      {challenge.status === 'pending' ? 'Chờ phản hồi' :
-                       challenge.status === 'accepted' ? 'Đã chấp nhận' :
-                       challenge.status === 'declined' ? 'Đã từ chối' : challenge.status}
+                      {challenge.status === 'pending'
+                        ? 'Chờ phản hồi'
+                        : challenge.status === 'accepted'
+                          ? 'Đã chấp nhận'
+                          : challenge.status === 'declined'
+                            ? 'Đã từ chối'
+                            : challenge.status}
                     </Badge>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent>
-                  <div className="text-sm text-gray-600">
-                    <p><strong>Cược:</strong> {getStakeDisplay(challenge)}</p>
+                  <div className='text-sm text-gray-600'>
+                    <p>
+                      <strong>Cược:</strong> {getStakeDisplay(challenge)}
+                    </p>
                     {challenge.scheduled_time && (
-                      <p><strong>Thời gian:</strong> {new Date(challenge.scheduled_time).toLocaleString('vi-VN')}</p>
+                      <p>
+                        <strong>Thời gian:</strong>{' '}
+                        {new Date(challenge.scheduled_time).toLocaleString(
+                          'vi-VN'
+                        )}
+                      </p>
                     )}
                     {challenge.message && (
-                      <p><strong>Lời nhắn:</strong> "{challenge.message}"</p>
+                      <p>
+                        <strong>Lời nhắn:</strong> "{challenge.message}"
+                      </p>
                     )}
                   </div>
                 </CardContent>
@@ -376,24 +415,26 @@ const MyChallengesTab = () => {
           )}
         </TabsContent>
 
-        <TabsContent value="upcoming" className="space-y-4">
+        <TabsContent value='upcoming' className='space-y-4'>
           {upcomingMatches.length === 0 ? (
             <Card>
-              <CardContent className="text-center py-8">
-                <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Không có trận đấu sắp tới</p>
+              <CardContent className='text-center py-8'>
+                <Calendar className='w-12 h-12 text-gray-300 mx-auto mb-4' />
+                <p className='text-gray-500'>Không có trận đấu sắp tới</p>
               </CardContent>
             </Card>
           ) : (
             upcomingMatches.map(match => {
-              const opponent = match.player1_id === user?.id ? match.profiles : match.profiles;
-              const isPastMatchTime = match.played_at && new Date(match.played_at) < new Date();
-              
+              const opponent =
+                match.player1_id === user?.id ? match.profiles : match.profiles;
+              const isPastMatchTime =
+                match.played_at && new Date(match.played_at) < new Date();
+
               return (
-                <Card key={match.id} className="border-l-4 border-l-green-500">
+                <Card key={match.id} className='border-l-4 border-l-green-500'>
                   <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center space-x-3">
+                    <div className='flex justify-between items-start'>
+                      <div className='flex items-center space-x-3'>
                         <Avatar>
                           <AvatarImage src={opponent?.avatar_url} />
                           <AvatarFallback>
@@ -401,31 +442,35 @@ const MyChallengesTab = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-semibold">{opponent?.full_name}</h3>
-                          <p className="text-sm text-gray-600">{opponent?.current_rank}</p>
+                          <h3 className='font-semibold'>
+                            {opponent?.full_name}
+                          </h3>
+                          <p className='text-sm text-gray-600'>
+                            {opponent?.current_rank}
+                          </p>
                         </div>
                       </div>
                       {isPastMatchTime && (
-                        <Badge className="bg-orange-100 text-orange-800">
+                        <Badge className='bg-orange-100 text-orange-800'>
                           Cần xác nhận kết quả
                         </Badge>
                       )}
                     </div>
                   </CardHeader>
-                  
-                  <CardContent className="space-y-4">
+
+                  <CardContent className='space-y-4'>
                     {match.played_at && (
-                      <div className="flex items-center text-sm">
-                        <Timer className="w-4 h-4 mr-2" />
+                      <div className='flex items-center text-sm'>
+                        <Timer className='w-4 h-4 mr-2' />
                         {new Date(match.played_at).toLocaleString('vi-VN')}
                       </div>
                     )}
 
                     {isPastMatchTime && (
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size='sm'
                         onClick={() => openMatchCompletion(match)}
-                        className="w-full"
+                        className='w-full'
                       >
                         Xác nhận kết quả
                       </Button>
@@ -437,24 +482,25 @@ const MyChallengesTab = () => {
           )}
         </TabsContent>
 
-        <TabsContent value="history" className="space-y-4">
+        <TabsContent value='history' className='space-y-4'>
           {pastMatches.length === 0 ? (
             <Card>
-              <CardContent className="text-center py-8">
-                <Star className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Chưa có lịch sử thi đấu</p>
+              <CardContent className='text-center py-8'>
+                <Star className='w-12 h-12 text-gray-300 mx-auto mb-4' />
+                <p className='text-gray-500'>Chưa có lịch sử thi đấu</p>
               </CardContent>
             </Card>
           ) : (
             pastMatches.map(match => {
-              const opponent = match.player1_id === user?.id ? match.profiles : match.profiles;
+              const opponent =
+                match.player1_id === user?.id ? match.profiles : match.profiles;
               const isWinner = match.winner_id === user?.id;
-              
+
               return (
                 <Card key={match.id}>
                   <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center space-x-3">
+                    <div className='flex justify-between items-start'>
+                      <div className='flex items-center space-x-3'>
                         <Avatar>
                           <AvatarImage src={opponent?.avatar_url} />
                           <AvatarFallback>
@@ -462,24 +508,34 @@ const MyChallengesTab = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-semibold">{opponent?.full_name}</h3>
-                          <p className="text-sm text-gray-600">{opponent?.current_rank}</p>
+                          <h3 className='font-semibold'>
+                            {opponent?.full_name}
+                          </h3>
+                          <p className='text-sm text-gray-600'>
+                            {opponent?.current_rank}
+                          </p>
                         </div>
                       </div>
-                      <Badge 
+                      <Badge
                         className={
-                          isWinner ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          isWinner
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
                         }
                       >
                         {isWinner ? 'Thắng' : 'Thua'}
                       </Badge>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent>
-                    <div className="flex justify-between text-sm">
-                      <span>Tỉ số: {match.score_player1} - {match.score_player2}</span>
-                      <span>{new Date(match.played_at).toLocaleDateString('vi-VN')}</span>
+                    <div className='flex justify-between text-sm'>
+                      <span>
+                        Tỉ số: {match.score_player1} - {match.score_player2}
+                      </span>
+                      <span>
+                        {new Date(match.played_at).toLocaleDateString('vi-VN')}
+                      </span>
                     </div>
                   </CardContent>
                 </Card>

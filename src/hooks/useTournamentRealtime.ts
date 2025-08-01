@@ -29,7 +29,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
     current_participants: 0,
     confirmed: 0,
     pending: 0,
-    last_updated: new Date()
+    last_updated: new Date(),
   });
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,16 +38,18 @@ export const useTournamentRealtime = (tournamentId: string) => {
   const loadInitialData = useCallback(async () => {
     try {
       console.log('🔄 Loading initial tournament data for:', tournamentId);
-      
+
       // Load tournament registrations with user profiles
       const { data: registrations, error } = await supabase
         .from('tournament_registrations')
-        .select(`
+        .select(
+          `
           id,
           registration_status,
           registration_date,
           user_id
-        `)
+        `
+        )
         .eq('tournament_id', tournamentId)
         .order('registration_date');
 
@@ -60,29 +62,42 @@ export const useTournamentRealtime = (tournamentId: string) => {
       const userIds = registrations?.map(r => r.user_id).filter(Boolean) || [];
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('user_id, full_name, display_name, avatar_url, elo, verified_rank')
+        .select(
+          'user_id, full_name, display_name, avatar_url, elo, verified_rank'
+        )
         .in('user_id', userIds);
 
       // Combine registrations with profiles
-      const participantList = registrations?.map(reg => ({
-        ...reg,
-        profiles: profiles?.find(p => p.user_id === reg.user_id)
-      })) || [];
+      const participantList =
+        registrations?.map(reg => ({
+          ...reg,
+          profiles: profiles?.find(p => p.user_id === reg.user_id),
+        })) || [];
 
       // Count only paid registrations for current_participants (fix 17/16 issue)
-      const confirmed = participantList.filter(r => r.registration_status === 'confirmed').length;
-      const paid = participantList.filter(r => r.registration_status === 'paid').length;
-      const pending = participantList.filter(r => r.registration_status === 'pending').length;
+      const confirmed = participantList.filter(
+        r => r.registration_status === 'confirmed'
+      ).length;
+      const paid = participantList.filter(
+        r => r.registration_status === 'paid'
+      ).length;
+      const pending = participantList.filter(
+        r => r.registration_status === 'pending'
+      ).length;
 
       setParticipants(participantList);
       setStats({
         current_participants: paid, // Use paid count instead of confirmed
         confirmed,
         pending,
-        last_updated: new Date()
+        last_updated: new Date(),
       });
 
-      console.log('📊 Initial stats loaded:', { confirmed, pending, total: participantList.length });
+      console.log('📊 Initial stats loaded:', {
+        confirmed,
+        pending,
+        total: participantList.length,
+      });
     } catch (error) {
       console.error('❌ Error in loadInitialData:', error);
       toast.error('Lỗi khi tải dữ liệu giải đấu');
@@ -94,7 +109,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
   // Handle real-time registration changes
   const handleRegistrationChange = useCallback((payload: any) => {
     console.log('📡 Registration change detected:', payload);
-    
+
     switch (payload.eventType) {
       case 'INSERT':
         console.log('➕ New registration:', payload.new);
@@ -115,54 +130,65 @@ export const useTournamentRealtime = (tournamentId: string) => {
     // Fetch user profile for the new registration
     const { data: profile } = await supabase
       .from('profiles')
-      .select('user_id, full_name, display_name, avatar_url, elo, verified_rank')
+      .select(
+        'user_id, full_name, display_name, avatar_url, elo, verified_rank'
+      )
       .eq('user_id', registration.user_id)
       .single();
 
     const newParticipant = {
       ...registration,
-      profiles: profile
+      profiles: profile,
     };
 
     setParticipants(prev => [...prev, newParticipant]);
-    
+
     // Update stats (fix to count paid registrations only)
     setStats(prev => ({
       ...prev,
-      current_participants: registration.registration_status === 'paid' 
-        ? prev.current_participants + 1 
-        : prev.current_participants,
-      confirmed: registration.registration_status === 'confirmed' 
-        ? prev.confirmed + 1 
-        : prev.confirmed,
-      pending: registration.registration_status === 'pending' 
-        ? prev.pending + 1 
-        : prev.pending,
-      last_updated: new Date()
+      current_participants:
+        registration.registration_status === 'paid'
+          ? prev.current_participants + 1
+          : prev.current_participants,
+      confirmed:
+        registration.registration_status === 'confirmed'
+          ? prev.confirmed + 1
+          : prev.confirmed,
+      pending:
+        registration.registration_status === 'pending'
+          ? prev.pending + 1
+          : prev.pending,
+      last_updated: new Date(),
     }));
 
-    toast.success(`🎉 ${profile?.display_name || profile?.full_name || 'Người chơi mới'} đã đăng ký!`);
+    toast.success(
+      `🎉 ${profile?.display_name || profile?.full_name || 'Người chơi mới'} đã đăng ký!`
+    );
   }, []);
 
   const handleRegistrationUpdate = useCallback((registration: any) => {
-    setParticipants(prev => 
-      prev.map(p => p.id === registration.id ? { ...p, ...registration } : p)
+    setParticipants(prev =>
+      prev.map(p => (p.id === registration.id ? { ...p, ...registration } : p))
     );
-    
+
     // Recalculate stats (fix to count paid registrations only)
     setParticipants(prev => {
-      const confirmed = prev.filter(r => r.registration_status === 'confirmed').length;
+      const confirmed = prev.filter(
+        r => r.registration_status === 'confirmed'
+      ).length;
       const paid = prev.filter(r => r.registration_status === 'paid').length;
-      const pending = prev.filter(r => r.registration_status === 'pending').length;
-      
+      const pending = prev.filter(
+        r => r.registration_status === 'pending'
+      ).length;
+
       setStats(prevStats => ({
         ...prevStats,
         current_participants: paid, // Use paid count instead of confirmed
         confirmed,
         pending,
-        last_updated: new Date()
+        last_updated: new Date(),
       }));
-      
+
       return prev;
     });
 
@@ -171,19 +197,22 @@ export const useTournamentRealtime = (tournamentId: string) => {
 
   const handleRegistrationDelete = useCallback((registration: any) => {
     setParticipants(prev => prev.filter(p => p.id !== registration.id));
-    
+
     setStats(prev => ({
       ...prev,
-      current_participants: registration.registration_status === 'paid' 
-        ? prev.current_participants - 1 
-        : prev.current_participants,
-      confirmed: registration.registration_status === 'confirmed' 
-        ? prev.confirmed - 1 
-        : prev.confirmed,
-      pending: registration.registration_status === 'pending' 
-        ? prev.pending - 1 
-        : prev.pending,
-      last_updated: new Date()
+      current_participants:
+        registration.registration_status === 'paid'
+          ? prev.current_participants - 1
+          : prev.current_participants,
+      confirmed:
+        registration.registration_status === 'confirmed'
+          ? prev.confirmed - 1
+          : prev.confirmed,
+      pending:
+        registration.registration_status === 'pending'
+          ? prev.pending - 1
+          : prev.pending,
+      last_updated: new Date(),
     }));
 
     toast.info('👋 Người chơi đã rời khỏi giải đấu');
@@ -192,12 +221,13 @@ export const useTournamentRealtime = (tournamentId: string) => {
   // Handle tournament stats changes
   const handleTournamentChange = useCallback((payload: any) => {
     console.log('🏆 Tournament data updated:', payload);
-    
+
     if (payload.eventType === 'UPDATE' && payload.new) {
       setStats(prev => ({
         ...prev,
-        current_participants: payload.new.current_participants || prev.current_participants,
-        last_updated: new Date()
+        current_participants:
+          payload.new.current_participants || prev.current_participants,
+        last_updated: new Date(),
       }));
     }
   }, []);
@@ -208,7 +238,10 @@ export const useTournamentRealtime = (tournamentId: string) => {
 
     loadInitialData();
 
-    console.log('🔄 Setting up real-time subscriptions for tournament:', tournamentId);
+    console.log(
+      '🔄 Setting up real-time subscriptions for tournament:',
+      tournamentId
+    );
 
     // Subscribe to tournament_registrations changes
     const registrationChannel = supabase
@@ -219,7 +252,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
         handleRegistrationChange
       )
@@ -234,7 +267,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'tournaments',
-          filter: `id=eq.${tournamentId}`
+          filter: `id=eq.${tournamentId}`,
         },
         handleTournamentChange
       )
@@ -245,12 +278,17 @@ export const useTournamentRealtime = (tournamentId: string) => {
       registrationChannel.unsubscribe();
       tournamentChannel.unsubscribe();
     };
-  }, [tournamentId, loadInitialData, handleRegistrationChange, handleTournamentChange]);
+  }, [
+    tournamentId,
+    loadInitialData,
+    handleRegistrationChange,
+    handleTournamentChange,
+  ]);
 
   return {
     stats,
     participants,
     loading,
-    refreshData: loadInitialData
+    refreshData: loadInitialData,
   };
 };

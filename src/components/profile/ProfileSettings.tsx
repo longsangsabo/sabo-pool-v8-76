@@ -151,7 +151,9 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
                 />
               ) : (
                 <div className='flex items-center gap-2'>
-                  <span className='text-gray-900'>{profile.display_name || profile.full_name}</span>
+                  <span className='text-gray-900'>
+                    {profile.display_name || profile.full_name}
+                  </span>
                   {profile.verified_rank && (
                     <Badge
                       variant='outline'
@@ -294,7 +296,9 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             <div className='flex justify-between items-center'>
               <div>
                 <div className='font-medium'>Hạng hiện tại</div>
-                <div className='text-sm text-gray-600'>{profile.verified_rank || 'Chưa có'}</div>
+                <div className='text-sm text-gray-600'>
+                  {profile.verified_rank || 'Chưa có'}
+                </div>
               </div>
               {profile.verified_rank && (
                 <Badge

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Heart, Eye, MapPin, Clock, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -54,21 +53,21 @@ const MarketplaceItemCard = ({
   };
 
   return (
-    <Card className="group hover:shadow-lg transition-shadow cursor-pointer">
-      <CardContent className="p-0">
+    <Card className='group hover:shadow-lg transition-shadow cursor-pointer'>
+      <CardContent className='p-0'>
         {/* Product Image */}
-        <div className="relative aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
+        <div className='relative aspect-square bg-gray-100 rounded-t-lg overflow-hidden'>
           {item.images && item.images.length > 0 ? (
             <img
               src={item.images[0]}
               alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+              className='w-full h-full object-cover group-hover:scale-105 transition-transform'
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
-              <div className="text-center">
-                <div className="text-4xl mb-2">🎱</div>
-                <div className="text-sm">Chưa có ảnh</div>
+            <div className='w-full h-full flex items-center justify-center text-gray-400'>
+              <div className='text-center'>
+                <div className='text-4xl mb-2'>🎱</div>
+                <div className='text-sm'>Chưa có ảnh</div>
               </div>
             </div>
           )}
@@ -76,11 +75,11 @@ const MarketplaceItemCard = ({
           {/* Favorite Button */}
           {onFavorite && (
             <button
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onFavorite(item.id);
               }}
-              className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-full shadow-sm transition-colors"
+              className='absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-full shadow-sm transition-colors'
             >
               <Heart
                 className={`w-4 h-4 ${
@@ -93,7 +92,7 @@ const MarketplaceItemCard = ({
           )}
 
           {/* Condition Badge */}
-          <div className="absolute top-2 left-2">
+          <div className='absolute top-2 left-2'>
             <Badge variant={getConditionVariant(item.condition)}>
               {getConditionLabel(item.condition)}
             </Badge>
@@ -101,18 +100,18 @@ const MarketplaceItemCard = ({
         </div>
 
         {/* Product Info */}
-        <div className="p-4 space-y-3" onClick={() => onItemClick(item)}>
+        <div className='p-4 space-y-3' onClick={() => onItemClick(item)}>
           {/* Title and Price */}
           <div>
-            <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
+            <h3 className='font-semibold text-lg line-clamp-2 group-hover:text-blue-600 transition-colors'>
               {item.title}
             </h3>
-            <div className="flex items-center justify-between mt-1">
-              <span className="text-xl font-bold text-green-600">
+            <div className='flex items-center justify-between mt-1'>
+              <span className='text-xl font-bold text-green-600'>
                 {formatPrice(item.price)}
               </span>
               {item.original_price && item.original_price > item.price && (
-                <span className="text-sm text-gray-500 line-through">
+                <span className='text-sm text-gray-500 line-through'>
                   {formatPrice(item.original_price)}
                 </span>
               )}
@@ -121,33 +120,33 @@ const MarketplaceItemCard = ({
 
           {/* Description */}
           {item.description && (
-            <p className="text-gray-600 text-sm line-clamp-2">
+            <p className='text-gray-600 text-sm line-clamp-2'>
               {item.description}
             </p>
           )}
 
           {/* Brand and Category */}
           {item.brand && (
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-xs">
+            <div className='flex items-center gap-2'>
+              <Badge variant='outline' className='text-xs'>
                 {item.brand}
               </Badge>
             </div>
           )}
 
           {/* Location and Stats */}
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" />
+          <div className='flex items-center justify-between text-sm text-gray-500'>
+            <div className='flex items-center gap-1'>
+              <MapPin className='w-4 h-4' />
               <span>{item.location || 'Chưa rõ'}</span>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Eye className="w-4 h-4" />
+            <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-1'>
+                <Eye className='w-4 h-4' />
                 <span>{item.views_count || 0}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <Heart className="w-4 h-4" />
+              <div className='flex items-center gap-1'>
+                <Heart className='w-4 h-4' />
                 <span>{item.favorites_count || 0}</span>
               </div>
             </div>
@@ -155,22 +154,22 @@ const MarketplaceItemCard = ({
 
           {/* Seller Info */}
           {item.seller && (
-            <div className="flex items-center justify-between pt-2 border-t">
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
+            <div className='flex items-center justify-between pt-2 border-t'>
+              <div className='flex items-center gap-2'>
+                <Avatar className='h-6 w-6'>
                   <AvatarImage src={item.seller.avatar_url || ''} />
-                  <AvatarFallback className="text-xs">
+                  <AvatarFallback className='text-xs'>
                     {item.seller.full_name?.charAt(0) || 'S'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm text-gray-600">
+                <span className='text-sm text-gray-600'>
                   {item.seller.full_name || item.seller.nickname || 'Người bán'}
                 </span>
               </div>
 
               {item.seller.avg_response_time && (
-                <div className="flex items-center gap-1 text-xs text-gray-500">
-                  <Clock className="w-3 h-3" />
+                <div className='flex items-center gap-1 text-xs text-gray-500'>
+                  <Clock className='w-3 h-3' />
                   <span>~{item.seller.avg_response_time}h</span>
                 </div>
               )}
@@ -178,12 +177,12 @@ const MarketplaceItemCard = ({
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-2">
+          <div className='flex gap-2 pt-2'>
             <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={(e) => {
+              variant='outline'
+              size='sm'
+              className='flex-1'
+              onClick={e => {
                 e.stopPropagation();
                 // Handle contact seller
                 console.log('Contact seller for item:', item.id);
@@ -192,9 +191,9 @@ const MarketplaceItemCard = ({
               Liên hệ
             </Button>
             <Button
-              size="sm"
-              className="flex-1"
-              onClick={(e) => {
+              size='sm'
+              className='flex-1'
+              onClick={e => {
                 e.stopPropagation();
                 // Handle buy now
                 console.log('Buy now item:', item.id);

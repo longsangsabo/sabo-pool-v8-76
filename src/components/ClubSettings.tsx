@@ -8,7 +8,14 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Settings, Building, Bell, Shield, Save, AlertTriangle } from 'lucide-react';
+import {
+  Settings,
+  Building,
+  Bell,
+  Shield,
+  Save,
+  AlertTriangle,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ClubSettings {
@@ -31,12 +38,13 @@ interface NotificationSettings {
 const ClubSettings = () => {
   const { user } = useAuth();
   const [clubSettings, setClubSettings] = useState<ClubSettings | null>(null);
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
-    new_rank_requests: true,
-    member_updates: true,
-    system_announcements: true,
-    weekly_reports: false
-  });
+  const [notificationSettings, setNotificationSettings] =
+    useState<NotificationSettings>({
+      new_rank_requests: true,
+      member_updates: true,
+      system_announcements: true,
+      weekly_reports: false,
+    });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -66,7 +74,7 @@ const ClubSettings = () => {
           phone: data.contact_info,
           operating_hours: {},
           number_of_tables: 10,
-          verification_notes: data.description
+          verification_notes: data.description,
         });
       }
     } catch (error) {
@@ -89,7 +97,7 @@ const ClubSettings = () => {
           address: clubSettings.address,
           contact_info: clubSettings.phone,
           description: clubSettings.verification_notes,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', clubSettings.id);
 
@@ -112,10 +120,10 @@ const ClubSettings = () => {
   if (loading) {
     return (
       <Card>
-        <CardContent className="pt-6">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
-            <p className="text-sm text-muted-foreground">Đang tải cài đặt...</p>
+        <CardContent className='pt-6'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2'></div>
+            <p className='text-sm text-muted-foreground'>Đang tải cài đặt...</p>
           </div>
         </CardContent>
       </Card>
@@ -125,11 +133,13 @@ const ClubSettings = () => {
   if (!clubSettings) {
     return (
       <Card>
-        <CardContent className="pt-6">
-          <div className="text-center py-8 text-muted-foreground">
-            <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-red-500" />
-            <p className="font-medium">Không tìm thấy thông tin CLB</p>
-            <p className="text-sm mt-1">Vui lòng liên hệ admin để được hỗ trợ</p>
+        <CardContent className='pt-6'>
+          <div className='text-center py-8 text-muted-foreground'>
+            <AlertTriangle className='w-12 h-12 mx-auto mb-4 text-red-500' />
+            <p className='font-medium'>Không tìm thấy thông tin CLB</p>
+            <p className='text-sm mt-1'>
+              Vui lòng liên hệ admin để được hỗ trợ
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -137,70 +147,89 @@ const ClubSettings = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Club Information Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Building className='w-5 h-5' />
             Thông tin Câu lạc bộ
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CardContent className='space-y-4'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div>
-              <Label htmlFor="club_name">Tên câu lạc bộ</Label>
+              <Label htmlFor='club_name'>Tên câu lạc bộ</Label>
               <Input
-                id="club_name"
+                id='club_name'
                 value={clubSettings.club_name}
-                onChange={(e) => setClubSettings({ ...clubSettings, club_name: e.target.value })}
+                onChange={e =>
+                  setClubSettings({
+                    ...clubSettings,
+                    club_name: e.target.value,
+                  })
+                }
               />
             </div>
-            
+
             <div>
-              <Label htmlFor="phone">Số điện thoại</Label>
+              <Label htmlFor='phone'>Số điện thoại</Label>
               <Input
-                id="phone"
+                id='phone'
                 value={clubSettings.phone}
-                onChange={(e) => setClubSettings({ ...clubSettings, phone: e.target.value })}
+                onChange={e =>
+                  setClubSettings({ ...clubSettings, phone: e.target.value })
+                }
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="address">Địa chỉ</Label>
+            <Label htmlFor='address'>Địa chỉ</Label>
             <Textarea
-              id="address"
+              id='address'
               value={clubSettings.address}
-              onChange={(e) => setClubSettings({ ...clubSettings, address: e.target.value })}
+              onChange={e =>
+                setClubSettings({ ...clubSettings, address: e.target.value })
+              }
               rows={3}
             />
           </div>
 
           <div>
-            <Label htmlFor="tables">Số bàn billiards</Label>
+            <Label htmlFor='tables'>Số bàn billiards</Label>
             <Input
-              id="tables"
-              type="number"
-              min="1"
+              id='tables'
+              type='number'
+              min='1'
               value={clubSettings.number_of_tables}
-              onChange={(e) => setClubSettings({ ...clubSettings, number_of_tables: parseInt(e.target.value) || 1 })}
+              onChange={e =>
+                setClubSettings({
+                  ...clubSettings,
+                  number_of_tables: parseInt(e.target.value) || 1,
+                })
+              }
             />
           </div>
 
           <div>
-            <Label htmlFor="notes">Ghi chú</Label>
+            <Label htmlFor='notes'>Ghi chú</Label>
             <Textarea
-              id="notes"
+              id='notes'
               value={clubSettings.verification_notes || ''}
-              onChange={(e) => setClubSettings({ ...clubSettings, verification_notes: e.target.value })}
-              placeholder="Ghi chú thêm về câu lạc bộ..."
+              onChange={e =>
+                setClubSettings({
+                  ...clubSettings,
+                  verification_notes: e.target.value,
+                })
+              }
+              placeholder='Ghi chú thêm về câu lạc bộ...'
               rows={3}
             />
           </div>
 
           <Button onClick={saveClubSettings} disabled={saving}>
-            <Save className="w-4 h-4 mr-2" />
+            <Save className='w-4 h-4 mr-2' />
             {saving ? 'Đang lưu...' : 'Lưu thông tin CLB'}
           </Button>
         </CardContent>
@@ -209,74 +238,94 @@ const ClubSettings = () => {
       {/* Notification Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bell className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Bell className='w-5 h-5' />
             Cài đặt Thông báo
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+        <CardContent className='space-y-4'>
+          <div className='space-y-4'>
+            <div className='flex items-center justify-between'>
               <div>
                 <Label>Yêu cầu xác thực hạng mới</Label>
-                <p className="text-sm text-muted-foreground">Nhận thông báo khi có người yêu cầu xác thực hạng</p>
+                <p className='text-sm text-muted-foreground'>
+                  Nhận thông báo khi có người yêu cầu xác thực hạng
+                </p>
               </div>
               <Switch
                 checked={notificationSettings.new_rank_requests}
-                onCheckedChange={(checked) => 
-                  setNotificationSettings({ ...notificationSettings, new_rank_requests: checked })
+                onCheckedChange={checked =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    new_rank_requests: checked,
+                  })
                 }
               />
             </div>
 
             <Separator />
 
-            <div className="flex items-center justify-between">
+            <div className='flex items-center justify-between'>
               <div>
                 <Label>Cập nhật thành viên</Label>
-                <p className="text-sm text-muted-foreground">Thông báo về hoạt động của thành viên</p>
+                <p className='text-sm text-muted-foreground'>
+                  Thông báo về hoạt động của thành viên
+                </p>
               </div>
               <Switch
                 checked={notificationSettings.member_updates}
-                onCheckedChange={(checked) => 
-                  setNotificationSettings({ ...notificationSettings, member_updates: checked })
+                onCheckedChange={checked =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    member_updates: checked,
+                  })
                 }
               />
             </div>
 
             <Separator />
 
-            <div className="flex items-center justify-between">
+            <div className='flex items-center justify-between'>
               <div>
                 <Label>Thông báo hệ thống</Label>
-                <p className="text-sm text-muted-foreground">Nhận thông báo quan trọng từ hệ thống</p>
+                <p className='text-sm text-muted-foreground'>
+                  Nhận thông báo quan trọng từ hệ thống
+                </p>
               </div>
               <Switch
                 checked={notificationSettings.system_announcements}
-                onCheckedChange={(checked) => 
-                  setNotificationSettings({ ...notificationSettings, system_announcements: checked })
+                onCheckedChange={checked =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    system_announcements: checked,
+                  })
                 }
               />
             </div>
 
             <Separator />
 
-            <div className="flex items-center justify-between">
+            <div className='flex items-center justify-between'>
               <div>
                 <Label>Báo cáo hàng tuần</Label>
-                <p className="text-sm text-muted-foreground">Nhận báo cáo tổng kết hoạt động CLB hàng tuần</p>
+                <p className='text-sm text-muted-foreground'>
+                  Nhận báo cáo tổng kết hoạt động CLB hàng tuần
+                </p>
               </div>
               <Switch
                 checked={notificationSettings.weekly_reports}
-                onCheckedChange={(checked) => 
-                  setNotificationSettings({ ...notificationSettings, weekly_reports: checked })
+                onCheckedChange={checked =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    weekly_reports: checked,
+                  })
                 }
               />
             </div>
           </div>
 
           <Button onClick={saveNotificationSettings}>
-            <Bell className="w-4 h-4 mr-2" />
+            <Bell className='w-4 h-4 mr-2' />
             Lưu cài đặt thông báo
           </Button>
         </CardContent>
@@ -285,20 +334,20 @@ const ClubSettings = () => {
       {/* Security Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Shield className='w-5 h-5' />
             Bảo mật
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+          <div className='bg-yellow-50 border border-yellow-200 rounded-lg p-4'>
+            <div className='flex items-start gap-3'>
+              <AlertTriangle className='w-5 h-5 text-yellow-600 mt-0.5' />
               <div>
-                <h3 className="font-medium text-yellow-800">Lưu ý bảo mật</h3>
-                <p className="text-sm text-yellow-700 mt-1">
-                  Việc xác thực hạng sai quá nhiều sẽ ảnh hưởng đến uy tín của câu lạc bộ.
-                  Hãy luôn kiểm tra kỹ trước khi xác nhận.
+                <h3 className='font-medium text-yellow-800'>Lưu ý bảo mật</h3>
+                <p className='text-sm text-yellow-700 mt-1'>
+                  Việc xác thực hạng sai quá nhiều sẽ ảnh hưởng đến uy tín của
+                  câu lạc bộ. Hãy luôn kiểm tra kỹ trước khi xác nhận.
                 </p>
               </div>
             </div>

@@ -11,10 +11,11 @@ export const useCompletedChallenges = () => {
       if (!user?.id) return [];
 
       console.log('🔍 Fetching completed challenges for user:', user.id);
-      
+
       const { data, error } = await supabase
         .from('challenges')
-        .select(`
+        .select(
+          `
           *,
           challenger_profile:profiles!challenges_challenger_id_fkey(
             user_id,
@@ -31,7 +32,8 @@ export const useCompletedChallenges = () => {
             full_name,
             avatar_url
           )
-        `)
+        `
+        )
         .eq('status', 'completed')
         .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
         .order('completed_at', { ascending: false })

@@ -1,7 +1,7 @@
-import { 
-  TOURNAMENT_ELO_REWARDS, 
-  SPA_TOURNAMENT_REWARDS, 
-  RANK_ELO
+import {
+  TOURNAMENT_ELO_REWARDS,
+  SPA_TOURNAMENT_REWARDS,
+  RANK_ELO,
 } from '@/utils/eloConstants';
 import type { RankCode, TournamentPosition } from '@/utils/eloConstants';
 
@@ -10,14 +10,20 @@ export class RankingService {
    * Calculate tournament ELO reward based on position
    */
   static calculateTournamentElo(position: TournamentPosition): number {
-    return TOURNAMENT_ELO_REWARDS[position] || TOURNAMENT_ELO_REWARDS.PARTICIPATION;
+    return (
+      TOURNAMENT_ELO_REWARDS[position] || TOURNAMENT_ELO_REWARDS.PARTICIPATION
+    );
   }
 
   /**
    * Calculate tournament SPA reward based on position and player rank
    */
-  static calculateTournamentSpa(position: TournamentPosition, playerRank: RankCode): number {
-    const rankRewards = SPA_TOURNAMENT_REWARDS[playerRank] || SPA_TOURNAMENT_REWARDS.K;
+  static calculateTournamentSpa(
+    position: TournamentPosition,
+    playerRank: RankCode
+  ): number {
+    const rankRewards =
+      SPA_TOURNAMENT_REWARDS[playerRank] || SPA_TOURNAMENT_REWARDS.K;
     return rankRewards[position] || rankRewards.PARTICIPATION;
   }
 
@@ -47,13 +53,26 @@ export class RankingService {
    * Get the next rank above current rank
    */
   static getNextRank(currentRank: RankCode): RankCode | null {
-    const rankOrder: RankCode[] = ['K', 'K+', 'I', 'I+', 'H', 'H+', 'G', 'G+', 'F', 'F+', 'E', 'E+'];
+    const rankOrder: RankCode[] = [
+      'K',
+      'K+',
+      'I',
+      'I+',
+      'H',
+      'H+',
+      'G',
+      'G+',
+      'F',
+      'F+',
+      'E',
+      'E+',
+    ];
     const currentIndex = rankOrder.indexOf(currentRank);
-    
+
     if (currentIndex === -1 || currentIndex === rankOrder.length - 1) {
       return null; // Invalid rank or already at highest
     }
-    
+
     return rankOrder[currentIndex + 1];
   }
 
@@ -78,12 +97,15 @@ export class RankingService {
   /**
    * Calculate tournament rewards summary
    */
-  static calculateTournamentRewards(position: TournamentPosition, playerRank: RankCode) {
+  static calculateTournamentRewards(
+    position: TournamentPosition,
+    playerRank: RankCode
+  ) {
     return {
       eloPoints: this.calculateTournamentElo(position),
       spaPoints: this.calculateTournamentSpa(position, playerRank),
       position,
-      rank: playerRank
+      rank: playerRank,
     };
   }
 
@@ -91,7 +113,15 @@ export class RankingService {
    * Get all possible tournament positions
    */
   static getTournamentPositions(): TournamentPosition[] {
-    return ['CHAMPION', 'RUNNER_UP', 'THIRD_PLACE', 'FOURTH_PLACE', 'TOP_8', 'TOP_16', 'PARTICIPATION'];
+    return [
+      'CHAMPION',
+      'RUNNER_UP',
+      'THIRD_PLACE',
+      'FOURTH_PLACE',
+      'TOP_8',
+      'TOP_16',
+      'PARTICIPATION',
+    ];
   }
 
   /**
@@ -105,9 +135,9 @@ export class RankingService {
       FOURTH_PLACE: 'Hạng 4',
       TOP_8: 'Top 8',
       TOP_16: 'Top 16',
-      PARTICIPATION: 'Tham gia'
+      PARTICIPATION: 'Tham gia',
     };
-    
+
     return positionMap[position] || position;
   }
 }

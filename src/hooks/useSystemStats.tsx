@@ -51,9 +51,13 @@ export const useSystemStats = () => {
         .from('player_rankings')
         .select('spa_points');
 
-      const avgTrustScore = trustScores && trustScores.length > 0
-        ? trustScores.reduce((sum, score) => sum + (score.spa_points || 0), 0) / trustScores.length
-        : 0;
+      const avgTrustScore =
+        trustScores && trustScores.length > 0
+          ? trustScores.reduce(
+              (sum, score) => sum + (score.spa_points || 0),
+              0
+            ) / trustScores.length
+          : 0;
 
       setStats({
         activePlayers: activePlayersCount || 0,
@@ -68,7 +72,10 @@ export const useSystemStats = () => {
       setStats(prev => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch system stats',
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch system stats',
       }));
     }
   };

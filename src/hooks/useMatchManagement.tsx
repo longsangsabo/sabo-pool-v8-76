@@ -54,13 +54,14 @@ export const useMatchManagement = (tournamentId: string) => {
     data: matches = [],
     isLoading: matchesLoading,
     error: matchesError,
-    refetch: refetchMatches
+    refetch: refetchMatches,
   } = useQuery({
     queryKey: ['tournament-matches', tournamentId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tournament_matches')
-        .select(`
+        .select(
+          `
           *,
           player1:profiles!tournament_matches_player1_id_fkey(
             user_id, full_name, display_name
@@ -68,7 +69,8 @@ export const useMatchManagement = (tournamentId: string) => {
           player2:profiles!tournament_matches_player2_id_fkey(
             user_id, full_name, display_name
           )
-        `)
+        `
+        )
         .eq('tournament_id', tournamentId)
         .order('round_number', { ascending: true })
         .order('match_number', { ascending: true });
@@ -92,12 +94,11 @@ export const useMatchManagement = (tournamentId: string) => {
         notes: match.notes,
         is_third_place_match: match.is_third_place_match || false,
         player1: match.player1,
-        player2: match.player2
+        player2: match.player2,
       })) as TournamentMatch[];
     },
     enabled: !!tournamentId,
   });
-
 
   // Simplified update match score - no match_results creation
   const updateScoreMutation = useMutation({
@@ -106,7 +107,7 @@ export const useMatchManagement = (tournamentId: string) => {
       player1Score,
       player2Score,
       winnerId,
-      status
+      status,
     }: {
       matchId: string;
       player1Score: number;
@@ -114,8 +115,12 @@ export const useMatchManagement = (tournamentId: string) => {
       winnerId?: string;
       status?: string;
     }) => {
-      console.log('Updating score for match:', matchId, { player1Score, player2Score, winnerId });
-      
+      console.log('Updating score for match:', matchId, {
+        player1Score,
+        player2Score,
+        winnerId,
+      });
+
       // Simple update - only tournament_matches table
       const { data: match, error: matchError } = await supabase
         .from('tournament_matches')
@@ -125,7 +130,7 @@ export const useMatchManagement = (tournamentId: string) => {
           winner_id: winnerId,
           status: status || (winnerId ? 'completed' : 'in_progress'),
           actual_end_time: winnerId ? new Date().toISOString() : null,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', matchId)
         .select()
@@ -146,30 +151,33 @@ export const useMatchManagement = (tournamentId: string) => {
       console.log('Score updated successfully');
       return match;
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       console.log('Score update success:', data);
-      queryClient.invalidateQueries({ queryKey: ['tournament-matches', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-matches', tournamentId],
+      });
       toast.success('Tỉ số đã được cập nhật thành công!');
     },
     onError: (error: any) => {
       console.error('Update score error:', error);
-      const errorMessage = error?.message || 'Có lỗi không xác định khi cập nhật tỉ số';
+      const errorMessage =
+        error?.message || 'Có lỗi không xác định khi cập nhật tỉ số';
       toast.error(`Lỗi: ${errorMessage}`);
     },
     retry: 1,
-    retryDelay: 1000
+    retryDelay: 1000,
   });
 
   // Restore match (undo cancel)
   const restoreMatchMutation = useMutation({
     mutationFn: async (matchId: string) => {
       console.log('Restoring match:', matchId);
-      
+
       const { data, error } = await supabase
         .from('tournament_matches')
         .update({
           status: 'scheduled',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', matchId)
         .select()
@@ -182,14 +190,16 @@ export const useMatchManagement = (tournamentId: string) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-matches', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-matches', tournamentId],
+      });
       toast.success('Trận đấu đã được khôi phục!');
     },
     onError: (error: any) => {
       console.error('Restore match error:', error);
       const errorMessage = error?.message || 'Có lỗi khi khôi phục trận đấu';
       toast.error(`Lỗi: ${errorMessage}`);
-    }
+    },
   });
 
   // Start match
@@ -199,7 +209,7 @@ export const useMatchManagement = (tournamentId: string) => {
         .from('tournament_matches')
         .update({
           status: 'in_progress',
-          actual_start_time: new Date().toISOString()
+          actual_start_time: new Date().toISOString(),
         })
         .eq('id', matchId)
         .select()
@@ -209,13 +219,15 @@ export const useMatchManagement = (tournamentId: string) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-matches', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-matches', tournamentId],
+      });
       toast.success('Trận đấu đã bắt đầu!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Start match error:', error);
       toast.error('Có lỗi khi bắt đầu trận đấu');
-    }
+    },
   });
 
   // Cancel match
@@ -224,7 +236,7 @@ export const useMatchManagement = (tournamentId: string) => {
       const { data, error } = await supabase
         .from('tournament_matches')
         .update({
-          status: 'cancelled'
+          status: 'cancelled',
         })
         .eq('id', matchId)
         .select()
@@ -234,13 +246,15 @@ export const useMatchManagement = (tournamentId: string) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-matches', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-matches', tournamentId],
+      });
       toast.success('Trận đấu đã bị hủy!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Cancel match error:', error);
       toast.error('Có lỗi khi hủy trận đấu');
-    }
+    },
   });
 
   // Edit confirmed score
@@ -249,20 +263,23 @@ export const useMatchManagement = (tournamentId: string) => {
       matchId,
       newPlayer1Score,
       newPlayer2Score,
-      editorId
+      editorId,
     }: {
       matchId: string;
       newPlayer1Score: number;
       newPlayer2Score: number;
       editorId: string;
     }) => {
-      console.log('Editing score for match:', matchId, { newPlayer1Score, newPlayer2Score });
-      
+      console.log('Editing score for match:', matchId, {
+        newPlayer1Score,
+        newPlayer2Score,
+      });
+
       const { data, error } = await supabase.rpc('edit_confirmed_score', {
         p_match_id: matchId,
         p_new_player1_score: newPlayer1Score,
         p_new_player2_score: newPlayer2Score,
-        p_admin_id: editorId
+        p_admin_id: editorId,
       });
 
       if (error) {
@@ -279,8 +296,10 @@ export const useMatchManagement = (tournamentId: string) => {
     },
     onSuccess: (data: any) => {
       console.log('Score edit success:', data);
-      queryClient.invalidateQueries({ queryKey: ['tournament-matches', tournamentId] });
-      
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-matches', tournamentId],
+      });
+
       if (data && typeof data === 'object' && data.bracket_updated) {
         toast.success('Tỷ số đã được cập nhật! Bảng đấu đã được làm mới.');
       } else {
@@ -289,11 +308,12 @@ export const useMatchManagement = (tournamentId: string) => {
     },
     onError: (error: any) => {
       console.error('Edit score error:', error);
-      const errorMessage = error?.message || 'Có lỗi không xác định khi sửa tỷ số';
+      const errorMessage =
+        error?.message || 'Có lỗi không xác định khi sửa tỷ số';
       toast.error(`Lỗi: ${errorMessage}`);
     },
     retry: 1,
-    retryDelay: 1000
+    retryDelay: 1000,
   });
 
   return {
@@ -315,6 +335,6 @@ export const useMatchManagement = (tournamentId: string) => {
     isStartingMatch: startMatchMutation.isPending,
     isCancellingMatch: cancelMatchMutation.isPending,
     isRestoringMatch: restoreMatchMutation.isPending,
-    isEditingScore: editScoreMutation.isPending
+    isEditingScore: editScoreMutation.isPending,
   };
 };

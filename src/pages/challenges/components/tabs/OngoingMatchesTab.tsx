@@ -39,7 +39,9 @@ interface OngoingMatchesTabProps {
   onStatsUpdate: () => void;
 }
 
-const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) => {
+const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({
+  onStatsUpdate,
+}) => {
   const { user } = useAuth();
   const [challenges, setChallenges] = useState<OngoingChallenge[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,7 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
 
   useEffect(() => {
     fetchOngoingChallenges();
-    
+
     // Set up real-time subscription for challenges
     const subscription = supabase
       .channel('ongoing-challenges')
@@ -57,7 +59,7 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
           event: '*',
           schema: 'public',
           table: 'challenges',
-          filter: `status=in.(accepted,ongoing)`
+          filter: `status=in.(accepted,ongoing)`,
         },
         () => {
           fetchOngoingChallenges();
@@ -75,10 +77,11 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
 
     try {
       setLoading(true);
-      
+
       let query = supabase
         .from('challenges')
-        .select(`
+        .select(
+          `
           id,
           challenger_id,
           opponent_id,
@@ -93,7 +96,8 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
           challenger_final_score,
           opponent_final_score,
           rack_history
-        `)
+        `
+        )
         .in('status', ['accepted', 'ongoing'])
         .neq('challenger_id', user.id)
         .neq('opponent_id', user.id);
@@ -102,7 +106,10 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
       if (filter === 'high-stakes') {
         query = query.gte('bet_points', 200);
       } else if (filter === 'recent') {
-        query = query.gte('responded_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()); // Last 2 hours
+        query = query.gte(
+          'responded_at',
+          new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+        ); // Last 2 hours
       }
 
       const { data, error } = await query
@@ -131,7 +138,7 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
           return {
             ...challenge,
             challenger: challengerData,
-            opponent: opponentData
+            opponent: opponentData,
           };
         })
       );
@@ -147,25 +154,31 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'accepted': return 'bg-blue-500';
-      case 'in_progress': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      case 'accepted':
+        return 'bg-blue-500';
+      case 'in_progress':
+        return 'bg-green-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'accepted': return 'Đã chấp nhận';
-      case 'in_progress': return 'Đang thi đấu';
-      default: return status;
+      case 'accepted':
+        return 'Đã chấp nhận';
+      case 'in_progress':
+        return 'Đang thi đấu';
+      default:
+        return status;
     }
   };
 
   const getTimeElapsed = (acceptedAt: string) => {
     try {
-      return formatDistanceToNow(new Date(acceptedAt), { 
-        addSuffix: true, 
-        locale: vi 
+      return formatDistanceToNow(new Date(acceptedAt), {
+        addSuffix: true,
+        locale: vi,
       });
     } catch {
       return 'Vừa bắt đầu';
@@ -175,45 +188,45 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
   if (loading) {
     return (
       <Card>
-        <CardContent className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <CardContent className='flex items-center justify-center py-12'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header with filters */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Eye className="h-5 w-5 text-primary" />
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <Eye className='h-5 w-5 text-primary' />
               <CardTitle>Thách đấu đang diễn ra</CardTitle>
-              <Badge variant="secondary">{challenges.length}</Badge>
+              <Badge variant='secondary'>{challenges.length}</Badge>
             </div>
-            
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <div className="flex gap-1">
+
+            <div className='flex items-center gap-2'>
+              <Filter className='h-4 w-4 text-muted-foreground' />
+              <div className='flex gap-1'>
                 <Button
                   variant={filter === 'all' ? 'default' : 'outline'}
-                  size="sm"
+                  size='sm'
                   onClick={() => setFilter('all')}
                 >
                   Tất cả
                 </Button>
                 <Button
                   variant={filter === 'high-stakes' ? 'default' : 'outline'}
-                  size="sm"
+                  size='sm'
                   onClick={() => setFilter('high-stakes')}
                 >
                   Mức cao
                 </Button>
                 <Button
                   variant={filter === 'recent' ? 'default' : 'outline'}
-                  size="sm"
+                  size='sm'
                   onClick={() => setFilter('recent')}
                 >
                   Mới nhất
@@ -227,101 +240,128 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({ onStatsUpdate }) 
       {/* Ongoing matches list */}
       {challenges.length === 0 ? (
         <Card>
-          <CardContent className="text-center py-12">
-            <Users className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
-            <h3 className="font-semibold text-lg mb-2">Không có trận đấu nào đang diễn ra</h3>
-            <p className="text-muted-foreground">
+          <CardContent className='text-center py-12'>
+            <Users className='w-16 h-16 text-muted-foreground/50 mx-auto mb-4' />
+            <h3 className='font-semibold text-lg mb-2'>
+              Không có trận đấu nào đang diễn ra
+            </h3>
+            <p className='text-muted-foreground'>
               Chưa có thách đấu nào được chấp nhận và đang thi đấu.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4">
-          {challenges.map((challenge) => (
-            <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
+        <div className='grid gap-4'>
+          {challenges.map(challenge => (
+            <Card
+              key={challenge.id}
+              className='hover:shadow-lg transition-shadow'
+            >
+              <CardContent className='p-4'>
+                <div className='flex items-center justify-between'>
                   {/* Players info */}
-                  <div className="flex items-center gap-4 flex-1">
-                     <div className="text-center">
-                       <p className="font-semibold text-sm">{challenge.challenger?.display_name || challenge.challenger?.full_name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          ELO: {challenge.challenger?.current_elo || 1000}
+                  <div className='flex items-center gap-4 flex-1'>
+                    <div className='text-center'>
+                      <p className='font-semibold text-sm'>
+                        {challenge.challenger?.display_name ||
+                          challenge.challenger?.full_name}
+                      </p>
+                      <p className='text-xs text-muted-foreground'>
+                        ELO: {challenge.challenger?.current_elo || 1000}
+                      </p>
+                      {challenge.handicap_1_rank > 0 && (
+                        <p className='text-xs text-blue-600'>
+                          +{challenge.handicap_1_rank}
                         </p>
-                        {challenge.handicap_1_rank > 0 && (
-                          <p className="text-xs text-blue-600">+{challenge.handicap_1_rank}</p>
-                        )}
-                     </div>
-                     
-                     <div className="flex flex-col items-center gap-1">
-                       <div className="text-xs text-muted-foreground">VS</div>
-                       <Badge className={`${getStatusColor(challenge.status)} text-white text-xs`}>
-                         {getStatusText(challenge.status)}
-                       </Badge>
-                     </div>
-                     
-                     <div className="text-center">
-                       <p className="font-semibold text-sm">{challenge.opponent?.display_name || challenge.opponent?.full_name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          ELO: {challenge.opponent?.current_elo || 1000}
+                      )}
+                    </div>
+
+                    <div className='flex flex-col items-center gap-1'>
+                      <div className='text-xs text-muted-foreground'>VS</div>
+                      <Badge
+                        className={`${getStatusColor(challenge.status)} text-white text-xs`}
+                      >
+                        {getStatusText(challenge.status)}
+                      </Badge>
+                    </div>
+
+                    <div className='text-center'>
+                      <p className='font-semibold text-sm'>
+                        {challenge.opponent?.display_name ||
+                          challenge.opponent?.full_name}
+                      </p>
+                      <p className='text-xs text-muted-foreground'>
+                        ELO: {challenge.opponent?.current_elo || 1000}
+                      </p>
+                      {challenge.handicap_05_rank > 0 && (
+                        <p className='text-xs text-blue-600'>
+                          +{challenge.handicap_05_rank}
                         </p>
-                        {challenge.handicap_05_rank > 0 && (
-                          <p className="text-xs text-blue-600">+{challenge.handicap_05_rank}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Match details */}
+                  <div className='flex items-center gap-6'>
+                    <div className='text-center'>
+                      <div className='flex items-center gap-1 text-sm font-semibold'>
+                        <Target className='h-4 w-4' />
+                        Race to {challenge.race_to}
+                      </div>
+                      <p className='text-xs text-muted-foreground'>
+                        {challenge.bet_points} SPA điểm
+                      </p>
+                    </div>
+
+                    <div className='text-center'>
+                      <div className='flex items-center gap-1 text-xs text-muted-foreground'>
+                        <Clock className='h-3 w-3' />
+                        {getTimeElapsed(
+                          challenge.responded_at || challenge.created_at
                         )}
-                     </div>
-                   </div>
+                      </div>
+                      {challenge.status === 'in_progress' &&
+                        challenge.started_at && (
+                          <p className='text-xs text-green-600 mt-1'>
+                            Đang thi đấu: {getTimeElapsed(challenge.started_at)}
+                          </p>
+                        )}
+                    </div>
 
-                   {/* Match details */}
-                   <div className="flex items-center gap-6">
-                     <div className="text-center">
-                       <div className="flex items-center gap-1 text-sm font-semibold">
-                         <Target className="h-4 w-4" />
-                         Race to {challenge.race_to}
-                       </div>
-                       <p className="text-xs text-muted-foreground">
-                         {challenge.bet_points} SPA điểm
-                       </p>
-                     </div>
-
-                     <div className="text-center">
-                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                         <Clock className="h-3 w-3" />
-                          {getTimeElapsed(challenge.responded_at || challenge.created_at)}
-                       </div>
-                       {challenge.status === 'in_progress' && challenge.started_at && (
-                         <p className="text-xs text-green-600 mt-1">
-                           Đang thi đấu: {getTimeElapsed(challenge.started_at)}
-                         </p>
-                       )}
-                     </div>
-
-                    <Button size="sm" variant="outline" className="gap-2">
-                      <Eye className="h-4 w-4" />
+                    <Button size='sm' variant='outline' className='gap-2'>
+                      <Eye className='h-4 w-4' />
                       Theo dõi
                     </Button>
                   </div>
                 </div>
 
-                 {/* Progress bar for race progress */}
-                 <div className="mt-3 pt-3 border-t">
-                   <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                     <span>Tiến độ trận đấu</span>
-                     <span>{challenge.challenger_final_score} - {challenge.opponent_final_score}</span>
-                   </div>
-                   <div className="w-full bg-muted rounded-full h-2">
-                     <div 
-                       className="bg-primary h-2 rounded-full transition-all duration-300" 
-                       style={{ 
-                         width: `${Math.max(challenge.challenger_final_score, challenge.opponent_final_score) / challenge.race_to * 100}%` 
-                       }}
-                     ></div>
-                   </div>
-                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                     <span>{challenge.challenger?.display_name || 'Player 1'}</span>
-                     <span>Race to {challenge.race_to}</span>
-                     <span>{challenge.opponent?.display_name || 'Player 2'}</span>
-                   </div>
-                 </div>
+                {/* Progress bar for race progress */}
+                <div className='mt-3 pt-3 border-t'>
+                  <div className='flex items-center justify-between text-xs text-muted-foreground mb-2'>
+                    <span>Tiến độ trận đấu</span>
+                    <span>
+                      {challenge.challenger_final_score} -{' '}
+                      {challenge.opponent_final_score}
+                    </span>
+                  </div>
+                  <div className='w-full bg-muted rounded-full h-2'>
+                    <div
+                      className='bg-primary h-2 rounded-full transition-all duration-300'
+                      style={{
+                        width: `${(Math.max(challenge.challenger_final_score, challenge.opponent_final_score) / challenge.race_to) * 100}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <div className='flex justify-between text-xs text-muted-foreground mt-1'>
+                    <span>
+                      {challenge.challenger?.display_name || 'Player 1'}
+                    </span>
+                    <span>Race to {challenge.race_to}</span>
+                    <span>
+                      {challenge.opponent?.display_name || 'Player 2'}
+                    </span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}

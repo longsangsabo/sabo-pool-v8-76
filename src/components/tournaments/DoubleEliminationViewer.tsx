@@ -14,11 +14,9 @@ interface DoubleEliminationViewerProps {
   adminMode?: boolean;
 }
 
-export const DoubleEliminationViewer: React.FC<DoubleEliminationViewerProps> = ({
-  tournamentId,
-  isClubOwner = false,
-  adminMode = false
-}) => {
+export const DoubleEliminationViewer: React.FC<
+  DoubleEliminationViewerProps
+> = ({ tournamentId, isClubOwner = false, adminMode = false }) => {
   const [showSABO, setShowSABO] = React.useState(false);
 
   if (showSABO) {
@@ -33,20 +31,26 @@ export const DoubleEliminationViewer: React.FC<DoubleEliminationViewerProps> = (
   }
   // Show migration notice by default
   return (
-    <div className="space-y-4">
-      <Alert className="border-orange-500 bg-orange-50">
-        <AlertTriangle className="h-4 w-4" />
-        <AlertDescription className="text-orange-800">
-          <div className="space-y-2">
-            <p><strong>DEPRECATED COMPONENT:</strong> This component has been replaced by the new SABO system.</p>
-            <p>The new system provides better performance, more accurate bracket logic, and improved user experience.</p>
-            <Button 
-              variant="outline" 
-              size="sm" 
+    <div className='space-y-4'>
+      <Alert className='border-orange-500 bg-orange-50'>
+        <AlertTriangle className='h-4 w-4' />
+        <AlertDescription className='text-orange-800'>
+          <div className='space-y-2'>
+            <p>
+              <strong>DEPRECATED COMPONENT:</strong> This component has been
+              replaced by the new SABO system.
+            </p>
+            <p>
+              The new system provides better performance, more accurate bracket
+              logic, and improved user experience.
+            </p>
+            <Button
+              variant='outline'
+              size='sm'
               onClick={() => setShowSABO(true)}
-              className="mt-2 bg-orange-100 border-orange-300 text-orange-800 hover:bg-orange-200"
+              className='mt-2 bg-orange-100 border-orange-300 text-orange-800 hover:bg-orange-200'
             >
-              <ArrowRight className="h-4 w-4 mr-1" />
+              <ArrowRight className='h-4 w-4 mr-1' />
               Switch to SABO System
             </Button>
           </div>

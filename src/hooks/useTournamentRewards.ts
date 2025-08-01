@@ -28,7 +28,7 @@ export const useTournamentRewards = () => {
         .select('*')
         .eq('is_active', true)
         .order('tournament_type', { ascending: true });
-      
+
       if (error) {
         console.error('Error fetching tournament rewards:', error);
         throw error;
@@ -38,33 +38,39 @@ export const useTournamentRewards = () => {
   });
 
   const fetchRewards = async () => {
-    queryClient.invalidateQueries({ queryKey: ['tournament-reward-templates'] });
+    queryClient.invalidateQueries({
+      queryKey: ['tournament-reward-templates'],
+    });
   };
 
   const createRewardMutation = useMutation({
-    mutationFn: async (rewardData: Omit<TournamentReward, 'id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (
+      rewardData: Omit<TournamentReward, 'id' | 'created_at' | 'updated_at'>
+    ) => {
       const { data, error } = await supabase
         .from('tournament_reward_templates')
         .insert(rewardData as any)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-reward-templates'] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-reward-templates'],
+      });
       toast({
-        title: "Success",
-        description: "Tournament reward structure created successfully",
+        title: 'Success',
+        description: 'Tournament reward structure created successfully',
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error creating tournament reward:', error);
       toast({
-        title: "Error",
-        description: "Failed to create tournament reward structure",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to create tournament reward structure',
+        variant: 'destructive',
       });
     },
   });
@@ -72,30 +78,35 @@ export const useTournamentRewards = () => {
   const createReward = createRewardMutation.mutate;
 
   const updateRewardMutation = useMutation({
-    mutationFn: async ({ id, ...rewardData }: Partial<TournamentReward> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...rewardData
+    }: Partial<TournamentReward> & { id: string }) => {
       const { data, error } = await supabase
         .from('tournament_reward_templates')
         .update(rewardData)
         .eq('id', id)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-reward-templates'] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-reward-templates'],
+      });
       toast({
-        title: "Success",
-        description: "Tournament reward structure updated successfully",
+        title: 'Success',
+        description: 'Tournament reward structure updated successfully',
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error updating tournament reward:', error);
       toast({
-        title: "Error",
-        description: "Failed to update tournament reward structure",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update tournament reward structure',
+        variant: 'destructive',
       });
     },
   });
@@ -110,22 +121,24 @@ export const useTournamentRewards = () => {
         .from('tournament_reward_templates')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-reward-templates'] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-reward-templates'],
+      });
       toast({
-        title: "Success",
-        description: "Tournament reward structure deleted successfully",
+        title: 'Success',
+        description: 'Tournament reward structure deleted successfully',
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error deleting tournament reward:', error);
       toast({
-        title: "Error",
-        description: "Failed to delete tournament reward structure",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete tournament reward structure',
+        variant: 'destructive',
       });
     },
   });

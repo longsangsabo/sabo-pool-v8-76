@@ -1,10 +1,11 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import 'https://deno.land/x/xhr@0.1.0/mod.ts';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
@@ -21,7 +22,10 @@ interface AdminMessage {
 }
 
 // Advanced knowledge base fetcher with admin privileges
-async function getAdvancedKnowledgeBase(intent: string, message: string): Promise<string> {
+async function getAdvancedKnowledgeBase(
+  intent: string,
+  message: string
+): Promise<string> {
   try {
     // Fetch from both admin and user knowledge bases
     const { data: adminKnowledge } = await supabase
@@ -51,7 +55,10 @@ async function getAdvancedKnowledgeBase(intent: string, message: string): Promis
         const lowerTitle = item.title.toLowerCase();
 
         // Direct title/content match
-        if (lowerTitle.includes(lowerMessage) || lowerMessage.includes(lowerTitle)) {
+        if (
+          lowerTitle.includes(lowerMessage) ||
+          lowerMessage.includes(lowerTitle)
+        ) {
           score += 10;
         }
 
@@ -68,7 +75,10 @@ async function getAdvancedKnowledgeBase(intent: string, message: string): Promis
         if (intent === 'admin_functions' && lowerContent.includes('admin')) {
           score += 8;
         }
-        if (intent === 'database_queries' && (lowerContent.includes('database') || lowerContent.includes('query'))) {
+        if (
+          intent === 'database_queries' &&
+          (lowerContent.includes('database') || lowerContent.includes('query'))
+        ) {
           score += 8;
         }
         if (intent === 'system_management' && lowerContent.includes('system')) {
@@ -87,7 +97,7 @@ async function getAdvancedKnowledgeBase(intent: string, message: string): Promis
 
     // Build dynamic admin knowledge base
     let knowledgeBase = `# SABO Pool Arena - Admin Knowledge Base\n\n`;
-    
+
     relevantItems.forEach(item => {
       knowledgeBase += `## ${item.title}\n${item.content}\n\n`;
     });
@@ -137,40 +147,74 @@ async function analyzeAdminIntent(message: string): Promise<{
   needsData: boolean;
 }> {
   const lowerMessage = message.toLowerCase();
-  
+
   // Advanced intent matching for admin tasks
-  if (lowerMessage.includes('user') || lowerMessage.includes('account') || lowerMessage.includes('profile')) {
+  if (
+    lowerMessage.includes('user') ||
+    lowerMessage.includes('account') ||
+    lowerMessage.includes('profile')
+  ) {
     return { intent: 'user_management', confidence: 0.9, needsData: true };
   }
-  
-  if (lowerMessage.includes('tournament') || lowerMessage.includes('competition') || lowerMessage.includes('bracket')) {
-    return { intent: 'tournament_management', confidence: 0.9, needsData: true };
+
+  if (
+    lowerMessage.includes('tournament') ||
+    lowerMessage.includes('competition') ||
+    lowerMessage.includes('bracket')
+  ) {
+    return {
+      intent: 'tournament_management',
+      confidence: 0.9,
+      needsData: true,
+    };
   }
-  
-  if (lowerMessage.includes('club') || lowerMessage.includes('venue') || lowerMessage.includes('registration')) {
+
+  if (
+    lowerMessage.includes('club') ||
+    lowerMessage.includes('venue') ||
+    lowerMessage.includes('registration')
+  ) {
     return { intent: 'club_management', confidence: 0.9, needsData: true };
   }
-  
-  if (lowerMessage.includes('database') || lowerMessage.includes('query') || lowerMessage.includes('sql')) {
+
+  if (
+    lowerMessage.includes('database') ||
+    lowerMessage.includes('query') ||
+    lowerMessage.includes('sql')
+  ) {
     return { intent: 'database_queries', confidence: 0.9, needsData: true };
   }
-  
-  if (lowerMessage.includes('system') || lowerMessage.includes('config') || lowerMessage.includes('setting')) {
+
+  if (
+    lowerMessage.includes('system') ||
+    lowerMessage.includes('config') ||
+    lowerMessage.includes('setting')
+  ) {
     return { intent: 'system_management', confidence: 0.9, needsData: false };
   }
-  
-  if (lowerMessage.includes('admin') || lowerMessage.includes('management') || lowerMessage.includes('control')) {
+
+  if (
+    lowerMessage.includes('admin') ||
+    lowerMessage.includes('management') ||
+    lowerMessage.includes('control')
+  ) {
     return { intent: 'admin_functions', confidence: 0.8, needsData: false };
   }
-  
+
   return { intent: 'general_admin', confidence: 0.6, needsData: false };
 }
 
-async function generateAdminAIResponse(adminMessage: string, intent: string): Promise<string> {
+async function generateAdminAIResponse(
+  adminMessage: string,
+  intent: string
+): Promise<string> {
   try {
     // Get advanced knowledge base
-    const advancedKnowledgeBase = await getAdvancedKnowledgeBase(intent, adminMessage);
-    
+    const advancedKnowledgeBase = await getAdvancedKnowledgeBase(
+      intent,
+      adminMessage
+    );
+
     const systemPrompt = `Bạn là AI assistant chuyên dụng cho Admin của SABO Pool Arena - nền tảng billiards hàng đầu Việt Nam.
 
 QUYỀN HẠN VÀ NHIỆM VỤ:
@@ -207,14 +251,14 @@ VÍ DỤ PHẢN HỒI ADMIN:
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        Authorization: `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'gpt-4.1-nano',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: adminMessage }
+          { role: 'user', content: adminMessage },
         ],
         max_tokens: 600, // Tăng cho admin responses
         temperature: 0.2, // Ít creative hơn, chính xác hơn
@@ -233,7 +277,7 @@ VÍ DỤ PHẢN HỒI ADMIN:
   }
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -245,11 +289,18 @@ serve(async (req) => {
     if (!sessionId || !message || !adminId) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
-    console.log('Processing admin message:', { sessionId, adminId, messageLength: message.length });
+    console.log('Processing admin message:', {
+      sessionId,
+      adminId,
+      messageLength: message.length,
+    });
 
     const startTime = Date.now();
 
@@ -258,19 +309,17 @@ serve(async (req) => {
     console.log('Admin intent analysis:', intentAnalysis);
 
     // Log admin message to AI usage statistics
-    await supabase
-      .from('ai_usage_statistics')
-      .insert({
-        user_id: adminId,
-        session_id: sessionId,
-        model_name: 'gpt-4.1-nano',
-        assistant_type: 'admin',
-        message_type: 'user',
-        intent: intentAnalysis.intent,
-        tokens_used: Math.ceil(message.length / 4), // Rough token estimate
-        success: true,
-        created_at: new Date().toISOString()
-      });
+    await supabase.from('ai_usage_statistics').insert({
+      user_id: adminId,
+      session_id: sessionId,
+      model_name: 'gpt-4.1-nano',
+      assistant_type: 'admin',
+      message_type: 'user',
+      intent: intentAnalysis.intent,
+      tokens_used: Math.ceil(message.length / 4), // Rough token estimate
+      success: true,
+      created_at: new Date().toISOString(),
+    });
 
     // Save admin message
     const { error: adminMsgError } = await supabase
@@ -279,39 +328,40 @@ serve(async (req) => {
         session_id: sessionId,
         content: message,
         type: 'user',
-        metadata: { intent: intentAnalysis }
+        metadata: { intent: intentAnalysis },
       });
 
     if (adminMsgError) {
       console.error('Error saving admin message:', adminMsgError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to save message' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Failed to save message' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Generate AI response for admin
-    const aiResponse = await generateAdminAIResponse(message, intentAnalysis.intent);
+    const aiResponse = await generateAdminAIResponse(
+      message,
+      intentAnalysis.intent
+    );
     console.log('Admin AI response generated:', { length: aiResponse.length });
 
     const endTime = Date.now();
     const responseTime = endTime - startTime;
 
     // Log AI response to AI usage statistics
-    await supabase
-      .from('ai_usage_statistics')
-      .insert({
-        user_id: adminId,
-        session_id: sessionId,
-        model_name: 'gpt-4.1-nano',
-        assistant_type: 'admin',
-        message_type: 'assistant',
-        intent: intentAnalysis.intent,
-        tokens_used: Math.ceil(aiResponse.length / 4), // Rough token estimate
-        response_time_ms: responseTime,
-        success: true,
-        created_at: new Date().toISOString()
-      });
+    await supabase.from('ai_usage_statistics').insert({
+      user_id: adminId,
+      session_id: sessionId,
+      model_name: 'gpt-4.1-nano',
+      assistant_type: 'admin',
+      message_type: 'assistant',
+      intent: intentAnalysis.intent,
+      tokens_used: Math.ceil(aiResponse.length / 4), // Rough token estimate
+      response_time_ms: responseTime,
+      success: true,
+      created_at: new Date().toISOString(),
+    });
 
     // Save AI response
     const { error: aiMsgError } = await supabase
@@ -320,50 +370,50 @@ serve(async (req) => {
         session_id: sessionId,
         content: aiResponse,
         type: 'assistant',
-        metadata: { 
+        metadata: {
           intent: intentAnalysis.intent,
           model: 'gpt-4.1-nano',
           confidence: intentAnalysis.confidence,
-          response_time_ms: responseTime
-        }
+          response_time_ms: responseTime,
+        },
       });
 
     if (aiMsgError) {
       console.error('Error saving admin AI message:', aiMsgError);
       return new Response(
         JSON.stringify({ error: 'Failed to save AI response' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         response: aiResponse,
         intent: intentAnalysis.intent,
-        confidence: intentAnalysis.confidence
+        confidence: intentAnalysis.confidence,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Error in ai-admin-assistant:', error);
-    
-    // Log error to AI usage statistics
-    await supabase
-      .from('ai_usage_statistics')
-      .insert({
-        session_id: 'unknown',
-        model_name: 'gpt-4.1-nano',
-        assistant_type: 'admin',
-        message_type: 'assistant',
-        success: false,
-        error_message: error.message,
-        created_at: new Date().toISOString()
-      });
 
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    // Log error to AI usage statistics
+    await supabase.from('ai_usage_statistics').insert({
+      session_id: 'unknown',
+      model_name: 'gpt-4.1-nano',
+      assistant_type: 'admin',
+      message_type: 'assistant',
+      success: false,
+      error_message: error.message,
+      created_at: new Date().toISOString(),
+    });
+
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

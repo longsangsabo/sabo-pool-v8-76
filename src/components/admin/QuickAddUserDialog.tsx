@@ -1,6 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -40,7 +45,7 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
   open,
   onOpenChange,
   tournament,
-  onSuccess
+  onSuccess,
 }) => {
   const [users, setUsers] = useState<Player[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<Player[]>([]);
@@ -59,9 +64,11 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
       // Get all users with ranking data
       const { data: allUsers, error: usersError } = await supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           id, user_id, full_name, display_name, avatar_url, verified_rank, elo
-        `)
+        `
+        )
         .limit(200);
 
       if (usersError) {
@@ -80,11 +87,13 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
         throw regError;
       }
 
-      const registeredUserIds = new Set(registrations?.map(r => r.user_id) || []);
-      
+      const registeredUserIds = new Set(
+        registrations?.map(r => r.user_id) || []
+      );
+
       // Filter out already registered users
-      const availableUsers = (allUsers || []).filter(user => 
-        !registeredUserIds.has(user.user_id)
+      const availableUsers = (allUsers || []).filter(
+        user => !registeredUserIds.has(user.user_id)
       );
 
       console.log('✅ Available users for adding:', availableUsers.length);
@@ -95,7 +104,7 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
       toast({
         title: 'Lỗi',
         description: 'Không thể tải danh sách người dùng: ' + error.message,
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -111,9 +120,13 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
 
     const filtered = users.filter(user => {
       const name = (user.full_name || user.display_name || '').toLowerCase();
-      const rank = (user.verified_rank || user.current_rank || '').toLowerCase();
+      const rank = (
+        user.verified_rank ||
+        user.current_rank ||
+        ''
+      ).toLowerCase();
       const search = searchTerm.toLowerCase();
-      
+
       return name.includes(search) || rank.includes(search);
     });
 
@@ -142,7 +155,7 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
         user_id: userId,
         registration_status: 'confirmed' as const,
         payment_status: 'paid' as const,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }));
 
       console.log('🚀 Bulk adding participants:', registrations);
@@ -161,7 +174,7 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
 
       toast({
         title: 'Thành công',
-        description: `Đã thêm ${selectedUsers.size} người tham gia vào giải đấu ${tournament.name}!`
+        description: `Đã thêm ${selectedUsers.size} người tham gia vào giải đấu ${tournament.name}!`,
       });
 
       // Reset state
@@ -169,13 +182,12 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
       setSearchTerm('');
       onSuccess();
       onOpenChange(false);
-
     } catch (error: any) {
       console.error('❌ Error adding participants:', error);
       toast({
         title: 'Lỗi',
         description: 'Không thể thêm người tham gia: ' + error.message,
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setAdding(false);
@@ -191,57 +203,64 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
     }
   }, [open, tournament.id]);
 
-  const availableSlots = tournament.max_participants - tournament.current_participants;
+  const availableSlots =
+    tournament.max_participants - tournament.current_participants;
   const canAddMore = selectedUsers.size <= availableSlots;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+      <DialogContent className='max-w-2xl max-h-[80vh] flex flex-col'>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5" />
+          <DialogTitle className='flex items-center gap-2'>
+            <UserPlus className='h-5 w-5' />
             Thêm nhanh người tham gia
           </DialogTitle>
           <DialogDescription>
             Giải đấu: {tournament.name} • Còn lại: {availableSlots} chỗ
             {selectedUsers.size > 0 && (
-              <span className="ml-2">
+              <span className='ml-2'>
                 • Đã chọn: {selectedUsers.size}
-                {!canAddMore && <span className="text-red-500"> (vượt quá giới hạn)</span>}
+                {!canAddMore && (
+                  <span className='text-red-500'> (vượt quá giới hạn)</span>
+                )}
               </span>
             )}
           </DialogDescription>
         </DialogHeader>
 
         {/* Search */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className='flex items-center gap-2'>
+          <div className='relative flex-1'>
+            <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
             <Input
-              placeholder="Tìm kiếm theo tên hoặc hạng..."
+              placeholder='Tìm kiếm theo tên hoặc hạng...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              onChange={e => setSearchTerm(e.target.value)}
+              className='pl-10'
             />
           </div>
         </div>
 
         {/* Users list */}
-        <ScrollArea className="flex-1 border rounded-lg">
+        <ScrollArea className='flex-1 border rounded-lg'>
           {loading ? (
-            <div className="p-4 text-center">Đang tải danh sách người dùng...</div>
+            <div className='p-4 text-center'>
+              Đang tải danh sách người dùng...
+            </div>
           ) : filteredUsers.length === 0 ? (
-            <div className="p-4 text-center text-muted-foreground">
-              {searchTerm ? 'Không tìm thấy người dùng phù hợp' : 'Không có người dùng khả dụng'}
+            <div className='p-4 text-center text-muted-foreground'>
+              {searchTerm
+                ? 'Không tìm thấy người dùng phù hợp'
+                : 'Không có người dùng khả dụng'}
             </div>
           ) : (
-            <div className="p-2 space-y-2">
-              {filteredUsers.map((user) => (
+            <div className='p-2 space-y-2'>
+              {filteredUsers.map(user => (
                 <div
                   key={user.user_id}
                   className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedUsers.has(user.user_id) 
-                      ? 'bg-primary/10 border-primary' 
+                    selectedUsers.has(user.user_id)
+                      ? 'bg-primary/10 border-primary'
                       : 'hover:bg-muted/50'
                   }`}
                   onClick={() => toggleUser(user.user_id)}
@@ -250,19 +269,19 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
                     checked={selectedUsers.has(user.user_id)}
                     onChange={() => toggleUser(user.user_id)}
                   />
-                  
-                  <div className="flex-1">
-                    <div className="font-medium">
+
+                  <div className='flex-1'>
+                    <div className='font-medium'>
                       {user.full_name || user.display_name || 'Không có tên'}
                     </div>
-                    <div className="flex gap-2 mt-1">
+                    <div className='flex gap-2 mt-1'>
                       {(user.verified_rank || user.current_rank) && (
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant='outline' className='text-xs'>
                           {user.verified_rank || user.current_rank}
                         </Badge>
                       )}
                       {user.elo && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant='secondary' className='text-xs'>
                           ELO: {user.elo}
                         </Badge>
                       )}
@@ -275,13 +294,13 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
         </ScrollArea>
 
         {/* Actions */}
-        <div className="flex justify-between items-center pt-4 border-t">
-          <div className="text-sm text-muted-foreground">
+        <div className='flex justify-between items-center pt-4 border-t'>
+          <div className='text-sm text-muted-foreground'>
             {selectedUsers.size > 0 ? (
               canAddMore ? (
                 `Sẽ thêm ${selectedUsers.size} người tham gia`
               ) : (
-                <span className="text-red-500">
+                <span className='text-red-500'>
                   Chỉ có thể thêm tối đa {availableSlots} người
                 </span>
               )
@@ -289,9 +308,9 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
               'Chọn người dùng để thêm vào giải đấu'
             )}
           </div>
-          
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+
+          <div className='flex gap-2'>
+            <Button variant='outline' onClick={() => onOpenChange(false)}>
               Hủy
             </Button>
             <Button

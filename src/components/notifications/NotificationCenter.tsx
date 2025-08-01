@@ -41,10 +41,10 @@ export const NotificationCenter = () => {
       if (error) throw error;
       return (data || []).map(n => ({
         ...n,
-        priority: (n as any).priority || 'normal'
+        priority: (n as any).priority || 'normal',
       })) as Notification[];
     },
-    refetchInterval: 30000 // Refresh every 30 seconds
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 
   // Mark as read mutation
@@ -52,9 +52,9 @@ export const NotificationCenter = () => {
     mutationFn: async (notificationId: string) => {
       const { error } = await supabase
         .from('notifications')
-        .update({ 
+        .update({
           is_read: true,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', notificationId);
 
@@ -62,7 +62,7 @@ export const NotificationCenter = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
-    }
+    },
   });
 
   // Mark all as read mutation
@@ -70,9 +70,9 @@ export const NotificationCenter = () => {
     mutationFn: async () => {
       const { error } = await supabase
         .from('notifications')
-        .update({ 
+        .update({
           is_read: true,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('is_read', false);
 
@@ -81,7 +81,7 @@ export const NotificationCenter = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Đã đánh dấu tất cả là đã đọc');
-    }
+    },
   });
 
   // Delete notification mutation
@@ -89,8 +89,8 @@ export const NotificationCenter = () => {
     mutationFn: async (notificationId: string) => {
       const { error } = await supabase
         .from('notifications')
-        .update({ 
-          deleted_at: new Date().toISOString()
+        .update({
+          deleted_at: new Date().toISOString(),
         })
         .eq('id', notificationId);
 
@@ -99,7 +99,7 @@ export const NotificationCenter = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Đã xóa thông báo');
-    }
+    },
   });
 
   // Real-time subscription
@@ -111,22 +111,22 @@ export const NotificationCenter = () => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'notifications'
+          table: 'notifications',
         },
-        (payload) => {
+        payload => {
           queryClient.invalidateQueries({ queryKey: ['notifications'] });
-          
+
           // Play notification sound
           if (soundEnabled) {
             const audio = new Audio('/notification.mp3');
             audio.play().catch(() => {}); // Ignore errors
           }
-          
+
           // Show toast
           const notification = payload.new as Notification;
           toast.info(notification.title, {
             description: notification.message,
-            duration: 5000
+            duration: 5000,
           });
         }
       )
@@ -141,85 +141,96 @@ export const NotificationCenter = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      default: return 'default';
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'secondary';
+      default:
+        return 'default';
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'challenge_received': return '⚔️';
-      case 'match_completed': return '🎱';
-      case 'tournament_invitation': return '🏆';
-      case 'payment_received': return '💰';
-      case 'rank_changed': return '📊';
-      default: return '📢';
+      case 'challenge_received':
+        return '⚔️';
+      case 'match_completed':
+        return '🎱';
+      case 'tournament_invitation':
+        return '🏆';
+      case 'payment_received':
+        return '💰';
+      case 'rank_changed':
+        return '📊';
+      default:
+        return '📢';
     }
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="flex items-center gap-2">
-          <Bell className="w-5 h-5" />
+    <Card className='h-full'>
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4'>
+        <CardTitle className='flex items-center gap-2'>
+          <Bell className='w-5 h-5' />
           Thông báo
           {unreadCount > 0 && (
-            <Badge variant="destructive" className="ml-2">
+            <Badge variant='destructive' className='ml-2'>
               {unreadCount}
             </Badge>
           )}
         </CardTitle>
-        
-        <div className="flex items-center gap-2">
+
+        <div className='flex items-center gap-2'>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={() => setSoundEnabled(!soundEnabled)}
           >
             {soundEnabled ? (
-              <Volume2 className="w-4 h-4" />
+              <Volume2 className='w-4 h-4' />
             ) : (
-              <VolumeX className="w-4 h-4" />
+              <VolumeX className='w-4 h-4' />
             )}
           </Button>
-          
+
           {unreadCount > 0 && (
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => markAllAsReadMutation.mutate()}
               disabled={markAllAsReadMutation.isPending}
             >
-              <Check className="w-4 h-4 mr-1" />
+              <Check className='w-4 h-4 mr-1' />
               Đánh dấu tất cả
             </Button>
           )}
-          
-          <Button variant="outline" size="sm">
-            <Settings className="w-4 h-4" />
+
+          <Button variant='outline' size='sm'>
+            <Settings className='w-4 h-4' />
           </Button>
         </div>
       </CardHeader>
 
-      <CardContent className="p-0">
-        <ScrollArea className="h-[600px] px-6">
+      <CardContent className='p-0'>
+        <ScrollArea className='h-[600px] px-6'>
           {isLoading ? (
-            <div className="flex items-center justify-center p-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className='flex items-center justify-center p-8'>
+              <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
             </div>
           ) : !notifications || notifications.length === 0 ? (
-            <div className="text-center p-8 text-muted-foreground">
-              <Bell className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <div className='text-center p-8 text-muted-foreground'>
+              <Bell className='w-12 h-12 mx-auto mb-4 opacity-50' />
               <p>Không có thông báo nào</p>
             </div>
           ) : (
-            <div className="space-y-0">
+            <div className='space-y-0'>
               {notifications.map((notification, index) => (
                 <div key={notification.id}>
                   <div
                     className={`p-4 hover:bg-muted/50 transition-colors cursor-pointer ${
-                      !notification.is_read ? 'bg-primary/5 border-l-2 border-l-primary' : ''
+                      !notification.is_read
+                        ? 'bg-primary/5 border-l-2 border-l-primary'
+                        : ''
                     }`}
                     onClick={() => {
                       if (!notification.is_read) {
@@ -230,60 +241,65 @@ export const NotificationCenter = () => {
                       }
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="text-2xl">
+                    <div className='flex items-start justify-between gap-3'>
+                      <div className='flex items-start gap-3 flex-1'>
+                        <div className='text-2xl'>
                           {getTypeIcon(notification.type)}
                         </div>
-                        
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-start justify-between gap-2">
-                            <h4 className={`font-medium leading-tight ${
-                              !notification.is_read ? 'text-primary' : ''
-                            }`}>
+
+                        <div className='flex-1 space-y-1'>
+                          <div className='flex items-start justify-between gap-2'>
+                            <h4
+                              className={`font-medium leading-tight ${
+                                !notification.is_read ? 'text-primary' : ''
+                              }`}
+                            >
                               {notification.title}
                             </h4>
-                            <Badge 
+                            <Badge
                               variant={getPriorityColor(notification.priority)}
-                              className="shrink-0"
+                              className='shrink-0'
                             >
                               {notification.priority}
                             </Badge>
                           </div>
-                          
-                          <p className="text-sm text-muted-foreground leading-relaxed">
+
+                          <p className='text-sm text-muted-foreground leading-relaxed'>
                             {notification.message}
                           </p>
-                          
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(notification.created_at), {
-                                addSuffix: true,
-                                locale: vi
-                              })}
+
+                          <div className='flex items-center justify-between'>
+                            <span className='text-xs text-muted-foreground'>
+                              {formatDistanceToNow(
+                                new Date(notification.created_at),
+                                {
+                                  addSuffix: true,
+                                  locale: vi,
+                                }
+                              )}
                             </span>
-                            
+
                             {!notification.is_read && (
-                              <div className="w-2 h-2 rounded-full bg-primary"></div>
+                              <div className='w-2 h-2 rounded-full bg-primary'></div>
                             )}
                           </div>
                         </div>
                       </div>
-                      
+
                       <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
+                        variant='ghost'
+                        size='sm'
+                        onClick={e => {
                           e.stopPropagation();
                           deleteNotificationMutation.mutate(notification.id);
                         }}
                         disabled={deleteNotificationMutation.isPending}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className='w-4 h-4' />
                       </Button>
                     </div>
                   </div>
-                  
+
                   {index < notifications.length - 1 && <Separator />}
                 </div>
               ))}

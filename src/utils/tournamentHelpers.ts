@@ -1,4 +1,3 @@
-
 // Tournament helper utilities
 export const getTournamentTypeText = (type: string): string => {
   switch (type) {
@@ -40,29 +39,33 @@ export const getTierText = (tier: string | number): string => {
   }
 };
 
-export const getRankRequirementText = (minRank?: string, maxRank?: string, rankRequirement?: string): string => {
+export const getRankRequirementText = (
+  minRank?: string,
+  maxRank?: string,
+  rankRequirement?: string
+): string => {
   if (rankRequirement && rankRequirement !== 'all') {
     return `Chỉ hạng ${rankRequirement}`;
   }
-  
+
   if (minRank && maxRank) {
     return `Từ hạng ${minRank} đến ${maxRank}`;
   }
-  
+
   if (minRank) {
     return `Từ hạng ${minRank} trở lên`;
   }
-  
+
   if (maxRank) {
     return `Tối đa hạng ${maxRank}`;
   }
-  
+
   return 'Tất cả hạng';
 };
 
 export const formatTournamentDateTime = (dateString: string | null): string => {
   if (!dateString) return 'Chưa xác định';
-  
+
   try {
     const date = new Date(dateString);
     return date.toLocaleString('vi-VN', {
@@ -71,50 +74,61 @@ export const formatTournamentDateTime = (dateString: string | null): string => {
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
     });
   } catch {
     return 'Chưa xác định';
   }
 };
 
-export const formatTournamentDateRange = (startDate: string | null, endDate: string | null): string => {
+export const formatTournamentDateRange = (
+  startDate: string | null,
+  endDate: string | null
+): string => {
   if (!startDate && !endDate) return 'Chưa xác định';
-  
+
   if (startDate && endDate) {
     const start = formatTournamentDateTime(startDate);
     const end = formatTournamentDateTime(endDate);
-    
+
     if (start === 'Chưa xác định' || end === 'Chưa xác định') {
       return 'Chưa xác định';
     }
-    
+
     // If same date, just show time range
     const startDateOnly = startDate.split('T')[0];
     const endDateOnly = endDate.split('T')[0];
-    
+
     if (startDateOnly === endDateOnly) {
-      const startTime = new Date(startDate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
-      const endTime = new Date(endDate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+      const startTime = new Date(startDate).toLocaleTimeString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+      const endTime = new Date(endDate).toLocaleTimeString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
       const dateStr = new Date(startDate).toLocaleDateString('vi-VN');
       return `${dateStr} (${startTime} - ${endTime})`;
     }
-    
+
     return `${start} - ${end}`;
   }
-  
+
   if (startDate) return `Từ ${formatTournamentDateTime(startDate)}`;
   if (endDate) return `Đến ${formatTournamentDateTime(endDate)}`;
-  
+
   return 'Chưa xác định';
 };
 
 // Prize formatting function to fix scientific notation display
 export const formatPrizeAmount = (amount: number | string): string => {
   const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
-  
+
   if (isNaN(numAmount) || numAmount === 0) return '0 VND';
-  
+
   if (numAmount >= 1000000) {
     return `${(numAmount / 1000000).toFixed(1)}M VND`;
   } else if (numAmount >= 1000) {
@@ -133,9 +147,9 @@ export const getAutomationStatusText = (
     registration: isActive ? '✅ Tự động đóng đăng ký' : '⏳ Chờ đóng đăng ký',
     bracket: isActive ? '✅ Tự động tạo bracket' : '⏳ Chờ tạo bracket',
     progression: isActive ? '✅ Tự động tiến vòng' : '⏳ Chờ tiến vòng',
-    completion: isActive ? '✅ Tự động hoàn thành' : '⏳ Chờ hoàn thành'
+    completion: isActive ? '✅ Tự động hoàn thành' : '⏳ Chờ hoàn thành',
   };
-  
+
   return texts[automationType];
 };
 
@@ -146,15 +160,17 @@ export const calculateTournamentRounds = (participantCount: number): number => {
 };
 
 // Generate tournament seeding for single elimination
-export const generateSeeding = (participantCount: number): Array<[number, number | null]> => {
+export const generateSeeding = (
+  participantCount: number
+): Array<[number, number | null]> => {
   const rounds = calculateTournamentRounds(participantCount);
   const maxParticipants = Math.pow(2, rounds);
   const pairs: Array<[number, number | null]> = [];
-  
+
   for (let i = 1; i <= maxParticipants / 2; i++) {
     const opponent = maxParticipants + 1 - i;
     pairs.push([i, opponent <= participantCount ? opponent : null]);
   }
-  
+
   return pairs;
 };

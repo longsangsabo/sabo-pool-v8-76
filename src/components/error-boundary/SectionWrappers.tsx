@@ -6,26 +6,30 @@ interface SectionWrapperProps {
 }
 
 // Tournament Section Wrapper
-export const TournamentSection: React.FC<SectionWrapperProps> = ({ children }) => {
+export const TournamentSection: React.FC<SectionWrapperProps> = ({
+  children,
+}) => {
   const handleError = (error: Error) => {
     console.error('[Tournament Section] Error:', error);
   };
 
   return (
-    <SectionErrorBoundary section="Tournament" onError={handleError}>
+    <SectionErrorBoundary section='Tournament' onError={handleError}>
       {children}
     </SectionErrorBoundary>
   );
 };
 
 // Challenge Section Wrapper
-export const ChallengeSection: React.FC<SectionWrapperProps> = ({ children }) => {
+export const ChallengeSection: React.FC<SectionWrapperProps> = ({
+  children,
+}) => {
   const handleError = (error: Error) => {
     console.error('[Challenge Section] Error:', error);
   };
 
   return (
-    <SectionErrorBoundary section="Challenge" onError={handleError}>
+    <SectionErrorBoundary section='Challenge' onError={handleError}>
       {children}
     </SectionErrorBoundary>
   );
@@ -38,7 +42,7 @@ export const ProfileSection: React.FC<SectionWrapperProps> = ({ children }) => {
   };
 
   return (
-    <SectionErrorBoundary section="Profile" onError={handleError}>
+    <SectionErrorBoundary section='Profile' onError={handleError}>
       {children}
     </SectionErrorBoundary>
   );
@@ -51,7 +55,7 @@ export const ClubSection: React.FC<SectionWrapperProps> = ({ children }) => {
   };
 
   return (
-    <SectionErrorBoundary section="Club" onError={handleError}>
+    <SectionErrorBoundary section='Club' onError={handleError}>
       {children}
     </SectionErrorBoundary>
   );

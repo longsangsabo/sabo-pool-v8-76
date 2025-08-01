@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -33,12 +39,12 @@ interface ProfileContextType {
   profile: ProfileData | null;
   stats: ProfileStats | null;
   loading: boolean;
-  
+
   // Actions
   loadProfile: () => Promise<void>;
   updateProfile: (data: Partial<ProfileData>) => Promise<void>;
   uploadAvatar: (file: File) => Promise<void>;
-  
+
   // Helpers
   updateField: (field: string, value: any) => void;
   hasChanges: boolean;
@@ -72,10 +78,14 @@ const defaultStats: ProfileStats = {
   elo_points: 1000,
 };
 
-export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UnifiedProfileProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [originalProfile, setOriginalProfile] = useState<ProfileData | null>(null);
+  const [originalProfile, setOriginalProfile] = useState<ProfileData | null>(
+    null
+  );
   const [stats, setStats] = useState<ProfileStats | null>(defaultStats);
   const [loading, setLoading] = useState(false);
 
@@ -101,11 +111,17 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
         full_name: profileData?.full_name || '',
         phone: profileData?.phone || user.phone || '',
         bio: profileData?.bio || '',
-        skill_level: (profileData?.skill_level as 'beginner' | 'intermediate' | 'advanced' | 'pro') || 'beginner',
+        skill_level:
+          (profileData?.skill_level as
+            | 'beginner'
+            | 'intermediate'
+            | 'advanced'
+            | 'pro') || 'beginner',
         city: '',
         district: '',
         avatar_url: profileData?.avatar_url || '',
-        role: (profileData?.role as 'player' | 'club_owner' | 'both') || 'player',
+        role:
+          (profileData?.role as 'player' | 'club_owner' | 'both') || 'player',
       };
 
       setProfile(formattedProfile);
@@ -122,9 +138,10 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
         total_matches: rankingData?.total_matches || 0,
         wins: rankingData?.wins || 0,
         losses: (rankingData?.total_matches || 0) - (rankingData?.wins || 0), // Calculate losses
-        win_rate: rankingData?.total_matches > 0 
-          ? ((rankingData.wins || 0) / rankingData.total_matches) * 100 
-          : 0,
+        win_rate:
+          rankingData?.total_matches > 0
+            ? ((rankingData.wins || 0) / rankingData.total_matches) * 100
+            : 0,
         current_rank: 'K', // Simplified
         spa_points: rankingData?.spa_points || 0,
         elo_points: rankingData?.elo_points || 1000,
@@ -139,73 +156,83 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
     }
   }, [user?.id]);
 
-  const updateProfile = useCallback(async (data: Partial<ProfileData>) => {
-    if (!user?.id || !profile) return;
+  const updateProfile = useCallback(
+    async (data: Partial<ProfileData>) => {
+      if (!user?.id || !profile) return;
 
-    setLoading(true);
-    try {
-      const updateData = {
-        ...data,
-        full_name: data.display_name || data.full_name, // Sync display_name with full_name
-      };
+      setLoading(true);
+      try {
+        const updateData = {
+          ...data,
+          full_name: data.display_name || data.full_name, // Sync display_name with full_name
+        };
 
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
+        const { error } = await supabase.from('profiles').upsert({
           user_id: user.id,
           ...updateData,
         });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      setProfile(prev => prev ? { ...prev, ...data } : null);
-      setOriginalProfile(prev => prev ? { ...prev, ...data } : null);
-      
-      toast.success('Cập nhật thông tin thành công!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('Lỗi khi cập nhật thông tin');
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id, profile]);
+        setProfile(prev => (prev ? { ...prev, ...data } : null));
+        setOriginalProfile(prev => (prev ? { ...prev, ...data } : null));
 
-  const uploadAvatar = useCallback(async (file: File) => {
-    if (!user?.id) return;
+        toast.success('Cập nhật thông tin thành công!');
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        toast.error('Lỗi khi cập nhật thông tin');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user?.id, profile]
+  );
 
-    setLoading(true);
-    try {
-      // Compress and upload image
-      const fileName = `${user.id}/avatar.jpg`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, file, { upsert: true });
+  const uploadAvatar = useCallback(
+    async (file: File) => {
+      if (!user?.id) return;
 
-      if (uploadError) throw uploadError;
+      setLoading(true);
+      try {
+        // Compress and upload image
+        const fileName = `${user.id}/avatar.jpg`;
 
-      const { data: urlData } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName);
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, file, { upsert: true });
 
-      const avatarUrl = urlData.publicUrl + '?t=' + new Date().getTime();
+        if (uploadError) throw uploadError;
 
-      await updateProfile({ avatar_url: avatarUrl });
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
-      toast.error('Lỗi khi tải ảnh đại diện');
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id, updateProfile]);
+        const { data: urlData } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(fileName);
 
-  const updateField = useCallback((field: string, value: any) => {
-    if (!profile) return;
-    setProfile({ ...profile, [field]: value });
-  }, [profile]);
+        const avatarUrl = urlData.publicUrl + '?t=' + new Date().getTime();
 
-  const hasChanges = !!(profile && originalProfile && 
-    JSON.stringify(profile) !== JSON.stringify(originalProfile));
+        await updateProfile({ avatar_url: avatarUrl });
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        toast.error('Lỗi khi tải ảnh đại diện');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user?.id, updateProfile]
+  );
+
+  const updateField = useCallback(
+    (field: string, value: any) => {
+      if (!profile) return;
+      setProfile({ ...profile, [field]: value });
+    },
+    [profile]
+  );
+
+  const hasChanges = !!(
+    profile &&
+    originalProfile &&
+    JSON.stringify(profile) !== JSON.stringify(originalProfile)
+  );
 
   const saveChanges = useCallback(async () => {
     if (!profile || !hasChanges) return;
@@ -233,7 +260,7 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
           table: 'profiles',
           filter: `user_id=eq.${user?.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('Profile updated:', payload);
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
@@ -243,11 +270,17 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
               full_name: newData.full_name || '',
               phone: newData.phone || '',
               bio: newData.bio || '',
-              skill_level: (newData.skill_level as 'beginner' | 'intermediate' | 'advanced' | 'pro') || 'beginner',
+              skill_level:
+                (newData.skill_level as
+                  | 'beginner'
+                  | 'intermediate'
+                  | 'advanced'
+                  | 'pro') || 'beginner',
               city: newData.city || '',
               district: newData.district || '',
               avatar_url: newData.avatar_url || '',
-              role: (newData.role as 'player' | 'club_owner' | 'both') || 'player',
+              role:
+                (newData.role as 'player' | 'club_owner' | 'both') || 'player',
               completion_percentage: newData.completion_percentage || 0,
             };
             setProfile(updatedProfile);
@@ -268,7 +301,7 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
           table: 'player_rankings',
           filter: `user_id=eq.${user?.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('Rankings updated:', payload);
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
@@ -276,9 +309,10 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
               total_matches: newData.total_matches || 0,
               wins: newData.wins || 0,
               losses: (newData.total_matches || 0) - (newData.wins || 0),
-              win_rate: newData.total_matches > 0 
-                ? ((newData.wins || 0) / newData.total_matches) * 100 
-                : 0,
+              win_rate:
+                newData.total_matches > 0
+                  ? ((newData.wins || 0) / newData.total_matches) * 100
+                  : 0,
               current_rank: 'K',
               spa_points: newData.spa_points || 0,
               elo_points: newData.elo_points || 1000,
@@ -310,16 +344,16 @@ export const UnifiedProfileProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   return (
-    <ProfileContext.Provider value={value}>
-      {children}
-    </ProfileContext.Provider>
+    <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
   );
 };
 
 export const useUnifiedProfile = () => {
   const context = useContext(ProfileContext);
   if (context === undefined) {
-    throw new Error('useUnifiedProfile must be used within UnifiedProfileProvider');
+    throw new Error(
+      'useUnifiedProfile must be used within UnifiedProfileProvider'
+    );
   }
   return context;
 };

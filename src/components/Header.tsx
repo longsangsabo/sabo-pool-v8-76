@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Users, 
-  Trophy, 
-  MessageSquare, 
-  User, 
-  Menu, 
-  X, 
+import {
+  Users,
+  Trophy,
+  MessageSquare,
+  User,
+  Menu,
+  X,
   Home,
   Store,
   Shield,
@@ -14,7 +14,7 @@ import {
   Calendar,
   BarChart3,
   Gamepad2,
-  Heart
+  Heart,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,9 +39,9 @@ const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   console.log('Header: user:', user?.id, user?.phone);
-  
+
   // Admin check removed for performance - admin functionality separated
-  
+
   const location = useLocation();
 
   // Admin functionality moved to AdminRouter - no admin checks in user components
@@ -74,23 +74,23 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <header className='bg-white shadow-sm border-b sticky top-0 z-50'>
+      <div className='container mx-auto px-4'>
+        <div className='flex items-center justify-between h-16'>
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">🎱</span>
+          <Link to='/' className='flex items-center space-x-2'>
+            <div className='w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center'>
+              <span className='text-white font-bold text-sm'>🎱</span>
             </div>
-            <span className="font-bold text-xl text-gray-900">SABO ARENA</span>
+            <span className='font-bold text-xl text-gray-900'>SABO ARENA</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            {navigationItems.map((item) => {
+          <nav className='hidden lg:flex items-center space-x-1'>
+            {navigationItems.map(item => {
               const Icon = item.icon;
               const isActive = isActiveRoute(item.href);
-              
+
               return (
                 <Link
                   key={item.name}
@@ -101,7 +101,7 @@ const Header = () => {
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className='w-4 h-4' />
                   <span>{item.name}</span>
                 </Link>
               );
@@ -109,15 +109,17 @@ const Header = () => {
           </nav>
 
           {/* Right Side */}
-          <div className="flex items-center space-x-4">
+          <div className='flex items-center space-x-4'>
             {/* SPA Points Badge */}
             {user && <SPAPointsBadge />}
-            
+
             {/* Notifications */}
             {user && (
-              <NotificationBadge 
+              <NotificationBadge
                 count={notifications?.length || 0}
-                hasUrgent={notifications?.some(n => n.priority === 'high') || false}
+                hasUrgent={
+                  notifications?.some(n => n.priority === 'high') || false
+                }
                 onClick={() => {
                   navigate('/notifications');
                 }}
@@ -128,34 +130,37 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2 p-1">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" />
+                  <Button
+                    variant='ghost'
+                    className='flex items-center space-x-2 p-1'
+                  >
+                    <Avatar className='h-8 w-8'>
+                      <AvatarImage src='/placeholder.svg' />
                       <AvatarFallback>
                         {user.email?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="hidden md:block text-sm font-medium">
+                    <span className='hidden md:block text-sm font-medium'>
                       {user.email}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align='end' className='w-56'>
                   <DropdownMenuItem asChild>
-                    <Link to="/profile" className="flex items-center">
-                      <User className="w-4 h-4 mr-2" />
+                    <Link to='/profile' className='flex items-center'>
+                      <User className='w-4 h-4 mr-2' />
                       Hồ sơ cá nhân
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/dashboard" className="flex items-center">
-                      <BarChart3 className="w-4 h-4 mr-2" />
+                    <Link to='/dashboard' className='flex items-center'>
+                      <BarChart3 className='w-4 h-4 mr-2' />
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/notifications" className="flex items-center">
-                      <Bell className="w-4 h-4 mr-2" />
+                    <Link to='/notifications' className='flex items-center'>
+                      <Bell className='w-4 h-4 mr-2' />
                       Thông báo
                     </Link>
                   </DropdownMenuItem>
@@ -167,36 +172,40 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Button variant="ghost" asChild>
-                  <Link to="/login">Đăng nhập</Link>
+              <div className='flex items-center space-x-2'>
+                <Button variant='ghost' asChild>
+                  <Link to='/login'>Đăng nhập</Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/register">Đăng ký</Link>
+                  <Link to='/register'>Đăng ký</Link>
                 </Button>
               </div>
             )}
 
             {/* Mobile Menu Button */}
             <Button
-              variant="ghost"
-              size="sm"
-              className="lg:hidden"
+              variant='ghost'
+              size='sm'
+              className='lg:hidden'
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? (
+                <X className='w-5 h-5' />
+              ) : (
+                <Menu className='w-5 h-5' />
+              )}
             </Button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t">
-            <nav className="space-y-2">
-              {navigationItems.map((item) => {
+          <div className='lg:hidden py-4 border-t'>
+            <nav className='space-y-2'>
+              {navigationItems.map(item => {
                 const Icon = item.icon;
                 const isActive = isActiveRoute(item.href);
-                
+
                 return (
                   <Link
                     key={item.name}
@@ -208,7 +217,7 @@ const Header = () => {
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className='w-5 h-5' />
                     <span>{item.name}</span>
                   </Link>
                 );

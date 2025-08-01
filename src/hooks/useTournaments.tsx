@@ -4,10 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useRealtimeTournamentSync } from './useRealtimeTournamentSync';
 import { toast } from 'sonner';
-import {
-  Tournament,
-  TournamentFormData,
-} from '../types/common';
+import { Tournament, TournamentFormData } from '../types/common';
 import { EnhancedTournament } from '@/types/tournament-extended';
 import { TournamentAdapter } from '@/utils/tournamentAdapter';
 import {
@@ -75,7 +72,7 @@ export const useTournaments = (userId?: string) => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Add realtime sync
   const { lastUpdate } = useRealtimeTournamentSync();
 
@@ -85,8 +82,10 @@ export const useTournaments = (userId?: string) => {
 
     try {
       // Sử dụng TournamentService để đảm bảo tính nhất quán
-      const result = await (await import('@/services/tournamentService')).TournamentService.getAllVisibleTournaments();
-      
+      const result = await (
+        await import('@/services/tournamentService')
+      ).TournamentService.getAllVisibleTournaments();
+
       // Cast to Tournament type - the TournamentService returns compatible data
       setTournaments(result as unknown as Tournament[]);
     } catch (err) {
@@ -109,12 +108,18 @@ export const useTournaments = (userId?: string) => {
 
         // Map tier letter to tier level
         const tierLevelMap: Record<string, number> = {
-          'K+': 1, 'K': 1,
-          'I+': 1, 'I': 1,
-          'H+': 2, 'H': 2,
-          'G+': 2, 'G': 2,
-          'F+': 3, 'F': 3,
-          'E+': 4, 'E': 4,
+          'K+': 1,
+          K: 1,
+          'I+': 1,
+          I: 1,
+          'H+': 2,
+          H: 2,
+          'G+': 2,
+          G: 2,
+          'F+': 3,
+          F: 3,
+          'E+': 4,
+          E: 4,
         };
 
         const { data: newTournament, error } = await supabase
@@ -173,8 +178,13 @@ export const useTournaments = (userId?: string) => {
 
       try {
         // Mock update tournament
-        const updatedTournament = { ...tournaments.find(t => t.id === id), ...updates };
-        setTournaments(prev => prev.map(t => (t.id === id ? updatedTournament as Tournament : t)));
+        const updatedTournament = {
+          ...tournaments.find(t => t.id === id),
+          ...updates,
+        };
+        setTournaments(prev =>
+          prev.map(t => (t.id === id ? (updatedTournament as Tournament) : t))
+        );
         return updatedTournament;
       } catch (err) {
         setError(
@@ -219,7 +229,7 @@ export const useTournaments = (userId?: string) => {
           user_id: user.id,
           registration_status: 'pending',
           payment_status: 'unpaid',
-          status: 'pending'
+          status: 'pending',
         });
 
         // Update local tournaments list
@@ -259,15 +269,25 @@ export const useTournaments = (userId?: string) => {
       try {
         if (!user?.id) throw new Error('Must be logged in');
 
-        console.log('Attempting to cancel registration for tournament:', tournamentId, 'user:', user.id);
-        
+        console.log(
+          'Attempting to cancel registration for tournament:',
+          tournamentId,
+          'user:',
+          user.id
+        );
+
         // Use TournamentRepository instead of direct Supabase calls
-        const data = await TournamentRepository.cancelRegistration(tournamentId, user.id);
+        const data = await TournamentRepository.cancelRegistration(
+          tournamentId,
+          user.id
+        );
 
         console.log('Delete result:', data);
 
         if (!data || data.length === 0) {
-          console.warn('No registration found to delete - updating UI state anyway');
+          console.warn(
+            'No registration found to delete - updating UI state anyway'
+          );
           toast.success('Đã hủy đăng ký giải đấu');
         } else {
           console.log('Successfully deleted registration:', data[0]);
@@ -306,7 +326,8 @@ export const useTournaments = (userId?: string) => {
       try {
         const { data, error } = await supabase
           .from('tournament_registrations')
-          .select(`
+          .select(
+            `
             *,
             profiles!inner(
               user_id,
@@ -315,7 +336,8 @@ export const useTournaments = (userId?: string) => {
               avatar_url,
               verified_rank
             )
-          `)
+          `
+          )
           .eq('tournament_id', tournamentId)
           .order('created_at', { ascending: true });
 
@@ -426,15 +448,16 @@ export const useTournaments = (userId?: string) => {
   const calculateEloPoints = useCallback(
     (tierCode: string, position: number): number => {
       // Use new RankingService instead of hardcoded logic
-      const tournamentPosition = RankingService.getTournamentPositions().find(pos => {
-        if (pos === 'CHAMPION') return position === 1;
-        if (pos === 'RUNNER_UP') return position === 2;
-        if (pos === 'THIRD_PLACE') return position === 3;
-        if (pos === 'FOURTH_PLACE') return position === 4;
-        if (pos === 'TOP_8') return position <= 8;
-        if (pos === 'TOP_16') return position <= 16;
-        return true; // PARTICIPATION
-      }) || 'PARTICIPATION';
+      const tournamentPosition =
+        RankingService.getTournamentPositions().find(pos => {
+          if (pos === 'CHAMPION') return position === 1;
+          if (pos === 'RUNNER_UP') return position === 2;
+          if (pos === 'THIRD_PLACE') return position === 3;
+          if (pos === 'FOURTH_PLACE') return position === 4;
+          if (pos === 'TOP_8') return position <= 8;
+          if (pos === 'TOP_16') return position <= 16;
+          return true; // PARTICIPATION
+        }) || 'PARTICIPATION';
 
       return RankingService.calculateTournamentElo(tournamentPosition);
     },
@@ -485,7 +508,7 @@ export const useTournaments = (userId?: string) => {
       try {
         // Mock finalize tournament
         console.log('Mock finalizing tournament:', { tournamentId, results });
-        
+
         // Update tournament status to completed
         setTournaments(prev =>
           prev.map(tournament =>
@@ -548,7 +571,7 @@ export const useTournaments = (userId?: string) => {
       toast.success('Successfully registered for tournament!');
       queryClient.invalidateQueries({ queryKey: ['tournaments'] });
     },
-    onError: (error) => {
+    onError: error => {
       toast.error('Failed to register for tournament');
       console.error('Tournament registration error:', error);
     },
@@ -609,9 +632,15 @@ export const useTournamentById = (id: string) => {
         max_participants: 32,
         current_participants: 12,
         registration_start: new Date().toISOString(),
-        registration_end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        tournament_start: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-        tournament_end: new Date(Date.now() + 16 * 24 * 60 * 60 * 1000).toISOString(),
+        registration_end: new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        tournament_start: new Date(
+          Date.now() + 14 * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        tournament_end: new Date(
+          Date.now() + 16 * 24 * 60 * 60 * 1000
+        ).toISOString(),
         club_id: 'club_1',
         venue_address: 'Mock Venue',
         entry_fee: 100,
@@ -628,8 +657,8 @@ export const useTournamentById = (id: string) => {
           name: 'Mock Club',
           address: 'Mock Address',
           phone: '0123456789',
-          email: 'mock@club.com'
-        }
+          email: 'mock@club.com',
+        },
       };
 
       return mockTournament;

@@ -25,17 +25,17 @@ const UserStatusDebug: React.FC = () => {
   const { user } = useAuth();
   const [status, setStatus] = useState<UserStatus>({
     isAdmin: false,
-    isClubOwner: false
+    isClubOwner: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const checkUserStatus = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Check profile info and admin status
       const { data: profileData, error: profileError } = await supabase
@@ -63,9 +63,8 @@ const UserStatusDebug: React.FC = () => {
         isAdmin: profileData?.is_admin || false,
         isClubOwner: !!clubData && clubData.verification_status === 'approved',
         clubInfo: clubData || undefined,
-        profile: profileData || undefined
+        profile: profileData || undefined,
       });
-
     } catch (err) {
       console.error('Error checking user status:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -82,15 +81,15 @@ const UserStatusDebug: React.FC = () => {
 
   if (!user) {
     return (
-      <Card className="w-full max-w-md">
+      <Card className='w-full max-w-md'>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-orange-500" />
+          <CardTitle className='flex items-center space-x-2'>
+            <AlertCircle className='w-5 h-5 text-orange-500' />
             <span>Chưa đăng nhập</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
+          <p className='text-sm text-muted-foreground'>
             Vui lòng đăng nhập để kiểm tra quyền admin và club.
           </p>
         </CardContent>
@@ -99,13 +98,13 @@ const UserStatusDebug: React.FC = () => {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className='w-full max-w-md'>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+        <CardTitle className='flex items-center justify-between'>
           <span>Trạng thái người dùng</span>
-          <Button 
-            size="sm" 
-            variant="outline" 
+          <Button
+            size='sm'
+            variant='outline'
             onClick={checkUserStatus}
             disabled={loading}
           >
@@ -113,33 +112,37 @@ const UserStatusDebug: React.FC = () => {
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className='space-y-4'>
         {/* User Info */}
-        <div className="flex items-center space-x-2">
-          <User className="w-4 h-4" />
+        <div className='flex items-center space-x-2'>
+          <User className='w-4 h-4' />
           <div>
-            <p className="font-medium">{status.profile?.full_name || 'Chưa có tên'}</p>
-            <p className="text-xs text-muted-foreground">{user.email}</p>
-            <p className="text-xs text-muted-foreground">{status.profile?.phone || 'Chưa có SĐT'}</p>
+            <p className='font-medium'>
+              {status.profile?.full_name || 'Chưa có tên'}
+            </p>
+            <p className='text-xs text-muted-foreground'>{user.email}</p>
+            <p className='text-xs text-muted-foreground'>
+              {status.profile?.phone || 'Chưa có SĐT'}
+            </p>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-600">Lỗi: {error}</p>
+          <div className='p-3 bg-red-50 border border-red-200 rounded-md'>
+            <p className='text-sm text-red-600'>Lỗi: {error}</p>
           </div>
         )}
 
         {/* Admin Status */}
-        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-          <div className="flex items-center space-x-2">
-            <Shield className="w-4 h-4" />
-            <span className="font-medium">Quyền Admin</span>
+        <div className='flex items-center justify-between p-3 bg-gray-50 rounded-md'>
+          <div className='flex items-center space-x-2'>
+            <Shield className='w-4 h-4' />
+            <span className='font-medium'>Quyền Admin</span>
           </div>
-          <Badge variant={status.isAdmin ? "default" : "secondary"}>
+          <Badge variant={status.isAdmin ? 'default' : 'secondary'}>
             {status.isAdmin ? (
-              <div className="flex items-center space-x-1">
-                <CheckCircle className="w-3 h-3" />
+              <div className='flex items-center space-x-1'>
+                <CheckCircle className='w-3 h-3' />
                 <span>Có quyền</span>
               </div>
             ) : (
@@ -149,15 +152,15 @@ const UserStatusDebug: React.FC = () => {
         </div>
 
         {/* Club Owner Status */}
-        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-          <div className="flex items-center space-x-2">
-            <Trophy className="w-4 h-4" />
-            <span className="font-medium">Chủ CLB</span>
+        <div className='flex items-center justify-between p-3 bg-gray-50 rounded-md'>
+          <div className='flex items-center space-x-2'>
+            <Trophy className='w-4 h-4' />
+            <span className='font-medium'>Chủ CLB</span>
           </div>
-          <Badge variant={status.isClubOwner ? "default" : "secondary"}>
+          <Badge variant={status.isClubOwner ? 'default' : 'secondary'}>
             {status.isClubOwner ? (
-              <div className="flex items-center space-x-1">
-                <CheckCircle className="w-3 h-3" />
+              <div className='flex items-center space-x-1'>
+                <CheckCircle className='w-3 h-3' />
                 <span>Đã xác thực</span>
               </div>
             ) : (
@@ -168,12 +171,16 @@ const UserStatusDebug: React.FC = () => {
 
         {/* Club Info */}
         {status.clubInfo && (
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-            <p className="font-medium text-sm">Thông tin CLB:</p>
-            <p className="text-sm">{status.clubInfo.club_name}</p>
-            <Badge 
-              variant={status.clubInfo.verification_status === 'approved' ? 'default' : 'secondary'}
-              className="mt-1"
+          <div className='p-3 bg-blue-50 border border-blue-200 rounded-md'>
+            <p className='font-medium text-sm'>Thông tin CLB:</p>
+            <p className='text-sm'>{status.clubInfo.club_name}</p>
+            <Badge
+              variant={
+                status.clubInfo.verification_status === 'approved'
+                  ? 'default'
+                  : 'secondary'
+              }
+              className='mt-1'
             >
               {status.clubInfo.verification_status}
             </Badge>
@@ -181,32 +188,32 @@ const UserStatusDebug: React.FC = () => {
         )}
 
         {/* Navigation Links */}
-        <div className="space-y-2 pt-2 border-t">
-          <p className="text-sm font-medium">Liên kết nhanh:</p>
+        <div className='space-y-2 pt-2 border-t'>
+          <p className='text-sm font-medium'>Liên kết nhanh:</p>
           {status.isAdmin && (
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="w-full justify-start"
+            <Button
+              size='sm'
+              variant='outline'
+              className='w-full justify-start'
               onClick={() => window.open('/admin', '_blank')}
             >
-              <Shield className="w-4 h-4 mr-2" />
+              <Shield className='w-4 h-4 mr-2' />
               Trang quản trị Admin
             </Button>
           )}
           {status.isClubOwner && (
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="w-full justify-start"
+            <Button
+              size='sm'
+              variant='outline'
+              className='w-full justify-start'
               onClick={() => window.open('/club-management', '_blank')}
             >
-              <Trophy className="w-4 h-4 mr-2" />
+              <Trophy className='w-4 h-4 mr-2' />
               Quản lý CLB
             </Button>
           )}
           {!status.isAdmin && !status.isClubOwner && (
-            <p className="text-sm text-muted-foreground">
+            <p className='text-sm text-muted-foreground'>
               Chưa có quyền đặc biệt nào.
             </p>
           )}

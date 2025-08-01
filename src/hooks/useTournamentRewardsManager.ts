@@ -20,31 +20,40 @@ export function useTournamentRewardsManager(tournamentId: string) {
   const queryClient = useQueryClient();
 
   // Fetch current tournament prize tiers
-  const { data: prizeTiers = [], isLoading, refetch } = useQuery({
+  const {
+    data: prizeTiers = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['tournament-prize-tiers', tournamentId],
     queryFn: async () => {
       if (!tournamentId || tournamentId.trim() === '') {
         return [];
       }
-      
+
       const { data, error } = await supabase
         .from('tournament_prize_tiers')
         .select('*')
         .eq('tournament_id', tournamentId)
         .order('position');
-      
+
       if (error) throw error;
-      
+
       // If no prize tiers exist, create default ones
       if (!data || data.length === 0) {
-        console.log('🔧 No prize tiers found, creating default ones for tournament:', tournamentId);
-        
+        console.log(
+          '🔧 No prize tiers found, creating default ones for tournament:',
+          tournamentId
+        );
+
         // Call the populate function to create default rewards
-        const { error: functionError } = await supabase
-          .rpc('populate_default_tournament_rewards', { 
-            tournament_id_param: tournamentId 
-          });
-        
+        const { error: functionError } = await supabase.rpc(
+          'populate_default_tournament_rewards',
+          {
+            tournament_id_param: tournamentId,
+          }
+        );
+
         if (functionError) {
           console.error('Error creating default rewards:', functionError);
         } else {
@@ -54,20 +63,22 @@ export function useTournamentRewardsManager(tournamentId: string) {
             .select('*')
             .eq('tournament_id', tournamentId)
             .order('position');
-          
+
           if (!newError && newData) {
             return newData as TournamentPrizeTier[];
           }
         }
       }
-      
+
       return data as TournamentPrizeTier[];
     },
-    enabled: !!tournamentId && tournamentId.trim() !== ''
+    enabled: !!tournamentId && tournamentId.trim() !== '',
   });
 
   // Convert prize tiers to TournamentRewards format
-  const convertToRewardsFormat = (tiers: TournamentPrizeTier[]): TournamentRewards => {
+  const convertToRewardsFormat = (
+    tiers: TournamentPrizeTier[]
+  ): TournamentRewards => {
     const positions: RewardPosition[] = tiers.map(tier => ({
       position: tier.position,
       name: tier.position_name,
@@ -75,7 +86,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
       spaPoints: tier.spa_points,
       cashPrize: tier.cash_amount || 0,
       items: tier.physical_items || [],
-      isVisible: tier.is_visible
+      isVisible: tier.is_visible,
     }));
 
     const totalPrize = positions.reduce((sum, pos) => sum + pos.cashPrize, 0);
@@ -84,17 +95,19 @@ export function useTournamentRewardsManager(tournamentId: string) {
       totalPrize,
       showPrizes: totalPrize > 0,
       positions,
-      specialAwards: []
+      specialAwards: [],
     };
   };
 
   // Convert TournamentRewards to prize tiers format
-  const convertToPrizeTiers = (rewards: TournamentRewards): Omit<TournamentPrizeTier, 'id'>[] => {
+  const convertToPrizeTiers = (
+    rewards: TournamentRewards
+  ): Omit<TournamentPrizeTier, 'id'>[] => {
     if (!tournamentId || tournamentId.trim() === '') {
       console.warn('⚠️ Cannot convert to prize tiers without tournamentId');
       return [];
     }
-    
+
     return rewards.positions.map(position => ({
       tournament_id: tournamentId,
       position: position.position,
@@ -103,7 +116,9 @@ export function useTournamentRewardsManager(tournamentId: string) {
       elo_points: position.eloPoints || 0,
       spa_points: position.spaPoints || 0,
       is_visible: position.isVisible !== false,
-      physical_items: (position.items || []).filter(item => item && item.trim()) // Filter out empty items
+      physical_items: (position.items || []).filter(
+        item => item && item.trim()
+      ), // Filter out empty items
     }));
   };
 
@@ -112,28 +127,31 @@ export function useTournamentRewardsManager(tournamentId: string) {
     mutationFn: async (rewards: TournamentRewards) => {
       // If no tournamentId, skip database save but return success for UI consistency
       if (!tournamentId || tournamentId.trim() === '') {
-        console.log('⏸️ No tournamentId provided, skipping database save for now');
+        console.log(
+          '⏸️ No tournamentId provided, skipping database save for now'
+        );
         return rewards;
       }
-      
+
       // Start transaction-like operation
-      
+
       // 1. Delete existing prize tiers
       const { error: deleteError } = await supabase
         .from('tournament_prize_tiers')
         .delete()
         .eq('tournament_id', tournamentId);
-      
+
       if (deleteError) throw deleteError;
 
       // 2. Insert new prize tiers
       if (rewards.positions.length > 0) {
         const newTiers = convertToPrizeTiers(rewards);
-        if (newTiers.length > 0) { // Only insert if we have valid tiers
+        if (newTiers.length > 0) {
+          // Only insert if we have valid tiers
           const { error: insertError } = await supabase
             .from('tournament_prize_tiers')
             .insert(newTiers);
-          
+
           if (insertError) throw insertError;
         }
       }
@@ -141,26 +159,28 @@ export function useTournamentRewardsManager(tournamentId: string) {
       // Update tournament timestamp for tracking
       const { error: updateError } = await supabase
         .from('tournaments')
-        .update({ 
-          updated_at: new Date().toISOString()
+        .update({
+          updated_at: new Date().toISOString(),
         })
         .eq('id', tournamentId);
-        
+
       if (updateError) throw updateError;
 
       return rewards;
     },
-    onSuccess: (savedRewards) => {
+    onSuccess: savedRewards => {
       // Invalidate and refetch data
-      queryClient.invalidateQueries({ queryKey: ['tournament-prize-tiers', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-prize-tiers', tournamentId],
+      });
       queryClient.invalidateQueries({ queryKey: ['tournaments'] });
-      
+
       toast.success('Đã cập nhật phần thưởng thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Failed to save rewards:', error);
       toast.error('Lỗi khi lưu phần thưởng. Vui lòng thử lại.');
-    }
+    },
   });
 
   // Delete specific position
@@ -171,26 +191,30 @@ export function useTournamentRewardsManager(tournamentId: string) {
         .delete()
         .eq('tournament_id', tournamentId)
         .eq('position', position);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tournament-prize-tiers', tournamentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['tournament-prize-tiers', tournamentId],
+      });
       toast.success('Đã xóa vị trí thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Failed to delete position:', error);
       toast.error('Lỗi khi xóa vị trí');
-    }
+    },
   });
 
   // Validation functions
   const validateRewards = (rewards: TournamentRewards): string[] => {
     const errors: string[] = [];
-    
+
     // Check for duplicate positions
     const positions = rewards.positions.map(p => p.position);
-    const duplicates = positions.filter((pos, index) => positions.indexOf(pos) !== index);
+    const duplicates = positions.filter(
+      (pos, index) => positions.indexOf(pos) !== index
+    );
     if (duplicates.length > 0) {
       errors.push(`Vị trí bị trùng: ${duplicates.join(', ')}`);
     }
@@ -205,7 +229,10 @@ export function useTournamentRewardsManager(tournamentId: string) {
     }
 
     // Check if total cash prizes don't exceed total prize
-    const totalCashPrizes = rewards.positions.reduce((sum, pos) => sum + (pos.cashPrize || 0), 0);
+    const totalCashPrizes = rewards.positions.reduce(
+      (sum, pos) => sum + (pos.cashPrize || 0),
+      0
+    );
     if (totalCashPrizes > rewards.totalPrize) {
       errors.push('Tổng tiền thưởng các vị trí vượt quá tổng giải thưởng');
     }
@@ -221,19 +248,19 @@ export function useTournamentRewardsManager(tournamentId: string) {
     rewards: currentRewards,
     prizeTiers,
     isLoading,
-    
+
     // Actions
     saveRewards: saveRewardsMutation.mutate,
     deletePosition: deletePositionMutation.mutate,
     refetch, // Add refetch function
-    
+
     // Status
     isSaving: saveRewardsMutation.isPending,
     isDeleting: deletePositionMutation.isPending,
-    
+
     // Utilities
     validateRewards,
     convertToRewardsFormat,
-    convertToPrizeTiers
+    convertToPrizeTiers,
   };
 }

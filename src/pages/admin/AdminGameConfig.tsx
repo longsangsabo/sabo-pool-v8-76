@@ -12,58 +12,61 @@ const AdminGameConfig = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className='space-y-6'>
+      <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Game Configuration</h1>
-          <p className="text-muted-foreground">
-            Quản lý và cấu hình toàn bộ các thông số game logic cho SABO Pool Arena
+          <h1 className='text-3xl font-bold text-foreground'>
+            Game Configuration
+          </h1>
+          <p className='text-muted-foreground'>
+            Quản lý và cấu hình toàn bộ các thông số game logic cho SABO Pool
+            Arena
           </p>
         </div>
         <GameConfigSync />
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview" className="gap-2">
-            <BarChart3 className="h-4 w-4" />
+      <Tabs value={activeTab} onValueChange={setActiveTab} className='w-full'>
+        <TabsList className='grid w-full grid-cols-5'>
+          <TabsTrigger value='overview' className='gap-2'>
+            <BarChart3 className='h-4 w-4' />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="elo" className="gap-2">
-            <Target className="h-4 w-4" />
+          <TabsTrigger value='elo' className='gap-2'>
+            <Target className='h-4 w-4' />
             ELO Rules
           </TabsTrigger>
-          <TabsTrigger value="ranks" className="gap-2">
-            <Star className="h-4 w-4" />
+          <TabsTrigger value='ranks' className='gap-2'>
+            <Star className='h-4 w-4' />
             Ranks
           </TabsTrigger>
-          <TabsTrigger value="spa" className="gap-2">
-            <Trophy className="h-4 w-4" />
+          <TabsTrigger value='spa' className='gap-2'>
+            <Trophy className='h-4 w-4' />
             SPA Rewards
           </TabsTrigger>
-          <TabsTrigger value="tournaments" className="gap-2">
-            <Settings className="h-4 w-4" />
+          <TabsTrigger value='tournaments' className='gap-2'>
+            <Settings className='h-4 w-4' />
             Tournaments
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value='overview' className='space-y-6'>
           <GameConfigOverview />
         </TabsContent>
 
-        <TabsContent value="elo" className="space-y-6">
+        <TabsContent value='elo' className='space-y-6'>
           <EloRulesManager />
         </TabsContent>
 
-        <TabsContent value="ranks" className="space-y-6">
+        <TabsContent value='ranks' className='space-y-6'>
           <RankDefinitionsManager />
         </TabsContent>
 
-        <TabsContent value="spa" className="space-y-6">
+        <TabsContent value='spa' className='space-y-6'>
           <SPARewardsManager />
         </TabsContent>
 
-        <TabsContent value="tournaments" className="space-y-6">
+        <TabsContent value='tournaments' className='space-y-6'>
           <TournamentRewardsManager />
         </TabsContent>
       </Tabs>

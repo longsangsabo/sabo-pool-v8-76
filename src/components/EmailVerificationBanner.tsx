@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Mail, X, Check } from 'lucide-react';
@@ -63,7 +62,8 @@ const EmailVerificationBanner = () => {
           <div className='ml-3'>
             <div className='text-sm'>
               <p className='text-blue-800 font-medium'>
-                <strong>📧 Xác thực email:</strong> Vui lòng kiểm tra hộp thư và nhấp vào link xác thực để kích hoạt tài khoản.
+                <strong>📧 Xác thực email:</strong> Vui lòng kiểm tra hộp thư và
+                nhấp vào link xác thực để kích hoạt tài khoản.
               </p>
               {emailSent && (
                 <p className='text-green-700 text-xs mt-1'>

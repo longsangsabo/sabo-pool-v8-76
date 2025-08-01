@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -22,20 +21,20 @@ export const AdminRoleSwitch: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className='flex items-center gap-2'>
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={handleSwitchToClub}
-        className="flex items-center gap-2 hover:bg-muted"
+        className='flex items-center gap-2 hover:bg-muted'
       >
-        <Building className="h-4 w-4" />
+        <Building className='h-4 w-4' />
         <span>Chuyển sang CLB</span>
-        <ArrowRight className="h-3 w-3" />
+        <ArrowRight className='h-3 w-3' />
       </Button>
-      
+
       {clubProfile && (
-        <Badge variant="secondary" className="text-xs">
+        <Badge variant='secondary' className='text-xs'>
           {clubProfile.club_name}
         </Badge>
       )}

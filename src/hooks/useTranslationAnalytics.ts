@@ -51,18 +51,21 @@ export const useTranslationAnalytics = () => {
     for (let i = 29; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      
+
       const automated = Math.floor(Math.random() * 500) + 100;
       const manual = Math.floor(Math.random() * 200) + 50;
       const total = automated + manual;
       const accuracy = Math.floor(Math.random() * 15) + 85; // 85-100%
-      
+
       dailyMetrics.push({
-        date: date.toLocaleDateString('vi-VN', { month: 'short', day: 'numeric' }),
+        date: date.toLocaleDateString('vi-VN', {
+          month: 'short',
+          day: 'numeric',
+        }),
         automated,
         manual,
         accuracy,
-        total
+        total,
       });
     }
 
@@ -75,7 +78,7 @@ export const useTranslationAnalytics = () => {
       { pair: 'KO → VI', count: 350, accuracy: 86 },
       { pair: 'ZH → VI', count: 280, accuracy: 82 },
       { pair: 'FR → VI', count: 180, accuracy: 88 },
-      { pair: 'DE → VI', count: 120, accuracy: 85 }
+      { pair: 'DE → VI', count: 120, accuracy: 85 },
     ];
 
     // Generate real-time metrics
@@ -88,7 +91,7 @@ export const useTranslationAnalytics = () => {
         status: 'active',
         trend: 'up',
         target: 150,
-        description: 'Số lượng dịch thuật được xử lý mỗi giờ'
+        description: 'Số lượng dịch thuật được xử lý mỗi giờ',
       },
       {
         id: 'accuracy-rate',
@@ -99,7 +102,7 @@ export const useTranslationAnalytics = () => {
         status: 'success',
         trend: 'up',
         target: 95,
-        description: 'Tỷ lệ dịch thuật chính xác'
+        description: 'Tỷ lệ dịch thuật chính xác',
       },
       {
         id: 'processing-time',
@@ -110,7 +113,7 @@ export const useTranslationAnalytics = () => {
         status: 'active',
         trend: 'stable',
         target: 200,
-        description: 'Thời gian trung bình để hoàn thành dịch thuật'
+        description: 'Thời gian trung bình để hoàn thành dịch thuật',
       },
       {
         id: 'error-rate',
@@ -121,14 +124,25 @@ export const useTranslationAnalytics = () => {
         status: 'warning',
         trend: 'down',
         target: 2,
-        description: 'Tỷ lệ dịch thuật bị lỗi hoặc không thành công'
-      }
+        description: 'Tỷ lệ dịch thuật bị lỗi hoặc không thành công',
+      },
     ];
 
-    const totalTranslations = dailyMetrics.reduce((sum, day) => sum + day.total, 0);
-    const automatedTranslations = dailyMetrics.reduce((sum, day) => sum + day.automated, 0);
-    const manualTranslations = dailyMetrics.reduce((sum, day) => sum + day.manual, 0);
-    const averageAccuracy = dailyMetrics.reduce((sum, day) => sum + day.accuracy, 0) / dailyMetrics.length;
+    const totalTranslations = dailyMetrics.reduce(
+      (sum, day) => sum + day.total,
+      0
+    );
+    const automatedTranslations = dailyMetrics.reduce(
+      (sum, day) => sum + day.automated,
+      0
+    );
+    const manualTranslations = dailyMetrics.reduce(
+      (sum, day) => sum + day.manual,
+      0
+    );
+    const averageAccuracy =
+      dailyMetrics.reduce((sum, day) => sum + day.accuracy, 0) /
+      dailyMetrics.length;
 
     return {
       totalTranslations,
@@ -139,7 +153,7 @@ export const useTranslationAnalytics = () => {
       languagePairs,
       realTimeMetrics,
       processingTime: realTimeMetrics[2].value,
-      errorRate: realTimeMetrics[3].value
+      errorRate: realTimeMetrics[3].value,
     };
   };
 
@@ -152,7 +166,6 @@ export const useTranslationAnalytics = () => {
       // For now, generate mock data
       const mockAnalytics = generateMockAnalytics();
       setAnalytics(mockAnalytics);
-
     } catch (err) {
       console.error('Error fetching translation analytics:', err);
       setError('Không thể tải dữ liệu phân tích dịch thuật');
@@ -175,6 +188,6 @@ export const useTranslationAnalytics = () => {
     analytics,
     loading,
     error,
-    refreshAnalytics
+    refreshAnalytics,
   };
 };

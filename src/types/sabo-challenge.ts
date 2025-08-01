@@ -25,7 +25,13 @@ export interface SaboChallenge {
   race_to: number;
   handicap_challenger: number;
   handicap_opponent: number;
-  status: 'pending' | 'accepted' | 'declined' | 'in_progress' | 'completed' | 'expired';
+  status:
+    | 'pending'
+    | 'accepted'
+    | 'declined'
+    | 'in_progress'
+    | 'completed'
+    | 'expired';
   created_at: string;
   expires_at: string;
   accepted_at?: string;
@@ -35,7 +41,7 @@ export interface SaboChallenge {
   opponent_final_score: number;
   winner_id?: string;
   rack_history: RackResult[];
-  
+
   // Player info (optional, loaded via join)
   challenger?: SaboChallengePlayer;
   opponent?: SaboChallengePlayer;

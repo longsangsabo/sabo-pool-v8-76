@@ -1,66 +1,66 @@
-
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-// Removed Sentry to improve loading speed
+// Back to optimized main app
 
+// eslint-disable-next-line no-console
 console.log('🚀 Starting application...');
 
 // Simple error handling
-window.addEventListener('error', (event) => {
+window.addEventListener('error', event => {
+  // eslint-disable-next-line no-console
   console.error('Global error:', event.error?.message || event.message);
 });
 
-window.addEventListener('unhandledrejection', (event) => {
+window.addEventListener('unhandledrejection', event => {
+  // eslint-disable-next-line no-console
   console.error('Unhandled promise rejection:', event.reason);
 });
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
+  // eslint-disable-next-line no-console
   console.error('Root element not found!');
   document.body.innerHTML = `
-    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a5d4a; color: white; font-family: Arial, sans-serif; padding: 20px;">
-      <div style="text-align: center;">
-        <h1 style="color: #fbbf24; margin-bottom: 16px;">🚨 Lỗi Khởi Động</h1>
-        <p>Không tìm thấy phần tử root.</p>
-        <button onclick="location.reload()" style="background: #fbbf24; color: #1a5d4a; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 20px;">
-          🔄 Tải Lại Trang
-        </button>
-      </div>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial; color: red;">
+      <h1>Critical Error: Root element not found!</h1>
     </div>
   `;
   throw new Error('Root element not found');
 }
 
 try {
-  console.log('Creating React root...');
-  const root = createRoot(rootElement);
-  
-  console.log('Rendering App component...');
-  root.render(
+  // ✅ Development logging only
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('🚀 Creating React root...');
+  }
+
+  createRoot(rootElement).render(
     <StrictMode>
       <App />
     </StrictMode>
   );
-  
-  console.log('✅ App rendered successfully!');
-  
+
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('✅ App rendered successfully!');
+  }
 } catch (error) {
-  console.error('Failed to render app:', error);
-  
-  rootElement.innerHTML = `
-    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a5d4a; color: white; font-family: Arial, sans-serif; padding: 20px;">
-      <div style="text-align: center;">
-        <h1 style="color: #fbbf24; margin-bottom: 16px;">⚠️ Lỗi Khởi Động</h1>
-        <p style="margin-bottom: 20px;">Đã xảy ra lỗi khi khởi động ứng dụng.</p>
-        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <pre style="font-size: 12px; color: #d1fae5; white-space: pre-wrap;">${error.message}</pre>
+  // eslint-disable-next-line no-console
+  console.error('❌ Failed to render app:', error);
+
+  // Show user-friendly error
+  if (rootElement) {
+    rootElement.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial; text-align: center;">
+        <div>
+          <h1 style="color: red;">Application Failed to Load</h1>
+          <p>Please refresh the page or contact support.</p>
+          <button onclick="window.location.reload()" style="padding: 10px 20px; font-size: 16px;">Reload Page</button>
         </div>
-        <button onclick="location.reload()" style="background: #fbbf24; color: #1a5d4a; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-          🔄 Tải Lại Trang
-        </button>
       </div>
-    </div>
-  `;
+    `;
+  }
 }

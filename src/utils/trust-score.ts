@@ -12,7 +12,7 @@ export interface TrustScoreInfo {
 /**
  * Get trust score color based on score value
  * 🟢 Uy tín cao (≥80%) - Dark green
- * 🔵 Khá tốt (60-79%) - Blue  
+ * 🔵 Khá tốt (60-79%) - Blue
  * 🟡 Trung bình (40-59%) - Yellow
  * 🔴 Cần cải thiện (<40%) - Red
  */
@@ -24,10 +24,10 @@ export const getTrustScoreInfo = (score: number): TrustScoreInfo => {
       color: 'green',
       bgColor: 'bg-green-700',
       textColor: 'text-white',
-      badgeClass: 'bg-green-700 text-white'
+      badgeClass: 'bg-green-700 text-white',
     };
   }
-  
+
   if (score >= 60) {
     return {
       score,
@@ -35,10 +35,10 @@ export const getTrustScoreInfo = (score: number): TrustScoreInfo => {
       color: 'blue',
       bgColor: 'bg-blue-600',
       textColor: 'text-white',
-      badgeClass: 'bg-blue-600 text-white'
+      badgeClass: 'bg-blue-600 text-white',
     };
   }
-  
+
   if (score >= 40) {
     return {
       score,
@@ -46,17 +46,17 @@ export const getTrustScoreInfo = (score: number): TrustScoreInfo => {
       color: 'yellow',
       bgColor: 'bg-yellow-600',
       textColor: 'text-white',
-      badgeClass: 'bg-yellow-600 text-white'
+      badgeClass: 'bg-yellow-600 text-white',
     };
   }
-  
+
   return {
     score,
     label: 'Cần cải thiện',
     color: 'red',
     bgColor: 'bg-red-600',
     textColor: 'text-white',
-    badgeClass: 'bg-red-600 text-white'
+    badgeClass: 'bg-red-600 text-white',
   };
 };
 
@@ -64,7 +64,8 @@ export const getTrustScoreInfo = (score: number): TrustScoreInfo => {
  * Get trust score description based on rating
  */
 export const getTrustScoreDescription = (score: number): string => {
-  if (score >= 95) return 'Người chơi có uy tín xuất sắc, đáng tin cậy tuyệt đối';
+  if (score >= 95)
+    return 'Người chơi có uy tín xuất sắc, đáng tin cậy tuyệt đối';
   if (score >= 80) return 'Người chơi có uy tín cao, rất đáng tin cậy';
   if (score >= 60) return 'Người chơi có uy tín khá tốt, đáng tin cậy';
   if (score >= 40) return 'Người chơi có uy tín trung bình, cần thận trọng';

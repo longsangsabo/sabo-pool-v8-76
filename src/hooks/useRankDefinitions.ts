@@ -19,9 +19,9 @@ export const useRankDefinitions = () => {
     } catch (error) {
       console.error('Error fetching ranks:', error);
       toast({
-        title: "Error",
-        description: "Failed to fetch ranks",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to fetch ranks',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -39,15 +39,15 @@ export const useRankDefinitions = () => {
 
       setRanks(prev => [...prev, ...(data || [])]);
       toast({
-        title: "Success",
-        description: "Rank created successfully"
+        title: 'Success',
+        description: 'Rank created successfully',
       });
     } catch (error) {
       console.error('Error creating rank:', error);
       toast({
-        title: "Error",
-        description: "Failed to create rank",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to create rank',
+        variant: 'destructive',
       });
     }
   };
@@ -62,44 +62,41 @@ export const useRankDefinitions = () => {
 
       if (error) throw error;
 
-      setRanks(prev => prev.map(rank => 
-        rank.id === id ? (data?.[0] || rank) : rank
-      ));
+      setRanks(prev =>
+        prev.map(rank => (rank.id === id ? data?.[0] || rank : rank))
+      );
 
       toast({
-        title: "Success",
-        description: "Rank updated successfully"
+        title: 'Success',
+        description: 'Rank updated successfully',
       });
     } catch (error) {
       console.error('Error updating rank:', error);
       toast({
-        title: "Error",
-        description: "Failed to update rank",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to update rank',
+        variant: 'destructive',
       });
     }
   };
 
   const deleteRank = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('ranks')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('ranks').delete().eq('id', id);
 
       if (error) throw error;
 
       setRanks(prev => prev.filter(rank => rank.id !== id));
       toast({
-        title: "Success",
-        description: "Rank deleted successfully"
+        title: 'Success',
+        description: 'Rank deleted successfully',
       });
     } catch (error) {
       console.error('Error deleting rank:', error);
       toast({
-        title: "Error",
-        description: "Failed to delete rank",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to delete rank',
+        variant: 'destructive',
       });
     }
   };
@@ -118,15 +115,15 @@ export const useRankDefinitions = () => {
       await fetchRanks();
 
       toast({
-        title: "Success",
-        description: "Rank order updated successfully"
+        title: 'Success',
+        description: 'Rank order updated successfully',
       });
     } catch (error) {
       console.error('Error reordering ranks:', error);
       toast({
-        title: "Error",
-        description: "Failed to reorder ranks",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to reorder ranks',
+        variant: 'destructive',
       });
     }
   };
@@ -142,6 +139,6 @@ export const useRankDefinitions = () => {
     updateRank,
     deleteRank,
     reorderRanks,
-    refetch: fetchRanks
+    refetch: fetchRanks,
   };
 };

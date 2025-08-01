@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -148,14 +147,14 @@ export const ClubLeaderboard: React.FC<ClubLeaderboardProps> = ({
   const getPositionIcon = (position: number) => {
     switch (position) {
       case 1:
-        return <Trophy className="h-5 w-5 text-yellow-500" />;
+        return <Trophy className='h-5 w-5 text-yellow-500' />;
       case 2:
-        return <Crown className="h-5 w-5 text-gray-400" />;
+        return <Crown className='h-5 w-5 text-gray-400' />;
       case 3:
-        return <Star className="h-5 w-5 text-orange-500" />;
+        return <Star className='h-5 w-5 text-orange-500' />;
       default:
         return (
-          <span className="text-sm font-medium text-gray-500">#{position}</span>
+          <span className='text-sm font-medium text-gray-500'>#{position}</span>
         );
     }
   };
@@ -164,153 +163,153 @@ export const ClubLeaderboard: React.FC<ClubLeaderboardProps> = ({
     <div className={`space-y-6 ${className}`}>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
+          <CardTitle className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <Shield className='h-5 w-5' />
               Club Leaderboard
             </div>
-            <Badge variant="outline">{filteredPlayers.length} Members</Badge>
+            <Badge variant='outline'>{filteredPlayers.length} Members</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
           {/* Filters and Search */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div className='flex flex-col md:flex-row gap-4 mb-6'>
+            <div className='flex-1'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                 <Input
-                  placeholder="Search players..."
+                  placeholder='Search players...'
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className='pl-10'
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <Select value={rankFilter} onValueChange={setRankFilter}>
-                <SelectTrigger className="w-32">
+                <SelectTrigger className='w-32'>
                   <SelectValue />
                 </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Ranks</SelectItem>
-                    <SelectItem value="E+">E+</SelectItem>
-                    <SelectItem value="E">E</SelectItem>
-                    <SelectItem value="F+">F+</SelectItem>
-                    <SelectItem value="F">F</SelectItem>
-                    <SelectItem value="G+">G+</SelectItem>
-                    <SelectItem value="G">G</SelectItem>
-                    <SelectItem value="H+">H+</SelectItem>
-                    <SelectItem value="H">H</SelectItem>
-                    <SelectItem value="I+">I+</SelectItem>
-                    <SelectItem value="I">I</SelectItem>
-                    <SelectItem value="K+">K+</SelectItem>
-                    <SelectItem value="K">K</SelectItem>
-                  </SelectContent>
+                <SelectContent>
+                  <SelectItem value='all'>All Ranks</SelectItem>
+                  <SelectItem value='E+'>E+</SelectItem>
+                  <SelectItem value='E'>E</SelectItem>
+                  <SelectItem value='F+'>F+</SelectItem>
+                  <SelectItem value='F'>F</SelectItem>
+                  <SelectItem value='G+'>G+</SelectItem>
+                  <SelectItem value='G'>G</SelectItem>
+                  <SelectItem value='H+'>H+</SelectItem>
+                  <SelectItem value='H'>H</SelectItem>
+                  <SelectItem value='I+'>I+</SelectItem>
+                  <SelectItem value='I'>I</SelectItem>
+                  <SelectItem value='K+'>K+</SelectItem>
+                  <SelectItem value='K'>K</SelectItem>
+                </SelectContent>
               </Select>
               <Select
                 value={sortBy}
                 onValueChange={(value: any) => setSortBy(value)}
               >
-                <SelectTrigger className="w-40">
+                <SelectTrigger className='w-40'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="rating">Rating</SelectItem>
-                  <SelectItem value="matches">Matches</SelectItem>
-                  <SelectItem value="win_rate">Win Rate</SelectItem>
-                  <SelectItem value="streak">Streak</SelectItem>
-                  <SelectItem value="contribution">Contribution</SelectItem>
-                  <SelectItem value="form">Recent Form</SelectItem>
+                  <SelectItem value='rating'>Rating</SelectItem>
+                  <SelectItem value='matches'>Matches</SelectItem>
+                  <SelectItem value='win_rate'>Win Rate</SelectItem>
+                  <SelectItem value='streak'>Streak</SelectItem>
+                  <SelectItem value='contribution'>Contribution</SelectItem>
+                  <SelectItem value='form'>Recent Form</SelectItem>
                 </SelectContent>
               </Select>
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() =>
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
                 }
               >
                 {sortOrder === 'asc' ? (
-                  <SortAsc className="h-4 w-4" />
+                  <SortAsc className='h-4 w-4' />
                 ) : (
-                  <SortDesc className="h-4 w-4" />
+                  <SortDesc className='h-4 w-4' />
                 )}
               </Button>
             </div>
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className='overflow-x-auto'>
+            <table className='w-full'>
               <thead>
-                <tr className="border-b">
-                  <th className="text-left p-3 font-medium">Position</th>
-                  <th className="text-left p-3 font-medium">Player</th>
-                  <th className="text-left p-3 font-medium">Rank</th>
-                  <th className="text-left p-3 font-medium">Rating</th>
-                  <th className="text-left p-3 font-medium">Matches</th>
-                  <th className="text-left p-3 font-medium">Win Rate</th>
-                  <th className="text-left p-3 font-medium">Streak</th>
-                  <th className="text-left p-3 font-medium">Contribution</th>
+                <tr className='border-b'>
+                  <th className='text-left p-3 font-medium'>Position</th>
+                  <th className='text-left p-3 font-medium'>Player</th>
+                  <th className='text-left p-3 font-medium'>Rank</th>
+                  <th className='text-left p-3 font-medium'>Rating</th>
+                  <th className='text-left p-3 font-medium'>Matches</th>
+                  <th className='text-left p-3 font-medium'>Win Rate</th>
+                  <th className='text-left p-3 font-medium'>Streak</th>
+                  <th className='text-left p-3 font-medium'>Contribution</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredPlayers.map((player, index) => (
                   <tr
                     key={player.id}
-                    className="border-b hover:bg-gray-50 transition-colors"
+                    className='border-b hover:bg-gray-50 transition-colors'
                   >
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
+                    <td className='p-3'>
+                      <div className='flex items-center gap-2'>
                         {getPositionIcon(index + 1)}
                       </div>
                     </td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <td className='p-3'>
+                      <div className='flex items-center gap-3'>
+                        <div className='w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center'>
                           {player.avatar_url ? (
                             <img
                               src={player.avatar_url}
                               alt={player.username}
-                              className="w-8 h-8 rounded-full"
+                              className='w-8 h-8 rounded-full'
                             />
                           ) : (
-                            <Users className="h-4 w-4 text-gray-500" />
+                            <Users className='h-4 w-4 text-gray-500' />
                           )}
                         </div>
                         <div>
-                          <div className="font-medium">{player.username}</div>
+                          <div className='font-medium'>{player.username}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-3">
+                    <td className='p-3'>
                       <Badge className={getRankColor(player.rank)}>
                         {player.rank}
                       </Badge>
                     </td>
-                    <td className="p-3 font-mono font-semibold">
+                    <td className='p-3 font-mono font-semibold'>
                       {player.current_rating}
                     </td>
-                    <td className="p-3">{player.matches_played}</td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">
+                    <td className='p-3'>{player.matches_played}</td>
+                    <td className='p-3'>
+                      <div className='flex items-center gap-2'>
+                        <span className='font-medium'>
                           {player.win_rate.toFixed(1)}%
                         </span>
-                        <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className='w-16 bg-gray-200 rounded-full h-2'>
                           <div
-                            className="bg-green-500 h-2 rounded-full"
+                            className='bg-green-500 h-2 rounded-full'
                             style={{ width: `${player.win_rate}%` }}
                           />
                         </div>
                       </div>
                     </td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-1">
+                    <td className='p-3'>
+                      <div className='flex items-center gap-1'>
                         {player.current_streak > 0 ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className='h-4 w-4 text-green-500' />
                         ) : player.current_streak < 0 ? (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className='h-4 w-4 text-red-500' />
                         ) : null}
                         <span
                           className={
@@ -326,8 +325,8 @@ export const ClubLeaderboard: React.FC<ClubLeaderboardProps> = ({
                         </span>
                       </div>
                     </td>
-                    <td className="p-3">
-                      <span className="font-medium text-blue-600">
+                    <td className='p-3'>
+                      <span className='font-medium text-blue-600'>
                         {player.club_contribution_points || 0}
                       </span>
                     </td>
@@ -339,12 +338,12 @@ export const ClubLeaderboard: React.FC<ClubLeaderboardProps> = ({
 
           {/* No Results */}
           {filteredPlayers.length === 0 && (
-            <div className="text-center py-8">
-              <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className='text-center py-8'>
+              <Users className='h-12 w-12 text-gray-400 mx-auto mb-4' />
+              <h3 className='text-lg font-medium text-gray-900 mb-2'>
                 No players found
               </h3>
-              <p className="text-gray-500">
+              <p className='text-gray-500'>
                 Try adjusting your search or filter criteria.
               </p>
             </div>

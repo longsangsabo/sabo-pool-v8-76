@@ -11,24 +11,24 @@ export const formatSafeDate = (
   options?: Intl.DateTimeFormatOptions
 ): string => {
   const dateToUse = primaryDate || fallbackDate;
-  
+
   if (!dateToUse) {
     return 'Chưa xác định';
   }
-  
+
   try {
     const date = new Date(dateToUse);
     if (isNaN(date.getTime())) {
       return 'Chưa xác định';
     }
-    
+
     const defaultOptions: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-      ...options
+      ...options,
     };
-    
+
     return date.toLocaleDateString('vi-VN', defaultOptions);
   } catch (error) {
     console.error('Error formatting date:', error);
@@ -51,6 +51,6 @@ export const formatSafeDateWithTime = (
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 };

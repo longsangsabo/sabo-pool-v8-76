@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -27,8 +26,18 @@ const EloCalculator = () => {
   } | null>(null);
 
   const handleCalculate = () => {
-    const player1NewRating = calculateEloRating(player1Rating, player2Rating, result, kFactor);
-    const player2NewRating = calculateEloRating(player2Rating, player1Rating, result === 'win' ? 'loss' : result === 'loss' ? 'win' : 'draw', kFactor);
+    const player1NewRating = calculateEloRating(
+      player1Rating,
+      player2Rating,
+      result,
+      kFactor
+    );
+    const player2NewRating = calculateEloRating(
+      player2Rating,
+      player1Rating,
+      result === 'win' ? 'loss' : result === 'loss' ? 'win' : 'draw',
+      kFactor
+    );
     const expectedScore = getExpectedScore(player1Rating, player2Rating);
 
     setCalculationResult({
@@ -41,52 +50,56 @@ const EloCalculator = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
           <CardTitle>ELO Rating Calculator</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <CardContent className='space-y-4'>
+          <div className='grid grid-cols-2 gap-4'>
             <div>
-              <Label htmlFor="player1-rating">Player 1 Rating</Label>
+              <Label htmlFor='player1-rating'>Player 1 Rating</Label>
               <Input
-                id="player1-rating"
-                type="number"
+                id='player1-rating'
+                type='number'
                 value={player1Rating}
-                onChange={(e) => setPlayer1Rating(Number(e.target.value))}
+                onChange={e => setPlayer1Rating(Number(e.target.value))}
               />
-              <Badge className={`mt-2 ${getRankColor(getRankFromRating(player1Rating))}`}>
+              <Badge
+                className={`mt-2 ${getRankColor(getRankFromRating(player1Rating))}`}
+              >
                 {getRankFromRating(player1Rating)}
               </Badge>
             </div>
             <div>
-              <Label htmlFor="player2-rating">Player 2 Rating</Label>
+              <Label htmlFor='player2-rating'>Player 2 Rating</Label>
               <Input
-                id="player2-rating"
-                type="number"
+                id='player2-rating'
+                type='number'
                 value={player2Rating}
-                onChange={(e) => setPlayer2Rating(Number(e.target.value))}
+                onChange={e => setPlayer2Rating(Number(e.target.value))}
               />
-              <Badge className={`mt-2 ${getRankColor(getRankFromRating(player2Rating))}`}>
+              <Badge
+                className={`mt-2 ${getRankColor(getRankFromRating(player2Rating))}`}
+              >
                 {getRankFromRating(player2Rating)}
               </Badge>
             </div>
           </div>
 
           <div>
-            <Label htmlFor="k-factor">K-Factor</Label>
+            <Label htmlFor='k-factor'>K-Factor</Label>
             <Input
-              id="k-factor"
-              type="number"
+              id='k-factor'
+              type='number'
               value={kFactor}
-              onChange={(e) => setKFactor(Number(e.target.value))}
+              onChange={e => setKFactor(Number(e.target.value))}
             />
           </div>
 
           <div>
             <Label>Match Result (Player 1 perspective)</Label>
-            <div className="flex gap-2 mt-2">
+            <div className='flex gap-2 mt-2'>
               <Button
                 variant={result === 'win' ? 'default' : 'outline'}
                 onClick={() => setResult('win')}
@@ -108,7 +121,7 @@ const EloCalculator = () => {
             </div>
           </div>
 
-          <Button onClick={handleCalculate} className="w-full">
+          <Button onClick={handleCalculate} className='w-full'>
             Calculate ELO Changes
           </Button>
         </CardContent>
@@ -120,26 +133,43 @@ const EloCalculator = () => {
             <CardTitle>Calculation Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <div>
-                <h4 className="font-semibold">Player 1</h4>
+                <h4 className='font-semibold'>Player 1</h4>
                 <p>Old Rating: {player1Rating}</p>
                 <p>New Rating: {calculationResult.player1NewRating}</p>
-                <p className={calculationResult.player1Change >= 0 ? 'text-green-600' : 'text-red-600'}>
-                  Change: {calculationResult.player1Change >= 0 ? '+' : ''}{calculationResult.player1Change}
+                <p
+                  className={
+                    calculationResult.player1Change >= 0
+                      ? 'text-green-600'
+                      : 'text-red-600'
+                  }
+                >
+                  Change: {calculationResult.player1Change >= 0 ? '+' : ''}
+                  {calculationResult.player1Change}
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold">Player 2</h4>
+                <h4 className='font-semibold'>Player 2</h4>
                 <p>Old Rating: {player2Rating}</p>
                 <p>New Rating: {calculationResult.player2NewRating}</p>
-                <p className={calculationResult.player2Change >= 0 ? 'text-green-600' : 'text-red-600'}>
-                  Change: {calculationResult.player2Change >= 0 ? '+' : ''}{calculationResult.player2Change}
+                <p
+                  className={
+                    calculationResult.player2Change >= 0
+                      ? 'text-green-600'
+                      : 'text-red-600'
+                  }
+                >
+                  Change: {calculationResult.player2Change >= 0 ? '+' : ''}
+                  {calculationResult.player2Change}
                 </p>
               </div>
             </div>
-            <div className="mt-4">
-              <p>Expected Score (Player 1): {(calculationResult.expectedScore * 100).toFixed(1)}%</p>
+            <div className='mt-4'>
+              <p>
+                Expected Score (Player 1):{' '}
+                {(calculationResult.expectedScore * 100).toFixed(1)}%
+              </p>
             </div>
           </CardContent>
         </Card>
