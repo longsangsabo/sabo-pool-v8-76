@@ -46,12 +46,15 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 my-8">
       {/* Feed Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-          Hoạt động trực tiếp
-        </h2>
+      <div className="flex items-center justify-between bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6 shadow-lg">
+        <div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            🔴 Hoạt động trực tiếp
+          </h2>
+          <p className="text-muted-foreground text-sm mt-1">Theo dõi các trận đấu và hoạt động đang diễn ra</p>
+        </div>
         <Button
           variant="outline"
           size="sm"
