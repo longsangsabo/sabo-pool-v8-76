@@ -12,6 +12,7 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
 import { useState as useStateForMatches } from 'react';
 import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
+import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
 
@@ -96,29 +97,12 @@ const EnhancedChallengesPageV2: React.FC = () => {
   
   // ✅ FIXED: Active challenges = all accepted challenges (ready to play/enter scores)
   const activeChallenges = challenges.filter(c => {
-    console.log('🔍 Checking challenge for active tab:', {
-      id: c.id,
-      status: c.status,
-      challenger: c.challenger_profile?.full_name,
-      opponent: c.opponent_profile?.full_name,
-      isMyChallenge: c.challenger_id === user?.id || c.opponent_id === user?.id
-    });
-    
     // Must be accepted status
-    if (c.status !== 'accepted') {
-      console.log('❌ Not accepted:', c.id);
-      return false;
-    }
+    if (c.status !== 'accepted') return false;
     
     // Must involve current user
     const isMyChallenge = c.challenger_id === user?.id || c.opponent_id === user?.id;
-    if (!isMyChallenge) {
-      console.log('❌ Not my challenge:', c.id);
-      return false;
-    }
-    
-    console.log('✅ Active challenge found:', c.id);
-    return true;
+    return isMyChallenge;
   });
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
@@ -166,8 +150,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
     
     setLoadingMatches(true);
     try {
-      console.log('🎯 Fetching matches for user:', user.id);
-      
       // Simple query without joins to avoid foreign key issues
       const { data: matches, error } = await supabase
         .from('matches')
@@ -180,7 +162,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
         throw error;
       }
 
-      console.log('✅ Fetched matches:', matches?.length || 0);
       setMatchesData(matches || []);
     } catch (error) {
       console.error('Error fetching matches:', error);
@@ -241,14 +222,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
   };
 
   const getFilteredChallenges = (challengeList: any[], skipStatusFilter = false) => {
-    console.log('🔍 getFilteredChallenges called with:', {
-      challengeListLength: challengeList.length,
-      statusFilter,
-      challengeTypeFilter,
-      searchTerm,
-      skipStatusFilter
-    });
-    
     const filtered = challengeList.filter(challenge => {
       // Search filter
       const matchesSearch = !searchTerm || (() => {
@@ -272,40 +245,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
         (challengeTypeFilter === 'standard' && (challenge.challenge_type === 'standard' || challenge.challenge_type === null || challenge.challenge_type === undefined));
 
       const result = matchesSearch && matchesStatus && matchesType;
-      
-      // Detailed logging for each challenge and filter condition
-      console.log(`🔍 Challenge ${challenge.id} (${challenge.status}):`, {
-        challenge_type: challenge.challenge_type,
-        challengeTypeFilter,
-        matchesSearch,
-        matchesStatus, 
-        matchesType,
-        finalResult: result,
-        searchTerm,
-        skipStatusFilter
-      });
-      
-      if (!result) {
-        console.log('🚫 Challenge filtered out:', {
-          id: challenge.id,
-          status: challenge.status,
-          challenge_type: challenge.challenge_type,
-          matchesSearch,
-          matchesStatus,
-          matchesType,
-          reason: !matchesSearch ? 'search' : !matchesStatus ? 'status' : !matchesType ? 'type' : 'unknown'
-        });
-      }
-
       return result;
-    });
-
-    console.log('🎯 getFilteredChallenges result:', {
-      inputCount: challengeList.length,
-      outputCount: filtered.length,
-      statusFilter,
-      challengeTypeFilter,
-      skipStatusFilter
     });
 
     return filtered;
@@ -315,13 +255,10 @@ const EnhancedChallengesPageV2: React.FC = () => {
     if (!user) return;
 
     try {
-      console.log('🎯 Joining open challenge:', challengeId);
-      
       // Show loading state
       toast.loading('Đang tham gia thách đấu...', { id: 'join-challenge' });
       
       const result = await acceptChallenge(challengeId);
-      console.log('✅ Join result:', result);
       
       // Update toast to success  
       toast.success('✅ Đã tham gia thành công! Status: accepted', { id: 'join-challenge' });
@@ -357,8 +294,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
   };
 
   const renderChallengeCard = (challenge: any) => {
-    const statusInfo = getStatusInfo(challenge.status);
-    const StatusIcon = statusInfo.icon;
     const isChallenger = user?.id === challenge.challenger_id;
     const canRespond = !isChallenger && challenge.status === 'pending';
     
@@ -367,310 +302,75 @@ const EnhancedChallengesPageV2: React.FC = () => {
     const hasMatch = !!associatedMatch;
     const canAcceptMatch = hasMatch && associatedMatch.status === 'scheduled' && isChallenger;
 
+    const handleAction = async (challengeId: string, action: 'accept' | 'decline' | 'cancel' | 'view') => {
+      switch (action) {
+        case 'accept':
+          await acceptChallenge(challengeId);
+          break;
+        case 'decline':
+          await declineChallenge(challengeId);
+          break;
+        case 'view':
+        default:
+          handleChallengeClick(challenge);
+          break;
+      }
+    };
+
+    // Convert status to UnifiedChallengeCard format
+    const getUnifiedStatus = (status: string) => {
+      switch (status) {
+        case 'pending':
+          return challenge.opponent_id ? 'pending' : 'open';
+        case 'accepted':
+          return 'ongoing';
+        case 'completed':
+          return 'completed';
+        default:
+          return 'pending';
+      }
+    };
+
     return (
-      <Card
-        key={challenge.id}
-        className="group relative h-full bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer transform hover:-translate-y-1 hover:bg-card/80"
-        onClick={() => handleChallengeClick(challenge)}
-      >
-        {/* Status accent line */}
-        <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-lg ${
-          challenge.status === 'pending' ? 'bg-gradient-to-r from-amber-400 to-yellow-500' :
-          challenge.status === 'accepted' ? 'bg-gradient-to-r from-emerald-400 to-green-500' :
-          challenge.status === 'completed' ? 'bg-gradient-to-r from-blue-400 to-indigo-500' :
-          'bg-gradient-to-r from-gray-400 to-slate-500'
-        }`} />
-
-        <CardHeader className="pb-4 pt-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-full transition-colors duration-200 ${
-                challenge.status === 'pending' ? 'bg-amber-50 text-amber-600 group-hover:bg-amber-100' :
-                challenge.status === 'accepted' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100' :
-                challenge.status === 'completed' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-100' :
-                'bg-gray-50 text-gray-600 group-hover:bg-gray-100'
-              }`}>
-                <StatusIcon className="w-4 h-4" />
-              </div>
-              <CardTitle className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                Thách đấu #{challenge.id.slice(-6)}
-              </CardTitle>
-            </div>
-            <div className="flex items-center gap-2">
-              {canRespond && (
-                <div className="animate-pulse">
-                  <Bell className="w-4 h-4 text-amber-500" />
-                </div>
-              )}
-              <Badge className={`${statusInfo.color} border-0 font-medium shadow-sm`}>
-                {statusInfo.text}
-              </Badge>
-            </div>
+      <div key={challenge.id} onClick={() => handleChallengeClick(challenge)}>
+        <UnifiedChallengeCard
+          challenge={{
+            ...challenge,
+            status: getUnifiedStatus(challenge.status)
+          }}
+          onJoin={challenge.status === 'pending' && !challenge.opponent_id ? handleJoinOpenChallenge : undefined}
+          onAction={handleAction}
+        />
+        
+        {/* Additional match action button for accepted challenges */}
+        {canAcceptMatch && (
+          <div className="mt-2">
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAcceptMatch(associatedMatch.id);
+              }}
+              className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+            >
+              Xác nhận trận đấu
+            </Button>
           </div>
-        </CardHeader>
-
-        <CardContent className="space-y-5 pb-6">
-          {/* Players */}
-          <div className="grid grid-cols-3 gap-4 items-center">
-            {/* Challenger */}
-            <div className="text-center space-y-2">
-              <div className="relative">
-                <Avatar className="w-12 h-12 mx-auto ring-2 ring-border/20 transition-all duration-200 group-hover:ring-primary/30 group-hover:scale-105">
-                  <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-                  <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-primary/10 to-primary/20 text-primary">
-                    {challenge.challenger_profile?.full_name?.[0] || 'C'}
-                  </AvatarFallback>
-                </Avatar>
-                {isChallenger && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">Me</span>
-                  </div>
-                )}
-              </div>
-              <div className="text-xs space-y-0.5">
-                <div className="font-semibold text-foreground truncate">
-                  {challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Thách đấu'}
-                </div>
-                <div className="text-muted-foreground font-medium">
-                  {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
-                </div>
-              </div>
-              {challenge.challenger_id && (
-                <div className="scale-90">
-                  <TrustScoreBadge playerId={challenge.challenger_id} />
-                </div>
-              )}
-            </div>
-
-            {/* VS & Bet */}
-            <div className="text-center space-y-2">
-              <div className="text-xl font-bold text-muted-foreground/60 tracking-wider">VS</div>
-              <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200/50 rounded-lg px-3 py-2 shadow-sm">
-                <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <span className="text-sm font-bold text-amber-600">SPA</span>
-                  <span className="text-sm font-bold text-amber-800">
-                    {challenge.bet_points}
-                  </span>
-                </div>
-                <div className="text-xs font-medium text-amber-600">Cược</div>
-              </div>
-              <div className="text-xs text-muted-foreground font-medium">
-                Race to {challenge.race_to || 5}
-              </div>
-            </div>
-
-            {/* Opponent */}
-            <div className="text-center space-y-2">
-              <div className="relative">
-                <Avatar className="w-12 h-12 mx-auto ring-2 ring-border/20 transition-all duration-200 group-hover:ring-primary/30 group-hover:scale-105">
-                  <AvatarImage src={challenge.opponent_profile?.avatar_url} />
-                  <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-secondary/10 to-secondary/20 text-secondary-foreground">
-                    {challenge.opponent_profile?.full_name?.[0] || 'O'}
-                  </AvatarFallback>
-                </Avatar>
-                {!isChallenger && challenge.opponent_id === user?.id && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">Me</span>
-                  </div>
-                )}
-              </div>
-              <div className="text-xs space-y-0.5">
-                <div className="font-semibold text-foreground truncate">
-                  {challenge.opponent_profile?.display_name || challenge.opponent_profile?.full_name || 'Đối thủ'}
-                </div>
-                <div className="text-muted-foreground font-medium">
-                  {challenge.opponent_profile?.verified_rank || challenge.opponent_profile?.current_rank || 'K'}
-                </div>
-              </div>
-              {challenge.opponent_id && (
-                <div className="scale-90">
-                  <TrustScoreBadge playerId={challenge.opponent_id} />
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Details */}
-          <div className="space-y-3 pt-2 border-t border-border/50">
-            {challenge.club_profiles && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="p-1.5 rounded-md bg-secondary/30">
-                  <MapPin className="w-3.5 h-3.5" />
-                </div>
-                <span className="truncate font-medium">{challenge.club_profiles.club_name}</span>
-              </div>
-            )}
-            
-            {challenge.scheduled_time && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="p-1.5 rounded-md bg-secondary/30">
-                  <Calendar className="w-3.5 h-3.5" />
-                </div>
-                <span className="font-medium">{new Date(challenge.scheduled_time).toLocaleDateString('vi-VN')}</span>
-              </div>
-            )}
-
-            {challenge.message && (
-              <div className="bg-secondary/20 rounded-md p-3 border border-border/30">
-                <div className="flex items-start gap-2">
-                  <MessageSquare className="w-3.5 h-3.5 mt-0.5 text-muted-foreground" />
-                  <span className="text-sm text-foreground/90 italic line-clamp-2">"{challenge.message}"</span>
-                </div>
-              </div>
-            )}
-
-            {/* Match Info Section - Show when challenge has been accepted */}
-            {hasMatch && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-lg p-4 space-y-3">
-                <div className="flex items-center gap-2 mb-3">
-                  <Trophy className="w-4 h-4 text-blue-600" />
-                  <span className="font-semibold text-blue-800">Trận đấu đã được tạo</span>
-                  <Badge className={associatedMatch.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}>
-                    {associatedMatch.status === 'scheduled' ? 'Chờ xác nhận' : 'Đã xác nhận'}
-                  </Badge>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Trận đấu ID:</span>
-                    <div className="font-mono text-blue-700">#{associatedMatch.id.slice(-8)}</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Tạo lúc:</span>
-                    <div className="font-medium">{new Date(associatedMatch.created_at).toLocaleString('vi-VN')}</div>
-                  </div>
-                </div>
-
-                {canAcceptMatch && (
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAcceptMatch(associatedMatch.id);
-                    }}
-                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-all duration-200"
-                  >
-                    <Trophy className="w-4 h-4 mr-2" />
-                    ✅ Xác nhận trận đấu
-                  </Button>
-                )}
-
-                {hasMatch && !canAcceptMatch && associatedMatch.status === 'confirmed' && (
-                  <div className="text-center py-2">
-                    <Badge className="bg-green-100 text-green-800 font-medium">
-                      ✅ Trận đấu đã sẵn sàng
-                    </Badge>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-border/30">
-              <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
-              <span>Hết hạn: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     );
   };
 
   const renderOpenChallengeCard = (challenge: any) => {
     return (
-      <Card
+      <UnifiedChallengeCard
         key={challenge.id}
-        className="group relative h-full bg-gradient-to-br from-emerald-50/50 to-green-50/50 backdrop-blur-sm border border-emerald-200/50 hover:border-emerald-300/70 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:from-emerald-50/70 hover:to-green-50/70"
-      >
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 rounded-t-lg" />
-        
-        <div className="absolute top-3 right-3 animate-pulse">
-          <div className="w-3 h-3 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/30"></div>
-        </div>
-
-        <CardHeader className="pb-4 pt-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors duration-200">
-                <Users className="w-4 h-4" />
-              </div>
-              <CardTitle className="text-base font-semibold text-emerald-700 group-hover:text-emerald-800 transition-colors">
-                Thách đấu mở #{challenge.id.slice(-6)}
-              </CardTitle>
-            </div>
-            <Badge className="bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 border-0 font-medium shadow-sm">
-              🌟 Mở - Chờ đối thủ
-            </Badge>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-5 pb-6">
-          <div className="flex items-center gap-4 p-3 bg-white/50 rounded-lg border border-emerald-100/50">
-            <Avatar className="w-14 h-14 ring-2 ring-emerald-200/50 transition-all duration-200 group-hover:ring-emerald-300/70 group-hover:scale-105">
-              <AvatarImage src={challenge.challenger_profile?.avatar_url} />
-              <AvatarFallback className="text-base font-semibold bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-700">
-                {challenge.challenger_profile?.full_name?.[0] || 'C'}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="font-semibold text-foreground text-base truncate">
-                {challenge.challenger_profile?.full_name || 'Thách đấu'}
-              </div>
-              <div className="text-sm text-muted-foreground font-medium">
-                {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50 rounded-lg p-4 space-y-3 shadow-sm">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold text-emerald-700">Mức cược:</span>
-              <div className="flex items-center gap-1.5">
-                <DollarSign className="w-4 h-4 text-emerald-600" />
-                <span className="font-bold text-emerald-700 text-lg">
-                  {challenge.bet_points}
-                </span>
-                <span className="text-sm font-medium text-emerald-600">điểm SPA</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold text-emerald-700">Thi đấu đến:</span>
-              <span className="font-bold text-emerald-600">
-                {challenge.race_to || 5} bida
-              </span>
-            </div>
-          </div>
-
-          {challenge.message && (
-            <div className="bg-white/60 border border-border/30 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <div className="p-1.5 rounded-md bg-secondary/30">
-                  <MessageSquare className="w-4 h-4 text-muted-foreground" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm font-semibold text-foreground">Lời nhắn:</span>
-                  <p className="text-sm text-muted-foreground mt-1 italic line-clamp-3">"{challenge.message}"</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {challenge.club_profiles && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground p-3 bg-white/30 rounded-lg border border-border/20">
-              <div className="p-1.5 rounded-md bg-secondary/30">
-                <MapPin className="w-4 h-4" />
-              </div>
-              <span className="font-medium">{challenge.club_profiles.club_name}</span>
-            </div>
-          )}
-
-          <Button 
-            onClick={() => handleJoinOpenChallenge(challenge.id)}
-            className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold py-3 rounded-lg shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-200 transform hover:scale-[1.02]"
-          >
-            <Users className="w-4 h-4 mr-2" />
-            🚀 Tham gia thách đấu
-          </Button>
-        </CardContent>
-      </Card>
+        challenge={{
+          ...challenge,
+          status: 'open'
+        }}
+        onJoin={handleJoinOpenChallenge}
+      />
     );
   };
 
