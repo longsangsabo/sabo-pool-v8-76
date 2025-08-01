@@ -22,7 +22,7 @@ import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
-import { ChallengeMatchCard } from '@/components/challenges/ChallengeMatchCard';
+
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 import { toast } from 'sonner';
@@ -234,7 +234,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
         if (challenge && !challenge.scheduled_time) {
           const { error: challengeError } = await supabase
             .from('challenges')
-            .update({ scheduled_time: new Date().toISOString() })
+            .update({ status: 'ongoing' })
             .eq('id', challenge.id);
           
           if (challengeError) console.error('Error updating challenge scheduled_time:', challengeError);
@@ -629,12 +629,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 {getFilteredChallenges(myMatches).length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {getFilteredChallenges(myMatches).map(challenge => (
-                      <ChallengeMatchCard
+                      <UnifiedChallengeCard
                         key={challenge.id}
-                        challenge={challenge as any}
+                        challenge={challenge}
+                        variant="match"
                         currentUserId={user?.id || ''}
-                        onSubmitScore={submitScore}
+                        onSubmitScore={handleSubmitScore}
                         isSubmittingScore={isSubmittingScore}
+                        onAction={handleChallengeAction}
                       />
                     ))}
                   </div>
@@ -657,12 +659,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 {activeChallenges.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {activeChallenges.map(challenge => (
-                      <ChallengeMatchCard
+                      <UnifiedChallengeCard
                         key={challenge.id}
-                        challenge={challenge as any}
+                        challenge={challenge}
+                        variant="match"
                         currentUserId={user?.id || ''}
-                        onSubmitScore={submitScore}
+                        onSubmitScore={handleSubmitScore}
                         isSubmittingScore={isSubmittingScore}
+                        onAction={handleChallengeAction}
                       />
                     ))}
                   </div>
@@ -744,18 +748,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
       />
       
       <ChallengeDetailsModal
-        challenge={selectedChallenge as any}
-        isOpen={showDetailsModal}
-        onClose={() => {
-          setShowDetailsModal(false);
-          setSelectedChallenge(null);
-        }}
-        onUpdate={() => {
-          // Data will refresh automatically via the hook
-        }}
-        onSubmitScore={handleSubmitScore}
-        showScoreEntry={selectedChallenge?.status === 'accepted' || selectedChallenge?.status === 'ongoing'}
-        isSubmittingScore={isSubmittingScore}
+          challenge={selectedChallenge as any}
+          isOpen={showDetailsModal}
+          onClose={() => {
+            setShowDetailsModal(false);
+            setSelectedChallenge(null);
+          }}
+          onUpdate={() => {
+            // Data will refresh automatically via the hook
+          }}
       />
     </ErrorBoundary>
   );

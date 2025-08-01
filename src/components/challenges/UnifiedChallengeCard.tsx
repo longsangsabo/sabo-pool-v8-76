@@ -3,71 +3,101 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Users, Clock, Trophy, DollarSign, MapPin, Zap } from 'lucide-react';
+import { Users, Clock, Trophy, DollarSign, MapPin, Zap, Target } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
+import { Challenge } from '@/types/challenge';
+import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 
-type ChallengeStatus = 'open' | 'ongoing' | 'upcoming' | 'completed' | 'pending' | 'accepted';
+type ChallengeStatus = 'open' | 'ongoing' | 'upcoming' | 'completed' | 'pending' | 'accepted' | 'declined' | 'cancelled' | 'expired';
 
 interface UnifiedChallengeCardProps {
-  challenge: {
-    id: string;
-    challenger_id: string;
-    opponent_id?: string;
-    bet_points: number;
-    race_to?: number;
-    challenge_type?: string;
-    status: ChallengeStatus;
-    created_at: string;
-    expires_at?: string;
-    completed_at?: string;
-    scheduled_time?: string;
-    challenger_profile?: {
-      full_name?: string;
-      display_name?: string;
-      avatar_url?: string;
-      current_rank?: string;
-      verified_rank?: string;
-      spa_points?: number;
-    };
-    opponent_profile?: {
-      full_name?: string;
-      display_name?: string;
-      avatar_url?: string;
-      current_rank?: string;
-      verified_rank?: string;
-      spa_points?: number;
-    };
-    club_profiles?: {
-      club_name: string;
-      address: string;
-    };
-    message?: string;
-    challenger_score?: number;
-    opponent_score?: number;
-    winner_id?: string;
-  };
-  variant?: 'default' | 'compact';
+  challenge: Challenge;
+  variant?: 'default' | 'compact' | 'match';
+  currentUserId?: string; // For match mode
   onJoin?: (challengeId: string) => Promise<void>;
   onAction?: (challengeId: string, action: 'accept' | 'decline' | 'cancel' | 'view' | 'score') => void;
   onSubmitScore?: (challengeId: string, challengerScore: number, opponentScore: number) => Promise<void>;
+  isSubmittingScore?: boolean;
 }
 
 const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
   challenge,
   variant = 'default',
+  currentUserId,
   onJoin,
   onAction,
-  onSubmitScore
+  onSubmitScore,
+  isSubmittingScore = false
 }) => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
   const isCompact = variant === 'compact';
+  const isMatch = variant === 'match';
+  const effectiveUserId = currentUserId || user?.id;
+
+  // Enhanced status logic for match mode with time-based logic
+  const getMatchStatus = () => {
+    if (challenge.status === 'completed') {
+      const challengerScore = challenge.challenger_score || 0;
+      const opponentScore = challenge.opponent_score || 0;
+      const winnerId = challengerScore > opponentScore ? challenge.challenger_id : challenge.opponent_id;
+      const isWinner = winnerId === effectiveUserId;
+      
+      return {
+        badge: isWinner ? 'Thắng' : 'Thua',
+        variant: isWinner ? 'default' : 'destructive' as const,
+        score: `${challengerScore} - ${opponentScore}`
+      };
+    }
+    
+    if (challenge.status === 'accepted') {
+      const scheduledTime = challenge.scheduled_time ? new Date(challenge.scheduled_time) : null;
+      const now = new Date();
+      
+      if (scheduledTime && scheduledTime < now) {
+        return {
+          badge: 'Đang diễn ra',
+          variant: 'default' as const
+        };
+      }
+      
+      return {
+        badge: 'Sắp diễn ra',
+        variant: 'secondary' as const
+      };
+    }
+
+    return {
+      badge: 'Chờ xử lý',
+      variant: 'outline' as const
+    };
+  };
 
   const getStatusConfig = (status: ChallengeStatus) => {
+    // For match mode, use enhanced status logic
+    if (isMatch) {
+      const matchStatus = getMatchStatus();
+      const colorMap = {
+        'Thắng': 'bg-green-500',
+        'Thua': 'bg-red-500',
+        'Đang diễn ra': 'bg-blue-500',
+        'Sắp diễn ra': 'bg-amber-500',
+        'Chờ xử lý': 'bg-purple-500'
+      };
+      
+      return {
+        color: colorMap[matchStatus.badge as keyof typeof colorMap] || 'bg-gray-500',
+        label: matchStatus.badge,
+        variant: matchStatus.variant,
+        className: 'hover:shadow-md transition-shadow'
+      };
+    }
+
     switch (status) {
-      case 'open':
+      case 'pending':
         return {
           color: 'bg-emerald-500',
           label: 'Mở',
@@ -75,7 +105,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
           className: 'from-emerald-50/50 to-green-50/50 border-emerald-200/50 hover:border-emerald-300/70'
         };
       case 'ongoing':
-      case 'accepted': // Map accepted to ongoing display
+      case 'accepted':
         return {
           color: 'bg-blue-500',
           label: 'Đang diễn ra',
@@ -96,7 +126,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
           variant: 'secondary' as const,
           className: 'from-gray-50/50 to-slate-50/50 border-gray-200/50 hover:border-gray-300/70'
         };
-      case 'pending':
+      case 'open':
         return {
           color: 'bg-purple-500',
           label: 'Chờ phản hồi',
@@ -130,7 +160,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
 
   const getTimeDisplay = () => {
     switch (challenge.status) {
-      case 'open':
+      case 'pending':
         return challenge.expires_at 
           ? `Hết hạn ${formatDistanceToNow(new Date(challenge.expires_at), { addSuffix: true, locale: vi })}`
           : `Tạo ${formatDistanceToNow(new Date(challenge.created_at), { addSuffix: true, locale: vi })}`;
@@ -139,8 +169,8 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
           ? `${formatDistanceToNow(new Date(challenge.scheduled_time), { addSuffix: true, locale: vi })}`
           : `Tạo ${formatDistanceToNow(new Date(challenge.created_at), { addSuffix: true, locale: vi })}`;
       case 'completed':
-        return challenge.completed_at 
-          ? `${formatDistanceToNow(new Date(challenge.completed_at), { addSuffix: true, locale: vi })}`
+        return challenge.actual_end_time 
+          ? `${formatDistanceToNow(new Date(challenge.actual_end_time), { addSuffix: true, locale: vi })}`
           : `Hoàn thành`;
       default:
         return formatDistanceToNow(new Date(challenge.created_at), { addSuffix: true, locale: vi });
@@ -148,11 +178,12 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
   };
 
   const renderPlayerInfo = (
-    profile?: UnifiedChallengeCardProps['challenge']['challenger_profile'],
+    profile: any,
     isChallenger: boolean = false,
-    showVsLabel: boolean = false
+    showVsLabel: boolean = false,
+    isForMatch: boolean = false
   ) => {
-    if (!profile && challenge.status === 'open') {
+    if (!profile && (challenge.status === 'pending' && !challenge.opponent_id)) {
       return showVsLabel ? (
         <div className="flex items-center justify-center">
           <span className="text-2xl font-bold text-muted-foreground">VS</span>
@@ -160,28 +191,26 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
       ) : null;
     }
 
+    const playerName = profile?.display_name || profile?.full_name || 'Người chơi ẩn danh';
+    const isCurrentUser = (isChallenger && effectiveUserId === challenge.challenger_id) || 
+                         (!isChallenger && effectiveUserId === challenge.opponent_id);
+
     return (
-      <div className="flex items-center gap-3">
-        <Avatar className={`${isCompact ? 'w-8 h-8' : 'w-12 h-12'} ring-2 ring-white/50`}>
+      <div className={`flex items-center gap-3 ${isForMatch ? '' : ''}`}>
+        <Avatar className={`${isCompact ? 'w-8 h-8' : isMatch ? 'w-10 h-10' : 'w-12 h-12'} ring-2 ring-white/50`}>
           <AvatarImage src={profile?.avatar_url} />
           <AvatarFallback>
-            {profile?.full_name?.charAt(0) || profile?.display_name?.charAt(0) || '?'}
+            {playerName.charAt(0)}
           </AvatarFallback>
         </Avatar>
-        <div className="flex-1 min-w-0">
-          <p className={`font-medium truncate ${isCompact ? 'text-sm' : ''}`}>
-            {profile?.display_name || profile?.full_name || 'Người chơi ẩn danh'}
+        <div className={`flex-1 min-w-0 ${isForMatch && !isChallenger ? 'text-right' : ''}`}>
+          <p className={`font-medium truncate ${isCompact ? 'text-sm' : isMatch ? 'text-sm' : ''}`}>
+            {playerName}
+            {isCurrentUser && <span className="text-primary ml-1">(Bạn)</span>}
           </p>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
-              {profile?.verified_rank || profile?.current_rank || 'K'}
-            </Badge>
-            {!isCompact && profile?.spa_points && (
-              <span className="text-xs text-muted-foreground">
-                {profile.spa_points} SPA
-              </span>
-            )}
-          </div>
+          <p className="text-xs text-muted-foreground">
+            {profile?.verified_rank || 'Chưa xác định'}
+          </p>
         </div>
       </div>
     );
@@ -189,7 +218,9 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
 
   const renderScore = () => {
     if (challenge.status === 'completed' && challenge.challenger_score !== undefined && challenge.opponent_score !== undefined) {
-      const isWinner = challenge.winner_id === challenge.challenger_id;
+      const challengerScore = challenge.challenger_score || 0;
+      const opponentScore = challenge.opponent_score || 0;
+      const isWinner = challengerScore > opponentScore;
       return (
         <div className="flex items-center gap-2 text-lg font-bold">
           <span className={isWinner ? 'text-green-600' : 'text-red-600'}>
@@ -206,19 +237,20 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
   };
 
   const renderActionButtons = () => {
-    const isMyChallenge = user?.id === challenge.challenger_id;
-    const isOpponent = user?.id === challenge.opponent_id;
-    const canEnterScore = (isMyChallenge || isOpponent) && 
+    const isMyChallenge = effectiveUserId === challenge.challenger_id;
+    const isOpponent = effectiveUserId === challenge.opponent_id;
+    const isParticipant = isMyChallenge || isOpponent;
+    const canEnterScore = isParticipant && 
       (challenge.status === 'accepted' || challenge.status === 'ongoing') && 
       onSubmitScore;
 
     switch (challenge.status) {
-      case 'open':
+      case 'pending':
         if (!isMyChallenge && onJoin) {
           return (
             <Button
               onClick={handleJoin}
-              disabled={isLoading || !user}
+              disabled={isLoading || !effectiveUserId}
               className="flex-1"
             >
               {isLoading ? (
@@ -266,11 +298,12 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
         if (canEnterScore) {
           return (
             <Button
-              onClick={() => onAction?.(challenge.id, 'score')}
-              className="flex-1"
+              onClick={() => setIsScoreModalOpen(true)}
+              disabled={isSubmittingScore}
+              className="w-full"
+              variant="default"
             >
-              <Trophy className="w-4 h-4 mr-2" />
-              Nhập tỷ số
+              {isSubmittingScore ? 'Đang ghi nhận...' : '📊 Nhập Tỷ Số'}
             </Button>
           );
         }
@@ -293,6 +326,111 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
     return null;
   };
 
+  // Match mode rendering for ongoing/completed challenges
+  const renderMatchCard = () => {
+    const challengerName = challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Người thách đấu';
+    const opponentName = challenge.opponent_profile?.display_name || challenge.opponent_profile?.full_name || 'Đối thủ';
+    const matchStatus = getMatchStatus();
+    const statusConfig = getStatusConfig(challenge.status);
+    const canEnterScore = challenge.status === 'accepted' && (effectiveUserId === challenge.challenger_id || effectiveUserId === challenge.opponent_id);
+
+    return (
+      <>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-4">
+            {/* Header with status */}
+            <div className="flex justify-between items-center mb-4">
+              <Badge variant={matchStatus.variant as "default" | "destructive" | "secondary" | "outline"} className="text-xs">
+                {matchStatus.badge}
+              </Badge>
+              
+              {challenge.scheduled_time && (
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="w-3 h-3" />
+                  {formatDistanceToNow(new Date(challenge.scheduled_time), { 
+                    addSuffix: true, 
+                    locale: vi 
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Players */}
+            <div className="flex items-center justify-between mb-4">
+              {/* Challenger */}
+              {renderPlayerInfo(challenge.challenger_profile, true, false, true)}
+
+              {/* VS / Score */}
+              <div className="text-center px-4">
+                {challenge.status === 'completed' && matchStatus.score ? (
+                  <div className="text-lg font-bold">{matchStatus.score}</div>
+                ) : (
+                  <div className="text-lg font-bold text-muted-foreground">VS</div>
+                )}
+              </div>
+
+              {/* Opponent */}
+              {renderPlayerInfo(challenge.opponent_profile, false, false, true)}
+            </div>
+
+            {/* Match Info */}
+            <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+              <div className="flex flex-col items-center gap-1">
+                <Target className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Race to</span>
+                <span className="font-semibold">{challenge.race_to || 8}</span>
+              </div>
+              
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-sm font-bold text-muted-foreground">SPA</span>
+                <span className="text-xs text-muted-foreground">Cược</span>
+                <span className="font-semibold">{challenge.bet_points || 100}</span>
+              </div>
+              
+              <div className="flex flex-col items-center gap-1">
+                <Trophy className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Câu lạc bộ</span>
+                <span className="font-semibold capitalize">{challenge.club?.name || 'CLB SABO'}</span>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            {canEnterScore && (
+              <Button
+                onClick={() => setIsScoreModalOpen(true)}
+                disabled={isSubmittingScore}
+                className="w-full"
+                variant="default"
+              >
+                {isSubmittingScore ? 'Đang ghi nhận...' : '📊 Nhập Tỷ Số'}
+              </Button>
+            )}
+
+            {/* Match Notes */}
+            {challenge.message && (
+              <div className="mt-3 p-2 bg-muted/30 rounded text-xs">
+                <strong>Ghi chú:</strong> {challenge.message}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Challenge Details Modal with Score Entry */}
+        <ChallengeDetailsModal
+          challenge={challenge as any}
+          isOpen={isScoreModalOpen}
+          onClose={() => setIsScoreModalOpen(false)}
+          onUpdate={() => {/* handle update */}}
+        />
+      </>
+    );
+  };
+
+  // Use match mode for accepted/ongoing/completed challenges
+  if (isMatch || challenge.status === 'accepted' || challenge.status === 'ongoing' || challenge.status === 'completed') {
+    return renderMatchCard();
+  }
+
   return (
     <Card className={`group relative h-full bg-gradient-to-br ${statusConfig.className} backdrop-blur-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}>
       {/* Status indicator */}
@@ -305,7 +443,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
 
       <CardHeader className={`${isCompact ? 'pb-3' : 'pb-4'}`}>
         <div className="flex items-center justify-between">
-          <Badge variant={statusConfig.variant} className="text-xs">
+          <Badge variant={statusConfig.variant as "default" | "destructive" | "secondary" | "outline"} className="text-xs">
             {statusConfig.label}
           </Badge>
           <div className="text-xs text-muted-foreground">
@@ -322,7 +460,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
           {renderPlayerInfo(challenge.challenger_profile, true)}
           
           {/* VS or Opponent */}
-          {challenge.status !== 'open' ? (
+          {challenge.opponent_id ? (
             renderPlayerInfo(challenge.opponent_profile, false, true)
           ) : (
             <div className="flex items-center justify-center py-2">
@@ -351,10 +489,10 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
         </div>
 
         {/* Club Information */}
-        {challenge.club_profiles && !isCompact && (
+        {challenge.club && !isCompact && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="w-4 h-4" />
-            <span className="font-medium">{challenge.club_profiles.club_name}</span>
+            <span className="font-medium">{challenge.club.name}</span>
           </div>
         )}
 
