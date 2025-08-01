@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import UserMobileHeader from './UserMobileHeader';
-import UserMobileNavigation from './UserMobileNavigation';
+import { MobileNavigation } from './MobileNavigation';
 
 interface UserMobileLayoutProps {
   children: ReactNode;
@@ -39,8 +39,8 @@ export const UserMobileLayout: React.FC<UserMobileLayoutProps> = ({
         </div>
       </main>
 
-      {/* Social Mobile Bottom Navigation */}
-      {showBottomNav && <UserMobileNavigation />}
+      {/* Mobile Bottom Navigation */}
+      {showBottomNav && <MobileNavigation />}
     </div>
   );
 };

@@ -14,9 +14,12 @@ const Profile: React.FC = () => {
     userAgent: navigator.userAgent.includes('Mobile')
   });
   
-  console.log('🎯 [Profile] Rendering ResponsiveProfilePage (NOT ArenaProfilePage)');
+  if (isMobile) {
+    console.log('🎯 [Profile] Rendering ArenaProfilePage for mobile');
+    return <ArenaProfilePage />;
+  }
   
-  // Use responsive profile page instead of arena
+  console.log('🎯 [Profile] Rendering ResponsiveProfilePage for desktop');
   return <ResponsiveProfilePage />;
 };
 

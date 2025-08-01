@@ -69,8 +69,10 @@ const ArenaProfilePage: React.FC = () => {
       </div>
       </div>
       
-      {/* Arena Navigation */}
-      <ArenaNavigation />
+      {/* Mobile Navigation */}
+      <div className="pb-20">
+        {/* Spacing for fixed bottom nav */}
+      </div>
     </div>
   );
 };
