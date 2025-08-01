@@ -44,11 +44,11 @@ class WebVitalsTracker {
       rating: this.getRating(name, metric.value),
       timestamp: Date.now(),
       url: window.location.href,
-      userId: this.userId
+      userId: this.userId,
     };
 
     this.metrics.push(webVitalsMetric);
-    
+
     // Log for debugging
     console.log(`[WebVitals] ${name}:`, webVitalsMetric);
 
@@ -58,17 +58,20 @@ class WebVitalsTracker {
     }
   }
 
-  private getRating(name: string, value: number): 'good' | 'needs-improvement' | 'poor' {
+  private getRating(
+    name: string,
+    value: number
+  ): 'good' | 'needs-improvement' | 'poor' {
     const thresholds: Record<string, [number, number]> = {
       CLS: [0.1, 0.25],
       FID: [100, 300],
       FCP: [1800, 3000],
       LCP: [2500, 4000],
-      TTFB: [800, 1800]
+      TTFB: [800, 1800],
     };
 
     const [good, poor] = thresholds[name] || [0, 0];
-    
+
     if (value <= good) return 'good';
     if (value <= poor) return 'needs-improvement';
     return 'poor';
@@ -78,14 +81,14 @@ class WebVitalsTracker {
     try {
       // Send to Supabase for storage
       const { supabase } = await import('@/integrations/supabase/client');
-      
+
       await supabase.from('web_vitals_metrics' as any).insert({
         metric_name: metric.name,
         metric_value: metric.value,
         rating: metric.rating,
         url: metric.url,
         user_id: metric.userId,
-        timestamp: new Date(metric.timestamp).toISOString()
+        timestamp: new Date(metric.timestamp).toISOString(),
       });
     } catch (error) {
       console.error('Failed to send web vitals metric:', error);
@@ -101,18 +104,18 @@ class WebVitalsTracker {
     try {
       // Batch send metrics
       const { supabase } = await import('@/integrations/supabase/client');
-      
+
       const formattedMetrics = metricsToSend.map(metric => ({
         metric_name: metric.name,
         metric_value: metric.value,
         rating: metric.rating,
         url: metric.url,
         user_id: metric.userId,
-        timestamp: new Date(metric.timestamp).toISOString()
+        timestamp: new Date(metric.timestamp).toISOString(),
       }));
 
       await supabase.from('web_vitals_metrics' as any).insert(formattedMetrics);
-      
+
       console.log(`[WebVitals] Sent ${formattedMetrics.length} metrics`);
     } catch (error) {
       console.error('Failed to send web vitals metrics:', error);

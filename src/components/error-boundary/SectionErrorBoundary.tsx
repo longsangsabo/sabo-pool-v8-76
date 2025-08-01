@@ -14,7 +14,10 @@ interface SectionErrorBoundaryState {
   error?: Error;
 }
 
-export class SectionErrorBoundary extends Component<SectionErrorBoundaryProps, SectionErrorBoundaryState> {
+export class SectionErrorBoundary extends Component<
+  SectionErrorBoundaryProps,
+  SectionErrorBoundaryState
+> {
   constructor(props: SectionErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -36,28 +39,29 @@ export class SectionErrorBoundary extends Component<SectionErrorBoundaryProps, S
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-4">
-                <AlertTriangle className="h-8 w-8 text-destructive" />
+        <div className='min-h-[400px] flex items-center justify-center p-4'>
+          <Card className='w-full max-w-md'>
+            <CardHeader className='text-center'>
+              <div className='flex justify-center mb-4'>
+                <AlertTriangle className='h-8 w-8 text-destructive' />
               </div>
               <CardTitle>Lỗi {this.props.section}</CardTitle>
             </CardHeader>
-            <CardContent className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                Đã xảy ra lỗi khi tải {this.props.section.toLowerCase()}. Vui lòng thử lại.
+            <CardContent className='text-center space-y-4'>
+              <p className='text-muted-foreground'>
+                Đã xảy ra lỗi khi tải {this.props.section.toLowerCase()}. Vui
+                lòng thử lại.
               </p>
-              
-              <div className="flex gap-2 justify-center">
-                <Button onClick={this.handleRetry} size="sm" className="gap-2">
-                  <RefreshCw className="h-4 w-4" />
+
+              <div className='flex gap-2 justify-center'>
+                <Button onClick={this.handleRetry} size='sm' className='gap-2'>
+                  <RefreshCw className='h-4 w-4' />
                   Thử lại
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => window.location.href = '/'}
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={() => (window.location.href = '/')}
                 >
                   Về trang chủ
                 </Button>

@@ -12,7 +12,7 @@ export class StandardQueryBuilder {
   static buildQuery(options: QueryBuilderOptions) {
     return { table: options.table };
   }
-  
+
   static applySoftDeleteFilter(options: SoftDeleteOptions) {
     return { table: options.table };
   }

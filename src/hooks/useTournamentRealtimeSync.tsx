@@ -21,12 +21,14 @@ export const useTournamentRealtimeSync = (
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           console.log('Real-time registration change:', payload);
-          
-          const tournamentId = (payload.new as any)?.tournament_id || (payload.old as any)?.tournament_id;
+
+          const tournamentId =
+            (payload.new as any)?.tournament_id ||
+            (payload.old as any)?.tournament_id;
           if (!tournamentId) return;
 
           switch (payload.eventType) {
@@ -37,7 +39,8 @@ export const useTournamentRealtimeSync = (
               onRegistrationChange(tournamentId, false);
               break;
             case 'UPDATE':
-              const isRegistered = (payload.new as any)?.registration_status !== 'cancelled';
+              const isRegistered =
+                (payload.new as any)?.registration_status !== 'cancelled';
               onRegistrationChange(tournamentId, isRegistered);
               break;
           }

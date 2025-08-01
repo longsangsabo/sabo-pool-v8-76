@@ -101,7 +101,9 @@ const ClubDetailPage = () => {
           name: 'Giải đấu tháng 1',
           description: 'Giải đấu hàng tháng của CLB',
           start_date: new Date().toISOString(),
-          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          end_date: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
           status: 'upcoming',
           max_participants: 32,
           entry_fee: 100000,
@@ -139,8 +141,8 @@ const ClubDetailPage = () => {
 
       const { error } = await supabase
         .from('profiles')
-        .update({ 
-          bio: `Member of club ${id}` // Using bio field instead of non-existent club_id
+        .update({
+          bio: `Member of club ${id}`, // Using bio field instead of non-existent club_id
         })
         .eq('user_id', user.user.id);
 

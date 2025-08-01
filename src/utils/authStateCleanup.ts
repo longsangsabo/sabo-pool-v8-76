@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 /**
@@ -7,9 +6,9 @@ import { supabase } from '@/integrations/supabase/client';
  */
 export const cleanupAuthState = () => {
   console.log('🧹 Cleaning up auth state...');
-  
+
   // Clear localStorage
-  Object.keys(localStorage).forEach((key) => {
+  Object.keys(localStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       localStorage.removeItem(key);
       console.log(`Removed localStorage key: ${key}`);
@@ -17,7 +16,7 @@ export const cleanupAuthState = () => {
   });
 
   // Clear sessionStorage
-  Object.keys(sessionStorage).forEach((key) => {
+  Object.keys(sessionStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       sessionStorage.removeItem(key);
       console.log(`Removed sessionStorage key: ${key}`);
@@ -30,7 +29,7 @@ export const cleanupAuthState = () => {
     'sb-auth-token',
     'auth-token',
     'access-token',
-    'refresh-token'
+    'refresh-token',
   ];
 
   additionalKeys.forEach(key => {
@@ -46,15 +45,14 @@ export const cleanupAuthState = () => {
  */
 export const robustSignOut = async () => {
   console.log('🚪 Performing robust sign out...');
-  
+
   try {
     // Clean up state first
     cleanupAuthState();
-    
+
     // Attempt global sign out
     await supabase.auth.signOut({ scope: 'global' });
     console.log('✅ Global sign out completed');
-    
   } catch (error) {
     console.warn('⚠️ Sign out error (will continue):', error);
   } finally {
@@ -69,33 +67,32 @@ export const robustSignOut = async () => {
  */
 export const robustSignIn = async (signInFunction: () => Promise<any>) => {
   console.log('🔐 Performing robust sign in...');
-  
+
   try {
     // Clean up existing state first
     cleanupAuthState();
-    
+
     // Attempt sign out to clear any existing session
     try {
       await supabase.auth.signOut({ scope: 'global' });
     } catch (error) {
       console.warn('⚠️ Pre-signin cleanup error (will continue):', error);
     }
-    
+
     // Perform the actual sign in
     const result = await signInFunction();
-    
+
     if (result.error) {
       throw result.error;
     }
-    
+
     if (result.data?.user) {
       console.log('✅ Sign in successful, refreshing page...');
       // Force page refresh for clean state
       window.location.href = '/dashboard';
     }
-    
+
     return result;
-    
   } catch (error) {
     console.error('❌ Sign in error:', error);
     throw error;
@@ -107,16 +104,16 @@ export const robustSignIn = async (signInFunction: () => Promise<any>) => {
  */
 export const checkAuthConflicts = () => {
   const conflicts = [];
-  
+
   // Check for multiple auth tokens
-  const authKeys = Object.keys(localStorage).filter(key => 
-    key.startsWith('supabase.auth.') || key.includes('sb-')
+  const authKeys = Object.keys(localStorage).filter(
+    key => key.startsWith('supabase.auth.') || key.includes('sb-')
   );
-  
+
   if (authKeys.length > 2) {
     conflicts.push(`Multiple auth keys found: ${authKeys.join(', ')}`);
   }
-  
+
   // Check for expired tokens
   authKeys.forEach(key => {
     try {
@@ -131,11 +128,11 @@ export const checkAuthConflicts = () => {
       conflicts.push(`Invalid token format: ${key}`);
     }
   });
-  
+
   if (conflicts.length > 0) {
     console.warn('⚠️ Auth conflicts detected:', conflicts);
     return conflicts;
   }
-  
+
   return [];
 };

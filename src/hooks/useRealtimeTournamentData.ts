@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -9,7 +8,10 @@ export const useRealtimeTournamentData = (
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up enhanced real-time subscription for tournament:', tournamentId);
+    console.log(
+      '🔄 Setting up enhanced real-time subscription for tournament:',
+      tournamentId
+    );
 
     const channel = supabase
       .channel(`tournament_data_enhanced_${tournamentId}`)
@@ -19,9 +21,9 @@ export const useRealtimeTournamentData = (
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament registrations updated:', payload);
           onUpdate();
         }
@@ -32,18 +34,24 @@ export const useRealtimeTournamentData = (
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament matches updated:', payload);
-          
+
           // Force immediate refresh for match updates
           if (payload.eventType === 'UPDATE') {
             console.log('✅ Match score/status updated, triggering refresh');
-            
+
             // Special handling for semifinals completion
-            if (payload.new && payload.new.round_number === 250 && payload.new.status === 'completed') {
-              console.log('🏆 Semifinal completed, checking for Championship Final advancement');
+            if (
+              payload.new &&
+              payload.new.round_number === 250 &&
+              payload.new.status === 'completed'
+            ) {
+              console.log(
+                '🏆 Semifinal completed, checking for Championship Final advancement'
+              );
               setTimeout(() => {
                 onUpdate();
               }, 500); // Longer delay for semifinals to ensure proper advancement
@@ -63,9 +71,9 @@ export const useRealtimeTournamentData = (
           event: '*',
           schema: 'public',
           table: 'tournament_results',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament results updated:', payload);
           onUpdate();
         }
@@ -76,19 +84,23 @@ export const useRealtimeTournamentData = (
           event: 'UPDATE',
           schema: 'public',
           table: 'tournaments',
-          filter: `id=eq.${tournamentId}`
+          filter: `id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament updated:', payload);
           onUpdate();
         }
       )
-      .subscribe((status) => {
-        console.log(`🔗 Enhanced tournament data subscription status: ${status}`);
+      .subscribe(status => {
+        console.log(
+          `🔗 Enhanced tournament data subscription status: ${status}`
+        );
       });
 
     return () => {
-      console.log('🔄 Cleaning up enhanced real-time subscription for tournament data');
+      console.log(
+        '🔄 Cleaning up enhanced real-time subscription for tournament data'
+      );
       supabase.removeChannel(channel);
     };
   }, [tournamentId, onUpdate]);

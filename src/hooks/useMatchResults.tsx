@@ -44,7 +44,7 @@ export const useMatchResults = () => {
           tournament_id: '00000000-0000-0000-0000-000000000000',
           round_number: 1,
           match_number: 1,
-          status: 'completed'
+          status: 'completed',
         })
         .select();
 
@@ -67,7 +67,7 @@ export const useMatchResults = () => {
         .from('tournament_matches')
         .select('*')
         .eq('status', 'completed');
-      
+
       if (playerId) {
         query = query.or(`player1_id.eq.${playerId},player2_id.eq.${playerId}`);
       }
@@ -86,9 +86,9 @@ export const useMatchResults = () => {
       // Simple update without complex confirmation logic
       const { error } = await supabase
         .from('tournament_matches')
-        .update({ 
+        .update({
           score_status: 'confirmed',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', matchId);
 
@@ -103,14 +103,18 @@ export const useMatchResults = () => {
     }
   };
 
-  const disputeMatchResult = async (matchId: string, reason: string, playerId: string) => {
+  const disputeMatchResult = async (
+    matchId: string,
+    reason: string,
+    playerId: string
+  ) => {
     try {
       // Update status to disputed
       const { error } = await supabase
         .from('tournament_matches')
-        .update({ 
+        .update({
           score_status: 'disputed',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', matchId);
 
@@ -129,7 +133,7 @@ export const useMatchResults = () => {
     try {
       const { data, error } = await supabase.rpc('verify_match_result', {
         p_match_id: matchId,
-        p_verifier_id: verifierId
+        p_verifier_id: verifierId,
       });
 
       if (error) throw error;
@@ -143,7 +147,10 @@ export const useMatchResults = () => {
     }
   };
 
-  const getPlayerStats = async (playerId: string, timeframe?: 'week' | 'month' | 'year') => {
+  const getPlayerStats = async (
+    playerId: string,
+    timeframe?: 'week' | 'month' | 'year'
+  ) => {
     try {
       // Get stats from player_rankings table
       const { data, error } = await supabase
@@ -154,14 +161,16 @@ export const useMatchResults = () => {
 
       if (error && error.code !== 'PGRST116') throw error;
 
-      return data || {
-        total_matches: 0,
-        wins: 0,
-        losses: 0,
-        win_percentage: 0,
-        spa_points: 0,
-        elo_points: 1000
-      };
+      return (
+        data || {
+          total_matches: 0,
+          wins: 0,
+          losses: 0,
+          win_percentage: 0,
+          spa_points: 0,
+          elo_points: 1000,
+        }
+      );
     } catch (error) {
       console.error('Error fetching player stats:', error);
       return null;
@@ -178,7 +187,7 @@ export const useMatchResults = () => {
       return {
         total_matches: totalMatches || 0,
         active_tournaments: 0,
-        total_players: 0
+        total_players: 0,
       };
     } catch (error) {
       console.error('Error fetching club stats:', error);
@@ -199,31 +208,38 @@ export const useMatchResults = () => {
       match_duration_minutes: matchData.match_duration_minutes,
       club_id: matchData.club_id,
       referee_id: matchData.referee_id,
-      match_notes: matchData.match_notes
+      match_notes: matchData.match_notes,
     };
     return recordMatch(standardizedData);
   };
-  const createDispute = async (matchId: string, reason: string, playerId?: string) => {
+  const createDispute = async (
+    matchId: string,
+    reason: string,
+    playerId?: string
+  ) => {
     return disputeMatchResult(matchId, reason, playerId || 'unknown');
   };
-  
-  const fetchEloHistory = async (playerId: string, timeframe?: string | number) => {
+
+  const fetchEloHistory = async (
+    playerId: string,
+    timeframe?: string | number
+  ) => {
     // Mock ELO history data with proper structure
     return [
-      { 
-        created_at: '2024-01-01T00:00:00Z', 
-        elo_after: 1000, 
-        elo_change: 0, 
+      {
+        created_at: '2024-01-01T00:00:00Z',
+        elo_after: 1000,
+        elo_change: 0,
         match_result: 'win' as const,
-        opponent_elo: 950 
+        opponent_elo: 950,
       },
-      { 
-        created_at: '2024-01-15T00:00:00Z', 
-        elo_after: 1050, 
-        elo_change: 50, 
+      {
+        created_at: '2024-01-15T00:00:00Z',
+        elo_after: 1050,
+        elo_change: 50,
         match_result: 'win' as const,
-        opponent_elo: 980 
-      }
+        opponent_elo: 980,
+      },
     ];
   };
 
@@ -238,6 +254,6 @@ export const useMatchResults = () => {
     getPlayerStats,
     getClubStats,
     fetchEloHistory,
-    loading
+    loading,
   };
 };

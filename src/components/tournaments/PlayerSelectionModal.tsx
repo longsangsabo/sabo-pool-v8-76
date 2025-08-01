@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Search } from 'lucide-react';
@@ -30,7 +35,7 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   matchId,
   position,
   availablePlayers,
-  onPlayerSelected
+  onPlayerSelected,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>('');
@@ -50,9 +55,10 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     try {
       setIsSubmitting(true);
 
-      const updateData = position === 'player1' ? 
-        { player1_id: selectedPlayerId } : 
-        { player2_id: selectedPlayerId };
+      const updateData =
+        position === 'player1'
+          ? { player1_id: selectedPlayerId }
+          : { player2_id: selectedPlayerId };
 
       const { error } = await supabase
         .from('tournament_matches')
@@ -64,7 +70,6 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
       onPlayerSelected(selectedPlayerId);
       onClose();
       toast.success('Đã chọn người chơi thành công!');
-
     } catch (error: any) {
       console.error('Error selecting player:', error);
       toast.error('Lỗi khi chọn người chơi: ' + error.message);
@@ -79,33 +84,35 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[80vh]">
+      <DialogContent className='max-w-lg max-h-[80vh]'>
         <DialogHeader>
-          <DialogTitle className="text-center">
+          <DialogTitle className='text-center'>
             Chọn Người Chơi - {position === 'player1' ? 'Vị trí 1' : 'Vị trí 2'}
           </DialogTitle>
         </DialogHeader>
-        
-        <div className="space-y-4">
+
+        <div className='space-y-4'>
           {/* Search */}
-          <div className="relative">
-            <Search className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+          <div className='relative'>
+            <Search className='h-4 w-4 absolute left-3 top-3 text-gray-400' />
             <Input
-              placeholder="Tìm kiếm người chơi..."
+              placeholder='Tìm kiếm người chơi...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              onChange={e => setSearchTerm(e.target.value)}
+              className='pl-10'
             />
           </div>
 
           {/* Player List */}
-          <div className="max-h-64 overflow-y-auto space-y-2">
+          <div className='max-h-64 overflow-y-auto space-y-2'>
             {filteredPlayers.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                {searchTerm ? 'Không tìm thấy người chơi phù hợp' : 'Không có người chơi khả dụng'}
+              <div className='text-center py-8 text-muted-foreground'>
+                {searchTerm
+                  ? 'Không tìm thấy người chơi phù hợp'
+                  : 'Không có người chơi khả dụng'}
               </div>
             ) : (
-              filteredPlayers.map((player) => (
+              filteredPlayers.map(player => (
                 <div
                   key={player.user_id}
                   className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
@@ -115,25 +122,27 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
                   }`}
                   onClick={() => setSelectedPlayerId(player.user_id)}
                 >
-                  <Avatar className="h-10 w-10">
+                  <Avatar className='h-10 w-10'>
                     <AvatarImage src={player.avatar_url} />
                     <AvatarFallback>
-                      <User className="h-5 w-5" />
+                      <User className='h-5 w-5' />
                     </AvatarFallback>
                   </Avatar>
-                  
-                  <div className="flex-1">
-                    <div className="font-medium">{formatPlayerName(player)}</div>
+
+                  <div className='flex-1'>
+                    <div className='font-medium'>
+                      {formatPlayerName(player)}
+                    </div>
                     {player.verified_rank && (
-                      <div className="text-sm text-muted-foreground">
+                      <div className='text-sm text-muted-foreground'>
                         Rank: {player.verified_rank}
                       </div>
                     )}
                   </div>
-                  
+
                   {selectedPlayerId === player.user_id && (
-                    <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                    <div className='w-4 h-4 rounded-full bg-primary flex items-center justify-center'>
+                      <div className='w-2 h-2 rounded-full bg-white'></div>
                     </div>
                   )}
                 </div>
@@ -142,14 +151,14 @@ export const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-2 pt-4">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+          <div className='flex gap-2 pt-4'>
+            <Button variant='outline' onClick={onClose} className='flex-1'>
               Hủy
             </Button>
-            <Button 
+            <Button
               onClick={handleSelectPlayer}
               disabled={!selectedPlayerId || isSubmitting}
-              className="flex-1"
+              className='flex-1'
             >
               {isSubmitting ? 'Đang xử lý...' : 'Chọn Người Chơi'}
             </Button>

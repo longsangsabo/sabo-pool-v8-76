@@ -27,7 +27,9 @@ export const useTournamentsForTemplates = () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('tournaments')
-        .select('id, name, status, tournament_type, max_participants, current_participants, created_at, tournament_start, entry_fee, description, club_id')
+        .select(
+          'id, name, status, tournament_type, max_participants, current_participants, created_at, tournament_start, entry_fee, description, club_id'
+        )
         .order('created_at', { ascending: false });
 
       if (fetchError) {
@@ -37,7 +39,9 @@ export const useTournamentsForTemplates = () => {
       setTournaments(data || []);
     } catch (err) {
       console.error('Error fetching tournaments:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch tournaments');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch tournaments'
+      );
       setTournaments([]);
     } finally {
       setLoading(false);
@@ -53,6 +57,6 @@ export const useTournamentsForTemplates = () => {
     loading,
     error,
     fetchTournaments,
-    refetch: fetchTournaments
+    refetch: fetchTournaments,
   };
 };

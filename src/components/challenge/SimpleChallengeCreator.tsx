@@ -4,7 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -20,14 +26,17 @@ interface SimpleChallenge {
   onCancel?: () => void;
 }
 
-const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel }) => {
+const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({
+  onSuccess,
+  onCancel,
+}) => {
   const [formData, setFormData] = useState<SimpleChallengeForm>({
     opponent_id: '',
     bet_points: 100,
     message: '',
-    scheduled_time: ''
+    scheduled_time: '',
   });
-  
+
   const [opponents, setOpponents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +46,9 @@ const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel
 
   const fetchOpponents = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return;
 
       const { data, error } = await supabase
@@ -59,7 +70,7 @@ const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Simple validation
     if (!formData.opponent_id || !formData.scheduled_time) {
       toast.error('Please fill in all required fields');
@@ -72,21 +83,21 @@ const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel
     }
 
     setIsLoading(true);
-    
+
     try {
-      const { error } = await supabase
-        .from('challenges')
-        .insert([{
+      const { error } = await supabase.from('challenges').insert([
+        {
           challenger_id: (await supabase.auth.getUser()).data.user?.id,
           opponent_id: formData.opponent_id,
           bet_points: formData.bet_points,
           challenge_message: formData.message,
           scheduled_time: formData.scheduled_time,
-          status: 'pending'
-        }]);
+          status: 'pending',
+        },
+      ]);
 
       if (error) throw error;
-      
+
       toast.success('Challenge created successfully!');
       onSuccess?.();
     } catch (error) {
@@ -103,15 +114,18 @@ const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel
         <CardTitle>Create Challenge</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
-            <Label htmlFor="opponent">Opponent</Label>
-            <Select value={formData.opponent_id} onValueChange={(value) => updateField('opponent_id', value)}>
+            <Label htmlFor='opponent'>Opponent</Label>
+            <Select
+              value={formData.opponent_id}
+              onValueChange={value => updateField('opponent_id', value)}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Select opponent" />
+                <SelectValue placeholder='Select opponent' />
               </SelectTrigger>
               <SelectContent>
-                {opponents.map((opponent) => (
+                {opponents.map(opponent => (
                   <SelectItem key={opponent.user_id} value={opponent.user_id}>
                     {opponent.full_name || opponent.display_name}
                   </SelectItem>
@@ -120,47 +134,49 @@ const SimpleChallengeCreator: React.FC<SimpleChallenge> = ({ onSuccess, onCancel
             </Select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className='grid grid-cols-2 gap-4'>
             <div>
-              <Label htmlFor="bet_points">Bet Points</Label>
+              <Label htmlFor='bet_points'>Bet Points</Label>
               <Input
-                id="bet_points"
-                type="number"
-                min="100"
-                max="650"
+                id='bet_points'
+                type='number'
+                min='100'
+                max='650'
                 value={formData.bet_points}
-                onChange={(e) => updateField('bet_points', parseInt(e.target.value))}
+                onChange={e =>
+                  updateField('bet_points', parseInt(e.target.value))
+                }
                 required
               />
             </div>
-            
+
             <div>
-              <Label htmlFor="scheduled_time">Scheduled Time</Label>
+              <Label htmlFor='scheduled_time'>Scheduled Time</Label>
               <Input
-                id="scheduled_time"
-                type="datetime-local"
+                id='scheduled_time'
+                type='datetime-local'
                 value={formData.scheduled_time}
-                onChange={(e) => updateField('scheduled_time', e.target.value)}
+                onChange={e => updateField('scheduled_time', e.target.value)}
                 required
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="message">Message (Optional)</Label>
+            <Label htmlFor='message'>Message (Optional)</Label>
             <Textarea
-              id="message"
+              id='message'
               value={formData.message}
-              onChange={(e) => updateField('message', e.target.value)}
-              placeholder="Add a message to your challenge..."
+              onChange={e => updateField('message', e.target.value)}
+              placeholder='Add a message to your challenge...'
             />
           </div>
 
-          <div className="flex gap-2">
-            <Button type="submit" disabled={isLoading}>
+          <div className='flex gap-2'>
+            <Button type='submit' disabled={isLoading}>
               {isLoading ? 'Creating...' : 'Create Challenge'}
             </Button>
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type='button' variant='outline' onClick={onCancel}>
               Cancel
             </Button>
           </div>

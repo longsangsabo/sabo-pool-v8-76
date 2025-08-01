@@ -10,14 +10,20 @@ export const useTournamentRewardSync = () => {
     setError(null);
 
     try {
-      console.log('🔄 Syncing tournament rewards...', tournamentId ? `for ${tournamentId}` : 'for all tournaments');
+      console.log(
+        '🔄 Syncing tournament rewards...',
+        tournamentId ? `for ${tournamentId}` : 'for all tournaments'
+      );
 
-      const { data, error } = await supabase.functions.invoke('sync-tournament-rewards', {
-        body: {
-          tournament_id: tournamentId,
-          sync_all: !tournamentId
+      const { data, error } = await supabase.functions.invoke(
+        'sync-tournament-rewards',
+        {
+          body: {
+            tournament_id: tournamentId,
+            sync_all: !tournamentId,
+          },
         }
-      });
+      );
 
       if (error) {
         console.error('❌ Sync error:', error);
@@ -38,6 +44,6 @@ export const useTournamentRewardSync = () => {
   return {
     syncTournamentRewards,
     syncing,
-    error
+    error,
   };
 };

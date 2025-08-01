@@ -1,9 +1,14 @@
-
 import React, { useState } from 'react';
 import { Search, Download, Filter, ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Select,
@@ -75,8 +80,12 @@ const AdminTransactions = () => {
     return (
       <div className='flex items-center justify-center h-64'>
         <div className='text-center'>
-          <h2 className='text-2xl font-bold text-gray-900 mb-4'>Access Denied</h2>
-          <p className='text-gray-600'>You don't have permission to access this page.</p>
+          <h2 className='text-2xl font-bold text-gray-900 mb-4'>
+            Access Denied
+          </h2>
+          <p className='text-gray-600'>
+            You don't have permission to access this page.
+          </p>
         </div>
       </div>
     );
@@ -155,103 +164,111 @@ const AdminTransactions = () => {
 
   return (
     <div className='space-y-6'>
-        <div className='flex justify-between items-center'>
-          <div>
-            <h1 className='text-3xl font-bold text-gray-900'>Quản Lý Giao Dịch</h1>
-            <p className='text-gray-600'>Theo dõi và quản lý các giao dịch tài chính</p>
-          </div>
-          <Button className='gap-2'>
-            <Download className='w-4 h-4' />
-            Xuất báo cáo
-          </Button>
+      <div className='flex justify-between items-center'>
+        <div>
+          <h1 className='text-3xl font-bold text-gray-900'>
+            Quản Lý Giao Dịch
+          </h1>
+          <p className='text-gray-600'>
+            Theo dõi và quản lý các giao dịch tài chính
+          </p>
         </div>
-
-        <div className='flex gap-4'>
-          <div className='flex-1 relative'>
-            <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
-            <Input
-              placeholder='Tìm kiếm giao dịch...'
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className='pl-10'
-            />
-          </div>
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className='w-48'>
-              <SelectValue placeholder='Loại giao dịch' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='all'>Tất cả</SelectItem>
-              <SelectItem value='deposit'>Nạp tiền</SelectItem>
-              <SelectItem value='withdraw'>Rút tiền</SelectItem>
-              <SelectItem value='tournament_fee'>Phí giải đấu</SelectItem>
-              <SelectItem value='membership'>Hội viên</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className='w-48'>
-              <SelectValue placeholder='Trạng thái' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='all'>Tất cả</SelectItem>
-              <SelectItem value='completed'>Hoàn thành</SelectItem>
-              <SelectItem value='pending'>Đang xử lý</SelectItem>
-              <SelectItem value='failed'>Thất bại</SelectItem>
-              <SelectItem value='cancelled'>Đã hủy</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Danh sách giao dịch</CardTitle>
-            <CardDescription>Tổng cộng {transactions.length} giao dịch</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Mã GD</TableHead>
-                  <TableHead>Người dùng</TableHead>
-                  <TableHead>Loại</TableHead>
-                  <TableHead>Số tiền</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead>Phương thức</TableHead>
-                  <TableHead>Thời gian</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {transactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell className='font-medium'>{transaction.id}</TableCell>
-                    <TableCell>{transaction.user_name}</TableCell>
-                    <TableCell>
-                      <Badge className={getTypeColor(transaction.type)}>
-                        {getTypeText(transaction.type)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className='font-medium'>
-                      {formatPrice(transaction.amount)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(transaction.status)}>
-                        {getStatusText(transaction.status)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className='text-sm text-gray-600'>
-                      {transaction.payment_method}
-                    </TableCell>
-                    <TableCell className='text-sm text-gray-600'>
-                      {formatDate(transaction.created_at)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        <Button className='gap-2'>
+          <Download className='w-4 h-4' />
+          Xuất báo cáo
+        </Button>
       </div>
-    );
+
+      <div className='flex gap-4'>
+        <div className='flex-1 relative'>
+          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
+          <Input
+            placeholder='Tìm kiếm giao dịch...'
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className='pl-10'
+          />
+        </div>
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className='w-48'>
+            <SelectValue placeholder='Loại giao dịch' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Tất cả</SelectItem>
+            <SelectItem value='deposit'>Nạp tiền</SelectItem>
+            <SelectItem value='withdraw'>Rút tiền</SelectItem>
+            <SelectItem value='tournament_fee'>Phí giải đấu</SelectItem>
+            <SelectItem value='membership'>Hội viên</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className='w-48'>
+            <SelectValue placeholder='Trạng thái' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Tất cả</SelectItem>
+            <SelectItem value='completed'>Hoàn thành</SelectItem>
+            <SelectItem value='pending'>Đang xử lý</SelectItem>
+            <SelectItem value='failed'>Thất bại</SelectItem>
+            <SelectItem value='cancelled'>Đã hủy</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Danh sách giao dịch</CardTitle>
+          <CardDescription>
+            Tổng cộng {transactions.length} giao dịch
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Mã GD</TableHead>
+                <TableHead>Người dùng</TableHead>
+                <TableHead>Loại</TableHead>
+                <TableHead>Số tiền</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead>Phương thức</TableHead>
+                <TableHead>Thời gian</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map(transaction => (
+                <TableRow key={transaction.id}>
+                  <TableCell className='font-medium'>
+                    {transaction.id}
+                  </TableCell>
+                  <TableCell>{transaction.user_name}</TableCell>
+                  <TableCell>
+                    <Badge className={getTypeColor(transaction.type)}>
+                      {getTypeText(transaction.type)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className='font-medium'>
+                    {formatPrice(transaction.amount)}
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={getStatusColor(transaction.status)}>
+                      {getStatusText(transaction.status)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className='text-sm text-gray-600'>
+                    {transaction.payment_method}
+                  </TableCell>
+                  <TableCell className='text-sm text-gray-600'>
+                    {formatDate(transaction.created_at)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 export default AdminTransactions;

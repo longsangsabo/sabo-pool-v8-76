@@ -1,10 +1,10 @@
 export { SectionErrorBoundary } from './SectionErrorBoundary';
 export { GenericFallback } from './FallbackComponents';
-export { 
+export {
   TournamentSection,
   ChallengeSection,
   ProfileSection,
-  ClubSection
+  ClubSection,
 } from './SectionWrappers';
 
 // Re-export main error boundary

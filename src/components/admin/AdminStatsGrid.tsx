@@ -19,18 +19,21 @@ interface AdminStatsGridProps {
   loading?: boolean;
 }
 
-const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({ stats, loading = false }) => {
+const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({
+  stats,
+  loading = false,
+}) => {
   if (loading) {
     return (
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardHeader className="pb-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          <Card key={i} className='animate-pulse'>
+            <CardHeader className='pb-2'>
+              <div className='h-4 bg-gray-200 rounded w-3/4'></div>
             </CardHeader>
             <CardContent>
-              <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-full"></div>
+              <div className='h-8 bg-gray-200 rounded w-1/2 mb-2'></div>
+              <div className='h-3 bg-gray-200 rounded w-full'></div>
             </CardContent>
           </Card>
         ))}
@@ -72,37 +75,41 @@ const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({ stats, loading = false 
   };
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         const TrendIcon = getTrendIcon(stat.trend);
-        
+
         return (
           <Card key={index} className={getCardClasses(stat.status)}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <div className="flex items-center gap-2">
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                {stat.title}
+              </CardTitle>
+              <div className='flex items-center gap-2'>
                 <Icon className={`h-4 w-4 ${stat.color}`} />
                 {stat.status === 'warning' && (
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                  <div className='w-2 h-2 bg-yellow-500 rounded-full animate-pulse'></div>
                 )}
                 {stat.status === 'error' && (
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  <div className='w-2 h-2 bg-red-500 rounded-full animate-pulse'></div>
                 )}
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+              <div className='text-2xl font-bold'>{stat.value}</div>
               {(stat.change || stat.subtitle) && (
-                <div className="flex items-center justify-between mt-2">
+                <div className='flex items-center justify-between mt-2'>
                   {stat.change && (
-                    <div className={`flex items-center text-xs ${getTrendColor(stat.trend)}`}>
-                      <TrendIcon className="h-3 w-3 mr-1" />
+                    <div
+                      className={`flex items-center text-xs ${getTrendColor(stat.trend)}`}
+                    >
+                      <TrendIcon className='h-3 w-3 mr-1' />
                       {stat.change}
                     </div>
                   )}
                   {stat.subtitle && (
-                    <div className="text-xs text-muted-foreground">
+                    <div className='text-xs text-muted-foreground'>
                       {stat.subtitle}
                     </div>
                   )}

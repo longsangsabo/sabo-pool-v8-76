@@ -16,7 +16,7 @@ export const useSocial = () => {
         toast.error('Failed to follow user');
       }
     },
-    isPending: false
+    isPending: false,
   };
 
   const unfollowUser = {
@@ -28,7 +28,7 @@ export const useSocial = () => {
         toast.error('Failed to unfollow user');
       }
     },
-    isPending: false
+    isPending: false,
   };
 
   // Helper function to check if user is following another user
@@ -44,6 +44,6 @@ export const useSocial = () => {
     following,
     followUser,
     unfollowUser,
-    isFollowing
+    isFollowing,
   };
 };

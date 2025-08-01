@@ -17,7 +17,7 @@ const TournamentActions: React.FC<TournamentActionsProps> = ({
   tournamentStatus,
   managementStatus,
   onTournamentStarted,
-  className
+  className,
 }) => {
   return (
     <Card className={className}>
@@ -25,13 +25,13 @@ const TournamentActions: React.FC<TournamentActionsProps> = ({
         <CardTitle>Tournament Actions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <div className="space-y-2">
+        <div className='space-y-4'>
+          <div className='space-y-2'>
             <p>Tournament: {tournamentName}</p>
             <p>Status: {tournamentStatus}</p>
             <p>Management: {managementStatus}</p>
           </div>
-          <Button onClick={onTournamentStarted} className="w-full">
+          <Button onClick={onTournamentStarted} className='w-full'>
             Start Tournament
           </Button>
         </div>

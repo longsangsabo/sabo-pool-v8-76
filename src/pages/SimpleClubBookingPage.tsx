@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
@@ -14,19 +13,25 @@ const SimpleClubBookingPage = () => {
     timeSlot: '',
     tableNumber: '',
     duration: '1',
-    notificationMethod: 'sms'
+    notificationMethod: 'sms',
   });
   const [loading, setLoading] = useState(false);
   const [availableTables, setAvailableTables] = useState<number[]>([]);
   const [bookingStep, setBookingStep] = useState(1);
   const [isHighContrast, setIsHighContrast] = useState(false);
-  const [connectionSpeed, setConnectionSpeed] = useState<'fast' | 'slow'>('fast');
+  const [connectionSpeed, setConnectionSpeed] = useState<'fast' | 'slow'>(
+    'fast'
+  );
 
   // Simulate connection speed detection
   useEffect(() => {
     const connection = (navigator as any).connection;
     if (connection) {
-      setConnectionSpeed(connection.effectiveType === '3g' || connection.effectiveType === '2g' ? 'slow' : 'fast');
+      setConnectionSpeed(
+        connection.effectiveType === '3g' || connection.effectiveType === '2g'
+          ? 'slow'
+          : 'fast'
+      );
     }
   }, []);
 
@@ -35,11 +40,14 @@ const SimpleClubBookingPage = () => {
     if (formData.date && formData.timeSlot) {
       setLoading(true);
       const delay = connectionSpeed === 'slow' ? 2000 : 500;
-      
+
       setTimeout(() => {
         const totalTables = 12;
         const occupiedTables = Math.floor(Math.random() * 6) + 1;
-        const available = Array.from({ length: totalTables - occupiedTables }, (_, i) => i + 1);
+        const available = Array.from(
+          { length: totalTables - occupiedTables },
+          (_, i) => i + 1
+        );
         setAvailableTables(available);
         setLoading(false);
       }, delay);
@@ -80,31 +88,34 @@ const SimpleClubBookingPage = () => {
 
   const calculatePrice = () => {
     if (!formData.timeSlot || !formData.duration) return 0;
-    
+
     const hour = parseInt(formData.timeSlot.split(':')[0]);
     const duration = parseInt(formData.duration);
     const pricePerHour = hour < 17 ? 25000 : 35000;
-    
+
     return pricePerHour * duration;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setLoading(true);
-    
+
     try {
       const delay = connectionSpeed === 'slow' ? 3000 : 1500;
       await new Promise(resolve => setTimeout(resolve, delay));
-      
-      toast.success(`🎉 Đặt bàn thành công! Bàn ${formData.tableNumber} - ${formData.date ? formData.date.toLocaleDateString('vi-VN') : ''} lúc ${formData.timeSlot}`);
-      
+
+      toast.success(
+        `🎉 Đặt bàn thành công! Bàn ${formData.tableNumber} - ${formData.date ? formData.date.toLocaleDateString('vi-VN') : ''} lúc ${formData.timeSlot}`
+      );
+
       setBookingStep(3);
-      
     } catch (error) {
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại hoặc gọi hotline: 0901 234 567');
+      toast.error(
+        'Có lỗi xảy ra. Vui lòng thử lại hoặc gọi hotline: 0901 234 567'
+      );
     } finally {
       setLoading(false);
     }
@@ -119,16 +130,16 @@ const SimpleClubBookingPage = () => {
         timeSlot: '',
         tableNumber: '',
         duration: '1',
-        notificationMethod: 'sms'
+        notificationMethod: 'sms',
       });
       setBookingStep(1);
       toast.success('Đã hủy đặt bàn thành công');
     }
   };
 
-  const themeClasses = isHighContrast ? 
-    'bg-black text-white' : 
-    'bg-gradient-to-br from-green-900 via-green-800 to-green-900';
+  const themeClasses = isHighContrast
+    ? 'bg-black text-white'
+    : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900';
 
   if (bookingStep === 3) {
     return (
@@ -145,7 +156,10 @@ const SimpleClubBookingPage = () => {
     <>
       <Helmet>
         <title>Đặt bàn billiards - SABO Billiards</title>
-        <meta name="description" content="Đặt bàn billiards online nhanh chóng, dễ dàng tại SABO Billiards" />
+        <meta
+          name='description'
+          content='Đặt bàn billiards online nhanh chóng, dễ dàng tại SABO Billiards'
+        />
       </Helmet>
 
       <div className={`min-h-screen ${themeClasses}`}>

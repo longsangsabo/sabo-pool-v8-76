@@ -1,5 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,14 +19,15 @@ interface ChallengeConversationModalProps {
   opponentName?: string;
 }
 
-export function ChallengeConversationModal({ 
-  open, 
-  onOpenChange, 
-  challengeId, 
-  opponentName 
+export function ChallengeConversationModal({
+  open,
+  onOpenChange,
+  challengeId,
+  opponentName,
 }: ChallengeConversationModalProps) {
   const { user } = useAuth();
-  const { getChallengeConversations, sendMessage, isSendingMessage } = useChallengeWorkflow();
+  const { getChallengeConversations, sendMessage, isSendingMessage } =
+    useChallengeWorkflow();
   const { data: conversations = [] } = getChallengeConversations(challengeId);
   const [message, setMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -48,35 +54,37 @@ export function ChallengeConversationModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md h-[500px] flex flex-col">
+      <DialogContent className='max-w-md h-[500px] flex flex-col'>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className='flex items-center gap-2'>
             Chat với {opponentName || 'Đối thủ'}
           </DialogTitle>
         </DialogHeader>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-3 p-4">
+        <div className='flex-1 overflow-y-auto space-y-3 p-4'>
           {conversations.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">
+            <div className='text-center text-muted-foreground py-8'>
               Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!
             </div>
           ) : (
-            conversations.map((conversation) => {
+            conversations.map(conversation => {
               const isOwn = conversation.sender_id === user?.id;
               return (
                 <div
                   key={conversation.id}
                   className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}
                 >
-                  <Avatar className="w-8 h-8 flex-shrink-0">
+                  <Avatar className='w-8 h-8 flex-shrink-0'>
                     <AvatarImage src={conversation.sender?.avatar_url} />
                     <AvatarFallback>
                       {conversation.sender?.display_name?.[0] || '?'}
                     </AvatarFallback>
                   </Avatar>
-                  
-                  <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[70%]`}>
+
+                  <div
+                    className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[70%]`}
+                  >
                     <div
                       className={`px-3 py-2 rounded-lg text-sm ${
                         isOwn
@@ -86,11 +94,14 @@ export function ChallengeConversationModal({
                     >
                       {conversation.message}
                     </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {new Date(conversation.created_at).toLocaleTimeString('vi-VN', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                    <div className='text-xs text-muted-foreground mt-1'>
+                      {new Date(conversation.created_at).toLocaleTimeString(
+                        'vi-VN',
+                        {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }
+                      )}
                     </div>
                   </div>
                 </div>
@@ -101,20 +112,20 @@ export function ChallengeConversationModal({
         </div>
 
         {/* Message Input */}
-        <form onSubmit={handleSendMessage} className="flex gap-2 p-4 pt-0">
+        <form onSubmit={handleSendMessage} className='flex gap-2 p-4 pt-0'>
           <Input
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Nhập tin nhắn..."
+            onChange={e => setMessage(e.target.value)}
+            placeholder='Nhập tin nhắn...'
             disabled={isSendingMessage}
-            className="flex-1"
+            className='flex-1'
           />
           <Button
-            type="submit"
+            type='submit'
             disabled={!message.trim() || isSendingMessage}
-            size="icon"
+            size='icon'
           >
-            <Send className="w-4 h-4" />
+            <Send className='w-4 h-4' />
           </Button>
         </form>
       </DialogContent>

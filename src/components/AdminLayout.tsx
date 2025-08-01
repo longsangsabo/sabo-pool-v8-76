@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { AdminResponsiveLayout } from './layouts/AdminResponsiveLayout';
@@ -9,9 +8,7 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   return (
-    <AdminResponsiveLayout>
-      {children || <Outlet />}
-    </AdminResponsiveLayout>
+    <AdminResponsiveLayout>{children || <Outlet />}</AdminResponsiveLayout>
   );
 };
 

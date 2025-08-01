@@ -84,9 +84,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           event: 'INSERT',
           schema: 'public',
           table: 'spa_points_log',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const newTransaction = payload.new as SPATransaction;
           setTransactions(prev => [newTransaction, ...prev.slice(0, 49)]);
           // Invalidate user profile to refresh SPA balance
@@ -102,12 +102,28 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
 
   const filters = [
     { id: 'all', name: 'Tất cả', icon: <Filter className='h-4 w-4' /> },
-    { id: 'tournament', name: 'Giải đấu', icon: <Trophy className='h-4 w-4' /> },
-    { id: 'challenge', name: 'Thách đấu', icon: <Swords className='h-4 w-4' /> },
-    { id: 'checkin', name: 'Check-in', icon: <CalendarCheck className='h-4 w-4' /> },
+    {
+      id: 'tournament',
+      name: 'Giải đấu',
+      icon: <Trophy className='h-4 w-4' />,
+    },
+    {
+      id: 'challenge',
+      name: 'Thách đấu',
+      icon: <Swords className='h-4 w-4' />,
+    },
+    {
+      id: 'checkin',
+      name: 'Check-in',
+      icon: <CalendarCheck className='h-4 w-4' />,
+    },
     { id: 'video', name: 'Video', icon: <Video className='h-4 w-4' /> },
     { id: 'registration', name: 'Đăng ký', icon: <Gift className='h-4 w-4' /> },
-    { id: 'decay', name: 'Giảm điểm', icon: <TrendingDown className='h-4 w-4' /> },
+    {
+      id: 'decay',
+      name: 'Giảm điểm',
+      icon: <TrendingDown className='h-4 w-4' />,
+    },
   ];
 
   // Remove status filters since SPA transactions are always completed
@@ -179,28 +195,33 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
         transaction.description
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        transaction.id
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+        transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesTypeFilter =
         selectedFilter === 'all' || transaction.source_type === selectedFilter;
 
       return matchesSearch && matchesTypeFilter;
     })
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
   const exportTransactions = () => {
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + "Thời gian,Loại,Mô tả,Điểm\n"
-      + filteredTransactions.map(t => 
-          `${new Date(t.created_at).toLocaleString('vi-VN')},${getTransactionTypeName(t.source_type)},${t.description},${t.points_earned}`
-        ).join("\n");
-    
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      'Thời gian,Loại,Mô tả,Điểm\n' +
+      filteredTransactions
+        .map(
+          t =>
+            `${new Date(t.created_at).toLocaleString('vi-VN')},${getTransactionTypeName(t.source_type)},${t.description},${t.points_earned}`
+        )
+        .join('\n');
+
     const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "spa_transactions.csv");
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'spa_transactions.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -254,7 +275,6 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
               </button>
             ))}
           </div>
-
         </CardContent>
       </Card>
 
@@ -273,7 +293,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                 className='flex items-center gap-4 p-4 rounded-lg border hover:shadow-md transition-shadow'
               >
                 {/* Transaction Icon */}
-                <div className={`p-2 rounded-full ${getSourceColor(transaction.source_type)}`}>
+                <div
+                  className={`p-2 rounded-full ${getSourceColor(transaction.source_type)}`}
+                >
                   {getTransactionIcon(transaction.source_type)}
                 </div>
 
@@ -302,7 +324,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                     <div className='flex items-center gap-1'>
                       <Calendar className='h-3 w-3' />
                       <span>
-                        {new Date(transaction.created_at).toLocaleDateString('vi-VN')} {new Date(transaction.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(transaction.created_at).toLocaleDateString(
+                          'vi-VN'
+                        )}{' '}
+                        {new Date(transaction.created_at).toLocaleTimeString(
+                          'vi-VN',
+                          { hour: '2-digit', minute: '2-digit' }
+                        )}
                       </span>
                     </div>
                     {transaction.source_id && (
@@ -315,7 +343,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                 <div className='text-right'>
                   <div
                     className={`text-lg font-bold ${
-                      transaction.points_earned >= 0 ? 'text-green-600' : 'text-red-600'
+                      transaction.points_earned >= 0
+                        ? 'text-green-600'
+                        : 'text-red-600'
                     }`}
                   >
                     {formatPoints(transaction.points_earned)}
@@ -326,9 +356,11 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
 
             {filteredTransactions.length === 0 && !isLoading && (
               <div className='text-center py-8 text-gray-500'>
-                <Trophy className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                <Trophy className='h-12 w-12 mx-auto mb-3 opacity-50' />
                 <p>Chưa có giao dịch SPA nào</p>
-                <p className="text-sm">Tham gia thách đấu hoặc giải đấu để bắt đầu kiếm SPA points!</p>
+                <p className='text-sm'>
+                  Tham gia thách đấu hoặc giải đấu để bắt đầu kiếm SPA points!
+                </p>
               </div>
             )}
           </div>

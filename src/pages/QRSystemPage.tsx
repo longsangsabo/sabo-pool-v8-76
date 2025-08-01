@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   Card,
@@ -89,7 +88,7 @@ export const QRSystemPage: React.FC = () => {
         table_name: tableName,
         data: JSON.stringify({ clubId, tableNumber, tableName }),
       };
-      
+
       await createQRCode(qrData);
       toast({
         title: 'Tạo QR code thành công',
@@ -217,9 +216,7 @@ export const QRSystemPage: React.FC = () => {
                   <p>Chưa có trận đấu nào</p>
                 </div>
               ) : (
-                <div className='space-y-3'>
-                  {/* Render matches */}
-                </div>
+                <div className='space-y-3'>{/* Render matches */}</div>
               )}
             </CardContent>
           </Card>

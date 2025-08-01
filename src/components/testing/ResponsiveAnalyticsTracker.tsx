@@ -5,7 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Activity, TrendingUp, Users, Clock, Smartphone, Tablet, Monitor } from 'lucide-react';
+import {
+  Activity,
+  TrendingUp,
+  Users,
+  Clock,
+  Smartphone,
+  Tablet,
+  Monitor,
+} from 'lucide-react';
 
 interface AnalyticsData {
   deviceType: 'mobile' | 'tablet' | 'desktop';
@@ -49,12 +57,14 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
     deviceDistribution: { mobile: 0, tablet: 0, desktop: 0 },
     averageTimeOnPage: 0,
     commonBreakpointTransitions: [],
-    performanceIssues: 0
+    performanceIssues: 0,
   });
   const [sessionStartTime] = useState(Date.now());
   const [renderCount, setRenderCount] = useState(0);
   const [breakpointChanges, setBreakpointChanges] = useState(0);
-  const [previousBreakpoint, setPreviousBreakpoint] = useState(responsive.breakpoint);
+  const [previousBreakpoint, setPreviousBreakpoint] = useState(
+    responsive.breakpoint
+  );
 
   // Generate unique session ID
   const generateSessionId = () => {
@@ -72,9 +82,11 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
     if (previousBreakpoint !== responsive.breakpoint) {
       setBreakpointChanges(prev => prev + 1);
       setPreviousBreakpoint(responsive.breakpoint);
-      
+
       // Log breakpoint transition
-      console.log(`📊 Breakpoint transition: ${previousBreakpoint} → ${responsive.breakpoint}`);
+      console.log(
+        `📊 Breakpoint transition: ${previousBreakpoint} → ${responsive.breakpoint}`
+      );
     }
 
     // Update session data
@@ -84,7 +96,7 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       timestamp: Date.now(),
       screenDimensions: {
         width: responsive.width,
-        height: responsive.height
+        height: responsive.height,
       },
       userAgent: navigator.userAgent,
       pageUrl: window.location.href,
@@ -94,8 +106,11 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       performanceMetrics: {
         renderTime: performance.now(),
         layoutShifts: 0, // Would be tracked via PerformanceObserver
-        memoryUsage: 'memory' in performance ? (performance as any).memory?.usedJSHeapSize / 1048576 || 0 : 0
-      }
+        memoryUsage:
+          'memory' in performance
+            ? (performance as any).memory?.usedJSHeapSize / 1048576 || 0
+            : 0,
+      },
     };
 
     setSessionData(currentSessionData);
@@ -117,8 +132,8 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       performanceMetrics: {
         renderTime: 0,
         layoutShifts: 0,
-        memoryUsage: 0
-      }
+        memoryUsage: 0,
+      },
     });
 
     console.log('📊 Started responsive analytics tracking');
@@ -127,7 +142,7 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
   // Stop tracking and generate report
   const stopTrackingAndReport = () => {
     setIsTracking(false);
-    
+
     if (sessionData) {
       // Generate analytics report
       const report = {
@@ -135,14 +150,14 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
         timeOnPage: Date.now() - sessionStartTime,
         finalBreakpoint: responsive.breakpoint,
         totalBreakpointChanges: breakpointChanges,
-        totalRenders: renderCount
+        totalRenders: renderCount,
       };
 
       console.log('📊 Responsive Analytics Report:', report);
-      
+
       // Send to analytics service (example)
       sendToAnalyticsService(report);
-      
+
       // Update local stats
       updateLocalStats(report);
     }
@@ -152,7 +167,7 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
   const sendToAnalyticsService = (data: any) => {
     // Example: Send to Google Analytics, Mixpanel, etc.
     console.log('📤 Sending to analytics service:', data);
-    
+
     // Example implementation:
     // gtag('event', 'responsive_behavior', {
     //   device_type: data.deviceType,
@@ -168,20 +183,27 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       totalSessions: prev.totalSessions + 1,
       deviceDistribution: {
         ...prev.deviceDistribution,
-        [data.deviceType]: prev.deviceDistribution[data.deviceType] + 1
+        [data.deviceType]: prev.deviceDistribution[data.deviceType] + 1,
       },
-      averageTimeOnPage: ((prev.averageTimeOnPage * prev.totalSessions) + data.timeOnPage) / (prev.totalSessions + 1),
+      averageTimeOnPage:
+        (prev.averageTimeOnPage * prev.totalSessions + data.timeOnPage) /
+        (prev.totalSessions + 1),
       commonBreakpointTransitions: prev.commonBreakpointTransitions,
-      performanceIssues: prev.performanceIssues + (data.totalRenders > 20 ? 1 : 0)
+      performanceIssues:
+        prev.performanceIssues + (data.totalRenders > 20 ? 1 : 0),
     }));
   };
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case 'mobile': return <Smartphone className="h-4 w-4" />;
-      case 'tablet': return <Tablet className="h-4 w-4" />;
-      case 'desktop': return <Monitor className="h-4 w-4" />;
-      default: return <Activity className="h-4 w-4" />;
+      case 'mobile':
+        return <Smartphone className='h-4 w-4' />;
+      case 'tablet':
+        return <Tablet className='h-4 w-4' />;
+      case 'desktop':
+        return <Monitor className='h-4 w-4' />;
+      default:
+        return <Activity className='h-4 w-4' />;
     }
   };
 
@@ -197,151 +219,180 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <Activity className='h-5 w-5' />
             <CardTitle>Responsive Analytics Tracker</CardTitle>
           </div>
-          <div className="flex gap-2">
-            <Button 
-              onClick={startTracking} 
+          <div className='flex gap-2'>
+            <Button
+              onClick={startTracking}
               disabled={isTracking}
-              variant="default"
-              size="sm"
+              variant='default'
+              size='sm'
             >
               Start Tracking
             </Button>
-            <Button 
-              onClick={stopTrackingAndReport} 
+            <Button
+              onClick={stopTrackingAndReport}
               disabled={!isTracking}
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
             >
               Stop & Report
             </Button>
           </div>
         </div>
       </CardHeader>
-      
-      <CardContent className="space-y-6">
+
+      <CardContent className='space-y-6'>
         {/* Current Session */}
         {sessionData && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Current Session</h3>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="flex items-center justify-center gap-1 mb-1">
+          <div className='space-y-4'>
+            <h3 className='text-lg font-semibold'>Current Session</h3>
+
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+              <div className='text-center p-3 bg-blue-50 rounded-lg'>
+                <div className='flex items-center justify-center gap-1 mb-1'>
                   {getDeviceIcon(sessionData.deviceType)}
-                  <span className="text-sm font-medium">Device</span>
+                  <span className='text-sm font-medium'>Device</span>
                 </div>
-                <Badge variant="outline">{sessionData.deviceType}</Badge>
+                <Badge variant='outline'>{sessionData.deviceType}</Badge>
               </div>
-              
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <Clock className="h-4 w-4 text-green-600" />
-                  <span className="text-sm font-medium">Time</span>
+
+              <div className='text-center p-3 bg-green-50 rounded-lg'>
+                <div className='flex items-center justify-center gap-1 mb-1'>
+                  <Clock className='h-4 w-4 text-green-600' />
+                  <span className='text-sm font-medium'>Time</span>
                 </div>
-                <div className="text-lg font-bold text-green-600">
+                <div className='text-lg font-bold text-green-600'>
                   {formatTime(Date.now() - sessionStartTime)}
                 </div>
               </div>
-              
-              <div className="text-center p-3 bg-orange-50 rounded-lg">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <TrendingUp className="h-4 w-4 text-orange-600" />
-                  <span className="text-sm font-medium">Changes</span>
+
+              <div className='text-center p-3 bg-orange-50 rounded-lg'>
+                <div className='flex items-center justify-center gap-1 mb-1'>
+                  <TrendingUp className='h-4 w-4 text-orange-600' />
+                  <span className='text-sm font-medium'>Changes</span>
                 </div>
-                <div className="text-lg font-bold text-orange-600">
+                <div className='text-lg font-bold text-orange-600'>
                   {breakpointChanges}
                 </div>
               </div>
-              
-              <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <Activity className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm font-medium">Renders</span>
+
+              <div className='text-center p-3 bg-purple-50 rounded-lg'>
+                <div className='flex items-center justify-center gap-1 mb-1'>
+                  <Activity className='h-4 w-4 text-purple-600' />
+                  <span className='text-sm font-medium'>Renders</span>
                 </div>
-                <div className="text-lg font-bold text-purple-600">
+                <div className='text-lg font-bold text-purple-600'>
                   {renderCount}
                 </div>
               </div>
             </div>
-            
-            <div className="text-sm text-muted-foreground">
+
+            <div className='text-sm text-muted-foreground'>
               <div>Session ID: {sessionData.sessionId}</div>
-              <div>Screen: {sessionData.screenDimensions.width}×{sessionData.screenDimensions.height}</div>
+              <div>
+                Screen: {sessionData.screenDimensions.width}×
+                {sessionData.screenDimensions.height}
+              </div>
             </div>
           </div>
         )}
 
         {/* Historical Stats */}
         {stats.totalSessions > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Session Statistics</h3>
-            
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-3 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-bold">{stats.totalSessions}</div>
-                <div className="text-sm text-muted-foreground">Total Sessions</div>
+          <div className='space-y-4'>
+            <h3 className='text-lg font-semibold'>Session Statistics</h3>
+
+            <div className='grid grid-cols-3 gap-4'>
+              <div className='text-center p-3 bg-muted/50 rounded-lg'>
+                <div className='text-2xl font-bold'>{stats.totalSessions}</div>
+                <div className='text-sm text-muted-foreground'>
+                  Total Sessions
+                </div>
               </div>
-              
-              <div className="text-center p-3 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-bold">{formatTime(stats.averageTimeOnPage)}</div>
-                <div className="text-sm text-muted-foreground">Avg Time</div>
+
+              <div className='text-center p-3 bg-muted/50 rounded-lg'>
+                <div className='text-2xl font-bold'>
+                  {formatTime(stats.averageTimeOnPage)}
+                </div>
+                <div className='text-sm text-muted-foreground'>Avg Time</div>
               </div>
-              
-              <div className="text-center p-3 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-bold">{stats.performanceIssues}</div>
-                <div className="text-sm text-muted-foreground">Performance Issues</div>
+
+              <div className='text-center p-3 bg-muted/50 rounded-lg'>
+                <div className='text-2xl font-bold'>
+                  {stats.performanceIssues}
+                </div>
+                <div className='text-sm text-muted-foreground'>
+                  Performance Issues
+                </div>
               </div>
             </div>
-            
+
             {/* Device Distribution */}
-            <div className="space-y-3">
-              <h4 className="font-medium">Device Distribution</h4>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="h-4 w-4" />
+            <div className='space-y-3'>
+              <h4 className='font-medium'>Device Distribution</h4>
+
+              <div className='space-y-2'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <Smartphone className='h-4 w-4' />
                     <span>Mobile</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Progress 
-                      value={(stats.deviceDistribution.mobile / stats.totalSessions) * 100} 
-                      className="w-24 h-2"
+                  <div className='flex items-center gap-2'>
+                    <Progress
+                      value={
+                        (stats.deviceDistribution.mobile /
+                          stats.totalSessions) *
+                        100
+                      }
+                      className='w-24 h-2'
                     />
-                    <span className="text-sm">{stats.deviceDistribution.mobile}</span>
+                    <span className='text-sm'>
+                      {stats.deviceDistribution.mobile}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Tablet className="h-4 w-4" />
+
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <Tablet className='h-4 w-4' />
                     <span>Tablet</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Progress 
-                      value={(stats.deviceDistribution.tablet / stats.totalSessions) * 100} 
-                      className="w-24 h-2"
+                  <div className='flex items-center gap-2'>
+                    <Progress
+                      value={
+                        (stats.deviceDistribution.tablet /
+                          stats.totalSessions) *
+                        100
+                      }
+                      className='w-24 h-2'
                     />
-                    <span className="text-sm">{stats.deviceDistribution.tablet}</span>
+                    <span className='text-sm'>
+                      {stats.deviceDistribution.tablet}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Monitor className="h-4 w-4" />
+
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <Monitor className='h-4 w-4' />
                     <span>Desktop</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Progress 
-                      value={(stats.deviceDistribution.desktop / stats.totalSessions) * 100} 
-                      className="w-24 h-2"
+                  <div className='flex items-center gap-2'>
+                    <Progress
+                      value={
+                        (stats.deviceDistribution.desktop /
+                          stats.totalSessions) *
+                        100
+                      }
+                      className='w-24 h-2'
                     />
-                    <span className="text-sm">{stats.deviceDistribution.desktop}</span>
+                    <span className='text-sm'>
+                      {stats.deviceDistribution.desktop}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -351,13 +402,17 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
 
         {/* Tracking Instructions */}
         <Alert>
-          <Activity className="h-4 w-4" />
+          <Activity className='h-4 w-4' />
           <AlertDescription>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <strong>How to use:</strong>
-              <ol className="list-decimal list-inside space-y-1 text-sm">
-                <li>Click "Start Tracking" to begin monitoring responsive behavior</li>
-                <li>Resize your browser window to test different breakpoints</li>
+              <ol className='list-decimal list-inside space-y-1 text-sm'>
+                <li>
+                  Click "Start Tracking" to begin monitoring responsive behavior
+                </li>
+                <li>
+                  Resize your browser window to test different breakpoints
+                </li>
                 <li>Navigate through the application normally</li>
                 <li>Click "Stop & Report" to generate analytics data</li>
               </ol>

@@ -23,22 +23,24 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
   onAutoFill,
   variant = 'outline',
   size = 'default',
-  className = ''
+  className = '',
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleAutoFill = async () => {
     setIsLoading(true);
-    
+
     try {
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Lỗi xác thực",
-          description: "Vui lòng đăng nhập để sử dụng tính năng này",
-          variant: "destructive"
+          title: 'Lỗi xác thực',
+          description: 'Vui lòng đăng nhập để sử dụng tính năng này',
+          variant: 'destructive',
         });
         return;
       }
@@ -113,19 +115,18 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
       onAutoFill(autoFillData);
 
       toast({
-        title: "Tự động điền thành công",
-        description: clubProfile 
+        title: 'Tự động điền thành công',
+        description: clubProfile
           ? `Đã điền thông tin từ ${clubProfile.club_name}`
-          : "Đã điền thông tin cơ bản",
-        duration: 3000
+          : 'Đã điền thông tin cơ bản',
+        duration: 3000,
       });
-
     } catch (error) {
       console.error('Auto-fill error:', error);
       toast({
-        title: "Lỗi tự động điền",
-        description: "Không thể tự động điền thông tin. Vui lòng thử lại.",
-        variant: "destructive"
+        title: 'Lỗi tự động điền',
+        description: 'Không thể tự động điền thông tin. Vui lòng thử lại.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -134,7 +135,7 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
 
   return (
     <Button
-      type="button"
+      type='button'
       variant={variant}
       size={size}
       onClick={handleAutoFill}
@@ -142,9 +143,9 @@ export const AutoFillButton: React.FC<AutoFillButtonProps> = ({
       className={`flex items-center gap-2 ${className}`}
     >
       {isLoading ? (
-        <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+        <div className='animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full' />
       ) : (
-        <Wand2 className="w-4 h-4" />
+        <Wand2 className='w-4 h-4' />
       )}
       {isLoading ? 'Đang điền...' : 'Tự động điền từ CLB'}
     </Button>

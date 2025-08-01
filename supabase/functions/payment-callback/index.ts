@@ -56,7 +56,7 @@ async function verifySecureHash(
 
 serve(async req => {
   console.log('Payment callback received');
-  
+
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -109,7 +109,11 @@ serve(async req => {
     const paymentStatus = vnp_ResponseCode === '00' ? 'success' : 'failed';
     const amount = vnp_Amount ? parseInt(vnp_Amount) / 100 : 0; // Convert back from VNPay format
 
-    console.log('Updating transaction:', { vnp_TxnRef, paymentStatus, vnp_ResponseCode });
+    console.log('Updating transaction:', {
+      vnp_TxnRef,
+      paymentStatus,
+      vnp_ResponseCode,
+    });
 
     const { error: updateError } = await supabase
       .from('payment_transactions')
@@ -140,14 +144,20 @@ serve(async req => {
       if (fetchError) {
         console.error('Failed to fetch transaction details:', fetchError);
       } else if (transaction) {
-        console.log('Processing successful payment for user:', transaction.user_id);
+        console.log(
+          'Processing successful payment for user:',
+          transaction.user_id
+        );
 
         // Update wallet balance
-        const { error: walletError } = await supabase.rpc('update_wallet_balance', {
-          p_user_id: transaction.user_id,
-          p_amount: amount,
-          p_transaction_type: 'deposit'
-        });
+        const { error: walletError } = await supabase.rpc(
+          'update_wallet_balance',
+          {
+            p_user_id: transaction.user_id,
+            p_amount: amount,
+            p_transaction_type: 'deposit',
+          }
+        );
 
         if (walletError) {
           console.error('Failed to update wallet:', walletError);
@@ -169,7 +179,10 @@ serve(async req => {
           if (upgradeError) {
             console.error('Failed to upgrade membership:', upgradeError);
           } else {
-            console.log('Membership upgraded successfully for user:', transaction.user_id);
+            console.log(
+              'Membership upgraded successfully for user:',
+              transaction.user_id
+            );
           }
         }
 
@@ -179,12 +192,12 @@ serve(async req => {
           type: 'payment_success',
           title: 'Thanh toán thành công',
           message: `Giao dịch ${vnp_TxnRef} đã được xử lý thành công. Số tiền: ${amount.toLocaleString('vi-VN')} VNĐ`,
-          priority: 'high'
+          priority: 'high',
         });
       }
     } else {
       console.log('Payment failed with code:', vnp_ResponseCode);
-      
+
       // Get user ID for failed payment notification
       const { data: transaction } = await supabase
         .from('payment_transactions')
@@ -198,13 +211,14 @@ serve(async req => {
           type: 'payment_failed',
           title: 'Thanh toán thất bại',
           message: `Giao dịch ${vnp_TxnRef} không thành công. Mã lỗi: ${vnp_ResponseCode}`,
-          priority: 'normal'
+          priority: 'normal',
         });
       }
     }
 
     // Redirect to frontend with result
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
+    const siteUrl =
+      Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
     const redirectUrl = `${siteUrl}/payment/result?status=${paymentStatus}&ref=${vnp_TxnRef}&amount=${amount}`;
 
     console.log('Redirecting to:', redirectUrl);
@@ -213,7 +227,8 @@ serve(async req => {
   } catch (error) {
     console.error('Payment callback error:', error);
 
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
+    const siteUrl =
+      Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
     const redirectUrl = `${siteUrl}/payment/result?status=error&message=${encodeURIComponent(error.message)}`;
 
     return Response.redirect(redirectUrl, 302);

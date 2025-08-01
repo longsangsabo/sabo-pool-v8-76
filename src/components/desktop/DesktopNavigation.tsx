@@ -1,18 +1,17 @@
-
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  Trophy, 
-  Swords, 
-  Users, 
+import {
+  Home,
+  Trophy,
+  Swords,
+  Users,
   Calendar,
   BarChart3,
   Wallet,
   Settings,
   Heart,
   Store,
-  Shield
+  Shield,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -34,27 +33,28 @@ export const DesktopNavigation: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="w-64 min-h-screen bg-card border-r border-border">
-      <div className="p-4">
-        <div className="space-y-2">
-          {navigationItems.map((item) => {
+    <nav className='w-64 min-h-screen bg-card border-r border-border'>
+      <div className='p-4'>
+        <div className='space-y-2'>
+          {navigationItems.map(item => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.href || 
-                           (item.href !== '/' && location.pathname.startsWith(item.href));
+            const isActive =
+              location.pathname === item.href ||
+              (item.href !== '/' && location.pathname.startsWith(item.href));
 
             return (
               <NavLink
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors",
+                  'flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors',
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
               >
-                <Icon className="h-5 w-5" />
-                <span className="font-medium">{item.name}</span>
+                <Icon className='h-5 w-5' />
+                <span className='font-medium'>{item.name}</span>
               </NavLink>
             );
           })}

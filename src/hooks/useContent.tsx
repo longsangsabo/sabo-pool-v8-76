@@ -50,8 +50,8 @@ export const useContent = () => {
           published_at: new Date().toISOString(),
           view_count: 150,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ];
       return mockPosts;
     },
@@ -65,12 +65,13 @@ export const useContent = () => {
         {
           id: '1',
           question: 'Làm thế nào để tham gia giải đấu?',
-          answer: 'Bạn có thể đăng ký tham gia giải đấu thông qua trang Tournaments.',
+          answer:
+            'Bạn có thể đăng ký tham gia giải đấu thông qua trang Tournaments.',
           category: 'Giải đấu',
           order_index: 1,
           status: 'active',
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ];
       return mockFAQs;
     },
@@ -87,8 +88,8 @@ export const useContent = () => {
           content: 'Các quy định chung của sân bi-a...',
           category: 'Chung',
           status: 'active',
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ];
       return mockRules;
     },
@@ -104,7 +105,7 @@ export const useContent = () => {
         id: Date.now().toString(),
         view_count: 0,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       console.log('Mock create post:', newPost);

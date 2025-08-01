@@ -23,9 +23,9 @@ const ChallengeNotificationSystem = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'challenges',
-          filter: `opponent_id=eq.${user.id}`
+          filter: `opponent_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           handleNewChallenge(payload.new);
         }
       )
@@ -35,9 +35,9 @@ const ChallengeNotificationSystem = () => {
           event: 'UPDATE',
           schema: 'public',
           table: 'challenges',
-          filter: `challenger_id=eq.${user.id}`
+          filter: `challenger_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           handleChallengeResponse(payload.new);
         }
       )
@@ -51,9 +51,9 @@ const ChallengeNotificationSystem = () => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'matches'
+          table: 'matches',
         },
-        (payload) => {
+        payload => {
           handleNewMatch(payload.new);
         }
       )
@@ -93,21 +93,18 @@ const ChallengeNotificationSystem = () => {
         .single();
 
       const challengerName = profile?.full_name || 'Một người chơi';
-      
-      toast.info(
-        `${challengerName} đã gửi thách đấu cho bạn!`,
-        {
-          description: `Mức cược: ${challenge.bet_points} điểm`,
-          duration: 5000,
-          action: {
-            label: 'Xem',
-            onClick: () => {
-              // Navigate to challenges tab
-              window.location.hash = '#challenges';
-            }
-          }
-        }
-      );
+
+      toast.info(`${challengerName} đã gửi thách đấu cho bạn!`, {
+        description: `Mức cược: ${challenge.bet_points} điểm`,
+        duration: 5000,
+        action: {
+          label: 'Xem',
+          onClick: () => {
+            // Navigate to challenges tab
+            window.location.hash = '#challenges';
+          },
+        },
+      });
 
       setHasUnread(true);
     } catch (error) {
@@ -125,20 +122,17 @@ const ChallengeNotificationSystem = () => {
           .single();
 
         const opponentName = profile?.full_name || 'Đối thủ';
-        
-        toast.success(
-          `${opponentName} đã chấp nhận thách đấu!`,
-          {
-            description: 'Trận đấu đã được tạo. Hãy chuẩn bị!',
-            duration: 5000,
-            action: {
-              label: 'Xem lịch thi đấu',
-              onClick: () => {
-                window.location.hash = '#challenges';
-              }
-            }
-          }
-        );
+
+        toast.success(`${opponentName} đã chấp nhận thách đấu!`, {
+          description: 'Trận đấu đã được tạo. Hãy chuẩn bị!',
+          duration: 5000,
+          action: {
+            label: 'Xem lịch thi đấu',
+            onClick: () => {
+              window.location.hash = '#challenges';
+            },
+          },
+        });
       } catch (error) {
         console.error('Error handling challenge response:', error);
       }
@@ -151,14 +145,11 @@ const ChallengeNotificationSystem = () => {
           .single();
 
         const opponentName = profile?.full_name || 'Đối thủ';
-        
-        toast.error(
-          `${opponentName} đã từ chối thách đấu`,
-          {
-            description: challenge.response_message || 'Không có lý do cụ thể',
-            duration: 4000
-          }
-        );
+
+        toast.error(`${opponentName} đã từ chối thách đấu`, {
+          description: challenge.response_message || 'Không có lý do cụ thể',
+          duration: 4000,
+        });
       } catch (error) {
         console.error('Error handling challenge decline:', error);
       }
@@ -166,12 +157,16 @@ const ChallengeNotificationSystem = () => {
   };
 
   const handleNewMatch = async (match: any) => {
-    if (!user || (match.player1_id !== user.id && match.player2_id !== user.id)) {
+    if (
+      !user ||
+      (match.player1_id !== user.id && match.player2_id !== user.id)
+    ) {
       return;
     }
 
-    const opponentId = match.player1_id === user.id ? match.player2_id : match.player1_id;
-    
+    const opponentId =
+      match.player1_id === user.id ? match.player2_id : match.player1_id;
+
     try {
       const { data: profile } = await supabase
         .from('profiles')
@@ -180,7 +175,7 @@ const ChallengeNotificationSystem = () => {
         .single();
 
       const opponentName = profile?.full_name || 'Đối thủ';
-      
+
       // Set up match reminder (1 hour before)
       if (match.played_at) {
         const matchTime = new Date(match.played_at);
@@ -189,7 +184,7 @@ const ChallengeNotificationSystem = () => {
 
         if (reminderTime > now) {
           const timeoutDuration = reminderTime.getTime() - now.getTime();
-          
+
           setTimeout(() => {
             toast.info(
               `Nhắc nhở: Trận đấu với ${opponentName} sẽ bắt đầu trong 1 giờ!`,
@@ -200,8 +195,8 @@ const ChallengeNotificationSystem = () => {
                   label: 'Xem chi tiết',
                   onClick: () => {
                     window.location.hash = '#challenges';
-                  }
-                }
+                  },
+                },
               }
             );
           }, timeoutDuration);
@@ -214,13 +209,16 @@ const ChallengeNotificationSystem = () => {
 
   // Auto-expire challenges
   useEffect(() => {
-    const expireInterval = setInterval(async () => {
-      try {
-        await supabase.rpc('expire_old_challenges');
-      } catch (error) {
-        console.error('Error expiring challenges:', error);
-      }
-    }, 5 * 60 * 1000); // Check every 5 minutes
+    const expireInterval = setInterval(
+      async () => {
+        try {
+          await supabase.rpc('expire_old_challenges');
+        } catch (error) {
+          console.error('Error expiring challenges:', error);
+        }
+      },
+      5 * 60 * 1000
+    ); // Check every 5 minutes
 
     return () => clearInterval(expireInterval);
   }, []);

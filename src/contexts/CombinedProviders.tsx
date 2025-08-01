@@ -1,4 +1,3 @@
-
 import React, { memo } from 'react';
 import { UserDataProvider } from './UserDataContext';
 import { LanguageProvider } from './LanguageContext';
@@ -13,17 +12,17 @@ interface CombinedProvidersProps {
   children: React.ReactNode;
 }
 
-const CombinedProvidersComponent: React.FC<CombinedProvidersProps> = ({ children }) => {
+const CombinedProvidersComponent: React.FC<CombinedProvidersProps> = ({
+  children,
+}) => {
   return (
     <AuthErrorBoundary>
-      <ThemeProvider defaultTheme="system" storageKey="sabo-ui-theme">
+      <ThemeProvider defaultTheme='system' storageKey='sabo-ui-theme'>
         <AuthProvider>
           <LanguageProvider>
             <ResponsiveLayoutProvider>
               <UserDataProvider>
-                <AppProviders>
-                  {children}
-                </AppProviders>
+                <AppProviders>{children}</AppProviders>
               </UserDataProvider>
             </ResponsiveLayoutProvider>
           </LanguageProvider>

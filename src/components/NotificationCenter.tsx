@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, Check, CheckCheck, X } from 'lucide-react';
@@ -136,16 +135,17 @@ const NotificationCenter = () => {
                             <span className='text-xs text-gray-500'>
                               {formatTimeAgo(notification.created_at || '')}
                             </span>
-                            {notification.priority && notification.priority !== 'low' && (
-                              <Badge
-                                variant='outline'
-                                className={`text-xs ${getPriorityColor(notification.priority)}`}
-                              >
-                                {notification.priority === 'high'
-                                  ? 'Cao'
-                                  : 'Thường'}
-                              </Badge>
-                            )}
+                            {notification.priority &&
+                              notification.priority !== 'low' && (
+                                <Badge
+                                  variant='outline'
+                                  className={`text-xs ${getPriorityColor(notification.priority)}`}
+                                >
+                                  {notification.priority === 'high'
+                                    ? 'Cao'
+                                    : 'Thường'}
+                                </Badge>
+                              )}
                           </div>
                           {notification.action_url && (
                             <Button
@@ -168,8 +168,8 @@ const NotificationCenter = () => {
               )}
               {notifications.length > 0 && (
                 <div className='p-3 border-t text-center'>
-                  <Button 
-                    variant='link' 
+                  <Button
+                    variant='link'
                     size='sm'
                     onClick={() => {
                       navigate('/notifications');

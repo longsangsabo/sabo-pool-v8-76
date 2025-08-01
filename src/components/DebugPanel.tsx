@@ -31,8 +31,12 @@ const DebugPanel = () => {
         clubs: await supabase.from('clubs').select('count'),
         tournaments: await supabase.from('tournaments').select('count'),
         challenges: await supabase.from('challenges').select('count'),
-        memberships: await (supabase as any).from('memberships').select('count'),
-        player_rankings: await (supabase as any).from('player_rankings').select('count'),
+        memberships: await (supabase as any)
+          .from('memberships')
+          .select('count'),
+        player_rankings: await (supabase as any)
+          .from('player_rankings')
+          .select('count'),
       };
 
       setDebugInfo({ type: 'database', results });

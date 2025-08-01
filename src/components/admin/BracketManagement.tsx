@@ -1,15 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { 
-  Network, Users, Shuffle, RotateCcw, UserPlus, UserMinus, 
-  RefreshCw, Settings, Eye, Edit, Trash2, ArrowUpDown 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  Network,
+  Users,
+  Shuffle,
+  RotateCcw,
+  UserPlus,
+  UserMinus,
+  RefreshCw,
+  Settings,
+  Eye,
+  Edit,
+  Trash2,
+  ArrowUpDown,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -39,7 +77,7 @@ interface BracketManagementProps {
 
 const BracketManagement: React.FC<BracketManagementProps> = ({
   tournamentId,
-  onBracketUpdate
+  onBracketUpdate,
 }) => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -48,7 +86,7 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
   const [substitutionData, setSubstitutionData] = useState({
     oldPlayerId: '',
     newPlayerId: '',
-    reason: ''
+    reason: '',
   });
 
   useEffect(() => {
@@ -73,7 +111,7 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
 
       if (playerData && playerData.length > 0) {
         const playerIds = playerData.map(reg => reg.user_id);
-        
+
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('user_id, full_name, elo')
@@ -85,13 +123,12 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
           id: profile.user_id,
           full_name: profile.full_name,
           elo: profile.elo,
-          seed_position: undefined
+          seed_position: undefined,
         }));
         setPlayers(formattedPlayers);
       } else {
         setPlayers([]);
       }
-
     } catch (error) {
       console.error('Error loading bracket data:', error);
       toast.error('Có lỗi khi tải dữ liệu bracket');
@@ -107,9 +144,10 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
     setIsLoading(true);
     try {
       // Update all matches containing the old player
-      const matchesToUpdate = matches.filter(m => 
-        m.player1_id === substitutionData.oldPlayerId || 
-        m.player2_id === substitutionData.oldPlayerId
+      const matchesToUpdate = matches.filter(
+        m =>
+          m.player1_id === substitutionData.oldPlayerId ||
+          m.player2_id === substitutionData.oldPlayerId
       );
 
       for (const match of matchesToUpdate) {
@@ -130,7 +168,7 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
         old_user_id: substitutionData.oldPlayerId,
         new_user_id: substitutionData.newPlayerId,
         reason: substitutionData.reason,
-        affected_matches: matchesToUpdate.length
+        affected_matches: matchesToUpdate.length,
       });
 
       toast.success('Đã thay thế người chơi thành công');
@@ -149,13 +187,16 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
   const regenerateBracket = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('generate-tournament-bracket', {
-        body: {
-          tournament_id: tournamentId,
-          seeding_method: 'elo_ranking',
-          force_regenerate: true
+      const { data, error } = await supabase.functions.invoke(
+        'generate-tournament-bracket',
+        {
+          body: {
+            tournament_id: tournamentId,
+            seeding_method: 'elo_ranking',
+            force_regenerate: true,
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
@@ -172,28 +213,35 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
 
   const getBracketStats = () => {
     const totalMatches = matches.length;
-    const completedMatches = matches.filter(m => m.status === 'completed').length;
-    const inProgressMatches = matches.filter(m => m.status === 'in_progress').length;
-    const scheduledMatches = matches.filter(m => m.status === 'scheduled').length;
+    const completedMatches = matches.filter(
+      m => m.status === 'completed'
+    ).length;
+    const inProgressMatches = matches.filter(
+      m => m.status === 'in_progress'
+    ).length;
+    const scheduledMatches = matches.filter(
+      m => m.status === 'scheduled'
+    ).length;
 
     return {
       totalMatches,
       completedMatches,
       inProgressMatches,
       scheduledMatches,
-      completionRate: totalMatches > 0 ? (completedMatches / totalMatches) * 100 : 0
+      completionRate:
+        totalMatches > 0 ? (completedMatches / totalMatches) * 100 : 0,
     };
   };
 
   const stats = getBracketStats();
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Bracket Overview */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Network className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Network className='h-5 w-5' />
             Quản lý Bracket
           </CardTitle>
           <CardDescription>
@@ -201,30 +249,41 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{stats.totalMatches}</div>
-              <div className="text-sm text-blue-600">Tổng trận đấu</div>
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-6'>
+            <div className='bg-blue-50 p-4 rounded-lg'>
+              <div className='text-2xl font-bold text-blue-600'>
+                {stats.totalMatches}
+              </div>
+              <div className='text-sm text-blue-600'>Tổng trận đấu</div>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">{stats.completedMatches}</div>
-              <div className="text-sm text-green-600">Đã hoàn thành</div>
+            <div className='bg-green-50 p-4 rounded-lg'>
+              <div className='text-2xl font-bold text-green-600'>
+                {stats.completedMatches}
+              </div>
+              <div className='text-sm text-green-600'>Đã hoàn thành</div>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">{stats.inProgressMatches}</div>
-              <div className="text-sm text-yellow-600">Đang diễn ra</div>
+            <div className='bg-yellow-50 p-4 rounded-lg'>
+              <div className='text-2xl font-bold text-yellow-600'>
+                {stats.inProgressMatches}
+              </div>
+              <div className='text-sm text-yellow-600'>Đang diễn ra</div>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-gray-600">{stats.scheduledMatches}</div>
-              <div className="text-sm text-gray-600">Chưa bắt đầu</div>
+            <div className='bg-gray-50 p-4 rounded-lg'>
+              <div className='text-2xl font-bold text-gray-600'>
+                {stats.scheduledMatches}
+              </div>
+              <div className='text-sm text-gray-600'>Chưa bắt đầu</div>
             </div>
           </div>
 
-          <div className="flex gap-3 flex-wrap">
-            <Dialog open={showSubstitutionDialog} onOpenChange={setShowSubstitutionDialog}>
+          <div className='flex gap-3 flex-wrap'>
+            <Dialog
+              open={showSubstitutionDialog}
+              onOpenChange={setShowSubstitutionDialog}
+            >
               <DialogTrigger asChild>
-                <Button variant="outline">
-                  <ArrowUpDown className="w-4 h-4 mr-2" />
+                <Button variant='outline'>
+                  <ArrowUpDown className='w-4 h-4 mr-2' />
                   Thay thế người chơi
                 </Button>
               </DialogTrigger>
@@ -232,59 +291,77 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
                 <DialogHeader>
                   <DialogTitle>Thay thế người chơi</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div className='space-y-4'>
+                  <div className='space-y-2'>
                     <Label>Người chơi cần thay thế</Label>
                     <Select
                       value={substitutionData.oldPlayerId}
-                      onValueChange={(value) => setSubstitutionData({...substitutionData, oldPlayerId: value})}
+                      onValueChange={value =>
+                        setSubstitutionData({
+                          ...substitutionData,
+                          oldPlayerId: value,
+                        })
+                      }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Chọn người chơi cần thay thế" />
+                        <SelectValue placeholder='Chọn người chơi cần thay thế' />
                       </SelectTrigger>
                       <SelectContent>
-                        {players.map((player) => (
+                        {players.map(player => (
                           <SelectItem key={player.id} value={player.id}>
-                            {player.full_name} (Seed: {player.seed_position || 'N/A'})
+                            {player.full_name} (Seed:{' '}
+                            {player.seed_position || 'N/A'})
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <Label>Người chơi thay thế</Label>
                     <Select
                       value={substitutionData.newPlayerId}
-                      onValueChange={(value) => setSubstitutionData({...substitutionData, newPlayerId: value})}
+                      onValueChange={value =>
+                        setSubstitutionData({
+                          ...substitutionData,
+                          newPlayerId: value,
+                        })
+                      }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Chọn người chơi thay thế" />
+                        <SelectValue placeholder='Chọn người chơi thay thế' />
                       </SelectTrigger>
                       <SelectContent>
-                        {players.filter(p => p.id !== substitutionData.oldPlayerId).map((player) => (
-                          <SelectItem key={player.id} value={player.id}>
-                            {player.full_name} (ELO: {player.elo || 'N/A'})
-                          </SelectItem>
-                        ))}
+                        {players
+                          .filter(p => p.id !== substitutionData.oldPlayerId)
+                          .map(player => (
+                            <SelectItem key={player.id} value={player.id}>
+                              {player.full_name} (ELO: {player.elo || 'N/A'})
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="reason">Lý do thay thế</Label>
+                  <div className='space-y-2'>
+                    <Label htmlFor='reason'>Lý do thay thế</Label>
                     <Input
-                      id="reason"
-                      placeholder="Nhập lý do thay thế..."
+                      id='reason'
+                      placeholder='Nhập lý do thay thế...'
                       value={substitutionData.reason}
-                      onChange={(e) => setSubstitutionData({...substitutionData, reason: e.target.value})}
+                      onChange={e =>
+                        setSubstitutionData({
+                          ...substitutionData,
+                          reason: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={handlePlayerSubstitution}
                     disabled={isLoading}
-                    className="w-full"
+                    className='w-full'
                   >
                     {isLoading ? 'Đang xử lý...' : 'Thay thế người chơi'}
                   </Button>
@@ -294,8 +371,8 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline">
-                  <RefreshCw className="w-4 h-4 mr-2" />
+                <Button variant='outline'>
+                  <RefreshCw className='w-4 h-4 mr-2' />
                   Tạo lại Bracket
                 </Button>
               </AlertDialogTrigger>
@@ -303,13 +380,17 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Xác nhận tạo lại Bracket</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Hành động này sẽ tạo lại toàn bộ bracket dựa trên ELO hiện tại của người chơi. 
-                    Tất cả kết quả trận đấu hiện tại sẽ bị mất.
+                    Hành động này sẽ tạo lại toàn bộ bracket dựa trên ELO hiện
+                    tại của người chơi. Tất cả kết quả trận đấu hiện tại sẽ bị
+                    mất.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Hủy</AlertDialogCancel>
-                  <AlertDialogAction onClick={regenerateBracket} disabled={isLoading}>
+                  <AlertDialogAction
+                    onClick={regenerateBracket}
+                    disabled={isLoading}
+                  >
                     {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -325,53 +406,64 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
           <CardTitle>Cấu trúc Bracket</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            {Array.from(new Set(matches.map(m => m.round_number))).sort().map(round => (
-              <div key={round}>
-                <h3 className="font-semibold text-lg mb-3">Vòng {round}</h3>
-                <div className="grid gap-3">
-                  {matches
-                    .filter(m => m.round_number === round)
-                    .sort((a, b) => a.match_number - b.match_number)
-                    .map(match => (
-                      <div key={match.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="font-medium mb-2">
-                              Trận {match.match_number}
-                            </div>
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between">
-                                <span>{match.player1?.full_name || 'TBD'}</span>
-                                <Badge variant="outline" className="text-xs">
-                                  P1
-                                </Badge>
+          <div className='space-y-6'>
+            {Array.from(new Set(matches.map(m => m.round_number)))
+              .sort()
+              .map(round => (
+                <div key={round}>
+                  <h3 className='font-semibold text-lg mb-3'>Vòng {round}</h3>
+                  <div className='grid gap-3'>
+                    {matches
+                      .filter(m => m.round_number === round)
+                      .sort((a, b) => a.match_number - b.match_number)
+                      .map(match => (
+                        <div
+                          key={match.id}
+                          className='border rounded-lg p-4 hover:bg-gray-50'
+                        >
+                          <div className='flex items-center justify-between'>
+                            <div className='flex-1'>
+                              <div className='font-medium mb-2'>
+                                Trận {match.match_number}
                               </div>
-                              <div className="flex items-center justify-between">
-                                <span>{match.player2?.full_name || 'TBD'}</span>
-                                <Badge variant="outline" className="text-xs">
-                                  P2
-                                </Badge>
+                              <div className='space-y-1'>
+                                <div className='flex items-center justify-between'>
+                                  <span>
+                                    {match.player1?.full_name || 'TBD'}
+                                  </span>
+                                  <Badge variant='outline' className='text-xs'>
+                                    P1
+                                  </Badge>
+                                </div>
+                                <div className='flex items-center justify-between'>
+                                  <span>
+                                    {match.player2?.full_name || 'TBD'}
+                                  </span>
+                                  <Badge variant='outline' className='text-xs'>
+                                    P2
+                                  </Badge>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="text-right">
-                            <Badge 
-                              className={
-                                match.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                match.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                                'bg-gray-100 text-gray-800'
-                              }
-                            >
-                              {match.status}
-                            </Badge>
+                            <div className='text-right'>
+                              <Badge
+                                className={
+                                  match.status === 'completed'
+                                    ? 'bg-green-100 text-green-800'
+                                    : match.status === 'in_progress'
+                                      ? 'bg-blue-100 text-blue-800'
+                                      : 'bg-gray-100 text-gray-800'
+                                }
+                              >
+                                {match.status}
+                              </Badge>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </CardContent>
       </Card>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 const TermsPage = () => {
   return (
     <div className='min-h-screen bg-gray-50 p-4'>
@@ -16,10 +15,14 @@ const TermsPage = () => {
         </CardHeader>
         <CardContent className='space-y-6'>
           <section>
-            <h2 className='text-xl font-semibold mb-3'>1. Chấp nhận điều khoản</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              1. Chấp nhận điều khoản
+            </h2>
             <p className='text-muted-foreground'>
-              Bằng việc sử dụng SABO Arena, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu trong tài liệu này. 
-              Nếu bạn không đồng ý với bất kỳ điều khoản nào, vui lòng không sử dụng dịch vụ của chúng tôi.
+              Bằng việc sử dụng SABO Arena, bạn đồng ý tuân thủ các điều khoản
+              và điều kiện được nêu trong tài liệu này. Nếu bạn không đồng ý với
+              bất kỳ điều khoản nào, vui lòng không sử dụng dịch vụ của chúng
+              tôi.
             </p>
           </section>
 
@@ -38,7 +41,9 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>3. Tài khoản người dùng</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              3. Tài khoản người dùng
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Khi tạo tài khoản, bạn cam kết:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -66,7 +71,9 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>5. Nội dung người dùng</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              5. Nội dung người dùng
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Đối với nội dung bạn đăng tải:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -79,7 +86,9 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>6. Thanh toán và hoàn tiền</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              6. Thanh toán và hoàn tiền
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Các điều khoản về tài chính:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -92,7 +101,9 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>7. Giới hạn trách nhiệm</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              7. Giới hạn trách nhiệm
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>SABO Arena không chịu trách nhiệm cho:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>

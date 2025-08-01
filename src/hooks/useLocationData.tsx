@@ -48,7 +48,12 @@ export const useLocationData = () => {
   const fetchWards = async (districtId: string): Promise<Ward[]> => {
     const mockWards: Ward[] = [
       { id: '1', name: 'Phường Bến Nghé', code: 'P1', district_id: districtId },
-      { id: '2', name: 'Phường Bến Thành', code: 'P2', district_id: districtId },
+      {
+        id: '2',
+        name: 'Phường Bến Thành',
+        code: 'P2',
+        district_id: districtId,
+      },
       { id: '3', name: 'Phường Cầu Kho', code: 'P3', district_id: districtId },
     ];
     return mockWards;

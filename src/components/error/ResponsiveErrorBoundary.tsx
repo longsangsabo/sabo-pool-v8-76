@@ -23,7 +23,7 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
     hasError: false,
     error: null,
     errorInfo: null,
-    errorId: ''
+    errorId: '',
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -31,7 +31,7 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
       hasError: true,
       error,
       errorInfo: null,
-      errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     };
   }
 
@@ -39,7 +39,7 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
     this.setState({
       error,
       errorInfo,
-      errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     });
 
     // Call custom error handler if provided
@@ -56,14 +56,14 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
 
   private logResponsiveError = (error: Error, errorInfo: ErrorInfo) => {
     const isResponsiveError = this.isResponsiveRelatedError(error);
-    
+
     console.group(`🔧 Responsive Error Boundary - ${this.state.errorId}`);
     console.error('Error caught:', error);
     console.error('Error info:', errorInfo);
     console.log('Screen dimensions:', {
       width: window.innerWidth,
       height: window.innerHeight,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     });
     console.log('Is responsive-related:', isResponsiveError);
     console.groupEnd();
@@ -72,17 +72,17 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
   private isResponsiveRelatedError = (error: Error): boolean => {
     const responsiveKeywords = [
       'useOptimizedResponsive',
-      'useResponsive', 
+      'useResponsive',
       'breakpoint',
       'ResponsiveLayout',
       'MobileLayout',
       'TabletLayout',
       'DesktopLayout',
-      'responsive'
+      'responsive',
     ];
 
     const errorString = error.toString() + (error.stack || '');
-    return responsiveKeywords.some(keyword => 
+    return responsiveKeywords.some(keyword =>
       errorString.toLowerCase().includes(keyword.toLowerCase())
     );
   };
@@ -101,14 +101,14 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
         userAgent: navigator.userAgent,
         screenDimensions: {
           width: window.innerWidth,
-          height: window.innerHeight
+          height: window.innerHeight,
         },
         url: window.location.href,
-        isResponsiveRelated: this.isResponsiveRelatedError(error)
+        isResponsiveRelated: this.isResponsiveRelatedError(error),
       };
 
       console.log('Error report prepared for monitoring:', errorReport);
-      
+
       // Example API call to monitoring service
       // fetch('/api/errors', {
       //   method: 'POST',
@@ -116,7 +116,10 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
       //   body: JSON.stringify(errorReport)
       // });
     } catch (reportingError) {
-      console.error('Failed to report error to monitoring service:', reportingError);
+      console.error(
+        'Failed to report error to monitoring service:',
+        reportingError
+      );
     }
   };
 
@@ -125,7 +128,7 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-      errorId: ''
+      errorId: '',
     });
   };
 
@@ -142,40 +145,44 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
 
       // Default error UI
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <Card className="max-w-2xl w-full">
+        <div className='min-h-screen flex items-center justify-center p-4'>
+          <Card className='max-w-2xl w-full'>
             <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-destructive/10 rounded-full">
-                  <AlertTriangle className="h-6 w-6 text-destructive" />
+              <div className='flex items-center gap-3'>
+                <div className='p-2 bg-destructive/10 rounded-full'>
+                  <AlertTriangle className='h-6 w-6 text-destructive' />
                 </div>
                 <div>
-                  <CardTitle className="text-destructive">Responsive Layout Error</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <CardTitle className='text-destructive'>
+                    Responsive Layout Error
+                  </CardTitle>
+                  <p className='text-sm text-muted-foreground mt-1'>
                     Something went wrong with the responsive system
                   </p>
                 </div>
               </div>
             </CardHeader>
-            
-            <CardContent className="space-y-4">
+
+            <CardContent className='space-y-4'>
               {/* Error Details */}
               <Alert>
-                <Bug className="h-4 w-4" />
+                <Bug className='h-4 w-4' />
                 <AlertDescription>
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <div>
                       <strong>Error:</strong> {this.state.error?.message}
                     </div>
                     <div>
-                      <strong>Error ID:</strong> 
-                      <Badge variant="outline" className="ml-2">
+                      <strong>Error ID:</strong>
+                      <Badge variant='outline' className='ml-2'>
                         {this.state.errorId}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Monitor className="h-4 w-4" />
-                      <span>Screen: {window.innerWidth}×{window.innerHeight}</span>
+                    <div className='flex items-center gap-2'>
+                      <Monitor className='h-4 w-4' />
+                      <span>
+                        Screen: {window.innerWidth}×{window.innerHeight}
+                      </span>
                     </div>
                   </div>
                 </AlertDescription>
@@ -183,21 +190,21 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
 
               {/* Debug Information */}
               {process.env.NODE_ENV === 'development' && this.state.error && (
-                <details className="bg-muted p-4 rounded-lg">
-                  <summary className="cursor-pointer font-medium mb-2">
+                <details className='bg-muted p-4 rounded-lg'>
+                  <summary className='cursor-pointer font-medium mb-2'>
                     Debug Information (Development Only)
                   </summary>
-                  <div className="space-y-2 text-sm font-mono">
+                  <div className='space-y-2 text-sm font-mono'>
                     <div>
                       <strong>Stack Trace:</strong>
-                      <pre className="mt-1 whitespace-pre-wrap text-xs">
+                      <pre className='mt-1 whitespace-pre-wrap text-xs'>
                         {this.state.error.stack}
                       </pre>
                     </div>
                     {this.state.errorInfo && (
                       <div>
                         <strong>Component Stack:</strong>
-                        <pre className="mt-1 whitespace-pre-wrap text-xs">
+                        <pre className='mt-1 whitespace-pre-wrap text-xs'>
                           {this.state.errorInfo.componentStack}
                         </pre>
                       </div>
@@ -207,34 +214,39 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
               )}
 
               {/* Recovery Actions */}
-              <div className="flex gap-3">
-                <Button 
+              <div className='flex gap-3'>
+                <Button
                   onClick={this.handleRetry}
-                  variant="default"
-                  className="flex-1"
+                  variant='default'
+                  className='flex-1'
                 >
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                  <RefreshCw className='h-4 w-4 mr-2' />
                   Try Again
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={this.handleReload}
-                  variant="outline"
-                  className="flex-1"
+                  variant='outline'
+                  className='flex-1'
                 >
                   Reload Page
                 </Button>
               </div>
 
               {/* Help Information */}
-              <Alert className="bg-blue-50">
+              <Alert className='bg-blue-50'>
                 <AlertDescription>
-                  <div className="space-y-2 text-sm">
+                  <div className='space-y-2 text-sm'>
                     <strong>What you can do:</strong>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
+                    <ul className='list-disc list-inside space-y-1 ml-2'>
                       <li>Try refreshing the page</li>
-                      <li>Check if the issue persists on different screen sizes</li>
-                      <li>Report this error with ID: <code>{this.state.errorId}</code></li>
+                      <li>
+                        Check if the issue persists on different screen sizes
+                      </li>
+                      <li>
+                        Report this error with ID:{' '}
+                        <code>{this.state.errorId}</code>
+                      </li>
                       <li>Disable browser extensions that might interfere</li>
                     </ul>
                   </div>

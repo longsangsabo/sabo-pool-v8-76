@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +15,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
   tournamentId,
   onTournamentUpdate,
   onParticipantUpdate,
-  onResultsUpdate
+  onResultsUpdate,
 }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -24,7 +23,10 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up comprehensive real-time sync for tournament:', tournamentId);
+    console.log(
+      '🔄 Setting up comprehensive real-time sync for tournament:',
+      tournamentId
+    );
 
     // Tournament changes subscription
     const tournamentChannel = supabase
@@ -35,22 +37,24 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           event: '*',
           schema: 'public',
           table: 'tournaments',
-          filter: `id=eq.${tournamentId}`
+          filter: `id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🏆 Tournament update:', payload);
           setLastUpdate(new Date());
           onTournamentUpdate?.(payload.new);
-          
+
           if (payload.eventType === 'UPDATE') {
             const oldRecord = payload.old as any;
             const newRecord = payload.new as any;
-            
+
             // Tournament status changes
             if (oldRecord?.status !== newRecord?.status) {
               switch (newRecord.status) {
                 case 'completed':
-                  toast.success('🎉 Giải đấu đã hoàn thành! Kết quả đã được tính toán.');
+                  toast.success(
+                    '🎉 Giải đấu đã hoàn thành! Kết quả đã được tính toán.'
+                  );
                   onResultsUpdate?.();
                   break;
                 case 'ongoing':
@@ -70,13 +74,13 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('👥 Registration update:', payload);
           setLastUpdate(new Date());
           onParticipantUpdate?.(payload.new);
-          
+
           if (payload.eventType === 'INSERT') {
             toast.success('Có người tham gia mới');
           }
@@ -88,13 +92,13 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           event: '*',
           schema: 'public',
           table: 'tournament_results',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🏆 Tournament results update:', payload);
           setLastUpdate(new Date());
           onResultsUpdate?.();
-          
+
           if (payload.eventType === 'INSERT') {
             toast.success('🏆 Kết quả giải đấu đã được cập nhật!');
           } else if (payload.eventType === 'UPDATE') {
@@ -108,18 +112,25 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('⚔️ Tournament match updated:', payload);
           setLastUpdate(new Date());
-          
+
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
-          
+
           // Match completion
-          if (oldRecord?.status !== 'completed' && newRecord?.status === 'completed') {
-            if (newRecord.bracket_type === 'finals' || newRecord.round_number === 300) { // SABO_REBUILD: Updated bracket type and round
+          if (
+            oldRecord?.status !== 'completed' &&
+            newRecord?.status === 'completed'
+          ) {
+            if (
+              newRecord.bracket_type === 'finals' ||
+              newRecord.round_number === 300
+            ) {
+              // SABO_REBUILD: Updated bracket type and round
               toast.success('🏁 Trận chung kết đã kết thúc!');
             } else {
               toast.info('✅ Một trận đấu đã hoàn thành');
@@ -133,9 +144,9 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           event: 'INSERT',
           schema: 'public',
           table: 'spa_points_log',
-          filter: 'source_type=eq.tournament'
+          filter: 'source_type=eq.tournament',
         },
-        (payload) => {
+        payload => {
           const newRecord = payload.new as any;
           if (!tournamentId || newRecord.source_id === tournamentId) {
             console.log('💎 SPA points awarded:', payload);
@@ -144,10 +155,10 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         console.log(`🔗 Tournament sync status: ${status}`);
         setIsConnected(status === 'SUBSCRIBED');
-        
+
         if (status === 'SUBSCRIBED') {
           console.log('✅ Real-time sync connected successfully');
         } else if (status === 'CHANNEL_ERROR') {
@@ -165,17 +176,20 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
   if (!tournamentId) return null;
 
   return (
-    <div className="flex items-center gap-2 text-xs">
-      <Badge variant={isConnected ? "secondary" : "destructive"} className="gap-1">
+    <div className='flex items-center gap-2 text-xs'>
+      <Badge
+        variant={isConnected ? 'secondary' : 'destructive'}
+        className='gap-1'
+      >
         {isConnected ? (
-          <Wifi className="h-3 w-3" />
+          <Wifi className='h-3 w-3' />
         ) : (
-          <WifiOff className="h-3 w-3" />
+          <WifiOff className='h-3 w-3' />
         )}
         {isConnected ? 'Đang đồng bộ' : 'Mất kết nối'}
       </Badge>
       {lastUpdate && (
-        <span className="text-muted-foreground">
+        <span className='text-muted-foreground'>
           Cập nhật: {lastUpdate.toLocaleTimeString('vi-VN')}
         </span>
       )}

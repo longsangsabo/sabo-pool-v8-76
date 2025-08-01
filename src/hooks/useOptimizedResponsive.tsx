@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BREAKPOINTS, getBreakpoint, type Breakpoint } from '@/constants/breakpoints';
+import {
+  BREAKPOINTS,
+  getBreakpoint,
+  type Breakpoint,
+} from '@/constants/breakpoints';
 
 interface ResponsiveState {
   width: number;
@@ -15,10 +19,12 @@ const DEBOUNCE_DELAY = 100; // ms
 export const useOptimizedResponsive = () => {
   const [state, setState] = useState<ResponsiveState>(() => {
     // Initial state - fallback for SSR
-    const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-    const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 768;
+    const initialWidth =
+      typeof window !== 'undefined' ? window.innerWidth : 1024;
+    const initialHeight =
+      typeof window !== 'undefined' ? window.innerHeight : 768;
     const breakpoint = getBreakpoint(initialWidth);
-    
+
     return {
       width: initialWidth,
       height: initialHeight,
@@ -33,7 +39,7 @@ export const useOptimizedResponsive = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     const breakpoint = getBreakpoint(width);
-    
+
     setState({
       width,
       height,

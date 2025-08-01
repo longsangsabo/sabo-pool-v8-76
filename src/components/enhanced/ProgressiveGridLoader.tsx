@@ -22,14 +22,12 @@ export function ProgressiveGridLoader<T>({
   gridClassName = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
   loadMoreText = 'Tải thêm',
   increment = 6,
-  autoLoad = false
+  autoLoad = false,
 }: ProgressiveGridLoaderProps<T>) {
-  const {
-    visibleItems,
-    hasMore,
-    isLoading,
-    loadMore
-  } = useProgressiveLoading(items, { increment });
+  const { visibleItems, hasMore, isLoading, loadMore } = useProgressiveLoading(
+    items,
+    { increment }
+  );
 
   // Auto-load when scrolling near bottom
   React.useEffect(() => {
@@ -38,7 +36,7 @@ export function ProgressiveGridLoader<T>({
     const handleScroll = () => {
       const scrollPosition = window.innerHeight + window.scrollY;
       const threshold = document.documentElement.offsetHeight - 1000;
-      
+
       if (scrollPosition >= threshold && !isLoading) {
         loadMore();
       }
@@ -52,39 +50,44 @@ export function ProgressiveGridLoader<T>({
     <div className={className}>
       <div className={gridClassName}>
         {visibleItems.map((item, index) => (
-          <div 
+          <div
             key={index}
-            className="animate-fade-in"
+            className='animate-fade-in'
             style={{ animationDelay: `${(index % increment) * 50}ms` }}
           >
             {renderItem(item, index)}
           </div>
         ))}
-        
+
         {/* Show skeleton loaders while loading more */}
         {isLoading && renderSkeleton && (
           <>
-            {Array.from({ length: Math.min(increment, items.length - visibleItems.length) }, (_, i) => (
-              <div key={`skeleton-${i}`} className="animate-pulse">
-                {renderSkeleton(visibleItems.length + i)}
-              </div>
-            ))}
+            {Array.from(
+              {
+                length: Math.min(increment, items.length - visibleItems.length),
+              },
+              (_, i) => (
+                <div key={`skeleton-${i}`} className='animate-pulse'>
+                  {renderSkeleton(visibleItems.length + i)}
+                </div>
+              )
+            )}
           </>
         )}
       </div>
 
       {/* Load More Button */}
       {hasMore && !autoLoad && (
-        <div className="flex justify-center mt-8">
+        <div className='flex justify-center mt-8'>
           <Button
             onClick={loadMore}
             disabled={isLoading}
-            className="hover-scale"
-            variant="outline"
+            className='hover-scale'
+            variant='outline'
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className='h-4 w-4 mr-2 animate-spin' />
                 Đang tải...
               </>
             ) : (
@@ -96,9 +99,9 @@ export function ProgressiveGridLoader<T>({
 
       {/* Auto-load indicator */}
       {hasMore && autoLoad && isLoading && (
-        <div className="flex justify-center mt-8 animate-fade-in">
-          <div className="flex items-center text-muted-foreground">
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+        <div className='flex justify-center mt-8 animate-fade-in'>
+          <div className='flex items-center text-muted-foreground'>
+            <Loader2 className='h-4 w-4 mr-2 animate-spin' />
             Đang tải thêm...
           </div>
         </div>

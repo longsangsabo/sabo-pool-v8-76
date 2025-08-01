@@ -13,7 +13,7 @@ export const SABO_RANKS = [
   { value: 9, code: 'F', name: 'Hạng F (Chuyên nghiệp)', level: 9 },
   { value: 10, code: 'F+', name: 'Hạng F+ (Chuyên nghiệp cao)', level: 10 },
   { value: 11, code: 'E', name: 'Hạng E (Bậc thầy)', level: 11 },
-  { value: 12, code: 'E+', name: 'Hạng E+ (Đại sư)', level: 12 }
+  { value: 12, code: 'E+', name: 'Hạng E+ (Đại sư)', level: 12 },
 ] as const;
 
 // Convert integer (1-12) to SABO rank code (K, K+, I, I+, etc.)

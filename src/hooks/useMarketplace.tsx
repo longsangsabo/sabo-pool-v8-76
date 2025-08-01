@@ -1,5 +1,3 @@
-
-
 import { useEffect } from 'react';
 import { useMarketplaceItems } from './marketplace/useMarketplaceItems';
 import { useMyMarketplaceItems } from './marketplace/useMyMarketplaceItems';
@@ -61,4 +59,3 @@ export const useMarketplace = () => {
 // Export types for backward compatibility
 export type { MarketplaceItem } from './marketplace/types';
 export type { MarketplaceTransaction } from './marketplace/useMarketplaceTransactions';
-

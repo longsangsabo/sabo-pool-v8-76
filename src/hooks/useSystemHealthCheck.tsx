@@ -16,11 +16,13 @@ interface HealthCheckConfig {
   criticalIssueThreshold: number;
 }
 
-export const useSystemHealthCheck = (config: HealthCheckConfig = {
-  enableAutoFix: true,
-  checkInterval: 60000, // Increased to 60 seconds to reduce load
-  criticalIssueThreshold: 3
-}) => {
+export const useSystemHealthCheck = (
+  config: HealthCheckConfig = {
+    enableAutoFix: true,
+    checkInterval: 60000, // Increased to 60 seconds to reduce load
+    criticalIssueThreshold: 3,
+  }
+) => {
   console.log('[HealthCheck] 🏥 Health check system initializing...');
   const queryClient = useQueryClient();
   const [healthChecks, setHealthChecks] = useState<HealthCheckItem[]>([
@@ -28,42 +30,42 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
       id: 'data_consistency',
       name: 'Tính nhất quán dữ liệu',
       status: 'checking',
-      lastChecked: new Date()
+      lastChecked: new Date(),
     },
     {
       id: 'ui_state_sync',
       name: 'Đồng bộ trạng thái UI',
       status: 'checking',
-      lastChecked: new Date()
+      lastChecked: new Date(),
     },
     {
       id: 'query_cache',
       name: 'Cache truy vấn',
       status: 'checking',
-      lastChecked: new Date()
-    }
+      lastChecked: new Date(),
+    },
   ]);
 
   const [criticalIssues, setCriticalIssues] = useState<string[]>([]);
 
   const performHealthCheck = async () => {
     console.log('[HealthCheck] Starting system health check...');
-    
+
     const results: HealthCheckItem[] = [];
 
     // Check 1: Data Consistency - Are there any stale queries?
     try {
       const queryCache = queryClient.getQueryCache();
-      const staleQueries = queryCache.getAll().filter(query => 
-        query.isStale() && query.state.status === 'success'
-      );
-      
+      const staleQueries = queryCache
+        .getAll()
+        .filter(query => query.isStale() && query.state.status === 'success');
+
       results.push({
         id: 'data_consistency',
         name: 'Tính nhất quán dữ liệu',
         status: staleQueries.length > 5 ? 'warning' : 'healthy',
         lastChecked: new Date(),
-        details: `${staleQueries.length} truy vấn cũ`
+        details: `${staleQueries.length} truy vấn cũ`,
       });
     } catch (error) {
       results.push({
@@ -71,7 +73,7 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
         name: 'Tính nhất quán dữ liệu',
         status: 'error',
         lastChecked: new Date(),
-        details: 'Lỗi kiểm tra dữ liệu'
+        details: 'Lỗi kiểm tra dữ liệu',
       });
     }
 
@@ -79,13 +81,13 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
     try {
       // Skip admin tournaments check since it's been removed
       const hasData = true; // Always healthy since check is removed
-      
+
       results.push({
         id: 'ui_state_sync',
         name: 'Đồng bộ trạng thái UI',
         status: hasData ? 'healthy' : 'warning',
         lastChecked: new Date(),
-        details: hasData ? 'Dữ liệu đồng bộ' : 'Không có dữ liệu'
+        details: hasData ? 'Dữ liệu đồng bộ' : 'Không có dữ liệu',
       });
     } catch (error) {
       results.push({
@@ -93,23 +95,26 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
         name: 'Đồng bộ trạng thái UI',
         status: 'error',
         lastChecked: new Date(),
-        details: 'Lỗi kiểm tra UI'
+        details: 'Lỗi kiểm tra UI',
       });
     }
 
     // Check 3: Query Cache Health
     try {
       const queryCache = queryClient.getQueryCache();
-      const errorQueries = queryCache.getAll().filter(query => 
-        query.state.status === 'error'
-      );
-      
+      const errorQueries = queryCache
+        .getAll()
+        .filter(query => query.state.status === 'error');
+
       results.push({
         id: 'query_cache',
         name: 'Cache truy vấn',
         status: errorQueries.length > 0 ? 'error' : 'healthy',
         lastChecked: new Date(),
-        details: errorQueries.length > 0 ? `${errorQueries.length} lỗi cache` : 'Cache hoạt động tốt'
+        details:
+          errorQueries.length > 0
+            ? `${errorQueries.length} lỗi cache`
+            : 'Cache hoạt động tốt',
       });
     } catch (error) {
       results.push({
@@ -117,7 +122,7 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
         name: 'Cache truy vấn',
         status: 'error',
         lastChecked: new Date(),
-        details: 'Không thể kiểm tra cache'
+        details: 'Không thể kiểm tra cache',
       });
     }
 
@@ -127,7 +132,7 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
     const critical = results
       .filter(check => check.status === 'error')
       .map(check => check.id);
-    
+
     setCriticalIssues(critical);
 
     // Auto-fix critical issues if enabled
@@ -137,7 +142,9 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
 
     // Alert if too many critical issues
     if (critical.length >= config.criticalIssueThreshold) {
-      toast.error(`Phát hiện ${critical.length} vấn đề nghiêm trọng trong hệ thống!`);
+      toast.error(
+        `Phát hiện ${critical.length} vấn đề nghiêm trọng trong hệ thống!`
+      );
     }
 
     console.log('[HealthCheck] Health check completed:', results);
@@ -145,24 +152,26 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
 
   const autoFixCriticalIssues = async (issues: string[]) => {
     console.log('[HealthCheck] Auto-fixing critical issues:', issues);
-    
+
     for (const issue of issues) {
       try {
         switch (issue) {
           case 'query_cache':
             // Clear error queries and refetch
-            queryClient.getQueryCache().getAll()
+            queryClient
+              .getQueryCache()
+              .getAll()
               .filter(query => query.state.status === 'error')
               .forEach(query => {
                 queryClient.resetQueries({ queryKey: query.queryKey });
               });
             break;
-            
+
           case 'ui_state_sync':
             // Force refetch critical data
             // Skip admin tournaments invalidation since removed
             break;
-            
+
           case 'data_consistency':
             // Refresh stale queries
             await queryClient.refetchQueries({ stale: true });
@@ -172,7 +181,7 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
         console.error(`[HealthCheck] Failed to auto-fix ${issue}:`, error);
       }
     }
-    
+
     toast.success('Đã tự động khắc phục các vấn đề hệ thống');
   };
 
@@ -184,21 +193,23 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
 
   // Temporarily disable periodic health checks to reduce load during startup issues
   useEffect(() => {
-    console.log('[HealthCheck] ⚠️ Periodic health checks temporarily disabled for performance debugging');
-    
+    console.log(
+      '[HealthCheck] ⚠️ Periodic health checks temporarily disabled for performance debugging'
+    );
+
     // Only run initial check after a delay to not interfere with page load
     const timer = setTimeout(() => {
       console.log('[HealthCheck] Running delayed initial health check...');
       performHealthCheck();
     }, 10000); // 10 seconds delay
-    
+
     return () => clearTimeout(timer);
   }, []);
 
-  const overallHealth = healthChecks.every(check => check.status === 'healthy') 
-    ? 'healthy' 
-    : healthChecks.some(check => check.status === 'error') 
-      ? 'error' 
+  const overallHealth = healthChecks.every(check => check.status === 'healthy')
+    ? 'healthy'
+    : healthChecks.some(check => check.status === 'error')
+      ? 'error'
       : 'warning';
 
   return {
@@ -206,6 +217,6 @@ export const useSystemHealthCheck = (config: HealthCheckConfig = {
     criticalIssues,
     overallHealth,
     performHealthCheck,
-    manualFix
+    manualFix,
   };
 };

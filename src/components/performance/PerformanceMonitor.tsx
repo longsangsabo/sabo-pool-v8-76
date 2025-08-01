@@ -8,14 +8,14 @@ const PerformanceMonitor: React.FC = () => {
         <CardTitle>Performance Monitor</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
+        <div className='space-y-2'>
+          <div className='flex items-center justify-between'>
             <span>CPU Usage</span>
-            <span className="text-sm text-muted-foreground">25%</span>
+            <span className='text-sm text-muted-foreground'>25%</span>
           </div>
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <span>Memory Usage</span>
-            <span className="text-sm text-muted-foreground">1.2GB</span>
+            <span className='text-sm text-muted-foreground'>1.2GB</span>
           </div>
         </div>
       </CardContent>

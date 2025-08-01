@@ -9,7 +9,7 @@ interface UseInfiniteScrollOptions {
 export const useInfiniteScroll = ({
   threshold = 300,
   hasMore = true,
-  loadMore
+  loadMore,
 }: UseInfiniteScrollOptions) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,14 +32,14 @@ export const useInfiniteScroll = ({
       setError(null);
 
       const loadPromise = loadMore();
-      
+
       if (loadPromise && typeof loadPromise.then === 'function') {
         loadPromise
           .then(() => {
             setIsLoading(false);
             loadingRef.current = false;
           })
-          .catch((err) => {
+          .catch(err => {
             setError(err.message || 'Failed to load more content');
             setIsLoading(false);
             loadingRef.current = false;
@@ -92,7 +92,7 @@ export const useInfiniteScroll = ({
     containerRef,
     isLoading,
     error,
-    reset
+    reset,
   };
 };
 

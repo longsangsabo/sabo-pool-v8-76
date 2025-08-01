@@ -1,7 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { RankRequest, CreateRankRequestData, RankRequestFilters } from '@/types/rankRequests';
+import {
+  RankRequest,
+  CreateRankRequestData,
+  RankRequestFilters,
+} from '@/types/rankRequests';
 
 export const useRankRequests = (clubId?: string) => {
   const [requests, setRequests] = useState<RankRequest[]>([]);
@@ -10,7 +13,7 @@ export const useRankRequests = (clubId?: string) => {
   const [filters, setFilters] = useState<RankRequestFilters>({
     status: undefined,
     club_id: clubId,
-    dateRange: undefined
+    dateRange: undefined,
   });
 
   const fetchRankRequests = async (filterOptions?: RankRequestFilters) => {
@@ -25,11 +28,11 @@ export const useRankRequests = (clubId?: string) => {
 
       // Apply filters
       const activeFilters = filterOptions || filters;
-      
+
       if (activeFilters.club_id || clubId) {
         query = query.eq('club_id', activeFilters.club_id || clubId);
       }
-      
+
       if (activeFilters.status) {
         query = query.eq('status', activeFilters.status);
       }
@@ -49,8 +52,10 @@ export const useRankRequests = (clubId?: string) => {
       }
 
       // Get additional data in separate queries (now with proper foreign key constraints)
-      const playerIds = verificationData?.map(v => v.user_id).filter(Boolean) || [];
-      const clubIds = verificationData?.map(v => v.club_id).filter(Boolean) || [];
+      const playerIds =
+        verificationData?.map(v => v.user_id).filter(Boolean) || [];
+      const clubIds =
+        verificationData?.map(v => v.club_id).filter(Boolean) || [];
 
       // Fetch player profiles
       const { data: playersData } = await supabase
@@ -65,48 +70,61 @@ export const useRankRequests = (clubId?: string) => {
         .in('id', clubIds);
 
       // Transform data to match RankRequest interface
-      const transformedRequests: RankRequest[] = (verificationData || []).map(item => {
-        const playerProfile = playersData?.find(p => p.user_id === item.user_id);
-        const clubProfile = clubsData?.find(c => c.id === item.club_id);
+      const transformedRequests: RankRequest[] = (verificationData || []).map(
+        item => {
+          const playerProfile = playersData?.find(
+            p => p.user_id === item.user_id
+          );
+          const clubProfile = clubsData?.find(c => c.id === item.club_id);
 
-        return {
-          id: item.id,
-          user_id: item.user_id,
-          requested_rank: item.requested_rank,
-          club_id: item.club_id,
-          status: item.status as RankRequest['status'],
-          rejection_reason: item.rejection_reason,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-          approved_by: item.approved_by,
-          approved_at: item.approved_at,
-          user: playerProfile ? {
-            id: playerProfile.user_id,
-            email: '', // Email not needed for display
-            profiles: {
-              full_name: playerProfile.full_name,
-              avatar_url: playerProfile.avatar_url,
-              elo: playerProfile.elo || 1000
-            }
-          } : undefined,
-          club: clubProfile ? {
-            id: clubProfile.id,
-            name: clubProfile.club_name,
-            address: clubProfile.address
-          } : undefined
-        };
-      });
+          return {
+            id: item.id,
+            user_id: item.user_id,
+            requested_rank: item.requested_rank,
+            club_id: item.club_id,
+            status: item.status as RankRequest['status'],
+            rejection_reason: item.rejection_reason,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            approved_by: item.approved_by,
+            approved_at: item.approved_at,
+            user: playerProfile
+              ? {
+                  id: playerProfile.user_id,
+                  email: '', // Email not needed for display
+                  profiles: {
+                    full_name: playerProfile.full_name,
+                    avatar_url: playerProfile.avatar_url,
+                    elo: playerProfile.elo || 1000,
+                  },
+                }
+              : undefined,
+            club: clubProfile
+              ? {
+                  id: clubProfile.id,
+                  name: clubProfile.club_name,
+                  address: clubProfile.address,
+                }
+              : undefined,
+          };
+        }
+      );
 
       setRequests(transformedRequests);
     } catch (err) {
       console.error('Error fetching rank requests:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch rank requests');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch rank requests'
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const checkExistingPendingRequest = async (userId: string, clubId: string) => {
+  const checkExistingPendingRequest = async (
+    userId: string,
+    clubId: string
+  ) => {
     try {
       const { data, error } = await supabase
         .from('rank_requests')
@@ -132,9 +150,14 @@ export const useRankRequests = (clubId?: string) => {
       }
 
       // Check for existing pending request first
-      const existingRequest = await checkExistingPendingRequest(userId, data.club_id);
+      const existingRequest = await checkExistingPendingRequest(
+        userId,
+        data.club_id
+      );
       if (existingRequest) {
-        throw new Error('Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này. Vui lòng chờ CLB xét duyệt trước khi gửi yêu cầu mới.');
+        throw new Error(
+          'Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này. Vui lòng chờ CLB xét duyệt trước khi gửi yêu cầu mới.'
+        );
       }
 
       const { data: newRequest, error } = await supabase
@@ -144,15 +167,20 @@ export const useRankRequests = (clubId?: string) => {
           club_id: data.club_id,
           requested_rank: data.requested_rank,
           evidence_files: data.evidence_files || [],
-          status: 'pending'
+          status: 'pending',
         })
         .select()
         .single();
 
       if (error) {
         // Handle specific constraint violation errors
-        if (error.code === '23P01' && error.message.includes('unique_pending_rank_request')) {
-          throw new Error('Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này.');
+        if (
+          error.code === '23P01' &&
+          error.message.includes('unique_pending_rank_request')
+        ) {
+          throw new Error(
+            'Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này.'
+          );
         }
         throw error;
       }
@@ -176,8 +204,9 @@ export const useRankRequests = (clubId?: string) => {
           status: updateData.status,
           rejection_reason: updateData.rejection_reason,
           approved_by: updateData.approved_by,
-          approved_at: updateData.status === 'approved' ? new Date().toISOString() : null,
-          updated_at: new Date().toISOString()
+          approved_at:
+            updateData.status === 'approved' ? new Date().toISOString() : null,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', id);
 
@@ -209,17 +238,21 @@ export const useRankRequests = (clubId?: string) => {
   };
 
   const approveRankRequest = async (id: string, verifierId?: string) => {
-    return updateRankRequest(id, { 
-      status: 'approved', 
-      approved_by: verifierId 
+    return updateRankRequest(id, {
+      status: 'approved',
+      approved_by: verifierId,
     });
   };
 
-  const rejectRankRequest = async (id: string, reason: string, verifierId?: string) => {
-    return updateRankRequest(id, { 
-      status: 'rejected', 
+  const rejectRankRequest = async (
+    id: string,
+    reason: string,
+    verifierId?: string
+  ) => {
+    return updateRankRequest(id, {
+      status: 'rejected',
       rejection_reason: reason,
-      approved_by: verifierId 
+      approved_by: verifierId,
     });
   };
 
@@ -246,24 +279,34 @@ export const useRankRequests = (clubId?: string) => {
   };
 
   const rankRequests = requests;
-  
+
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'pending': return 'Đang chờ';
-      case 'approved': return 'Đã duyệt';
-      case 'rejected': return 'Từ chối';
-      case 'on_site_test': return 'Kiểm tra tại chỗ';
-      default: return status;
+      case 'pending':
+        return 'Đang chờ';
+      case 'approved':
+        return 'Đã duyệt';
+      case 'rejected':
+        return 'Từ chối';
+      case 'on_site_test':
+        return 'Kiểm tra tại chỗ';
+      default:
+        return status;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      case 'on_site_test': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'pending':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'approved':
+        return 'text-green-600 bg-green-100';
+      case 'rejected':
+        return 'text-red-600 bg-red-100';
+      case 'on_site_test':
+        return 'text-blue-600 bg-blue-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -272,24 +315,28 @@ export const useRankRequests = (clubId?: string) => {
     pending: getPendingRequests().length,
     approved: getApprovedRequests().length,
     rejected: getRejectedRequests().length,
-    on_site_test: requests.filter(req => req.status === 'on_site_test').length
+    on_site_test: requests.filter(req => req.status === 'on_site_test').length,
   };
 
   useEffect(() => {
     fetchRankRequests();
-    
+
     // Subscribe to realtime changes
     const channel = supabase
       .channel('rank-requests')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'rank_requests',
-        filter: clubId ? `club_id=eq.${clubId}` : undefined
-      }, () => {
-        console.log('Rank request changed, refetching...');
-        fetchRankRequests(); // Refetch on any change
-      })
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rank_requests',
+          filter: clubId ? `club_id=eq.${clubId}` : undefined,
+        },
+        () => {
+          console.log('Rank request changed, refetching...');
+          fetchRankRequests(); // Refetch on any change
+        }
+      )
       .subscribe();
 
     return () => {
@@ -299,7 +346,12 @@ export const useRankRequests = (clubId?: string) => {
 
   // Also refetch when filters change
   useEffect(() => {
-    if (filters.club_id || filters.status || filters.date_from || filters.date_to) {
+    if (
+      filters.club_id ||
+      filters.status ||
+      filters.date_from ||
+      filters.date_to
+    ) {
       fetchRankRequests(filters);
     }
   }, [filters]);

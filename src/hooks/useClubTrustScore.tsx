@@ -51,7 +51,7 @@ export const useClubTrustScore = () => {
         setData({
           clubTrustScore: 80.0,
           averageMemberTrust: 0,
-          memberTrustScores: []
+          memberTrustScores: [],
         });
         return;
       }
@@ -60,38 +60,43 @@ export const useClubTrustScore = () => {
       const userIds = memberIds.map(m => m.user_id);
       const { data: memberProfiles } = await supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           user_id,
           full_name,
           avatar_url,
           phone
-        `)
+        `
+        )
         .in('user_id', userIds);
 
       // Return mock trust scores since column doesn't exist
-      const memberTrustScores = memberProfiles?.map(profile => {
-        return {
-          user_id: profile.user_id,
-          full_name: profile.full_name || 'Unknown User',
-          avatar_url: profile.avatar_url,
-          phone: profile.phone,
-          trust_score: 75.0 // Default trust score
-        };
-      }) || [];
+      const memberTrustScores =
+        memberProfiles?.map(profile => {
+          return {
+            user_id: profile.user_id,
+            full_name: profile.full_name || 'Unknown User',
+            avatar_url: profile.avatar_url,
+            phone: profile.phone,
+            trust_score: 75.0, // Default trust score
+          };
+        }) || [];
 
       // Calculate average member trust
-      const averageMemberTrust = memberTrustScores.length > 0 
-        ? memberTrustScores.reduce((sum, m) => sum + m.trust_score, 0) / memberTrustScores.length
-        : 0;
+      const averageMemberTrust =
+        memberTrustScores.length > 0
+          ? memberTrustScores.reduce((sum, m) => sum + m.trust_score, 0) /
+            memberTrustScores.length
+          : 0;
 
       setData({
         clubTrustScore: 80.0,
         averageMemberTrust: Number(averageMemberTrust.toFixed(1)),
-        memberTrustScores
+        memberTrustScores,
       });
-
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch trust scores';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch trust scores';
       setError(errorMessage);
       console.error('Trust score fetch error:', err);
     } finally {
@@ -121,31 +126,52 @@ export const useClubTrustScore = () => {
       // Subscribe to mutual ratings changes (affects trust scores)
       const ratingsSubscription = supabase
         .channel(`trust-scores-${clubId}`)
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'mutual_ratings'
-        }, (payload) => {
-          console.log('New rating submitted, refreshing trust scores:', payload);
-          fetchTrustData();
-        })
-        .on('postgres_changes', {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'player_rankings'
-        }, (payload) => {
-          console.log('Player ranking updated, refreshing trust scores:', payload);
-          fetchTrustData();
-        })
-        .on('postgres_changes', {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'club_profiles',
-          filter: `id=eq.${clubId}`
-        }, (payload) => {
-          console.log('Club profile updated, refreshing trust scores:', payload);
-          fetchTrustData();
-        })
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'mutual_ratings',
+          },
+          payload => {
+            console.log(
+              'New rating submitted, refreshing trust scores:',
+              payload
+            );
+            fetchTrustData();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'player_rankings',
+          },
+          payload => {
+            console.log(
+              'Player ranking updated, refreshing trust scores:',
+              payload
+            );
+            fetchTrustData();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'club_profiles',
+            filter: `id=eq.${clubId}`,
+          },
+          payload => {
+            console.log(
+              'Club profile updated, refreshing trust scores:',
+              payload
+            );
+            fetchTrustData();
+          }
+        )
         .subscribe();
 
       return () => {
@@ -164,6 +190,6 @@ export const useClubTrustScore = () => {
     data,
     loading,
     error,
-    refetch: fetchTrustData
+    refetch: fetchTrustData,
   };
 };

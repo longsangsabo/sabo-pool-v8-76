@@ -15,7 +15,7 @@ const CompactStatCard: React.FC<CompactStatCardProps> = ({
   value,
   label,
   color = 'primary',
-  trend = 'neutral'
+  trend = 'neutral',
 }) => {
   const getColorClasses = (color: string) => {
     switch (color) {
@@ -39,20 +39,24 @@ const CompactStatCard: React.FC<CompactStatCardProps> = ({
   };
 
   return (
-    <Card className={`transition-all duration-200 hover:scale-105 ${getColorClasses(color)}`}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex-shrink-0">
-            <Icon className="w-6 h-6" />
+    <Card
+      className={`transition-all duration-200 hover:scale-105 ${getColorClasses(color)}`}
+    >
+      <CardContent className='p-4'>
+        <div className='flex items-center gap-3'>
+          <div className='flex-shrink-0'>
+            <Icon className='w-6 h-6' />
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1">
-              <div className="text-2xl font-bold truncate">{value}</div>
+          <div className='flex-1 min-w-0'>
+            <div className='flex items-center gap-1'>
+              <div className='text-2xl font-bold truncate'>{value}</div>
               {getTrendIndicator() && (
-                <span className="text-sm">{getTrendIndicator()}</span>
+                <span className='text-sm'>{getTrendIndicator()}</span>
               )}
             </div>
-            <div className="text-sm font-medium opacity-80 truncate">{label}</div>
+            <div className='text-sm font-medium opacity-80 truncate'>
+              {label}
+            </div>
           </div>
         </div>
       </CardContent>

@@ -22,18 +22,31 @@ export const formatRankDisplay = (rank: string, elo: number): string => {
 // Get ELO from SABO rank (approximation for reverse conversion)
 export const saboRankToElo = (rank: string): number => {
   switch (rank) {
-    case 'E+': return 2100;
-    case 'E': return 2000;
-    case 'F+': return 1900;
-    case 'F': return 1800;
-    case 'G+': return 1700;
-    case 'G': return 1600;
-    case 'H+': return 1500;
-    case 'H': return 1400;
-    case 'I+': return 1300;
-    case 'I': return 1200;
-    case 'K+': return 1100;
-    case 'K': return 1000;
-    default: return 1000;
+    case 'E+':
+      return 2100;
+    case 'E':
+      return 2000;
+    case 'F+':
+      return 1900;
+    case 'F':
+      return 1800;
+    case 'G+':
+      return 1700;
+    case 'G':
+      return 1600;
+    case 'H+':
+      return 1500;
+    case 'H':
+      return 1400;
+    case 'I+':
+      return 1300;
+    case 'I':
+      return 1200;
+    case 'K+':
+      return 1100;
+    case 'K':
+      return 1000;
+    default:
+      return 1000;
   }
 };

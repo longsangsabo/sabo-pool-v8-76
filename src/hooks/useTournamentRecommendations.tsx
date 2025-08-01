@@ -182,9 +182,15 @@ export const useTournamentRecommendations = () => {
           max_participants: 32,
           current_participants: 12,
           registration_start: new Date().toISOString(),
-          registration_end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_start: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_end: new Date(Date.now() + 16 * 24 * 60 * 60 * 1000).toISOString(),
+          registration_end: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_start: new Date(
+            Date.now() + 14 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_end: new Date(
+            Date.now() + 16 * 24 * 60 * 60 * 1000
+          ).toISOString(),
           club_id: 'club_1',
           venue_address: 'Hà Nội',
           entry_fee_points: 100,
@@ -217,10 +223,18 @@ export const useTournamentRecommendations = () => {
           game_format: '9_ball',
           max_participants: 16,
           current_participants: 8,
-          registration_start: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-          registration_end: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_start: new Date(Date.now() + 17 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_end: new Date(Date.now() + 19 * 24 * 60 * 60 * 1000).toISOString(),
+          registration_start: new Date(
+            Date.now() + 3 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          registration_end: new Date(
+            Date.now() + 10 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_start: new Date(
+            Date.now() + 17 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_end: new Date(
+            Date.now() + 19 * 24 * 60 * 60 * 1000
+          ).toISOString(),
           club_id: 'club_2',
           venue_address: 'Tp. Hồ Chí Minh',
           entry_fee_points: 50,
@@ -291,10 +305,18 @@ export const useTournamentRecommendations = () => {
           game_format: '10_ball',
           max_participants: 64,
           current_participants: 20,
-          registration_start: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-          registration_end: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_start: new Date(Date.now() + 16 * 24 * 60 * 60 * 1000).toISOString(),
-          tournament_end: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
+          registration_start: new Date(
+            Date.now() + 2 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          registration_end: new Date(
+            Date.now() + 9 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_start: new Date(
+            Date.now() + 16 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          tournament_end: new Date(
+            Date.now() + 18 * 24 * 60 * 60 * 1000
+          ).toISOString(),
           club_id: 'club_3',
           venue_address: 'Hải Phòng',
           entry_fee_points: 200,
@@ -323,17 +345,23 @@ export const useTournamentRecommendations = () => {
 
       // Apply basic filtering
       let filteredData = mockFilteredTournaments;
-      
+
       switch (filter) {
         case 'nearby':
-          filteredData = mockFilteredTournaments.filter(t => (t.distance_km || 0) < 30);
+          filteredData = mockFilteredTournaments.filter(
+            t => (t.distance_km || 0) < 30
+          );
           break;
         case 'high_prize':
-          filteredData = mockFilteredTournaments.sort((a, b) => b.total_prize_pool - a.total_prize_pool);
+          filteredData = mockFilteredTournaments.sort(
+            (a, b) => b.total_prize_pool - a.total_prize_pool
+          );
           break;
         case 'recent':
-          filteredData = mockFilteredTournaments.sort((a, b) => 
-            new Date(b.registration_start).getTime() - new Date(a.registration_start).getTime()
+          filteredData = mockFilteredTournaments.sort(
+            (a, b) =>
+              new Date(b.registration_start).getTime() -
+              new Date(a.registration_start).getTime()
           );
           break;
       }

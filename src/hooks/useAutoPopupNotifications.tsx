@@ -13,7 +13,7 @@ export const useAutoPopupNotifications = () => {
     queryKey: ['pending-popup-notifications', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data, error } = await supabase
         .from('notifications')
         .select('*')
@@ -21,12 +21,12 @@ export const useAutoPopupNotifications = () => {
         .eq('auto_popup', true)
         .eq('is_read', false)
         .order('created_at', { ascending: false });
-        
+
       if (error) throw error;
       return data || [];
     },
     enabled: !!user?.id,
-    refetchInterval: 30000 // Check every 30 seconds
+    refetchInterval: 30000, // Check every 30 seconds
   });
 
   // Set the first pending popup when available
@@ -42,30 +42,42 @@ export const useAutoPopupNotifications = () => {
 
     const channel = supabase
       .channel(`notifications-${user.id}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'notifications',
-        filter: `user_id=eq.${user.id}`
-      }, (payload) => {
-        // Check if the new notification should auto-popup
-        if (payload.new.auto_popup && !payload.new.is_read) {
-          setCurrentPopup(payload.new);
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        payload => {
+          // Check if the new notification should auto-popup
+          if (payload.new.auto_popup && !payload.new.is_read) {
+            setCurrentPopup(payload.new);
+          }
         }
-      })
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'notifications',
-        filter: `user_id=eq.${user.id}`
-      }, (payload) => {
-        // If current popup was marked as read, remove it
-        if (currentPopup && payload.new.id === currentPopup.id && payload.new.is_read) {
-          setCurrentPopup(null);
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        payload => {
+          // If current popup was marked as read, remove it
+          if (
+            currentPopup &&
+            payload.new.id === currentPopup.id &&
+            payload.new.is_read
+          ) {
+            setCurrentPopup(null);
+          }
+          // Refetch to get updated list
+          refetch();
         }
-        // Refetch to get updated list
-        refetch();
-      })
+      )
       .subscribe();
 
     return () => {
@@ -85,9 +97,11 @@ export const useAutoPopupNotifications = () => {
         .from('notifications')
         .update({ is_read: true, auto_popup: false })
         .eq('id', notificationId);
-      
+
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      queryClient.invalidateQueries({ queryKey: ['pending-popup-notifications'] });
+      queryClient.invalidateQueries({
+        queryKey: ['pending-popup-notifications'],
+      });
     } catch (error) {
       console.error('Error marking notification as read:', error);
     }
@@ -97,6 +111,6 @@ export const useAutoPopupNotifications = () => {
     currentPopup,
     closeCurrentPopup,
     markNotificationAsRead,
-    pendingPopupsCount: pendingPopups?.length || 0
+    pendingPopupsCount: pendingPopups?.length || 0,
   };
 };

@@ -9,11 +9,11 @@ export const useDailyChallenges = () => {
 
   const fetchDailyChallenges = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
       const today = new Date().toISOString().split('T')[0];
-      
+
       const { count, error } = await supabase
         .from('spa_points_log')
         .select('*', { count: 'exact' })
@@ -64,6 +64,6 @@ export const useDailyChallenges = () => {
     getRemainingFullPointChallenges,
     isAtLimit,
     getStatusMessage,
-    refetch: fetchDailyChallenges
+    refetch: fetchDailyChallenges,
   };
 };

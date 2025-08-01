@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { calculateSaboHandicap, type SaboRank, type HandicapResult } from '@/utils/saboHandicap';
+import {
+  calculateSaboHandicap,
+  type SaboRank,
+  type HandicapResult,
+} from '@/utils/saboHandicap';
 
 export interface SaboChallengeData {
   id: string;
@@ -44,7 +48,7 @@ export function useSaboChallenge() {
 
   const fetchUserRank = async () => {
     if (!user) return;
-    
+
     try {
       // Mock data since current_rank column doesn't exist in profiles
       setUserRank('K');
@@ -81,7 +85,7 @@ export function useSaboChallenge() {
 
   const getSaboHandicapExplanation = (handicapData: any): string => {
     if (!handicapData) return 'Không có dữ liệu handicap';
-    
+
     if (handicapData.handicap_challenger > 0) {
       return `Challenger được cộng ${handicapData.handicap_challenger} bàn`;
     } else if (handicapData.handicap_opponent > 0) {
@@ -97,6 +101,6 @@ export function useSaboChallenge() {
     fetchSaboChallenges,
     isValidSaboOpponent,
     getSaboHandicapExplanation,
-    refreshUserRank: fetchUserRank
+    refreshUserRank: fetchUserRank,
   };
 }

@@ -39,7 +39,11 @@ export class BaseEntityService {
     return { success: true, data: [] };
   }
 
-  static async softDelete(tableName: string, entityId: string, adminId?: string) {
+  static async softDelete(
+    tableName: string,
+    entityId: string,
+    adminId?: string
+  ) {
     console.log('Mock soft delete entity:', tableName, entityId, adminId);
     return { success: true };
   }

@@ -5,15 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Trophy, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle, 
+import {
+  Trophy,
+  Clock,
+  CheckCircle,
+  AlertCircle,
   User,
   Calendar,
   MessageSquare,
-  FileText
+  FileText,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -48,9 +48,13 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
   const { user } = useAuth();
   const [requests, setRequests] = useState<RankRequest[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<RankRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<RankRequest | null>(
+    null
+  );
   const [showDialog, setShowDialog] = useState(false);
-  const [actionType, setActionType] = useState<'approve' | 'reject' | 'schedule' | null>(null);
+  const [actionType, setActionType] = useState<
+    'approve' | 'reject' | 'schedule' | null
+  >(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
 
@@ -78,7 +82,7 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
   const fetchRankRequests = async () => {
     try {
       setLoading(true);
-      
+
       // Using mock data for now - will update when database structure is ready
       const mockRequests = [
         {
@@ -91,8 +95,8 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
           user_profile: {
             full_name: 'Nguyễn Văn A',
             display_name: 'Player A',
-            phone: '0901234567'
-          }
+            phone: '0901234567',
+          },
         },
         {
           id: '2',
@@ -104,11 +108,11 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
           user_profile: {
             full_name: 'Trần Thị B',
             display_name: 'Player B',
-            phone: '0901234568'
-          }
-        }
+            phone: '0901234568',
+          },
+        },
       ];
-      
+
       setRequests(mockRequests);
     } catch (error) {
       console.error('Error fetching rank requests:', error);
@@ -123,20 +127,25 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
 
     try {
       setLoading(true);
-      
-      const { data, error } = await supabase.functions.invoke('rank-request-notification', {
-        body: {
-          rank_request_id: selectedRequest.id,
-          action: actionType,
-          rejection_reason: rejectionReason,
-          scheduled_time: scheduledTime
+
+      const { data, error } = await supabase.functions.invoke(
+        'rank-request-notification',
+        {
+          body: {
+            rank_request_id: selectedRequest.id,
+            action: actionType,
+            rejection_reason: rejectionReason,
+            scheduled_time: scheduledTime,
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
       if (data.success) {
-        toast.success(`Yêu cầu đã được ${actionType === 'approve' ? 'phê duyệt' : actionType === 'reject' ? 'từ chối' : 'lên lịch'} thành công!`);
+        toast.success(
+          `Yêu cầu đã được ${actionType === 'approve' ? 'phê duyệt' : actionType === 'reject' ? 'từ chối' : 'lên lịch'} thành công!`
+        );
         setShowDialog(false);
         setSelectedRequest(null);
         setActionType(null);
@@ -154,7 +163,10 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
     }
   };
 
-  const openActionDialog = (request: RankRequest, action: 'approve' | 'reject' | 'schedule') => {
+  const openActionDialog = (
+    request: RankRequest,
+    action: 'approve' | 'reject' | 'schedule'
+  ) => {
     setSelectedRequest(request);
     setActionType(action);
     setShowDialog(true);
@@ -196,11 +208,13 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
   };
 
   const getRankBadgeColor = (rank: string) => {
-    return ranks.find(r => r.value === rank)?.color || 'bg-gray-100 text-gray-800';
+    return (
+      ranks.find(r => r.value === rank)?.color || 'bg-gray-100 text-gray-800'
+    );
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
@@ -209,83 +223,89 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {loading && <div className="text-center py-4">Đang tải...</div>}
-          
+          {loading && <div className='text-center py-4'>Đang tải...</div>}
+
           {!loading && requests.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <div className='text-center py-8 text-gray-500'>
+              <Trophy className='h-12 w-12 mx-auto mb-4 opacity-50' />
               <p>Không có yêu cầu xác thực hạng nào</p>
             </div>
           )}
 
           {!loading && requests.length > 0 && (
-            <div className="space-y-4">
-              {requests.map((request) => (
+            <div className='space-y-4'>
+              {requests.map(request => (
                 <div
                   key={request.id}
-                  className="border rounded-lg p-4 bg-white hover:bg-gray-50 transition-colors"
+                  className='border rounded-lg p-4 bg-white hover:bg-gray-50 transition-colors'
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium">
-                            {request.user_profile?.display_name || request.user_profile?.full_name}
+                  <div className='flex items-start justify-between'>
+                    <div className='flex-1'>
+                      <div className='flex items-center gap-3 mb-2'>
+                        <div className='flex items-center gap-2'>
+                          <User className='h-4 w-4 text-gray-400' />
+                          <span className='font-medium'>
+                            {request.user_profile?.display_name ||
+                              request.user_profile?.full_name}
                           </span>
                         </div>
-                        <Badge className={getRankBadgeColor(request.requested_rank)}>
+                        <Badge
+                          className={getRankBadgeColor(request.requested_rank)}
+                        >
                           {request.requested_rank}
                         </Badge>
                         {getStatusBadge(request.status)}
                       </div>
-                      
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                        <Calendar className="h-4 w-4" />
+
+                      <div className='flex items-center gap-2 text-sm text-gray-600 mb-2'>
+                        <Calendar className='h-4 w-4' />
                         <span>
-                          {new Date(request.created_at).toLocaleDateString('vi-VN', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
+                          {new Date(request.created_at).toLocaleDateString(
+                            'vi-VN',
+                            {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }
+                          )}
                         </span>
                       </div>
 
-                      <div className="flex items-start gap-2 text-sm">
-                        <MessageSquare className="h-4 w-4 text-gray-400 mt-0.5" />
-                        <p className="text-gray-700">{request.reason}</p>
+                      <div className='flex items-start gap-2 text-sm'>
+                        <MessageSquare className='h-4 w-4 text-gray-400 mt-0.5' />
+                        <p className='text-gray-700'>{request.reason}</p>
                       </div>
                     </div>
 
                     {request.status === 'pending' && (
-                      <div className="flex gap-2 ml-4">
+                      <div className='flex gap-2 ml-4'>
                         <Button
-                          size="sm"
-                          variant="outline"
+                          size='sm'
+                          variant='outline'
                           onClick={() => openActionDialog(request, 'approve')}
-                          className="text-green-600 hover:text-green-700"
+                          className='text-green-600 hover:text-green-700'
                         >
-                          <CheckCircle className="h-4 w-4 mr-1" />
+                          <CheckCircle className='h-4 w-4 mr-1' />
                           Phê duyệt
                         </Button>
                         <Button
-                          size="sm"
-                          variant="outline"
+                          size='sm'
+                          variant='outline'
                           onClick={() => openActionDialog(request, 'schedule')}
-                          className="text-blue-600 hover:text-blue-700"
+                          className='text-blue-600 hover:text-blue-700'
                         >
-                          <Calendar className="h-4 w-4 mr-1" />
+                          <Calendar className='h-4 w-4 mr-1' />
                           Lên lịch
                         </Button>
                         <Button
-                          size="sm"
-                          variant="outline"
+                          size='sm'
+                          variant='outline'
                           onClick={() => openActionDialog(request, 'reject')}
-                          className="text-red-600 hover:text-red-700"
+                          className='text-red-600 hover:text-red-700'
                         >
-                          <AlertCircle className="h-4 w-4 mr-1" />
+                          <AlertCircle className='h-4 w-4 mr-1' />
                           Từ chối
                         </Button>
                       </div>
@@ -308,32 +328,39 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
               {actionType === 'schedule' && 'Lên lịch kiểm tra'}
             </DialogTitle>
           </DialogHeader>
-          
-          <div className="space-y-4">
+
+          <div className='space-y-4'>
             {selectedRequest && (
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <User className="h-4 w-4" />
-                  <span className="font-medium">
-                    {selectedRequest.user_profile?.display_name || selectedRequest.user_profile?.full_name}
+              <div className='p-4 bg-gray-50 rounded-lg'>
+                <div className='flex items-center gap-2 mb-2'>
+                  <User className='h-4 w-4' />
+                  <span className='font-medium'>
+                    {selectedRequest.user_profile?.display_name ||
+                      selectedRequest.user_profile?.full_name}
                   </span>
-                  <Badge className={getRankBadgeColor(selectedRequest.requested_rank)}>
+                  <Badge
+                    className={getRankBadgeColor(
+                      selectedRequest.requested_rank
+                    )}
+                  >
                     {selectedRequest.requested_rank}
                   </Badge>
                 </div>
-                <p className="text-sm text-gray-600">{selectedRequest.reason}</p>
+                <p className='text-sm text-gray-600'>
+                  {selectedRequest.reason}
+                </p>
               </div>
             )}
 
             {actionType === 'reject' && (
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className='block text-sm font-medium mb-2'>
                   Lý do từ chối *
                 </label>
                 <Textarea
                   value={rejectionReason}
-                  onChange={(e) => setRejectionReason(e.target.value)}
-                  placeholder="Nhập lý do từ chối yêu cầu..."
+                  onChange={e => setRejectionReason(e.target.value)}
+                  placeholder='Nhập lý do từ chối yêu cầu...'
                   rows={3}
                 />
               </div>
@@ -341,14 +368,14 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
 
             {actionType === 'schedule' && (
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className='block text-sm font-medium mb-2'>
                   Thời gian kiểm tra *
                 </label>
                 <input
-                  type="datetime-local"
+                  type='datetime-local'
                   value={scheduledTime}
-                  onChange={(e) => setScheduledTime(e.target.value)}
-                  className="w-full p-2 border rounded-md"
+                  onChange={e => setScheduledTime(e.target.value)}
+                  className='w-full p-2 border rounded-md'
                 />
               </div>
             )}
@@ -356,7 +383,7 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => setShowDialog(false)}
               disabled={loading}
             >
@@ -364,7 +391,11 @@ const RankRequestsManagement = ({ clubId }: RankRequestsManagementProps) => {
             </Button>
             <Button
               onClick={handleRequestAction}
-              disabled={loading || (actionType === 'reject' && !rejectionReason.trim()) || (actionType === 'schedule' && !scheduledTime)}
+              disabled={
+                loading ||
+                (actionType === 'reject' && !rejectionReason.trim()) ||
+                (actionType === 'schedule' && !scheduledTime)
+              }
             >
               {loading ? 'Đang xử lý...' : 'Xác nhận'}
             </Button>

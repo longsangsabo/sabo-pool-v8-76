@@ -31,7 +31,7 @@ export const useEnhancedNotifications = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase.rpc('get_notification_summary', {
-        p_user_id: user.id
+        p_user_id: user.id,
       });
 
       if (error) {
@@ -54,96 +54,112 @@ export const useEnhancedNotifications = () => {
   }, [user?.id]);
 
   // Mark notifications as read using the batch function
-  const markNotificationsAsRead = useCallback(async (notificationIds: string[]) => {
-    if (!notificationIds.length) return;
+  const markNotificationsAsRead = useCallback(
+    async (notificationIds: string[]) => {
+      if (!notificationIds.length) return;
 
-    try {
-      const { error } = await supabase.rpc('mark_notifications_read', {
-        p_user_id: user.id,
-        p_notification_ids: notificationIds
-      });
+      try {
+        const { error } = await supabase.rpc('mark_notifications_read', {
+          p_user_id: user.id,
+          p_notification_ids: notificationIds,
+        });
 
-      if (error) {
-        console.error('Error marking notifications as read:', error);
-        return;
+        if (error) {
+          console.error('Error marking notifications as read:', error);
+          return;
+        }
+
+        // Update local state
+        setNotifications(prev =>
+          prev.map(notif =>
+            notificationIds.includes(notif.id)
+              ? { ...notif, is_read: true }
+              : notif
+          )
+        );
+
+        // Refresh summary to get accurate counts
+        await fetchNotificationSummary();
+      } catch (error) {
+        console.error('Error in markNotificationsAsRead:', error);
       }
-
-      // Update local state
-      setNotifications(prev => 
-        prev.map(notif => 
-          notificationIds.includes(notif.id) 
-            ? { ...notif, is_read: true }
-            : notif
-        )
-      );
-      
-      // Refresh summary to get accurate counts
-      await fetchNotificationSummary();
-    } catch (error) {
-      console.error('Error in markNotificationsAsRead:', error);
-    }
-  }, [fetchNotificationSummary]);
+    },
+    [fetchNotificationSummary]
+  );
 
   // Mark single notification as read with mutation API
-  const markAsRead = useMemo(() => ({
-    mutate: async (notificationId: string) => {
-      setMarkAsReadPending(true);
-      try {
-        await markNotificationsAsRead([notificationId]);
-      } finally {
-        setMarkAsReadPending(false);
-      }
-    },
-    isPending: markAsReadPending
-  }), [markNotificationsAsRead, markAsReadPending]);
+  const markAsRead = useMemo(
+    () => ({
+      mutate: async (notificationId: string) => {
+        setMarkAsReadPending(true);
+        try {
+          await markNotificationsAsRead([notificationId]);
+        } finally {
+          setMarkAsReadPending(false);
+        }
+      },
+      isPending: markAsReadPending,
+    }),
+    [markNotificationsAsRead, markAsReadPending]
+  );
 
   // Mark all notifications as read with mutation API
-  const markAllAsRead = useMemo(() => ({
-    mutate: async () => {
-      setMarkAllAsReadPending(true);
-      try {
-        const unreadIds = notifications
-          .filter(notif => !notif.is_read)
-          .map(notif => notif.id);
-        
-        if (unreadIds.length > 0) {
-          await markNotificationsAsRead(unreadIds);
+  const markAllAsRead = useMemo(
+    () => ({
+      mutate: async () => {
+        setMarkAllAsReadPending(true);
+        try {
+          const unreadIds = notifications
+            .filter(notif => !notif.is_read)
+            .map(notif => notif.id);
+
+          if (unreadIds.length > 0) {
+            await markNotificationsAsRead(unreadIds);
+          }
+        } finally {
+          setMarkAllAsReadPending(false);
         }
-      } finally {
-        setMarkAllAsReadPending(false);
-      }
-    },
-    isPending: markAllAsReadPending
-  }), [notifications, markNotificationsAsRead, markAllAsReadPending]);
+      },
+      isPending: markAllAsReadPending,
+    }),
+    [notifications, markNotificationsAsRead, markAllAsReadPending]
+  );
 
   // Set up real-time subscription
   useEffect(() => {
     if (!user?.id) return;
 
     console.log('Setting up enhanced notification subscription');
-    
+
     // Initial fetch
     fetchNotificationSummary();
-    
+
     // Set up real-time subscription
     const channel = supabase
       .channel(`notifications-${user.id}`)
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'notifications',
-        filter: `user_id=eq.${user.id}`
-      }, (payload) => {
-        console.log('Real-time notification update:', payload);
-        
-        // Refresh the summary to get accurate counts and latest notifications
-        fetchNotificationSummary();
-        
-        // Show toast for new high-priority notifications
-        if (payload.eventType === 'INSERT' && payload.new.priority === 'high') {
-          // You can add a toast notification here if needed
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        payload => {
+          console.log('Real-time notification update:', payload);
+
+          // Refresh the summary to get accurate counts and latest notifications
+          fetchNotificationSummary();
+
+          // Show toast for new high-priority notifications
+          if (
+            payload.eventType === 'INSERT' &&
+            payload.new.priority === 'high'
+          ) {
+            // You can add a toast notification here if needed
+          }
         }
-      })
+      )
       .subscribe();
 
     return () => {
@@ -163,6 +179,6 @@ export const useEnhancedNotifications = () => {
     markNotificationsAsRead,
     markAsRead,
     markAllAsRead,
-    hasUrgent: highPriorityCount > 0
+    hasUrgent: highPriorityCount > 0,
   };
 };

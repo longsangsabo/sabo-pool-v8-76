@@ -24,8 +24,8 @@ export const useClubStandings = () => {
             current_rank: 1,
             verified_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
+            updated_at: new Date().toISOString(),
+          },
         ];
 
         setClubStandings(mockStandings);
@@ -55,7 +55,7 @@ export const useClubStandings = () => {
           current_rank: 1,
           verified_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         };
       } catch (err) {
         setError(
@@ -88,7 +88,7 @@ export const useClubStandings = () => {
           current_rank: 1,
           verified_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         };
       } catch (err) {
         setError(
@@ -138,8 +138,8 @@ export const useClubStandings = () => {
             current_rank: 1,
             verified_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
+            updated_at: new Date().toISOString(),
+          },
         ];
       } catch (err) {
         setError(
@@ -183,8 +183,8 @@ export const useClubStandings = () => {
           current_rank: 1,
           verified_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ];
     } catch (err) {
       setError(
@@ -231,8 +231,8 @@ export const useClubStandings = () => {
           current_rank: 1,
           verified_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ];
     } catch (err) {
       setError(
@@ -262,8 +262,8 @@ export const useClubStandings = () => {
           current_rank: 1,
           verified_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       }));
     } catch (err) {
       setError(

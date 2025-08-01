@@ -27,40 +27,48 @@ export const IntegrationTestSuite: React.FC = () => {
         // Test breakpoint detection
         const width = window.innerWidth;
         if (width < 768) {
-          const mobileElements = document.querySelectorAll('[data-testid="mobile-layout"]');
-          if (mobileElements.length === 0) throw new Error('Mobile layout not detected');
+          const mobileElements = document.querySelectorAll(
+            '[data-testid="mobile-layout"]'
+          );
+          if (mobileElements.length === 0)
+            throw new Error('Mobile layout not detected');
         } else if (width < 1024) {
           // Tablet logic
           return 'Tablet layout detected correctly';
         } else {
           // Desktop logic
-          const desktopElements = document.querySelectorAll('[data-testid="desktop-layout"]');
+          const desktopElements = document.querySelectorAll(
+            '[data-testid="desktop-layout"]'
+          );
           return 'Desktop layout detected correctly';
         }
         return 'Layout detection working correctly';
-      }
+      },
     },
     {
       id: 'admin-navigation',
       name: 'Admin Navigation Functionality',
       test: async () => {
         // Test admin sidebar with updated selector
-        const sidebar = document.querySelector('[data-testid="admin-sidebar"]') || 
-                       document.querySelector('.admin-sidebar') ||
-                       document.querySelector('nav[aria-label="Admin navigation"]');
-        
+        const sidebar =
+          document.querySelector('[data-testid="admin-sidebar"]') ||
+          document.querySelector('.admin-sidebar') ||
+          document.querySelector('nav[aria-label="Admin navigation"]');
+
         if (!sidebar) {
           throw new Error('Admin sidebar not found');
         }
-        
+
         // Test navigation items - look for any navigation links
-        const navItems = document.querySelectorAll('nav a, [role="navigation"] a, .admin-sidebar a');
+        const navItems = document.querySelectorAll(
+          'nav a, [role="navigation"] a, .admin-sidebar a'
+        );
         if (navItems.length === 0) {
           throw new Error('Navigation items not found');
         }
-        
+
         return `Admin sidebar found with ${navItems.length} navigation items`;
-      }
+      },
     },
     {
       id: 'database-connection',
@@ -74,7 +82,7 @@ export const IntegrationTestSuite: React.FC = () => {
         } catch (error) {
           throw new Error('Database connection failed');
         }
-      }
+      },
     },
     {
       id: 'component-rendering',
@@ -84,15 +92,15 @@ export const IntegrationTestSuite: React.FC = () => {
         const selectors = [
           '[data-testid="admin-sidebar"]',
           'main',
-          'header', 
+          'header',
           'nav',
           '.card',
-          'button'
+          'button',
         ];
-        
+
         let foundComponents = 0;
         const foundSelectors: string[] = [];
-        
+
         for (const selector of selectors) {
           const elements = document.querySelectorAll(selector);
           if (elements.length > 0) {
@@ -100,13 +108,13 @@ export const IntegrationTestSuite: React.FC = () => {
             foundSelectors.push(`${selector} (${elements.length})`);
           }
         }
-        
+
         if (foundComponents === 0) {
           throw new Error('No key components found');
         }
-        
+
         return `${foundComponents}/${selectors.length} component types found: ${foundSelectors.join(', ')}`;
-      }
+      },
     },
     {
       id: 'performance-check',
@@ -117,16 +125,18 @@ export const IntegrationTestSuite: React.FC = () => {
         if (memory) {
           const usedMB = memory.usedJSHeapSize / (1024 * 1024);
           const totalMB = memory.totalJSHeapSize / (1024 * 1024);
-          
+
           // Admin interface naturally uses more memory due to rich components
           // Threshold increased to 300MB for admin dashboard
           if (usedMB > 300) {
-            throw new Error(`High memory usage: ${usedMB.toFixed(2)}MB (Total: ${totalMB.toFixed(2)}MB)`);
+            throw new Error(
+              `High memory usage: ${usedMB.toFixed(2)}MB (Total: ${totalMB.toFixed(2)}MB)`
+            );
           }
           return `Memory usage: ${usedMB.toFixed(2)}MB / ${totalMB.toFixed(2)}MB - Healthy`;
         }
         return 'Performance check completed (memory API not available)';
-      }
+      },
     },
     {
       id: 'responsive-transitions',
@@ -134,111 +144,127 @@ export const IntegrationTestSuite: React.FC = () => {
       test: async () => {
         // Test smooth transitions by simulating resize
         const startTime = performance.now();
-        
+
         // Trigger multiple resize events
         for (let i = 0; i < 5; i++) {
           window.dispatchEvent(new Event('resize'));
           await new Promise(resolve => setTimeout(resolve, 20));
         }
-        
+
         const duration = performance.now() - startTime;
         if (duration > 500) {
           throw new Error(`Slow transitions: ${duration.toFixed(2)}ms`);
         }
-        
+
         return `Transitions completed in ${duration.toFixed(2)}ms`;
-      }
-    }
+      },
+    },
   ];
 
   useEffect(() => {
     // Initialize tests
-    setTests(testDefinitions.map(def => ({
-      id: def.id,
-      name: def.name,
-      status: 'pending',
-      duration: 0
-    })));
+    setTests(
+      testDefinitions.map(def => ({
+        id: def.id,
+        name: def.name,
+        status: 'pending',
+        duration: 0,
+      }))
+    );
   }, []);
 
-  const runTest = async (testDef: typeof testDefinitions[0]) => {
+  const runTest = async (testDef: (typeof testDefinitions)[0]) => {
     const startTime = performance.now();
     setCurrentTest(testDef.id);
-    
-    setTests(prev => prev.map(test => 
-      test.id === testDef.id 
-        ? { ...test, status: 'running' }
-        : test
-    ));
+
+    setTests(prev =>
+      prev.map(test =>
+        test.id === testDef.id ? { ...test, status: 'running' } : test
+      )
+    );
 
     try {
       const result = await testDef.test();
       const duration = performance.now() - startTime;
-      
-      setTests(prev => prev.map(test => 
-        test.id === testDef.id 
-          ? { 
-              ...test, 
-              status: 'passed', 
-              duration,
-              details: result 
-            }
-          : test
-      ));
+
+      setTests(prev =>
+        prev.map(test =>
+          test.id === testDef.id
+            ? {
+                ...test,
+                status: 'passed',
+                duration,
+                details: result,
+              }
+            : test
+        )
+      );
     } catch (error) {
       const duration = performance.now() - startTime;
-      
-      setTests(prev => prev.map(test => 
-        test.id === testDef.id 
-          ? { 
-              ...test, 
-              status: 'failed', 
-              duration,
-              error: error instanceof Error ? error.message : 'Unknown error'
-            }
-          : test
-      ));
+
+      setTests(prev =>
+        prev.map(test =>
+          test.id === testDef.id
+            ? {
+                ...test,
+                status: 'failed',
+                duration,
+                error: error instanceof Error ? error.message : 'Unknown error',
+              }
+            : test
+        )
+      );
     }
-    
+
     setCurrentTest(null);
   };
 
   const runAllTests = async () => {
     setIsRunning(true);
-    
+
     for (const testDef of testDefinitions) {
       await runTest(testDef);
       // Small delay between tests
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    
+
     setIsRunning(false);
   };
 
   const resetTests = () => {
-    setTests(testDefinitions.map(def => ({
-      id: def.id,
-      name: def.name,
-      status: 'pending',
-      duration: 0
-    })));
+    setTests(
+      testDefinitions.map(def => ({
+        id: def.id,
+        name: def.name,
+        status: 'pending',
+        duration: 0,
+      }))
+    );
   };
 
   const getStatusIcon = (status: TestResult['status']) => {
     switch (status) {
-      case 'passed': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'failed': return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'running': return <Clock className="h-4 w-4 text-blue-600 animate-spin" />;
-      default: return <Clock className="h-4 w-4 text-gray-400" />;
+      case 'passed':
+        return <CheckCircle className='h-4 w-4 text-green-600' />;
+      case 'failed':
+        return <XCircle className='h-4 w-4 text-red-600' />;
+      case 'running':
+        return <Clock className='h-4 w-4 text-blue-600 animate-spin' />;
+      default:
+        return <Clock className='h-4 w-4 text-gray-400' />;
     }
   };
 
   const getStatusVariant = (status: TestResult['status']) => {
     switch (status) {
-      case 'passed': return 'default';
-      case 'failed': return 'destructive';
-      case 'running': return 'secondary';
-      default: return 'outline';
+      case 'passed':
+        return 'default';
+      case 'failed':
+        return 'destructive';
+      case 'running':
+        return 'secondary';
+      default:
+        return 'outline';
     }
   };
 
@@ -247,65 +273,69 @@ export const IntegrationTestSuite: React.FC = () => {
   const totalTests = tests.length;
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
           <CardTitle>🧪 Integration Test Suite</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          
+        <CardContent className='space-y-4'>
           {/* Test Summary */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{passedTests}</div>
-              <div className="text-sm text-muted-foreground">Passed</div>
+          <div className='grid grid-cols-3 gap-4'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-green-600'>
+                {passedTests}
+              </div>
+              <div className='text-sm text-muted-foreground'>Passed</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-600">{failedTests}</div>
-              <div className="text-sm text-muted-foreground">Failed</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-red-600'>
+                {failedTests}
+              </div>
+              <div className='text-sm text-muted-foreground'>Failed</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">{totalTests}</div>
-              <div className="text-sm text-muted-foreground">Total</div>
+            <div className='text-center'>
+              <div className='text-2xl font-bold'>{totalTests}</div>
+              <div className='text-sm text-muted-foreground'>Total</div>
             </div>
           </div>
 
           {/* Control Buttons */}
-          <div className="flex gap-2">
-            <Button 
-              onClick={runAllTests} 
-              disabled={isRunning}
-              size="sm"
-            >
-              <Play className="h-4 w-4 mr-2" />
+          <div className='flex gap-2'>
+            <Button onClick={runAllTests} disabled={isRunning} size='sm'>
+              <Play className='h-4 w-4 mr-2' />
               {isRunning ? 'Running Tests...' : 'Run All Tests'}
             </Button>
-            <Button variant="outline" onClick={resetTests} size="sm">
+            <Button variant='outline' onClick={resetTests} size='sm'>
               Reset Tests
             </Button>
           </div>
 
           {/* Test Results */}
-          <div className="space-y-2">
-            {tests.map((test) => {
+          <div className='space-y-2'>
+            {tests.map(test => {
               const testDef = testDefinitions.find(d => d.id === test.id);
               return (
-                <div key={test.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex items-center gap-3">
+                <div
+                  key={test.id}
+                  className='flex items-center justify-between p-3 border rounded-lg'
+                >
+                  <div className='flex items-center gap-3'>
                     {getStatusIcon(test.status)}
                     <div>
-                      <div className="font-medium">{test.name}</div>
+                      <div className='font-medium'>{test.name}</div>
                       {test.details && (
-                        <div className="text-sm text-muted-foreground">{test.details}</div>
+                        <div className='text-sm text-muted-foreground'>
+                          {test.details}
+                        </div>
                       )}
                       {test.error && (
-                        <div className="text-sm text-red-600">{test.error}</div>
+                        <div className='text-sm text-red-600'>{test.error}</div>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className='flex items-center gap-2'>
                     {test.duration > 0 && (
-                      <span className="text-sm text-muted-foreground">
+                      <span className='text-sm text-muted-foreground'>
                         {test.duration.toFixed(2)}ms
                       </span>
                     )}
@@ -313,8 +343,8 @@ export const IntegrationTestSuite: React.FC = () => {
                       {test.status}
                     </Badge>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => testDef && runTest(testDef)}
                       disabled={isRunning || test.status === 'running'}
                     >
@@ -328,9 +358,10 @@ export const IntegrationTestSuite: React.FC = () => {
 
           {/* Overall Status */}
           {failedTests > 0 && (
-            <Alert variant="destructive">
+            <Alert variant='destructive'>
               <AlertDescription>
-                {failedTests} test(s) failed. Please check the results above for details.
+                {failedTests} test(s) failed. Please check the results above for
+                details.
               </AlertDescription>
             </Alert>
           )}
@@ -342,7 +373,6 @@ export const IntegrationTestSuite: React.FC = () => {
               </AlertDescription>
             </Alert>
           )}
-
         </CardContent>
       </Card>
     </div>

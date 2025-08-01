@@ -42,7 +42,7 @@ export const useCheckIn = () => {
         total_points: 150,
         last_checkin_date: new Date().toISOString().split('T')[0],
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       } as UserStreak;
     },
     enabled: !!user?.id,
@@ -66,12 +66,12 @@ export const useCheckIn = () => {
         points_earned: 10,
         current_streak: (userStreak?.current_streak || 0) + 1,
         total_points: (userStreak?.total_points || 0) + 10,
-        message: 'Check-in thành công! +10 điểm'
+        message: 'Check-in thành công! +10 điểm',
       };
     },
-    onSuccess: (result) => {
+    onSuccess: result => {
       queryClient.invalidateQueries({ queryKey: ['user-streak'] });
-      
+
       if (result.success) {
         toast.success(result.message, {
           duration: 3000,
@@ -80,7 +80,7 @@ export const useCheckIn = () => {
         toast.info(result.message);
       }
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Check-in error:', error);
       toast.error('Có lỗi xảy ra khi check-in');
     },

@@ -1,4 +1,11 @@
-import { TournamentStatus, TournamentType, GameFormat, TournamentTier, PaymentStatus, RegistrationStatus } from './tournament-enums';
+import {
+  TournamentStatus,
+  TournamentType,
+  GameFormat,
+  TournamentTier,
+  PaymentStatus,
+  RegistrationStatus,
+} from './tournament-enums';
 import type { RankCode } from '@/utils/eloConstants';
 
 // Simplified tournament rewards - removed complex logic
@@ -57,7 +64,7 @@ export interface EnhancedTournament {
   created_at: string;
   updated_at: string;
   has_third_place_match?: boolean;
-  
+
   // Extended fields
   rewards: TournamentRewards;
   eligible_ranks: RankCode[];
@@ -66,19 +73,19 @@ export interface EnhancedTournament {
   max_rank_requirement?: RankCode;
   requires_approval: boolean;
   is_public: boolean;
-  
+
   // Calculated fields
   available_slots: number;
   registration_status: 'not_started' | 'open' | 'closed' | 'ended';
   time_until_start?: string;
-  
+
   // Relations (optional, loaded when needed)
   club?: {
     id: string;
     name: string;
     address: string;
   };
-  
+
   registrations?: TournamentRegistration[];
   organizer?: {
     id: string;
@@ -97,7 +104,7 @@ export interface TournamentRegistration {
   notes?: string;
   added_by_admin?: string;
   admin_notes?: string;
-  
+
   // Player info (loaded when needed)
   player?: {
     id: string;
@@ -118,7 +125,7 @@ export interface TournamentFormData {
   tournament_start: string;
   tournament_end: string;
   venue_address: string;
-  
+
   // Tournament settings
   max_participants: number;
   tournament_type: TournamentType;
@@ -126,13 +133,13 @@ export interface TournamentFormData {
   entry_fee: number;
   prize_pool: number;
   has_third_place_match?: boolean;
-  
+
   // Registration settings
   registration_start: string;
   registration_end: string;
   rules?: string;
   contact_info?: string;
-  
+
   // Rank eligibility
   eligible_ranks: RankCode[];
   allow_all_ranks: boolean;
@@ -140,7 +147,7 @@ export interface TournamentFormData {
   max_rank_requirement?: RankCode;
   requires_approval: boolean;
   is_public: boolean;
-  
+
   // Rewards (optional for form, will be calculated)
   rewards?: TournamentRewards;
 }

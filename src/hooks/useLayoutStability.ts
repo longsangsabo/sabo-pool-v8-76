@@ -15,7 +15,7 @@ export const useLayoutStability = (options: LayoutStabilityOptions = {}) => {
     if (!containerRef.current || !reserveSpace) return;
 
     const element = containerRef.current;
-    
+
     // Set explicit dimensions to prevent layout shift
     if (width && height) {
       element.style.width = `${width}px`;
@@ -32,14 +32,14 @@ export const useLayoutStability = (options: LayoutStabilityOptions = {}) => {
 
   const getContainerStyle = (): React.CSSProperties => {
     const style: React.CSSProperties = {};
-    
+
     if (width && height) {
       style.width = `${width}px`;
       style.height = `${height}px`;
     } else if (aspectRatio) {
       style.aspectRatio = aspectRatio;
     }
-    
+
     return style;
   };
 
@@ -60,7 +60,7 @@ export const useImagePreloader = (images: string[]) => {
         img.onload = resolve;
         img.onerror = reject;
         img.src = src;
-        
+
         // Add preload link to head
         const link = document.createElement('link');
         link.rel = 'preload';
@@ -80,22 +80,28 @@ export const useImagePreloader = (images: string[]) => {
 };
 
 // Hook for detecting and logging layout shifts
-export const useLayoutShiftDetector = (enabled: boolean = process.env.NODE_ENV === 'development') => {
+export const useLayoutShiftDetector = (
+  enabled: boolean = process.env.NODE_ENV === 'development'
+) => {
   useEffect(() => {
-    if (!enabled || typeof window === 'undefined' || !('PerformanceObserver' in window)) {
+    if (
+      !enabled ||
+      typeof window === 'undefined' ||
+      !('PerformanceObserver' in window)
+    ) {
       return;
     }
 
     let clsValue = 0;
-    let clsEntries: PerformanceEntry[] = [];
+    const clsEntries: PerformanceEntry[] = [];
 
-    const observer = new PerformanceObserver((entryList) => {
+    const observer = new PerformanceObserver(entryList => {
       for (const entry of entryList.getEntries()) {
         // Only consider layout shifts without recent user input
         if (!(entry as any).hadRecentInput) {
           clsValue += (entry as any).value;
           clsEntries.push(entry);
-          
+
           // Log significant layout shifts
           if ((entry as any).value > 0.1) {
             console.warn('Significant layout shift detected:', {

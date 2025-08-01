@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -28,7 +34,7 @@ interface RealTimeBracketUpdatesProps {
 
 export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
   tournamentId,
-  maxUpdates = 10
+  maxUpdates = 10,
 }) => {
   const [updates, setUpdates] = useState<BracketUpdate[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -45,9 +51,9 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
           event: 'UPDATE',
           schema: 'public',
           table: 'tournament_matches',
-          filter: tournamentId ? `tournament_id=eq.${tournamentId}` : undefined
+          filter: tournamentId ? `tournament_id=eq.${tournamentId}` : undefined,
         },
-        (payload) => {
+        payload => {
           const match = payload.new;
           if (match.status === 'completed' && match.winner_id) {
             // Fetch additional match details
@@ -61,9 +67,9 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
           event: 'UPDATE',
           schema: 'public',
           table: 'tournaments',
-          filter: tournamentId ? `id=eq.${tournamentId}` : undefined
+          filter: tournamentId ? `id=eq.${tournamentId}` : undefined,
         },
-        (payload) => {
+        payload => {
           const tournament = payload.new;
           if (tournament.status === 'completed') {
             addUpdate({
@@ -77,12 +83,12 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
               match_number: 0,
               bracket_type: 'finals', // SABO_REBUILD: Updated bracket type
               timestamp: new Date().toISOString(),
-              type: 'tournament_completed'
+              type: 'tournament_completed',
             });
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
           console.log('🔄 Connected to real-time bracket updates');
@@ -94,7 +100,11 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
     };
   }, [tournamentId]);
 
-  const fetchMatchDetails = async (matchId: string, tournamentId: string, winnerId: string) => {
+  const fetchMatchDetails = async (
+    matchId: string,
+    tournamentId: string,
+    winnerId: string
+  ) => {
     try {
       // Get match details
       const { data: match } = await supabase
@@ -131,7 +141,7 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
           match_number: match.match_number,
           bracket_type: match.bracket_type,
           timestamp: new Date().toISOString(),
-          type: 'match_completed'
+          type: 'match_completed',
         });
       }
     } catch (error) {
@@ -147,7 +157,7 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
     toast({
       title: getUpdateTitle(update),
       description: getUpdateDescription(update),
-      variant: "default",
+      variant: 'default',
     });
   };
 
@@ -180,13 +190,13 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
   const getUpdateIcon = (type: BracketUpdate['type']) => {
     switch (type) {
       case 'match_completed':
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
+        return <CheckCircle className='h-4 w-4 text-green-600' />;
       case 'winner_advanced':
-        return <Users className="h-4 w-4 text-blue-600" />;
+        return <Users className='h-4 w-4 text-blue-600' />;
       case 'tournament_completed':
-        return <Activity className="h-4 w-4 text-purple-600" />;
+        return <Activity className='h-4 w-4 text-purple-600' />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className='h-4 w-4 text-gray-600' />;
     }
   };
 
@@ -197,7 +207,10 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
       semifinal: 'bg-blue-500/10 text-blue-700 border-blue-200',
       final: 'bg-purple-500/10 text-purple-700 border-purple-200',
     };
-    return colors[type as keyof typeof colors] || 'bg-gray-500/10 text-gray-700 border-gray-200';
+    return (
+      colors[type as keyof typeof colors] ||
+      'bg-gray-500/10 text-gray-700 border-gray-200'
+    );
   };
 
   const formatTime = (timestamp: string) => {
@@ -206,72 +219,81 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
+    <Card className='h-full'>
+      <CardHeader className='pb-4'>
+        <div className='flex items-center justify-between'>
           <div>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Activity className="h-5 w-5" />
+            <CardTitle className='text-lg flex items-center gap-2'>
+              <Activity className='h-5 w-5' />
               Real-time Updates
             </CardTitle>
             <CardDescription>
               Live bracket progression and match results
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
-              <span className="text-xs text-muted-foreground">
+          <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1'>
+              <div
+                className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}
+              />
+              <span className='text-xs text-muted-foreground'>
                 {isConnected ? 'Connected' : 'Disconnected'}
               </span>
             </div>
             {lastUpdateTime && (
-              <span className="text-xs text-muted-foreground">
+              <span className='text-xs text-muted-foreground'>
                 Last: {formatTime(lastUpdateTime.toISOString())}
               </span>
             )}
           </div>
         </div>
       </CardHeader>
-      
-      <CardContent className="p-0">
-        <ScrollArea className="h-96 px-6 pb-6">
+
+      <CardContent className='p-0'>
+        <ScrollArea className='h-96 px-6 pb-6'>
           {updates.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
-              <Clock className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-sm">Waiting for bracket updates...</p>
-              <p className="text-xs">Match completions will appear here</p>
+            <div className='flex flex-col items-center justify-center py-8 text-muted-foreground'>
+              <Clock className='h-8 w-8 mb-2 opacity-50' />
+              <p className='text-sm'>Waiting for bracket updates...</p>
+              <p className='text-xs'>Match completions will appear here</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className='space-y-3'>
               {updates.map((update, index) => (
-                <div 
+                <div
                   key={update.id}
                   className={`p-3 rounded-lg border transition-all ${
-                    index === 0 ? 'bg-blue-50 border-blue-200' : 'bg-background border-border'
+                    index === 0
+                      ? 'bg-blue-50 border-blue-200'
+                      : 'bg-background border-border'
                   }`}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className='flex items-start gap-3'>
                     {getUpdateIcon(update.type)}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="font-medium text-sm truncate">
+                    <div className='flex-1 min-w-0'>
+                      <div className='flex items-center gap-2 mb-1'>
+                        <p className='font-medium text-sm truncate'>
                           {update.tournament_name}
                         </p>
                         {update.bracket_type && (
-                        <Badge className={getBracketTypeBadge(update.bracket_type)}>
-                          {update.bracket_type}
-                        </Badge>
+                          <Badge
+                            className={getBracketTypeBadge(update.bracket_type)}
+                          >
+                            {update.bracket_type}
+                          </Badge>
                         )}
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground mb-2">
+
+                      <p className='text-sm text-muted-foreground mb-2'>
                         {getUpdateDescription(update)}
                       </p>
-                      
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+
+                      <div className='flex items-center justify-between text-xs text-muted-foreground'>
                         {update.round_number > 0 && (
-                          <span>Round {update.round_number}, Match {update.match_number}</span>
+                          <span>
+                            Round {update.round_number}, Match{' '}
+                            {update.match_number}
+                          </span>
                         )}
                         <span>{formatTime(update.timestamp)}</span>
                       </div>

@@ -21,10 +21,10 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
   showNotifications = true,
   showWallet = true,
   showBottomNav = true,
-  onMenuClick
+  onMenuClick,
 }) => {
   return (
-    <div className="min-h-screen bg-background lg:hidden">
+    <div className='min-h-screen bg-background lg:hidden'>
       {/* Mobile Header */}
       <MobileHeader
         title={title}
@@ -36,9 +36,7 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
       />
 
       {/* Main Content */}
-      <main className={`${showBottomNav ? 'pb-16' : ''}`}>
-        {children}
-      </main>
+      <main className={`${showBottomNav ? 'pb-16' : ''}`}>{children}</main>
 
       {/* Mobile Bottom Navigation */}
       {showBottomNav && <MobileNavigation />}

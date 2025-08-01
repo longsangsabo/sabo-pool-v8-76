@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
@@ -28,12 +27,12 @@ export const useAdminCheck = () => {
       }
 
       const isAdmin = roles?.some(r => r.role === 'admin') || false;
-      console.log('useAdminCheck: Admin status result:', { 
-        user_id: user.id, 
-        is_admin: isAdmin, 
-        roles 
+      console.log('useAdminCheck: Admin status result:', {
+        user_id: user.id,
+        is_admin: isAdmin,
+        roles,
       });
-      
+
       return isAdmin;
     },
     enabled: !!user?.id,
@@ -47,6 +46,6 @@ export const useAdminCheck = () => {
   return {
     isAdmin: query.data || false,
     isLoading: query.isLoading,
-    error: query.error
+    error: query.error,
   };
 };

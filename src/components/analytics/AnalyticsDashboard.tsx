@@ -71,7 +71,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 }) => {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedRange, setSelectedRange] = useState<'week' | 'month' | 'year' | 'all'>(timeRange);
+  const [selectedRange, setSelectedRange] = useState<
+    'week' | 'month' | 'year' | 'all'
+  >(timeRange);
 
   useEffect(() => {
     fetchAnalytics();
@@ -193,7 +195,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </p>
         </div>
 
-        <Select value={selectedRange} onValueChange={(value: 'week' | 'month' | 'year' | 'all') => setSelectedRange(value)}>
+        <Select
+          value={selectedRange}
+          onValueChange={(value: 'week' | 'month' | 'year' | 'all') =>
+            setSelectedRange(value)
+          }
+        >
           <SelectTrigger className='w-32'>
             <SelectValue />
           </SelectTrigger>

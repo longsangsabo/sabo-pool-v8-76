@@ -52,9 +52,17 @@ export function useSPAAnalytics() {
 
       // Get SPA history for trends (mock data for now)
       const trendData = Array.from({ length: 30 }, (_, i) => ({
-        date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        spa_points: Math.max(0, (currentRanking?.spa_points || 100) + Math.floor(Math.random() * 100 - 50)),
-        source: ['challenge', 'tournament', 'milestone', 'bonus'][Math.floor(Math.random() * 4)]
+        date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split('T')[0],
+        spa_points: Math.max(
+          0,
+          (currentRanking?.spa_points || 100) +
+            Math.floor(Math.random() * 100 - 50)
+        ),
+        source: ['challenge', 'tournament', 'milestone', 'bonus'][
+          Math.floor(Math.random() * 4)
+        ],
       }));
 
       // Mock source breakdown
@@ -62,7 +70,7 @@ export function useSPAAnalytics() {
         { source: 'Thách đấu', points: 450, percentage: 45 },
         { source: 'Giải đấu', points: 300, percentage: 30 },
         { source: 'Thành tựu', points: 150, percentage: 15 },
-        { source: 'Thưởng khác', points: 100, percentage: 10 }
+        { source: 'Thưởng khác', points: 100, percentage: 10 },
       ];
 
       const analytics: SPAAnalyticsData = {
@@ -71,12 +79,12 @@ export function useSPAAnalytics() {
         monthlyChange: Math.floor(Math.random() * 200 - 100),
         rankingPosition: Math.floor(Math.random() * 100) + 1,
         trendData,
-        sourceBreakdown
+        sourceBreakdown,
       };
 
       return analytics;
     },
-    enabled: !!user?.id
+    enabled: !!user?.id,
   });
 
   // System-wide SPA Analytics (for admin)
@@ -89,24 +97,30 @@ export function useSPAAnalytics() {
         .select('spa_points', { count: 'exact' })
         .gt('spa_points', 0);
 
-      const averageSPA = playersWithSPA?.reduce((sum, p) => sum + (p.spa_points || 0), 0) / (count || 1) || 0;
+      const averageSPA =
+        playersWithSPA?.reduce((sum, p) => sum + (p.spa_points || 0), 0) /
+          (count || 1) || 0;
 
       // Get top SPA player
       const { data: topPlayer } = await supabase
         .from('player_rankings')
-        .select(`
+        .select(
+          `
           spa_points,
           profiles!inner(full_name)
-        `)
+        `
+        )
         .order('spa_points', { ascending: false })
         .limit(1)
         .single();
 
       // Mock daily distribution
       const dailyDistribution = Array.from({ length: 7 }, (_, i) => ({
-        date: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        date: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split('T')[0],
         new_points: Math.floor(Math.random() * 1000) + 500,
-        players_active: Math.floor(Math.random() * 50) + 20
+        players_active: Math.floor(Math.random() * 50) + 20,
       }));
 
       const systemStats: SystemSPAStats = {
@@ -114,19 +128,19 @@ export function useSPAAnalytics() {
         averageSPA,
         topSPAPlayer: {
           name: (topPlayer?.profiles as any)?.full_name || 'Unknown',
-          spa_points: topPlayer?.spa_points || 0
+          spa_points: topPlayer?.spa_points || 0,
         },
-        dailyDistribution
+        dailyDistribution,
       };
 
       return systemStats;
-    }
+    },
   });
 
   return {
     playerAnalytics,
     systemAnalytics,
     isLoadingPlayer,
-    isLoadingSystem
+    isLoadingSystem,
   };
 }

@@ -37,7 +37,7 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
   challengerId,
   opponentId,
   isOpen,
-  onToggle
+  onToggle,
 }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -47,12 +47,13 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const otherUserId = user?.id === challengerId ? opponentId : challengerId;
-  const otherUserName = user?.id === challengerId ? opponentName : challengerName;
+  const otherUserName =
+    user?.id === challengerId ? opponentName : challengerName;
 
   // Load messages - Mock implementation since challenge_messages table doesn't exist
   const loadMessages = async () => {
     if (!isOpen) return;
-    
+
     setIsLoading(true);
     try {
       // Mock messages for now
@@ -63,11 +64,12 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
           sender_id: challengerId === user?.id ? opponentId : challengerId,
           message: 'Chào bạn! Sẵn sàng cho trận đấu chưa? 🎱',
           created_at: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-          sender_name: challengerId === user?.id ? opponentName : challengerName,
-          sender_avatar: undefined
-        }
+          sender_name:
+            challengerId === user?.id ? opponentName : challengerName,
+          sender_avatar: undefined,
+        },
       ];
-      
+
       setMessages(mockMessages);
     } catch (error) {
       console.error('Error loading messages:', error);
@@ -91,9 +93,9 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
         message: newMessage.trim(),
         created_at: new Date().toISOString(),
         sender_name: user.user_metadata?.full_name || 'Bạn',
-        sender_avatar: user.user_metadata?.avatar_url
+        sender_avatar: user.user_metadata?.avatar_url,
       };
-      
+
       setMessages(prev => [...prev, newMsg]);
       setNewMessage('');
       toast.success('Đã gửi tin nhắn!');
@@ -139,29 +141,27 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">
-              Chat với {otherUserName}
-            </CardTitle>
+    <Card className='w-full'>
+      <CardHeader className='pb-3'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <MessageCircle className='h-5 w-5 text-primary' />
+            <CardTitle className='text-lg'>Chat với {otherUserName}</CardTitle>
           </div>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={onToggle}
-            className="gap-1"
+            className='gap-1'
           >
             {isOpen ? (
               <>
-                <ChevronUp className="h-4 w-4" />
+                <ChevronUp className='h-4 w-4' />
                 Thu gọn
               </>
             ) : (
               <>
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className='h-4 w-4' />
                 Mở rộng
               </>
             )}
@@ -170,34 +170,36 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
       </CardHeader>
 
       {isOpen && (
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {/* Messages area */}
-          <div className="h-64 overflow-y-auto border rounded-lg p-3 space-y-3 bg-muted/20">
+          <div className='h-64 overflow-y-auto border rounded-lg p-3 space-y-3 bg-muted/20'>
             {isLoading ? (
-              <div className="text-center text-muted-foreground">
+              <div className='text-center text-muted-foreground'>
                 Đang tải tin nhắn...
               </div>
             ) : messages.length === 0 ? (
-              <div className="text-center text-muted-foreground">
+              <div className='text-center text-muted-foreground'>
                 Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!
               </div>
             ) : (
-              messages.map((message) => (
+              messages.map(message => (
                 <div
                   key={message.id}
                   className={`flex gap-2 ${
-                    message.sender_id === user?.id ? 'justify-end' : 'justify-start'
+                    message.sender_id === user?.id
+                      ? 'justify-end'
+                      : 'justify-start'
                   }`}
                 >
                   {message.sender_id !== user?.id && (
-                    <Avatar className="h-8 w-8">
+                    <Avatar className='h-8 w-8'>
                       <AvatarImage src={message.sender_avatar} />
                       <AvatarFallback>
                         {message.sender_name?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   )}
-                  
+
                   <div
                     className={`max-w-[70%] rounded-lg px-3 py-2 ${
                       message.sender_id === user?.id
@@ -205,21 +207,27 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
                         : 'bg-background border'
                     }`}
                   >
-                    <p className="text-sm">{message.message}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.sender_id === user?.id
-                        ? 'text-primary-foreground/70'
-                        : 'text-muted-foreground'
-                    }`}>
-                      {format(new Date(message.created_at), 'HH:mm', { locale: vi })}
+                    <p className='text-sm'>{message.message}</p>
+                    <p
+                      className={`text-xs mt-1 ${
+                        message.sender_id === user?.id
+                          ? 'text-primary-foreground/70'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      {format(new Date(message.created_at), 'HH:mm', {
+                        locale: vi,
+                      })}
                     </p>
                   </div>
 
                   {message.sender_id === user?.id && (
-                    <Avatar className="h-8 w-8">
+                    <Avatar className='h-8 w-8'>
                       <AvatarImage src={user?.user_metadata?.avatar_url} />
                       <AvatarFallback>
-                        {user?.user_metadata?.full_name?.charAt(0).toUpperCase() || 'U'}
+                        {user?.user_metadata?.full_name
+                          ?.charAt(0)
+                          .toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
                   )}
@@ -230,22 +238,22 @@ const ChallengeChat: React.FC<ChallengeChatProps> = ({
           </div>
 
           {/* Message input */}
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Input
-              placeholder="Nhập tin nhắn..."
+              placeholder='Nhập tin nhắn...'
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={e => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               disabled={isSending}
-              className="flex-1"
+              className='flex-1'
             />
             <Button
               onClick={sendMessage}
               disabled={!newMessage.trim() || isSending}
-              size="sm"
-              className="gap-2"
+              size='sm'
+              className='gap-2'
             >
-              <Send className="h-4 w-4" />
+              <Send className='h-4 w-4' />
               Gửi
             </Button>
           </div>

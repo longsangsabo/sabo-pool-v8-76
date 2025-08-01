@@ -13,14 +13,14 @@ export const useErrorHandler = () => {
       error: error.message,
       stack: error.stack,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Show user-friendly toast
     const section = context?.section || 'Ứng dụng';
     toast.error(`Lỗi ${section}`, {
       description: 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.',
-      duration: 5000
+      duration: 5000,
     });
   }, []);
 

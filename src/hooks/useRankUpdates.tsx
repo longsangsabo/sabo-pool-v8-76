@@ -20,21 +20,27 @@ export const useRankUpdates = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const notification = payload.new;
-          
-          if (notification.type === 'rank_approved' || notification.type === 'rank_result') {
+
+          if (
+            notification.type === 'rank_approved' ||
+            notification.type === 'rank_result'
+          ) {
             console.log('🏆 Rank notification received:', notification);
-            
+
             const metadata = notification.metadata || {};
             const rank = metadata.rank || 'Unknown';
             const spaReward = metadata.spa_reward || 0;
             const clubName = metadata.club_name || 'CLB';
-            
+
             // Show success toast with rank update info
-            if (notification.type === 'rank_result' && notification.message?.includes('phê duyệt')) {
+            if (
+              notification.type === 'rank_result' &&
+              notification.message?.includes('phê duyệt')
+            ) {
               toast({
                 title: '🎉 Hạng đã được xác thực!',
                 description: `Chúc mừng! Hạng ${rank} của bạn đã được xác thực tại ${clubName}. +${spaReward} SPA Points!`,
@@ -43,21 +49,23 @@ export const useRankUpdates = () => {
 
               // Dispatch custom event for other components to react
               if (typeof window !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('rankApproved', {
-                  detail: {
-                    rank,
-                    spaReward,
-                    userId: user.id,
-                    clubName,
-                    notification
-                  }
-                }));
+                window.dispatchEvent(
+                  new CustomEvent('rankApproved', {
+                    detail: {
+                      rank,
+                      spaReward,
+                      userId: user.id,
+                      clubName,
+                      notification,
+                    },
+                  })
+                );
               }
             }
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         console.log('🔔 Rank notification subscription status:', status);
       });
 

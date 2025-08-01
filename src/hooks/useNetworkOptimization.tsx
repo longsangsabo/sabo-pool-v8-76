@@ -13,7 +13,7 @@ export const useNetworkOptimization = () => {
     rtt: 50,
     downlink: 10,
     effectiveType: '4g',
-    quality: 'good'
+    quality: 'good',
   });
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -25,7 +25,7 @@ export const useNetworkOptimization = () => {
           rtt: connection.rtt || 50,
           downlink: connection.downlink || 10,
           effectiveType: connection.effectiveType || '4g',
-          quality: connection.effectiveType === '4g' ? 'good' : 'fair'
+          quality: connection.effectiveType === '4g' ? 'good' : 'fair',
         });
       } else {
         // Fallback for browsers without connection API
@@ -33,7 +33,7 @@ export const useNetworkOptimization = () => {
           rtt: 50,
           downlink: 10,
           effectiveType: '4g',
-          quality: 'good'
+          quality: 'good',
         });
       }
     };
@@ -47,14 +47,20 @@ export const useNetworkOptimization = () => {
     window.addEventListener('offline', handleOnlineStatus);
 
     if ('connection' in navigator) {
-      (navigator as any).connection.addEventListener('change', updateConnectionInfo);
+      (navigator as any).connection.addEventListener(
+        'change',
+        updateConnectionInfo
+      );
     }
 
     return () => {
       window.removeEventListener('online', handleOnlineStatus);
       window.removeEventListener('offline', handleOnlineStatus);
       if ('connection' in navigator) {
-        (navigator as any).connection.removeEventListener('change', updateConnectionInfo);
+        (navigator as any).connection.removeEventListener(
+          'change',
+          updateConnectionInfo
+        );
       }
     };
   }, []);
@@ -75,17 +81,21 @@ export const usePerformanceMonitoring = () => {
   const [performanceMetrics, setPerformanceMetrics] = useState({
     loadTime: 0,
     renderTime: 0,
-    memoryUsage: 0
+    memoryUsage: 0,
   });
 
   useEffect(() => {
     const measurePerformance = () => {
       if (typeof window !== 'undefined' && window.performance) {
-        const navigation = window.performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        const navigation = window.performance.getEntriesByType(
+          'navigation'
+        )[0] as PerformanceNavigationTiming;
         setPerformanceMetrics({
           loadTime: navigation.loadEventEnd - navigation.loadEventStart,
-          renderTime: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
-          memoryUsage: (window.performance as any).memory?.usedJSHeapSize || 0
+          renderTime:
+            navigation.domContentLoadedEventEnd -
+            navigation.domContentLoadedEventStart,
+          memoryUsage: (window.performance as any).memory?.usedJSHeapSize || 0,
         });
       }
     };

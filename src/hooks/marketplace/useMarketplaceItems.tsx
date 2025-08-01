@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { MarketplaceItem } from './types';
@@ -91,26 +90,33 @@ export const useMarketplaceItems = () => {
       let filteredItems = mockItems;
 
       if (filters?.category && filters.category !== 'all') {
-        filteredItems = filteredItems.filter(item => item.category === filters.category);
+        filteredItems = filteredItems.filter(
+          item => item.category === filters.category
+        );
       }
 
       if (filters?.search) {
         const searchTerm = filters.search.toLowerCase();
-        filteredItems = filteredItems.filter(item => 
-          item.title.toLowerCase().includes(searchTerm) ||
-          item.description.toLowerCase().includes(searchTerm) ||
-          item.brand?.toLowerCase().includes(searchTerm)
+        filteredItems = filteredItems.filter(
+          item =>
+            item.title.toLowerCase().includes(searchTerm) ||
+            item.description.toLowerCase().includes(searchTerm) ||
+            item.brand?.toLowerCase().includes(searchTerm)
         );
       }
 
       if (filters?.priceRange) {
-        filteredItems = filteredItems.filter(item => 
-          item.price >= filters.priceRange![0] && item.price <= filters.priceRange![1]
+        filteredItems = filteredItems.filter(
+          item =>
+            item.price >= filters.priceRange![0] &&
+            item.price <= filters.priceRange![1]
         );
       }
 
       if (filters?.condition) {
-        filteredItems = filteredItems.filter(item => item.condition === filters.condition);
+        filteredItems = filteredItems.filter(
+          item => item.condition === filters.condition
+        );
       }
 
       setItems(filteredItems);
@@ -125,11 +131,11 @@ export const useMarketplaceItems = () => {
     try {
       // Mock increment views since marketplace_items table doesn't exist
       console.log('Mock increment views for item:', itemId);
-      
+
       // Update local state if needed
-      setItems(prevItems => 
-        prevItems.map(item => 
-          item.id === itemId 
+      setItems(prevItems =>
+        prevItems.map(item =>
+          item.id === itemId
             ? { ...item, views_count: (item.views_count || 0) + 1 }
             : item
         )

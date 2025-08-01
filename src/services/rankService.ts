@@ -25,50 +25,50 @@ export const rankService = {
   async getAllRanks() {
     return [];
   },
-  
+
   async getRankByCode(code: string) {
     return null;
   },
-  
+
   async getRankInfo(rankCode: string) {
     return null;
   },
-  
+
   async getRankCodes() {
     return [];
   },
-  
+
   async getRanksByGroup(group: string) {
     return [];
   },
-  
+
   async getTournamentRewards() {
     return [];
   },
-  
+
   async getRankByElo(elo: number) {
     return null;
   },
-  
+
   async getNextRank(currentRank: string) {
     return null;
   },
-  
+
   async getPreviousRank(currentRank: string) {
     return null;
   },
-  
+
   async clearCache() {
     return true;
   },
-  
+
   async calculateTournamentRewards(): Promise<TournamentReward[]> {
     return [];
   },
-  
+
   async getSpaRewards(): Promise<SpaReward[]> {
     return [];
-  }
+  },
 };
 
 export class RankService {
@@ -81,12 +81,15 @@ export class RankService {
         rank_description: 'Starting rank',
         promotion_requirements: {},
         elo_requirement: 1000,
-        spa_requirement: 0
-      }
+        spa_requirement: 0,
+      },
     ];
   }
 
-  static async updateRankDefinition(rankCode: string, data: Partial<DatabaseRankDefinition>) {
+  static async updateRankDefinition(
+    rankCode: string,
+    data: Partial<DatabaseRankDefinition>
+  ) {
     console.log('Mock update rank definition:', rankCode, data);
     return { success: true };
   }

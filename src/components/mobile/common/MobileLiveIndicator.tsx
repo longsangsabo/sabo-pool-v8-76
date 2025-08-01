@@ -31,15 +31,15 @@ export const MobileLiveIndicator: React.FC<MobileLiveIndicatorProps> = ({
   return (
     <div className={`mobile-live-indicator ${className}`}>
       <Badge className={`${getIndicatorColor()} animate-pulse`}>
-        <div className="live-dot"></div>
-        <span className="font-semibold text-xs uppercase tracking-wide">
+        <div className='live-dot'></div>
+        <span className='font-semibold text-xs uppercase tracking-wide'>
           {status}
         </span>
       </Badge>
-      
+
       {viewers && (
-        <div className="flex items-center gap-1 ml-2 text-xs text-muted-foreground">
-          <Eye className="w-3 h-3" />
+        <div className='flex items-center gap-1 ml-2 text-xs text-muted-foreground'>
+          <Eye className='w-3 h-3' />
           <span>{viewers.toLocaleString()}</span>
         </div>
       )}

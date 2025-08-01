@@ -3,23 +3,29 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  Trophy, 
-  Medal, 
-  Award, 
-  TrendingUp, 
-  TrendingDown, 
-  Search, 
+import {
+  Trophy,
+  Medal,
+  Award,
+  TrendingUp,
+  TrendingDown,
+  Search,
   Filter,
   Users,
   Building2,
   Calendar,
   Crown,
   Star,
-  Zap
+  Zap,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -52,19 +58,42 @@ interface RankingLeaderboardProps {
 }
 
 export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
-  className
+  className,
 }) => {
   const [players, setPlayers] = useState<LeaderboardPlayer[]>([]);
-  const [filteredPlayers, setFilteredPlayers] = useState<LeaderboardPlayer[]>([]);
+  const [filteredPlayers, setFilteredPlayers] = useState<LeaderboardPlayer[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRank, setSelectedRank] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'elo' | 'winRate' | 'matches' | 'streak'>('elo');
+  const [sortBy, setSortBy] = useState<
+    'elo' | 'winRate' | 'matches' | 'streak'
+  >('elo');
   const [activeTab, setActiveTab] = useState('overall');
 
-  const ranks = ['E+', 'E', 'F+', 'F', 'G+', 'G', 'H+', 'H', 'I+', 'I', 'K+', 'K'];
-  const cities = ['Hà Nội', 'TP. Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'];
+  const ranks = [
+    'E+',
+    'E',
+    'F+',
+    'F',
+    'G+',
+    'G',
+    'H+',
+    'H',
+    'I+',
+    'I',
+    'K+',
+    'K',
+  ];
+  const cities = [
+    'Hà Nội',
+    'TP. Hồ Chí Minh',
+    'Đà Nẵng',
+    'Cần Thơ',
+    'Hải Phòng',
+  ];
 
   useEffect(() => {
     fetchLeaderboardData();
@@ -79,29 +108,37 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
     try {
       // This would fetch from actual database
       // For now, using mock data
-      const mockData: LeaderboardPlayer[] = Array.from({ length: 100 }, (_, i) => ({
-        id: `${i + 1}`,
-        userId: `user-${i + 1}`,
-        displayName: `Player ${i + 1}`,
-        avatarUrl: undefined,
-        currentElo: 2500 - i * 15 + Math.random() * 100,
-        rank: getRankFromELO(2500 - i * 15),
-        position: i + 1,
-        totalMatches: Math.floor(Math.random() * 100) + 20,
-        wins: Math.floor(Math.random() * 80) + 10,
-        losses: Math.floor(Math.random() * 50) + 5,
-        winRate: 50 + Math.random() * 40,
-        streak: Math.floor(Math.random() * 20) - 10,
-        club: Math.random() > 0.5 ? `CLB ${Math.floor(Math.random() * 10) + 1}` : undefined,
-        city: cities[Math.floor(Math.random() * cities.length)],
-        district: `Quận ${Math.floor(Math.random() * 12) + 1}`,
-        eloChange24h: Math.floor(Math.random() * 40) - 20,
-        eloChange7d: Math.floor(Math.random() * 80) - 40,
-        lastActive: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-        peakElo: 2500 - i * 15 + Math.random() * 200,
-        consistency: 50 + Math.random() * 40,
-        form: Math.random() * 100 - 50
-      }));
+      const mockData: LeaderboardPlayer[] = Array.from(
+        { length: 100 },
+        (_, i) => ({
+          id: `${i + 1}`,
+          userId: `user-${i + 1}`,
+          displayName: `Player ${i + 1}`,
+          avatarUrl: undefined,
+          currentElo: 2500 - i * 15 + Math.random() * 100,
+          rank: getRankFromELO(2500 - i * 15),
+          position: i + 1,
+          totalMatches: Math.floor(Math.random() * 100) + 20,
+          wins: Math.floor(Math.random() * 80) + 10,
+          losses: Math.floor(Math.random() * 50) + 5,
+          winRate: 50 + Math.random() * 40,
+          streak: Math.floor(Math.random() * 20) - 10,
+          club:
+            Math.random() > 0.5
+              ? `CLB ${Math.floor(Math.random() * 10) + 1}`
+              : undefined,
+          city: cities[Math.floor(Math.random() * cities.length)],
+          district: `Quận ${Math.floor(Math.random() * 12) + 1}`,
+          eloChange24h: Math.floor(Math.random() * 40) - 20,
+          eloChange7d: Math.floor(Math.random() * 80) - 40,
+          lastActive: new Date(
+            Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          peakElo: 2500 - i * 15 + Math.random() * 200,
+          consistency: 50 + Math.random() * 40,
+          form: Math.random() * 100 - 50,
+        })
+      );
 
       setPlayers(mockData);
     } catch (error) {
@@ -116,9 +153,10 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(player =>
-        player.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        player.club?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        player =>
+          player.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          player.club?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -151,7 +189,7 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
     // Update positions after filtering
     filtered = filtered.map((player, index) => ({
       ...player,
-      position: index + 1
+      position: index + 1,
     }));
 
     setFilteredPlayers(filtered);
@@ -174,30 +212,37 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
 
   const getRankColor = (rank: string): string => {
     switch (rank.charAt(0)) {
-      case 'E': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'F': return 'bg-red-100 text-red-800 border-red-200';
-      case 'G': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'H': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'I': return 'bg-green-100 text-green-800 border-green-200';
-      case 'K': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'E':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'F':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'G':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'H':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'I':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'K':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getRankName = (rank: string): string => {
     const names: { [key: string]: string } = {
       'E+': 'Chuyên nghiệp tiến bộ',
-      'E': 'Chuyên nghiệp',
+      E: 'Chuyên nghiệp',
       'F+': 'Xuất sắc tiến bộ',
-      'F': 'Xuất sắc',
+      F: 'Xuất sắc',
       'G+': 'Giỏi tiến bộ',
-      'G': 'Giỏi',
+      G: 'Giỏi',
       'H+': 'Khá tiến bộ',
-      'H': 'Khá',
+      H: 'Khá',
       'I+': 'Trung bình tiến bộ',
-      'I': 'Trung bình',
+      I: 'Trung bình',
       'K+': 'Người mới tiến bộ',
-      'K': 'Người mới',
+      K: 'Người mới',
     };
     return names[rank] || rank;
   };
@@ -205,13 +250,17 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
   const getPositionIcon = (position: number) => {
     switch (position) {
       case 1:
-        return <Crown className="h-5 w-5 text-yellow-500" />;
+        return <Crown className='h-5 w-5 text-yellow-500' />;
       case 2:
-        return <Medal className="h-5 w-5 text-gray-400" />;
+        return <Medal className='h-5 w-5 text-gray-400' />;
       case 3:
-        return <Award className="h-5 w-5 text-orange-500" />;
+        return <Award className='h-5 w-5 text-orange-500' />;
       default:
-        return <span className="text-sm font-bold text-muted-foreground">#{position}</span>;
+        return (
+          <span className='text-sm font-bold text-muted-foreground'>
+            #{position}
+          </span>
+        );
     }
   };
 
@@ -231,103 +280,110 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Trophy className="h-5 w-5" />
+        <CardTitle className='flex items-center gap-2'>
+          <Trophy className='h-5 w-5' />
           Bảng Xếp Hạng ELO
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overall">Tổng Thể</TabsTrigger>
-            <TabsTrigger value="rank">Theo Hạng</TabsTrigger>
-            <TabsTrigger value="club">Theo CLB</TabsTrigger>
-            <TabsTrigger value="region">Theo Khu Vực</TabsTrigger>
+          <TabsList className='grid w-full grid-cols-4'>
+            <TabsTrigger value='overall'>Tổng Thể</TabsTrigger>
+            <TabsTrigger value='rank'>Theo Hạng</TabsTrigger>
+            <TabsTrigger value='club'>Theo CLB</TabsTrigger>
+            <TabsTrigger value='region'>Theo Khu Vực</TabsTrigger>
           </TabsList>
-          
-          <div className="mt-6 space-y-4">
+
+          <div className='mt-6 space-y-4'>
             {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className='flex flex-col md:flex-row gap-4'>
+              <div className='flex-1'>
+                <div className='relative'>
+                  <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
                   <Input
-                    placeholder="Tìm kiếm player hoặc CLB..."
+                    placeholder='Tìm kiếm player hoặc CLB...'
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className='pl-10'
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className='flex gap-2'>
                 <Select value={selectedRank} onValueChange={setSelectedRank}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Hạng" />
+                  <SelectTrigger className='w-32'>
+                    <SelectValue placeholder='Hạng' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tất cả hạng</SelectItem>
+                    <SelectItem value='all'>Tất cả hạng</SelectItem>
                     {ranks.map(rank => (
-                      <SelectItem key={rank} value={rank}>{rank}</SelectItem>
+                      <SelectItem key={rank} value={rank}>
+                        {rank}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 <Select value={selectedCity} onValueChange={setSelectedCity}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Thành phố" />
+                  <SelectTrigger className='w-32'>
+                    <SelectValue placeholder='Thành phố' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tất cả</SelectItem>
+                    <SelectItem value='all'>Tất cả</SelectItem>
                     {cities.map(city => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                  <SelectTrigger className="w-32">
+                <Select
+                  value={sortBy}
+                  onValueChange={(value: any) => setSortBy(value)}
+                >
+                  <SelectTrigger className='w-32'>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="elo">ELO</SelectItem>
-                    <SelectItem value="winRate">Tỷ lệ thắng</SelectItem>
-                    <SelectItem value="matches">Số trận</SelectItem>
-                    <SelectItem value="streak">Chuỗi thắng</SelectItem>
+                    <SelectItem value='elo'>ELO</SelectItem>
+                    <SelectItem value='winRate'>Tỷ lệ thắng</SelectItem>
+                    <SelectItem value='matches'>Số trận</SelectItem>
+                    <SelectItem value='streak'>Chuỗi thắng</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <TabsContent value="overall" className="space-y-4">
+            <TabsContent value='overall' className='space-y-4'>
               {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <div className='flex items-center justify-center py-8'>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
                 </div>
               ) : filteredPlayers.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className='text-center py-8 text-muted-foreground'>
                   Không tìm thấy player nào phù hợp
                 </div>
               ) : (
-                <div className="space-y-2">
-                  {filteredPlayers.slice(0, 50).map((player) => (
+                <div className='space-y-2'>
+                  {filteredPlayers.slice(0, 50).map(player => (
                     <div
                       key={player.id}
                       className={`flex items-center justify-between p-4 rounded-lg border transition-colors ${getPositionStyle(player.position)}`}
                     >
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center justify-center w-12">
+                      <div className='flex items-center gap-4'>
+                        <div className='flex items-center justify-center w-12'>
                           {getPositionIcon(player.position)}
                         </div>
-                        <Avatar className="h-10 w-10">
+                        <Avatar className='h-10 w-10'>
                           <AvatarImage src={player.avatarUrl} />
                           <AvatarFallback>
-                            <Users className="h-4 w-4" />
+                            <Users className='h-4 w-4' />
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{player.displayName}</p>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <p className='font-medium'>{player.displayName}</p>
+                          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                             {player.club && (
                               <>
-                                <Building2 className="h-3 w-3" />
+                                <Building2 className='h-3 w-3' />
                                 <span>{player.club}</span>
                                 <span>•</span>
                               </>
@@ -336,59 +392,74 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
                           </div>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center gap-6">
-                        <div className="text-center">
+
+                      <div className='flex items-center gap-6'>
+                        <div className='text-center'>
                           <Badge className={getRankColor(player.rank)}>
                             {player.rank}
                           </Badge>
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className='text-xs text-muted-foreground mt-1'>
                             {getRankName(player.rank)}
                           </p>
                         </div>
-                        
-                        <div className="text-center">
-                          <p className="text-xl font-bold">{Math.round(player.currentElo)}</p>
-                          <div className="flex items-center gap-1 text-sm">
+
+                        <div className='text-center'>
+                          <p className='text-xl font-bold'>
+                            {Math.round(player.currentElo)}
+                          </p>
+                          <div className='flex items-center gap-1 text-sm'>
                             {player.eloChange24h > 0 ? (
-                              <TrendingUp className="h-3 w-3 text-green-500" />
+                              <TrendingUp className='h-3 w-3 text-green-500' />
                             ) : player.eloChange24h < 0 ? (
-                              <TrendingDown className="h-3 w-3 text-red-500" />
+                              <TrendingDown className='h-3 w-3 text-red-500' />
                             ) : null}
-                            <span className={`${
-                              player.eloChange24h > 0 ? 'text-green-600' : 
-                              player.eloChange24h < 0 ? 'text-red-600' : 
-                              'text-muted-foreground'
-                            }`}>
+                            <span
+                              className={`${
+                                player.eloChange24h > 0
+                                  ? 'text-green-600'
+                                  : player.eloChange24h < 0
+                                    ? 'text-red-600'
+                                    : 'text-muted-foreground'
+                              }`}
+                            >
                               {player.eloChange24h > 0 ? '+' : ''}
                               {player.eloChange24h}
                             </span>
                           </div>
                         </div>
-                        
-                        <div className="text-center">
-                          <p className="font-medium">{player.winRate.toFixed(1)}%</p>
-                          <p className="text-xs text-muted-foreground">
+
+                        <div className='text-center'>
+                          <p className='font-medium'>
+                            {player.winRate.toFixed(1)}%
+                          </p>
+                          <p className='text-xs text-muted-foreground'>
                             {player.wins}W/{player.losses}L
                           </p>
                         </div>
-                        
-                        <div className="text-center">
-                          <div className="flex items-center gap-1">
+
+                        <div className='text-center'>
+                          <div className='flex items-center gap-1'>
                             {player.streak > 0 ? (
-                              <Zap className="h-3 w-3 text-green-500" />
+                              <Zap className='h-3 w-3 text-green-500' />
                             ) : player.streak < 0 ? (
-                              <Zap className="h-3 w-3 text-red-500" />
+                              <Zap className='h-3 w-3 text-red-500' />
                             ) : null}
-                            <span className={`font-medium ${
-                              player.streak > 0 ? 'text-green-600' : 
-                              player.streak < 0 ? 'text-red-600' : 
-                              'text-muted-foreground'
-                            }`}>
-                              {player.streak > 0 ? '+' : ''}{player.streak}
+                            <span
+                              className={`font-medium ${
+                                player.streak > 0
+                                  ? 'text-green-600'
+                                  : player.streak < 0
+                                    ? 'text-red-600'
+                                    : 'text-muted-foreground'
+                              }`}
+                            >
+                              {player.streak > 0 ? '+' : ''}
+                              {player.streak}
                             </span>
                           </div>
-                          <p className="text-xs text-muted-foreground">Streak</p>
+                          <p className='text-xs text-muted-foreground'>
+                            Streak
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -396,21 +467,21 @@ export const RankingLeaderboard: React.FC<RankingLeaderboardProps> = ({
                 </div>
               )}
             </TabsContent>
-            
-            <TabsContent value="rank">
-              <div className="text-center py-8 text-muted-foreground">
+
+            <TabsContent value='rank'>
+              <div className='text-center py-8 text-muted-foreground'>
                 Chức năng xếp hạng theo từng hạng đang được phát triển
               </div>
             </TabsContent>
-            
-            <TabsContent value="club">
-              <div className="text-center py-8 text-muted-foreground">
+
+            <TabsContent value='club'>
+              <div className='text-center py-8 text-muted-foreground'>
                 Chức năng xếp hạng theo CLB đang được phát triển
               </div>
             </TabsContent>
-            
-            <TabsContent value="region">
-              <div className="text-center py-8 text-muted-foreground">
+
+            <TabsContent value='region'>
+              <div className='text-center py-8 text-muted-foreground'>
                 Chức năng xếp hạng theo khu vực đang được phát triển
               </div>
             </TabsContent>

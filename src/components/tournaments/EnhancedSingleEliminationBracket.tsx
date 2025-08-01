@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTournamentMatches } from '@/hooks/useTournamentMatches';
 import { useTournaments } from '@/hooks/useTournaments';
@@ -21,24 +20,18 @@ interface EnhancedSingleEliminationBracketProps {
   adminMode?: boolean;
 }
 
-export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminationBracketProps> = ({
-  tournamentId,
-  isClubOwner = false,
-  adminMode = false
-}) => {
+export const EnhancedSingleEliminationBracket: React.FC<
+  EnhancedSingleEliminationBracketProps
+> = ({ tournamentId, isClubOwner = false, adminMode = false }) => {
   const { user } = useAuth();
   const { tournaments } = useTournaments();
-  const {
-    matches,
-    loading,
-    error,
-    refetch
-  } = useTournamentMatches(tournamentId);
+  const { matches, loading, error, refetch } =
+    useTournamentMatches(tournamentId);
 
   const tournament = tournaments.find(t => t.id === tournamentId);
   const [selectedMatch, setSelectedMatch] = useState<any>(null);
   const [needsProgression, setNeedsProgression] = useState(false);
-  
+
   // Listen for automatic winner advancement
   useWinnerAdvancementListener(tournamentId);
 
@@ -50,12 +43,12 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
       acc[round].push(match);
       return acc;
     }, {});
-    
+
     return Object.keys(grouped)
       .sort((a, b) => parseInt(a) - parseInt(b))
       .map(round => ({
         round: parseInt(round),
-        matches: grouped[round].sort((a, b) => a.match_number - b.match_number)
+        matches: grouped[round].sort((a, b) => a.match_number - b.match_number),
       }));
   };
 
@@ -63,33 +56,36 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
   useEffect(() => {
     if (matches.length > 0) {
       let hasProgressionIssues = false;
-      
+
       // Check all rounds for progression issues
       const roundsData = groupMatchesByRound(matches);
-      
+
       for (let i = 0; i < roundsData.length - 1; i++) {
         const currentRound = roundsData[i];
         const nextRound = roundsData[i + 1];
-        
+
         if (!nextRound) continue;
-        
-        const completedInCurrent = currentRound.matches.filter(m => 
-          m.status === 'completed' && m.winner_id
+
+        const completedInCurrent = currentRound.matches.filter(
+          m => m.status === 'completed' && m.winner_id
         );
-        
-        const emptyInNext = nextRound.matches.filter(m => 
-          !m.player1_id || !m.player2_id
+
+        const emptyInNext = nextRound.matches.filter(
+          m => !m.player1_id || !m.player2_id
         );
-        
+
         if (completedInCurrent.length > 0 && emptyInNext.length > 0) {
           hasProgressionIssues = true;
-          console.log(`🔧 Round ${currentRound.round} -> ${nextRound.round} needs progression:`, {
-            completed: completedInCurrent.length,
-            emptySlots: emptyInNext.length
-          });
+          console.log(
+            `🔧 Round ${currentRound.round} -> ${nextRound.round} needs progression:`,
+            {
+              completed: completedInCurrent.length,
+              emptySlots: emptyInNext.length,
+            }
+          );
         }
       }
-      
+
       setNeedsProgression(hasProgressionIssues);
     }
   }, [matches]);
@@ -104,19 +100,22 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <span className="ml-2">Đang tải bảng đấu...</span>
+      <div className='flex items-center justify-center p-8'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+        <span className='ml-2'>Đang tải bảng đấu...</span>
       </div>
     );
   }
   const rounds = groupMatchesByRound(matches);
-  const totalRounds = rounds.length > 0 ? Math.max(...rounds.map(r => r.round)) : 0;
+  const totalRounds =
+    rounds.length > 0 ? Math.max(...rounds.map(r => r.round)) : 0;
 
   const handleScoreUpdate = async () => {
     setSelectedMatch(null);
     // No need to manually refetch - real-time updates will handle this
-    console.log('🎯 Score updated - real-time sync will update bracket automatically');
+    console.log(
+      '🎯 Score updated - real-time sync will update bracket automatically'
+    );
   };
 
   const handleMatchClick = (match: any) => {
@@ -131,10 +130,10 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Tournament Automation Dashboard */}
       {(isClubOwner || adminMode) && (
-        <TournamentAutomationDashboard 
+        <TournamentAutomationDashboard
           tournamentId={tournamentId}
           isAdmin={isClubOwner || adminMode}
         />
@@ -150,23 +149,27 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
       )}
 
       {/* Bracket Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-accent-blue" />
+      <div className='flex items-center justify-between'>
+        <h2 className='text-2xl font-bold flex items-center gap-2'>
+          <Trophy className='w-6 h-6 text-accent-blue' />
           Single Elimination Bracket
         </h2>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-accent-blue border-accent-blue/30">
-            {matches.filter(m => m.status === 'completed').length}/{matches.length} Completed
+        <div className='flex items-center gap-2'>
+          <Badge
+            variant='outline'
+            className='text-accent-blue border-accent-blue/30'
+          >
+            {matches.filter(m => m.status === 'completed').length}/
+            {matches.length} Completed
           </Badge>
-          
+
           {needsProgression && (isClubOwner || adminMode) && (
-            <div className="flex items-center gap-2">
-              <Badge variant="destructive" className="gap-1">
-                <AlertTriangle className="w-3 h-3" />
+            <div className='flex items-center gap-2'>
+              <Badge variant='destructive' className='gap-1'>
+                <AlertTriangle className='w-3 h-3' />
                 Cần sửa bracket
               </Badge>
-              <BracketFixButton 
+              <BracketFixButton
                 tournamentId={tournamentId}
                 onFixed={handleBracketFixed}
               />
@@ -176,19 +179,22 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
       </div>
 
       {/* Tournament Rounds */}
-      <div className="space-y-6">
+      <div className='space-y-6'>
         {rounds.map(({ round, matches }) => {
           const isFirstRound = round === 1;
           const isFinalRound = round === totalRounds;
-          
+
           return (
             <BracketRoundSection
               key={`round-${round}`}
               title={
-                isFinalRound ? 'Chung kết' :
-                round === totalRounds - 1 ? 'Bán kết' :
-                round === totalRounds - 2 ? 'Tứ kết' :
-                `Vòng ${round}`
+                isFinalRound
+                  ? 'Chung kết'
+                  : round === totalRounds - 1
+                    ? 'Bán kết'
+                    : round === totalRounds - 2
+                      ? 'Tứ kết'
+                      : `Vòng ${round}`
               }
               matches={matches}
               isClubOwner={isClubOwner || adminMode}
@@ -198,7 +204,7 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
               roundNumber={round}
               totalRounds={totalRounds}
               bracketType={isFinalRound ? 'final' : 'winner'}
-              tournamentType="single_elimination"
+              tournamentType='single_elimination'
               currentUserId={user?.id}
             />
           );
@@ -207,7 +213,7 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
 
       {/* Tournament Completion Button */}
       {tournament && (isClubOwner || adminMode) && (
-        <div className="flex justify-center pt-6 border-t">
+        <div className='flex justify-center pt-6 border-t'>
           <TournamentCompletionButton
             tournamentId={tournamentId}
             tournamentName={tournament.name}
@@ -223,7 +229,7 @@ export const EnhancedSingleEliminationBracket: React.FC<EnhancedSingleEliminatio
           match={selectedMatch}
           isOpen={!!selectedMatch}
           onClose={() => setSelectedMatch(null)}
-          tournamentType="single_elimination"
+          tournamentType='single_elimination'
           onSuccess={handleScoreUpdate}
         />
       )}

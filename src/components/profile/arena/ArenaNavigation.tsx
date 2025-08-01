@@ -13,17 +13,17 @@ export const ArenaNavigation: React.FC = () => {
   ];
 
   return (
-    <div className="arena-navigation">
+    <div className='arena-navigation'>
       {navItems.map((item, index) => {
         const Icon = item.icon;
         return (
-          <div 
+          <div
             key={index}
             className={`nav-item ${item.active ? 'active' : ''}`}
             onClick={() => navigate(item.path)}
           >
-            <Icon className="nav-icon" />
-            <span className="nav-label">{item.label}</span>
+            <Icon className='nav-icon' />
+            <span className='nav-label'>{item.label}</span>
           </div>
         );
       })}

@@ -13,7 +13,7 @@ const RankingSystemTest = () => {
     try {
       // Test basic ranking functions
       const { data, error } = await supabase.rpc('refresh_leaderboard_stats');
-      
+
       if (error) {
         toast.error('Test failed: ' + error.message);
       } else {
@@ -31,27 +31,27 @@ const RankingSystemTest = () => {
       <CardHeader>
         <CardTitle>Ranking System Test</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
+      <CardContent className='space-y-4'>
+        <div className='flex items-center justify-between'>
           <div>
-            <h3 className="font-medium">Test Ranking Functions</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className='font-medium'>Test Ranking Functions</h3>
+            <p className='text-sm text-muted-foreground'>
               Test the ranking system functionality
             </p>
           </div>
-          <Button 
-            onClick={testRankingSystem} 
+          <Button
+            onClick={testRankingSystem}
             disabled={testing}
-            variant="outline"
+            variant='outline'
           >
             {testing ? 'Testing...' : 'Run Test'}
           </Button>
         </div>
-        
-        <div className="space-y-2">
-          <Badge variant="secondary">Trust Score Calculation</Badge>
-          <Badge variant="secondary">Leaderboard Stats</Badge>
-          <Badge variant="secondary">Rank Verification</Badge>
+
+        <div className='space-y-2'>
+          <Badge variant='secondary'>Trust Score Calculation</Badge>
+          <Badge variant='secondary'>Leaderboard Stats</Badge>
+          <Badge variant='secondary'>Rank Verification</Badge>
         </div>
       </CardContent>
     </Card>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, Trophy, Gamepad2, Building, Shield } from 'lucide-react';
@@ -26,8 +25,14 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
     const handleUrlChange = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
-      
-      if (tabParam && (tabParam === 'performance' || tabParam === 'basic' || tabParam === 'club' || tabParam === 'rank')) {
+
+      if (
+        tabParam &&
+        (tabParam === 'performance' ||
+          tabParam === 'basic' ||
+          tabParam === 'club' ||
+          tabParam === 'rank')
+      ) {
         setActiveTab(tabParam);
       }
     };
@@ -57,38 +62,40 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className='w-full'>
-      <TabsList className={`grid w-full ${showClubTab ? 'grid-cols-4' : 'grid-cols-3'} bg-muted dark:bg-muted`}>
-        <TabsTrigger 
-          value='performance' 
+      <TabsList
+        className={`grid w-full ${showClubTab ? 'grid-cols-4' : 'grid-cols-3'} bg-muted dark:bg-muted`}
+      >
+        <TabsTrigger
+          value='performance'
           className='flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground'
         >
           <Trophy className='h-4 w-4' />
-          <span className="hidden sm:inline">Thành tích & Thách đấu</span>
-          <span className="sm:hidden">Thành tích</span>
+          <span className='hidden sm:inline'>Thành tích & Thách đấu</span>
+          <span className='sm:hidden'>Thành tích</span>
         </TabsTrigger>
-        <TabsTrigger 
-          value='basic' 
+        <TabsTrigger
+          value='basic'
           className='flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground'
         >
           <User className='h-4 w-4' />
-          <span className="hidden sm:inline">Thông tin cá nhân</span>
-          <span className="sm:hidden">Cá nhân</span>
+          <span className='hidden sm:inline'>Thông tin cá nhân</span>
+          <span className='sm:hidden'>Cá nhân</span>
         </TabsTrigger>
-        <TabsTrigger 
-          value='rank' 
+        <TabsTrigger
+          value='rank'
           className='flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground'
         >
           <Shield className='h-4 w-4' />
-          <span className="hidden sm:inline">Xác thực hạng</span>
-          <span className="sm:hidden">Hạng</span>
+          <span className='hidden sm:inline'>Xác thực hạng</span>
+          <span className='sm:hidden'>Hạng</span>
         </TabsTrigger>
-        <TabsTrigger 
-          value='club' 
+        <TabsTrigger
+          value='club'
           className='flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground'
         >
           <Building className='h-4 w-4' />
-          <span className="hidden sm:inline">Quản lý CLB</span>
-          <span className="sm:hidden">CLB</span>
+          <span className='hidden sm:inline'>Quản lý CLB</span>
+          <span className='sm:hidden'>CLB</span>
         </TabsTrigger>
       </TabsList>
       {children}

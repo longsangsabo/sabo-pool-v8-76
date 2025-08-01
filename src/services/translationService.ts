@@ -65,11 +65,11 @@ class TranslationService {
   // Extract translation keys from component content
   extractTranslationKeys(componentContent: string): string[] {
     const keys: string[] = [];
-    
+
     // Tìm các pattern t('key') và t("key")
     const singleQuoteMatches = componentContent.match(/t\('([^']+)'\)/g);
     const doubleQuoteMatches = componentContent.match(/t\("([^"]+)"\)/g);
-    
+
     if (singleQuoteMatches) {
       singleQuoteMatches.forEach(match => {
         const key = match.match(/t\('([^']+)'\)/)?.[1];
@@ -78,7 +78,7 @@ class TranslationService {
         }
       });
     }
-    
+
     if (doubleQuoteMatches) {
       doubleQuoteMatches.forEach(match => {
         const key = match.match(/t\("([^"]+)"\)/)?.[1];
@@ -92,17 +92,21 @@ class TranslationService {
   }
 
   // Queue a page for translation
-  async queuePageForTranslation(pagePath: string, componentName: string, customKeys?: string[]): Promise<void> {
+  async queuePageForTranslation(
+    pagePath: string,
+    componentName: string,
+    customKeys?: string[]
+  ): Promise<void> {
     try {
       console.log(`📝 Đưa trang vào hàng đợi dịch thuật: ${pagePath}`);
-      
+
       // Use custom keys if provided, otherwise generate sample keys
       const translationKeys = customKeys || [
         `${componentName.toLowerCase()}.title`,
         `${componentName.toLowerCase()}.description`,
-        `${componentName.toLowerCase()}.button.action`
+        `${componentName.toLowerCase()}.button.action`,
       ];
-      
+
       const newTask: TranslationTask = {
         id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         page_path: pagePath,
@@ -112,19 +116,18 @@ class TranslationService {
         translation_keys: translationKeys,
         status: 'pending',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       this.tasks.push(newTask);
       this.saveTasks();
 
       console.log('✅ Đã thêm task dịch thuật:', newTask);
-      
+
       // Auto-process with a small delay
       setTimeout(() => {
         this.processTranslationQueue();
       }, 1000);
-      
     } catch (error) {
       console.error('Lỗi khi tạo task dịch thuật:', error);
     }
@@ -133,7 +136,9 @@ class TranslationService {
   // Process translation queue
   async processTranslationQueue(): Promise<void> {
     try {
-      const pendingTasks = this.tasks.filter(task => task.status === 'pending').slice(0, 5);
+      const pendingTasks = this.tasks
+        .filter(task => task.status === 'pending')
+        .slice(0, 5);
 
       if (pendingTasks.length === 0) {
         return;
@@ -144,7 +149,6 @@ class TranslationService {
       for (const task of pendingTasks) {
         await this.translateTask(task);
       }
-
     } catch (error) {
       console.error('Lỗi khi xử lý hàng đợi dịch thuật:', error);
     }
@@ -167,8 +171,12 @@ class TranslationService {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Generate mock translations
-      const translations = await this.callTranslationAPI(task.translation_keys, task.source_language, task.target_language);
-      
+      const translations = await this.callTranslationAPI(
+        task.translation_keys,
+        task.source_language,
+        task.target_language
+      );
+
       // Update status to completed
       if (taskIndex !== -1) {
         this.tasks[taskIndex].status = 'completed';
@@ -177,10 +185,9 @@ class TranslationService {
       }
 
       console.log(`✅ Dịch thành công: ${task.page_path}`);
-
     } catch (error) {
       console.error(`❌ Lỗi khi dịch ${task.page_path}:`, error);
-      
+
       // Update status to failed
       const taskIndex = this.tasks.findIndex(t => t.id === task.id);
       if (taskIndex !== -1) {
@@ -192,7 +199,11 @@ class TranslationService {
   }
 
   // Real translation API call using Edge Function
-  async callTranslationAPI(keys: string[], sourceLanguage: string, targetLanguage: string): Promise<Record<string, string>> {
+  async callTranslationAPI(
+    keys: string[],
+    sourceLanguage: string,
+    targetLanguage: string
+  ): Promise<Record<string, string>> {
     try {
       // Try to use the real Edge Function
       const { data, error } = await fetch('/api/translate', {
@@ -204,16 +215,21 @@ class TranslationService {
           keys,
           sourceLanguage,
           targetLanguage,
-          context: 'Pool billiards gaming application'
-        })
-      }).then(res => res.json()).catch(() => ({ error: 'Network error' }));
+          context: 'Pool billiards gaming application',
+        }),
+      })
+        .then(res => res.json())
+        .catch(() => ({ error: 'Network error' }));
 
       if (error) {
         console.warn('Edge function unavailable, using fallback:', error);
         return this.generateFallbackTranslations(keys, targetLanguage);
       }
 
-      return data.translations || this.generateFallbackTranslations(keys, targetLanguage);
+      return (
+        data.translations ||
+        this.generateFallbackTranslations(keys, targetLanguage)
+      );
     } catch (error) {
       console.error('Lỗi API dịch thuật:', error);
       return this.generateFallbackTranslations(keys, targetLanguage);
@@ -221,63 +237,68 @@ class TranslationService {
   }
 
   // Enhanced fallback translations with better context
-  private generateFallbackTranslations(keys: string[], targetLanguage: string): Record<string, string> {
+  private generateFallbackTranslations(
+    keys: string[],
+    targetLanguage: string
+  ): Record<string, string> {
     const translations: Record<string, string> = {};
-    
+
     const translationMap: Record<string, string> = {
       // Navigation & Common
-      'home': 'Trang chủ',
-      'tournaments': 'Giải đấu', 
-      'clubs': 'Câu lạc bộ',
-      'rankings': 'Xếp hạng',
-      'profile': 'Hồ sơ',
-      'login': 'Đăng nhập',
-      'sign_up': 'Đăng ký',
-      'logout': 'Đăng xuất',
-      
+      home: 'Trang chủ',
+      tournaments: 'Giải đấu',
+      clubs: 'Câu lạc bộ',
+      rankings: 'Xếp hạng',
+      profile: 'Hồ sơ',
+      login: 'Đăng nhập',
+      sign_up: 'Đăng ký',
+      logout: 'Đăng xuất',
+
       // Tournament related
-      'create_tournament': 'Tạo giải đấu',
-      'join_tournament': 'Tham gia giải đấu',
-      'tournament_registration': 'Đăng ký giải đấu',
-      'registration_open': 'Đang mở đăng ký',
-      'entry_fee': 'Phí tham gia',
-      'search_tournaments': 'Tìm kiếm giải đấu',
-      
+      create_tournament: 'Tạo giải đấu',
+      join_tournament: 'Tham gia giải đấu',
+      tournament_registration: 'Đăng ký giải đấu',
+      registration_open: 'Đang mở đăng ký',
+      entry_fee: 'Phí tham gia',
+      search_tournaments: 'Tìm kiếm giải đấu',
+
       // Club related
-      'pool_clubs': 'Câu lạc bộ bida',
-      'register_new_club': 'Đăng ký CLB mới',
-      'club_directory': 'Danh bạ CLB',
-      'operating_hours': 'Giờ hoạt động',
-      'business_license': 'Giấy phép kinh doanh',
-      
+      pool_clubs: 'Câu lạc bộ bida',
+      register_new_club: 'Đăng ký CLB mới',
+      club_directory: 'Danh bạ CLB',
+      operating_hours: 'Giờ hoạt động',
+      business_license: 'Giấy phép kinh doanh',
+
       // Common actions
-      'search': 'Tìm kiếm',
-      'create': 'Tạo',
-      'join': 'Tham gia',
-      'register': 'Đăng ký',
-      'edit': 'Chỉnh sửa',
-      'delete': 'Xóa',
-      'save': 'Lưu',
-      'cancel': 'Hủy',
-      'confirm': 'Xác nhận',
+      search: 'Tìm kiếm',
+      create: 'Tạo',
+      join: 'Tham gia',
+      register: 'Đăng ký',
+      edit: 'Chỉnh sửa',
+      delete: 'Xóa',
+      save: 'Lưu',
+      cancel: 'Hủy',
+      confirm: 'Xác nhận',
     };
-    
+
     keys.forEach(key => {
       if (targetLanguage === 'vi') {
         // Extract the actual text from key patterns
         const keyLower = key.toLowerCase();
         let translated = translationMap[keyLower];
-        
+
         if (!translated) {
           // Try to find partial matches
-          for (const [englishKey, vietnameseText] of Object.entries(translationMap)) {
+          for (const [englishKey, vietnameseText] of Object.entries(
+            translationMap
+          )) {
             if (keyLower.includes(englishKey)) {
               translated = vietnameseText;
               break;
             }
           }
         }
-        
+
         if (!translated) {
           // Generate based on key patterns
           if (key.includes('title')) {
@@ -290,13 +311,13 @@ class TranslationService {
             translated = `[Dịch tự động] ${key}`;
           }
         }
-        
+
         translations[key] = translated;
       } else {
         translations[key] = `[Auto-translated] ${key}`;
       }
     });
-    
+
     return translations;
   }
 
@@ -309,8 +330,9 @@ class TranslationService {
     lastTranslated: string | null;
   }> {
     try {
-      const sortedTasks = [...this.tasks].sort((a, b) => 
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      const sortedTasks = [...this.tasks].sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
       );
 
       const result = {
@@ -318,7 +340,7 @@ class TranslationService {
         pendingTasks: this.tasks.filter(t => t.status === 'pending').length,
         completedTasks: this.tasks.filter(t => t.status === 'completed').length,
         failedTasks: this.tasks.filter(t => t.status === 'failed').length,
-        lastTranslated: sortedTasks[0]?.updated_at || null
+        lastTranslated: sortedTasks[0]?.updated_at || null,
       };
 
       return result;
@@ -329,20 +351,24 @@ class TranslationService {
         pendingTasks: 0,
         completedTasks: 0,
         failedTasks: 0,
-        lastTranslated: null
+        lastTranslated: null,
       };
     }
   }
 
   // Get all tasks
   getAllTasks(): TranslationTask[] {
-    return [...this.tasks].sort((a, b) => 
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    return [...this.tasks].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
   }
 
   // Manually trigger translation for a specific page
-  async manualTranslate(pagePath: string, componentName: string): Promise<void> {
+  async manualTranslate(
+    pagePath: string,
+    componentName: string
+  ): Promise<void> {
     console.log(`🔧 Dịch thủ công: ${pagePath}`);
     await this.queuePageForTranslation(pagePath, componentName);
   }
@@ -395,6 +421,6 @@ export const useAutoTranslation = () => {
     batchTranslate,
     getStats,
     getTasks,
-    clearTasks
+    clearTasks,
   };
 };

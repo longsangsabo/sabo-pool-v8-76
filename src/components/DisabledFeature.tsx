@@ -7,20 +7,20 @@ interface DisabledFeatureProps {
   description?: string;
 }
 
-export const DisabledFeature: React.FC<DisabledFeatureProps> = ({ 
-  title, 
-  description = "Tính năng này đang được phát triển và sẽ có trong phiên bản tiếp theo." 
+export const DisabledFeature: React.FC<DisabledFeatureProps> = ({
+  title,
+  description = 'Tính năng này đang được phát triển và sẽ có trong phiên bản tiếp theo.',
 }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <AlertCircle className="h-5 w-5 text-yellow-500" />
+        <CardTitle className='flex items-center gap-2'>
+          <AlertCircle className='h-5 w-5 text-yellow-500' />
           {title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-muted-foreground">{description}</p>
+        <p className='text-muted-foreground'>{description}</p>
       </CardContent>
     </Card>
   );

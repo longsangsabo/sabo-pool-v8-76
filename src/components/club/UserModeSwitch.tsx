@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,19 +14,22 @@ export const UserModeSwitch: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className='flex items-center gap-2'>
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={handleSwitchToUser}
-        className="flex items-center gap-2 hover:bg-muted"
+        className='flex items-center gap-2 hover:bg-muted'
       >
-        <Users className="h-4 w-4" />
+        <Users className='h-4 w-4' />
         <span>Chế độ người chơi</span>
-        <ArrowRight className="h-3 w-3" />
+        <ArrowRight className='h-3 w-3' />
       </Button>
-      
-      <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+
+      <Badge
+        variant='secondary'
+        className='text-xs bg-green-100 text-green-700'
+      >
         Player Mode
       </Badge>
     </div>

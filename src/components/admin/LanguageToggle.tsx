@@ -12,13 +12,13 @@ const LanguageToggle = () => {
 
   return (
     <Button
-      variant="outline"
-      size="sm"
+      variant='outline'
+      size='sm'
       onClick={toggleLanguage}
-      className="flex items-center gap-2 px-3 py-2"
+      className='flex items-center gap-2 px-3 py-2'
     >
-      <Globe className="h-4 w-4" />
-      <span className="font-medium">
+      <Globe className='h-4 w-4' />
+      <span className='font-medium'>
         {language === 'vi' ? '🇺🇸 EN' : '🇻🇳 VI'}
       </span>
     </Button>

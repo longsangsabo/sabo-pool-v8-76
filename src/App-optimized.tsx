@@ -1,19 +1,22 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider } from "next-themes";
-import { Suspense } from "react";
-import ErrorBoundary from "@/components/ui/error-boundary";
-import { AuthProvider } from "@/hooks/useAuth";
-import { AvatarProvider } from "@/contexts/AvatarContext";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import MainLayout from "@/components/MainLayout";
-import DailyNotificationSystem from "@/components/DailyNotificationSystem";
-import RealtimeNotificationSystem from "@/components/RealtimeNotificationSystem";
-import { createLazyComponent, PageLoadingFallback } from "@/components/ui/lazy-components";
+import { ThemeProvider } from 'next-themes';
+import { Suspense } from 'react';
+import ErrorBoundary from '@/components/ui/error-boundary';
+import { AuthProvider } from '@/hooks/useAuth';
+import { AvatarProvider } from '@/contexts/AvatarContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
+import MainLayout from '@/components/MainLayout';
+import DailyNotificationSystem from '@/components/DailyNotificationSystem';
+import RealtimeNotificationSystem from '@/components/RealtimeNotificationSystem';
+import {
+  createLazyComponent,
+  PageLoadingFallback,
+} from '@/components/ui/lazy-components';
 
 // Optimized Query Client with enhanced caching strategy
 const queryClient = new QueryClient({
@@ -37,75 +40,75 @@ const queryClient = new QueryClient({
 
 // Lazy load all page components with optimized loading states
 const LazySimpleDashboard = createLazyComponent(
-  () => import("./pages/SimpleDashboard"),
-  <PageLoadingFallback pageTitle="Dashboard" />,
-  "SimpleDashboard"
+  () => import('./pages/SimpleDashboard'),
+  <PageLoadingFallback pageTitle='Dashboard' />,
+  'SimpleDashboard'
 );
 
 const LazyTournamentsPage = createLazyComponent(
-  () => import("./pages/TournamentsPage"),
-  <PageLoadingFallback pageTitle="Tournaments" />,
-  "TournamentsPage"
+  () => import('./pages/TournamentsPage'),
+  <PageLoadingFallback pageTitle='Tournaments' />,
+  'TournamentsPage'
 );
 
 const LazyTournamentDetailsPage = createLazyComponent(
-  () => import("./pages/TournamentDetailsPage"),
-  <PageLoadingFallback pageTitle="Tournament Details" />,
-  "TournamentDetailsPage"
+  () => import('./pages/TournamentDetailsPage'),
+  <PageLoadingFallback pageTitle='Tournament Details' />,
+  'TournamentDetailsPage'
 );
 
 const LazyEnhancedChallengesPageV2 = createLazyComponent(
-  () => import("./pages/EnhancedChallengesPageV2"),
-  <PageLoadingFallback pageTitle="Challenges" />,
-  "EnhancedChallengesPageV2"
+  () => import('./pages/EnhancedChallengesPageV2'),
+  <PageLoadingFallback pageTitle='Challenges' />,
+  'EnhancedChallengesPageV2'
 );
 
 const LazyLeaderboardPage = createLazyComponent(
-  () => import("./pages/LeaderboardPage"),
-  <PageLoadingFallback pageTitle="Leaderboard" />,
-  "LeaderboardPage"
+  () => import('./pages/LeaderboardPage'),
+  <PageLoadingFallback pageTitle='Leaderboard' />,
+  'LeaderboardPage'
 );
 
 const LazyEnhancedLeaderboardPage = createLazyComponent(
-  () => import("./pages/EnhancedLeaderboardPage"),
-  <PageLoadingFallback pageTitle="Enhanced Leaderboard" />,
-  "EnhancedLeaderboardPage"
+  () => import('./pages/EnhancedLeaderboardPage'),
+  <PageLoadingFallback pageTitle='Enhanced Leaderboard' />,
+  'EnhancedLeaderboardPage'
 );
 
 const LazyClubsPage = createLazyComponent(
-  () => import("./pages/ClubsPage"),
-  <PageLoadingFallback pageTitle="Clubs" />,
-  "ClubsPage"
+  () => import('./pages/ClubsPage'),
+  <PageLoadingFallback pageTitle='Clubs' />,
+  'ClubsPage'
 );
 
 const LazyClubDetailPage = createLazyComponent(
-  () => import("./pages/ClubDetailPage"),
-  <PageLoadingFallback pageTitle="Club Details" />,
-  "ClubDetailPage"
+  () => import('./pages/ClubDetailPage'),
+  <PageLoadingFallback pageTitle='Club Details' />,
+  'ClubDetailPage'
 );
 
 const LazyProfilePage = createLazyComponent(
-  () => import("./pages/ProfilePage"),
-  <PageLoadingFallback pageTitle="Profile" />,
-  "ProfilePage"
+  () => import('./pages/ProfilePage'),
+  <PageLoadingFallback pageTitle='Profile' />,
+  'ProfilePage'
 );
 
 const LazyDashboardPage = createLazyComponent(
-  () => import("./pages/DashboardPage"),
-  <PageLoadingFallback pageTitle="Dashboard" />,
-  "DashboardPage"
+  () => import('./pages/DashboardPage'),
+  <PageLoadingFallback pageTitle='Dashboard' />,
+  'DashboardPage'
 );
 
 const LazySettingsPage = createLazyComponent(
-  () => import("./pages/SettingsPage"),
-  <PageLoadingFallback pageTitle="Settings" />,
-  "SettingsPage"
+  () => import('./pages/SettingsPage'),
+  <PageLoadingFallback pageTitle='Settings' />,
+  'SettingsPage'
 );
 
 const LazyNotificationsPage = createLazyComponent(
-  () => import("./pages/NotificationsPage"),
-  <PageLoadingFallback pageTitle="Notifications" />,
-  "NotificationsPage"
+  () => import('./pages/NotificationsPage'),
+  <PageLoadingFallback pageTitle='Notifications' />,
+  'NotificationsPage'
 );
 
 // DEPRECATED AUTH COMPONENTS - Replaced by unified AuthPage
@@ -142,55 +145,56 @@ const LazyNotificationsPage = createLazyComponent(
 
 // Admin pages - load only when needed
 const LazyAdminDashboard = createLazyComponent(
-  () => import("./pages/AdminDashboard"),
-  <PageLoadingFallback pageTitle="Admin Dashboard" />,
-  "AdminDashboard"
+  () => import('./pages/AdminDashboard'),
+  <PageLoadingFallback pageTitle='Admin Dashboard' />,
+  'AdminDashboard'
 );
 
 const LazyAdminUsers = createLazyComponent(
-  () => import("./pages/admin/AdminUsers"),
-  <PageLoadingFallback pageTitle="Admin Users" />,
-  "AdminUsers"
+  () => import('./pages/admin/AdminUsers'),
+  <PageLoadingFallback pageTitle='Admin Users' />,
+  'AdminUsers'
 );
-
 
 // Other frequently used pages
 const LazyMarketplacePage = createLazyComponent(
-  () => import("./pages/MarketplacePage"),
-  <PageLoadingFallback pageTitle="Marketplace" />,
-  "MarketplacePage"
+  () => import('./pages/MarketplacePage'),
+  <PageLoadingFallback pageTitle='Marketplace' />,
+  'MarketplacePage'
 );
 
 const LazyWalletPage = createLazyComponent(
-  () => import("./pages/WalletPage"),
-  <PageLoadingFallback pageTitle="Wallet" />,
-  "WalletPage"
+  () => import('./pages/WalletPage'),
+  <PageLoadingFallback pageTitle='Wallet' />,
+  'WalletPage'
 );
 
 const LazyMatchHistoryPage = createLazyComponent(
-  () => import("./pages/MatchHistoryPage"),
-  <PageLoadingFallback pageTitle="Match History" />,
-  "MatchHistoryPage"
+  () => import('./pages/MatchHistoryPage'),
+  <PageLoadingFallback pageTitle='Match History' />,
+  'MatchHistoryPage'
 );
 
 // Less frequently used pages - lazy load with smaller priority
-const LazyAboutPage = createLazyComponent(() => import("./pages/AboutPage"));
-const LazyFAQPage = createLazyComponent(() => import("./pages/FAQPage"));
-const LazyHelpPage = createLazyComponent(() => import("./pages/HelpPage"));
-const LazyPrivacyPage = createLazyComponent(() => import("./pages/PrivacyPage"));
-const LazyTermsPage = createLazyComponent(() => import("./pages/TermsPage"));
+const LazyAboutPage = createLazyComponent(() => import('./pages/AboutPage'));
+const LazyFAQPage = createLazyComponent(() => import('./pages/FAQPage'));
+const LazyHelpPage = createLazyComponent(() => import('./pages/HelpPage'));
+const LazyPrivacyPage = createLazyComponent(
+  () => import('./pages/PrivacyPage')
+);
+const LazyTermsPage = createLazyComponent(() => import('./pages/TermsPage'));
 
 // Auth wrapper with optimization
-import AuthWrapper from "./components/AuthWrapper";
+import AuthWrapper from './components/AuthWrapper';
 
 const App = () => {
-  console.log("Optimized App component loading...");
+  console.log('Optimized App component loading...');
 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
             <TooltipProvider>
               <AuthProvider>
                 <AvatarProvider>
@@ -199,63 +203,129 @@ const App = () => {
                       <RealtimeNotificationSystem />
                       <Suspense fallback={<PageLoadingFallback />}>
                         <Routes>
-                          <Route path="/" element={<MainLayout />}>
+                          <Route path='/' element={<MainLayout />}>
                             {/* Core app routes */}
                             <Route index element={<LazySimpleDashboard />} />
-                            <Route path="dashboard" element={<AuthWrapper><LazyDashboardPage /></AuthWrapper>} />
-                            
+                            <Route
+                              path='dashboard'
+                              element={
+                                <AuthWrapper>
+                                  <LazyDashboardPage />
+                                </AuthWrapper>
+                              }
+                            />
+
                             {/* Tournaments - high priority */}
-                            <Route path="tournaments" element={<LazyTournamentsPage />} />
-                            <Route path="tournaments/:id" element={<LazyTournamentDetailsPage />} />
-                            
+                            <Route
+                              path='tournaments'
+                              element={<LazyTournamentsPage />}
+                            />
+                            <Route
+                              path='tournaments/:id'
+                              element={<LazyTournamentDetailsPage />}
+                            />
+
                             {/* Challenges - high priority */}
-                            <Route path="challenges" element={<LazyEnhancedChallengesPageV2 />} />
-                            
+                            <Route
+                              path='challenges'
+                              element={<LazyEnhancedChallengesPageV2 />}
+                            />
+
                             {/* Leaderboard - medium priority */}
-                            <Route path="leaderboard" element={<LazyLeaderboardPage />} />
-                            <Route path="enhanced-leaderboard" element={<LazyEnhancedLeaderboardPage />} />
-                            
+                            <Route
+                              path='leaderboard'
+                              element={<LazyLeaderboardPage />}
+                            />
+                            <Route
+                              path='enhanced-leaderboard'
+                              element={<LazyEnhancedLeaderboardPage />}
+                            />
+
                             {/* Clubs - medium priority */}
-                            <Route path="clubs" element={<LazyClubsPage />} />
-                            <Route path="club/:id" element={<LazyClubDetailPage />} />
-                            
+                            <Route path='clubs' element={<LazyClubsPage />} />
+                            <Route
+                              path='club/:id'
+                              element={<LazyClubDetailPage />}
+                            />
+
                             {/* User pages - medium priority */}
-                            <Route path="profile" element={<AuthWrapper><LazyProfilePage /></AuthWrapper>} />
-                            <Route path="settings" element={<LazySettingsPage />} />
-                            <Route path="notifications" element={<AuthWrapper><LazyNotificationsPage /></AuthWrapper>} />
-                            
+                            <Route
+                              path='profile'
+                              element={
+                                <AuthWrapper>
+                                  <LazyProfilePage />
+                                </AuthWrapper>
+                              }
+                            />
+                            <Route
+                              path='settings'
+                              element={<LazySettingsPage />}
+                            />
+                            <Route
+                              path='notifications'
+                              element={
+                                <AuthWrapper>
+                                  <LazyNotificationsPage />
+                                </AuthWrapper>
+                              }
+                            />
+
                             {/* Marketplace & Financial - medium priority */}
-                            <Route path="marketplace" element={<LazyMarketplacePage />} />
-                            <Route path="wallet" element={<LazyWalletPage />} />
-                            <Route path="matches" element={<LazyMatchHistoryPage />} />
-                            
+                            <Route
+                              path='marketplace'
+                              element={<LazyMarketplacePage />}
+                            />
+                            <Route path='wallet' element={<LazyWalletPage />} />
+                            <Route
+                              path='matches'
+                              element={<LazyMatchHistoryPage />}
+                            />
+
                             {/* Static/Info pages - low priority */}
-                            <Route path="about" element={<LazyAboutPage />} />
-                            <Route path="help" element={<LazyHelpPage />} />
-                            <Route path="faq" element={<LazyFAQPage />} />
-                            <Route path="privacy" element={<LazyPrivacyPage />} />
-                            <Route path="terms" element={<LazyTermsPage />} />
+                            <Route path='about' element={<LazyAboutPage />} />
+                            <Route path='help' element={<LazyHelpPage />} />
+                            <Route path='faq' element={<LazyFAQPage />} />
+                            <Route
+                              path='privacy'
+                              element={<LazyPrivacyPage />}
+                            />
+                            <Route path='terms' element={<LazyTermsPage />} />
                           </Route>
-                          
+
                           {/* Admin routes - only load when accessed */}
-                          <Route path="/admin" element={<LazyAdminDashboard />} />
-                          <Route path="/admin/users" element={<LazyAdminUsers />} />
-                          
-                          
+                          <Route
+                            path='/admin'
+                            element={<LazyAdminDashboard />}
+                          />
+                          <Route
+                            path='/admin/users'
+                            element={<LazyAdminUsers />}
+                          />
+
                           {/* DEPRECATED AUTH ROUTES - Replaced by unified AuthPage
                           <Route path="/login" element={<LazyLoginPage />} />
                           <Route path="/register" element={<LazyRegisterPage />} />
                           */}
-                          
+
                           {/* Fallback */}
-                          <Route path="*" element={
-                            <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
-                              <div className="text-center">
-                                <h1 className="text-2xl mb-4">Trang không tìm thấy</h1>
-                                <Link to="/" className="text-primary hover:underline">Về trang chủ</Link>
+                          <Route
+                            path='*'
+                            element={
+                              <div className='min-h-screen flex items-center justify-center bg-background text-foreground'>
+                                <div className='text-center'>
+                                  <h1 className='text-2xl mb-4'>
+                                    Trang không tìm thấy
+                                  </h1>
+                                  <Link
+                                    to='/'
+                                    className='text-primary hover:underline'
+                                  >
+                                    Về trang chủ
+                                  </Link>
+                                </div>
                               </div>
-                            </div>
-                          } />
+                            }
+                          />
                         </Routes>
                       </Suspense>
                       <DailyNotificationSystem />

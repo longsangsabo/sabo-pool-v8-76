@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '../integrations/supabase/client';
 import { Wallet, Transaction, PaymentMethod } from '../types/common';
@@ -59,11 +58,13 @@ export const usePayment = () => {
     try {
       // Mock implementation
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (wallet) {
-        setWallet(prev => prev ? { ...prev, balance: prev.balance + amount } : null);
+        setWallet(prev =>
+          prev ? { ...prev, balance: prev.balance + amount } : null
+        );
       }
-      
+
       return { success: true };
     } catch (err) {
       setError('Failed to deposit funds');
@@ -78,11 +79,13 @@ export const usePayment = () => {
     try {
       // Mock implementation
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (wallet && wallet.balance >= amount) {
-        setWallet(prev => prev ? { ...prev, balance: prev.balance - amount } : null);
+        setWallet(prev =>
+          prev ? { ...prev, balance: prev.balance - amount } : null
+        );
       }
-      
+
       return { success: true };
     } catch (err) {
       setError('Failed to withdraw funds');
@@ -124,16 +127,22 @@ export const usePayment = () => {
     }
   };
 
-  const transferFunds = async (recipientId: string, amount: number, description?: string) => {
+  const transferFunds = async (
+    recipientId: string,
+    amount: number,
+    description?: string
+  ) => {
     setIsProcessing(true);
     try {
       // Mock implementation
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (wallet && wallet.balance >= amount) {
-        setWallet(prev => prev ? { ...prev, balance: prev.balance - amount } : null);
+        setWallet(prev =>
+          prev ? { ...prev, balance: prev.balance - amount } : null
+        );
       }
-      
+
       return { success: true };
     } catch (err) {
       setError('Failed to transfer funds');
@@ -147,10 +156,8 @@ export const usePayment = () => {
     setLoading(true);
     try {
       // Mock implementation
-      setPaymentMethods(prev => 
-        prev.map(pm => 
-          pm.id === paymentMethodId ? { ...pm, ...data } : pm
-        )
+      setPaymentMethods(prev =>
+        prev.map(pm => (pm.id === paymentMethodId ? { ...pm, ...data } : pm))
       );
     } catch (err) {
       setError('Failed to update payment method');

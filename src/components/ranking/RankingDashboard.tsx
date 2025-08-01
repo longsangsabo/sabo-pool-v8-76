@@ -12,7 +12,9 @@ interface RankingDashboardProps {
   playerId?: string;
 }
 
-export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) => {
+export const RankingDashboard: React.FC<RankingDashboardProps> = ({
+  playerId,
+}) => {
   const {
     playerRanking,
     ranks,
@@ -24,15 +26,15 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
     getRankProgress,
     getDailyChallengeCount,
     initializePlayerRanking,
-    refetch
+    refetch,
   } = usePlayerRanking(playerId);
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-64 w-full" />
-        <Skeleton className="h-48 w-full" />
+      <div className='space-y-6'>
+        <Skeleton className='h-32 w-full' />
+        <Skeleton className='h-64 w-full' />
+        <Skeleton className='h-48 w-full' />
       </div>
     );
   }
@@ -40,14 +42,14 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
   if (error) {
     return (
       <Card>
-        <CardContent className="p-6 text-center">
-          <div className="text-red-500 mb-4">
-            <Info className="h-12 w-12 mx-auto mb-2" />
-            <p className="font-medium">Lỗi tải dữ liệu</p>
-            <p className="text-sm text-muted-foreground">{error}</p>
+        <CardContent className='p-6 text-center'>
+          <div className='text-red-500 mb-4'>
+            <Info className='h-12 w-12 mx-auto mb-2' />
+            <p className='font-medium'>Lỗi tải dữ liệu</p>
+            <p className='text-sm text-muted-foreground'>{error}</p>
           </div>
-          <Button onClick={refetch} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <Button onClick={refetch} variant='outline'>
+            <RefreshCw className='h-4 w-4 mr-2' />
             Thử lại
           </Button>
         </CardContent>
@@ -58,12 +60,13 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
   if (!playerRanking) {
     return (
       <Card>
-        <CardContent className="p-6 text-center">
-          <div className="mb-4">
-            <Info className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
-            <p className="font-medium">Chưa có thông tin hạng</p>
-            <p className="text-sm text-muted-foreground">
-              Bạn chưa có thông tin hạng trong hệ thống. Hãy khởi tạo để bắt đầu!
+        <CardContent className='p-6 text-center'>
+          <div className='mb-4'>
+            <Info className='h-12 w-12 mx-auto mb-2 text-muted-foreground' />
+            <p className='font-medium'>Chưa có thông tin hạng</p>
+            <p className='text-sm text-muted-foreground'>
+              Bạn chưa có thông tin hạng trong hệ thống. Hãy khởi tạo để bắt
+              đầu!
             </p>
           </div>
           <Button onClick={initializePlayerRanking}>
@@ -79,17 +82,17 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
   const dailyChallengeCount = getDailyChallengeCount();
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header with refresh button */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold">Hệ thống Hạng SPA</h2>
-          <p className="text-muted-foreground">
+          <h2 className='text-2xl font-bold'>Hệ thống Hạng SPA</h2>
+          <p className='text-muted-foreground'>
             Theo dõi tiến độ và thành tích của bạn
           </p>
         </div>
-        <Button onClick={refetch} variant="outline" size="sm">
-          <RefreshCw className="h-4 w-4 mr-2" />
+        <Button onClick={refetch} variant='outline' size='sm'>
+          <RefreshCw className='h-4 w-4 mr-2' />
           Làm mới
         </Button>
       </div>
@@ -106,38 +109,41 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
       )}
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
+          <CardContent className='p-4'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-blue-600'>
                 {playerRanking.total_matches}
               </div>
-              <p className="text-sm text-muted-foreground">Tổng trận đấu</p>
+              <p className='text-sm text-muted-foreground'>Tổng trận đấu</p>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+          <CardContent className='p-4'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-green-600'>
                 {playerRanking.wins}
               </div>
-              <p className="text-sm text-muted-foreground">Trận thắng</p>
+              <p className='text-sm text-muted-foreground'>Trận thắng</p>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">
-                {playerRanking.total_matches > 0 
-                  ? Math.round((playerRanking.wins / playerRanking.total_matches) * 100)
-                  : 0}%
+          <CardContent className='p-4'>
+            <div className='text-center'>
+              <div className='text-2xl font-bold text-purple-600'>
+                {playerRanking.total_matches > 0
+                  ? Math.round(
+                      (playerRanking.wins / playerRanking.total_matches) * 100
+                    )
+                  : 0}
+                %
               </div>
-              <p className="text-sm text-muted-foreground">Tỷ lệ thắng</p>
+              <p className='text-sm text-muted-foreground'>Tỷ lệ thắng</p>
             </div>
           </CardContent>
         </Card>
@@ -155,31 +161,41 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
       {rankingHistory.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <History className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <History className='h-5 w-5' />
               Lịch sử thăng hạng
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {rankingHistory.slice(0, 5).map((history) => (
-                <div key={history.id} className="flex items-center justify-between p-4 rounded-lg border">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      {history.old_rank && <RankBadge rank={history.old_rank} size="sm" />}
-                      <span className="text-muted-foreground">→</span>
-                      {history.new_rank && <RankBadge rank={history.new_rank} size="sm" />}
+            <div className='space-y-3'>
+              {rankingHistory.slice(0, 5).map(history => (
+                <div
+                  key={history.id}
+                  className='flex items-center justify-between p-4 rounded-lg border'
+                >
+                  <div className='flex items-center gap-4'>
+                    <div className='flex items-center gap-2'>
+                      {history.old_rank && (
+                        <RankBadge rank={history.old_rank} size='sm' />
+                      )}
+                      <span className='text-muted-foreground'>→</span>
+                      {history.new_rank && (
+                        <RankBadge rank={history.new_rank} size='sm' />
+                      )}
                     </div>
                     <div>
-                      <p className="font-medium">
-                        Thăng hạng từ {history.old_rank?.name} lên {history.new_rank?.name}
+                      <p className='font-medium'>
+                        Thăng hạng từ {history.old_rank?.name} lên{' '}
+                        {history.new_rank?.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(history.promotion_date).toLocaleDateString('vi-VN')}
+                      <p className='text-sm text-muted-foreground'>
+                        {new Date(history.promotion_date).toLocaleDateString(
+                          'vi-VN'
+                        )}
                       </p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-green-600">
+                  <Badge variant='outline' className='text-green-600'>
                     Thăng hạng
                   </Badge>
                 </div>
@@ -191,16 +207,19 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({ playerId }) 
 
       {/* Season Info */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
+        <CardContent className='p-4'>
+          <div className='flex items-center justify-between'>
             <div>
-              <p className="font-medium">Mùa giải hiện tại</p>
-              <p className="text-sm text-muted-foreground">
-                Bắt đầu từ {new Date(playerRanking.season_start).toLocaleDateString('vi-VN')}
+              <p className='font-medium'>Mùa giải hiện tại</p>
+              <p className='text-sm text-muted-foreground'>
+                Bắt đầu từ{' '}
+                {new Date(playerRanking.season_start).toLocaleDateString(
+                  'vi-VN'
+                )}
               </p>
             </div>
             {playerRanking.verified_at && (
-              <Badge variant="outline" className="text-green-600">
+              <Badge variant='outline' className='text-green-600'>
                 Đã xác thực
               </Badge>
             )}

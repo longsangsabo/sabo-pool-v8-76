@@ -3,7 +3,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface NotificationRequest {
@@ -46,7 +47,7 @@ async function sendSMS(phoneNumber: string, message: string): Promise<boolean> {
       {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${btoa(`${twilioAccountSid}:${twilioAuthToken}`)}`,
+          Authorization: `Basic ${btoa(`${twilioAccountSid}:${twilioAuthToken}`)}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
@@ -72,10 +73,15 @@ async function sendSMS(phoneNumber: string, message: string): Promise<boolean> {
 }
 
 // Email Service using Resend
-async function sendEmail(email: string, title: string, message: string, metadata?: Record<string, any>): Promise<boolean> {
+async function sendEmail(
+  email: string,
+  title: string,
+  message: string,
+  metadata?: Record<string, any>
+): Promise<boolean> {
   try {
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    
+
     if (!resendApiKey) {
       console.log('Email: Missing Resend API key, skipping email delivery');
       return false;
@@ -91,7 +97,9 @@ async function sendEmail(email: string, title: string, message: string, metadata
           <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea;">
             <p style="color: #666; line-height: 1.6; margin: 0;">${message}</p>
           </div>
-          ${metadata?.action_url ? `
+          ${
+            metadata?.action_url
+              ? `
             <div style="text-align: center; margin-top: 20px;">
               <a href="${metadata.action_url}" 
                  style="background: #667eea; color: white; padding: 12px 24px; 
@@ -99,7 +107,9 @@ async function sendEmail(email: string, title: string, message: string, metadata
                 Xem chi tiết
               </a>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
         <div style="padding: 20px; text-align: center; color: #666; font-size: 12px;">
           <p>Đây là email tự động từ Sabo Pool Arena. Vui lòng không trả lời email này.</p>
@@ -110,7 +120,7 @@ async function sendEmail(email: string, title: string, message: string, metadata
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
+        Authorization: `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -136,10 +146,15 @@ async function sendEmail(email: string, title: string, message: string, metadata
 }
 
 // Push Notification Service using Firebase Cloud Messaging
-async function sendPushNotification(token: string, title: string, message: string, metadata?: Record<string, any>): Promise<boolean> {
+async function sendPushNotification(
+  token: string,
+  title: string,
+  message: string,
+  metadata?: Record<string, any>
+): Promise<boolean> {
   try {
     const fcmServerKey = Deno.env.get('FCM_SERVER_KEY');
-    
+
     if (!fcmServerKey) {
       console.log('Push: Missing FCM server key, skipping push notification');
       return false;
@@ -148,7 +163,7 @@ async function sendPushNotification(token: string, title: string, message: strin
     const response = await fetch('https://fcm.googleapis.com/fcm/send', {
       method: 'POST',
       headers: {
-        'Authorization': `key=${fcmServerKey}`,
+        Authorization: `key=${fcmServerKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -178,10 +193,13 @@ async function sendPushNotification(token: string, title: string, message: strin
 }
 
 // Zalo Service (placeholder - needs actual Zalo API integration)
-async function sendZaloMessage(zaloId: string, message: string): Promise<boolean> {
+async function sendZaloMessage(
+  zaloId: string,
+  message: string
+): Promise<boolean> {
   try {
     const zaloAccessToken = Deno.env.get('ZALO_ACCESS_TOKEN');
-    
+
     if (!zaloAccessToken) {
       console.log('Zalo: Missing access token, skipping Zalo delivery');
       return false;
@@ -205,12 +223,15 @@ async function deliverNotification(
   message: string,
   smsMessage?: string,
   metadata?: Record<string, any>
-): Promise<{ sent: string[], failed: string[] }> {
+): Promise<{ sent: string[]; failed: string[] }> {
   const sent: string[] = [];
   const failed: string[] = [];
 
   for (const channel of channels) {
-    if (!enabledChannels.includes(channel.channel_type) || !channel.is_verified) {
+    if (
+      !enabledChannels.includes(channel.channel_type) ||
+      !channel.is_verified
+    ) {
       continue;
     }
 
@@ -221,10 +242,20 @@ async function deliverNotification(
         success = await sendSMS(channel.channel_address, smsMessage || message);
         break;
       case 'email':
-        success = await sendEmail(channel.channel_address, title, message, metadata);
+        success = await sendEmail(
+          channel.channel_address,
+          title,
+          message,
+          metadata
+        );
         break;
       case 'push':
-        success = await sendPushNotification(channel.channel_address, title, message, metadata);
+        success = await sendPushNotification(
+          channel.channel_address,
+          title,
+          message,
+          metadata
+        );
         break;
       case 'zalo':
         success = await sendZaloMessage(channel.channel_address, message);
@@ -247,17 +278,27 @@ async function deliverNotification(
   return { sent, failed };
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { notification_id, user_id, channels, title, message, priority, category, metadata }: NotificationRequest = 
-      await req.json();
+    const {
+      notification_id,
+      user_id,
+      channels,
+      title,
+      message,
+      priority,
+      category,
+      metadata,
+    }: NotificationRequest = await req.json();
 
-    console.log(`Processing notification ${notification_id} for user ${user_id}`);
+    console.log(
+      `Processing notification ${notification_id} for user ${user_id}`
+    );
 
     // Get user's communication channels
     const { data: userChannels, error: channelsError } = await supabase
@@ -267,7 +308,9 @@ serve(async (req) => {
       .eq('is_active', true);
 
     if (channelsError) {
-      throw new Error(`Failed to fetch user channels: ${channelsError.message}`);
+      throw new Error(
+        `Failed to fetch user channels: ${channelsError.message}`
+      );
     }
 
     // Get user's notification preferences
@@ -288,31 +331,35 @@ serve(async (req) => {
       const quietStart = preferences.quiet_start_time;
       const quietEnd = preferences.quiet_end_time;
 
-      const isQuietTime = (quietStart <= quietEnd) 
-        ? (currentTime >= quietStart && currentTime <= quietEnd)
-        : (currentTime >= quietStart || currentTime <= quietEnd);
+      const isQuietTime =
+        quietStart <= quietEnd
+          ? currentTime >= quietStart && currentTime <= quietEnd
+          : currentTime >= quietStart || currentTime <= quietEnd;
 
       if (isQuietTime && priority !== 'urgent') {
         console.log('Notification blocked due to quiet hours');
-        
+
         // Update notification log
         await supabase
           .from('notification_logs')
           .update({
             status: 'cancelled',
             channels_failed: ['quiet_hours'],
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq('id', notification_id);
 
         return new Response(
-          JSON.stringify({ 
-            success: true, 
+          JSON.stringify({
+            success: true,
             message: 'Notification cancelled due to quiet hours',
             sent: [],
-            failed: ['quiet_hours']
+            failed: ['quiet_hours'],
           }),
-          { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+          {
+            status: 200,
+            headers: { 'Content-Type': 'application/json', ...corsHeaders },
+          }
         );
       }
     }
@@ -351,7 +398,7 @@ serve(async (req) => {
       channels_sent: deliveryResult.sent,
       channels_failed: deliveryResult.failed,
       sent_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     if (deliveryResult.sent.length > 0) {
@@ -366,23 +413,28 @@ serve(async (req) => {
     console.log(`Notification ${notification_id} processed:`, deliveryResult);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         notification_id,
-        ...deliveryResult 
+        ...deliveryResult,
       }),
-      { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      }
     );
-
   } catch (error) {
     console.error('Multi-channel notification error:', error);
-    
+
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: error.message 
+      JSON.stringify({
+        success: false,
+        error: error.message,
       }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      }
     );
   }
 });

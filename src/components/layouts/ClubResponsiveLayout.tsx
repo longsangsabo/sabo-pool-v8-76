@@ -1,4 +1,3 @@
-
 import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { ClubDesktopLayout } from './ClubDesktopLayout';
@@ -9,40 +8,26 @@ interface ClubResponsiveLayoutProps {
   children: React.ReactNode;
 }
 
-const ClubResponsiveLayoutBase: React.FC<ClubResponsiveLayoutProps> = ({ children }) => {
+const ClubResponsiveLayoutBase: React.FC<ClubResponsiveLayoutProps> = ({
+  children,
+}) => {
   const { isMobile, isTablet, isDesktop } = useOptimizedResponsive();
 
   // Early return pattern - only render one layout
   if (isMobile) {
-    return (
-      <ClubMobileLayout>
-        {children}
-      </ClubMobileLayout>
-    );
+    return <ClubMobileLayout>{children}</ClubMobileLayout>;
   }
-  
+
   if (isTablet) {
-    return (
-      <ClubTabletLayout>
-        {children}
-      </ClubTabletLayout>
-    );
+    return <ClubTabletLayout>{children}</ClubTabletLayout>;
   }
-  
+
   if (isDesktop) {
-    return (
-      <ClubDesktopLayout>
-        {children}
-      </ClubDesktopLayout>
-    );
+    return <ClubDesktopLayout>{children}</ClubDesktopLayout>;
   }
 
   // Fallback to mobile layout
-  return (
-    <ClubMobileLayout>
-      {children}
-    </ClubMobileLayout>
-  );
+  return <ClubMobileLayout>{children}</ClubMobileLayout>;
 };
 
 // Memoized for performance

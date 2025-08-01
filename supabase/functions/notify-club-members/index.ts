@@ -1,9 +1,10 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.7";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface NotifyClubMembersRequest {
@@ -25,18 +26,18 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { 
-      tournament_id, 
-      club_id, 
-      tournament_name, 
-      created_by_id 
+    const {
+      tournament_id,
+      club_id,
+      tournament_name,
+      created_by_id,
     }: NotifyClubMembersRequest = await req.json();
 
     console.log('📢 Notifying club members:', {
       tournament_id,
       club_id,
       tournament_name,
-      created_by_id
+      created_by_id,
     });
 
     // Get club information and creator name
@@ -65,16 +66,16 @@ const handler = async (req: Request): Promise<Response> => {
     // Get all club members (people who have registered for tournaments at this club)
     const { data: clubMembers, error: membersError } = await supabase
       .from('tournament_registrations')
-      .select(`
+      .select(
+        `
         user_id,
         profiles!inner(full_name, user_id)
-      `)
+      `
+      )
       .neq('user_id', created_by_id) // Don't notify the creator
-      .in('tournament_id', 
-        supabase
-          .from('tournaments')
-          .select('id')
-          .eq('club_id', club_id)
+      .in(
+        'tournament_id',
+        supabase.from('tournaments').select('id').eq('club_id', club_id)
       );
 
     if (membersError) {
@@ -83,16 +84,20 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Get unique club members
-    const uniqueMembers = clubMembers?.reduce((acc, reg) => {
-      const userId = reg.user_id;
-      if (!acc.find(member => member.user_id === userId)) {
-        acc.push({
-          user_id: userId,
-          full_name: reg.profiles?.full_name || 'Thành viên'
-        });
-      }
-      return acc;
-    }, [] as Array<{user_id: string, full_name: string}>) || [];
+    const uniqueMembers =
+      clubMembers?.reduce(
+        (acc, reg) => {
+          const userId = reg.user_id;
+          if (!acc.find(member => member.user_id === userId)) {
+            acc.push({
+              user_id: userId,
+              full_name: reg.profiles?.full_name || 'Thành viên',
+            });
+          }
+          return acc;
+        },
+        [] as Array<{ user_id: string; full_name: string }>
+      ) || [];
 
     console.log('👥 Found club members:', uniqueMembers.length);
 
@@ -108,10 +113,10 @@ const handler = async (req: Request): Promise<Response> => {
         club_id,
         tournament_name,
         club_name: clubData.club_name,
-        created_by: creatorData?.full_name || 'CLB'
+        created_by: creatorData?.full_name || 'CLB',
       },
       action_url: `/tournaments/${tournament_id}`,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     }));
 
     if (notifications.length > 0) {
@@ -124,7 +129,11 @@ const handler = async (req: Request): Promise<Response> => {
         throw notificationError;
       }
 
-      console.log('✅ Created notifications for', notifications.length, 'club members');
+      console.log(
+        '✅ Created notifications for',
+        notifications.length,
+        'club members'
+      );
     }
 
     // Also send real-time notification
@@ -139,12 +148,15 @@ const handler = async (req: Request): Promise<Response> => {
           club_id,
           club_name: clubData.club_name,
           created_by: creatorData?.full_name || 'CLB',
-          message: `Giải đấu mới "${tournament_name}" đã được tạo!`
-        }
+          message: `Giải đấu mới "${tournament_name}" đã được tạo!`,
+        },
       });
 
     if (realtimeError) {
-      console.error('⚠️ Warning: Real-time notification failed:', realtimeError);
+      console.error(
+        '⚠️ Warning: Real-time notification failed:',
+        realtimeError
+      );
     }
 
     return new Response(
@@ -152,7 +164,7 @@ const handler = async (req: Request): Promise<Response> => {
         success: true,
         message: `Đã gửi thông báo cho ${notifications.length} thành viên CLB`,
         notifications_sent: notifications.length,
-        club_name: clubData.club_name
+        club_name: clubData.club_name,
       }),
       {
         status: 200,
@@ -162,19 +174,18 @@ const handler = async (req: Request): Promise<Response> => {
         },
       }
     );
-
   } catch (error: any) {
     console.error('❌ Error in notify-club-members function:', error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: false,
-        error: error.message || 'Internal server error'
+        error: error.message || 'Internal server error',
       }),
       {
         status: 500,
-        headers: { 
-          'Content-Type': 'application/json', 
-          ...corsHeaders 
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
         },
       }
     );

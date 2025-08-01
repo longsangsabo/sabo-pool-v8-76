@@ -1,8 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../integrations/supabase/client';
-import { useOptimizedLeaderboardQuery, useOptimizedStatsQuery } from './useDatabaseOptimization';
+import {
+  useOptimizedLeaderboardQuery,
+  useOptimizedStatsQuery,
+} from './useDatabaseOptimization';
 
 export interface LeaderboardEntry {
   id: string;
@@ -79,9 +81,7 @@ export const useLeaderboard = () => {
 
     try {
       // Build query for leaderboard data using player_rankings with proper join
-      let query = supabase
-        .from('player_rankings')
-        .select(`
+      let query = supabase.from('player_rankings').select(`
           *,
           profiles!inner(
             user_id,
@@ -99,18 +99,28 @@ export const useLeaderboard = () => {
       if (currentFilters.city) {
         query = query.eq('profiles.city', currentFilters.city);
       }
-      
+
       if (currentFilters.searchTerm) {
-        query = query.or(`profiles.full_name.ilike.%${currentFilters.searchTerm}%,profiles.display_name.ilike.%${currentFilters.searchTerm}%`);
+        query = query.or(
+          `profiles.full_name.ilike.%${currentFilters.searchTerm}%,profiles.display_name.ilike.%${currentFilters.searchTerm}%`
+        );
       }
 
       // Apply sorting
-      const sortColumn = currentFilters.sortBy === 'elo' ? 'elo_points' : 
-                        currentFilters.sortBy === 'ranking_points' ? 'spa_points' :
-                        currentFilters.sortBy === 'wins' ? 'wins' :
-                        currentFilters.sortBy === 'win_rate' ? 'win_rate' : 'total_matches';
-      
-      query = query.order(sortColumn, { ascending: currentFilters.sortOrder === 'asc' });
+      const sortColumn =
+        currentFilters.sortBy === 'elo'
+          ? 'elo_points'
+          : currentFilters.sortBy === 'ranking_points'
+            ? 'spa_points'
+            : currentFilters.sortBy === 'wins'
+              ? 'wins'
+              : currentFilters.sortBy === 'win_rate'
+                ? 'win_rate'
+                : 'total_matches';
+
+      query = query.order(sortColumn, {
+        ascending: currentFilters.sortOrder === 'asc',
+      });
 
       // Apply pagination
       const from = (currentFilters.page - 1) * currentFilters.pageSize;
@@ -122,34 +132,45 @@ export const useLeaderboard = () => {
       if (error) throw error;
 
       // Transform data to match LeaderboardEntry interface
-      const transformedData: LeaderboardEntry[] = (data || []).map((item: any, index: number) => ({
-        id: item.id,
-        username: item.profiles?.display_name || item.profiles?.full_name || 'Unknown',
-        full_name: item.profiles?.full_name || '',
-        current_rank: item.profiles?.verified_rank || 'Nghiệp dư',
-        ranking_points: item.spa_points || 0,
-        total_matches: item.total_matches || 0,
-        avatar_url: item.profiles?.avatar_url || '',
-        elo: item.elo_points || 1000,
-        wins: item.wins || 0,
-        losses: (item.total_matches || 0) - (item.wins || 0),
-        matches_played: item.total_matches || 0,
-        win_rate: item.total_matches > 0 ? (item.wins / item.total_matches) * 100 : 0,
-        rank: from + index + 1,
-        last_played: item.updated_at || new Date().toISOString(),
-        streak: item.win_streak || 0,
-        country: 'Vietnam',
-        city: item.profiles?.city || '',
-        location: `${item.profiles?.city || ''}, ${item.profiles?.district || ''}`.trim().replace(/^,|,$/, ''),
-        bio: item.profiles?.bio || '',
-        user_id: item.user_id,
-      }));
+      const transformedData: LeaderboardEntry[] = (data || []).map(
+        (item: any, index: number) => ({
+          id: item.id,
+          username:
+            item.profiles?.display_name ||
+            item.profiles?.full_name ||
+            'Unknown',
+          full_name: item.profiles?.full_name || '',
+          current_rank: item.profiles?.verified_rank || 'Nghiệp dư',
+          ranking_points: item.spa_points || 0,
+          total_matches: item.total_matches || 0,
+          avatar_url: item.profiles?.avatar_url || '',
+          elo: item.elo_points || 1000,
+          wins: item.wins || 0,
+          losses: (item.total_matches || 0) - (item.wins || 0),
+          matches_played: item.total_matches || 0,
+          win_rate:
+            item.total_matches > 0 ? (item.wins / item.total_matches) * 100 : 0,
+          rank: from + index + 1,
+          last_played: item.updated_at || new Date().toISOString(),
+          streak: item.win_streak || 0,
+          country: 'Vietnam',
+          city: item.profiles?.city || '',
+          location:
+            `${item.profiles?.city || ''}, ${item.profiles?.district || ''}`
+              .trim()
+              .replace(/^,|,$/, ''),
+          bio: item.profiles?.bio || '',
+          user_id: item.user_id,
+        })
+      );
 
       setLeaderboard(transformedData);
       setTotalCount(count || 0);
     } catch (err) {
       console.error('Leaderboard fetch error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch leaderboard');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch leaderboard'
+      );
       setLeaderboard([]);
       setTotalCount(0);
     } finally {
@@ -174,21 +195,25 @@ export const useLeaderboard = () => {
         .select('elo_points');
 
       const eloPoints = rankingsData?.map(item => item.elo_points || 0) || [];
-      
+
       const calculatedStats: LeaderboardStats = {
         totalPlayers: totalPlayers || 0,
-        averageElo: eloPoints.length > 0 
-          ? eloPoints.reduce((sum, points) => sum + points, 0) / eloPoints.length 
-          : 1500,
+        averageElo:
+          eloPoints.length > 0
+            ? eloPoints.reduce((sum, points) => sum + points, 0) /
+              eloPoints.length
+            : 1500,
         highestElo: eloPoints.length > 0 ? Math.max(...eloPoints) : 2500,
         lowestElo: eloPoints.length > 0 ? Math.min(...eloPoints) : 800,
         activePlayers: rankingsData?.length || 0,
       };
-      
+
       setStats(calculatedStats);
     } catch (err) {
       console.error('Leaderboard stats error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch leaderboard stats');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch leaderboard stats'
+      );
       setStats(initialStats);
     }
   };
@@ -199,23 +224,24 @@ export const useLeaderboard = () => {
   }, [filters]);
 
   const updateFilters = (newFilters: Partial<LeaderboardFilters>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
+    setFilters(prev => ({ ...prev, ...newFilters, page: 1 }));
   };
 
   const goToPage = (page: number) => {
-    setFilters((prev) => ({ ...prev, page }));
+    setFilters(prev => ({ ...prev, page }));
   };
 
   const sortBy = (sortBy: LeaderboardFilters['sortBy']) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       sortBy,
-      sortOrder: prev.sortBy === sortBy && prev.sortOrder === 'desc' ? 'asc' : 'desc',
+      sortOrder:
+        prev.sortBy === sortBy && prev.sortOrder === 'desc' ? 'asc' : 'desc',
     }));
   };
 
   const search = (searchTerm: string) => {
-    setFilters((prev) => ({ ...prev, searchTerm, page: 1 }));
+    setFilters(prev => ({ ...prev, searchTerm, page: 1 }));
   };
 
   return {
@@ -241,9 +267,9 @@ export const useLeaderboardQuery = () => {
         .from('profiles')
         .select('*')
         .order('elo', { ascending: false });
-      
+
       if (error) throw error;
       return data;
-    }
+    },
   });
 };

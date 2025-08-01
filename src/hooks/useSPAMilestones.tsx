@@ -44,27 +44,28 @@ export const useSPAMilestones = () => {
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  const { data: completedMilestones = [], isLoading: completedLoading } = useQuery({
-    queryKey: ['player-milestones', user?.id],
-    queryFn: async (): Promise<PlayerMilestone[]> => {
-      if (!user?.id) return [];
+  const { data: completedMilestones = [], isLoading: completedLoading } =
+    useQuery({
+      queryKey: ['player-milestones', user?.id],
+      queryFn: async (): Promise<PlayerMilestone[]> => {
+        if (!user?.id) return [];
 
-      try {
-        const { data, error } = await (supabase as any)
-          .from('player_milestones')
-          .select('*')
-          .eq('user_id', user.id);
+        try {
+          const { data, error } = await (supabase as any)
+            .from('player_milestones')
+            .select('*')
+            .eq('user_id', user.id);
 
-        if (error) throw error;
-        return data || [];
-      } catch (error) {
-        console.error('Error fetching player milestones:', error);
-        return [];
-      }
-    },
-    enabled: !!user?.id,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
+          if (error) throw error;
+          return data || [];
+        } catch (error) {
+          console.error('Error fetching player milestones:', error);
+          return [];
+        }
+      },
+      enabled: !!user?.id,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    });
 
   const { data: playerStats } = useQuery({
     queryKey: ['player-rankings', user?.id],
@@ -83,42 +84,51 @@ export const useSPAMilestones = () => {
     enabled: !!user?.id,
   });
 
-  const milestonesWithProgress: MilestoneProgress[] = milestones.map(milestone => {
-    const completed = completedMilestones.some(cm => cm.milestone_id === milestone.id);
-    
-    let progress = 0;
-    let maxProgress = milestone.requirement_value;
+  const milestonesWithProgress: MilestoneProgress[] = milestones.map(
+    milestone => {
+      const completed = completedMilestones.some(
+        cm => cm.milestone_id === milestone.id
+      );
 
-    if (playerStats) {
-      switch (milestone.milestone_type) {
-        case 'matches_played':
-          progress = playerStats.total_matches || 0;
-          break;
-        case 'spa_points':
-          progress = playerStats.spa_points || 0;
-          break;
-        case 'win_streak':
-          progress = playerStats.win_streak || 0;
-          break;
-        case 'win_rate':
-          const winRate = playerStats.total_matches > 0 
-            ? (playerStats.wins / playerStats.total_matches) * 100 
-            : 0;
-          progress = winRate >= 50 && playerStats.total_matches >= milestone.requirement_value ? 1 : 0;
-          maxProgress = 1;
-          break;
-        default:
-          progress = 0;
+      let progress = 0;
+      let maxProgress = milestone.requirement_value;
+
+      if (playerStats) {
+        switch (milestone.milestone_type) {
+          case 'matches_played':
+            progress = playerStats.total_matches || 0;
+            break;
+          case 'spa_points':
+            progress = playerStats.spa_points || 0;
+            break;
+          case 'win_streak':
+            progress = playerStats.win_streak || 0;
+            break;
+          case 'win_rate':
+            const winRate =
+              playerStats.total_matches > 0
+                ? (playerStats.wins / playerStats.total_matches) * 100
+                : 0;
+            progress =
+              winRate >= 50 &&
+              playerStats.total_matches >= milestone.requirement_value
+                ? 1
+                : 0;
+            maxProgress = 1;
+            break;
+          default:
+            progress = 0;
+        }
       }
-    }
 
-    return {
-      milestone,
-      completed,
-      progress: Math.min(progress, maxProgress),
-      maxProgress,
-    };
-  });
+      return {
+        milestone,
+        completed,
+        progress: Math.min(progress, maxProgress),
+        maxProgress,
+      };
+    }
+  );
 
   return {
     milestones: milestonesWithProgress,

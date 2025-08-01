@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -21,7 +20,7 @@ interface UnifiedProfileData {
   role?: string;
   active_role?: string;
   completion_percentage?: number;
-  
+
   // Dashboard stats
   matches_played?: number;
   matches_won?: number;
@@ -30,7 +29,7 @@ interface UnifiedProfileData {
   tournaments_joined?: number;
   current_ranking?: number;
   spa_points?: number;
-  
+
   // Additional data
   club_profile?: any;
   recent_activities?: any[];
@@ -40,9 +39,15 @@ interface UnifiedProfileData {
 export const useUnifiedProfile = () => {
   const { user } = useAuth();
   const { handleError } = useErrorHandler();
-  const { data: dashboardStats, isLoading: dashboardLoading } = usePlayerDashboard();
+  const { data: dashboardStats, isLoading: dashboardLoading } =
+    usePlayerDashboard();
 
-  const { data: profileData, isLoading: profileLoading, error, refetch } = useQuery({
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['unified-profile', user?.id],
     queryFn: async () => {
       if (!user?.id) {
@@ -52,16 +57,20 @@ export const useUnifiedProfile = () => {
       try {
         // Step 1: Fetch or create basic profile
         let profile = null;
-        
-        const { data: existingProfile, error: profileFetchError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
+
+        const { data: existingProfile, error: profileFetchError } =
+          await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle();
 
         if (profileFetchError) {
           console.error('Profile fetch error:', profileFetchError);
-          handleError(profileFetchError, { section: 'Profile', action: 'fetch' });
+          handleError(profileFetchError, {
+            section: 'Profile',
+            action: 'fetch',
+          });
           throw profileFetchError;
         }
 
@@ -71,11 +80,14 @@ export const useUnifiedProfile = () => {
             .from('profiles')
             .insert({
               user_id: user.id,
-              full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Người dùng',
+              full_name:
+                user.user_metadata?.full_name ||
+                user.email?.split('@')[0] ||
+                'Người dùng',
               email: user.email,
               role: 'player',
               active_role: 'player',
-              completion_percentage: 0
+              completion_percentage: 0,
             })
             .select()
             .maybeSingle();
@@ -108,7 +120,10 @@ export const useUnifiedProfile = () => {
             clubProfile = clubData;
           }
         } catch (clubFetchError) {
-          console.warn('Club profile fetch failed (non-critical):', clubFetchError);
+          console.warn(
+            'Club profile fetch failed (non-critical):',
+            clubFetchError
+          );
         }
 
         // Step 3: Fetch recent activities (optional, won't fail if empty)
@@ -117,7 +132,8 @@ export const useUnifiedProfile = () => {
           const [matchesResult, challengesResult] = await Promise.allSettled([
             supabase
               .from('matches')
-              .select(`
+              .select(
+                `
                 id,
                 status,
                 created_at,
@@ -126,46 +142,69 @@ export const useUnifiedProfile = () => {
                 score_player2,
                 player1_id,
                 player2_id
-              `)
+              `
+              )
               .or(`player1_id.eq.${user.id},player2_id.eq.${user.id}`)
               .order('created_at', { ascending: false })
               .limit(10),
             supabase
               .from('challenges')
-              .select(`
+              .select(
+                `
                 id,
                 status,
                 created_at,
                 challenger_id,
                 opponent_id,
                 bet_points
-              `)
+              `
+              )
               .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
               .order('created_at', { ascending: false })
-              .limit(5)
+              .limit(5),
           ]);
 
-          const recentMatches = matchesResult.status === 'fulfilled' ? matchesResult.value.data || [] : [];
-          const recentChallenges = challengesResult.status === 'fulfilled' ? challengesResult.value.data || [] : [];
+          const recentMatches =
+            matchesResult.status === 'fulfilled'
+              ? matchesResult.value.data || []
+              : [];
+          const recentChallenges =
+            challengesResult.status === 'fulfilled'
+              ? challengesResult.value.data || []
+              : [];
 
           recentActivities = [
             ...recentMatches.map(match => ({ ...match, type: 'match' })),
-            ...recentChallenges.map(challenge => ({ ...challenge, type: 'challenge' }))
+            ...recentChallenges.map(challenge => ({
+              ...challenge,
+              type: 'challenge',
+            })),
           ]
-            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+            .sort(
+              (a, b) =>
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            )
             .slice(0, 10);
         } catch (activitiesError) {
-          console.warn('Activities fetch failed (non-critical):', activitiesError);
+          console.warn(
+            'Activities fetch failed (non-critical):',
+            activitiesError
+          );
         }
 
         return {
           ...profile,
           club_profile: clubProfile,
-          recent_activities: recentActivities
+          recent_activities: recentActivities,
         };
       } catch (error) {
         console.error('Unified profile fetch error:', error);
-        handleError(error as Error, { section: 'Profile', action: 'unified_fetch', userId: user.id });
+        handleError(error as Error, {
+          section: 'Profile',
+          action: 'unified_fetch',
+          userId: user.id,
+        });
         throw error;
       }
     },
@@ -180,26 +219,41 @@ export const useUnifiedProfile = () => {
   });
 
   // Combine profile data with dashboard stats
-  const unifiedData: UnifiedProfileData | null = profileData && dashboardStats ? {
-    ...profileData,
-    ...dashboardStats,
-    completion_percentage: calculateCompletionPercentage(profileData)
-  } : profileData ? {
-    ...profileData,
-    completion_percentage: calculateCompletionPercentage(profileData)
-  } : null;
+  const unifiedData: UnifiedProfileData | null =
+    profileData && dashboardStats
+      ? {
+          ...profileData,
+          ...dashboardStats,
+          completion_percentage: calculateCompletionPercentage(profileData),
+        }
+      : profileData
+        ? {
+            ...profileData,
+            completion_percentage: calculateCompletionPercentage(profileData),
+          }
+        : null;
 
   return {
     data: unifiedData,
     isLoading: profileLoading || dashboardLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
 function calculateCompletionPercentage(profile: any): number {
   if (!profile) return 0;
-  const fields = ['full_name', 'display_name', 'phone', 'bio', 'city', 'verified_rank', 'avatar_url'];
-  const completedFields = fields.filter(field => profile[field] && profile[field].trim() !== '');
+  const fields = [
+    'full_name',
+    'display_name',
+    'phone',
+    'bio',
+    'city',
+    'verified_rank',
+    'avatar_url',
+  ];
+  const completedFields = fields.filter(
+    field => profile[field] && profile[field].trim() !== ''
+  );
   return Math.round((completedFields.length / fields.length) * 100);
 }

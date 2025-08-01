@@ -21,9 +21,9 @@ export const useDailyLimits = () => {
     queryKey: ['daily-limits', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const today = new Date().toISOString().split('T')[0];
-      
+
       const { data, error } = await supabase
         .from('daily_challenge_stats')
         .select('*')
@@ -41,7 +41,9 @@ export const useDailyLimits = () => {
       midnight.setHours(24, 0, 0, 0);
       const timeUntilReset = midnight.getTime() - now.getTime();
       const hours = Math.floor(timeUntilReset / (1000 * 60 * 60));
-      const minutes = Math.floor((timeUntilReset % (1000 * 60 * 60)) / (1000 * 60));
+      const minutes = Math.floor(
+        (timeUntilReset % (1000 * 60 * 60)) / (1000 * 60)
+      );
 
       const challengeCount = data?.challenge_count || 0;
       const limitReached = challengeCount >= 2;
@@ -51,11 +53,11 @@ export const useDailyLimits = () => {
         challengeCount,
         matchCount: 0, // Will be enhanced later
         limitReached,
-        timeUntilReset: `${hours}h ${minutes}m`
+        timeUntilReset: `${hours}h ${minutes}m`,
       } as DailyLimitStats;
     },
     enabled: !!user?.id,
-    refetchInterval: 60000 // Refresh every minute
+    refetchInterval: 60000, // Refresh every minute
   });
 
   // Check if user can create challenges
@@ -74,19 +76,20 @@ export const useDailyLimits = () => {
   const updateDailyStats = useMutation({
     mutationFn: async () => {
       if (!user?.id) throw new Error('User not authenticated');
-      
+
       const today = new Date().toISOString().split('T')[0];
-      
-      const { error } = await supabase
-        .from('daily_challenge_stats')
-        .upsert({
+
+      const { error } = await supabase.from('daily_challenge_stats').upsert(
+        {
           user_id: user.id,
           challenge_date: today,
-          challenge_count: 1
-        }, {
+          challenge_count: 1,
+        },
+        {
           onConflict: 'user_id,challenge_date',
-          ignoreDuplicates: false
-        });
+          ignoreDuplicates: false,
+        }
+      );
 
       if (error) throw error;
     },
@@ -94,10 +97,10 @@ export const useDailyLimits = () => {
       queryClient.invalidateQueries({ queryKey: ['daily-limits'] });
       toast.success('Daily challenge stats updated');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error updating daily stats:', error);
       toast.error('Failed to update daily stats');
-    }
+    },
   });
 
   return {
@@ -106,6 +109,6 @@ export const useDailyLimits = () => {
     canCreateChallenge,
     getRemainingChallenges,
     updateDailyStats: updateDailyStats.mutateAsync,
-    isUpdating: updateDailyStats.isPending
+    isUpdating: updateDailyStats.isPending,
   };
 };

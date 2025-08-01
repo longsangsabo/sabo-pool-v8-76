@@ -28,10 +28,10 @@ interface TournamentResultsViewProps {
   isOwner?: boolean;
 }
 
-export function TournamentResultsView({ 
-  tournamentId, 
-  tournamentStatus, 
-  isOwner = false 
+export function TournamentResultsView({
+  tournamentId,
+  tournamentStatus,
+  isOwner = false,
 }: TournamentResultsViewProps) {
   const [results, setResults] = useState<TournamentResult[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,13 +45,15 @@ export function TournamentResultsView({
     try {
       const { data, error } = await supabase
         .from('tournament_results')
-        .select(`
+        .select(
+          `
           *,
           profile:profiles!tournament_results_user_id_fkey(
             full_name,
             display_name
           )
-        `)
+        `
+        )
         .eq('tournament_id', tournamentId)
         .order('final_position');
 
@@ -68,17 +70,23 @@ export function TournamentResultsView({
   const calculateResults = async () => {
     setCalculating(true);
     try {
-      console.log('🧮 Starting tournament results calculation for:', tournamentId);
-      
+      console.log(
+        '🧮 Starting tournament results calculation for:',
+        tournamentId
+      );
+
       // Sử dụng database function thay vì edge function
-      const { data, error } = await supabase.rpc('complete_tournament_automatically', {
-        p_tournament_id: tournamentId
-      });
+      const { data, error } = await supabase.rpc(
+        'complete_tournament_automatically',
+        {
+          p_tournament_id: tournamentId,
+        }
+      );
 
       if (error) throw error;
 
       console.log('✅ Tournament results calculated:', data);
-      
+
       const result = data as any;
       if (result?.success) {
         toast.success('🎉 Kết quả đã được tính toán và lưu thành công!');
@@ -97,13 +105,13 @@ export function TournamentResultsView({
   const getPositionIcon = (position: number) => {
     switch (position) {
       case 1:
-        return <Crown className="h-5 w-5 text-yellow-500" />;
+        return <Crown className='h-5 w-5 text-yellow-500' />;
       case 2:
-        return <Medal className="h-5 w-5 text-gray-400" />;
+        return <Medal className='h-5 w-5 text-gray-400' />;
       case 3:
-        return <Medal className="h-5 w-5 text-amber-600" />;
+        return <Medal className='h-5 w-5 text-amber-600' />;
       default:
-        return <Trophy className="h-4 w-4 text-muted-foreground" />;
+        return <Trophy className='h-4 w-4 text-muted-foreground' />;
     }
   };
 
@@ -124,14 +132,14 @@ export function TournamentResultsView({
     if (amount === 0) return '-';
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'VND',
     }).format(amount);
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-6 w-6 animate-spin mr-2" />
+      <div className='flex items-center justify-center p-8'>
+        <Loader2 className='h-6 w-6 animate-spin mr-2' />
         <span>Đang tải kết quả...</span>
       </div>
     );
@@ -141,30 +149,30 @@ export function TournamentResultsView({
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Trophy className='h-5 w-5' />
             Kết quả giải đấu
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-center py-8">
-          <Trophy className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground mb-4">
+        <CardContent className='text-center py-8'>
+          <Trophy className='h-12 w-12 mx-auto mb-4 text-muted-foreground' />
+          <p className='text-muted-foreground mb-4'>
             Kết quả sẽ hiển thị khi giải đấu hoàn thành
           </p>
           {isOwner && tournamentStatus === 'in_progress' && (
-            <Button 
-              onClick={calculateResults} 
+            <Button
+              onClick={calculateResults}
               disabled={calculating}
-              variant="outline"
+              variant='outline'
             >
               {calculating ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <Loader2 className='h-4 w-4 animate-spin mr-2' />
                   Đang tính toán...
                 </>
               ) : (
                 <>
-                  <Calculator className="h-4 w-4 mr-2" />
+                  <Calculator className='h-4 w-4 mr-2' />
                   Tính toán kết quả
                 </>
               )}
@@ -179,29 +187,26 @@ export function TournamentResultsView({
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Trophy className='h-5 w-5' />
             Kết quả giải đấu
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-center py-8">
-          <Trophy className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground mb-4">
+        <CardContent className='text-center py-8'>
+          <Trophy className='h-12 w-12 mx-auto mb-4 text-muted-foreground' />
+          <p className='text-muted-foreground mb-4'>
             Chưa có kết quả cho giải đấu này
           </p>
           {isOwner && (
-            <Button 
-              onClick={calculateResults} 
-              disabled={calculating}
-            >
+            <Button onClick={calculateResults} disabled={calculating}>
               {calculating ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <Loader2 className='h-4 w-4 animate-spin mr-2' />
                   Đang tính toán...
                 </>
               ) : (
                 <>
-                  <Calculator className="h-4 w-4 mr-2" />
+                  <Calculator className='h-4 w-4 mr-2' />
                   Tính toán kết quả
                 </>
               )}
@@ -215,67 +220,75 @@ export function TournamentResultsView({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Trophy className="h-5 w-5" />
+        <CardTitle className='flex items-center gap-2'>
+          <Trophy className='h-5 w-5' />
           Kết quả giải đấu
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className='space-y-4'>
           {results.map((result, index) => (
-            <div 
+            <div
               key={result.id}
               className={`flex items-center justify-between p-4 rounded-lg border ${
-                result.final_position <= 3 ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' : 'bg-card'
+                result.final_position <= 3
+                  ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200'
+                  : 'bg-card'
               }`}
             >
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
+              <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-2'>
                   {getPositionIcon(result.final_position)}
-                  <div className="text-lg font-bold">
+                  <div className='text-lg font-bold'>
                     #{result.final_position}
                   </div>
                 </div>
-                
+
                 <div>
-                  <h3 className="font-semibold">
+                  <h3 className='font-semibold'>
                     {result.profile?.display_name || result.profile?.full_name}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className='text-sm text-muted-foreground'>
                     {getPositionText(result.final_position)}
                   </p>
                 </div>
               </div>
 
-              <div className="text-right space-y-1">
-                <div className="flex gap-4 text-sm">
+              <div className='text-right space-y-1'>
+                <div className='flex gap-4 text-sm'>
                   <div>
-                    <span className="text-muted-foreground">Trận: </span>
-                    <span className="font-medium">{result.matches_played}</span>
+                    <span className='text-muted-foreground'>Trận: </span>
+                    <span className='font-medium'>{result.matches_played}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">T/B: </span>
-                    <span className="font-medium text-green-600">{result.matches_won}</span>
+                    <span className='text-muted-foreground'>T/B: </span>
+                    <span className='font-medium text-green-600'>
+                      {result.matches_won}
+                    </span>
                     /
-                    <span className="font-medium text-red-600">{result.matches_lost}</span>
+                    <span className='font-medium text-red-600'>
+                      {result.matches_lost}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="flex gap-4 text-sm">
+
+                <div className='flex gap-4 text-sm'>
                   <div>
-                    <span className="text-muted-foreground">SPA: </span>
-                    <Badge variant="secondary">+{result.spa_points_earned}</Badge>
+                    <span className='text-muted-foreground'>SPA: </span>
+                    <Badge variant='secondary'>
+                      +{result.spa_points_earned}
+                    </Badge>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">ELO: </span>
-                    <Badge variant="outline">+{result.elo_points_earned}</Badge>
+                    <span className='text-muted-foreground'>ELO: </span>
+                    <Badge variant='outline'>+{result.elo_points_earned}</Badge>
                   </div>
                 </div>
 
                 {result.prize_amount > 0 && (
-                  <div className="text-sm">
-                    <span className="text-muted-foreground">Tiền thưởng: </span>
-                    <span className="font-bold text-green-600">
+                  <div className='text-sm'>
+                    <span className='text-muted-foreground'>Tiền thưởng: </span>
+                    <span className='font-bold text-green-600'>
                       {formatPrizeMoney(result.prize_amount)}
                     </span>
                   </div>
@@ -286,21 +299,21 @@ export function TournamentResultsView({
         </div>
 
         {isOwner && results.length > 0 && (
-          <div className="mt-6 pt-4 border-t">
-            <Button 
-              onClick={calculateResults} 
+          <div className='mt-6 pt-4 border-t'>
+            <Button
+              onClick={calculateResults}
               disabled={calculating}
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
             >
               {calculating ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <Loader2 className='h-4 w-4 animate-spin mr-2' />
                   Đang tính lại...
                 </>
               ) : (
                 <>
-                  <Calculator className="h-4 w-4 mr-2" />
+                  <Calculator className='h-4 w-4 mr-2' />
                   Tính lại kết quả
                 </>
               )}

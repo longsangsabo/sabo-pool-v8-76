@@ -25,7 +25,7 @@ export function useEnhancedChallenges() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { completeChallengeWithLimits } = useAdvancedSPAPoints();
-  
+
   // Include all functionality from useChallenges
   const challengesHook = useChallenges();
 
@@ -34,9 +34,9 @@ export function useEnhancedChallenges() {
     queryKey: ['daily-challenge-stats', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const today = new Date().toISOString().split('T')[0];
-      
+
       const { data, error } = await supabase
         .from('daily_challenge_stats')
         .select('*')
@@ -48,64 +48,64 @@ export function useEnhancedChallenges() {
         throw error;
       }
 
-      return data ? {
-        date: data.challenge_date,
-        count: data.challenge_count,
-        limitReached: data.challenge_count >= 2
-      } : {
-        date: today,
-        count: 0,
-        limitReached: false
-      };
+      return data
+        ? {
+            date: data.challenge_date,
+            count: data.challenge_count,
+            limitReached: data.challenge_count >= 2,
+          }
+        : {
+            date: today,
+            count: 0,
+            limitReached: false,
+          };
     },
-    enabled: !!user?.id
+    enabled: !!user?.id,
   });
 
   // Complete challenge with enhanced SPA system
   const completeChallengeEnhanced = useMutation({
     mutationFn: async (params: ChallengeCompletion) => {
       // Use the credit_spa_points function and mark challenge as completed
-      const { data: result, error } = await supabase.rpc(
-        'credit_spa_points',
-        {
-          p_user_id: params.winnerId,
-          p_points: 100, // Base amount, will be calculated properly later
-          p_description: `Challenge victory vs opponent`
-        }
-      );
+      const { data: result, error } = await supabase.rpc('credit_spa_points', {
+        p_user_id: params.winnerId,
+        p_points: 100, // Base amount, will be calculated properly later
+        p_description: `Challenge victory vs opponent`,
+      });
 
       if (error) throw error;
 
       // Update challenge status to completed
       await supabase
         .from('challenges')
-        .update({ 
+        .update({
           status: 'completed',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', params.challengeId);
 
       // Update daily stats by incrementing challenge count
       const today = new Date().toISOString().split('T')[0];
-      
+
       // Insert or update daily stats for both players
-      await supabase
-        .from('daily_challenge_stats')
-        .upsert([
+      await supabase.from('daily_challenge_stats').upsert(
+        [
           {
             user_id: params.winnerId,
             challenge_date: today,
-            challenge_count: 1
+            challenge_count: 1,
           },
           {
             user_id: params.loserId,
             challenge_date: today,
-            challenge_count: 1
-          }
-        ], {
+            challenge_count: 1,
+          },
+        ],
+        {
           onConflict: 'user_id,challenge_date',
-          ignoreDuplicates: false 
-        });
+          ignoreDuplicates: false,
+        }
+      );
 
       return { success: true, winner_points: 100 };
     },
@@ -117,18 +117,15 @@ export function useEnhancedChallenges() {
       queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
 
       // Show success message
-      toast.success(
-        `🎯 +${result.winner_points} SPA điểm!`,
-        {
-          description: `Thách đấu hoàn thành thành công`,
-          duration: 5000
-        }
-      );
+      toast.success(`🎯 +${result.winner_points} SPA điểm!`, {
+        description: `Thách đấu hoàn thành thành công`,
+        duration: 5000,
+      });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error completing challenge:', error);
       toast.error('Lỗi khi hoàn thành thách đấu');
-    }
+    },
   });
 
   // Check if user can create challenges today
@@ -159,8 +156,8 @@ export function useEnhancedChallenges() {
     canCreateChallenge,
     getRemainingChallenges,
     checkOvertimePenalty,
-    
+
     // All original useChallenges functionality
-    ...challengesHook
+    ...challengesHook,
   };
 }

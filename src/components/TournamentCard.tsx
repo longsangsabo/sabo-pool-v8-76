@@ -1,9 +1,16 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, Users, Trophy, DollarSign, Info, Eye } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Trophy,
+  DollarSign,
+  Info,
+  Eye,
+} from 'lucide-react';
 import { EnhancedTournament } from '@/types/tournament-extended';
 import TournamentDetailsInfoModal from './tournament/TournamentDetailsInfoModal';
 import { calculateTotalPrizePool, formatCurrency } from '@/utils/prizeUtils';
@@ -15,10 +22,10 @@ interface TournamentCardProps {
   showViewButton?: boolean;
 }
 
-const TournamentCard: React.FC<TournamentCardProps> = ({ 
-  tournament, 
-  onView, 
-  showViewButton = true
+const TournamentCard: React.FC<TournamentCardProps> = ({
+  tournament,
+  onView,
+  showViewButton = true,
 }) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
@@ -90,10 +97,10 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
 
   return (
     <>
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="pb-3">
-          <div className="flex justify-between items-start">
-            <CardTitle className="text-lg font-bold line-clamp-2">
+      <Card className='hover:shadow-lg transition-shadow duration-200'>
+        <CardHeader className='pb-3'>
+          <div className='flex justify-between items-start'>
+            <CardTitle className='text-lg font-bold line-clamp-2'>
               {tournament.name}
             </CardTitle>
             <Badge className={getStatusColor(tournament.status || 'upcoming')}>
@@ -102,55 +109,60 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {/* Tournament Details */}
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
-                {formatSafeDate(tournament.tournament_start, (tournament as any).start_date)}
+          <div className='grid grid-cols-2 gap-3 text-sm'>
+            <div className='flex items-center gap-2'>
+              <Calendar className='w-4 h-4 text-muted-foreground' />
+              <span className='text-muted-foreground'>
+                {formatSafeDate(
+                  tournament.tournament_start,
+                  (tournament as any).start_date
+                )}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
+            <div className='flex items-center gap-2'>
+              <Users className='w-4 h-4 text-muted-foreground' />
+              <span className='text-muted-foreground'>
                 {tournament.max_participants || 'Không giới hạn'} người
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
+            <div className='flex items-center gap-2'>
+              <DollarSign className='w-4 h-4 text-muted-foreground' />
+              <span className='text-muted-foreground'>
                 {formatCurrency(tournament.entry_fee || 0)}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground truncate">
+            <div className='flex items-center gap-2'>
+              <MapPin className='w-4 h-4 text-muted-foreground' />
+              <span className='text-muted-foreground truncate'>
                 {tournament.venue_address || 'Chưa xác định'}
               </span>
             </div>
           </div>
 
           {/* Tournament Type Display - FIXED */}
-          <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-lg">
-            <span className="text-lg">{getTournamentTypeIcon(tournament.tournament_type)}</span>
-            <span className="text-sm font-medium text-foreground">
+          <div className='flex items-center gap-2 p-2 bg-muted/30 rounded-lg'>
+            <span className='text-lg'>
+              {getTournamentTypeIcon(tournament.tournament_type)}
+            </span>
+            <span className='text-sm font-medium text-foreground'>
               {getTournamentTypeText(tournament.tournament_type)}
             </span>
           </div>
 
           {/* Prize Pool */}
           {totalPrizePool > 0 && (
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-tournament-gold" />
-                  <span className="text-sm font-medium">Tổng giải thưởng</span>
+            <div className='bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                  <Trophy className='w-4 h-4 text-tournament-gold' />
+                  <span className='text-sm font-medium'>Tổng giải thưởng</span>
                 </div>
-                <span className="font-bold text-tournament-gold">
+                <span className='font-bold text-tournament-gold'>
                   {formatCurrency(totalPrizePool)}
                 </span>
               </div>
@@ -159,30 +171,30 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
 
           {/* Description */}
           {tournament.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2">
+            <p className='text-sm text-muted-foreground line-clamp-2'>
               {tournament.description}
             </p>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-2">
+          <div className='flex gap-2 pt-2'>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => setShowDetailsModal(true)}
-              className="flex items-center gap-2"
+              className='flex items-center gap-2'
             >
-              <Info className="w-4 h-4" />
+              <Info className='w-4 h-4' />
               Chi tiết
             </Button>
-            
+
             {showViewButton && (
               <Button
-                size="sm"
+                size='sm'
                 onClick={() => onView(tournament)}
-                className="flex items-center gap-2 flex-1"
+                className='flex items-center gap-2 flex-1'
               >
-                <Eye className="w-4 h-4" />
+                <Eye className='w-4 h-4' />
                 Xem giải đấu
               </Button>
             )}
@@ -192,12 +204,20 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
 
       {/* Details Modal */}
       <TournamentDetailsInfoModal
-        tournament={{
-          ...tournament,
-          first_prize: tournament.prize_pool ? tournament.prize_pool * 0.5 : 0,
-          second_prize: tournament.prize_pool ? tournament.prize_pool * 0.3 : 0,
-          third_prize: tournament.prize_pool ? tournament.prize_pool * 0.2 : 0
-        } as any}
+        tournament={
+          {
+            ...tournament,
+            first_prize: tournament.prize_pool
+              ? tournament.prize_pool * 0.5
+              : 0,
+            second_prize: tournament.prize_pool
+              ? tournament.prize_pool * 0.3
+              : 0,
+            third_prize: tournament.prize_pool
+              ? tournament.prize_pool * 0.2
+              : 0,
+          } as any
+        }
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
       />

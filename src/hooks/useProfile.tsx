@@ -68,7 +68,9 @@ export const useProfile = () => {
     }
   };
 
-  const updateProfile = async (profileData: ProfileFormData): Promise<UserProfile | null> => {
+  const updateProfile = async (
+    profileData: ProfileFormData
+  ): Promise<UserProfile | null> => {
     setLoading(true);
     setError('');
 
@@ -129,16 +131,19 @@ export const useProfile = () => {
         setProfile(profileData);
       }
     };
-    
+
     fetchProfile();
   }, []);
 
   // Enhanced real-time subscription for profile changes with automation
   useEffect(() => {
     if (!profile) return; // Only set up subscription after profile is loaded
-    
-    console.log('[useProfile] Setting up enhanced real-time subscription for user:', profile.user_id);
-    
+
+    console.log(
+      '[useProfile] Setting up enhanced real-time subscription for user:',
+      profile.user_id
+    );
+
     const channel = supabase
       .channel('profile-changes-enhanced')
       .on(
@@ -147,41 +152,54 @@ export const useProfile = () => {
           event: 'UPDATE',
           schema: 'public',
           table: 'profiles',
-          filter: `user_id=eq.${profile.user_id}`
+          filter: `user_id=eq.${profile.user_id}`,
         },
-        (payload) => {
-          console.log('[useProfile] Real-time profile update received:', payload);
-          
+        payload => {
+          console.log(
+            '[useProfile] Real-time profile update received:',
+            payload
+          );
+
           // Refresh profile when rank is updated (with null safety)
           const oldRank = payload.old?.verified_rank;
           const newRank = payload.new?.verified_rank;
-          
+
           if (oldRank !== newRank) {
             console.log('[useProfile] Profile rank updated via real-time:', {
               old: oldRank,
-              new: newRank
+              new: newRank,
             });
-            
+
             // Force refresh profile data with retries
             const refreshWithRetry = async (attempts = 3) => {
               for (let i = 0; i < attempts; i++) {
                 try {
-                  console.log(`[useProfile] Refresh attempt ${i + 1}/${attempts}`);
+                  console.log(
+                    `[useProfile] Refresh attempt ${i + 1}/${attempts}`
+                  );
                   const updatedProfile = await getProfile();
                   if (updatedProfile) {
                     setProfile(updatedProfile);
-                    console.log('[useProfile] Profile updated successfully with new rank:', updatedProfile.current_rank);
+                    console.log(
+                      '[useProfile] Profile updated successfully with new rank:',
+                      updatedProfile.current_rank
+                    );
                     break;
                   }
                 } catch (error) {
-                  console.error(`[useProfile] Refresh attempt ${i + 1} failed:`, error);
+                  console.error(
+                    `[useProfile] Refresh attempt ${i + 1} failed:`,
+                    error
+                  );
                   if (i < attempts - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+                    await new Promise(resolve =>
+                      setTimeout(resolve, 1000 * (i + 1))
+                    );
                   }
                 }
               }
             };
-            
+
             refreshWithRetry();
           }
         }
@@ -192,28 +210,36 @@ export const useProfile = () => {
           event: '*',
           schema: 'public',
           table: 'player_rankings',
-          filter: `user_id=eq.${profile.user_id}`
+          filter: `user_id=eq.${profile.user_id}`,
         },
-        (payload) => {
-          console.log('[useProfile] Player rankings updated via real-time:', payload);
-          
+        payload => {
+          console.log(
+            '[useProfile] Player rankings updated via real-time:',
+            payload
+          );
+
           // Refresh profile to get updated SPA points and ranking data
           const refreshProfile = async () => {
             try {
               const updatedProfile = await getProfile();
               if (updatedProfile) {
                 setProfile(updatedProfile);
-                console.log('[useProfile] Profile updated with new ranking data');
+                console.log(
+                  '[useProfile] Profile updated with new ranking data'
+                );
               }
             } catch (error) {
-              console.error('[useProfile] Failed to refresh profile after ranking update:', error);
+              console.error(
+                '[useProfile] Failed to refresh profile after ranking update:',
+                error
+              );
             }
           };
-          
+
           refreshProfile();
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         console.log('[useProfile] Real-time subscription status:', status);
       });
 
@@ -228,6 +254,6 @@ export const useProfile = () => {
     error,
     getProfile,
     updateProfile,
-    profile // Return current profile state for real-time updates
+    profile, // Return current profile state for real-time updates
   };
 };

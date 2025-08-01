@@ -28,10 +28,7 @@ export const PerformanceProfiler: React.FC = () => {
     try {
       // Test 1: Database Query Performance
       const dbStart = performance.now();
-      await supabase
-        .from('tournaments')
-        .select('*')
-        .limit(50);
+      await supabase.from('tournaments').select('*').limit(50);
       const dbTime = performance.now() - dbStart;
 
       results.push({
@@ -39,7 +36,7 @@ export const PerformanceProfiler: React.FC = () => {
         value: dbTime,
         unit: 'ms',
         status: dbTime < 100 ? 'good' : dbTime < 300 ? 'warning' : 'critical',
-        threshold: 100
+        threshold: 100,
       });
 
       // Test 2: Tournament Matches Query
@@ -54,8 +51,9 @@ export const PerformanceProfiler: React.FC = () => {
         name: 'Match Query Time',
         value: matchTime,
         unit: 'ms',
-        status: matchTime < 150 ? 'good' : matchTime < 400 ? 'warning' : 'critical',
-        threshold: 150
+        status:
+          matchTime < 150 ? 'good' : matchTime < 400 ? 'warning' : 'critical',
+        threshold: 150,
       });
 
       // Test 3: Function Call Performance
@@ -67,8 +65,9 @@ export const PerformanceProfiler: React.FC = () => {
         name: 'Function Execution',
         value: funcTime,
         unit: 'ms',
-        status: funcTime < 200 ? 'good' : funcTime < 500 ? 'warning' : 'critical',
-        threshold: 200
+        status:
+          funcTime < 200 ? 'good' : funcTime < 500 ? 'warning' : 'critical',
+        threshold: 200,
       });
 
       // Test 4: Memory Usage (if available)
@@ -80,8 +79,9 @@ export const PerformanceProfiler: React.FC = () => {
           name: 'Memory Usage',
           value: memUsage,
           unit: 'MB',
-          status: memUsage < 50 ? 'good' : memUsage < 100 ? 'warning' : 'critical',
-          threshold: 50
+          status:
+            memUsage < 50 ? 'good' : memUsage < 100 ? 'warning' : 'critical',
+          threshold: 50,
         });
       }
 
@@ -91,8 +91,9 @@ export const PerformanceProfiler: React.FC = () => {
         name: 'Total Test Duration',
         value: totalTime,
         unit: 'ms',
-        status: totalTime < 1000 ? 'good' : totalTime < 2000 ? 'warning' : 'critical',
-        threshold: 1000
+        status:
+          totalTime < 1000 ? 'good' : totalTime < 2000 ? 'warning' : 'critical',
+        threshold: 1000,
       });
 
       setMetrics(results);
@@ -106,76 +107,95 @@ export const PerformanceProfiler: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-600 bg-green-50';
-      case 'warning': return 'text-yellow-600 bg-yellow-50';
-      case 'critical': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'good':
+        return 'text-green-600 bg-green-50';
+      case 'warning':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'critical':
+        return 'text-red-600 bg-red-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'good': return <Zap className="h-4 w-4 text-green-600" />;
-      case 'warning': return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'critical': return <Activity className="h-4 w-4 text-red-600" />;
-      default: return <Database className="h-4 w-4 text-gray-600" />;
+      case 'good':
+        return <Zap className='h-4 w-4 text-green-600' />;
+      case 'warning':
+        return <Clock className='h-4 w-4 text-yellow-600' />;
+      case 'critical':
+        return <Activity className='h-4 w-4 text-red-600' />;
+      default:
+        return <Database className='h-4 w-4 text-gray-600' />;
     }
   };
 
-  const overallScore = metrics.length > 0 
-    ? Math.round((metrics.filter(m => m.status === 'good').length / metrics.length) * 100)
-    : 0;
+  const overallScore =
+    metrics.length > 0
+      ? Math.round(
+          (metrics.filter(m => m.status === 'good').length / metrics.length) *
+            100
+        )
+      : 0;
 
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+        <div className='flex items-center justify-between'>
+          <CardTitle className='flex items-center gap-2'>
+            <Activity className='h-5 w-5' />
             Performance Profiler
           </CardTitle>
-          <Button 
-            onClick={runPerformanceProfile} 
+          <Button
+            onClick={runPerformanceProfile}
             disabled={isRunning}
-            size="sm"
+            size='sm'
           >
             {isRunning ? 'Profiling...' : 'Run Profile'}
           </Button>
         </div>
         {lastRun && (
-          <p className="text-sm text-muted-foreground">
+          <p className='text-sm text-muted-foreground'>
             Last run: {lastRun.toLocaleTimeString()}
           </p>
         )}
       </CardHeader>
-      
-      <CardContent className="space-y-4">
+
+      <CardContent className='space-y-4'>
         {/* Overall Score */}
         {metrics.length > 0 && (
-          <div className="text-center p-4 border rounded-lg">
-            <div className="text-3xl font-bold mb-2">{overallScore}%</div>
-            <div className="text-sm text-muted-foreground">Performance Score</div>
-            <Progress value={overallScore} className="mt-2" />
+          <div className='text-center p-4 border rounded-lg'>
+            <div className='text-3xl font-bold mb-2'>{overallScore}%</div>
+            <div className='text-sm text-muted-foreground'>
+              Performance Score
+            </div>
+            <Progress value={overallScore} className='mt-2' />
           </div>
         )}
 
         {/* Metrics */}
-        <div className="space-y-3">
+        <div className='space-y-3'>
           {metrics.map((metric, index) => (
-            <div key={index} className="flex items-center justify-between p-3 border rounded">
-              <div className="flex items-center gap-3">
+            <div
+              key={index}
+              className='flex items-center justify-between p-3 border rounded'
+            >
+              <div className='flex items-center gap-3'>
                 {getStatusIcon(metric.status)}
                 <div>
-                  <div className="font-medium">{metric.name}</div>
-                  <div className="text-sm text-muted-foreground">
-                    Threshold: {metric.threshold}{metric.unit}
+                  <div className='font-medium'>{metric.name}</div>
+                  <div className='text-sm text-muted-foreground'>
+                    Threshold: {metric.threshold}
+                    {metric.unit}
                   </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-lg">
-                  {metric.value.toFixed(1)}{metric.unit}
+
+              <div className='flex items-center gap-2'>
+                <span className='font-mono text-lg'>
+                  {metric.value.toFixed(1)}
+                  {metric.unit}
                 </span>
                 <Badge className={getStatusColor(metric.status)}>
                   {metric.status}
@@ -196,11 +216,14 @@ export const PerformanceProfiler: React.FC = () => {
         {/* Performance Tips */}
         <Alert>
           <AlertDescription>
-            <strong>Performance Guidelines:</strong><br />
-            • Database queries should complete under 100ms<br />
-            • Function calls should execute within 200ms<br />
-            • Memory usage should stay below 50MB<br />
-            • Total operations should finish within 1 second
+            <strong>Performance Guidelines:</strong>
+            <br />
+            • Database queries should complete under 100ms
+            <br />
+            • Function calls should execute within 200ms
+            <br />
+            • Memory usage should stay below 50MB
+            <br />• Total operations should finish within 1 second
           </AlertDescription>
         </Alert>
       </CardContent>

@@ -238,14 +238,17 @@ const ClubProfileTab = ({ user, profile, onUpdate }: ClubProfileTabProps) => {
         club_name: formData.club_name,
         address: formData.address,
         district: formData.district || 'Chưa chọn',
-        city: formData.city || 'Chưa chọn', 
+        city: formData.city || 'Chưa chọn',
         phone: formData.phone,
         email: formData.email,
         opening_time: formData.opening_time || '08:00',
         closing_time: formData.closing_time || '22:00',
         table_count: parseInt(formData.table_count) || 1,
         table_types: formData.table_types || ['Pool 8'],
-        basic_price: parseInt(formData.basic_price) || parseInt(formData.hourly_rate) || 50000,
+        basic_price:
+          parseInt(formData.basic_price) ||
+          parseInt(formData.hourly_rate) ||
+          50000,
         normal_hour_price: parseInt(formData.normal_hour_price) || null,
         peak_hour_price: parseInt(formData.peak_hour_price) || null,
         weekend_price: parseInt(formData.weekend_price) || null,
@@ -257,19 +260,21 @@ const ClubProfileTab = ({ user, profile, onUpdate }: ClubProfileTabProps) => {
         business_license_url: formData.business_license_url || null,
         manager_name: formData.manager_name || null,
         manager_phone: formData.manager_phone || null,
-        status: 'pending'
+        status: 'pending',
       };
 
       // Create a club entry instead
       const { data, error } = await supabase
         .from('clubs')
-        .insert([{
-          name: registrationData.club_name,
-          address: registrationData.address,
-          contact_info: registrationData.phone,
-          owner_id: user.id,
-          status: 'pending'
-        }])
+        .insert([
+          {
+            name: registrationData.club_name,
+            address: registrationData.address,
+            contact_info: registrationData.phone,
+            owner_id: user.id,
+            status: 'pending',
+          },
+        ])
         .select()
         .single();
 
@@ -279,22 +284,22 @@ const ClubProfileTab = ({ user, profile, onUpdate }: ClubProfileTabProps) => {
       }
 
       // Create success notification for user
-      await supabase
-        .from('notifications')
-        .insert({
-          user_id: user.id,
-          type: 'club_registration_submitted',
-          title: 'Đăng ký CLB thành công! 🏢',
-          message: `Bạn đã gửi đăng ký câu lạc bộ "${registrationData.club_name}" thành công. Chúng tôi sẽ xem xét và thông báo kết quả trong thời gian sớm nhất.`,
-          action_url: '/profile?tab=club'
-        });
+      await supabase.from('notifications').insert({
+        user_id: user.id,
+        type: 'club_registration_submitted',
+        title: 'Đăng ký CLB thành công! 🏢',
+        message: `Bạn đã gửi đăng ký câu lạc bộ "${registrationData.club_name}" thành công. Chúng tôi sẽ xem xét và thông báo kết quả trong thời gian sớm nhất.`,
+        action_url: '/profile?tab=club',
+      });
 
       toast.success('Đăng ký CLB thành công! Vui lòng chờ admin xét duyệt.');
       await checkClubRegistration();
       onUpdate();
     } catch (error: any) {
       console.error('Error registering club:', error);
-      toast.error('Có lỗi xảy ra khi đăng ký CLB: ' + (error.message || 'Unknown error'));
+      toast.error(
+        'Có lỗi xảy ra khi đăng ký CLB: ' + (error.message || 'Unknown error')
+      );
     } finally {
       setRegistering(false);
     }

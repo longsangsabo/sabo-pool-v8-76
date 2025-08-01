@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +14,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Calendar, MapPin, Users, DollarSign, Trophy, Plus, Trash2, Zap } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Users,
+  DollarSign,
+  Trophy,
+  Plus,
+  Trash2,
+  Zap,
+} from 'lucide-react';
 import { QuickRewardAllocation } from './QuickRewardAllocation';
 
 import {
@@ -20,20 +34,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+} from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 import { format } from 'date-fns';
 
-import { EnhancedTournament, TournamentFormData } from '@/types/tournament-extended';
-import { TournamentStatus, TournamentType, GameFormat, TournamentTier } from '@/types/tournament-enums';
+import {
+  EnhancedTournament,
+  TournamentFormData,
+} from '@/types/tournament-extended';
+import {
+  TournamentStatus,
+  TournamentType,
+  GameFormat,
+  TournamentTier,
+} from '@/types/tournament-enums';
 
 interface EditTournamentModalProps {
   isOpen: boolean;
@@ -44,18 +72,20 @@ interface EditTournamentModalProps {
 
 const formSchema = z.object({
   name: z.string().min(3, {
-    message: "Tournament name must be at least 3 characters.",
+    message: 'Tournament name must be at least 3 characters.',
   }),
   description: z.string().optional(),
   tournament_type: z.nativeEnum(TournamentType),
   game_format: z.nativeEnum(GameFormat),
-  tier_level: z.preprocess(
-    (val) => Number(val),
-    z.number().min(1).max(6)
-  ).transform((val) => val as TournamentTier),
+  tier_level: z
+    .preprocess(val => Number(val), z.number().min(1).max(6))
+    .transform(val => val as TournamentTier),
   max_participants: z.preprocess(
-    (val) => Number(val),
-    z.number().min(2, { message: "Min participants is 2" }).max(256, { message: "Max participants is 256" })
+    val => Number(val),
+    z
+      .number()
+      .min(2, { message: 'Min participants is 2' })
+      .max(256, { message: 'Max participants is 256' })
   ),
   current_participants: z.number().optional(),
   registration_start: z.string(),
@@ -64,14 +94,8 @@ const formSchema = z.object({
   tournament_end: z.string(),
   club_id: z.string().optional(),
   venue_address: z.string(),
-  entry_fee: z.preprocess(
-    (val) => Number(val),
-    z.number().min(0)
-  ),
-  prize_pool: z.preprocess(
-    (val) => Number(val),
-    z.number().min(0)
-  ),
+  entry_fee: z.preprocess(val => Number(val), z.number().min(0)),
+  prize_pool: z.preprocess(val => Number(val), z.number().min(0)),
   status: z.nativeEnum(TournamentStatus),
   management_status: z.string().optional(),
   rules: z.string().optional(),
@@ -211,13 +235,18 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
         tournament_type: data.tournament_type as TournamentType,
         game_format: data.game_format as GameFormat,
         status: data.status as TournamentStatus,
-        rewards: { totalPrize: data.prize_pool, showPrizes: true, positions: [], specialAwards: [] },
+        rewards: {
+          totalPrize: data.prize_pool,
+          showPrizes: true,
+          positions: [],
+          specialAwards: [],
+        },
         available_slots: data.max_participants - data.current_participants,
         registration_status: 'open' as const,
         eligible_ranks: [],
         allow_all_ranks: true,
         requires_approval: false,
-        is_public: true
+        is_public: true,
       };
       onTournamentUpdated(enhancedData as EnhancedTournament);
       onClose();
@@ -232,7 +261,10 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
   const addNewTier = async () => {
     try {
-      const newPosition = prizeTiers.length > 0 ? prizeTiers[prizeTiers.length - 1].position + 1 : 1;
+      const newPosition =
+        prizeTiers.length > 0
+          ? prizeTiers[prizeTiers.length - 1].position + 1
+          : 1;
       const { data, error } = await supabase
         .from('tournament_prize_tiers')
         .insert({
@@ -245,7 +277,7 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
           items: [],
           is_visible: true,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .select()
         .single();
@@ -310,7 +342,7 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
         items: allocation.items,
         is_visible: true,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }));
 
       const { error } = await supabase
@@ -321,7 +353,7 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
       // Refresh prize tiers
       await fetchPrizeTiers();
-      
+
       toast.success('Phân bổ phần thưởng thành công!');
     } catch (error) {
       console.error('Error applying quick allocation:', error);
@@ -332,29 +364,42 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Chỉnh sửa giải đấu</DialogTitle>
           </DialogHeader>
 
-          <Tabs defaultValue="details" className="space-y-4">
+          <Tabs defaultValue='details' className='space-y-4'>
             <TabsList>
-              <TabsTrigger value="details" onClick={() => setActiveTab('details')}>Chi tiết</TabsTrigger>
-              <TabsTrigger value="rewards" onClick={() => setActiveTab('rewards')}>Phần thưởng</TabsTrigger>
+              <TabsTrigger
+                value='details'
+                onClick={() => setActiveTab('details')}
+              >
+                Chi tiết
+              </TabsTrigger>
+              <TabsTrigger
+                value='rewards'
+                onClick={() => setActiveTab('rewards')}
+              >
+                Phần thưởng
+              </TabsTrigger>
               {/* <TabsTrigger value="settings" onClick={() => setActiveTab('settings')}>Cài đặt</TabsTrigger> */}
             </TabsList>
 
-            <TabsContent value="details" className="space-y-4">
+            <TabsContent value='details' className='space-y-4'>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(updateTournament)} className="space-y-4">
+                <form
+                  onSubmit={form.handleSubmit(updateTournament)}
+                  className='space-y-4'
+                >
                   <FormField
                     control={form.control}
-                    name="name"
+                    name='name'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Tên giải đấu</FormLabel>
                         <FormControl>
-                          <Input placeholder="Tên giải đấu" {...field} />
+                          <Input placeholder='Tên giải đấu' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -363,36 +408,51 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                   <FormField
                     control={form.control}
-                    name="description"
+                    name='description'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Mô tả</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Mô tả giải đấu" {...field} />
+                          <Textarea placeholder='Mô tả giải đấu' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <FormField
                       control={form.control}
-                      name="tournament_type"
+                      name='tournament_type'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Loại giải đấu</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Chọn loại giải đấu" />
+                                <SelectValue placeholder='Chọn loại giải đấu' />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value={TournamentType.SINGLE_ELIMINATION}>1 Mạng</SelectItem>
-                              <SelectItem value={TournamentType.DOUBLE_ELIMINATION}>2 Mạng</SelectItem>
-                              <SelectItem value={TournamentType.ROUND_ROBIN}>Vòng tròn</SelectItem>
-                              <SelectItem value={TournamentType.SWISS}>Swiss</SelectItem>
+                              <SelectItem
+                                value={TournamentType.SINGLE_ELIMINATION}
+                              >
+                                1 Mạng
+                              </SelectItem>
+                              <SelectItem
+                                value={TournamentType.DOUBLE_ELIMINATION}
+                              >
+                                2 Mạng
+                              </SelectItem>
+                              <SelectItem value={TournamentType.ROUND_ROBIN}>
+                                Vòng tròn
+                              </SelectItem>
+                              <SelectItem value={TournamentType.SWISS}>
+                                Swiss
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -402,21 +462,32 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                     <FormField
                       control={form.control}
-                      name="game_format"
+                      name='game_format'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Thể thức</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Chọn thể thức" />
+                                <SelectValue placeholder='Chọn thể thức' />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value={GameFormat.EIGHT_BALL}>8 Ball</SelectItem>
-                              <SelectItem value={GameFormat.NINE_BALL}>9 Ball</SelectItem>
-                              <SelectItem value={GameFormat.TEN_BALL}>10 Ball</SelectItem>
-                              <SelectItem value={GameFormat.STRAIGHT_POOL}>Straight Pool</SelectItem>
+                              <SelectItem value={GameFormat.EIGHT_BALL}>
+                                8 Ball
+                              </SelectItem>
+                              <SelectItem value={GameFormat.NINE_BALL}>
+                                9 Ball
+                              </SelectItem>
+                              <SelectItem value={GameFormat.TEN_BALL}>
+                                10 Ball
+                              </SelectItem>
+                              <SelectItem value={GameFormat.STRAIGHT_POOL}>
+                                Straight Pool
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -425,26 +496,37 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <FormField
                       control={form.control}
-                      name="tier_level"
+                      name='tier_level'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Hạng giải đấu</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value?.toString()}
+                          >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Chọn hạng" />
+                                <SelectValue placeholder='Chọn hạng' />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="1">K - Mới bắt đầu</SelectItem>
-                              <SelectItem value="2">I - Cơ bản</SelectItem>
-                              <SelectItem value={TournamentTier.H.toString()}>H - Trung cấp</SelectItem>
-                              <SelectItem value={TournamentTier.G.toString()}>G - Cao cấp</SelectItem>
-                              <SelectItem value={TournamentTier.F.toString()}>F - Chuyên nghiệp</SelectItem>
-                              <SelectItem value={TournamentTier.E.toString()}>E - Chuyên nghiệp cao cấp</SelectItem>
+                              <SelectItem value='1'>K - Mới bắt đầu</SelectItem>
+                              <SelectItem value='2'>I - Cơ bản</SelectItem>
+                              <SelectItem value={TournamentTier.H.toString()}>
+                                H - Trung cấp
+                              </SelectItem>
+                              <SelectItem value={TournamentTier.G.toString()}>
+                                G - Cao cấp
+                              </SelectItem>
+                              <SelectItem value={TournamentTier.F.toString()}>
+                                F - Chuyên nghiệp
+                              </SelectItem>
+                              <SelectItem value={TournamentTier.E.toString()}>
+                                E - Chuyên nghiệp cao cấp
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -454,12 +536,16 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                     <FormField
                       control={form.control}
-                      name="max_participants"
+                      name='max_participants'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Số lượng người chơi</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="Số lượng" {...field} />
+                            <Input
+                              type='number'
+                              placeholder='Số lượng'
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -467,15 +553,19 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <FormField
                       control={form.control}
-                      name="entry_fee"
+                      name='entry_fee'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Phí tham gia</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="Phí tham gia" {...field} />
+                            <Input
+                              type='number'
+                              placeholder='Phí tham gia'
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -484,12 +574,16 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                     <FormField
                       control={form.control}
-                      name="prize_pool"
+                      name='prize_pool'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tổng giải thưởng</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="Giải thưởng" {...field} />
+                            <Input
+                              type='number'
+                              placeholder='Giải thưởng'
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -499,27 +593,27 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                   <FormField
                     control={form.control}
-                    name="venue_address"
+                    name='venue_address'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Địa điểm</FormLabel>
                         <FormControl>
-                          <Input placeholder="Địa điểm" {...field} />
+                          <Input placeholder='Địa điểm' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <FormField
                       control={form.control}
-                      name="registration_start"
+                      name='registration_start'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col space-y-1.5">
+                        <FormItem className='flex flex-col space-y-1.5'>
                           <FormLabel>Ngày mở đăng ký</FormLabel>
                           <FormControl>
-                            <Input placeholder="Ngày mở đăng ký" {...field} />
+                            <Input placeholder='Ngày mở đăng ký' {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -528,12 +622,12 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                     <FormField
                       control={form.control}
-                      name="registration_end"
+                      name='registration_end'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col space-y-1.5">
+                        <FormItem className='flex flex-col space-y-1.5'>
                           <FormLabel>Ngày đóng đăng ký</FormLabel>
                           <FormControl>
-                            <Input placeholder="Ngày đóng đăng ký" {...field} />
+                            <Input placeholder='Ngày đóng đăng ký' {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -541,15 +635,15 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <FormField
                       control={form.control}
-                      name="tournament_start"
+                      name='tournament_start'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col space-y-1.5">
+                        <FormItem className='flex flex-col space-y-1.5'>
                           <FormLabel>Ngày bắt đầu</FormLabel>
                           <FormControl>
-                            <Input placeholder="Ngày bắt đầu" {...field} />
+                            <Input placeholder='Ngày bắt đầu' {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -558,12 +652,12 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                     <FormField
                       control={form.control}
-                      name="tournament_end"
+                      name='tournament_end'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col space-y-1.5">
+                        <FormItem className='flex flex-col space-y-1.5'>
                           <FormLabel>Ngày kết thúc</FormLabel>
                           <FormControl>
-                            <Input placeholder="Ngày kết thúc" {...field} />
+                            <Input placeholder='Ngày kết thúc' {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -573,12 +667,12 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                   <FormField
                     control={form.control}
-                    name="rules"
+                    name='rules'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Luật lệ</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Luật lệ" {...field} />
+                          <Textarea placeholder='Luật lệ' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -587,93 +681,97 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
 
                   <FormField
                     control={form.control}
-                    name="contact_info"
+                    name='contact_info'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Thông tin liên hệ</FormLabel>
                         <FormControl>
-                          <Input placeholder="Thông tin liên hệ" {...field} />
+                          <Input placeholder='Thông tin liên hệ' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <Button type="submit" disabled={loading}>
-                    {loading ? "Đang cập nhật..." : "Cập nhật"}
+                  <Button type='submit' disabled={loading}>
+                    {loading ? 'Đang cập nhật...' : 'Cập nhật'}
                   </Button>
                 </form>
               </Form>
             </TabsContent>
 
-            <TabsContent value="rewards" className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Chỉnh sửa phần thưởng giải đấu</h3>
-                <div className="flex gap-2">
+            <TabsContent value='rewards' className='space-y-4'>
+              <div className='flex items-center justify-between'>
+                <h3 className='text-lg font-semibold'>
+                  Chỉnh sửa phần thưởng giải đấu
+                </h3>
+                <div className='flex gap-2'>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => setShowQuickAllocation(true)}
-                    className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none hover:from-yellow-500 hover:to-orange-600"
+                    className='bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none hover:from-yellow-500 hover:to-orange-600'
                   >
-                    <Zap className="w-4 h-4 mr-2" />
+                    <Zap className='w-4 h-4 mr-2' />
                     Phân bổ nhanh
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={addNewTier}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
+                  <Button variant='outline' size='sm' onClick={addNewTier}>
+                    <Plus className='w-4 h-4 mr-2' />
                     Thêm vị trí
                   </Button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {prizeTiers.map((tier) => (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                {prizeTiers.map(tier => (
                   <Card key={tier.id}>
                     <CardHeader>
                       <CardTitle>
                         {tier.position_name}
-                        <Badge className="ml-2">{tier.position}</Badge>
+                        <Badge className='ml-2'>{tier.position}</Badge>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <DollarSign className="w-4 h-4 text-gray-500" />
+                    <CardContent className='space-y-2'>
+                      <div className='flex items-center space-x-2'>
+                        <DollarSign className='w-4 h-4 text-gray-500' />
                         <Input
-                          type="number"
-                          placeholder="Tiền thưởng"
+                          type='number'
+                          placeholder='Tiền thưởng'
                           value={tier.cash_amount}
-                          onChange={(e) => updateTier(tier.id, 'cash_amount', e.target.value)}
+                          onChange={e =>
+                            updateTier(tier.id, 'cash_amount', e.target.value)
+                          }
                         />
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Trophy className="w-4 h-4 text-gray-500" />
+                      <div className='flex items-center space-x-2'>
+                        <Trophy className='w-4 h-4 text-gray-500' />
                         <Input
-                          type="number"
-                          placeholder="ELO Points"
+                          type='number'
+                          placeholder='ELO Points'
                           value={tier.elo_points}
-                          onChange={(e) => updateTier(tier.id, 'elo_points', e.target.value)}
+                          onChange={e =>
+                            updateTier(tier.id, 'elo_points', e.target.value)
+                          }
                         />
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Users className="w-4 h-4 text-gray-500" />
+                      <div className='flex items-center space-x-2'>
+                        <Users className='w-4 h-4 text-gray-500' />
                         <Input
-                          type="number"
-                          placeholder="SPA Points"
+                          type='number'
+                          placeholder='SPA Points'
                           value={tier.spa_points}
-                          onChange={(e) => updateTier(tier.id, 'spa_points', e.target.value)}
+                          onChange={e =>
+                            updateTier(tier.id, 'spa_points', e.target.value)
+                          }
                         />
                       </div>
                       <Button
-                        variant="destructive"
-                        size="sm"
+                        variant='destructive'
+                        size='sm'
                         onClick={() => deleteTier(tier.id)}
-                        className="w-full"
+                        className='w-full'
                       >
-                        <Trash2 className="w-4 h-4 mr-2" />
+                        <Trash2 className='w-4 h-4 mr-2' />
                         Xóa
                       </Button>
                     </CardContent>
@@ -688,8 +786,8 @@ export const EditTournamentModal: React.FC<EditTournamentModalProps> = ({
             </TabsContent> */}
           </Tabs>
 
-          <div className="flex justify-end">
-            <Button variant="outline" onClick={onClose}>
+          <div className='flex justify-end'>
+            <Button variant='outline' onClick={onClose}>
               Đóng
             </Button>
           </div>

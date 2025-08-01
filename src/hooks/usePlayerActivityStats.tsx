@@ -16,16 +16,19 @@ export const usePlayerActivityStats = () => {
     queryFn: async (): Promise<PlayerActivityStats> => {
       if (!user?.id) throw new Error('User not authenticated');
 
-        const { data, error } = await (supabase as any).rpc('get_player_activity_stats', {
-          p_user_id: user.id
-        });
+      const { data, error } = await (supabase as any).rpc(
+        'get_player_activity_stats',
+        {
+          p_user_id: user.id,
+        }
+      );
 
       if (error) {
         console.error('Activity stats error:', error);
         throw error;
       }
 
-      return (data as unknown) as PlayerActivityStats;
+      return data as unknown as PlayerActivityStats;
     },
     enabled: !!user?.id,
     staleTime: 5 * 60 * 1000, // 5 minutes

@@ -40,12 +40,12 @@ export const tournamentRepository = {
     console.log('Mock: Creating tournament', data);
     return { success: true, data: { id: 'mock-tournament-id', ...data } };
   },
-  
+
   async updateTournament(id: string, data: any) {
     console.log('Mock: Updating tournament', id, data);
     return { success: true, data: { id, ...data } };
   },
-  
+
   async getTournament(id: string) {
     console.log('Mock: Getting tournament', id);
     return { success: true, data: { id, name: 'Mock Tournament' } };
@@ -59,5 +59,5 @@ export const tournamentRepository = {
   async generateBracket(tournamentId: string) {
     console.log('Mock: Generating bracket for', tournamentId);
     return { success: true, data: { matches: [] } };
-  }
+  },
 };

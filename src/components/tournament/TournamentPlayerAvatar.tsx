@@ -11,32 +11,41 @@ interface TournamentPlayerAvatarProps {
   showRank?: boolean;
 }
 
-const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({ 
-  playerId, 
+const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
+  playerId,
   size = 'md',
-  showRank = true 
+  showRank = true,
 }) => {
   console.log('🏆 TournamentPlayerAvatar render for playerId:', playerId);
-  
+
   // Don't render anything if no playerId
   if (!playerId) {
     console.log('⚠️ No playerId provided');
     return (
-      <div className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center`}>
-        <span className="text-muted-foreground text-xs">TBD</span>
+      <div
+        className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center`}
+      >
+        <span className='text-muted-foreground text-xs'>TBD</span>
       </div>
     );
   }
 
-  const { data: playerData, isLoading, error, refetch } = useQuery({
+  const {
+    data: playerData,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['tournament-player', playerId],
     queryFn: async () => {
       console.log('🎾 Fetching player data for:', playerId);
-      
+
       // Fetch user profile data
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('user_id, full_name, display_name, avatar_url, verified_rank, elo')
+        .select(
+          'user_id, full_name, display_name, avatar_url, verified_rank, elo'
+        )
         .eq('user_id', playerId)
         .single();
 
@@ -51,7 +60,7 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
       const { data: ranking, error: rankingError } = await supabase
         .from('player_rankings')
         .select('verified_rank, spa_points, elo_points')
-        .eq('user_id', playerId)  // Đã fix: dùng user_id thay vì player_id
+        .eq('user_id', playerId) // Đã fix: dùng user_id thay vì player_id
         .single();
 
       if (rankingError) {
@@ -64,7 +73,7 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
         ...profile,
         ranking_verified_rank: ranking?.verified_rank,
         spa_points: ranking?.spa_points,
-        ranking_elo: ranking?.elo_points
+        ranking_elo: ranking?.elo_points,
       };
 
       console.log('✅ Final player data:', result);
@@ -91,7 +100,7 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
           event: '*',
           schema: 'public',
           table: 'profiles',
-          filter: `user_id=eq.${playerId}`
+          filter: `user_id=eq.${playerId}`,
         },
         () => refetch()
       )
@@ -101,7 +110,7 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
           event: '*',
           schema: 'public',
           table: 'player_rankings',
-          filter: `user_id=eq.${playerId}`
+          filter: `user_id=eq.${playerId}`,
         },
         () => refetch()
       )
@@ -114,9 +123,10 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
 
   // Calculate rank with fallback hierarchy
   const getPlayerRank = () => {
-    if (playerData?.ranking_verified_rank) return playerData.ranking_verified_rank;
+    if (playerData?.ranking_verified_rank)
+      return playerData.ranking_verified_rank;
     if (playerData?.verified_rank) return playerData.verified_rank;
-    
+
     // Calculate rank from ELO
     const elo = playerData?.ranking_elo || playerData?.elo || 1000;
     if (elo >= 1400) return 'E+';
@@ -136,15 +146,22 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
   // Get user initials
   const getInitials = () => {
     const name = playerData?.display_name || playerData?.full_name || 'U';
-    return name.split(' ').map(word => word.charAt(0)).join('').substring(0, 2).toUpperCase();
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
   };
 
   // Loading state
   if (isLoading) {
     console.log('⏳ Loading player data for:', playerId);
     return (
-      <div className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center relative`}>
-        <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
+      <div
+        className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center relative`}
+      >
+        <Loader2 className='w-3 h-3 animate-spin text-muted-foreground' />
       </div>
     );
   }
@@ -153,8 +170,10 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
   if (error) {
     console.error('❌ Error loading player:', playerId, error);
     return (
-      <div className={`${getSizeClasses(size)} bg-red-100 rounded-full flex items-center justify-center relative`}>
-        <span className="text-red-500 text-xs">!</span>
+      <div
+        className={`${getSizeClasses(size)} bg-red-100 rounded-full flex items-center justify-center relative`}
+      >
+        <span className='text-red-500 text-xs'>!</span>
       </div>
     );
   }
@@ -162,21 +181,21 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
   console.log('🎨 Rendering avatar for:', playerId, 'data:', playerData);
 
   return (
-    <div className="relative inline-block">
+    <div className='relative inline-block'>
       <Avatar className={getSizeClasses(size)}>
-        <AvatarImage 
-          src={playerData?.avatar_url || undefined} 
+        <AvatarImage
+          src={playerData?.avatar_url || undefined}
           alt={playerData?.display_name || playerData?.full_name || 'Player'}
         />
-        <AvatarFallback className="text-xs font-medium bg-primary/10 text-primary">
+        <AvatarFallback className='text-xs font-medium bg-primary/10 text-primary'>
           {getInitials()}
         </AvatarFallback>
       </Avatar>
-      
+
       {showRank && (
-        <Badge 
-          variant="secondary" 
-          className="absolute -bottom-1 -right-1 h-5 min-w-[20px] text-[10px] font-bold px-1 py-0 bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-0"
+        <Badge
+          variant='secondary'
+          className='absolute -bottom-1 -right-1 h-5 min-w-[20px] text-[10px] font-bold px-1 py-0 bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-0'
         >
           {getPlayerRank()}
         </Badge>

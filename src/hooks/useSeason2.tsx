@@ -1,7 +1,10 @@
-
-
 import { useState, useEffect } from 'react';
-import { Season2, Season2Leaderboard, Season2Stats, Season2LeaderboardEntry } from '../types/season2';
+import {
+  Season2,
+  Season2Leaderboard,
+  Season2Stats,
+  Season2LeaderboardEntry,
+} from '../types/season2';
 
 export const useSeason2 = () => {
   const [season2, setSeason2] = useState<Season2 | null>(null);
@@ -14,9 +17,10 @@ export const useSeason2 = () => {
     totalPrizePool: 0,
     averageRating: 0,
     topRating: 0,
-    activeUsers: 0
+    activeUsers: 0,
   });
-  const [userProgress, setUserProgress] = useState<Season2LeaderboardEntry | null>(null);
+  const [userProgress, setUserProgress] =
+    useState<Season2LeaderboardEntry | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -34,7 +38,7 @@ export const useSeason2 = () => {
         total_matches: 1200,
         registration_fee: 99000,
         prize_pool: 50000000,
-        description: 'Season 2 tournament for 2025'
+        description: 'Season 2 tournament for 2025',
       };
 
       const mockPrizes = [
@@ -45,7 +49,7 @@ export const useSeason2 = () => {
           prize_value: 10000000,
           prize_description: 'Giải nhất',
           voucher_amount: 0,
-          member_months: 0
+          member_months: 0,
         },
         {
           id: '2',
@@ -54,7 +58,7 @@ export const useSeason2 = () => {
           prize_value: 5000000,
           prize_description: 'Giải nhì',
           voucher_amount: 0,
-          member_months: 0
+          member_months: 0,
         },
         {
           id: '3',
@@ -63,8 +67,8 @@ export const useSeason2 = () => {
           prize_value: 3000000,
           prize_description: 'Giải ba',
           voucher_amount: 0,
-          member_months: 0
-        }
+          member_months: 0,
+        },
       ];
 
       setSeason2(mockSeason2);
@@ -83,12 +87,12 @@ export const useSeason2 = () => {
       return {
         eligible: true,
         reason: undefined,
-        currentRank: 'D1'
+        currentRank: 'D1',
       };
     } catch (err) {
       return {
         eligible: false,
-        reason: 'Không thể kiểm tra điều kiện tham gia'
+        reason: 'Không thể kiểm tra điều kiện tham gia',
       };
     }
   };
@@ -125,7 +129,7 @@ export const useSeason2 = () => {
         totalPrizePool: 50000000,
         averageRating: 1450,
         topRating: 2100,
-        activeUsers: 120
+        activeUsers: 120,
       });
     } catch (err) {
       setError('Failed to fetch stats');
@@ -157,8 +161,8 @@ export const useSeason2 = () => {
           full_name: 'Test User',
           avatar_url: '',
           current_rank: 'D1',
-          nickname: 'TestUser'
-        }
+          nickname: 'TestUser',
+        },
       };
       setUserProgress(mockProgress);
       return mockProgress;
@@ -169,22 +173,24 @@ export const useSeason2 = () => {
   };
 
   const getUserRank = (targetUserId?: string): Season2LeaderboardEntry => {
-    return userProgress || {
-      id: targetUserId || 'default',
-      rank: 0,
-      user_id: targetUserId || '',
-      nickname: '',
-      avatar_url: '',
-      elo_rating: 0,
-      matches_played: 0,
-      wins: 0,
-      losses: 0,
-      points: 0,
-      win_rate: 0,
-      form: '',
-      total_elo_points: 0,
-      tournaments_played: 0
-    };
+    return (
+      userProgress || {
+        id: targetUserId || 'default',
+        rank: 0,
+        user_id: targetUserId || '',
+        nickname: '',
+        avatar_url: '',
+        elo_rating: 0,
+        matches_played: 0,
+        wins: 0,
+        losses: 0,
+        points: 0,
+        win_rate: 0,
+        form: '',
+        total_elo_points: 0,
+        tournaments_played: 0,
+      }
+    );
   };
 
   useEffect(() => {

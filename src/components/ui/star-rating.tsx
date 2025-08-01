@@ -17,12 +17,12 @@ export const StarRating: React.FC<StarRatingProps> = ({
   max = 5,
   size = 'md',
   readonly = false,
-  className
+  className,
 }) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-5 h-5',
-    lg: 'w-6 h-6'
+    lg: 'w-6 h-6',
   };
 
   const handleStarClick = (rating: number) => {
@@ -36,11 +36,11 @@ export const StarRating: React.FC<StarRatingProps> = ({
       {Array.from({ length: max }, (_, index) => {
         const starValue = index + 1;
         const isFilled = starValue <= value;
-        
+
         return (
           <button
             key={index}
-            type="button"
+            type='button'
             onClick={() => handleStarClick(starValue)}
             disabled={readonly}
             className={cn(
@@ -53,8 +53,8 @@ export const StarRating: React.FC<StarRatingProps> = ({
               className={cn(
                 sizeClasses[size],
                 'transition-colors',
-                isFilled 
-                  ? 'fill-yellow-400 text-yellow-400' 
+                isFilled
+                  ? 'fill-yellow-400 text-yellow-400'
                   : 'text-gray-300 hover:text-yellow-400'
               )}
             />

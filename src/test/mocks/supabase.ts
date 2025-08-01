@@ -23,9 +23,9 @@ export const mockToast = {
 };
 
 export const mockTournaments = [
-  { id: '1', name: 'Test Tournament', status: 'upcoming' }
+  { id: '1', name: 'Test Tournament', status: 'upcoming' },
 ];
 
 export const mockUsers = [
-  { id: '1', email: 'test@example.com', full_name: 'Test User' }
+  { id: '1', email: 'test@example.com', full_name: 'Test User' },
 ];

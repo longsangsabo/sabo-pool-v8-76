@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { TournamentResultWithPlayer } from '@/types/tournamentResults';
@@ -23,7 +22,8 @@ export const useTournamentResults = (tournamentId?: string) => {
 
       const { data, error: fetchError } = await supabase
         .from('tournament_results')
-        .select(`
+        .select(
+          `
           *,
           profiles!tournament_results_user_id_fkey (
             user_id,
@@ -32,7 +32,8 @@ export const useTournamentResults = (tournamentId?: string) => {
             avatar_url,
             verified_rank
           )
-        `)
+        `
+        )
         .eq('tournament_id', tournamentId)
         .order('final_position', { ascending: true });
 
@@ -44,24 +45,31 @@ export const useTournamentResults = (tournamentId?: string) => {
       console.log('✅ Tournament results fetched:', data?.length || 0);
 
       // Transform data to match TournamentResultWithPlayer interface
-      const transformedResults: TournamentResultWithPlayer[] = (data || []).map(result => ({
-        user_id: result.user_id,
-        full_name: result.profiles?.full_name || 'Unknown Player',
-        display_name: result.profiles?.display_name || result.profiles?.full_name || 'Unknown Player',
-        avatar_url: result.profiles?.avatar_url || '',
-        verified_rank: result.profiles?.verified_rank || 'Unranked',
-        final_position: result.final_position || 0,
-        total_matches: result.matches_played || 0,
-        wins: result.matches_won || 0,
-        losses: result.matches_lost || 0,
-        win_percentage: Number(result.win_percentage) || 0,
-        spa_points_earned: result.spa_points_earned || 0,
-        elo_points_awarded: result.elo_points_earned || 0,
-        prize_amount: result.prize_amount || 0,
-        physical_rewards: Array.isArray(result.physical_rewards) ? result.physical_rewards as string[] : [],
-        placement_type: result.placement_type || '',
-        id: result.id
-      }));
+      const transformedResults: TournamentResultWithPlayer[] = (data || []).map(
+        result => ({
+          user_id: result.user_id,
+          full_name: result.profiles?.full_name || 'Unknown Player',
+          display_name:
+            result.profiles?.display_name ||
+            result.profiles?.full_name ||
+            'Unknown Player',
+          avatar_url: result.profiles?.avatar_url || '',
+          verified_rank: result.profiles?.verified_rank || 'Unranked',
+          final_position: result.final_position || 0,
+          total_matches: result.matches_played || 0,
+          wins: result.matches_won || 0,
+          losses: result.matches_lost || 0,
+          win_percentage: Number(result.win_percentage) || 0,
+          spa_points_earned: result.spa_points_earned || 0,
+          elo_points_awarded: result.elo_points_earned || 0,
+          prize_amount: result.prize_amount || 0,
+          physical_rewards: Array.isArray(result.physical_rewards)
+            ? (result.physical_rewards as string[])
+            : [],
+          placement_type: result.placement_type || '',
+          id: result.id,
+        })
+      );
 
       setResults(transformedResults);
     } catch (err: any) {
@@ -80,7 +88,10 @@ export const useTournamentResults = (tournamentId?: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up real-time subscription for tournament results:', tournamentId);
+    console.log(
+      '🔄 Setting up real-time subscription for tournament results:',
+      tournamentId
+    );
 
     const channel = supabase
       .channel(`tournament-results-${tournamentId}`)
@@ -90,11 +101,11 @@ export const useTournamentResults = (tournamentId?: string) => {
           event: '*',
           schema: 'public',
           table: 'tournament_results',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament results real-time update:', payload);
-          
+
           // Immediately refetch results to ensure accuracy
           fetchResults();
         }
@@ -111,6 +122,6 @@ export const useTournamentResults = (tournamentId?: string) => {
     results,
     loading,
     error,
-    refetch: fetchResults
+    refetch: fetchResults,
   };
 };

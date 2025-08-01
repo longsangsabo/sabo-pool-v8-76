@@ -31,7 +31,9 @@ export const useSPARewards = () => {
     }
   };
 
-  const createSPAReward = async (reward: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>) => {
+  const createSPAReward = async (
+    reward: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>
+  ) => {
     try {
       // For now, just simulate creation
       toast.success('SPA reward created successfully');
@@ -43,7 +45,10 @@ export const useSPARewards = () => {
     }
   };
 
-  const updateSPAReward = async (id: string, reward: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>) => {
+  const updateSPAReward = async (
+    id: string,
+    reward: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>
+  ) => {
     try {
       // For now, just simulate update
       toast.success('SPA reward updated successfully');
@@ -78,6 +83,6 @@ export const useSPARewards = () => {
     createReward: createSPAReward,
     updateReward: updateSPAReward,
     deleteReward: deleteSPAReward,
-    refetch: fetchSPARewards
+    refetch: fetchSPARewards,
   };
 };

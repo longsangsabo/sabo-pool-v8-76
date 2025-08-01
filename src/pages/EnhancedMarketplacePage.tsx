@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Plus, Grid3X3, List } from 'lucide-react';
@@ -12,13 +11,15 @@ import { toast } from 'sonner';
 const EnhancedMarketplacePage = () => {
   const { items, loading, error, fetchItems } = useMarketplace();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [condition, setCondition] = useState('all');
   const [location, setLocation] = useState('all');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    0, 100000000,
+  ]);
 
   // Load items on component mount
   useEffect(() => {
@@ -30,7 +31,8 @@ const EnhancedMarketplacePage = () => {
       search: searchQuery || undefined,
       category: category !== 'all' ? category : undefined,
       condition: condition !== 'all' ? condition : undefined,
-      priceRange: priceRange[0] > 0 || priceRange[1] < 100000000 ? priceRange : undefined,
+      priceRange:
+        priceRange[0] > 0 || priceRange[1] < 100000000 ? priceRange : undefined,
     };
 
     await fetchItems(filters);
@@ -60,13 +62,13 @@ const EnhancedMarketplacePage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
-        <div className="container mx-auto px-4">
+      <div className='min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8'>
+        <div className='container mx-auto px-4'>
           <Card>
-            <CardContent className="p-8 text-center">
-              <div className="text-red-500 mb-4">⚠️</div>
-              <h3 className="text-lg font-medium mb-2">Có lỗi xảy ra</h3>
-              <p className="text-gray-600 mb-4">{error}</p>
+            <CardContent className='p-8 text-center'>
+              <div className='text-red-500 mb-4'>⚠️</div>
+              <h3 className='text-lg font-medium mb-2'>Có lỗi xảy ra</h3>
+              <p className='text-gray-600 mb-4'>{error}</p>
               <Button onClick={() => fetchItems()}>Thử lại</Button>
             </CardContent>
           </Card>
@@ -79,38 +81,43 @@ const EnhancedMarketplacePage = () => {
     <>
       <Helmet>
         <title>Marketplace - SABO Billiards</title>
-        <meta name="description" content="Mua bán thiết bị bi-a chính hãng, chất lượng cao" />
+        <meta
+          name='description'
+          content='Mua bán thiết bị bi-a chính hãng, chất lượng cao'
+        />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
-        <div className="container mx-auto px-4 max-w-7xl">
+      <div className='min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8'>
+        <div className='container mx-auto px-4 max-w-7xl'>
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
+          <div className='mb-8'>
+            <div className='flex items-center justify-between mb-6'>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className='text-3xl font-bold text-gray-900'>
                   Marketplace
                 </h1>
-                <p className="text-gray-600 mt-2">
+                <p className='text-gray-600 mt-2'>
                   Mua bán thiết bị bi-a chính hãng, chất lượng cao
                 </p>
               </div>
-              
-              <div className="flex items-center gap-3">
+
+              <div className='flex items-center gap-3'>
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                  variant='outline'
+                  size='sm'
+                  onClick={() =>
+                    setViewMode(viewMode === 'grid' ? 'list' : 'grid')
+                  }
                 >
                   {viewMode === 'grid' ? (
-                    <List className="w-4 h-4" />
+                    <List className='w-4 h-4' />
                   ) : (
-                    <Grid3X3 className="w-4 h-4" />
+                    <Grid3X3 className='w-4 h-4' />
                   )}
                 </Button>
-                
-                <Button className="flex items-center gap-2">
-                  <Plus className="w-4 h-4" />
+
+                <Button className='flex items-center gap-2'>
+                  <Plus className='w-4 h-4' />
                   Đăng bán
                 </Button>
               </div>
@@ -134,23 +141,24 @@ const EnhancedMarketplacePage = () => {
           </div>
 
           {/* Results */}
-          <div className="mb-4">
-            <p className="text-gray-600">
-              Tìm thấy <span className="font-semibold">{items.length}</span> sản phẩm
+          <div className='mb-4'>
+            <p className='text-gray-600'>
+              Tìm thấy <span className='font-semibold'>{items.length}</span> sản
+              phẩm
             </p>
           </div>
 
           {/* Items Grid/List */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
               {[...Array(8)].map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardContent className="p-0">
-                    <div className="aspect-square bg-gray-200 rounded-t-lg"></div>
-                    <div className="p-4 space-y-3">
-                      <div className="h-4 bg-gray-200 rounded"></div>
-                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <Card key={i} className='animate-pulse'>
+                  <CardContent className='p-0'>
+                    <div className='aspect-square bg-gray-200 rounded-t-lg'></div>
+                    <div className='p-4 space-y-3'>
+                      <div className='h-4 bg-gray-200 rounded'></div>
+                      <div className='h-4 bg-gray-200 rounded w-2/3'></div>
+                      <div className='h-4 bg-gray-200 rounded w-1/2'></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -158,17 +166,17 @@ const EnhancedMarketplacePage = () => {
             </div>
           ) : items.length === 0 ? (
             <Card>
-              <CardContent className="p-8 text-center">
-                <div className="text-gray-400 mb-4">
-                  <div className="text-6xl mb-4">🎱</div>
-                  <h3 className="text-lg font-medium mb-2">
+              <CardContent className='p-8 text-center'>
+                <div className='text-gray-400 mb-4'>
+                  <div className='text-6xl mb-4'>🎱</div>
+                  <h3 className='text-lg font-medium mb-2'>
                     Không tìm thấy sản phẩm
                   </h3>
-                  <p className="text-sm">
+                  <p className='text-sm'>
                     Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
                   </p>
                 </div>
-                <Button variant="outline" onClick={handleClearFilters}>
+                <Button variant='outline' onClick={handleClearFilters}>
                   Xóa bộ lọc
                 </Button>
               </CardContent>
@@ -181,7 +189,7 @@ const EnhancedMarketplacePage = () => {
                   : 'space-y-4'
               }
             >
-              {items.map((item) => (
+              {items.map(item => (
                 <MarketplaceItemCard
                   key={item.id}
                   item={item}
@@ -195,8 +203,8 @@ const EnhancedMarketplacePage = () => {
 
           {/* Load More */}
           {items.length > 0 && (
-            <div className="text-center mt-8">
-              <Button variant="outline" onClick={() => fetchItems()}>
+            <div className='text-center mt-8'>
+              <Button variant='outline' onClick={() => fetchItems()}>
                 Tải thêm sản phẩm
               </Button>
             </div>
