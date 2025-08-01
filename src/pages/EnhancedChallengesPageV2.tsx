@@ -149,15 +149,23 @@ const EnhancedChallengesPageV2: React.FC = () => {
   ).map(convertToLocalChallenge);
   
   const activeChallenges = myChallenges.filter(c => {
-    if (c.status !== 'accepted') return false;
+    console.log('🔍 Checking challenge for active:', {
+      id: c.id,
+      status: c.status,
+      scheduled_time: c.scheduled_time,
+      challenger: c.challenger_profile?.full_name,
+      opponent: c.opponent_profile?.full_name
+    });
     
-    // If no scheduled time, it's ready to start
-    if (!c.scheduled_time) return true;
+    if (c.status !== 'accepted') {
+      console.log('❌ Challenge rejected - not accepted:', c.id);
+      return false;
+    }
     
-    // If scheduled time exists, check if it has passed
-    const scheduledTime = new Date(c.scheduled_time);
-    const now = new Date();
-    return scheduledTime < now;
+    // ✅ FIX: All accepted challenges should be active immediately
+    // Remove scheduled_time checking - if it's accepted, it's ready to play
+    console.log('✅ Challenge accepted for active tab:', c.id);
+    return true;
   });
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
