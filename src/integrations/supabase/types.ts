@@ -241,6 +241,13 @@ export type Database = {
             referencedRelation: "challenges"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_challenge_matches_challenge"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
         ]
       }
       challenges: {

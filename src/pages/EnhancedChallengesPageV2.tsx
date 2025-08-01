@@ -189,20 +189,25 @@ const EnhancedChallengesPageV2: React.FC = () => {
     
     setLoadingMatches(true);
     try {
+      console.log('🎯 Fetching matches for user:', user.id);
+      
+      // Simple query without joins to avoid foreign key issues
       const { data: matches, error } = await supabase
         .from('matches')
-        .select(`
-          *,
-          player1:player1_id(user_id, full_name, display_name, avatar_url, verified_rank, current_rank),
-          player2:player2_id(user_id, full_name, display_name, avatar_url, verified_rank, current_rank)
-        `)
+        .select('*')
         .or(`player1_id.eq.${user.id},player2_id.eq.${user.id}`)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Error fetching matches:', error);
+        throw error;
+      }
+
+      console.log('✅ Fetched matches:', matches?.length || 0);
       setMatchesData(matches || []);
     } catch (error) {
       console.error('Error fetching matches:', error);
+      toast.error('Lỗi tải danh sách trận đấu');
     } finally {
       setLoadingMatches(false);
     }
@@ -269,6 +274,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
     try {
       await acceptChallenge(challengeId);
       toast.success('Đã tham gia thách đấu mở thành công!');
+      // Refresh matches after accepting challenge
+      setTimeout(() => fetchMatches(), 500);
     } catch (error) {
       console.error('Error joining open challenge:', error);
       toast.error('Lỗi khi tham gia thách đấu');
