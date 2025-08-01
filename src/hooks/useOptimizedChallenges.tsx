@@ -254,13 +254,30 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         try {
           console.log('📬 Sending notification to challenger...');
           
+          // Get participant profile for notification metadata
+          const { data: participantProfile } = await supabase
+            .from('profiles')
+            .select('full_name, display_name, avatar_url, verified_rank, current_rank')
+            .eq('user_id', user.id)
+            .single();
+
           const { error: notificationError } = await supabase.functions.invoke('send-notification', {
             body: {
               user_id: challengeData.challenger_id,
               type: 'challenge_accepted',
               title: '🎯 Có người tham gia thách đấu!',
-              message: `Có người vừa tham gia thách đấu mở của bạn. Trận đấu đã được tạo và sẵn sàng diễn ra!`,
-              priority: 'high'
+              message: `${participantProfile?.display_name || participantProfile?.full_name || 'Một đối thủ'} vừa tham gia thách đấu mở của bạn. Trận đấu đã được tạo và sẵn sàng diễn ra!`,
+              priority: 'high',
+              metadata: {
+                challenge_id: challengeId,
+                participant_name: participantProfile?.display_name || participantProfile?.full_name || 'Đối thủ ẩn danh',
+                participant_avatar: participantProfile?.avatar_url,
+                participant_rank: participantProfile?.verified_rank || participantProfile?.current_rank,
+                bet_points: challengeData.bet_points,
+                race_to: challengeData.race_to,
+                message: challengeData.message,
+                location: challengeData.challenge_message || challengeData.message
+              }
             }
           });
 

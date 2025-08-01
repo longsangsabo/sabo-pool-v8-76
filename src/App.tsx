@@ -11,6 +11,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { PublicRoute } from '@/components/auth/PublicRoute';
 import { AdminRoute } from '@/components/auth/AdminRoute';
 import MainLayout from '@/components/MainLayout';
+import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 
 // ✅ Import debug utilities for tournament refresh
 import '@/utils/debugTournamentRefresh';
@@ -72,6 +73,9 @@ const App = () => {
   React.useEffect(() => {
     (window as any).queryClient = queryClient;
   }, []);
+
+  // ✅ Initialize realtime notifications
+  const { PopupComponent } = useRealtimeNotifications();
 
   return (
     <AppErrorBoundary>
@@ -139,6 +143,8 @@ const App = () => {
               </div>
             </CombinedProviders>
             <Toaster />
+            {/* ✅ Render notification popup */}
+            <PopupComponent />
           </Router>
         </HelmetProvider>
       </QueryClientProvider>
