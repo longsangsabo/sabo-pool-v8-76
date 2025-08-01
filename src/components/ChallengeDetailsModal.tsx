@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -54,6 +56,9 @@ interface ChallengeDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: () => void;
+  onSubmitScore?: (challengeId: string, challengerScore: number, opponentScore: number) => Promise<void>;
+  showScoreEntry?: boolean;
+  isSubmittingScore?: boolean;
 }
 
 const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
@@ -61,16 +66,25 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
   isOpen,
   onClose,
   onUpdate,
+  onSubmitScore,
+  showScoreEntry = false,
+  isSubmittingScore = false
 }) => {
   const { user } = useAuth();
   const [responseMessage, setResponseMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [challengerScore, setChallengerScore] = useState<number>(0);
+  const [opponentScore, setOpponentScore] = useState<number>(0);
+  const [showScoreForm, setShowScoreForm] = useState(false);
 
   if (!challenge) return null;
 
   const isChallenger = user?.id === challenge.challenger_id;
   const isOpponent = user?.id === challenge.opponent_id;
   const canRespond = isOpponent && challenge.status === 'pending';
+  const canEnterScore = (isChallenger || isOpponent) && 
+    (challenge.status === 'accepted' || challenge.status === 'ongoing') && 
+    onSubmitScore;
   
   const getStatusInfo = (status: string) => {
     switch (status) {
@@ -84,6 +98,8 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
         return { text: 'Hoàn thành', color: 'bg-blue-100 text-blue-800' };
       case 'expired':
         return { text: 'Hết hạn', color: 'bg-gray-100 text-gray-800' };
+      case 'ongoing':
+        return { text: 'Đang diễn ra', color: 'bg-blue-100 text-blue-800' };
       default:
         return { text: status, color: 'bg-gray-100 text-gray-800' };
     }
@@ -114,6 +130,32 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
     }
   };
 
+  const handleSubmitScore = async () => {
+    if (!challenge || !onSubmitScore) return;
+    
+    if (challengerScore === 0 && opponentScore === 0) {
+      toast.error('Vui lòng nhập tỷ số');
+      return;
+    }
+
+    if (challengerScore !== challenge.race_to && opponentScore !== challenge.race_to) {
+      toast.error(`Một trong hai bên phải đạt ${challenge.race_to} điểm để thắng`);
+      return;
+    }
+
+    try {
+      await onSubmitScore(challenge.id, challengerScore, opponentScore);
+      setShowScoreForm(false);
+      setChallengerScore(0);
+      setOpponentScore(0);
+      onClose();
+      toast.success('Đã ghi tỷ số thành công!');
+    } catch (error) {
+      console.error('Error submitting score:', error);
+      toast.error('Không thể ghi tỷ số. Vui lòng thử lại.');
+    }
+  };
+
   const handleCancel = async () => {
     if (!isChallenger) return;
     
@@ -141,7 +183,7 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -265,6 +307,98 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
             </div>
           )}
 
+          {/* Score Entry Section */}
+          {canEnterScore && (
+            <div className="space-y-4 border-t pt-4">
+              {!showScoreForm ? (
+                <Button
+                  onClick={() => setShowScoreForm(true)}
+                  className="w-full"
+                >
+                  <Target className="w-4 h-4 mr-2" />
+                  Nhập tỷ số trận đấu
+                </Button>
+              ) : (
+                <div className="space-y-4">
+                  <div className="text-center text-sm text-muted-foreground mb-4">
+                    Trận đấu đầu tiên đạt {challenge.race_to} điểm sẽ thắng
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="challenger-score">
+                        {challenge.challenger_profile?.full_name || 'Challenger'}
+                      </Label>
+                      <Input
+                        id="challenger-score"
+                        type="number"
+                        value={challengerScore}
+                        onChange={(e) => setChallengerScore(parseInt(e.target.value) || 0)}
+                        min={0}
+                        max={challenge.race_to}
+                        className="text-center text-lg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="opponent-score">
+                        {challenge.opponent_profile?.full_name || 'Opponent'}
+                      </Label>
+                      <Input
+                        id="opponent-score"
+                        type="number"
+                        value={opponentScore}
+                        onChange={(e) => setOpponentScore(parseInt(e.target.value) || 0)}
+                        min={0}
+                        max={challenge.race_to}
+                        className="text-center text-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {challengerScore > 0 || opponentScore > 0 ? (
+                    <div className="text-center text-sm">
+                      {challengerScore === challenge.race_to ? (
+                        <span className="text-green-600 font-medium">
+                          {challenge.challenger_profile?.full_name || 'Challenger'} thắng!
+                        </span>
+                      ) : opponentScore === challenge.race_to ? (
+                        <span className="text-green-600 font-medium">
+                          {challenge.opponent_profile?.full_name || 'Opponent'} thắng!
+                        </span>
+                      ) : (
+                        <span className="text-amber-600">
+                          Chưa có ai đạt {challenge.race_to} điểm
+                        </span>
+                      )}
+                    </div>
+                  ) : null}
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowScoreForm(false);
+                        setChallengerScore(0);
+                        setOpponentScore(0);
+                      }}
+                      className="flex-1"
+                    >
+                      Hủy
+                    </Button>
+                    <Button
+                      onClick={handleSubmitScore}
+                      disabled={(challengerScore !== challenge.race_to && opponentScore !== challenge.race_to) || isSubmittingScore}
+                      className="flex-1"
+                    >
+                      {isSubmittingScore ? 'Đang ghi...' : 'Ghi tỷ số'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Response Section */}
           {canRespond && (
             <div className="space-y-4 border-t pt-4">
@@ -315,7 +449,7 @@ const ChallengeDetailsModal: React.FC<ChallengeDetailsModalProps> = ({
           )}
 
           {/* Close Button */}
-          {!canRespond && !(isChallenger && challenge.status === 'pending') && (
+          {!canRespond && !(isChallenger && challenge.status === 'pending') && !showScoreForm && (
             <div className="border-t pt-4">
               <Button variant="outline" onClick={onClose} className="w-full">
                 Đóng

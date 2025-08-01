@@ -5,11 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useChallenges } from '@/hooks/useChallenges';
 import { toast } from 'sonner';
 import { Calendar, Search, Trophy, Users, Zap, RefreshCw } from 'lucide-react';
-import OpenChallengeCard from './OpenChallengeCard';
-import OngoingChallengeCard from './OngoingChallengeCard';
-import UpcomingChallengeCard from './UpcomingChallengeCard';
-import CompletedChallengeCard from './CompletedChallengeCard';
-import CreateChallengeModal from '../CreateChallengeModal';
+import UnifiedChallengeCard from './UnifiedChallengeCard';
+import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
 
 interface MobileChallengeManagerProps {
   className?: string;
@@ -194,9 +191,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             </div>
             {ongoingChallenges.length > 0 ? (
               ongoingChallenges.map(challenge => (
-                <OngoingChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
+                  challenge={{
+                    ...challenge,
+                    status: 'ongoing' as const
+                  }}
                   variant="compact"
                 />
               ))
@@ -218,9 +218,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             </div>
             {upcomingChallenges.length > 0 ? (
               upcomingChallenges.map(challenge => (
-                <UpcomingChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
+                  challenge={{
+                    ...challenge,
+                    status: 'upcoming' as const
+                  }}
                   variant="compact"
                 />
               ))
@@ -248,9 +251,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
                   hasProfile: !!challenge.challenger_profile
                 });
                 return (
-                  <OpenChallengeCard
+                  <UnifiedChallengeCard
                     key={challenge.id}
-                    challenge={challenge}
+                    challenge={{
+                      ...challenge,
+                      status: 'open' as const
+                    }}
                     onJoin={joinOpenChallenge}
                     variant="compact"
                   />
@@ -277,9 +283,12 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
             </div>
             {completedChallenges.length > 0 ? (
               completedChallenges.map(challenge => (
-                <CompletedChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
+                  challenge={{
+                    ...challenge,
+                    status: 'completed' as const
+                  }}
                   variant="compact"
                 />
               ))
@@ -400,10 +409,11 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
       </div>
 
       {/* Create Challenge Modal */}
-      <CreateChallengeModal
+      <UnifiedCreateChallengeModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onChallengeCreated={handleChallengeCreated}
+        variant="standard"
       />
     </div>
   );

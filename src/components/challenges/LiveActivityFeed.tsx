@@ -6,7 +6,7 @@ import SectionHeader from './SectionHeader';
 import LiveMatchCard from './LiveMatchCard';
 import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
-import OpenChallengeCard from './OpenChallengeCard';
+import UnifiedChallengeCard from './UnifiedChallengeCard';
 import { useOptimizedMatches } from '@/hooks/useOptimizedMatches';
 import { toast } from 'sonner';
 
@@ -185,9 +185,12 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
           {openChallenges.length > 0 ? (
             <div className="grid gap-3">
               {openChallenges.map(challenge => (
-                <OpenChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
+                  challenge={{
+                    ...challenge,
+                    status: 'open' as const
+                  }}
                   onJoin={async () => await onJoinChallenge(challenge.id)}
                   variant="compact"
                 />

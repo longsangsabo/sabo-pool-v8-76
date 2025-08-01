@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Clock, Trophy, Target } from 'lucide-react';
 import { Challenge } from '@/types/challenge';
-import { ScoreEntryModal } from './ScoreEntryModal';
+import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -181,13 +181,15 @@ export const ChallengeMatchCard: React.FC<ChallengeMatchCardProps> = ({
         </CardContent>
       </Card>
 
-      {/* Score Entry Modal */}
-      <ScoreEntryModal
-        challenge={challenge}
+      {/* Challenge Details Modal with Score Entry */}
+      <ChallengeDetailsModal
+        challenge={challenge as any}
         isOpen={isScoreModalOpen}
         onClose={() => setIsScoreModalOpen(false)}
+        onUpdate={() => {/* handle update */}}
         onSubmitScore={onSubmitScore}
-        currentUserId={currentUserId}
+        showScoreEntry={true}
+        isSubmittingScore={isSubmittingScore}
       />
     </>
   );

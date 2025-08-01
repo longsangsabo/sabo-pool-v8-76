@@ -11,10 +11,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
 import { useState as useStateForMatches } from 'react';
-import CreateChallengeModal from '@/components/CreateChallengeModal';
+import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
-import AdminCreateChallengeModal from '@/components/admin/AdminCreateChallengeModal';
+
 import TrustScoreBadge from '@/components/TrustScoreBadge';
 import CompactStatCard from '@/components/challenges/CompactStatCard';
 import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
@@ -1003,22 +1003,24 @@ const EnhancedChallengesPageV2: React.FC = () => {
       {isDesktop ? <DesktopLayout /> : <MobileLayout />}
 
       {/* Modals */}
-      <CreateChallengeModal
+      <UnifiedCreateChallengeModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onChallengeCreated={() => {
           setShowCreateModal(false);
           // Data will refresh automatically via the hook
         }}
+        variant="standard"
       />
 
-      <AdminCreateChallengeModal
+      <UnifiedCreateChallengeModal
         isOpen={showAdminCreateModal}
         onClose={() => setShowAdminCreateModal(false)}
         onChallengeCreated={() => {
           setShowAdminCreateModal(false);
           // Data will refresh automatically via the hook
         }}
+        variant="admin"
       />
       
       <ChallengeDetailsModal
