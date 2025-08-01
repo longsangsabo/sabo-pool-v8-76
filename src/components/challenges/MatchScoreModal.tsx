@@ -11,6 +11,8 @@ interface MatchScoreModalProps {
   challengeId: string;
   isChallenger: boolean;
   raceTo: number;
+  challengerName?: string;
+  opponentName?: string;
 }
 
 export function MatchScoreModal({ 
@@ -18,7 +20,9 @@ export function MatchScoreModal({
   onOpenChange, 
   challengeId, 
   isChallenger, 
-  raceTo 
+  raceTo,
+  challengerName = 'Challenger',
+  opponentName = 'Opponent'
 }: MatchScoreModalProps) {
   const { submitScore, isSubmittingScore } = useChallengeWorkflow();
   const [challengerScore, setChallengerScore] = useState(0);
@@ -75,7 +79,7 @@ export function MatchScoreModal({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="challenger-score">
-                Challenger
+                {challengerName}
               </Label>
               <Input
                 id="challenger-score"
@@ -90,7 +94,7 @@ export function MatchScoreModal({
 
             <div>
               <Label htmlFor="opponent-score">
-                Opponent
+                {opponentName}
               </Label>
               <Input
                 id="opponent-score"
@@ -107,9 +111,9 @@ export function MatchScoreModal({
           {challengerScore > 0 || opponentScore > 0 ? (
             <div className="text-center text-sm">
               {challengerScore === raceTo ? (
-                <span className="text-green-600 font-medium">Challenger thắng!</span>
+                <span className="text-green-600 font-medium">{challengerName} thắng!</span>
               ) : opponentScore === raceTo ? (
-                <span className="text-green-600 font-medium">Opponent thắng!</span>
+                <span className="text-green-600 font-medium">{opponentName} thắng!</span>
               ) : (
                 <span className="text-amber-600">
                   Chưa có ai đạt {raceTo} điểm

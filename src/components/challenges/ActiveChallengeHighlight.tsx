@@ -214,6 +214,8 @@ export const ActiveChallengeHighlight: React.FC<ActiveChallengeHighlightProps> =
           challengeId={selectedChallenge.id}
           isChallenger={user?.id === selectedChallenge.challenger_id}
           raceTo={selectedChallenge.race_to}
+          challengerName={selectedChallenge.challenger_profile?.full_name || 'Challenger'}
+          opponentName={selectedChallenge.opponent_profile?.full_name || 'Opponent'}
         />
       )}
     </>
