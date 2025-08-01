@@ -6,18 +6,15 @@
 // Performance monitoring
 export const performanceMonitor = {
   // Measure component render time
-  measureRender: (
-    componentName: string,
-    renderFn: () => React.ReactElement
-  ) => {
+  measureRender: (componentName: string, renderFn: () => React.ReactElement) => {
     const start = performance.now();
     const result = renderFn();
     const end = performance.now();
-
+    
     if (process.env.NODE_ENV === 'development') {
       console.log(`${componentName} render time: ${end - start}ms`);
     }
-
+    
     return result;
   },
 
@@ -46,11 +43,7 @@ export const performanceMonitor = {
 // Bundle size tracking
 export const bundleMonitor = {
   // Track lazy loading success
-  trackLazyLoad: (
-    componentName: string,
-    success: boolean,
-    loadTime?: number
-  ) => {
+  trackLazyLoad: (componentName: string, success: boolean, loadTime?: number) => {
     if (process.env.NODE_ENV === 'development') {
       console.log(`Lazy load ${componentName}:`, { success, loadTime });
     }
@@ -94,11 +87,9 @@ export const optimizationHelpers = {
   },
 
   // Intersection Observer for lazy loading
-  createLazyObserver: (
-    callback: (entry: IntersectionObserverEntry) => void
-  ) => {
+  createLazyObserver: (callback: (entry: IntersectionObserverEntry) => void) => {
     return new IntersectionObserver(
-      entries => {
+      (entries) => {
         entries.forEach(callback);
       },
       {
@@ -121,8 +112,8 @@ export const imageOptimization = {
 
   // Lazy load images
   lazyLoadImage: (img: HTMLImageElement, src: string) => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           img.src = src;
           img.classList.remove('lazy');
@@ -137,10 +128,7 @@ export const imageOptimization = {
 // Network optimization
 export const networkOptimization = {
   // Prefetch critical resources
-  prefetchResource: (
-    href: string,
-    type: 'script' | 'style' | 'image' = 'script'
-  ) => {
+  prefetchResource: (href: string, type: 'script' | 'style' | 'image' = 'script') => {
     const link = document.createElement('link');
     link.rel = 'prefetch';
     link.href = href;
@@ -149,10 +137,7 @@ export const networkOptimization = {
   },
 
   // Preload critical resources
-  preloadResource: (
-    href: string,
-    type: 'script' | 'style' | 'image' = 'script'
-  ) => {
+  preloadResource: (href: string, type: 'script' | 'style' | 'image' = 'script') => {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.href = href;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,17 +11,15 @@ interface ClubMobileLayoutProps {
   children?: React.ReactNode;
 }
 
-export const ClubMobileLayout: React.FC<ClubMobileLayoutProps> = ({
-  children,
-}) => {
+export const ClubMobileLayout: React.FC<ClubMobileLayoutProps> = ({ children }) => {
   const { user } = useAuth();
   const { isClubOwner, clubProfile, isLoading } = useClubRole();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   if (isLoading) {
     return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -30,17 +29,19 @@ export const ClubMobileLayout: React.FC<ClubMobileLayoutProps> = ({
   }
 
   return (
-    <div className='min-h-screen bg-background'>
-      <ClubMobileHeader
+    <div className="min-h-screen bg-background">
+      <ClubMobileHeader 
         onMenuClick={() => setIsDrawerOpen(true)}
         clubProfile={clubProfile}
       />
-
-      <main className='pb-16 pt-2 px-4'>{children || <Outlet />}</main>
-
+      
+      <main className="pb-16 pt-2 px-4">
+        {children || <Outlet />}
+      </main>
+      
       <ClubMobileNavigation />
-
-      <ClubMobileDrawer
+      
+      <ClubMobileDrawer 
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         clubProfile={clubProfile}

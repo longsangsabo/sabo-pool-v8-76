@@ -1,11 +1,6 @@
+
 import { useState } from 'react';
-import {
-  QRCode,
-  QRScanHistory,
-  TableQRCode,
-  QuickMatch,
-  CreateQuickMatchRequest,
-} from '../types/qr';
+import { QRCode, QRScanHistory, TableQRCode, QuickMatch, CreateQuickMatchRequest } from '../types/qr';
 
 export const useQRSystem = () => {
   const [qrCodes, setQrCodes] = useState<QRCode[]>([]);
@@ -60,8 +55,10 @@ export const useQRSystem = () => {
 
   const updateQRCode = async (id: string, data: any) => {
     try {
-      setQrCodes(prev =>
-        prev.map(qr => (qr.id === id ? { ...qr, ...data } : qr))
+      setQrCodes(prev => 
+        prev.map(qr => 
+          qr.id === id ? { ...qr, ...data } : qr
+        )
       );
     } catch (err) {
       setError('Failed to update QR code');
@@ -109,7 +106,7 @@ export const useQRSystem = () => {
           description: 'Test Club',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        },
+        }
       };
       return mockTable;
     } catch (err) {
@@ -120,9 +117,7 @@ export const useQRSystem = () => {
     }
   };
 
-  const scanPlayerQR = async (
-    qrCode: string
-  ): Promise<{ user_id: string } | null> => {
+  const scanPlayerQR = async (qrCode: string): Promise<{ user_id: string } | null> => {
     setLoading(true);
     try {
       // Mock player QR scan
@@ -135,9 +130,7 @@ export const useQRSystem = () => {
     }
   };
 
-  const createQuickMatch = async (
-    request: CreateQuickMatchRequest
-  ): Promise<QuickMatch | null> => {
+  const createQuickMatch = async (request: CreateQuickMatchRequest): Promise<QuickMatch | null> => {
     setLoading(true);
     try {
       // Mock quick match creation
@@ -165,10 +158,7 @@ export const useQRSystem = () => {
     }
   };
 
-  const generateQRCode = async (
-    type: 'player' | 'table',
-    data: string
-  ): Promise<QRCode | null> => {
+  const generateQRCode = async (type: 'player' | 'table', data: string): Promise<QRCode | null> => {
     try {
       const mockQR: QRCode = {
         id: Date.now().toString(),
@@ -193,13 +183,12 @@ export const useQRSystem = () => {
     }
   };
 
-  const updateQRCodeStatus = async (
-    id: string,
-    isActive: boolean
-  ): Promise<void> => {
+  const updateQRCodeStatus = async (id: string, isActive: boolean): Promise<void> => {
     try {
-      setQrCodes(prev =>
-        prev.map(qr => (qr.id === id ? { ...qr, is_active: isActive } : qr))
+      setQrCodes(prev => 
+        prev.map(qr => 
+          qr.id === id ? { ...qr, is_active: isActive } : qr
+        )
       );
     } catch (err) {
       setError('Failed to update QR code status');

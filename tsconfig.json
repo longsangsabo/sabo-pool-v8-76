@@ -14,9 +14,6 @@
     "skipLibCheck": true,
     "allowJs": true,
     "noUnusedLocals": false,
-    "strictNullChecks": false,
-    // ✅ Performance optimizations
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "strictNullChecks": false
   }
 }

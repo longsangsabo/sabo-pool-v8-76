@@ -1,10 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-} from 'react';
+
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useTournamentRegistrations } from '@/hooks/useTournamentRegistrations';
 import { useTournamentGlobal } from './TournamentGlobalContext';
 import { useModuleLoading } from './LoadingStateContext';
@@ -14,34 +9,30 @@ interface TournamentStateContextType {
   selectedTournamentId: string;
   setSelectedTournamentId: (id: string) => void;
   selectedTournament: any;
-
+  
   // Tournament data (inherited from global)
   tournaments: any[];
   loading: boolean;
   refetchTournaments: () => void;
-
+  
   // Registrations for selected tournament
   registrations: any[];
   registrationsLoading: boolean;
   fetchRegistrations: () => void;
-
+  
   // Participants (processed registrations)
   participants: any[];
-
+  
   // Utility functions
   refreshAll: () => void;
 }
 
-const TournamentStateContext = createContext<
-  TournamentStateContextType | undefined
->(undefined);
+const TournamentStateContext = createContext<TournamentStateContextType | undefined>(undefined);
 
 export const useTournamentState = () => {
   const context = useContext(TournamentStateContext);
   if (!context) {
-    throw new Error(
-      'useTournamentState must be used within a TournamentStateProvider'
-    );
+    throw new Error('useTournamentState must be used within a TournamentStateProvider');
   }
   return context;
 };
@@ -51,9 +42,10 @@ interface TournamentStateProviderProps {
   clubId?: string;
 }
 
-export const TournamentStateProvider: React.FC<
-  TournamentStateProviderProps
-> = ({ children, clubId }) => {
+export const TournamentStateProvider: React.FC<TournamentStateProviderProps> = ({ 
+  children, 
+  clubId 
+}) => {
   // Use global tournament state
   const {
     selectedTournamentId,
@@ -62,12 +54,11 @@ export const TournamentStateProvider: React.FC<
     tournaments,
     loading,
     refreshTournaments,
-    availableTournaments,
+    availableTournaments
   } = useTournamentGlobal();
 
   // Use module-specific loading for registrations
-  const { loading: registrationsLoading, setLoading: setRegistrationsLoading } =
-    useModuleLoading('registrations');
+  const { loading: registrationsLoading, setLoading: setRegistrationsLoading } = useModuleLoading('registrations');
 
   // Auto-select first tournament if none selected
   useEffect(() => {
@@ -77,27 +68,18 @@ export const TournamentStateProvider: React.FC<
   }, [selectedTournamentId, availableTournaments, setSelectedTournamentId]);
 
   // Registrations for selected tournament
-  const { registrations, fetchRegistrations } = useTournamentRegistrations(
-    selectedTournamentId || ''
-  );
+  const { 
+    registrations, 
+    fetchRegistrations 
+  } = useTournamentRegistrations(selectedTournamentId || '');
 
   console.log('🏆 [TournamentStateContext] Debug:', {
     clubId,
     totalTournaments: tournaments.length,
     availableTournaments: availableTournaments.length,
     selectedTournamentId,
-    tournaments: tournaments.map(t => ({
-      id: t.id,
-      name: t.name,
-      club_id: t.club_id,
-      status: t.status,
-    })),
-    filteredList: availableTournaments.map(t => ({
-      id: t.id,
-      name: t.name,
-      club_id: t.club_id,
-      status: t.status,
-    })),
+    tournaments: tournaments.map(t => ({ id: t.id, name: t.name, club_id: t.club_id, status: t.status })),
+    filteredList: availableTournaments.map(t => ({ id: t.id, name: t.name, club_id: t.club_id, status: t.status }))
   });
 
   // Process participants from registrations
@@ -106,15 +88,11 @@ export const TournamentStateProvider: React.FC<
     .map((r, index) => ({
       id: r.user_id,
       name: r.player?.full_name || r.player?.display_name || 'Unknown Player',
-      displayName:
-        r.player?.display_name || r.player?.full_name || 'Unknown Player',
-      rank:
-        (r.player as any)?.verified_rank ||
-        (r.player as any)?.current_rank ||
-        'Unranked',
+      displayName: r.player?.display_name || r.player?.full_name || 'Unknown Player',
+      rank: (r.player as any)?.verified_rank || (r.player as any)?.current_rank || 'Unranked',
       avatarUrl: r.player?.avatar_url,
       elo: r.player?.elo || 1000,
-      registrationOrder: (r as any)?.priority_order || index + 1,
+      registrationOrder: (r as any)?.priority_order || (index + 1)
     }))
     .sort((a, b) => {
       if (a.registrationOrder !== b.registrationOrder) {
@@ -141,7 +119,7 @@ export const TournamentStateProvider: React.FC<
     registrationsLoading,
     fetchRegistrations,
     participants,
-    refreshAll,
+    refreshAll
   };
 
   return (

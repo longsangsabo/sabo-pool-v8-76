@@ -37,13 +37,11 @@ export const useAdminUsers = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('profiles')
-        .select(
-          `
+        .select(`
           id, user_id, full_name, email, phone, verified_rank, elo, skill_level,
           is_demo_user, ban_status, ban_reason, role, is_admin, city,
           created_at, updated_at
-        `
-        )
+        `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -54,7 +52,7 @@ export const useAdminUsers = () => {
         club_id: null,
         rank_verified_at: null,
         rank_verified_by: null,
-        role: user.role || 'player',
+        role: user.role || 'player'
       }));
 
       setUsers(formattedUsers);
@@ -63,7 +61,7 @@ export const useAdminUsers = () => {
       toast({
         title: 'Lỗi',
         description: 'Không thể tải danh sách người dùng',
-        variant: 'destructive',
+        variant: 'destructive'
       });
     } finally {
       setIsLoading(false);
@@ -75,12 +73,7 @@ export const useAdminUsers = () => {
   }, []);
 
   const updateUserBanMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      banStatus,
-      banReason,
-      banExpiresAt,
-    }: {
+    mutationFn: async ({ userId, banStatus, banReason, banExpiresAt }: {
       userId: string;
       banStatus: string;
       banReason?: string | null;
@@ -92,7 +85,7 @@ export const useAdminUsers = () => {
           ban_status: banStatus,
           ban_reason: banReason,
           banned_at: banStatus === 'banned' ? new Date().toISOString() : null,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         })
         .eq('user_id', userId);
 
@@ -101,7 +94,7 @@ export const useAdminUsers = () => {
     onSuccess: () => {
       toast({
         title: 'Thành công',
-        description: 'Đã cập nhật trạng thái người dùng',
+        description: 'Đã cập nhật trạng thái người dùng'
       });
       loadUsers();
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
@@ -109,20 +102,22 @@ export const useAdminUsers = () => {
     onError: (error: any) => {
       toast({
         title: 'Lỗi',
-        description:
-          error.message || 'Không thể cập nhật trạng thái người dùng',
-        variant: 'destructive',
+        description: error.message || 'Không thể cập nhật trạng thái người dùng',
+        variant: 'destructive'
       });
-    },
+    }
   });
 
   const updateUserRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
+    mutationFn: async ({ userId, role }: {
+      userId: string;
+      role: string;
+    }) => {
       const { error } = await supabase
         .from('profiles')
         .update({
           role: role,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         })
         .eq('user_id', userId);
 
@@ -131,7 +126,7 @@ export const useAdminUsers = () => {
     onSuccess: () => {
       toast({
         title: 'Thành công',
-        description: 'Đã cập nhật quyền người dùng',
+        description: 'Đã cập nhật quyền người dùng'
       });
       loadUsers();
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
@@ -140,9 +135,9 @@ export const useAdminUsers = () => {
       toast({
         title: 'Lỗi',
         description: error.message || 'Không thể cập nhật quyền người dùng',
-        variant: 'destructive',
+        variant: 'destructive'
       });
-    },
+    }
   });
 
   return {
@@ -152,6 +147,6 @@ export const useAdminUsers = () => {
     updateUserRole: updateUserRoleMutation.mutate,
     isUpdatingBan: updateUserBanMutation.isPending,
     isUpdatingRole: updateUserRoleMutation.isPending,
-    refetch: loadUsers,
+    refetch: loadUsers
   };
 };

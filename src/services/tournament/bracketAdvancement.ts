@@ -1,3 +1,4 @@
+
 /**
  * TOURNAMENT BRACKET ADVANCEMENT SERVICE
  * Handles automatic winner progression in tournament brackets
@@ -24,7 +25,7 @@ export async function advanceWinnerToNextRound(
 ): Promise<AdvancementResult> {
   try {
     console.log('🎯 Using new fixed advance function for match:', matchId);
-
+    
     // Get tournament ID first
     const { data: matchData, error: matchError } = await supabase
       .from('tournament_matches')
@@ -36,33 +37,30 @@ export async function advanceWinnerToNextRound(
       console.error('❌ Error getting tournament ID:', matchError);
       return {
         success: false,
-        error: 'Could not find tournament for match',
+        error: 'Could not find tournament for match'
       };
     }
 
     // Use proper repair function with tournament ID
-    const { data, error } = await supabase.rpc(
-      'repair_double_elimination_bracket',
-      {
-        p_tournament_id: matchData.tournament_id,
-      }
-    );
+    const { data, error } = await supabase.rpc('repair_double_elimination_bracket', {
+      p_tournament_id: matchData.tournament_id
+    });
 
     if (error) {
       console.error('❌ Error in advance_winner_to_next_round:', error);
       return {
         success: false,
-        error: error.message,
+        error: error.message
       };
     }
 
     console.log('✅ Advancement result:', data);
-    return data as unknown as AdvancementResult;
+    return (data as unknown) as AdvancementResult;
   } catch (error: any) {
     console.error('❌ Exception in advanceWinnerToNextRound:', error);
     return {
       success: false,
-      error: error.message,
+      error: error.message
     };
   }
 }
@@ -89,7 +87,7 @@ export async function checkTournamentReadiness(
 
     return {
       ready: incompleteMatches.length === 0,
-      incompleteMatches: incompleteMatches.length,
+      incompleteMatches: incompleteMatches.length
     };
   } catch (error) {
     console.error('❌ Exception checking tournament readiness:', error);
@@ -100,9 +98,7 @@ export async function checkTournamentReadiness(
 /**
  * Fix bracket progression for existing tournaments with completed matches
  */
-export async function fixBracketProgression(
-  tournamentId: string
-): Promise<AdvancementResult> {
+export async function fixBracketProgression(tournamentId: string): Promise<AdvancementResult> {
   try {
     console.log('🔧 Fixing bracket progression for tournament:', tournamentId);
 
@@ -121,32 +117,23 @@ export async function fixBracketProgression(
       return { success: false, error: matchError.message };
     }
 
-    console.log(
-      '🎯 Found completed matches to process:',
-      completedMatches?.length || 0
-    );
+    console.log('🎯 Found completed matches to process:', completedMatches?.length || 0);
 
     // Process each completed match for advancement
     let successCount = 0;
-    const errors: string[] = [];
+    let errors: string[] = [];
 
     for (const match of completedMatches || []) {
       try {
         const result = await advanceWinnerToNextRound(match.id, true);
         if (result.success) {
           successCount++;
-          console.log(
-            `✅ Advanced winner from Round ${match.round_number} Match ${match.match_number}`
-          );
+          console.log(`✅ Advanced winner from Round ${match.round_number} Match ${match.match_number}`);
         } else {
-          errors.push(
-            `Round ${match.round_number} Match ${match.match_number}: ${result.error}`
-          );
+          errors.push(`Round ${match.round_number} Match ${match.match_number}: ${result.error}`);
         }
       } catch (error: any) {
-        errors.push(
-          `Round ${match.round_number} Match ${match.match_number}: ${error.message}`
-        );
+        errors.push(`Round ${match.round_number} Match ${match.match_number}: ${error.message}`);
       }
     }
 
@@ -156,16 +143,15 @@ export async function fixBracketProgression(
 
     return {
       success: successCount > 0,
-      message:
-        errors.length > 0
-          ? `Đã sửa ${successCount} trận, ${errors.length} lỗi`
-          : `Đã sửa thành công ${successCount} trận đấu`,
+      message: errors.length > 0 
+        ? `Đã sửa ${successCount} trận, ${errors.length} lỗi`
+        : `Đã sửa thành công ${successCount} trận đấu`
     };
   } catch (error: any) {
     console.error('❌ Exception in fixBracketProgression:', error);
     return {
       success: false,
-      error: error.message,
+      error: error.message
     };
   }
 }
@@ -173,14 +159,9 @@ export async function fixBracketProgression(
 /**
  * Auto-advance all completed matches in a tournament
  */
-export async function autoAdvanceCompletedMatches(
-  tournamentId: string
-): Promise<void> {
-  console.log(
-    '🔄 Auto-advancing completed matches for tournament:',
-    tournamentId
-  );
-
+export async function autoAdvanceCompletedMatches(tournamentId: string): Promise<void> {
+  console.log('🔄 Auto-advancing completed matches for tournament:', tournamentId);
+  
   try {
     const result = await fixBracketProgression(tournamentId);
     if (result.success) {

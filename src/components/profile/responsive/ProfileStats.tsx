@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TechStatCard } from '@/components/ui/sabo-tech-global';
 import { Trophy, Target, Users, Star, TrendingUp } from 'lucide-react';
@@ -8,10 +9,7 @@ interface ProfileStatsProps {
   className?: string;
 }
 
-export const ProfileStats: React.FC<ProfileStatsProps> = ({
-  profile,
-  className = '',
-}) => {
+export const ProfileStats: React.FC<ProfileStatsProps> = ({ profile, className = '' }) => {
   const { isMobile } = useOptimizedResponsive();
 
   const stats = [
@@ -42,9 +40,9 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({
     return (
       <div className={`profile-stats-horizontal ${className}`}>
         {stats.map((stat, index) => (
-          <div key={index} className='stat-card-compact'>
-            <div className='stat-number'>{stat.value}</div>
-            <div className='stat-label'>{stat.subtitle}</div>
+          <div key={index} className="stat-card-compact">
+            <div className="stat-number">{stat.value}</div>
+            <div className="stat-label">{stat.subtitle}</div>
           </div>
         ))}
       </div>

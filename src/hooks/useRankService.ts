@@ -1,10 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { rankService } from '@/services/rankService';
-import type {
-  DatabaseRankDefinition,
-  TournamentReward,
-  SpaReward,
-} from '@/services/rankService';
+import type { DatabaseRankDefinition, TournamentReward, SpaReward } from '@/services/rankService';
 
 /**
  * Hook to get all rank definitions
@@ -66,10 +62,7 @@ export const useRanksByGroup = () => {
 /**
  * Hook to get tournament rewards for a rank
  */
-export const useTournamentRewards = (
-  rankCode: string,
-  tournamentType: string = 'regular'
-) => {
+export const useTournamentRewards = (rankCode: string, tournamentType: string = 'regular') => {
   return useQuery({
     queryKey: ['tournament-rewards', rankCode, tournamentType],
     queryFn: () => rankService.getTournamentRewards(),
@@ -111,7 +104,7 @@ export const useRankProgression = (currentRank: string) => {
     queryFn: async () => {
       const [nextRank, previousRank] = await Promise.all([
         rankService.getNextRank(currentRank),
-        rankService.getPreviousRank(currentRank),
+        rankService.getPreviousRank(currentRank)
       ]);
       return { nextRank, previousRank };
     },
@@ -125,7 +118,7 @@ export const useRankProgression = (currentRank: string) => {
  */
 export const useInvalidateRanks = () => {
   const queryClient = useQueryClient();
-
+  
   return () => {
     rankService.clearCache();
     queryClient.invalidateQueries({ queryKey: ['ranks'] });

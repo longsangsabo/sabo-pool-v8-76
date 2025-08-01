@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Crown } from 'lucide-react';
@@ -28,18 +29,15 @@ export const PaymentButton = ({
 
     setIsProcessing(true);
     try {
-      const { data, error } = await supabase.functions.invoke(
-        'create-payment',
-        {
-          body: {
-            userId: user.id,
-            membershipType,
-            amount,
-            type: 'membership',
-            description: `Nâng cấp ${membershipType} - ${amount.toLocaleString('vi-VN')} VNĐ`,
-          },
-        }
-      );
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          userId: user.id,
+          membershipType,
+          amount,
+          type: 'membership',
+          description: `Nâng cấp ${membershipType} - ${amount.toLocaleString('vi-VN')} VNĐ`,
+        },
+      });
 
       if (error) throw error;
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Card,
@@ -81,8 +82,8 @@ export const Season2Info: React.FC = () => {
           </CardTitle>
           <CardDescription className='text-blue-100'>
             Thời gian:{' '}
-            {new Date(currentSeasonInfo.start_date).toLocaleDateString('vi-VN')}{' '}
-            - {new Date(currentSeasonInfo.end_date).toLocaleDateString('vi-VN')}
+            {new Date(currentSeasonInfo.start_date).toLocaleDateString('vi-VN')} -{' '}
+            {new Date(currentSeasonInfo.end_date).toLocaleDateString('vi-VN')}
           </CardDescription>
         </CardHeader>
         <CardContent>

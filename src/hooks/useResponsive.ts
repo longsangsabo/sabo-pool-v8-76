@@ -1,3 +1,4 @@
+
 import { useOptimizedResponsive } from './useOptimizedResponsive';
 
 export type Breakpoint = 'mobile' | 'tablet' | 'desktop';

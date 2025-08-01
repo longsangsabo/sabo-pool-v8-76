@@ -7,9 +7,7 @@ export interface SoftDeleteOptions {
 }
 
 export const SoftDeleteUtils = {
-  getSoftDeleteFilter: (options: SoftDeleteOptions) => ({
-    table: options.table,
-  }),
+  getSoftDeleteFilter: (options: SoftDeleteOptions) => ({ table: options.table }),
   applySoftDeleteFilter: () => true,
 };
 

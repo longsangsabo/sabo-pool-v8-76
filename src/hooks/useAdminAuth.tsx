@@ -18,9 +18,7 @@ export const useAdminAuth = () => {
         navigate('/auth?mode=login&redirect=/admin');
       } else if (isAdmin === false) {
         // Temporary bypass for admin emails during debug
-        const isAdminEmail =
-          user?.email === 'longsangsabo@gmail.com' ||
-          user?.email === 'longsang063@gmail.com';
+        const isAdminEmail = user?.email === 'longsangsabo@gmail.com' || user?.email === 'longsang063@gmail.com';
         if (!isAdminEmail) {
           navigate('/dashboard');
         }
@@ -30,15 +28,8 @@ export const useAdminAuth = () => {
 
   return {
     user,
-    isAdmin:
-      isAdmin ||
-      user?.email === 'longsangsabo@gmail.com' ||
-      user?.email === 'longsang063@gmail.com',
+    isAdmin: isAdmin || (user?.email === 'longsangsabo@gmail.com' || user?.email === 'longsang063@gmail.com'),
     loading: authLoading || adminLoading,
-    isAuthenticated:
-      !!user &&
-      (isAdmin ||
-        user?.email === 'longsangsabo@gmail.com' ||
-        user?.email === 'longsang063@gmail.com'),
+    isAuthenticated: !!user && (isAdmin || (user?.email === 'longsangsabo@gmail.com' || user?.email === 'longsang063@gmail.com')),
   };
 };

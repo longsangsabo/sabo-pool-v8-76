@@ -23,7 +23,7 @@ import { vi } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 
 const NotificationsPage = () => {
-  const { notifications, isLoading, markAsRead, markAllAsRead, unreadCount } =
+  const { notifications, isLoading, markAsRead, markAllAsRead, unreadCount } = 
     useEnhancedNotifications();
   const [activeTab, setActiveTab] = useState('all');
   const navigate = useNavigate();
@@ -82,10 +82,7 @@ const NotificationsPage = () => {
         );
       case 'high':
         return (
-          <Badge
-            variant='secondary'
-            className='text-xs bg-orange-100 text-orange-800'
-          >
+          <Badge variant='secondary' className='text-xs bg-orange-100 text-orange-800'>
             Quan trọng
           </Badge>
         );
@@ -98,7 +95,7 @@ const NotificationsPage = () => {
     if (!notification.is_read) {
       markAsRead.mutate(notification.id);
     }
-
+    
     if (notification.action_url) {
       navigate(notification.action_url);
     }
@@ -122,7 +119,9 @@ const NotificationsPage = () => {
     <div className='min-h-screen bg-gray-50 py-8'>
       <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-8'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-2'>Thông báo</h1>
+          <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+            Thông báo
+          </h1>
           <p className='text-gray-600'>
             Quản lý và theo dõi tất cả thông báo của bạn
           </p>
@@ -135,15 +134,17 @@ const NotificationsPage = () => {
                 <Bell className='h-5 w-5' />
                 Thông báo
                 {unreadCount > 0 && (
-                  <Badge className='bg-red-500 text-white'>{unreadCount}</Badge>
+                  <Badge className='bg-red-500 text-white'>
+                    {unreadCount}
+                  </Badge>
                 )}
               </CardTitle>
-
+              
               <div className='flex items-center gap-2'>
                 {unreadCount > 0 && (
-                  <Button
-                    variant='outline'
-                    size='sm'
+                  <Button 
+                    variant='outline' 
+                    size='sm' 
                     onClick={() => markAllAsRead.mutate()}
                     disabled={markAllAsRead.isPending}
                   >
@@ -186,8 +187,8 @@ const NotificationsPage = () => {
                         <div
                           key={notification.id}
                           className={`p-4 transition-colors cursor-pointer hover:bg-gray-50 ${
-                            !notification.is_read
-                              ? 'bg-blue-50 border-l-4 border-l-blue-500'
+                            !notification.is_read 
+                              ? 'bg-blue-50 border-l-4 border-l-blue-500' 
                               : ''
                           }`}
                           onClick={() => handleNotificationClick(notification)}
@@ -216,13 +217,10 @@ const NotificationsPage = () => {
 
                               <div className='flex items-center justify-between'>
                                 <span className='text-xs text-gray-500'>
-                                  {formatDistanceToNow(
-                                    new Date(notification.created_at),
-                                    {
-                                      addSuffix: true,
-                                      locale: vi,
-                                    }
-                                  )}
+                                  {formatDistanceToNow(new Date(notification.created_at), {
+                                    addSuffix: true,
+                                    locale: vi,
+                                  })}
                                 </span>
 
                                 <div className='flex items-center gap-1'>
@@ -230,7 +228,7 @@ const NotificationsPage = () => {
                                     <Button
                                       variant='ghost'
                                       size='sm'
-                                      onClick={e => {
+                                      onClick={(e) => {
                                         e.stopPropagation();
                                         markAsRead.mutate(notification.id);
                                       }}
@@ -242,7 +240,7 @@ const NotificationsPage = () => {
                                   <Button
                                     variant='ghost'
                                     size='sm'
-                                    onClick={e => {
+                                    onClick={(e) => {
                                       e.stopPropagation();
                                       // TODO: Add delete functionality
                                     }}

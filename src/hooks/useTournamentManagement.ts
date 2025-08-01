@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from './useAuth';
 import { toast as sonnerToast } from 'sonner';
 
@@ -30,9 +30,7 @@ interface TournamentRegistration {
 export function useTournamentManagement(tournamentId: string) {
   const { user } = useAuth();
   const [tournament, setTournament] = useState<Tournament | null>(null);
-  const [registrations, setRegistrations] = useState<TournamentRegistration[]>(
-    []
-  );
+  const [registrations, setRegistrations] = useState<TournamentRegistration[]>([]);
   const [hasBracket, setHasBracket] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -42,12 +40,10 @@ export function useTournamentManagement(tournamentId: string) {
     try {
       const { data, error } = await supabase
         .from('tournaments')
-        .select(
-          `
+        .select(`
           *,
           club_profiles(*)
-        `
-        )
+        `)
         .eq('id', tournamentId)
         .single();
 
@@ -56,9 +52,9 @@ export function useTournamentManagement(tournamentId: string) {
     } catch (error) {
       console.error('Error fetching tournament:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to load tournament details',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load tournament details",
+        variant: "destructive",
       });
     }
   }, [tournamentId, toast]);
@@ -67,15 +63,13 @@ export function useTournamentManagement(tournamentId: string) {
     try {
       const { data, error } = await supabase
         .from('tournament_registrations')
-        .select(
-          `
+        .select(`
           id,
           user_id,
           registration_status,
           created_at,
           profiles!tournament_registrations_user_id_fkey(full_name)
-        `
-        )
+        `)
         .eq('tournament_id', tournamentId)
         .eq('registration_status', 'confirmed')
         .order('created_at');
@@ -105,36 +99,33 @@ export function useTournamentManagement(tournamentId: string) {
 
   const generateBracket = async () => {
     try {
-      const { data, error } = await supabase.rpc(
-        'generate_single_elimination_bracket' as any,
-        {
-          p_tournament_id: tournamentId,
-        }
-      );
+      const { data, error } = await supabase.rpc('generate_single_elimination_bracket' as any, {
+        p_tournament_id: tournamentId
+      });
 
       if (error) throw error;
 
       if (data?.success) {
         await checkBracketExists();
         toast({
-          title: 'Success',
-          description: 'Tournament bracket generated successfully',
+          title: "Success",
+          description: "Tournament bracket generated successfully",
         });
         return true;
       } else {
         toast({
-          title: 'Error',
-          description: data?.error || 'Failed to generate bracket',
-          variant: 'destructive',
+          title: "Error",
+          description: data?.error || "Failed to generate bracket",
+          variant: "destructive",
         });
         return false;
       }
     } catch (error) {
       console.error('Error generating bracket:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to generate tournament bracket',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to generate tournament bracket",
+        variant: "destructive",
       });
       return false;
     }
@@ -146,12 +137,12 @@ export function useTournamentManagement(tournamentId: string) {
     try {
       setUpdating(true);
       console.log('Starting tournament with ID:', tournamentId);
-
+      
       const { error } = await supabase
         .from('tournaments')
-        .update({
+        .update({ 
           status: 'ongoing',
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         })
         .eq('id', tournamentId);
 
@@ -162,24 +153,24 @@ export function useTournamentManagement(tournamentId: string) {
 
       console.log('Tournament status updated successfully');
       await fetchTournament();
-
+      
       toast({
-        title: 'Tournament Started',
-        description: 'Tournament is now in progress',
+        title: "Tournament Started",
+        description: "Tournament is now in progress",
       });
-
+      
       // Also show sonner toast for better UX
-      sonnerToast.success('Giải đấu đã được bắt đầu thành công!');
-
+      sonnerToast.success("Giải đấu đã được bắt đầu thành công!");
+      
       return true;
     } catch (error) {
       console.error('Error starting tournament:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to start tournament',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to start tournament",
+        variant: "destructive",
       });
-      sonnerToast.error('Lỗi khi bắt đầu giải đấu');
+      sonnerToast.error("Lỗi khi bắt đầu giải đấu");
       return false;
     } finally {
       setUpdating(false);
@@ -187,33 +178,29 @@ export function useTournamentManagement(tournamentId: string) {
   };
 
   // Update tournament management status (merged from .tsx file)
-  const updateManagementStatus = useCallback(
-    async (newStatus: string) => {
-      if (!tournamentId || !user) return;
+  const updateManagementStatus = useCallback(async (newStatus: string) => {
+    if (!tournamentId || !user) return;
 
-      try {
-        setUpdating(true);
+    try {
+      setUpdating(true);
 
-        // Mock function call since it doesn't exist
-        console.log('Updating tournament management status:', {
-          p_tournament_id: tournamentId,
-          p_new_status: newStatus,
-          p_completed_by: user.id,
-        });
+      // Mock function call since it doesn't exist
+      console.log('Updating tournament management status:', {
+        p_tournament_id: tournamentId,
+        p_new_status: newStatus,
+        p_completed_by: user.id
+      });
 
-        sonnerToast.success(
-          `Đã cập nhật trạng thái giải đấu thành "${newStatus}"`
-        );
-        await fetchTournament();
-      } catch (error) {
-        console.error('Error updating tournament status:', error);
-        sonnerToast.error('Lỗi khi cập nhật trạng thái giải đấu');
-      } finally {
-        setUpdating(false);
-      }
-    },
-    [tournamentId, user, fetchTournament]
-  );
+      sonnerToast.success(`Đã cập nhật trạng thái giải đấu thành "${newStatus}"`);
+      await fetchTournament();
+
+    } catch (error) {
+      console.error('Error updating tournament status:', error);
+      sonnerToast.error('Lỗi khi cập nhật trạng thái giải đấu');
+    } finally {
+      setUpdating(false);
+    }
+  }, [tournamentId, user, fetchTournament]);
 
   const checkTournamentCompletion = async () => {
     try {
@@ -233,10 +220,10 @@ export function useTournamentManagement(tournamentId: string) {
         // Tournament is completed, update status
         await supabase
           .from('tournaments')
-          .update({
+          .update({ 
             status: 'completed',
             completed_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
           })
           .eq('id', tournamentId);
 
@@ -256,7 +243,7 @@ export function useTournamentManagement(tournamentId: string) {
       await Promise.all([
         fetchTournament(),
         fetchRegistrations(),
-        checkBracketExists(),
+        checkBracketExists()
       ]);
       setIsLoading(false);
     };
@@ -272,7 +259,7 @@ export function useTournamentManagement(tournamentId: string) {
           event: '*',
           schema: 'public',
           table: 'tournaments',
-          filter: `id=eq.${tournamentId}`,
+          filter: `id=eq.${tournamentId}`
         },
         () => {
           fetchTournament();
@@ -288,7 +275,7 @@ export function useTournamentManagement(tournamentId: string) {
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `tournament_id=eq.${tournamentId}`,
+          filter: `tournament_id=eq.${tournamentId}`
         },
         () => {
           fetchRegistrations();
@@ -318,6 +305,6 @@ export function useTournamentManagement(tournamentId: string) {
       fetchRegistrations();
       checkBracketExists();
     },
-    refetch: fetchTournament,
+    refetch: fetchTournament
   };
 }

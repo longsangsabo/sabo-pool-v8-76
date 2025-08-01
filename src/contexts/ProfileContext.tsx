@@ -40,12 +40,8 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(
-    null
-  );
+export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile | null>(null);
   const [clubProfile, setClubProfile] = useState<ClubProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useAuth();
@@ -58,7 +54,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     setIsLoading(true);
-
+    
     try {
       // Fetch player profile
       const { data: playerData, error: playerError } = await supabase
@@ -66,22 +62,22 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
-
+      
       if (playerError && playerError.code !== 'PGRST116') {
         throw playerError;
       }
-
+      
       if (playerData) {
         setPlayerProfile(playerData);
       }
-
+      
       // Always try to fetch club profile (user might have one regardless of role)
       const { data: clubData, error: clubError } = await supabase
         .from('club_profiles')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
-
+      
       if (!clubError && clubData) {
         setClubProfile(clubData);
         console.log('Club profile loaded:', clubData);
@@ -94,24 +90,24 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsLoading(false);
     }
   };
-
+  
   // Refresh profiles data
   const refreshProfiles = async () => {
     await fetchProfiles();
   };
-
+  
   // Initial fetch
   useEffect(() => {
     fetchProfiles();
   }, [user]);
-
+  
   return (
-    <ProfileContext.Provider
-      value={{
-        playerProfile,
-        clubProfile,
-        isLoading,
-        refreshProfiles,
+    <ProfileContext.Provider 
+      value={{ 
+        playerProfile, 
+        clubProfile, 
+        isLoading, 
+        refreshProfiles 
       }}
     >
       {children}

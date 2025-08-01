@@ -2,13 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface SaboTechBorderProps {
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'premium'
-    | 'rank';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'premium' | 'rank';
   rankLevel?: 'K' | 'I' | 'H' | 'G' | 'F' | 'E';
   interactive?: boolean;
   children: React.ReactNode;
@@ -18,9 +12,9 @@ export interface SaboTechBorderProps {
 
 /**
  * SABO Tech Border System Component
- *
+ * 
  * Advanced tech-style borders with animations and dynamic effects
- *
+ * 
  * @param variant - Border style variant
  * @param rankLevel - Specific rank for rank-based borders
  * @param interactive - Enable hover/interaction effects
@@ -34,13 +28,13 @@ export const SaboTechBorder: React.FC<SaboTechBorderProps> = ({
   interactive = false,
   children,
   className,
-  as: Component = 'div',
+  as: Component = 'div'
 }) => {
   const getBorderClass = () => {
     if (variant === 'rank' && rankLevel) {
       return `sabo-tech-border-rank-${rankLevel.toLowerCase()}`;
     }
-
+    
     switch (variant) {
       case 'primary':
         return 'sabo-tech-border-primary';
@@ -63,7 +57,11 @@ export const SaboTechBorder: React.FC<SaboTechBorderProps> = ({
     className
   );
 
-  return <Component className={classes}>{children}</Component>;
+  return (
+    <Component className={classes}>
+      {children}
+    </Component>
+  );
 };
 
 /**
@@ -75,7 +73,10 @@ export const SaboTechButton: React.FC<{
   className?: string;
   onClick?: () => void;
 }> = ({ children, className, onClick }) => (
-  <button className={cn('sabo-tech-button', className)} onClick={onClick}>
+  <button 
+    className={cn('sabo-tech-button', className)}
+    onClick={onClick}
+  >
     {children}
   </button>
 );
@@ -85,12 +86,7 @@ export const SaboTechCard: React.FC<{
   className?: string;
   premium?: boolean;
 }> = ({ children, className, premium = false }) => (
-  <div
-    className={cn(
-      premium ? 'sabo-tech-card-premium' : 'sabo-tech-card',
-      className
-    )}
-  >
+  <div className={cn(premium ? 'sabo-tech-card-premium' : 'sabo-tech-card', className)}>
     {children}
   </div>
 );

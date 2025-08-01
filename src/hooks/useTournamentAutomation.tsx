@@ -23,8 +23,7 @@ interface AutomationLog {
 }
 
 export const useTournamentAutomation = (tournamentId?: string) => {
-  const [automationStatus, setAutomationStatus] =
-    useState<AutomationStatus | null>(null);
+  const [automationStatus, setAutomationStatus] = useState<AutomationStatus | null>(null);
   const [automationLogs, setAutomationLogs] = useState<AutomationLog[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -32,40 +31,32 @@ export const useTournamentAutomation = (tournamentId?: string) => {
   const loadAutomationStatus = async (tId: string) => {
     try {
       setLoading(true);
-
+      
       // Mock automation logs since table doesn't exist
       const logs: any[] = [];
-
+      
       setAutomationLogs(logs || []);
 
       // Calculate automation status based on logs
-      const registrationAuto =
-        logs?.some(
-          log =>
-            log.automation_type === 'auto_close_registration' && log.success
-        ) || false;
+      const registrationAuto = logs?.some(log => 
+        log.automation_type === 'auto_close_registration' && log.success
+      ) || false;
+      
+      const bracketAuto = logs?.some(log => 
+        log.automation_type === 'auto_generate_bracket' && log.success
+      ) || false;
+      
+      const matchProgression = logs?.some(log => 
+        log.automation_type === 'auto_advance_winner' && log.success
+      ) || false;
+      
+      const completionAuto = logs?.some(log => 
+        log.automation_type === 'auto_complete_tournament' && log.success
+      ) || false;
 
-      const bracketAuto =
-        logs?.some(
-          log => log.automation_type === 'auto_generate_bracket' && log.success
-        ) || false;
-
-      const matchProgression =
-        logs?.some(
-          log => log.automation_type === 'auto_advance_winner' && log.success
-        ) || false;
-
-      const completionAuto =
-        logs?.some(
-          log =>
-            log.automation_type === 'auto_complete_tournament' && log.success
-        ) || false;
-
-      const errors =
-        logs
-          ?.filter(log => !log.success)
-          .map(log => log.error_message || `${log.automation_type} failed`)
-          .filter(Boolean) || [];
+      const errors = logs?.filter(log => !log.success)
+        .map(log => log.error_message || `${log.automation_type} failed`)
+        .filter(Boolean) || [];
 
       const lastRun = logs?.[0]?.created_at || null;
 
@@ -76,8 +67,9 @@ export const useTournamentAutomation = (tournamentId?: string) => {
         match_progression: matchProgression,
         completion_automation: completionAuto,
         last_automation_run: lastRun,
-        automation_errors: errors,
+        automation_errors: errors
       });
+
     } catch (error) {
       console.error('Error loading automation status:', error);
       toast.error('Không thể tải trạng thái tự động hóa');
@@ -88,42 +80,35 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
   // Force trigger specific automation
   const triggerAutomation = async (
-    tId: string,
-    automationType:
-      | 'close_registration'
-      | 'generate_bracket'
-      | 'start_tournament'
+    tId: string, 
+    automationType: 'close_registration' | 'generate_bracket' | 'start_tournament'
   ) => {
     try {
       setLoading(true);
-
+      
       switch (automationType) {
         case 'close_registration':
           const { error: closeError } = await supabase
             .from('tournaments')
-            .update({
+            .update({ 
               status: 'registration_closed',
-              updated_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             })
             .eq('id', tId);
-
+          
           if (closeError) throw closeError;
           toast.success('Đã đóng đăng ký thành công');
           break;
 
         case 'generate_bracket':
-          const { data: bracketResult, error: bracketError } =
-            await supabase.rpc('generate_single_elimination_bracket', {
-              p_tournament_id: tId,
-            });
-
+          const { data: bracketResult, error: bracketError } = await supabase
+            .rpc('generate_single_elimination_bracket', { p_tournament_id: tId });
+          
           if (bracketError) throw bracketError;
-
+          
           const result = bracketResult as any;
           if (result?.success) {
-            toast.success(
-              `Đã tạo bracket với ${result.matches_created} trận đấu`
-            );
+            toast.success(`Đã tạo bracket với ${result.matches_created} trận đấu`);
           } else {
             toast.error(result?.error || 'Không thể tạo bracket');
           }
@@ -132,12 +117,12 @@ export const useTournamentAutomation = (tournamentId?: string) => {
         case 'start_tournament':
           const { error: startError } = await supabase
             .from('tournaments')
-            .update({
+            .update({ 
               status: 'ongoing',
-              updated_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             })
             .eq('id', tId);
-
+          
           if (startError) throw startError;
           toast.success('Đã bắt đầu giải đấu');
           break;
@@ -145,6 +130,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
       // Reload automation status after trigger
       setTimeout(() => loadAutomationStatus(tId), 1000);
+      
     } catch (error) {
       console.error(`Error triggering ${automationType}:`, error);
       toast.error(`Lỗi khi thực hiện ${automationType}`);
@@ -163,13 +149,11 @@ export const useTournamentAutomation = (tournamentId?: string) => {
     try {
       setLoading(true);
 
-      const { data: result, error } = await supabase.rpc(
-        'emergency_complete_tournament_match',
-        {
+      const { data: result, error } = await supabase
+        .rpc('emergency_complete_tournament_match', {
           p_match_id: matchId,
-          p_winner_id: player1Score > player2Score ? 'player1' : 'player2',
-        }
-      );
+          p_winner_id: player1Score > player2Score ? 'player1' : 'player2'
+        });
 
       if (error) throw error;
 
@@ -198,21 +182,16 @@ export const useTournamentAutomation = (tournamentId?: string) => {
     const successfulRuns = automationLogs.filter(log => log.success).length;
     const successRate = (successfulRuns / totalRuns) * 100;
 
-    const automationTypes = [
-      ...new Set(automationLogs.map(log => log.automation_type)),
-    ];
+    const automationTypes = [...new Set(automationLogs.map(log => log.automation_type))];
     const typeMetrics = automationTypes.map(type => {
-      const typeLogs = automationLogs.filter(
-        log => log.automation_type === type
-      );
-      const typeSuccessRate =
-        (typeLogs.filter(log => log.success).length / typeLogs.length) * 100;
-
+      const typeLogs = automationLogs.filter(log => log.automation_type === type);
+      const typeSuccessRate = (typeLogs.filter(log => log.success).length / typeLogs.length) * 100;
+      
       return {
         type,
         runs: typeLogs.length,
         successRate: typeSuccessRate,
-        lastRun: typeLogs[0]?.created_at,
+        lastRun: typeLogs[0]?.created_at
       };
     });
 
@@ -227,8 +206,8 @@ export const useTournamentAutomation = (tournamentId?: string) => {
         .map(log => ({
           type: log.automation_type,
           error: log.error_message,
-          timestamp: log.created_at,
-        })),
+          timestamp: log.created_at
+        }))
     };
   };
 
@@ -245,6 +224,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
     loadAutomationStatus,
     triggerAutomation,
     emergencyCompleteMatch,
-    getAutomationMetrics: getAutomationMetrics(),
+    getAutomationMetrics: getAutomationMetrics()
   };
 };

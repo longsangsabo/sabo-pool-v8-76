@@ -1,3 +1,4 @@
+
 export interface SeasonHistory {
   id: string;
   user_id: string;
@@ -12,14 +13,14 @@ export interface SeasonHistory {
   peak_rank?: number;
   created_at: string;
   updated_at: string;
-
+  
   // Joined data
   profiles?: {
     nickname?: string;
     full_name?: string;
     avatar_url?: string;
   };
-
+  
   // Add nickname directly for easier access
   nickname?: string;
 }
@@ -92,8 +93,7 @@ export interface SeasonComparison {
     points_change: number;
     matches_change: number;
   };
-  top_players_change: Array<{
-    // Add missing property
+  top_players_change: Array<{ // Add missing property
     nickname: string;
     current_rank: number;
     previous_rank?: number;

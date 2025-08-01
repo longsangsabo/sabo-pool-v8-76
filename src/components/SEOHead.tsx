@@ -15,7 +15,8 @@ export const SEOHead = ({
   image = '/og-image.jpg',
   url = 'https://saboarena.com',
 }) => {
-  const fullTitle = title === 'SABO ARENA' ? title : `${title} | SABO ARENA`;
+  const fullTitle =
+    title === 'SABO ARENA' ? title : `${title} | SABO ARENA`;
 
   return (
     <Helmet>

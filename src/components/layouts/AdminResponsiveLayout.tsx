@@ -1,3 +1,4 @@
+
 import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { BREAKPOINTS } from '@/constants/breakpoints';
@@ -8,17 +9,23 @@ interface AdminResponsiveLayoutProps {
   children: React.ReactNode;
 }
 
-const AdminResponsiveLayoutBase: React.FC<AdminResponsiveLayoutProps> = ({
-  children,
-}) => {
+const AdminResponsiveLayoutBase: React.FC<AdminResponsiveLayoutProps> = ({ children }) => {
   const { width } = useOptimizedResponsive();
 
   // Early return pattern - admin uses desktop layout for tablet and up
   if (width >= BREAKPOINTS.mobile) {
-    return <AdminForceDesktopLayout>{children}</AdminForceDesktopLayout>;
+    return (
+      <AdminForceDesktopLayout>
+        {children}
+      </AdminForceDesktopLayout>
+    );
   }
 
-  return <AdminMobileLayout>{children}</AdminMobileLayout>;
+  return (
+    <AdminMobileLayout>
+      {children}
+    </AdminMobileLayout>
+  );
 };
 
 // Memoized for performance

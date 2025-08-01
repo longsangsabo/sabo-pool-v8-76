@@ -3,11 +3,10 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async req => {
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -27,12 +26,10 @@ serve(async req => {
     // Get transaction details
     const { data: transaction, error: transactionError } = await supabase
       .from('payment_transactions')
-      .select(
-        `
+      .select(`
         *,
         profiles!payment_transactions_user_id_fkey(full_name, email, phone)
-      `
-      )
+      `)
       .eq('id', transactionId)
       .single();
 
@@ -42,7 +39,7 @@ serve(async req => {
 
     // Generate receipt number if not exists
     const receiptNumber = `RCP-${transaction.transaction_ref}`;
-
+    
     // Check if receipt already exists
     let { data: existingReceipt } = await supabase
       .from('payment_receipts')
@@ -76,7 +73,7 @@ serve(async req => {
     // 1. Generate PDF using a service like jsPDF or Puppeteer
     // 2. Upload PDF to Supabase Storage
     // 3. Return the PDF URL
-
+    
     // For now, return the HTML content
     return new Response(
       JSON.stringify({
@@ -90,6 +87,7 @@ serve(async req => {
         status: 200,
       }
     );
+
   } catch (error) {
     console.error('Receipt generation error:', error);
     return new Response(
@@ -106,7 +104,7 @@ function generateReceiptHTML(transaction: any, receiptNumber: string): string {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND',
+      currency: 'VND'
     }).format(amount);
   };
 
@@ -180,14 +178,10 @@ function generateReceiptHTML(transaction: any, receiptNumber: string): string {
           
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p><strong>Trạng thái:</strong> ${getStatusLabel(transaction.status)}</p>
-            ${
-              transaction.refund_amount > 0
-                ? `
+            ${transaction.refund_amount > 0 ? `
               <p><strong>Số tiền đã hoàn:</strong> ${formatCurrency(transaction.refund_amount)}</p>
               <p><strong>Lý do hoàn tiền:</strong> ${transaction.refund_reason}</p>
-            `
-                : ''
-            }
+            ` : ''}
           </div>
         </div>
         
@@ -206,7 +200,7 @@ function getTransactionTypeLabel(type: string): string {
     membership: 'Nâng cấp thành viên',
     wallet_deposit: 'Nạp tiền vào ví',
     tournament_fee: 'Phí tham gia giải đấu',
-    club_payment: 'Thanh toán câu lạc bộ',
+    club_payment: 'Thanh toán câu lạc bộ'
   };
   return labels[type] || type;
 }
@@ -216,7 +210,7 @@ function getStatusLabel(status: string): string {
     success: 'Thành công',
     failed: 'Thất bại',
     pending: 'Đang xử lý',
-    refunded: 'Đã hoàn tiền',
+    refunded: 'Đã hoàn tiền'
   };
   return labels[status] || status;
 }

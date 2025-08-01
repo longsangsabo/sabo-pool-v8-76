@@ -1,3 +1,4 @@
+
 import { Tournament } from '@/types/tournament';
 
 export interface PrizeDistribution {
@@ -8,10 +9,7 @@ export interface PrizeDistribution {
  * Get prize amount for a specific position
  * Handles both formats: {"1": amount, "2": amount} and {"first_place": amount, "second_place": amount}
  */
-export const getPrizeForPosition = (
-  distribution: PrizeDistribution | null,
-  position: number
-): number => {
+export const getPrizeForPosition = (distribution: PrizeDistribution | null, position: number): number => {
   if (!distribution) return 0;
 
   // Try numeric position format first (test1 format)
@@ -23,9 +21,9 @@ export const getPrizeForPosition = (
   // Fall back to text format
   const textKeys: { [key: number]: string } = {
     1: 'first_place',
-    2: 'second_place',
+    2: 'second_place', 
     3: 'third_place',
-    4: 'fourth_place',
+    4: 'fourth_place'
   };
 
   const textKey = textKeys[position];
@@ -37,7 +35,7 @@ export const getPrizeForPosition = (
   if (distribution['participation'] !== undefined) {
     return Number(distribution['participation']) || 0;
   }
-
+  
   if (distribution['default'] !== undefined) {
     return Number(distribution['default']) || 0;
   }
@@ -61,9 +59,7 @@ export const calculateTotalPrizePool = (tournament: Tournament): number => {
 /**
  * Format prize distribution for display
  */
-export const formatPrizeDistribution = (
-  tournament: Tournament
-): Array<{ position: string; amount: number }> => {
+export const formatPrizeDistribution = (tournament: Tournament): Array<{position: string, amount: number}> => {
   // Note: prize_distribution removed - using tournament_prize_tiers table
   return [];
 };

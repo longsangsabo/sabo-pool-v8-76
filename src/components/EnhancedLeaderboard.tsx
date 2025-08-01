@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -32,7 +33,10 @@ import {
   TrendingDownIcon,
   BarChart3,
 } from 'lucide-react';
-import { getRankFromRating, type PlayerStats } from '../utils/eloCalculator';
+import {
+  getRankFromRating,
+  type PlayerStats,
+} from '../utils/eloCalculator';
 
 interface LeaderboardPlayer extends PlayerStats {
   username: string;

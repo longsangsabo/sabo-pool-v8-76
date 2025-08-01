@@ -1,15 +1,6 @@
 // Re-export from auth types to maintain compatibility
-export type {
-  User,
-  AuthContextType,
-  UserProfile,
-  ProfileFormData,
-} from './auth';
-export type {
-  PerformanceMetric,
-  APICallMetric,
-  PerformanceData,
-} from './performance';
+export type { User, AuthContextType, UserProfile, ProfileFormData } from './auth';
+export type { PerformanceMetric, APICallMetric, PerformanceData } from './performance'; 
 export type { EmailTemplate, MatchResult, PaymentDetails } from './email';
 export type { EloRule, EloRuleFormData, EloSystemInfo } from './elo';
 
@@ -87,14 +78,7 @@ export interface Challenge {
   handicap_1_rank?: number;
   handicap_05_rank?: number;
   message?: string;
-  status:
-    | 'pending'
-    | 'accepted'
-    | 'declined'
-    | 'ongoing'
-    | 'completed'
-    | 'cancelled'
-    | 'expired';
+  status: 'pending' | 'accepted' | 'declined' | 'ongoing' | 'completed' | 'cancelled' | 'expired';
   scheduled_time?: string;
   expires_at?: string;
   accepted_at?: string;
@@ -111,7 +95,7 @@ export interface Challenge {
   verified_at?: string;
   created_at: string;
   updated_at?: string;
-
+  
   // New consistent profile relations
   challenger_profile?: {
     id?: string;
@@ -140,11 +124,11 @@ export interface Challenge {
     name: string;
     address: string;
   };
-
+  
   // Admin fields
   admin_created_by?: string;
   admin_notes?: string;
-
+  
   // Legacy support for existing components - keep these for backward compatibility
   challenged_id?: string; // Alias for opponent_id - now OPTIONAL
   challenger?: {
@@ -306,23 +290,13 @@ export interface Tournament {
   id: string;
   name: string;
   description?: string;
-  tournament_type:
-    | 'single_elimination'
-    | 'double_elimination'
-    | 'round_robin'
-    | 'swiss';
+  tournament_type: 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss';
   game_format: '8_ball' | '9_ball' | '10_ball' | 'straight_pool';
   max_participants: number;
   current_participants: number;
   entry_fee: number;
   prize_pool: number;
-  status:
-    | 'upcoming'
-    | 'registration_open'
-    | 'registration_closed'
-    | 'ongoing'
-    | 'completed'
-    | 'cancelled';
+  status: 'upcoming' | 'registration_open' | 'registration_closed' | 'ongoing' | 'completed' | 'cancelled';
   tournament_start: string;
   tournament_end: string;
   registration_start: string;
@@ -351,11 +325,7 @@ export interface Tournament {
 export interface TournamentFormData {
   name: string;
   description?: string;
-  tournament_type:
-    | 'single_elimination'
-    | 'double_elimination'
-    | 'round_robin'
-    | 'swiss';
+  tournament_type: 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss';
   game_format: '8_ball' | '9_ball' | '10_ball' | 'straight_pool';
   max_participants: number;
   entry_fee: number;

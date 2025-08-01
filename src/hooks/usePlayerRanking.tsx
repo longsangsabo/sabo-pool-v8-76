@@ -51,9 +51,7 @@ export const usePlayerRanking = (playerId?: string) => {
   const { user } = useAuth();
   const currentPlayerId = playerId || user?.id;
 
-  const [playerRanking, setPlayerRanking] = useState<PlayerRanking | null>(
-    null
-  );
+  const [playerRanking, setPlayerRanking] = useState<PlayerRanking | null>(null);
   const [ranks, setRanks] = useState<Rank[]>([]);
   const [spaPointsLog, setSpaPointsLog] = useState<SPAPointsEntry[]>([]);
   const [rankingHistory, setRankingHistory] = useState<RankingHistory[]>([]);
@@ -79,12 +77,10 @@ export const usePlayerRanking = (playerId?: string) => {
 
     const { data, error } = await supabase
       .from('player_rankings')
-      .select(
-        `
+      .select(`
         *,
         rank:ranks(*)
-      `
-      )
+      `)
       .eq('user_id', currentPlayerId)
       .single();
 
@@ -138,27 +134,24 @@ export const usePlayerRanking = (playerId?: string) => {
     setError('');
 
     try {
-      const [ranksData, rankingData, pointsLogData, historyData] =
-        await Promise.all([
-          fetchRanks(),
-          fetchPlayerRanking(),
-          fetchSPAPointsLog(),
-          fetchRankingHistory(),
-        ]);
+      const [ranksData, rankingData, pointsLogData, historyData] = await Promise.all([
+        fetchRanks(),
+        fetchPlayerRanking(),
+        fetchSPAPointsLog(),
+        fetchRankingHistory()
+      ]);
 
       setRanks(ranksData as any);
       setPlayerRanking(rankingData as any);
-      setSpaPointsLog(
-        pointsLogData.map((item: any) => ({
-          id: item.id,
-          user_id: item.user_id,
-          source_type: item.category,
-          source_id: item.reference_id,
-          points_earned: item.points,
-          description: item.description,
-          created_at: item.created_at,
-        }))
-      );
+      setSpaPointsLog(pointsLogData.map((item: any) => ({
+        id: item.id,
+        user_id: item.user_id,
+        source_type: item.category,
+        source_id: item.reference_id,
+        points_earned: item.points,
+        description: item.description,
+        created_at: item.created_at
+      })));
       // Transform elo_history to ranking history format
       const transformedHistory = historyData.map((item: any) => ({
         id: item.id,
@@ -169,7 +162,7 @@ export const usePlayerRanking = (playerId?: string) => {
         total_points_earned: item.elo_change,
         season: 1,
         old_rank: null,
-        new_rank: null,
+        new_rank: null
       }));
       setRankingHistory(transformedHistory);
     } catch (err) {
@@ -187,7 +180,7 @@ export const usePlayerRanking = (playerId?: string) => {
       challenge: 0,
       checkin: 0,
       video: 0,
-      decay: 0,
+      decay: 0
     };
 
     spaPointsLog.forEach(entry => {
@@ -205,14 +198,14 @@ export const usePlayerRanking = (playerId?: string) => {
 
     const currentRankLevel = playerRanking.rank?.level || 1;
     const nextRank = ranks.find(r => r.level === currentRankLevel + 1);
-
+    
     if (!nextRank) {
       return {
         current: playerRanking.rank,
         next: null,
         progress: 100,
         pointsNeeded: 0,
-        pointsToNext: 0,
+        pointsToNext: 0
       };
     }
 
@@ -227,17 +220,16 @@ export const usePlayerRanking = (playerId?: string) => {
       next: nextRank,
       progress,
       pointsNeeded,
-      pointsToNext,
+      pointsToNext
     };
   };
 
   // Get daily challenge count
   const getDailyChallengeCount = () => {
     const today = new Date().toDateString();
-    return spaPointsLog.filter(
-      entry =>
-        entry.source_type === 'challenge' &&
-        new Date(entry.created_at).toDateString() === today
+    return spaPointsLog.filter(entry => 
+      entry.source_type === 'challenge' && 
+      new Date(entry.created_at).toDateString() === today
     ).length;
   };
 
@@ -248,13 +240,15 @@ export const usePlayerRanking = (playerId?: string) => {
     const beginnerRank = ranks.find(r => r.code === 'K');
     if (!beginnerRank) return;
 
-    const { error } = await supabase.from('player_rankings').insert({
-      user_id: currentPlayerId,
-      current_rank_id: beginnerRank.id,
-      spa_points: 0,
-      total_matches: 0,
-      wins: 0,
-    });
+    const { error } = await supabase
+      .from('player_rankings')
+      .insert({
+        user_id: currentPlayerId,
+        current_rank_id: beginnerRank.id,
+        spa_points: 0,
+        total_matches: 0,
+        wins: 0
+      });
 
     if (!error) {
       await loadData(); // Reload data
@@ -267,32 +261,24 @@ export const usePlayerRanking = (playerId?: string) => {
     // Subscribe to real-time changes
     const channel = supabase
       .channel('player-ranking-updates')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'player_rankings',
-          filter: `user_id=eq.${currentPlayerId}`,
-        },
-        () => {
-          console.log('Player ranking updated, reloading...');
-          loadData();
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'spa_points_log',
-          filter: `user_id=eq.${currentPlayerId}`,
-        },
-        () => {
-          console.log('SPA points updated, reloading...');
-          loadData();
-        }
-      )
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'player_rankings',
+        filter: `user_id=eq.${currentPlayerId}`
+      }, () => {
+        console.log('Player ranking updated, reloading...');
+        loadData();
+      })
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'spa_points_log',
+        filter: `user_id=eq.${currentPlayerId}`
+      }, () => {
+        console.log('SPA points updated, reloading...');
+        loadData();
+      })
       .subscribe();
 
     return () => {
@@ -311,6 +297,6 @@ export const usePlayerRanking = (playerId?: string) => {
     getRankProgress,
     getDailyChallengeCount,
     initializePlayerRanking,
-    refetch: loadData,
+    refetch: loadData
   };
 };

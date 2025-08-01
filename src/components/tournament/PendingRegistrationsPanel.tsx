@@ -7,9 +7,7 @@ interface PendingRegistrationsPanelProps {
   tournamentId: string;
 }
 
-export const PendingRegistrationsPanel: React.FC<
-  PendingRegistrationsPanelProps
-> = ({ tournamentId }) => {
+export const PendingRegistrationsPanel: React.FC<PendingRegistrationsPanelProps> = ({ tournamentId }) => {
   const [pendingRegistrations, setPendingRegistrations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,8 +20,7 @@ export const PendingRegistrationsPanel: React.FC<
       setLoading(true);
       const { data, error } = await supabase
         .from('tournament_registrations')
-        .select(
-          `
+        .select(`
           id, 
           registration_date, 
           entry_fee,
@@ -33,8 +30,7 @@ export const PendingRegistrationsPanel: React.FC<
             phone,
             email
           )
-        `
-        )
+        `)
         .eq('tournament_id', tournamentId)
         .eq('registration_status', 'pending')
         .order('registration_date');
@@ -56,16 +52,17 @@ export const PendingRegistrationsPanel: React.FC<
         .update({
           registration_status: 'confirmed',
           payment_status: 'completed',
-          confirmed_at: new Date().toISOString(),
+          confirmed_at: new Date().toISOString()
         })
         .eq('id', registrationId);
 
       if (error) throw error;
 
-      toast.success('Đã xác nhận đăng ký!');
+      toast.success("Đã xác nhận đăng ký!");
       loadPendingRegistrations();
+
     } catch (error: any) {
-      toast.error('Lỗi xác nhận: ' + error.message);
+      toast.error("Lỗi xác nhận: " + error.message);
     }
   };
 
@@ -74,18 +71,18 @@ export const PendingRegistrationsPanel: React.FC<
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit'
     });
   };
 
   if (loading) {
     return (
-      <div className='bg-yellow-50 border border-yellow-200 rounded-lg p-4'>
-        <div className='animate-pulse'>
-          <div className='h-4 bg-yellow-200 rounded w-1/3 mb-3'></div>
-          <div className='space-y-2'>
-            <div className='h-16 bg-yellow-100 rounded'></div>
-            <div className='h-16 bg-yellow-100 rounded'></div>
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="animate-pulse">
+          <div className="h-4 bg-yellow-200 rounded w-1/3 mb-3"></div>
+          <div className="space-y-2">
+            <div className="h-16 bg-yellow-100 rounded"></div>
+            <div className="h-16 bg-yellow-100 rounded"></div>
           </div>
         </div>
       </div>
@@ -94,49 +91,42 @@ export const PendingRegistrationsPanel: React.FC<
 
   if (pendingRegistrations.length === 0) {
     return (
-      <div className='bg-gray-50 border border-gray-200 rounded-lg p-4'>
-        <h3 className='font-semibold text-gray-700 mb-2'>
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <h3 className="font-semibold text-gray-700 mb-2">
           ⏳ Đăng ký chờ xác nhận (0)
         </h3>
-        <p className='text-sm text-gray-600'>
-          Không có đăng ký nào đang chờ xác nhận
-        </p>
+        <p className="text-sm text-gray-600">Không có đăng ký nào đang chờ xác nhận</p>
       </div>
     );
   }
 
   return (
-    <div className='bg-yellow-50 border border-yellow-200 rounded-lg p-4'>
-      <h3 className='font-semibold text-yellow-900 mb-3'>
+    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <h3 className="font-semibold text-yellow-900 mb-3">
         ⏳ Đăng ký chờ xác nhận ({pendingRegistrations.length})
       </h3>
-
-      <div className='space-y-2'>
-        {pendingRegistrations.map(registration => (
-          <div
-            key={registration.id}
-            className='bg-white p-3 rounded border flex items-center justify-between'
-          >
-            <div className='flex-1'>
-              <h4 className='font-medium'>
-                {registration.profiles?.full_name || 'Không có tên'}
-              </h4>
-              <div className='text-sm text-gray-600'>
-                📞 {registration.profiles?.phone || 'Chưa có SĐT'} • 💰{' '}
-                {registration.entry_fee?.toLocaleString('vi-VN') || '0'} VNĐ •
+      
+      <div className="space-y-2">
+        {pendingRegistrations.map((registration) => (
+          <div key={registration.id} className="bg-white p-3 rounded border flex items-center justify-between">
+            <div className="flex-1">
+              <h4 className="font-medium">{registration.profiles?.full_name || 'Không có tên'}</h4>
+              <div className="text-sm text-gray-600">
+                📞 {registration.profiles?.phone || 'Chưa có SĐT'} • 
+                💰 {registration.entry_fee?.toLocaleString('vi-VN') || '0'} VNĐ •
                 📅 {formatDate(registration.registration_date)}
               </div>
               {registration.notes && (
-                <div className='text-xs text-gray-500 mt-1'>
+                <div className="text-xs text-gray-500 mt-1">
                   💬 {registration.notes}
                 </div>
               )}
             </div>
-
+            
             <Button
-              size='sm'
+              size="sm"
               onClick={() => confirmRegistration(registration.id)}
-              className='bg-green-600 hover:bg-green-700 ml-2'
+              className="bg-green-600 hover:bg-green-700 ml-2"
             >
               ✅ Xác nhận
             </Button>

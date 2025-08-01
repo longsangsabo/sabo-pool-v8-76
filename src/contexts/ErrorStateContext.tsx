@@ -1,9 +1,10 @@
+
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
 interface ErrorStateContextType {
   // Error states by module
   errors: Record<string, string[]>;
-
+  
   // Actions
   addError: (module: string, error: string) => void;
   removeError: (module: string, errorIndex?: number) => void;
@@ -13,9 +14,7 @@ interface ErrorStateContextType {
   getAllErrors: () => string[];
 }
 
-const ErrorStateContext = createContext<ErrorStateContextType | undefined>(
-  undefined
-);
+const ErrorStateContext = createContext<ErrorStateContextType | undefined>(undefined);
 
 export const useErrorState = () => {
   const context = useContext(ErrorStateContext);
@@ -27,15 +26,14 @@ export const useErrorState = () => {
 
 // Convenience hook for specific modules
 export const useModuleError = (moduleName: string) => {
-  const { addError, removeError, clearErrors, hasErrors, getErrors } =
-    useErrorState();
-
+  const { addError, removeError, clearErrors, hasErrors, getErrors } = useErrorState();
+  
   return {
     errors: getErrors(moduleName),
     hasErrors: hasErrors(moduleName),
     addError: (error: string) => addError(moduleName, error),
     removeError: (errorIndex?: number) => removeError(moduleName, errorIndex),
-    clearErrors: () => clearErrors(moduleName),
+    clearErrors: () => clearErrors(moduleName)
   };
 };
 
@@ -43,15 +41,13 @@ interface ErrorStateProviderProps {
   children: React.ReactNode;
 }
 
-export const ErrorStateProvider: React.FC<ErrorStateProviderProps> = ({
-  children,
-}) => {
+export const ErrorStateProvider: React.FC<ErrorStateProviderProps> = ({ children }) => {
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
   const addError = useCallback((module: string, error: string) => {
     setErrors(prev => ({
       ...prev,
-      [module]: [...(prev[module] || []), error],
+      [module]: [...(prev[module] || []), error]
     }));
   }, []);
 
@@ -65,12 +61,10 @@ export const ErrorStateProvider: React.FC<ErrorStateProviderProps> = ({
         return newErrors;
       } else {
         // Remove specific error by index
-        const newModuleErrors = moduleErrors.filter(
-          (_, index) => index !== errorIndex
-        );
+        const newModuleErrors = moduleErrors.filter((_, index) => index !== errorIndex);
         return {
           ...prev,
-          [module]: newModuleErrors.length > 0 ? newModuleErrors : undefined,
+          [module]: newModuleErrors.length > 0 ? newModuleErrors : undefined
         };
       }
     });
@@ -88,24 +82,16 @@ export const ErrorStateProvider: React.FC<ErrorStateProviderProps> = ({
     }
   }, []);
 
-  const hasErrors = useCallback(
-    (module?: string) => {
-      if (module) {
-        return (errors[module] || []).length > 0;
-      }
-      return Object.values(errors).some(
-        moduleErrors => moduleErrors.length > 0
-      );
-    },
-    [errors]
-  );
+  const hasErrors = useCallback((module?: string) => {
+    if (module) {
+      return (errors[module] || []).length > 0;
+    }
+    return Object.values(errors).some(moduleErrors => moduleErrors.length > 0);
+  }, [errors]);
 
-  const getErrors = useCallback(
-    (module: string) => {
-      return errors[module] || [];
-    },
-    [errors]
-  );
+  const getErrors = useCallback((module: string) => {
+    return errors[module] || [];
+  }, [errors]);
 
   const getAllErrors = useCallback(() => {
     return Object.values(errors).flat();
@@ -118,7 +104,7 @@ export const ErrorStateProvider: React.FC<ErrorStateProviderProps> = ({
     clearErrors,
     hasErrors,
     getErrors,
-    getAllErrors,
+    getAllErrors
   };
 
   return (

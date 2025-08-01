@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Calendar, MapPin, Clock, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -47,10 +48,9 @@ const ChallengeResponseModal = ({
 
   const handleAccept = () => {
     const proposalData: ChallengeProposal = {
-      proposed_datetime:
-        proposedDate && proposedTime
-          ? `${proposedDate}T${proposedTime}`
-          : undefined,
+      proposed_datetime: proposedDate && proposedTime
+        ? `${proposedDate}T${proposedTime}`
+        : undefined,
       club_id: selectedClub || undefined,
       message: responseMessage || undefined,
     };

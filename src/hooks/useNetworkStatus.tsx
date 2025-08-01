@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 
 interface NetworkStatus {
@@ -42,10 +43,10 @@ export const useNetworkStatus = (): NetworkStatus => {
           setSpeed('fast');
         }
       };
-
+      
       updateSpeed();
       connection.addEventListener('change', updateSpeed);
-
+      
       return () => {
         connection.removeEventListener('change', updateSpeed);
       };
@@ -62,14 +63,14 @@ export const useNetworkStatus = (): NetworkStatus => {
     speed,
     quality: {
       isOnline,
-      speed,
+      speed
     },
     networkQuality: {
       isOnline,
       speed,
       latency,
-      effectiveType: (navigator as any).connection?.effectiveType,
+      effectiveType: (navigator as any).connection?.effectiveType
     },
-    isChecking,
+    isChecking
   };
 };
