@@ -194,7 +194,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         .select('*')
         .eq('id', challengeId)
         .eq('status', 'pending')
-        .single();
+        .maybeSingle();
 
       if (fetchError) throw fetchError;
       if (!challengeData) throw new Error('Challenge not found or already processed');
@@ -216,7 +216,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         .eq('id', challengeId)
         .eq('status', 'pending')
         .select('*')
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       if (!data) throw new Error('Challenge was already accepted by someone else');
