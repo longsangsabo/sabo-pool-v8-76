@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import { Calendar, Search, Trophy, Users, Zap, RefreshCw } from 'lucide-react';
 import UnifiedChallengeCard from './UnifiedChallengeCard';
 import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
+import { ActiveChallengeHighlight } from './ActiveChallengeHighlight';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface MobileChallengeManagerProps {
   className?: string;
@@ -348,6 +350,20 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
               <span className="text-sm">Tạo thách đấu</span>
             </button>
           </div>
+        </div>
+
+        {/* Priority: Active Challenge Highlight - Show accepted challenges */}
+        <div className="mb-6">
+          <ErrorBoundary fallback={<div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm">Lỗi hiển thị thách đấu đang hoạt động</div>}>
+            <ActiveChallengeHighlight
+              challenges={challenges || []}
+              user={user}
+              onChallengeClick={(challenge) => {
+                console.log('Mobile challenge clicked:', challenge);
+                // Could navigate to challenge details page or open modal
+              }}
+            />
+          </ErrorBoundary>
         </div>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
