@@ -45,41 +45,6 @@ import {
   Sword,
 } from 'lucide-react';
 
-// Use simplified Challenge interface based on the database
-interface Challenge {
-  id: string;
-  challenger_id: string;
-  opponent_id?: string;
-  club_id?: string;
-  bet_points: number;
-  race_to?: number;
-  status: string;
-  message?: string;
-  scheduled_time?: string;
-  created_at: string;
-  expires_at: string;
-  challenge_type?: string;
-  challenger_profile?: {
-    full_name: string;
-    display_name?: string;
-    avatar_url?: string;
-    current_rank?: string;
-    verified_rank?: string;
-    spa_points?: number;
-  };
-  opponent_profile?: {
-    full_name: string;
-    display_name?: string;
-    avatar_url?: string;
-    current_rank?: string;
-    verified_rank?: string;
-    spa_points?: number;
-  };
-  club_profiles?: {
-    club_name: string;
-    address: string;
-  };
-}
 
 interface ChallengeStats {
   total: number;
@@ -120,33 +85,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
   // Modals
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAdminCreateModal, setShowAdminCreateModal] = useState(false);
-  const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
+  const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // Convert hook data to local Challenge format safely
-  const convertToLocalChallenge = (c: any): Challenge => ({
-    id: c.id,
-    challenger_id: c.challenger_id,
-    opponent_id: c.opponent_id,
-    club_id: c.club_id,
-    bet_points: c.bet_points || 0,
-    race_to: c.race_to || 5,
-    status: c.status,
-    message: c.message,
-    scheduled_time: c.scheduled_time,
-    created_at: c.created_at,
-    expires_at: c.expires_at,
-    challenge_type: c.challenge_type,
-    challenger_profile: c.challenger_profile,
-    opponent_profile: c.opponent_profile,
-    club_profiles: c.club_profiles || null,
-  });
 
   // Filter challenges by user involvement
   const myChallenges = challenges.filter(c => 
     c.challenger_id === user?.id || c.opponent_id === user?.id
-  ).map(convertToLocalChallenge);
+  );
   
   // ✅ FIXED: Active challenges = all accepted challenges (ready to play/enter scores)
   const activeChallenges = challenges.filter(c => {
@@ -173,11 +119,11 @@ const EnhancedChallengesPageV2: React.FC = () => {
     
     console.log('✅ Active challenge found:', c.id);
     return true;
-  }).map(convertToLocalChallenge);
+  });
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
     c.status === 'pending' && !c.opponent_id
-  ).map(convertToLocalChallenge);
+  );
   
   // Calculate stats from derived data
   const stats: ChallengeStats = {
@@ -294,7 +240,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
     }
   };
 
-  const getFilteredChallenges = (challengeList: Challenge[], skipStatusFilter = false) => {
+  const getFilteredChallenges = (challengeList: any[], skipStatusFilter = false) => {
     console.log('🔍 getFilteredChallenges called with:', {
       challengeListLength: challengeList.length,
       statusFilter,
@@ -405,12 +351,12 @@ const EnhancedChallengesPageV2: React.FC = () => {
     }
   };
 
-  const handleChallengeClick = (challenge: Challenge) => {
+  const handleChallengeClick = (challenge: any) => {
     setSelectedChallenge(challenge);
     setShowDetailsModal(true);
   };
 
-  const renderChallengeCard = (challenge: Challenge) => {
+  const renderChallengeCard = (challenge: any) => {
     const statusInfo = getStatusInfo(challenge.status);
     const StatusIcon = statusInfo.icon;
     const isChallenger = user?.id === challenge.challenger_id;
@@ -628,7 +574,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
     );
   };
 
-  const renderOpenChallengeCard = (challenge: Challenge) => {
+  const renderOpenChallengeCard = (challenge: any) => {
     return (
       <Card
         key={challenge.id}
@@ -998,7 +944,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
               <TabsContent value="active-challenges" className="space-y-6">
                 <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
                   Debug: raw activeChallenges={activeChallenges.length}, NO FILTERS APPLIED
-                  <br />Raw data: {JSON.stringify(activeChallenges.map(c => ({id: c.id, status: c.status, challenge_type: c.challenge_type})))}
+                  <br />Raw data: {JSON.stringify(activeChallenges.map(c => ({id: c.id, status: c.status})))}
                 </div>
                 {activeChallenges.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
