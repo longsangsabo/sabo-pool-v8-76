@@ -344,6 +344,11 @@ export const useChallenges = () => {
 
       // ✅ NEW: Create match record automatically when challenge is accepted
       console.log('🏆 Creating match record for accepted challenge...');
+      console.log('🏆 Match data to insert:', {
+        player1_id: challengeData.challenger_id,
+        player2_id: finalOpponentId,
+        challenge_id: challengeId
+      });
       
       const matchData = {
         player1_id: challengeData.challenger_id,
@@ -356,6 +361,8 @@ export const useChallenges = () => {
         score_player2: 0
       };
 
+      console.log('📋 Final match data:', matchData);
+
       const { data: matchRecord, error: matchError } = await supabase
         .from('matches')
         .insert([matchData])
@@ -364,9 +371,16 @@ export const useChallenges = () => {
 
       if (matchError) {
         console.error('❌ Error creating match record:', matchError);
+        console.error('❌ Match error details:', {
+          message: matchError.message,
+          code: matchError.code,
+          details: matchError.details,
+          hint: matchError.hint
+        });
         // Don't throw error here since challenge was already accepted
         // This is a non-critical failure that can be handled later
         console.warn('⚠️ Challenge accepted but match record creation failed');
+        toast.warning('Tham gia thách đấu thành công! (Ghi chú: Cần refresh để xem trận đấu)');
       } else {
         console.log('✅ Match record created successfully:', matchRecord);
         toast.success('Tham gia thách đấu thành công! Trận đấu đã được lên lịch.');

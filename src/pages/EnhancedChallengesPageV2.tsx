@@ -272,12 +272,19 @@ const EnhancedChallengesPageV2: React.FC = () => {
     if (!user) return;
 
     try {
-      await acceptChallenge(challengeId);
+      console.log('🎯 Joining open challenge:', challengeId);
+      const result = await acceptChallenge(challengeId);
+      console.log('✅ Join result:', result);
+      
       toast.success('Đã tham gia thách đấu mở thành công!');
-      // Refresh matches after accepting challenge
-      setTimeout(() => fetchMatches(), 500);
+      
+      // Refresh both challenges and matches after accepting challenge
+      setTimeout(() => {
+        fetchMatches();
+        fetchChallenges?.(); // Also refresh challenges
+      }, 800);
     } catch (error) {
-      console.error('Error joining open challenge:', error);
+      console.error('❌ Error joining open challenge:', error);
       toast.error('Lỗi khi tham gia thách đấu');
     }
   };
