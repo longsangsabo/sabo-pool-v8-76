@@ -200,9 +200,12 @@ export const useChallenges = () => {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 48);
 
+      // ✅ Support for open challenges - set opponent_id to null for open challenges
+      const isOpenChallenge = !challengeData.opponent_id || challengeData.opponent_id === 'open';
+
       const newChallenge = {
         challenger_id: user.id,
-        opponent_id: challengeData.opponent_id,
+        opponent_id: isOpenChallenge ? null : challengeData.opponent_id,
         bet_points: challengeData.bet_points,
         race_to: challengeData.race_to || 5,
         handicap_1_rank: challengeData.handicap_1_rank?.toString() || null,
@@ -211,6 +214,7 @@ export const useChallenges = () => {
         scheduled_time: challengeData.scheduled_time,
         status: 'pending' as const,
         expires_at: expiresAt.toISOString(),
+        is_open_challenge: isOpenChallenge,
       };
 
       const { data, error: insertError } = await supabase
@@ -263,6 +267,48 @@ export const useChallenges = () => {
 
     try {
       console.log('🎯 Attempting to accept challenge:', challengeId, 'User:', user.id);
+
+      // ✅ Use the new database function for safe open challenge acceptance
+      const { data: result, error } = await supabase.rpc('accept_open_challenge', {
+        p_challenge_id: challengeId,
+        p_user_id: user.id
+      });
+
+      if (error) {
+        console.error('❌ Error calling accept_open_challenge:', error);
+        throw new Error(`Không thể tham gia thách đấu: ${error.message}`);
+      }
+
+      if (!result.success) {
+        console.error('❌ Challenge acceptance failed:', result.error);
+        throw new Error(result.error || 'Không thể tham gia thách đấu');
+      }
+
+      console.log('✅ Challenge accepted successfully:', result);
+      toast.success('Tham gia thách đấu thành công! Trận đấu đã được lên lịch.');
+
+      // Update local state to remove the challenge from open challenges
+      setChallenges(prev => prev.filter(c => c.id !== challengeId));
+      
+      // Refetch challenges to update the list with latest data
+      await fetchChallenges();
+      
+      return result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
+      console.error('❌ Accept challenge error:', err);
+      throw new Error(errorMessage);
+    }
+  };
+
+  // Legacy accept challenge method (fallback for specific challenges)
+  const acceptChallengeOld = async (challengeId: string) => {
+    if (!user) {
+      throw new Error('Bạn cần đăng nhập để tham gia thách đấu');
+    }
+
+    try {
+      console.log('🎯 Attempting to accept challenge (old method):', challengeId, 'User:', user.id);
 
       // First, get the challenge to check if it's open or specific
       const { data: challengeData, error: fetchError } = await supabase

@@ -8,14 +8,16 @@ import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
 import { CompletedChallengeCard } from './CompletedChallengeCard';
 import { ActiveChallengeHighlight } from './ActiveChallengeHighlight';
+import { OpenChallengeCard } from './OpenChallengeCard';
 import UnifiedChallengeCard from './UnifiedChallengeCard';
 import { useOptimizedMatches } from '@/hooks/useOptimizedMatches';
 import { useCompletedChallenges } from '@/hooks/useCompletedChallenges';
+import { useOpenChallenges } from '@/hooks/useOpenChallenges';
 import { toast } from 'sonner';
 
 interface LiveActivityFeedProps {
-  openChallenges: any[];
-  onJoinChallenge: (challengeId: string) => void;
+  openChallenges?: any[]; // Make optional since we'll use useOpenChallenges
+  onJoinChallenge?: (challengeId: string) => void; // Make optional
   challenges?: any[]; // Add challenges prop for ActiveChallengeHighlight
   user?: any; // Add user prop for ActiveChallengeHighlight  
   onChallengeClick?: (challenge: any) => void; // Add callback prop
@@ -23,14 +25,15 @@ interface LiveActivityFeedProps {
 
 
 const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({ 
-  openChallenges, 
-  onJoinChallenge,
+  openChallenges: externalOpenChallenges, 
+  onJoinChallenge: externalOnJoinChallenge,
   challenges = [],
   user,
   onChallengeClick
 }) => {
   const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
   const { data: completedChallenges = [], isLoading: completedLoading } = useCompletedChallenges();
+  const { openChallenges, loading: openChallengeLoading, joining, joinChallenge } = useOpenChallenges();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Debug logging removed for production
@@ -187,39 +190,38 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
 
       {/* Bottom Row - Open Challenges and Recent Results */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Open Challenges Section */}
-        <div className="space-y-4">
+        {/* Thách đấu mở Section - Enhanced with new components */}
+        <div>
           <SectionHeader
-            icon="👀"
-            title="ĐANG TÌM ĐỐI THỦ"
+            icon="🌐"
+            title="THÁCH ĐẤU MỞ"
             count={openChallenges.length}
-            subtitle="Thách đấu mở đang chờ người tham gia"
+            subtitle="Các thách đấu đang tìm đối thủ"
           />
           
-          {openChallenges.length > 0 ? (
+          {openChallengeLoading ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>Đang tải thách đấu mở...</p>
+            </div>
+          ) : openChallenges.length > 0 ? (
             <div className="grid gap-3">
-              {openChallenges.map(challenge => (
-                <UnifiedChallengeCard
+              {openChallenges.slice(0, 6).map((challenge) => (
+                <OpenChallengeCard
                   key={challenge.id}
-                  challenge={{
-                    ...challenge,
-                    status: 'open' as const
-                  }}
-                  onJoin={async () => await onJoinChallenge(challenge.id)}
-                  variant="compact"
+                  challenge={challenge}
+                  currentUser={user}
+                  onJoin={externalOnJoinChallenge || joinChallenge}
+                  isJoining={joining === challenge.id}
                 />
               ))}
             </div>
           ) : (
-            <Card className="border-dashed border-2 border-muted-foreground/20">
-              <CardContent className="p-6 text-center">
-                <div className="text-muted-foreground">
-                  <div className="text-3xl mb-2">🎯</div>
-                  <div className="font-medium text-sm">Hiện tại không có thách đấu mở nào</div>
-                  <div className="text-xs">Tạo thách đấu mở để tìm đối thủ ngay!</div>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="space-y-2">
+                <p>🌟 Không có thách đấu mở nào</p>
+                <p className="text-sm">Tạo thách đấu mở để mọi người có thể tham gia!</p>
+              </div>
+            </div>
           )}
         </div>
 

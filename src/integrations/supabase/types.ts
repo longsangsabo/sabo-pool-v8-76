@@ -3542,6 +3542,10 @@ export type Database = {
             }
         Returns: Json
       }
+      accept_open_challenge: {
+        Args: { p_challenge_id: string; p_user_id: string }
+        Returns: Json
+      }
       add_third_place_match_to_existing_tournament: {
         Args: { p_tournament_id: string }
         Returns: Json
@@ -3749,6 +3753,10 @@ export type Database = {
       check_tournament_triggers_status: {
         Args: Record<PropertyKey, never>
         Returns: Json
+      }
+      cleanup_expired_challenges: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       cleanup_old_automation_logs: {
         Args: { p_days_to_keep?: number }

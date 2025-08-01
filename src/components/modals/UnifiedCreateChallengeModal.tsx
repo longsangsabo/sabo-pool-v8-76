@@ -220,20 +220,25 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
     setLoading(true);
     try {
+      // ✅ Create challenge data with proper open challenge support
       const challengeData: any = {
         challenger_id: user?.id,
         bet_points: formData.bet_points,
         race_to: formData.race_to,
         message: formData.message || null,
         club_id: formData.club_id,
-        status: challengeType === 'direct' ? 'pending' : 'open',
+        status: 'pending', // Always pending initially
         scheduled_time: formData.scheduled_time || null,
         is_sabo: formData.is_sabo,
-        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 48h expiration
+        is_open_challenge: challengeType === 'open'
       };
 
+      // For direct challenges, set opponent_id. For open challenges, leave it null
       if (challengeType === 'direct') {
         challengeData.opponent_id = formData.opponent_id;
+      } else {
+        challengeData.opponent_id = null; // Explicitly set to null for open challenges
       }
 
       if (formData.is_sabo) {
