@@ -144,16 +144,19 @@ export function useChallengeWorkflow() {
 
       const { data, error } = await supabase.rpc('accept_challenge', {
         p_challenge_id: challengeId,
-        p_user_id: user.id,
-        p_scheduled_time: scheduledTime || null
+        p_user_id: user.id
       });
 
       if (error) throw error;
-      if (data && typeof data === 'object' && 'error' in data && data.error) {
-        throw new Error(data.error as string);
+      if (!data) return null;
+      
+      // Safe type checking after null check
+      const result = data as any;
+      if (result && typeof result === 'object' && 'error' in result && result.error) {
+        throw new Error(result.error as string);
       }
       
-      return data;
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['challenges'] });

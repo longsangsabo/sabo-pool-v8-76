@@ -487,12 +487,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
           />
         </div>
 
-        {/* Active Challenge Highlight - Show accepted challenges ready for scoring */}
-        <ActiveChallengeHighlight
-          challenges={challenges}
-          user={user}
-          onChallengeClick={handleChallengeClick}
-        />
+        {/* Fixed Active Challenge Section - Always visible */}
+        <div className="w-full mb-6">
+          <ActiveChallengeHighlight
+            challenges={challenges}
+            user={user}
+            onChallengeClick={handleChallengeClick}
+          />
+        </div>
 
         {/* Live Activity Feed - Main Content Area */}
         <div className="w-full">

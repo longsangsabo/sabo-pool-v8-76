@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bell, Check, CheckCheck, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +17,7 @@ const NotificationCenter = () => {
   const { notifications, isLoading, markAsRead, markAllAsRead, unreadCount } =
     useEnhancedNotifications();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -170,7 +172,7 @@ const NotificationCenter = () => {
                     variant='link' 
                     size='sm'
                     onClick={() => {
-                      window.location.href = '/notifications';
+                      navigate('/notifications');
                       setIsOpen(false);
                     }}
                   >

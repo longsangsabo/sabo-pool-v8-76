@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface UserDesktopHeaderProps {
   onToggleSidebar: () => void;
@@ -29,6 +29,7 @@ export const UserDesktopHeader: React.FC<UserDesktopHeaderProps> = ({
 }) => {
   const { user, signOut } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -80,7 +81,7 @@ export const UserDesktopHeader: React.FC<UserDesktopHeaderProps> = ({
             count={0}
             hasUrgent={false}
             onClick={() => {
-              window.location.href = '/notifications';
+              navigate('/notifications');
             }}
           />
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Users, 
   Trophy, 
@@ -37,6 +37,7 @@ const Header = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   console.log('Header: user:', user?.id, user?.phone);
   
   // Admin check removed for performance - admin functionality separated
@@ -118,8 +119,7 @@ const Header = () => {
                 count={notifications?.length || 0}
                 hasUrgent={notifications?.some(n => n.priority === 'high') || false}
                 onClick={() => {
-                  // Navigate to notifications page or open dropdown
-                  window.location.href = '/notifications';
+                  navigate('/notifications');
                 }}
               />
             )}
