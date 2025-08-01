@@ -28,6 +28,13 @@ export const ActiveChallengeHighlight: React.FC<ActiveChallengeHighlightProps> =
     (c.challenger_id === user?.id || c.opponent_id === user?.id)
   );
 
+  // Debug log
+  console.log('🔍 ActiveChallengeHighlight render:', { 
+    totalChallenges: challenges.length, 
+    acceptedChallenges: acceptedChallenges.length,
+    userId: user?.id 
+  });
+
   // Always show the component with a dedicated area
   const hasActiveChallenges = acceptedChallenges.length > 0;
 
