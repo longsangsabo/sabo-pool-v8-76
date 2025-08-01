@@ -9,7 +9,7 @@ import {
   User,
   Bell,
   Wallet,
-  Calendar
+  BarChart3
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -73,9 +73,9 @@ export const MobileNavigation = () => {
       icon: Trophy
     },
     {
-      path: '/calendar',
-      label: 'Lịch',
-      icon: Calendar
+      path: '/leaderboard',
+      label: 'BXH',
+      icon: BarChart3
     },
     {
       path: '/notifications',
