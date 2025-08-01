@@ -13,14 +13,8 @@ const AuthCallbackPage = () => {
       if (loading) return;
 
       if (user) {
-        // Check if user needs to complete profile
-        if (!user.user_metadata?.full_name) {
-          toast.success('Đăng nhập thành công! Vui lòng hoàn thành thông tin cá nhân.');
-          navigate('/profile');
-        } else {
-          toast.success('Đăng nhập thành công!');
-          navigate('/dashboard');
-        }
+        toast.success('Đăng nhập thành công!');
+        navigate('/dashboard');
       } else {
         // Auth failed, redirect to login
         toast.error('Đăng nhập thất bại. Vui lòng thử lại.');
