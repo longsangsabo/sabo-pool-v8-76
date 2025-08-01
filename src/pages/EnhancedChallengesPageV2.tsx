@@ -580,10 +580,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
         key={challenge.id}
         className="group relative h-full bg-gradient-to-br from-emerald-50/50 to-green-50/50 backdrop-blur-sm border border-emerald-200/50 hover:border-emerald-300/70 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:from-emerald-50/70 hover:to-green-50/70"
       >
-        {/* Gradient accent line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 rounded-t-lg" />
         
-        {/* Open challenge indicator */}
         <div className="absolute top-3 right-3 animate-pulse">
           <div className="w-3 h-3 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/30"></div>
         </div>
@@ -605,7 +603,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-5 pb-6">
-          {/* Challenger Info */}
           <div className="flex items-center gap-4 p-3 bg-white/50 rounded-lg border border-emerald-100/50">
             <Avatar className="w-14 h-14 ring-2 ring-emerald-200/50 transition-all duration-200 group-hover:ring-emerald-300/70 group-hover:scale-105">
               <AvatarImage src={challenge.challenger_profile?.avatar_url} />
@@ -621,14 +618,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
                 {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
               </div>
             </div>
-            {challenge.challenger_id && (
-              <div className="flex-shrink-0">
-                <TrustScoreBadge playerId={challenge.challenger_id} />
-              </div>
-            )}
           </div>
 
-          {/* Challenge Details */}
           <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50 rounded-lg p-4 space-y-3 shadow-sm">
             <div className="flex justify-between items-center">
               <span className="text-sm font-semibold text-emerald-700">Mức cược:</span>
@@ -670,11 +661,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
               <span className="font-medium">{challenge.club_profiles.club_name}</span>
             </div>
           )}
-
-          <div className="flex justify-between text-xs text-muted-foreground/70 pt-2 border-t border-emerald-200/30">
-            <span>Tạo: {new Date(challenge.created_at).toLocaleDateString('vi-VN')}</span>
-            <span>Hết hạn: {new Date(challenge.expires_at).toLocaleDateString('vi-VN')}</span>
-          </div>
 
           <Button 
             onClick={() => handleJoinOpenChallenge(challenge.id)}
