@@ -148,7 +148,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
     c.challenger_id === user?.id || c.opponent_id === user?.id
   ).map(convertToLocalChallenge);
   
-  const activeChallenges = myChallenges.filter(c => c.status === 'accepted');
+  const activeChallenges = myChallenges.filter(c => {
+    if (c.status !== 'accepted') return false;
+    if (!c.scheduled_time) return true;
+    
+    const scheduledTime = new Date(c.scheduled_time);
+    const now = new Date();
+    return scheduledTime < now; // Only show challenges that have started
+  });
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
     c.status === 'pending' && !c.opponent_id
