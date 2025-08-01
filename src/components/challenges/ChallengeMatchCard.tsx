@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Clock, Trophy, Target, DollarSign } from 'lucide-react';
+import { Clock, Trophy, Target } from 'lucide-react';
 import { Challenge } from '@/types/challenge';
 import { ScoreEntryModal } from './ScoreEntryModal';
 import { formatDistanceToNow } from 'date-fns';
@@ -52,8 +52,8 @@ export const ChallengeMatchCard: React.FC<ChallengeMatchCardProps> = ({
       
       if (scheduledTime && scheduledTime < now) {
         return {
-          badge: 'Đã quá giờ',
-          variant: 'destructive' as const
+          badge: 'Đang diễn ra',
+          variant: 'default' as const
         };
       }
       
@@ -148,15 +148,15 @@ export const ChallengeMatchCard: React.FC<ChallengeMatchCardProps> = ({
             </div>
             
             <div className="flex flex-col items-center gap-1">
-              <DollarSign className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-bold text-muted-foreground">SPA</span>
               <span className="text-xs text-muted-foreground">Cược</span>
               <span className="font-semibold">{challenge.bet_points || 100}</span>
             </div>
             
             <div className="flex flex-col items-center gap-1">
               <Trophy className="w-4 h-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Loại</span>
-              <span className="font-semibold capitalize">Standard</span>
+              <span className="text-xs text-muted-foreground">Câu lạc bộ</span>
+              <span className="font-semibold capitalize">{challenge.club?.name || 'CLB SABO'}</span>
             </div>
           </div>
 
