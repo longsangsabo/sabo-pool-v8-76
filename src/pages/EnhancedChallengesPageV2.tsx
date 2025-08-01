@@ -150,11 +150,14 @@ const EnhancedChallengesPageV2: React.FC = () => {
   
   const activeChallenges = myChallenges.filter(c => {
     if (c.status !== 'accepted') return false;
+    
+    // If no scheduled time, it's ready to start
     if (!c.scheduled_time) return true;
     
+    // If scheduled time exists, check if it has passed
     const scheduledTime = new Date(c.scheduled_time);
     const now = new Date();
-    return scheduledTime < now; // Only show challenges that have started
+    return scheduledTime < now;
   });
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
