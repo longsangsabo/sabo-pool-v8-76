@@ -179,6 +179,11 @@ export const useChallenges = () => {
     }
 
     try {
+      // Daily limit temporarily disabled
+      // TODO: Re-enable daily limit when needed
+      console.log('Daily challenge limit temporarily disabled');
+      
+      /*
       // Check daily limit (2 challenges per day)
       const today = new Date().toISOString().split('T')[0];
       const { data: todayChallenges, error: checkError } = await supabase
@@ -195,6 +200,7 @@ export const useChallenges = () => {
       if (todayChallenges && todayChallenges.length >= 2) {
         throw new Error('Daily challenge limit reached (2 challenges per day)');
       }
+      */
 
       // Create challenge with 48h expiration
       const expiresAt = new Date();
