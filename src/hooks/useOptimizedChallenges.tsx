@@ -235,7 +235,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         challenge_id: challengeId,
         status: 'scheduled' as const,
         match_type: 'challenge' as const,
-        scheduled_time: challengeData.scheduled_time || new Date().toISOString(),
+        scheduled_time: new Date().toISOString(),
         score_player1: 0,
         score_player2: 0
       };

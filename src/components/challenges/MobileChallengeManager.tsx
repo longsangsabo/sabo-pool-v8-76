@@ -222,7 +222,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
                   key={challenge.id}
                   challenge={{
                     ...challenge,
-                    status: 'upcoming' as const
+                    status: 'accepted' as const
                   }}
                   variant="compact"
                 />
@@ -255,7 +255,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
                     key={challenge.id}
                     challenge={{
                       ...challenge,
-                      status: 'open' as const
+                      status: 'pending' as const
                     }}
                     onJoin={joinOpenChallenge}
                     variant="compact"

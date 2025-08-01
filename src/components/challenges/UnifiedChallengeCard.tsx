@@ -164,7 +164,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
         return challenge.expires_at 
           ? `Hết hạn ${formatDistanceToNow(new Date(challenge.expires_at), { addSuffix: true, locale: vi })}`
           : `Tạo ${formatDistanceToNow(new Date(challenge.created_at), { addSuffix: true, locale: vi })}`;
-      case 'upcoming':
+      case 'accepted':
         return challenge.scheduled_time
           ? `${formatDistanceToNow(new Date(challenge.scheduled_time), { addSuffix: true, locale: vi })}`
           : `Tạo ${formatDistanceToNow(new Date(challenge.created_at), { addSuffix: true, locale: vi })}`;

@@ -656,9 +656,13 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="active-challenges" className="space-y-6">
-                {activeChallenges.length > 0 ? (
+                <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
+                  Debug: activeChallenges count={activeChallenges.length}, filtered={getFilteredChallenges(activeChallenges, true).length}
+                  <br/>Active challenges: {JSON.stringify(activeChallenges.map(c => ({id: c.id, status: c.status, challenger: c.challenger_id, opponent: c.opponent_id})))}
+                </div>
+                {getFilteredChallenges(activeChallenges, true).length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {activeChallenges.map(challenge => (
+                    {getFilteredChallenges(activeChallenges, true).map(challenge => (
                       <UnifiedChallengeCard
                         key={challenge.id}
                         challenge={challenge}

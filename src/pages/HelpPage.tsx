@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
@@ -315,34 +316,34 @@ const HelpPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <a 
-                    href="/terms" 
+                  <Link 
+                    to="/terms" 
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
                   >
                     <span>Điều khoản sử dụng</span>
                     <ExternalLink className="w-4 h-4" />
-                  </a>
-                  <a 
-                    href="/privacy" 
+                  </Link>
+                  <Link 
+                    to="/privacy" 
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
                   >
                     <span>Chính sách bảo mật</span>
                     <ExternalLink className="w-4 h-4" />
-                  </a>
-                  <a 
-                    href="/about" 
+                  </Link>
+                  <Link 
+                    to="/about" 
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
                   >
                     <span>Về SABO ARENA</span>
                     <ExternalLink className="w-4 h-4" />
-                  </a>
-                  <a 
-                    href="/contact" 
+                  </Link>
+                  <Link 
+                    to="/contact" 
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
                   >
                     <span>Liên hệ</span>
                     <ExternalLink className="w-4 h-4" />
-                  </a>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

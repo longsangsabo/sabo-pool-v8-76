@@ -150,8 +150,8 @@ export const useOptimizedMatches = () => {
             opponent_id,
             bet_points,
             race_to,
-            scheduled_time,
-            responded_at
+            responded_at,
+            created_at
           `)
           .eq('status', 'accepted')
           .not('opponent_id', 'is', null)
@@ -176,7 +176,7 @@ export const useOptimizedMatches = () => {
           id: `challenge-${challenge.id}`,
           player1_id: challenge.challenger_id,
           player2_id: challenge.opponent_id,
-          scheduled_time: challenge.scheduled_time || challenge.responded_at,
+          scheduled_time: challenge.responded_at || challenge.created_at,
           bet_points: challenge.bet_points,
           race_to: challenge.race_to
         }))
