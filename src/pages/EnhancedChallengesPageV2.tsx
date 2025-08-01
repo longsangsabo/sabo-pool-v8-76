@@ -148,25 +148,32 @@ const EnhancedChallengesPageV2: React.FC = () => {
     c.challenger_id === user?.id || c.opponent_id === user?.id
   ).map(convertToLocalChallenge);
   
-  const activeChallenges = myChallenges.filter(c => {
-    console.log('🔍 Checking challenge for active:', {
+  // ✅ FIXED: Active challenges = all accepted challenges (ready to play/enter scores)
+  const activeChallenges = challenges.filter(c => {
+    console.log('🔍 Checking challenge for active tab:', {
       id: c.id,
       status: c.status,
-      scheduled_time: c.scheduled_time,
       challenger: c.challenger_profile?.full_name,
-      opponent: c.opponent_profile?.full_name
+      opponent: c.opponent_profile?.full_name,
+      isMyChallenge: c.challenger_id === user?.id || c.opponent_id === user?.id
     });
     
+    // Must be accepted status
     if (c.status !== 'accepted') {
-      console.log('❌ Challenge rejected - not accepted:', c.id);
+      console.log('❌ Not accepted:', c.id);
       return false;
     }
     
-    // ✅ FIX: All accepted challenges should be active immediately
-    // Remove scheduled_time checking - if it's accepted, it's ready to play
-    console.log('✅ Challenge accepted for active tab:', c.id);
+    // Must involve current user
+    const isMyChallenge = c.challenger_id === user?.id || c.opponent_id === user?.id;
+    if (!isMyChallenge) {
+      console.log('❌ Not my challenge:', c.id);
+      return false;
+    }
+    
+    console.log('✅ Active challenge found:', c.id);
     return true;
-  });
+  }).map(convertToLocalChallenge);
   const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
     c.status === 'pending' && !c.opponent_id
