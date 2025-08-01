@@ -91,7 +91,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('player_rankings')
         .select('current_rank, spa_points')
         .eq('user_id', user.id)
         .single();
@@ -138,16 +138,30 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
         .select(`
           user_id,
           full_name,
-          avatar_url,
-          current_rank,
-          spa_points
+          avatar_url
         `)
         .or(`full_name.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%`)
         .neq('user_id', user?.id)
         .limit(10);
 
       if (error) throw error;
-      setSearchResults(data || []);
+      
+      // Get ranking data separately and merge
+      const playersWithRanking = await Promise.all((data || []).map(async (player) => {
+        const { data: ranking } = await supabase
+          .from('player_rankings')
+          .select('current_rank, spa_points')
+          .eq('user_id', player.user_id)
+          .single();
+        
+        return {
+          ...player,
+          current_rank: ranking?.current_rank,
+          spa_points: ranking?.spa_points || 0
+        };
+      }));
+      
+      setSearchResults(playersWithRanking);
     } catch (error) {
       console.error('Error searching players:', error);
       toast.error('Không thể tìm kiếm người chơi');
@@ -183,7 +197,12 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     const challengerRank = currentUserProfile.current_rank as SaboRank;
     const opponentRank = selectedPlayer.current_rank as SaboRank;
     
-    return calculateSaboHandicap(challengerRank, opponentRank);
+    try {
+      return calculateSaboHandicap(challengerRank, opponentRank, formData.bet_points);
+    } catch (error) {
+      console.error('Error calculating handicap:', error);
+      return null;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -223,7 +242,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
           challengeData.sabo_handicap_data = {
             challenger_rank: currentUserProfile?.current_rank,
             opponent_rank: selectedPlayer?.current_rank,
-            handicap_description: handicap.description
+            handicap_info: JSON.stringify(handicap)
           };
         }
       }
@@ -438,7 +457,8 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
                   <span className="font-medium text-blue-800">Thông tin Handicap</span>
                 </div>
                 <div className="text-sm space-y-1">
-                  <div>Handicap: {handicapInfo.description}</div>
+                  <div>Handicap được áp dụng cho trận đấu SABO</div>
+                  <div className="text-blue-600 font-medium">Challenger vs Opponent: {currentUserProfile?.current_rank || 'K'} vs {selectedPlayer.current_rank || 'K'}</div>
                 </div>
               </div>
             )}
