@@ -3787,7 +3787,7 @@ export type Database = {
       }
       expire_old_challenges: {
         Args: Record<PropertyKey, never>
-        Returns: undefined
+        Returns: number
       }
       finalize_tournament: {
         Args: Record<PropertyKey, never>
