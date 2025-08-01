@@ -242,15 +242,37 @@ const EnhancedChallengesPageV2: React.FC = () => {
   // Function to update match status
   const handleAcceptMatch = async (matchId: string) => {
     try {
-      const { error } = await supabase
+      // Find the match to get challenge_id
+      const match = matchesData.find(m => m.id === matchId);
+      if (!match) {
+        toast.error('Không tìm thấy trận đấu');
+        return;
+      }
+
+      // Update match status
+      const { error: matchError } = await supabase
         .from('matches')
         .update({ status: 'in_progress' })
         .eq('id', matchId);
 
-      if (error) throw error;
+      if (matchError) throw matchError;
+
+      // If challenge has null scheduled_time, update it to now
+      if (match.challenge_id) {
+        const challenge = challenges.find(c => c.id === match.challenge_id);
+        if (challenge && !challenge.scheduled_time) {
+          const { error: challengeError } = await supabase
+            .from('challenges')
+            .update({ scheduled_time: new Date().toISOString() })
+            .eq('id', challenge.id);
+          
+          if (challengeError) console.error('Error updating challenge scheduled_time:', challengeError);
+        }
+      }
       
       toast.success('Đã xác nhận trận đấu!');
       fetchMatches(); // Refresh matches
+      fetchChallenges?.(); // Refresh challenges too
     } catch (error) {
       console.error('Error accepting match:', error);
       toast.error('Có lỗi xảy ra khi xác nhận trận đấu');
