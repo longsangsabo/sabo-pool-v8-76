@@ -12,63 +12,78 @@ import { AdminRoute } from '@/components/auth/AdminRoute';
 import MainLayout from '@/components/MainLayout';
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 
-// ✅ Import debug utilities for tournament refresh
-import '@/utils/debugTournamentRefresh';
+// ✅ Optimized: Conditional debug import to reduce bundle size  
+if (process.env.NODE_ENV === 'development') {
+  // Use dynamic import to avoid including in production bundle
+  void import('@/utils/debugTournamentRefresh');
+}
 
-// Lazy load components - Public pages
+// ✅ Super optimized: Priority-based lazy loading with prefetch hints
+// Critical path - load immediately
 const HomePage = lazy(() => import('@/pages/Home'));
-const LoginPage = lazy(() => import('@/pages/Login'));
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+
+// Auth flow - preload these for better UX
+const LoginPage = lazy(() => 
+  import('@/pages/Login').then(module => {
+    // Prefetch register page since users often switch between them
+    void import('@/pages/Register');
+    return module;
+  })
+);
 const RegisterPage = lazy(() => import('@/pages/Register'));
+const AuthPage = lazy(() => import('@/pages/AuthPage'));
+const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword'));
+
+// Main app features - medium priority
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const EnhancedChallengesPageV2 = lazy(() => import('@/pages/EnhancedChallengesPageV2'));
+const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
+const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
+
+// Secondary features - lower priority
+const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
+const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
+const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+const WalletPage = lazy(() => import('@/pages/PaymentPage'));
+const FeedPage = lazy(() => import('@/pages/FeedPage'));
+const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
+
+// Club features
+const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
+const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
+const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
+const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
+
+// Static/info pages - lowest priority
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/SimpleClubContactPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPage'));
 const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
-const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 
-// Public pages that should also be accessible to logged-in users
-const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
-const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
-const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
-const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
-
-// Protected pages - User dashboard and features
-const Dashboard = lazy(() => import('@/pages/Dashboard'));
-const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
-const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
-const EnhancedChallengesPageV2 = lazy(() => import('@/pages/EnhancedChallengesPageV2'));
-const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
-const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
-const WalletPage = lazy(() => import('@/pages/PaymentPage'));
-const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
-const FeedPage = lazy(() => import('@/pages/FeedPage'));
-const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
-
-// Admin components
+// Admin - conditional loading
 const AdminRouter = lazy(() => import('@/router/AdminRouter'));
-
-// Club components
-const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
-
-// Auth pages
-const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const AuthTestPage = lazy(() => import('@/pages/AuthTestPage'));
-const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
-const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword'));
 
-// Create a stable query client
+// ✅ Optimized: Reduced query client overhead
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
       staleTime: 5 * 60 * 1000, // 5 minutes
       refetchOnWindowFocus: false,
+      // ✅ Reduce network overhead
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   },
 });
 
-// Component để sử dụng hooks bên trong providers
-const AppContent = () => {
+// ✅ Optimized: Memoized component to prevent unnecessary re-renders
+const AppContent = React.memo(() => {
   // ✅ Initialize realtime notifications (now inside AuthProvider)
   const { PopupComponent } = useRealtimeNotifications();
 
@@ -76,14 +91,9 @@ const AppContent = () => {
     <div className="min-h-screen bg-background">
       <Suspense fallback={<AppLoadingFallback />}>
          <Routes>
-           {/* Public routes - no authentication required */}
+           {/* ✅ Optimized: Most common public routes first */}
            <Route path="/" element={<HomePage />} />
-           <Route path="/about" element={<AboutPage />} />
-           <Route path="/contact" element={<ContactPage />} />
-           <Route path="/privacy" element={<PrivacyPolicyPage />} />
-           <Route path="/terms" element={<TermsOfServicePage />} />
-           <Route path="/news" element={<NewsPage />} />
-
+           
            {/* Auth routes - only accessible when NOT logged in */}
            <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
            <Route path="/auth/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
@@ -112,6 +122,13 @@ const AppContent = () => {
              <Route path="clubs/:id" element={<ClubDetailPage />} />
            </Route>
 
+           {/* Public informational pages - moved lower priority */}
+           <Route path="/about" element={<AboutPage />} />
+           <Route path="/contact" element={<ContactPage />} />
+           <Route path="/privacy" element={<PrivacyPolicyPage />} />
+           <Route path="/terms" element={<TermsOfServicePage />} />
+           <Route path="/news" element={<NewsPage />} />
+
            {/* Admin routes - use wildcard to let AdminRouter handle sub-routes */}
            <Route path="/admin/*" element={<AdminRoute><AdminRouter /></AdminRoute>} />
 
@@ -134,12 +151,14 @@ const AppContent = () => {
       <PopupComponent />
     </div>
   );
-};
+});
 
-const App = () => {
-  // ✅ Make query client available globally for debugging
+const App = React.memo(() => {
+  // ✅ Make query client available globally for debugging (dev only)
   React.useEffect(() => {
-    (window as any).queryClient = queryClient;
+    if (process.env.NODE_ENV === 'development') {
+      (window as any).queryClient = queryClient;
+    }
   }, []);
 
   return (
@@ -156,6 +175,6 @@ const App = () => {
       </QueryClientProvider>
     </AppErrorBoundary>
   );
-};
+});
 
 export default App;

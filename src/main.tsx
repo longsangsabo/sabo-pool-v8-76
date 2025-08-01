@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import MinimalApp from './App.minimal.tsx';
+import App from './App.tsx';
 import './index.css';
-// Removed Sentry to improve loading speed
+// Removed Sentry to improve loading speed - keeping this optimization
 
 console.log('🚀 Starting application...');
 
@@ -37,11 +37,11 @@ try {
   const root = createRoot(rootElement);
 
   console.log('Rendering App component...');
-  root.render(
-    <StrictMode>
-      <MinimalApp />
-    </StrictMode>
-  );
+  createRoot(rootElement).render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    );
 
   console.log('✅ App rendered successfully!');
 } catch (error) {

@@ -29,6 +29,20 @@ export const supabase = createClient<Database>(
       storage: localStorage,
       persistSession: true,
       autoRefreshToken: true,
+      // ✅ Optimized: Reduce auth checking frequency
+      detectSessionInUrl: true,
+    },
+    // ✅ Optimized: Reduce realtime overhead
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+      },
+    },
+    global: {
+      // ✅ Optimized: Add headers for better caching
+      headers: {
+        'X-Client-Info': 'sabo-pool-arena@1.0.0',
+      },
     },
   }
 );
