@@ -1,73 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Coins } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { useSPABalance } from '@/hooks/useSPABalance';
 
 export const SPAPointsBadge: React.FC = () => {
   const { user } = useAuth();
-  const [balance, setBalance] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        console.log('Fetching wallet balance for user:', user.id);
-        
-        const { data, error } = await supabase
-          .from('spa_transactions')
-          .select('amount')
-          .eq('user_id', user.id)
-          .single();
-
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching SPA balance:', error);
-          setBalance(0);
-        } else {
-          const newBalance = data?.amount || 0;
-          console.log('SPA balance fetched:', newBalance);
-          setBalance(newBalance);
-        }
-      } catch (error) {
-        console.error('Error fetching wallet balance:', error);
-        setBalance(0);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBalance();
-
-    // Set up real-time subscription for balance updates
-    const channel = supabase
-      .channel('spa-balance')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'spa_transactions',
-          filter: `user_id=eq.${user?.id}`,
-        },
-        (payload) => {
-          console.log('SPA balance updated via realtime:', payload);
-          if (payload.new && 'amount' in payload.new) {
-            setBalance(payload.new.amount as number);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user]);
+  const { balance, loading } = useSPABalance();
 
   if (loading) {
     return (
