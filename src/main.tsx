@@ -1,18 +1,17 @@
-
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import MinimalApp from './App.minimal.tsx';
 import './index.css';
 // Removed Sentry to improve loading speed
 
 console.log('🚀 Starting application...');
 
 // Simple error handling
-window.addEventListener('error', (event) => {
+window.addEventListener('error', event => {
   console.error('Global error:', event.error?.message || event.message);
 });
 
-window.addEventListener('unhandledrejection', (event) => {
+window.addEventListener('unhandledrejection', event => {
   console.error('Unhandled promise rejection:', event.reason);
 });
 
@@ -36,19 +35,18 @@ if (!rootElement) {
 try {
   console.log('Creating React root...');
   const root = createRoot(rootElement);
-  
+
   console.log('Rendering App component...');
   root.render(
     <StrictMode>
-      <App />
+      <MinimalApp />
     </StrictMode>
   );
-  
+
   console.log('✅ App rendered successfully!');
-  
 } catch (error) {
   console.error('Failed to render app:', error);
-  
+
   rootElement.innerHTML = `
     <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a5d4a; color: white; font-family: Arial, sans-serif; padding: 20px;">
       <div style="text-align: center;">
