@@ -8,7 +8,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 
-type ChallengeStatus = 'open' | 'ongoing' | 'upcoming' | 'completed' | 'pending';
+type ChallengeStatus = 'open' | 'ongoing' | 'upcoming' | 'completed' | 'pending' | 'accepted';
 
 interface UnifiedChallengeCardProps {
   challenge: {
@@ -50,14 +50,16 @@ interface UnifiedChallengeCardProps {
   };
   variant?: 'default' | 'compact';
   onJoin?: (challengeId: string) => Promise<void>;
-  onAction?: (challengeId: string, action: 'accept' | 'decline' | 'cancel' | 'view') => void;
+  onAction?: (challengeId: string, action: 'accept' | 'decline' | 'cancel' | 'view' | 'score') => void;
+  onSubmitScore?: (challengeId: string, challengerScore: number, opponentScore: number) => Promise<void>;
 }
 
 const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
   challenge,
   variant = 'default',
   onJoin,
-  onAction
+  onAction,
+  onSubmitScore
 }) => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +75,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
           className: 'from-emerald-50/50 to-green-50/50 border-emerald-200/50 hover:border-emerald-300/70'
         };
       case 'ongoing':
+      case 'accepted': // Map accepted to ongoing display
         return {
           color: 'bg-blue-500',
           label: 'Đang diễn ra',
@@ -205,6 +208,9 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
   const renderActionButtons = () => {
     const isMyChallenge = user?.id === challenge.challenger_id;
     const isOpponent = user?.id === challenge.opponent_id;
+    const canEnterScore = (isMyChallenge || isOpponent) && 
+      (challenge.status === 'accepted' || challenge.status === 'ongoing') && 
+      onSubmitScore;
 
     switch (challenge.status) {
       case 'open':
@@ -251,6 +257,21 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
                 Chấp nhận
               </Button>
             </div>
+          );
+        }
+        break;
+      
+      case 'accepted':
+      case 'ongoing':
+        if (canEnterScore) {
+          return (
+            <Button
+              onClick={() => onAction?.(challenge.id, 'score')}
+              className="flex-1"
+            >
+              <Trophy className="w-4 h-4 mr-2" />
+              Nhập tỷ số
+            </Button>
           );
         }
         break;

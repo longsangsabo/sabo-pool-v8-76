@@ -109,6 +109,35 @@ const EnhancedChallengesPageV2: React.FC = () => {
     c.status === 'pending' && !c.opponent_id
   );
   
+  // Handle score submission
+  const handleSubmitScore = async (challengeId: string, challengerScore: number, opponentScore: number) => {
+    try {
+      // Use the existing submitScore function from the hook
+      await submitScore(challengeId, challengerScore, opponentScore);
+      
+      // Close the modal
+      setShowDetailsModal(false);
+      setSelectedChallenge(null);
+      
+      toast.success('Tỷ số đã được ghi nhận thành công!');
+    } catch (error) {
+      console.error('Error submitting score:', error);
+      toast.error('Không thể ghi tỷ số. Vui lòng thử lại.');
+    }
+  };
+
+  // Handle card actions
+  const handleChallengeAction = (challengeId: string, action: 'accept' | 'decline' | 'cancel' | 'view' | 'score') => {
+    const challenge = challenges.find(c => c.id === challengeId);
+    if (!challenge) return;
+
+    if (action === 'view' || action === 'score') {
+      setSelectedChallenge(challenge);
+      setShowDetailsModal(true);
+    }
+    // Other actions would be handled by individual components
+  };
+
   // Calculate stats from derived data
   const stats: ChallengeStats = {
     total: myChallenges.length,
@@ -733,6 +762,9 @@ const EnhancedChallengesPageV2: React.FC = () => {
         onUpdate={() => {
           // Data will refresh automatically via the hook
         }}
+        onSubmitScore={handleSubmitScore}
+        showScoreEntry={selectedChallenge?.status === 'accepted' || selectedChallenge?.status === 'ongoing'}
+        isSubmittingScore={isSubmittingScore}
       />
     </ErrorBoundary>
   );
