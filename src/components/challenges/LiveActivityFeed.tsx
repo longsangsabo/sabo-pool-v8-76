@@ -144,7 +144,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
             icon="⏰"
             title="SẮP DIỄN RA"
             count={upcomingMatches.length}
-            subtitle="Các trận đấu đã được lên lịch"
+            subtitle="Các trận đấu đã được lên lịch và thách đấu đã chấp nhận"
           />
           
           {upcomingMatches.length > 0 ? (
@@ -163,7 +163,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
                 <div className="text-muted-foreground">
                   <div className="text-3xl mb-2">📅</div>
                   <div className="font-medium text-sm">Chưa có trận đấu nào được lên lịch</div>
-                  <div className="text-xs">Các trận đấu sắp tới sẽ hiển thị ở đây</div>
+                  <div className="text-xs">Các thách đấu đã chấp nhận và trận đấu sắp tới sẽ hiển thị ở đây</div>
                 </div>
               </CardContent>
             </Card>

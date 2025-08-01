@@ -127,35 +127,71 @@ export const useOptimizedMatches = () => {
 
   const fetchUpcomingMatches = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('matches')
-        .select(`
-          id,
-          player1_id,
-          player2_id,
-          scheduled_time
-        `)
-        .eq('status', 'scheduled')
-        .gte('scheduled_time', new Date().toISOString())
-        .order('scheduled_time', { ascending: true })
-        .limit(5);
+      // Query both scheduled matches and accepted challenges that should become matches
+      const [scheduledMatches, acceptedChallenges] = await Promise.all([
+        supabase
+          .from('matches')
+          .select(`
+            id,
+            player1_id,
+            player2_id,
+            scheduled_time
+          `)
+          .eq('status', 'scheduled')
+          .gte('scheduled_time', new Date().toISOString())
+          .order('scheduled_time', { ascending: true })
+          .limit(3),
+        
+        supabase
+          .from('challenges')
+          .select(`
+            id,
+            challenger_id,
+            opponent_id,
+            bet_points,
+            race_to,
+            scheduled_time,
+            responded_at
+          `)
+          .eq('status', 'accepted')
+          .not('opponent_id', 'is', null)
+          .order('responded_at', { ascending: false })
+          .limit(3)
+      ]);
 
-      if (error) {
-        console.warn('Upcoming matches query failed, using fallback:', error);
-        setUpcomingMatches([]);
-        return;
+      const matches = scheduledMatches.data || [];
+      const challenges = acceptedChallenges.data || [];
+
+      if (scheduledMatches.error) {
+        console.warn('Scheduled matches query failed:', scheduledMatches.error);
+      }
+      if (acceptedChallenges.error) {
+        console.warn('Accepted challenges query failed:', acceptedChallenges.error);
       }
 
-      if (!data || data.length === 0) {
+      // Combine matches and accepted challenges
+      const combinedData = [
+        ...matches,
+        ...challenges.map(challenge => ({
+          id: `challenge-${challenge.id}`,
+          player1_id: challenge.challenger_id,
+          player2_id: challenge.opponent_id,
+          scheduled_time: challenge.scheduled_time || challenge.responded_at,
+          bet_points: challenge.bet_points,
+          race_to: challenge.race_to
+        }))
+      ];
+
+      if (combinedData.length === 0) {
         setUpcomingMatches([]);
         return;
       }
 
       // Get unique player IDs
       const playerIds = new Set<string>();
-      data.forEach(match => {
-        if (match.player1_id) playerIds.add(match.player1_id);
-        if (match.player2_id) playerIds.add(match.player2_id);
+      combinedData.forEach(item => {
+        if (item.player1_id) playerIds.add(item.player1_id);
+        if (item.player2_id) playerIds.add(item.player2_id);
       });
 
       // Fetch profiles with fallback
@@ -169,22 +205,22 @@ export const useOptimizedMatches = () => {
         return acc;
       }, {} as Record<string, any>);
 
-      const formatted = data.map(match => ({
-        id: match.id,
+      const formatted = combinedData.map(item => ({
+        id: item.id,
         player1: {
-          name: profileMap[match.player1_id]?.full_name || 'Player 1',
-          avatar: profileMap[match.player1_id]?.avatar_url || '',
-          rank: profileMap[match.player1_id]?.verified_rank || 'K'
+          name: profileMap[item.player1_id]?.full_name || 'Player 1',
+          avatar: profileMap[item.player1_id]?.avatar_url || '',
+          rank: profileMap[item.player1_id]?.verified_rank || 'K'
         },
         player2: {
-          name: profileMap[match.player2_id]?.full_name || 'Player 2',
-          avatar: profileMap[match.player2_id]?.avatar_url || '',
-          rank: profileMap[match.player2_id]?.verified_rank || 'K'
+          name: profileMap[item.player2_id]?.full_name || 'Player 2',
+          avatar: profileMap[item.player2_id]?.avatar_url || '',
+          rank: profileMap[item.player2_id]?.verified_rank || 'K'
         },
-        scheduledTime: match.scheduled_time || new Date().toISOString(),
-        raceToTarget: 16,
+        scheduledTime: item.scheduled_time || new Date().toISOString(),
+        raceToTarget: (item as any).race_to || 16,
         location: 'CLB Online',
-        betPoints: 200
+        betPoints: (item as any).bet_points || 200
       }));
 
       setUpcomingMatches(formatted);
@@ -320,24 +356,38 @@ export const useOptimizedMatches = () => {
     }
   }, [fetchLiveMatches, fetchUpcomingMatches, fetchRecentResults]);
 
-  // Simplified real-time - single subscription to reduce overhead
+  // Real-time subscriptions for both matches and challenges
   useEffect(() => {
     refreshAll();
 
-    const subscription = supabase
+    const matchesSubscription = supabase
       .channel('optimized-matches')
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
         table: 'matches'
       }, () => {
-        // Debounced refresh to prevent rapid updates
         setTimeout(refreshAll, 1000);
       })
       .subscribe();
 
+    const challengesSubscription = supabase
+      .channel('optimized-challenges')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'challenges'
+      }, (payload) => {
+        // Refresh when challenges are accepted
+        if (payload.new && (payload.new as any).status === 'accepted') {
+          setTimeout(refreshAll, 500);
+        }
+      })
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(subscription);
+      supabase.removeChannel(matchesSubscription);
+      supabase.removeChannel(challengesSubscription);
     };
   }, [refreshAll]);
 
