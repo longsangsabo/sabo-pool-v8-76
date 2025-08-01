@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import UltraMinimalApp from './App.ultra-minimal.tsx';
-import './index.minimal.css';
-// Emergency ultra-minimal mode for deployment timeout fix
+import App from './App.tsx';
+import './index.css';
+// Back to optimized main app
 
 // eslint-disable-next-line no-console
 console.log('🚀 Starting application...');
@@ -37,11 +37,11 @@ try {
     console.log('🚀 Creating React root...');
   }
 
-    createRoot(rootElement).render(
-      <StrictMode>
-        <UltraMinimalApp />
-      </StrictMode>,
-    );
+  createRoot(rootElement).render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
 
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console

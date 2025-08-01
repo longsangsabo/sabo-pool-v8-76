@@ -1,172 +1,99 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HelmetProvider } from 'react-helmet-async';
+import { Toaster } from '@/components/ui/sonner';
+import { CombinedProviders } from '@/contexts/CombinedProviders';
 import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { PublicRoute } from '@/components/auth/PublicRoute';
+import { AdminRoute } from '@/components/auth/AdminRoute';
+import MainLayout from '@/components/MainLayout';
+import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 
-// ✅ STAGE 1: Critical path - load immediately for initial render
+// ✅ Optimized: Conditional debug import to reduce bundle size
+if (process.env.NODE_ENV === 'development') {
+  // Use dynamic import to avoid including in production bundle
+  void import('@/utils/debugTournamentRefresh');
+}
+
+// ✅ Super optimized: Priority-based lazy loading with prefetch hints
+// Critical path - load immediately
 const HomePage = lazy(() => import('@/pages/Home'));
-
-// ✅ STAGE 2: Auth flow - defer providers until needed
-let QueryClientProvider: any = null;
-let HelmetProvider: any = null;
-let CombinedProviders: any = null;
-let Toaster: any = null;
-
-// ✅ STAGE 3: Feature pages - load when navigation happens
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
-const LoginPage = lazy(() => import('@/pages/Login'));
+
+// Auth flow - preload these for better UX
+const LoginPage = lazy(() =>
+  import('@/pages/Login').then(module => {
+    // Prefetch register page since users often switch between them
+    void import('@/pages/Register');
+    return module;
+  })
+);
 const RegisterPage = lazy(() => import('@/pages/Register'));
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword'));
+
+// Main app features - medium priority
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const EnhancedChallengesPageV2 = lazy(
   () => import('@/pages/EnhancedChallengesPageV2')
 );
 const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
+
+// Secondary features - lower priority
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
 const WalletPage = lazy(() => import('@/pages/PaymentPage'));
 const FeedPage = lazy(() => import('@/pages/FeedPage'));
 const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
+
+// Club features
 const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
 const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
 const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
 const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
+
+// Static/info pages - lowest priority
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/SimpleClubContactPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPage'));
 const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
+
+// Admin - conditional loading
 const AdminRouter = lazy(() => import('@/router/AdminRouter'));
 const AuthTestPage = lazy(() => import('@/pages/AuthTestPage'));
 
-// ✅ Protected/Public route components - defer until auth system loads
-let ProtectedRoute: any = null;
-let PublicRoute: any = null;
-let AdminRoute: any = null;
-let MainLayout: any = null;
-
-// ✅ Create minimal fast-loading shell
-const AppShell = React.memo(() => {
-  const [isProvidersLoaded, setIsProvidersLoaded] = useState(false);
-  const [queryClient, setQueryClient] = useState<any>(null);
-
-  // ✅ Load providers only when user starts interacting
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const loadProviders = async () => {
-      try {
-        // Load providers asynchronously
-        const [
-          { QueryClient, QueryClientProvider: QCP },
-          { HelmetProvider: HP },
-          { CombinedProviders: CP },
-          { Toaster: T },
-          { ProtectedRoute: PR },
-          { PublicRoute: PubR },
-          { AdminRoute: AR },
-          MainLayoutModule,
-        ] = await Promise.all([
-          import('@tanstack/react-query'),
-          import('react-helmet-async'),
-          import('@/contexts/CombinedProviders'),
-          import('@/components/ui/sonner'),
-          import('@/components/auth/ProtectedRoute'),
-          import('@/components/auth/PublicRoute'),
-          import('@/components/auth/AdminRoute'),
-          import('@/components/MainLayout'),
-        ]);
-
-        // ✅ Create query client with optimized settings
-        const client = new QueryClient({
-          defaultOptions: {
-            queries: {
-              retry: 1,
-              staleTime: 5 * 60 * 1000,
-              refetchOnWindowFocus: false,
-              refetchOnMount: false,
-              refetchOnReconnect: false,
-            },
-          },
-        });
-
-        // Assign to module-level variables
-        QueryClientProvider = QCP;
-        HelmetProvider = HP;
-        CombinedProviders = CP;
-        Toaster = T;
-        ProtectedRoute = PR;
-        PublicRoute = PubR;
-        AdminRoute = AR;
-        MainLayout = MainLayoutModule.default;
-
-        setQueryClient(client);
-        setIsProvidersLoaded(true);
-
-        // ✅ Make query client available globally for debugging (dev only)
-        if (process.env.NODE_ENV === 'development') {
-          (window as any).queryClient = client;
-        }
-      } catch (error) {
-        console.error('Failed to load providers:', error);
-        // Fallback - try again after delay
-        timeoutId = setTimeout(loadProviders, 2000);
-      }
-    };
-
-    // ✅ Start loading providers immediately but don't block initial render
-    timeoutId = setTimeout(loadProviders, 100);
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, []);
-
-  // ✅ Show loading screen until providers are ready
-  if (!isProvidersLoaded || !QueryClientProvider || !queryClient) {
-    return (
-      <div className='min-h-screen bg-background'>
-        <Suspense fallback={<AppLoadingFallback />}>
-          <Router>
-            <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='*' element={<AppLoadingFallback />} />
-            </Routes>
-          </Router>
-        </Suspense>
-      </div>
-    );
-  }
-
-  // ✅ Full app with all providers loaded
-  return (
-    <AppErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <HelmetProvider>
-          <Router>
-            <CombinedProviders>
-              <AppContent />
-            </CombinedProviders>
-            <Toaster />
-          </Router>
-        </HelmetProvider>
-      </QueryClientProvider>
-    </AppErrorBoundary>
-  );
+// ✅ Optimized: Reduced query client overhead
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
+      // ✅ Reduce network overhead
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
+  },
 });
 
-// ✅ App content with full routing
+// ✅ Optimized: Memoized component to prevent unnecessary re-renders
 const AppContent = React.memo(() => {
+  // ✅ Initialize realtime notifications (now inside AuthProvider)
+  const { PopupComponent } = useRealtimeNotifications();
+
   return (
     <div className='min-h-screen bg-background'>
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
-          {/* ✅ Most common public routes first */}
+          {/* ✅ Optimized: Most common public routes first */}
           <Route path='/' element={<HomePage />} />
 
           {/* Auth routes - only accessible when NOT logged in */}
@@ -204,7 +131,7 @@ const AppContent = React.memo(() => {
           />
           <Route path='/auth/callback' element={<AuthCallbackPage />} />
 
-          {/* Protected routes with MainLayout */}
+          {/* Protected routes with MainLayout - these will show the sidebar */}
           <Route
             path='/'
             element={
@@ -227,20 +154,22 @@ const AppContent = React.memo(() => {
             <Route path='feed' element={<FeedPage />} />
             <Route path='marketplace' element={<MarketplacePage />} />
             <Route path='auth-test' element={<AuthTestPage />} />
+
+            {/* Public pages accessible through sidebar when logged in */}
             <Route path='tournaments' element={<TournamentPage />} />
             <Route path='leaderboard' element={<LeaderboardPage />} />
             <Route path='clubs' element={<ClubsPage />} />
             <Route path='clubs/:id' element={<ClubDetailPage />} />
           </Route>
 
-          {/* Public informational pages */}
+          {/* Public informational pages - moved lower priority */}
           <Route path='/about' element={<AboutPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/privacy' element={<PrivacyPolicyPage />} />
           <Route path='/terms' element={<TermsOfServicePage />} />
           <Route path='/news' element={<NewsPage />} />
 
-          {/* Admin routes */}
+          {/* Admin routes - use wildcard to let AdminRouter handle sub-routes */}
           <Route
             path='/admin/*'
             element={
@@ -250,7 +179,7 @@ const AppContent = React.memo(() => {
             }
           />
 
-          {/* Club management routes */}
+          {/* Club management routes - protected and require club owner privileges */}
           <Route
             path='/club-management'
             element={
@@ -328,12 +257,35 @@ const AppContent = React.memo(() => {
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </Suspense>
+      {/* ✅ Render notification popup */}
+      <PopupComponent />
     </div>
   );
 });
 
 const App = React.memo(() => {
-  return <AppShell />;
+  // ✅ Make query client available globally for debugging (dev only)
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).queryClient = queryClient;
+    }
+  }, []);
+
+  return (
+    <AppErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
+          <Router>
+            <CombinedProviders>
+              <AppContent />
+            </CombinedProviders>
+            <Toaster />
+          </Router>
+        </HelmetProvider>
+      </QueryClientProvider>
+    </AppErrorBoundary>
+  );
 });
 
 export default App;
