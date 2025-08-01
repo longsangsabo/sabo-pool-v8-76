@@ -22,17 +22,18 @@ export const ActiveChallengeHighlight: React.FC<ActiveChallengeHighlightProps> =
   const [scoreModalOpen, setScoreModalOpen] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
 
-  // Filter accepted challenges that user is part of
-  const acceptedChallenges = challenges.filter(c => 
-    c.status === 'accepted' && 
+  // Filter accepted challenges that user is part of - with null safety
+  const acceptedChallenges = Array.isArray(challenges) ? challenges.filter(c => 
+    c && c.status === 'accepted' && 
     (c.challenger_id === user?.id || c.opponent_id === user?.id)
-  );
+  ) : [];
 
   // Debug log
   console.log('🔍 ActiveChallengeHighlight render:', { 
-    totalChallenges: challenges.length, 
+    totalChallenges: challenges?.length || 0, 
     acceptedChallenges: acceptedChallenges.length,
-    userId: user?.id 
+    userId: user?.id,
+    challenges: challenges || 'null'
   });
 
   // Always show the component with a dedicated area
