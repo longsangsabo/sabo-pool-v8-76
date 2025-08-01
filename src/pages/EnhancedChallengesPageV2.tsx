@@ -273,19 +273,23 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
     try {
       console.log('🎯 Joining open challenge:', challengeId);
+      
+      // Show loading state
+      toast.loading('Đang tham gia thách đấu...', { id: 'join-challenge' });
+      
       const result = await acceptChallenge(challengeId);
       console.log('✅ Join result:', result);
       
-      toast.success('Đã tham gia thách đấu mở thành công!');
+      // Update toast to success  
+      toast.success('✅ Đã tham gia thành công! Status: accepted', { id: 'join-challenge' });
       
-      // Refresh both challenges and matches after accepting challenge
-      setTimeout(() => {
-        fetchMatches();
-        fetchChallenges?.(); // Also refresh challenges
-      }, 800);
+      // Refresh data immediately for real-time feedback
+      await fetchChallenges?.();
+      fetchMatches(); // Also refresh matches to show new match
+      
     } catch (error) {
       console.error('❌ Error joining open challenge:', error);
-      toast.error('Lỗi khi tham gia thách đấu');
+      toast.error('Lỗi khi tham gia thách đấu', { id: 'join-challenge' });
     }
   };
 
