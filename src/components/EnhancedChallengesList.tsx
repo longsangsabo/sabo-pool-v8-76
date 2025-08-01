@@ -193,7 +193,7 @@ const EnhancedChallengesList = () => {
                            'K'}
                         </Badge>
                         <span>•</span>
-                        <span>{challenge.challenger_profile?.elo || challenge.opponent_profile?.elo || 1000} ELO</span>
+                        <span>{challenge.challenger_profile?.spa_points || challenge.opponent_profile?.spa_points || 0} SPA</span>
                       </div>
                     </div>
                   </div>

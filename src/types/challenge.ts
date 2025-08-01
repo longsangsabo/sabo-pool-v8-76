@@ -11,6 +11,8 @@ export interface ChallengeProfile {
   avatar_url?: string;
   current_rank?: string;
   ranking_points?: number;
+  spa_points?: number; // Added SPA points from player_rankings
+  elo_points?: number; // Added ELO points from player_rankings
   // Support for joined player_rankings data
   player_rankings?: Array<{
     elo_points: number;
