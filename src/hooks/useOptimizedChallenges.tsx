@@ -112,11 +112,35 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
       // Enrich challenges with cached + fresh profile data
       const enrichedChallenges = challengesData?.map(challenge => ({
         ...challenge,
-        challenger_profile: cachedProfiles.get(challenge.challenger_id) || null,
-        opponent_profile: cachedProfiles.get(challenge.opponent_id) || null,
+        // Convert string values to numbers where needed for type compatibility
+        handicap_1_rank: challenge.handicap_1_rank ? parseFloat(challenge.handicap_1_rank) : undefined,
+        handicap_05_rank: challenge.handicap_05_rank ? parseFloat(challenge.handicap_05_rank) : undefined,
+        // Add properly typed profile data
+        challenger_profile: cachedProfiles.get(challenge.challenger_id) ? {
+          user_id: challenge.challenger_id,
+          full_name: cachedProfiles.get(challenge.challenger_id)?.full_name || '',
+          display_name: cachedProfiles.get(challenge.challenger_id)?.display_name,
+          verified_rank: cachedProfiles.get(challenge.challenger_id)?.verified_rank,
+          current_rank: cachedProfiles.get(challenge.challenger_id)?.verified_rank,
+          spa_points: cachedProfiles.get(challenge.challenger_id)?.spa_points || 0,
+          elo_points: cachedProfiles.get(challenge.challenger_id)?.elo_points || 1000,
+          avatar_url: cachedProfiles.get(challenge.challenger_id)?.avatar_url,
+          elo: cachedProfiles.get(challenge.challenger_id)?.elo || 1000
+        } : null,
+        opponent_profile: cachedProfiles.get(challenge.opponent_id) ? {
+          user_id: challenge.opponent_id,
+          full_name: cachedProfiles.get(challenge.opponent_id)?.full_name || '',
+          display_name: cachedProfiles.get(challenge.opponent_id)?.display_name,
+          verified_rank: cachedProfiles.get(challenge.opponent_id)?.verified_rank,
+          current_rank: cachedProfiles.get(challenge.opponent_id)?.verified_rank,
+          spa_points: cachedProfiles.get(challenge.opponent_id)?.spa_points || 0,
+          elo_points: cachedProfiles.get(challenge.opponent_id)?.elo_points || 1000,
+          avatar_url: cachedProfiles.get(challenge.opponent_id)?.avatar_url,
+          elo: cachedProfiles.get(challenge.opponent_id)?.elo || 1000
+        } : null,
       })) || [];
 
-      setChallenges(enrichedChallenges as any);
+      setChallenges(enrichedChallenges as Challenge[]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);

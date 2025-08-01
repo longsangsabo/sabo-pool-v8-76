@@ -9,6 +9,7 @@ import UnifiedChallengeCard from './UnifiedChallengeCard';
 import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
 import { ActiveChallengeHighlight } from './ActiveChallengeHighlight';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { ChallengeProfile } from '@/types/challenge';
 
 interface MobileChallengeManagerProps {
   className?: string;
@@ -69,10 +70,10 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({ classNa
         name: c.challenger_profile.full_name,
         display: c.challenger_profile.display_name,
         rank: c.challenger_profile.verified_rank || c.challenger_profile.current_rank,
-        spa_points: c.challenger_profile.spa_points || 0
+        spa_points: (c.challenger_profile as any)?.spa_points || 0
       } : null,
-      challenger_spa: c.challenger_profile?.spa_points || 0,
-      opponent_spa: c.opponent_profile?.spa_points || 0
+      challenger_spa: (c.challenger_profile as any)?.spa_points || 0,
+      opponent_spa: (c.opponent_profile as any)?.spa_points || 0
     }))
   });
 
