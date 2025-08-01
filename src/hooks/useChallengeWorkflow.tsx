@@ -109,8 +109,10 @@ export function useChallengeWorkflow() {
     },
     onSuccess: (result) => {
       console.log('Score submitted successfully:', result);
-      queryClient.invalidateQueries({ queryKey: ['challenges'] });
-      queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
+      
+      // Use refetchQueries instead of invalidateQueries to avoid full page reload
+      queryClient.refetchQueries({ queryKey: ['challenges'] });
+      queryClient.refetchQueries({ queryKey: ['player-rankings'] });
       
       toast.success(
         `🎯 Trận đấu hoàn thành! Người thắng nhận ${result.points_awarded} SPA điểm`,
