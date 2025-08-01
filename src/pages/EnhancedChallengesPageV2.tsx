@@ -905,7 +905,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
               <TabsContent value="active-challenges" className="space-y-6">
                 {getFilteredChallenges(activeChallenges).length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {getFilteredChallenges(activeChallenges).map(renderChallengeCard)}
+                    {getFilteredChallenges(activeChallenges).map(challenge => (
+                      <ChallengeMatchCard
+                        key={challenge.id}
+                        challenge={challenge as any}
+                        currentUserId={user?.id || ''}
+                        onSubmitScore={submitScore}
+                        isSubmittingScore={isSubmittingScore}
+                      />
+                    ))}
                   </div>
                 ) : (
                   <Card className="bg-gradient-to-br from-amber-50/50 to-orange-50/50 border border-amber-200/30">
