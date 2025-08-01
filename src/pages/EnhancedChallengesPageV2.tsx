@@ -23,6 +23,7 @@ import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
 
+import { ActiveChallengeHighlight } from '@/components/challenges/ActiveChallengeHighlight';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 import { toast } from 'sonner';
@@ -486,13 +487,20 @@ const EnhancedChallengesPageV2: React.FC = () => {
           />
         </div>
 
+        {/* Active Challenge Highlight - Show accepted challenges ready for scoring */}
+        <ActiveChallengeHighlight
+          challenges={challenges}
+          user={user}
+          onChallengeClick={handleChallengeClick}
+        />
+
         {/* Live Activity Feed - Main Content Area */}
-                        <div className="w-full">
-                          <LiveActivityFeed
-                            openChallenges={openChallenges}
-                            onJoinChallenge={handleJoinOpenChallenge}
-                          />
-                        </div>
+        <div className="w-full">
+          <LiveActivityFeed
+            openChallenges={openChallenges}
+            onJoinChallenge={handleJoinOpenChallenge}
+          />
+        </div>
 
         {/* Advanced Management Section - Desktop Optimized */}
         <Card className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg">

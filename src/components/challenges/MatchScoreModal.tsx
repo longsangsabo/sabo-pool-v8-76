@@ -59,10 +59,13 @@ export function MatchScoreModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" aria-describedby="score-modal-description">
         <DialogHeader>
           <DialogTitle>Nhập tỷ số trận đấu</DialogTitle>
         </DialogHeader>
+        <div id="score-modal-description" className="sr-only">
+          Modal để nhập tỷ số kết quả trận đấu giữa hai người chơi
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="text-center text-sm text-muted-foreground mb-4">
