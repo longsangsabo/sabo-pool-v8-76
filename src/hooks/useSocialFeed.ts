@@ -165,7 +165,7 @@ export const useSocialFeed = () => {
         .from('challenges')
         .select(`
           *,
-          challenger:profiles!challenges_challenger_id_fkey(full_name, display_name, avatar_url)
+          challenger:profiles!challenger_id(full_name, display_name, avatar_url)
         `)
         .in('status', ['pending', 'accepted'])
         .order('created_at', { ascending: false })

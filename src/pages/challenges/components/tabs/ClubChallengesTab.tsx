@@ -42,7 +42,7 @@ const ClubChallengesTab: React.FC<ClubChallengesTabProps> = ({ clubId }) => {
         .from('challenges')
         .select(`
           *,
-          challenger_profile:profiles!challenges_challenger_id_fkey(
+          challenger_profile:profiles!challenger_id(
             user_id,
             full_name,
             display_name,
@@ -50,7 +50,7 @@ const ClubChallengesTab: React.FC<ClubChallengesTabProps> = ({ clubId }) => {
             verified_rank,
             elo
           ),
-          opponent_profile:profiles!challenges_opponent_id_fkey(
+          opponent_profile:profiles!opponent_id(
             user_id,
             full_name,
             display_name,

@@ -134,10 +134,10 @@ export function useSaboChallenges() {
         .from('challenges')
         .select(`
           *,
-          challenger:profiles!challenges_challenger_id_fkey(
+          challenger:profiles!challenger_id(
             user_id, full_name, display_name, avatar_url
           ),
-          opponent:profiles!challenges_opponent_id_fkey(
+          opponent:profiles!opponent_id(
             user_id, full_name, display_name, avatar_url
           )
         `)
@@ -229,10 +229,10 @@ export function useSaboChallenges() {
         .insert([newChallenge])
         .select(`
           *,
-          challenger:profiles!challenges_challenger_id_fkey(
+          challenger:profiles!challenger_id(
             user_id, full_name, display_name, avatar_url
           ),
-          opponent:profiles!challenges_opponent_id_fkey(
+          opponent:profiles!opponent_id(
             user_id, full_name, display_name, avatar_url
           )
         `)
