@@ -158,6 +158,7 @@ export type Database = {
           challenge_message: string | null
           challenge_type: string | null
           challenger_id: string
+          club_id: string | null
           completed_at: string | null
           created_at: string
           expires_at: string | null
@@ -178,6 +179,7 @@ export type Database = {
           challenge_message?: string | null
           challenge_type?: string | null
           challenger_id: string
+          club_id?: string | null
           completed_at?: string | null
           created_at?: string
           expires_at?: string | null
@@ -198,6 +200,7 @@ export type Database = {
           challenge_message?: string | null
           challenge_type?: string | null
           challenger_id?: string
+          club_id?: string | null
           completed_at?: string | null
           created_at?: string
           expires_at?: string | null
@@ -220,6 +223,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "challenges_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "club_profiles"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "challenges_opponent_id_fkey"
