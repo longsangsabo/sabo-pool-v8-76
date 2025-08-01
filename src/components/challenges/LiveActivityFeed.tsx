@@ -7,7 +7,7 @@ import LiveMatchCard from './LiveMatchCard';
 import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
 import OpenChallengeCard from './OpenChallengeCard';
-import { useRealMatches } from '@/hooks/useRealMatches';
+import { useOptimizedMatches } from '@/hooks/useOptimizedMatches';
 import { toast } from 'sonner';
 
 interface LiveActivityFeedProps {
@@ -20,7 +20,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
   openChallenges, 
   onJoinChallenge 
 }) => {
-  const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useRealMatches();
+  const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {

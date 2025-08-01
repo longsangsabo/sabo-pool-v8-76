@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/useResponsive';
-import { useChallenges } from '@/hooks/useChallenges';
+import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
 import CreateChallengeModal from '@/components/CreateChallengeModal';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
 import CreateChallengeButton from '@/components/CreateChallengeButton';
@@ -20,6 +20,7 @@ import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 import { toast } from 'sonner';
 import {
@@ -93,18 +94,19 @@ const EnhancedChallengesPageV2: React.FC = () => {
   // Debug log to check responsive state
   console.log('Responsive state:', { isDesktop, isMobile, width });
   
-  // Use the standardized hook
+  // Use the optimized hook
   const {
     challenges,
     receivedChallenges,
     sentChallenges,
+    openChallenges: hookOpenChallenges,
     loading,
     error,
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
     fetchChallenges
-  } = useChallenges();
+  } = useOptimizedChallenges();
   
   const [activeTab, setActiveTab] = useState('my-challenges');
   const [challengeTypeFilter, setChallengeTypeFilter] = useState<'all' | 'standard' | 'sabo'>('all');
@@ -142,10 +144,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   // Derived data from hook - filter data safely
   const myChallenges = [...receivedChallenges, ...sentChallenges].map(convertToLocalChallenge);
   const activeChallenges = challenges.filter(c => c.status === 'accepted').map(convertToLocalChallenge);
-  const openChallenges = challenges.filter(c => 
-    !c.opponent_id && 
-    c.status === 'pending'
-  ).map(convertToLocalChallenge);
+  const openChallenges = hookOpenChallenges.map(convertToLocalChallenge);
   
   // Calculate stats from derived data
   const stats: ChallengeStats = {
@@ -793,7 +792,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   );
 
   return (
-    <>
+    <ErrorBoundary>
       {/* Debug Info - Only show on desktop in development */}
       {isDesktop && process.env.NODE_ENV === 'development' && <ResponsiveDebugInfo />}
       
@@ -830,7 +829,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
           // Data will refresh automatically via the hook
         }}
       />
-    </>
+    </ErrorBoundary>
   );
 };
 
