@@ -1,59 +1,115 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
 
-// ✅ STAGE 1: Critical path - load immediately for initial render
+// ✅ ULTRA MINIMAL: Only load what's absolutely necessary for initial render
 const HomePage = lazy(() => import('@/pages/Home'));
 
-// ✅ STAGE 2: Auth flow - defer providers until needed
-let QueryClientProvider: any = null;
-let HelmetProvider: any = null;
-let CombinedProviders: any = null;
-let Toaster: any = null;
-
-// ✅ STAGE 3: User pages - NO ADMIN CODE HERE
-const Dashboard = lazy(() => import('@/pages/Dashboard'));
+// ✅ Auth pages - super lightweight
 const LoginPage = lazy(() => import('@/pages/Login'));
 const RegisterPage = lazy(() => import('@/pages/Register'));
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword'));
+
+// ✅ Essential pages only
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
-const EnhancedChallengesPageV2 = lazy(() => import('@/pages/EnhancedChallengesPageV2'));
-const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
-const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
-const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
-const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
-const WalletPage = lazy(() => import('@/pages/PaymentPage'));
-const FeedPage = lazy(() => import('@/pages/FeedPage'));
-const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
-const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
-const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
-const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
-const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFound'));
+
+// ✅ Static pages (small)
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/SimpleClubContactPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPage'));
 const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
-const NotFoundPage = lazy(() => import('@/pages/NotFound'));
+
+// ✅ HEAVY PAGES - Load only when user really needs them
+const TournamentPage = lazy(() => 
+  import('@/pages/TournamentsPage').then(module => {
+    console.log('🏆 Loading Tournament features...');
+    return module;
+  })
+);
+const EnhancedChallengesPageV2 = lazy(() => 
+  import('@/pages/EnhancedChallengesPageV2').then(module => {
+    console.log('⚔️ Loading Challenge system...');
+    return module;
+  })
+);
+const LeaderboardPage = lazy(() => 
+  import('@/pages/LeaderboardPage').then(module => {
+    console.log('🏅 Loading Leaderboard...');
+    return module;
+  })
+);
+const ClubManagementPage = lazy(() => 
+  import('@/pages/ClubManagementPage').then(module => {
+    console.log('🏢 Loading Club Management...');
+    return module;
+  })
+);
+
+// ✅ CLUB FEATURES - Separate load
+const ClubsPage = lazy(() => 
+  import('@/pages/ClubsPage').then(module => {
+    console.log('🏛️ Loading Club features...');
+    return module;
+  })
+);
+const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
+const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
+
+// ✅ SOCIAL FEATURES - Separate load
+const CommunityPage = lazy(() => 
+  import('@/pages/CommunityPage').then(module => {
+    console.log('👥 Loading Community features...');
+    return module;
+  })
+);
+const FeedPage = lazy(() => 
+  import('@/pages/FeedPage').then(module => {
+    console.log('📰 Loading Social Feed...');
+    return module;
+  })
+);
+
+// ✅ COMMERCE FEATURES - Separate load
+const WalletPage = lazy(() => 
+  import('@/pages/PaymentPage').then(module => {
+    console.log('💳 Loading Payment system...');
+    return module;
+  })
+);
+const MarketplacePage = lazy(() => 
+  import('@/pages/EnhancedMarketplacePage').then(module => {
+    console.log('🛒 Loading Marketplace...');
+    return module;
+  })
+);
+
+// ✅ OPTIONAL FEATURES
+const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const AuthTestPage = lazy(() => import('@/pages/AuthTestPage'));
 
-// ✅ Admin components - COMPLETELY SEPARATE, only load when needed
+// ✅ ADMIN - Completely isolated
 let AdminRouter: any = null;
 let AdminRoute: any = null;
 
-// ✅ Protected/Public route components - defer until auth system loads
+// ✅ Core providers - load async
+let QueryClientProvider: any = null;
+let HelmetProvider: any = null;
+let CombinedProviders: any = null;
+let Toaster: any = null;
 let ProtectedRoute: any = null;
 let PublicRoute: any = null;
-let MainLayout: any = null;
+let UserMainLayout: any = null;
 
-// ✅ Admin detection utility
+// ✅ Admin check function
 const checkIsAdmin = async (userId: string): Promise<boolean> => {
   try {
-    // Fast admin check without loading admin components
     const { supabase } = await import('@/integrations/supabase/client');
     const { data } = await supabase
       .from('profiles')
@@ -67,20 +123,21 @@ const checkIsAdmin = async (userId: string): Promise<boolean> => {
   }
 };
 
-// ✅ Create minimal fast-loading shell
+// ✅ Ultra minimal app shell
 const AppShell = React.memo(() => {
-  const [isProvidersLoaded, setIsProvidersLoaded] = useState(false);
-  const [isAdminLoaded, setIsAdminLoaded] = useState(false);
-  const [shouldLoadAdmin, setShouldLoadAdmin] = useState(false);
-  const [queryClient, setQueryClient] = useState<any>(null);
+  const [isProvidersLoaded, setIsProvidersLoaded] = React.useState(false);
+  const [isAdminLoaded, setIsAdminLoaded] = React.useState(false);
+  const [shouldLoadAdmin, setShouldLoadAdmin] = React.useState(false);
+  const [queryClient, setQueryClient] = React.useState<any>(null);
 
-  // ✅ Load providers only when user starts interacting
-  useEffect(() => {
+  // ✅ Load only essential providers first
+  React.useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     
-    const loadProviders = async () => {
+    const loadCoreProviders = async () => {
       try {
-        // Load core providers asynchronously
+        console.log('⚡ Loading core providers...');
+        
         const [
           { QueryClient, QueryClientProvider: QCP },
           { HelmetProvider: HP },
@@ -88,7 +145,7 @@ const AppShell = React.memo(() => {
           { Toaster: T },
           { ProtectedRoute: PR },
           { PublicRoute: PubR },
-          MainLayoutModule,
+          UserMainLayoutModule,
         ] = await Promise.all([
           import('@tanstack/react-query'),
           import('react-helmet-async'),
@@ -99,7 +156,6 @@ const AppShell = React.memo(() => {
           import('@/components/UserMainLayout'),
         ]);
 
-        // ✅ Create query client with optimized settings
         const client = new QueryClient({
           defaultOptions: {
             queries: {
@@ -112,44 +168,39 @@ const AppShell = React.memo(() => {
           },
         });
 
-        // Assign to module-level variables
         QueryClientProvider = QCP;
         HelmetProvider = HP;
         CombinedProviders = CP;
         Toaster = T;
         ProtectedRoute = PR;
         PublicRoute = PubR;
-        MainLayout = MainLayoutModule.default;
+        UserMainLayout = UserMainLayoutModule.default;
         
         setQueryClient(client);
         setIsProvidersLoaded(true);
 
-        // ✅ Make query client available globally for debugging (dev only)
         if (process.env.NODE_ENV === 'development') {
           (window as any).queryClient = client;
         }
+        
+        console.log('✅ Core providers loaded');
       } catch (error) {
-        console.error('Failed to load providers:', error);
-        // Fallback - try again after delay
-        timeoutId = setTimeout(loadProviders, 2000);
+        console.error('❌ Failed to load core providers:', error);
+        timeoutId = setTimeout(loadCoreProviders, 2000);
       }
     };
 
-    // ✅ Start loading providers immediately but don't block initial render
-    timeoutId = setTimeout(loadProviders, 100);
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    timeoutId = setTimeout(loadCoreProviders, 100);
+    return () => clearTimeout(timeoutId);
   }, []);
 
-  // ✅ Admin loading effect - only when needed
-  useEffect(() => {
+  // ✅ Admin loading (separate)
+  React.useEffect(() => {
     if (!shouldLoadAdmin || isAdminLoaded) return;
 
     const loadAdminComponents = async () => {
       try {
-        console.log('🔒 Loading admin components...');
+        console.log('🔒 Loading admin system...');
         
         const [
           { default: AR },
@@ -163,17 +214,17 @@ const AppShell = React.memo(() => {
         AdminRoute = ARoute;
         setIsAdminLoaded(true);
         
-        console.log('✅ Admin components loaded successfully');
+        console.log('✅ Admin system loaded');
       } catch (error) {
-        console.error('❌ Failed to load admin components:', error);
-        setIsAdminLoaded(true); // Set as loaded to prevent infinite loading
+        console.error('❌ Failed to load admin:', error);
+        setIsAdminLoaded(true);
       }
     };
 
     loadAdminComponents();
   }, [shouldLoadAdmin, isAdminLoaded]);
 
-  // ✅ Show loading screen until core providers are ready
+  // ✅ Show minimal loading until ready
   if (!isProvidersLoaded || !QueryClientProvider || !queryClient) {
     return (
       <div className="min-h-screen bg-background">
@@ -189,7 +240,6 @@ const AppShell = React.memo(() => {
     );
   }
 
-  // ✅ Full app with all providers loaded
   return (
     <AppErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -209,7 +259,7 @@ const AppShell = React.memo(() => {
   );
 });
 
-// ✅ App content with smart admin loading
+// ✅ Main app content with minimal routes
 const AppContent = React.memo(({ 
   onAdminNeeded, 
   isAdminLoaded 
@@ -221,10 +271,10 @@ const AppContent = React.memo(({
     <div className="min-h-screen bg-background">
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
-          {/* ✅ Most common public routes first */}
+          {/* ✅ PUBLIC ROUTES - Immediate load */}
           <Route path="/" element={<HomePage />} />
-
-          {/* Auth routes - only accessible when NOT logged in */}
+          
+          {/* ✅ AUTH ROUTES - Lightweight */}
           <Route
             path="/auth"
             element={
@@ -259,40 +309,51 @@ const AppContent = React.memo(({
           />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-          {/* Protected routes with MainLayout - USER ONLY */}
+          {/* ✅ PROTECTED CORE ROUTES - Essential only */}
           <Route
             path="/"
             element={
               <ProtectedRoute>
-                <MainLayout />
+                <UserMainLayout />
               </ProtectedRoute>
             }
           >
+            {/* ESSENTIAL USER FEATURES */}
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="challenges" element={<EnhancedChallengesPageV2 />} />
-            <Route path="community" element={<CommunityPage />} />
-            <Route path="calendar" element={<CalendarPage />} />
             <Route path="settings" element={<SettingsPage />} />
-            <Route path="wallet" element={<WalletPage />} />
-            <Route path="club-registration" element={<ClubRegistrationPage />} />
-            <Route path="feed" element={<FeedPage />} />
-            <Route path="marketplace" element={<MarketplacePage />} />
-            <Route path="auth-test" element={<AuthTestPage />} />
+            
+            {/* HEAVY FEATURES - Load on demand */}
             <Route path="tournaments" element={<TournamentPage />} />
+            <Route path="challenges" element={<EnhancedChallengesPageV2 />} />
             <Route path="leaderboard" element={<LeaderboardPage />} />
+            
+            {/* CLUB FEATURES */}
             <Route path="clubs" element={<ClubsPage />} />
             <Route path="clubs/:id" element={<ClubDetailPage />} />
+            <Route path="club-registration" element={<ClubRegistrationPage />} />
+            
+            {/* SOCIAL FEATURES */}
+            <Route path="community" element={<CommunityPage />} />
+            <Route path="feed" element={<FeedPage />} />
+            
+            {/* COMMERCE FEATURES */}
+            <Route path="wallet" element={<WalletPage />} />
+            <Route path="marketplace" element={<MarketplacePage />} />
+            
+            {/* OPTIONAL FEATURES */}
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="auth-test" element={<AuthTestPage />} />
           </Route>
 
-          {/* Public informational pages */}
+          {/* ✅ STATIC PAGES */}
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsOfServicePage />} />
           <Route path="/news" element={<NewsPage />} />
 
-          {/* ✅ ADMIN ROUTES - Smart loading */}
+          {/* ✅ ADMIN - Smart loading */}
           <Route
             path="/admin/*"
             element={
@@ -303,7 +364,7 @@ const AppContent = React.memo(({
             }
           />
 
-          {/* Club management routes */}
+          {/* ✅ CLUB MANAGEMENT - Heavy feature */}
           <Route
             path="/club-management"
             element={
@@ -313,63 +374,7 @@ const AppContent = React.memo(({
             }
           />
           <Route
-            path="/club-management/tournaments"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/challenges"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/verification"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/members"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/notifications"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/schedule"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/payments"
-            element={
-              <ProtectedRoute>
-                <ClubManagementPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/club-management/settings"
+            path="/club-management/*"
             element={
               <ProtectedRoute>
                 <ClubManagementPage />
@@ -377,7 +382,7 @@ const AppContent = React.memo(({
             }
           />
 
-          {/* Fallback route */}
+          {/* ✅ FALLBACK */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
@@ -385,7 +390,7 @@ const AppContent = React.memo(({
   );
 });
 
-// ✅ Smart admin loader component
+// ✅ Smart admin loader (unchanged)
 const AdminLoader = React.memo(({ 
   onAdminNeeded, 
   isAdminLoaded 
@@ -393,13 +398,12 @@ const AdminLoader = React.memo(({
   onAdminNeeded: () => void;
   isAdminLoaded: boolean;
 }) => {
-  const [isCheckingAdmin, setIsCheckingAdmin] = useState(true);
-  const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [isCheckingAdmin, setIsCheckingAdmin] = React.useState(true);
+  const [isUserAdmin, setIsUserAdmin] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkAdmin = async () => {
       try {
-        // Get current user first
         const { supabase } = await import('@/integrations/supabase/client');
         const { data: { user } } = await supabase.auth.getUser();
         
@@ -412,7 +416,7 @@ const AdminLoader = React.memo(({
         setIsUserAdmin(adminStatus);
         
         if (adminStatus) {
-          onAdminNeeded(); // Trigger admin components loading
+          onAdminNeeded();
         }
       } catch (error) {
         console.error('Admin check failed:', error);
@@ -424,7 +428,6 @@ const AdminLoader = React.memo(({
     checkAdmin();
   }, [onAdminNeeded]);
 
-  // Show loading while checking admin status
   if (isCheckingAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -436,15 +439,13 @@ const AdminLoader = React.memo(({
     );
   }
 
-  // Not admin - show access denied
   if (!isUserAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-md p-8 border rounded-lg">
           <h1 className="text-2xl font-bold text-destructive mb-4">Access Denied</h1>
           <p className="text-muted-foreground mb-6">
-            Bạn không có quyền truy cập vào khu vực admin. 
-            Chỉ có administrator mới có thể truy cập trang này.
+            Bạn không có quyền truy cập vào khu vực admin.
           </p>
           <button 
             onClick={() => window.history.back()}
@@ -457,20 +458,17 @@ const AdminLoader = React.memo(({
     );
   }
 
-  // Admin but components not loaded yet
   if (!isAdminLoaded || !AdminRouter || !AdminRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading admin panel...</p>
-          <p className="text-xs text-muted-foreground mt-2">This may take a moment on first load</p>
         </div>
       </div>
     );
   }
 
-  // Admin and everything loaded
   return (
     <AdminRoute>
       <AdminRouter />

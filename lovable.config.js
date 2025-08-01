@@ -1,9 +1,11 @@
 module.exports = {
-  // Build configuration
+  // Build configuration with timeout optimization
   build: {
-    command: 'npm run build',
+    command: 'npm run build:production',
     output: 'dist',
-    install: 'npm install'
+    install: 'npm ci --prefer-offline',
+    timeout: 600000, // 10 minutes timeout
+    memory: 4096 // 4GB memory
   },
 
   // Development server
@@ -15,14 +17,16 @@ module.exports = {
   // Environment variables
   env: {
     NODE_ENV: 'production',
-    PORT: '3000'
+    PORT: '3000',
+    NODE_OPTIONS: '--max-old-space-size=4096'
   },
 
   // Build optimization
   optimization: {
     minify: true,
     sourcemap: false,
-    treeShaking: true
+    treeShaking: true,
+    splitChunks: true
   },
 
   // Headers for security and performance

@@ -6,10 +6,14 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "dist",
+        "installCommand": "npm ci",
+        "buildCommand": "npm run build:production"
       }
     }
   ],
+  "buildCommand": "npm run build:production",
+  "outputDirectory": "dist",
   "routes": [
     {
       "src": "/api/(.*)",
@@ -21,11 +25,13 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
   },
   "functions": {
     "api/**/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs18.x",
+      "maxDuration": 30
     }
   },
   "headers": [

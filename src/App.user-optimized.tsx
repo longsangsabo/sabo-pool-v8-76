@@ -96,7 +96,7 @@ const AppShell = React.memo(() => {
           import('@/components/ui/sonner'),
           import('@/components/auth/ProtectedRoute'),
           import('@/components/auth/PublicRoute'),
-          import('@/components/UserMainLayout'),
+          import('@/components/MainLayout'),
         ]);
 
         // ✅ Create query client with optimized settings
