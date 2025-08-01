@@ -489,11 +489,13 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
         {/* Fixed Active Challenge Section - Always visible */}
         <div className="w-full mb-6">
-          <ActiveChallengeHighlight
-            challenges={challenges}
-            user={user}
-            onChallengeClick={handleChallengeClick}
-          />
+          <ErrorBoundary fallback={<div className="p-4 bg-red-50 border border-red-200 rounded">ActiveChallengeHighlight error</div>}>
+            <ActiveChallengeHighlight
+              challenges={challenges || []}
+              user={user}
+              onChallengeClick={handleChallengeClick}
+            />
+          </ErrorBoundary>
         </div>
 
         {/* Live Activity Feed - Main Content Area */}
