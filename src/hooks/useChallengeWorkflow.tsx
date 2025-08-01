@@ -80,8 +80,46 @@ export function useChallengeWorkflow() {
       opponentScore: number;
       isChallenger: boolean;
     }) => {
-      toast.success('Tỷ số đã được ghi nhận!');
-      return { success: true };
+      console.log('Submitting challenge score:', {
+        challengeId,
+        challengerScore,
+        opponentScore,
+        isChallenger,
+        userId: user?.id
+      });
+
+      const { data, error } = await supabase.functions.invoke('challenge-score-update', {
+        body: {
+          challengeId,
+          challengerScore,
+          opponentScore
+        }
+      });
+
+      if (error) {
+        console.error('Score submission error:', error);
+        throw new Error(error.message || 'Failed to submit score');
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to process score');
+      }
+
+      return data.result;
+    },
+    onSuccess: (result) => {
+      console.log('Score submitted successfully:', result);
+      queryClient.invalidateQueries({ queryKey: ['challenges'] });
+      queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
+      
+      toast.success(
+        `🎯 Trận đấu hoàn thành! Người thắng nhận ${result.points_awarded} SPA điểm`,
+        { duration: 5000 }
+      );
+    },
+    onError: (error: Error) => {
+      console.error('Error submitting score:', error);
+      toast.error(`Lỗi: ${error.message}`);
     }
   });
 
@@ -95,6 +133,32 @@ export function useChallengeWorkflow() {
   const sendMessage = useMutation({
     mutationFn: async ({ challengeId, message }: { challengeId: string; message: string }) => {
       return { success: true };
+    }
+  });
+
+  const acceptChallenge = useMutation({
+    mutationFn: async ({ challengeId, scheduledTime }: { challengeId: string; scheduledTime?: string }) => {
+      if (!user?.id) throw new Error('User not authenticated');
+
+      const { data, error } = await supabase.rpc('accept_challenge', {
+        p_challenge_id: challengeId,
+        p_user_id: user.id,
+        p_scheduled_time: scheduledTime || null
+      });
+
+      if (error) throw error;
+      if (data && typeof data === 'object' && 'error' in data && data.error) {
+        throw new Error(data.error as string);
+      }
+      
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['challenges'] });
+      toast.success('Thách đấu đã được chấp nhận!');
+    },
+    onError: (error: Error) => {
+      toast.error(`Lỗi: ${error.message}`);
     }
   });
 
@@ -127,11 +191,13 @@ export function useChallengeWorkflow() {
     submitScore: submitScore.mutateAsync,
     confirmResult: confirmResult.mutateAsync,
     sendMessage: sendMessage.mutateAsync,
+    acceptChallenge: acceptChallenge.mutateAsync,
     scheduleChallenge: scheduleChallenge.mutateAsync,
     isStartingMatch: startMatch.isPending,
     isSubmittingScore: submitScore.isPending,
     isConfirming: confirmResult.isPending,
     isSendingMessage: sendMessage.isPending,
+    isAccepting: acceptChallenge.isPending,
     isScheduling: scheduleChallenge.isPending
   };
 }

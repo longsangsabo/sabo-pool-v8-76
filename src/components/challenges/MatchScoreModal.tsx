@@ -28,14 +28,17 @@ export function MatchScoreModal({
     e.preventDefault();
     
     if (challengerScore === 0 && opponentScore === 0) {
+      alert('Vui lòng nhập tỷ số hợp lệ');
       return;
     }
 
     if (challengerScore !== raceTo && opponentScore !== raceTo) {
+      alert(`Một trong hai người chơi phải đạt ${raceTo} điểm để thắng`);
       return;
     }
 
     try {
+      console.log('Submitting scores:', { challengerScore, opponentScore, raceTo });
       await submitScore({
         challengeId,
         challengerScore,
@@ -43,6 +46,9 @@ export function MatchScoreModal({
         isChallenger
       });
       onOpenChange(false);
+      // Reset scores
+      setChallengerScore(0);
+      setOpponentScore(0);
     } catch (error) {
       console.error('Error submitting score:', error);
     }

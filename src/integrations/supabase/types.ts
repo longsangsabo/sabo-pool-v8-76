@@ -256,6 +256,7 @@ export type Database = {
           challenge_message: string | null
           challenge_type: string | null
           challenger_id: string
+          challenger_score: number | null
           club_id: string | null
           completed_at: string | null
           created_at: string
@@ -267,17 +268,21 @@ export type Database = {
           is_open_challenge: boolean | null
           message: string | null
           opponent_id: string | null
+          opponent_score: number | null
           race_to: number | null
           responded_at: string | null
           response_message: string | null
           scheduled_time: string | null
+          started_at: string | null
           status: string
+          winner_id: string | null
         }
         Insert: {
           bet_points?: number | null
           challenge_message?: string | null
           challenge_type?: string | null
           challenger_id: string
+          challenger_score?: number | null
           club_id?: string | null
           completed_at?: string | null
           created_at?: string
@@ -289,17 +294,21 @@ export type Database = {
           is_open_challenge?: boolean | null
           message?: string | null
           opponent_id?: string | null
+          opponent_score?: number | null
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
           scheduled_time?: string | null
+          started_at?: string | null
           status?: string
+          winner_id?: string | null
         }
         Update: {
           bet_points?: number | null
           challenge_message?: string | null
           challenge_type?: string | null
           challenger_id?: string
+          challenger_score?: number | null
           club_id?: string | null
           completed_at?: string | null
           created_at?: string
@@ -311,11 +320,14 @@ export type Database = {
           is_open_challenge?: boolean | null
           message?: string | null
           opponent_id?: string | null
+          opponent_score?: number | null
           race_to?: number | null
           responded_at?: string | null
           response_message?: string | null
           scheduled_time?: string | null
+          started_at?: string | null
           status?: string
+          winner_id?: string | null
         }
         Relationships: [
           {
@@ -3521,8 +3533,14 @@ export type Database = {
     }
     Functions: {
       accept_challenge: {
-        Args: { p_challenge_id: string; p_user_id: string }
-        Returns: boolean
+        Args:
+          | { p_challenge_id: string; p_user_id: string }
+          | {
+              p_challenge_id: string
+              p_user_id: string
+              p_scheduled_time?: string
+            }
+        Returns: Json
       }
       add_third_place_match_to_existing_tournament: {
         Args: { p_tournament_id: string }
@@ -4165,6 +4183,15 @@ export type Database = {
       }
       populate_sabo_tournament_players: {
         Args: { p_tournament_id: string }
+        Returns: Json
+      }
+      process_challenge_completion: {
+        Args: {
+          p_challenge_id: string
+          p_challenger_score: number
+          p_opponent_score: number
+          p_submitter_id: string
+        }
         Returns: Json
       }
       process_grand_final_completion: {
