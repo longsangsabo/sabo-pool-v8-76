@@ -61,6 +61,7 @@ interface Challenge {
   challenge_type?: string;
   challenger_profile?: {
     full_name: string;
+    display_name?: string;
     avatar_url?: string;
     current_rank?: string;
     verified_rank?: string;
@@ -68,6 +69,7 @@ interface Challenge {
   };
   opponent_profile?: {
     full_name: string;
+    display_name?: string;
     avatar_url?: string;
     current_rank?: string;
     verified_rank?: string;
@@ -390,7 +392,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </div>
               <div className="text-xs space-y-0.5">
                 <div className="font-semibold text-foreground truncate">
-                  {challenge.challenger_profile?.full_name || 'Thách đấu'}
+                  {challenge.challenger_profile?.display_name || challenge.challenger_profile?.full_name || 'Thách đấu'}
                 </div>
                 <div className="text-muted-foreground font-medium">
                   {challenge.challenger_profile?.verified_rank || challenge.challenger_profile?.current_rank || 'K'}
@@ -408,12 +410,12 @@ const EnhancedChallengesPageV2: React.FC = () => {
               <div className="text-xl font-bold text-muted-foreground/60 tracking-wider">VS</div>
               <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200/50 rounded-lg px-3 py-2 shadow-sm">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <DollarSign className="w-4 h-4 text-amber-600" />
+                  <span className="text-sm font-bold text-amber-600">SPA</span>
                   <span className="text-sm font-bold text-amber-800">
                     {challenge.bet_points}
                   </span>
                 </div>
-                <div className="text-xs font-medium text-amber-600">SPA điểm</div>
+                <div className="text-xs font-medium text-amber-600">Cược</div>
               </div>
               <div className="text-xs text-muted-foreground font-medium">
                 Race to {challenge.race_to || 5}
@@ -437,7 +439,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </div>
               <div className="text-xs space-y-0.5">
                 <div className="font-semibold text-foreground truncate">
-                  {challenge.opponent_profile?.full_name || 'Đối thủ'}
+                  {challenge.opponent_profile?.display_name || challenge.opponent_profile?.full_name || 'Đối thủ'}
                 </div>
                 <div className="text-muted-foreground font-medium">
                   {challenge.opponent_profile?.verified_rank || challenge.opponent_profile?.current_rank || 'K'}
