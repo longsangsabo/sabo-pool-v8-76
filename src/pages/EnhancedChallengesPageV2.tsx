@@ -279,7 +279,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
     }
   };
 
-  const getFilteredChallenges = (challengeList: Challenge[]) => {
+  const getFilteredChallenges = (challengeList: Challenge[], skipStatusFilter = false) => {
+    console.log('🔍 getFilteredChallenges called with:', {
+      challengeListLength: challengeList.length,
+      statusFilter,
+      challengeTypeFilter,
+      searchTerm,
+      skipStatusFilter
+    });
+    
     return challengeList.filter(challenge => {
       // Search filter
       const matchesSearch = !searchTerm || (() => {
@@ -294,15 +302,27 @@ const EnhancedChallengesPageV2: React.FC = () => {
         );
       })();
 
-      // Status filter
-      const matchesStatus = statusFilter === 'all' || challenge.status === statusFilter;
+      // Status filter - skip for active challenges tab
+      const matchesStatus = skipStatusFilter || statusFilter === 'all' || challenge.status === statusFilter;
 
       // Challenge type filter
       const matchesType = challengeTypeFilter === 'all' || 
         (challengeTypeFilter === 'sabo' && challenge.challenge_type === 'sabo') ||
         (challengeTypeFilter === 'standard' && (challenge.challenge_type === 'standard' || !challenge.challenge_type));
 
-      return matchesSearch && matchesStatus && matchesType;
+      const result = matchesSearch && matchesStatus && matchesType;
+      
+      if (!result) {
+        console.log('🚫 Challenge filtered out:', {
+          id: challenge.id,
+          status: challenge.status,
+          matchesSearch,
+          matchesStatus,
+          matchesType
+        });
+      }
+
+      return result;
     });
   };
 
@@ -871,7 +891,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
                   value="active-challenges"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
                 >
-                  Đang diễn ra ({getFilteredChallenges(activeChallenges).length})
+                  Đang diễn ra ({getFilteredChallenges(activeChallenges, true).length})
                 </TabsTrigger>
                 <TabsTrigger 
                   value="open-challenges"
@@ -937,9 +957,12 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="active-challenges" className="space-y-6">
-                {getFilteredChallenges(activeChallenges).length > 0 ? (
+                <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
+                  Debug: activeChallenges={activeChallenges.length}, filtered={getFilteredChallenges(activeChallenges, true).length}, statusFilter={statusFilter}
+                </div>
+                {getFilteredChallenges(activeChallenges, true).length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {getFilteredChallenges(activeChallenges).map(challenge => (
+                    {getFilteredChallenges(activeChallenges, true).map(challenge => (
                       <ChallengeMatchCard
                         key={challenge.id}
                         challenge={challenge as any}
