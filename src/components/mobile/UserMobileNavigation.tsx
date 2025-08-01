@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Trophy, Users, Calendar, User } from 'lucide-react';
+import { Home, Trophy, Users, BarChart3, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -9,7 +9,7 @@ const navItems = [
   { icon: User, path: '/profile', label: 'Hồ sơ' },
   { icon: Trophy, path: '/tournaments', label: 'Giải đấu' },
   { icon: Users, path: '/challenges', label: 'Thách đấu' },
-  { icon: Calendar, path: '/calendar', label: 'Lịch' },
+  { icon: BarChart3, path: '/leaderboard', label: 'BXH' },
 ];
 
 const UserMobileNavigation: React.FC = () => {
