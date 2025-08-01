@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Search, Trophy, DollarSign, MapPin, Clock, Users, HelpCircle, Calculator, Loader2, Globe, Target, Shield } from 'lucide-react';
+import { Search, Trophy, MapPin, Clock, Users, HelpCircle, Calculator, Loader2, Globe, Target, Shield, Star } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { calculateSaboHandicap, type SaboRank, formatHandicapDisplay } from '@/utils/saboHandicap';
 import SaboInfoDialog from '@/components/sabo/SaboInfoDialog';
@@ -298,35 +298,37 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-4">
+            <DialogTitle className="flex items-center gap-2 text-lg">
               {variant === 'admin' ? <Shield className="w-5 h-5" /> : <Trophy className="w-5 h-5" />}
               {variant === 'admin' ? 'Tạo thách đấu (Admin)' : 'Tạo thách đấu mới'}
             </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Challenge Type Selection */}
-            <div className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Challenge Type Selection - Compact */}
+            <div className="space-y-2">
               <Label className="text-sm font-medium">Loại thách đấu</Label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   type="button"
                   variant={challengeType === 'direct' ? 'default' : 'outline'}
                   onClick={() => setChallengeType('direct')}
-                  className="justify-start"
+                  className="h-10 text-sm"
+                  size="sm"
                 >
-                  <Users className="w-4 h-4 mr-2" />
+                  <Target className="w-4 h-4 mr-1" />
                   Thách đấu trực tiếp
                 </Button>
                 <Button
                   type="button"
                   variant={challengeType === 'open' ? 'default' : 'outline'}
                   onClick={() => setChallengeType('open')}
-                  className="justify-start"
+                  className="h-10 text-sm"
+                  size="sm"
                 >
-                  <Globe className="w-4 h-4 mr-2" />
+                  <Globe className="w-4 h-4 mr-1" />
                   Thách đấu mở
                 </Button>
               </div>
@@ -334,8 +336,8 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
 
             {/* Opponent Search - Only for direct challenges */}
             {challengeType === 'direct' && (
-              <div className="space-y-3">
-                <Label htmlFor="opponent-search">Tìm đối thủ</Label>
+              <div className="space-y-2">
+                <Label htmlFor="opponent-search" className="text-sm">Tìm đối thủ</Label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
@@ -347,30 +349,30 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
                       setFormData(prev => ({ ...prev, opponent_search: value }));
                       searchPlayers(value);
                     }}
-                    className="pl-10"
+                    className="pl-10 h-10"
                   />
                   {searching && (
                     <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin" />
                   )}
                 </div>
 
-                {/* Search Results */}
+                {/* Search Results - Compact */}
                 {searchResults.length > 0 && (
-                  <div className="border rounded-lg p-2 bg-background max-h-48 overflow-y-auto">
+                  <div className="border rounded-lg p-2 bg-background max-h-32 overflow-y-auto">
                     {searchResults.map((player) => (
                       <div
                         key={player.user_id}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-muted cursor-pointer"
+                        className="flex items-center gap-2 p-2 rounded hover:bg-muted cursor-pointer"
                         onClick={() => handlePlayerSelect(player)}
                       >
-                        <Avatar className="w-8 h-8">
+                        <Avatar className="w-6 h-6">
                           <AvatarImage src={player.avatar_url} />
-                          <AvatarFallback>{player.full_name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="text-xs">{player.full_name.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <div className="flex-1">
-                          <p className="font-medium">{player.full_name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Rank: {player.current_rank || 'K'} • {player.spa_points || 0} SPA
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{player.full_name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {player.current_rank || 'K'} • {player.spa_points || 0} SPA
                           </p>
                         </div>
                       </div>
@@ -378,17 +380,17 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
                   </div>
                 )}
 
-                {/* Selected Player */}
+                {/* Selected Player - Compact */}
                 {selectedPlayer && (
-                  <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                    <Avatar className="w-10 h-10">
+                  <div className="flex items-center gap-2 p-2 bg-muted rounded-lg">
+                    <Avatar className="w-8 h-8">
                       <AvatarImage src={selectedPlayer.avatar_url} />
-                      <AvatarFallback>{selectedPlayer.full_name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="text-sm">{selectedPlayer.full_name.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                      <p className="font-medium">{selectedPlayer.full_name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Rank: {selectedPlayer.current_rank || 'K'} • {selectedPlayer.spa_points || 0} SPA
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{selectedPlayer.full_name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {selectedPlayer.current_rank || 'K'} • {selectedPlayer.spa_points || 0} SPA
                       </p>
                     </div>
                     <Button
@@ -399,6 +401,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
                         setSelectedPlayer(null);
                         setFormData(prev => ({ ...prev, opponent_id: '', opponent_search: '' }));
                       }}
+                      className="h-6 w-6 p-0"
                     >
                       ✕
                     </Button>
@@ -407,43 +410,45 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
               </div>
             )}
 
-            {/* Bet Configuration */}
-            <div className="space-y-3">
+            {/* Bet Configuration - More Compact Grid */}
+            <div className="space-y-2">
               <Label className="text-sm font-medium">Cấu hình cược</Label>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {BET_CONFIGURATIONS.map((config) => (
                   <Button
                     key={config.points}
                     type="button"
                     variant={formData.bet_points === config.points ? 'default' : 'outline'}
                     onClick={() => handleBetChange(config.points)}
-                    className="h-auto p-3 flex flex-col items-center text-center"
+                    className="h-16 p-2 flex flex-col items-center text-center"
+                    size="sm"
                   >
                     <div className="flex items-center gap-1 mb-1">
-                      <DollarSign className="w-4 h-4" />
-                      <span className="font-bold">{config.points}</span>
+                      <Star className="w-3 h-3" />
+                      <span className="font-bold text-sm">{config.points}</span>
                     </div>
-                    <div className="text-xs">Race to {config.raceTO}</div>
+                    <div className="text-xs opacity-75">Race to {config.raceTO}</div>
                   </Button>
                 ))}
               </div>
             </div>
 
-            {/* SABO Toggle */}
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="space-y-1">
+            {/* SABO Toggle - Compact */}
+            <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="space-y-0">
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="sabo-mode">Chế độ SABO</Label>
+                  <Label htmlFor="sabo-mode" className="text-sm">Chế độ SABO</Label>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowSaboInfo(true)}
+                    className="h-6 w-6 p-0"
                   >
-                    <HelpCircle className="w-4 h-4" />
+                    <HelpCircle className="w-3 h-3" />
                   </Button>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Bật handicap dựa trên rank
                 </p>
               </div>
@@ -454,33 +459,33 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
               />
             </div>
 
-            {/* SABO Handicap Info */}
+            {/* SABO Handicap Info - Compact */}
             {formData.is_sabo && handicapInfo && selectedPlayer && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-1">
                   <Calculator className="w-4 h-4 text-blue-600" />
-                  <span className="font-medium text-blue-800">Thông tin Handicap</span>
+                  <span className="text-sm font-medium text-blue-800">Thông tin Handicap</span>
                 </div>
-                <div className="text-sm space-y-1">
+                <div className="text-xs space-y-1">
                   <div>Handicap được áp dụng cho trận đấu SABO</div>
-                  <div className="text-blue-600 font-medium">Challenger vs Opponent: {currentUserProfile?.current_rank || 'K'} vs {selectedPlayer.current_rank || 'K'}</div>
+                  <div className="text-blue-600 font-medium">{currentUserProfile?.current_rank || 'K'} vs {selectedPlayer.current_rank || 'K'}</div>
                 </div>
               </div>
             )}
 
-            {/* Club Selection */}
-            <div className="space-y-3">
-              <Label htmlFor="club">Câu lạc bộ</Label>
+            {/* Club Selection - Compact */}
+            <div className="space-y-2">
+              <Label htmlFor="club" className="text-sm">Câu lạc bộ</Label>
               <Select value={formData.club_id} onValueChange={(value) => setFormData(prev => ({ ...prev, club_id: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10">
                   <SelectValue placeholder="Chọn câu lạc bộ" />
                 </SelectTrigger>
                 <SelectContent>
                   {clubs.map((club) => (
                     <SelectItem key={club.id} value={club.id}>
                       <div>
-                        <div className="font-medium">{club.name}</div>
-                        <div className="text-sm text-muted-foreground">{club.address}</div>
+                        <div className="font-medium text-sm">{club.name}</div>
+                        <div className="text-xs text-muted-foreground">{club.address}</div>
                       </div>
                     </SelectItem>
                   ))}
@@ -488,47 +493,49 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
               </Select>
             </div>
 
-            {/* Scheduled Time */}
-            <div className="space-y-3">
-              <Label htmlFor="scheduled-time">Thời gian dự kiến (tùy chọn)</Label>
+            {/* Scheduled Time - Compact */}
+            <div className="space-y-2">
+              <Label htmlFor="scheduled-time" className="text-sm">Thời gian dự kiến (tùy chọn)</Label>
               <Input
                 id="scheduled-time"
                 type="datetime-local"
                 value={formData.scheduled_time}
                 onChange={(e) => setFormData(prev => ({ ...prev, scheduled_time: e.target.value }))}
                 min={new Date().toISOString().slice(0, 16)}
+                className="h-10"
               />
             </div>
 
-            {/* Message */}
-            <div className="space-y-3">
-              <Label htmlFor="message">Tin nhắn (tùy chọn)</Label>
+            {/* Message - Compact */}
+            <div className="space-y-2">
+              <Label htmlFor="message" className="text-sm">Tin nhắn (tùy chọn)</Label>
               <Textarea
                 id="message"
                 placeholder="Thêm tin nhắn cho thách đấu..."
                 value={formData.message}
                 onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                rows={3}
+                rows={2}
+                className="text-sm"
               />
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
+            {/* Action Buttons - Compact */}
+            <div className="flex gap-2 pt-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1"
+                className="flex-1 h-10"
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
                 disabled={loading || (challengeType === 'direct' && !formData.opponent_id) || !formData.club_id}
-                className="flex-1"
+                className="flex-1 h-10"
               >
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                {challengeType === 'direct' ? 'Gửi thách đấu' : 'Tạo thách đấu mở'}
+                {challengeType === 'direct' ? 'Gửi thách đấu' : 'Gửi thách đấu'}
               </Button>
             </div>
           </form>
