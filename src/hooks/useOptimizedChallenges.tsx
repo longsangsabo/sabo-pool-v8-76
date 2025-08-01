@@ -221,8 +221,36 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
       if (error) throw error;
       if (!data) throw new Error('Challenge was already accepted by someone else');
 
+      // ✅ CRITICAL: Create match record automatically when challenge is accepted
+      console.log('🏆 Creating match record for accepted challenge...');
+      
+      const finalOpponentId = isOpenChallenge ? user.id : challengeData.opponent_id;
+      const matchData = {
+        player1_id: challengeData.challenger_id,
+        player2_id: finalOpponentId,
+        challenge_id: challengeId,
+        status: 'scheduled' as const,
+        match_type: 'challenge' as const,
+        scheduled_time: challengeData.scheduled_time || new Date().toISOString(),
+        score_player1: 0,
+        score_player2: 0
+      };
+
+      const { data: matchRecord, error: matchError } = await supabase
+        .from('matches')
+        .insert([matchData])
+        .select('*')
+        .maybeSingle();
+
+      if (matchError) {
+        console.error('❌ Error creating match record:', matchError);
+        console.warn('⚠️ Challenge accepted but match record creation failed');
+      } else {
+        console.log('✅ Match record created successfully:', matchRecord);
+      }
+
       await fetchChallenges(); // Refresh to update state
-      return data;
+      return { challenge: data, match: matchRecord };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to accept challenge';
       throw new Error(errorMessage);
