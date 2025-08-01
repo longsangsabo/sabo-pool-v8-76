@@ -973,7 +973,8 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
               <TabsContent value="active-challenges" className="space-y-6">
                 <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
-                  Debug: activeChallenges={activeChallenges.length}, filtered={getFilteredChallenges(activeChallenges, true).length}, statusFilter={statusFilter}
+                  Debug: raw activeChallenges={activeChallenges.length}, filtered={getFilteredChallenges(activeChallenges, true).length}, statusFilter={statusFilter}
+                  <br />Raw data: {JSON.stringify(activeChallenges.map(c => ({id: c.id, status: c.status})))}
                 </div>
                 {getFilteredChallenges(activeChallenges, true).length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
