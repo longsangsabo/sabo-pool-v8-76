@@ -503,6 +503,9 @@ const EnhancedChallengesPageV2: React.FC = () => {
           <LiveActivityFeed
             openChallenges={openChallenges}
             onJoinChallenge={handleJoinOpenChallenge}
+            challenges={challenges}
+            user={user}
+            onChallengeClick={handleChallengeClick}
           />
         </div>
 

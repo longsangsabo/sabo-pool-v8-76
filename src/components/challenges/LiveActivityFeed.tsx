@@ -7,6 +7,7 @@ import LiveMatchCard from './LiveMatchCard';
 import UpcomingMatchCard from './UpcomingMatchCard';
 import RecentResultCard from './RecentResultCard';
 import { CompletedChallengeCard } from './CompletedChallengeCard';
+import { ActiveChallengeHighlight } from './ActiveChallengeHighlight';
 import UnifiedChallengeCard from './UnifiedChallengeCard';
 import { useOptimizedMatches } from '@/hooks/useOptimizedMatches';
 import { useCompletedChallenges } from '@/hooks/useCompletedChallenges';
@@ -15,12 +16,18 @@ import { toast } from 'sonner';
 interface LiveActivityFeedProps {
   openChallenges: any[];
   onJoinChallenge: (challengeId: string) => void;
+  challenges?: any[]; // Add challenges prop for ActiveChallengeHighlight
+  user?: any; // Add user prop for ActiveChallengeHighlight  
+  onChallengeClick?: (challenge: any) => void; // Add callback prop
 }
 
 
 const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({ 
   openChallenges, 
-  onJoinChallenge 
+  onJoinChallenge,
+  challenges = [],
+  user,
+  onChallengeClick
 }) => {
   const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
   const { data: completedChallenges = [], isLoading: completedLoading } = useCompletedChallenges();
@@ -102,14 +109,25 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
 
       {/* Top Row - Live and Upcoming Matches */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Live Matches Section */}
+        {/* Live Matches Section - Enhanced with ActiveChallengeHighlight */}
         <div className="space-y-4">
           <SectionHeader
-            icon="🔴"
+            icon="🎯"
             title="ĐANG DIỄN RA"
             count={liveMatches.length}
-            subtitle="Các trận đấu đang thi đấu"
+            subtitle="Các trận đấu và thách đấu đang diễn ra"
           />
+          
+          {/* Active Challenge Highlight - Show accepted challenges ready for scoring */}
+          {challenges && challenges.length > 0 && user && (
+            <div className="mb-4">
+              <ActiveChallengeHighlight
+                challenges={challenges}
+                user={user}
+                onChallengeClick={onChallengeClick}
+              />
+            </div>
+          )}
           
           {liveMatches.length > 0 ? (
             <div className="grid gap-3">
