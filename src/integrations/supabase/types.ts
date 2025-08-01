@@ -1196,7 +1196,7 @@ export type Database = {
           {
             foreignKeyName: "matches_challenge_id_fkey"
             columns: ["challenge_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "challenges"
             referencedColumns: ["id"]
           },
@@ -4538,6 +4538,14 @@ export type Database = {
           p_submitted_by: string
         }
         Returns: Json
+      }
+      update_player_stats_from_match: {
+        Args: {
+          p_player1_id: string
+          p_player2_id: string
+          p_winner_id: string
+        }
+        Returns: undefined
       }
       update_rank_verification_simple: {
         Args: { p_request_id: string; p_status: string; p_admin_notes?: string }
