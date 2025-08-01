@@ -91,20 +91,13 @@ const EnhancedChallengesPageV2: React.FC = () => {
   const { user } = useAuth();
   const { isDesktop, isMobile, width } = useResponsive();
   
-  // Debug log to check responsive state
-  console.log('Responsive state:', { isDesktop, isMobile, width });
-  
-  // Use the optimized hook
+  // Use the optimized hook to prevent multiple fetches
   const {
     challenges,
-    receivedChallenges,
-    sentChallenges,
-    openChallenges: hookOpenChallenges,
     loading,
     error,
     acceptChallenge,
     declineChallenge,
-    cancelChallenge,
     fetchChallenges
   } = useOptimizedChallenges();
   
@@ -122,7 +115,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Convert hook data to local Challenge format
+  // Convert hook data to local Challenge format safely
   const convertToLocalChallenge = (c: any): Challenge => ({
     id: c.id,
     challenger_id: c.challenger_id,
@@ -141,10 +134,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
     club_profiles: c.club_profiles || null,
   });
 
-  // Derived data from hook - filter data safely
-  const myChallenges = [...receivedChallenges, ...sentChallenges].map(convertToLocalChallenge);
-  const activeChallenges = challenges.filter(c => c.status === 'accepted').map(convertToLocalChallenge);
-  const openChallenges = hookOpenChallenges.map(convertToLocalChallenge);
+  // Filter challenges by user involvement
+  const myChallenges = challenges.filter(c => 
+    c.challenger_id === user?.id || c.opponent_id === user?.id
+  ).map(convertToLocalChallenge);
+  
+  const activeChallenges = myChallenges.filter(c => c.status === 'accepted');
+  const openChallenges = challenges.filter(c => 
+    c.status === 'pending' && !c.opponent_id
+  ).map(convertToLocalChallenge);
   
   // Calculate stats from derived data
   const stats: ChallengeStats = {
