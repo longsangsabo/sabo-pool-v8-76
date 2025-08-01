@@ -19,7 +19,7 @@ import CreateChallengeButton from '@/components/CreateChallengeButton';
 import TrustScoreBadge from '@/components/TrustScoreBadge';
 import CompactStatCard from '@/components/challenges/CompactStatCard';
 import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
-import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
+
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
 import { ChallengeMatchCard } from '@/components/challenges/ChallengeMatchCard';
@@ -488,9 +488,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
         {/* Live Activity Feed - Main Content Area */}
                         <div className="w-full">
-                          <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
-                            Debug: Rendering LiveActivityFeed with {openChallenges?.length || 0} open challenges
-                          </div>
                           <LiveActivityFeed
                             openChallenges={openChallenges}
                             onJoinChallenge={handleJoinOpenChallenge}
@@ -657,10 +654,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="active-challenges" className="space-y-6">
-                <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
-                  Debug: raw activeChallenges={activeChallenges.length}, NO FILTERS APPLIED
-                  <br />Raw data: {JSON.stringify(activeChallenges.map(c => ({id: c.id, status: c.status})))}
-                </div>
                 {activeChallenges.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {activeChallenges.map(challenge => (
@@ -725,8 +718,6 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
   return (
     <ErrorBoundary>
-      {/* Debug Info - Only show on desktop in development */}
-      {isDesktop && process.env.NODE_ENV === 'development' && <ResponsiveDebugInfo />}
       
       {/* Responsive Layout Rendering */}
       {isDesktop ? <DesktopLayout /> : <MobileLayout />}
