@@ -21,7 +21,7 @@ import {
   MessageSquare,
   Ban
 } from 'lucide-react';
-import ChallengeCard from '../cards/ChallengeCard';
+import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import { useChallenges } from '@/hooks/useChallenges';
 import ActiveChallengesSection from '../sections/ActiveChallengesSection';
 
@@ -192,14 +192,16 @@ const MyChallengesTab: React.FC<MyChallengesTabProps> = ({ onStatsUpdate, highli
           ) : (
             <div className="grid gap-4">
               {receivedChallenges.map(challenge => (
-                <ChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
-                  currentUserId={user?.id}
-                  onAccept={handleAcceptChallenge}
-                  onDecline={handleDeclineChallenge}
-                  onCancel={handleCancelChallenge}
-                  type="incoming"
+                  challenge={{
+                    ...challenge,
+                    bet_points: challenge.bet_points || 0,
+                    challenger_id: challenge.challenger_id || '',
+                    opponent_id: challenge.opponent_id || challenge.challenged_id || '',
+                    status: challenge.status as any
+                  }}
+                  variant="default"
                 />
               ))}
             </div>
@@ -221,12 +223,17 @@ const MyChallengesTab: React.FC<MyChallengesTabProps> = ({ onStatsUpdate, highli
           ) : (
             <div className="grid gap-4">
               {sentChallenges.map(challenge => (
-                <ChallengeCard
+                <UnifiedChallengeCard
                   key={challenge.id}
-                  challenge={challenge}
-                  currentUserId={user?.id}
-                  onCancel={handleCancelChallenge}
-                  type="outgoing"
+                  challenge={{
+                    ...challenge,
+                    bet_points: challenge.bet_points || 0,
+                    challenger_id: challenge.challenger_id || '',
+                    opponent_id: challenge.opponent_id || challenge.challenged_id || '',
+                    status: challenge.status as any
+                  }}
+                  
+                  variant="compact"
                 />
               ))}
             </div>
@@ -281,11 +288,16 @@ const MyChallengesTab: React.FC<MyChallengesTabProps> = ({ onStatsUpdate, highli
               {challenges
                 .filter(c => c.status === 'completed')
                 .map(challenge => (
-                <ChallengeCard
-                  key={challenge.id}
-                  challenge={challenge}
-                  currentUserId={user?.id}
-                  type="completed"
+                <UnifiedChallengeCard
+                   key={challenge.id}
+                   challenge={{
+                     ...challenge,
+                     bet_points: challenge.bet_points || 0,
+                     challenger_id: challenge.challenger_id || '',
+                     opponent_id: challenge.opponent_id || challenge.challenged_id || '',
+                     status: challenge.status as any
+                   }}
+                   variant="compact"
                 />
               ))}
             </div>

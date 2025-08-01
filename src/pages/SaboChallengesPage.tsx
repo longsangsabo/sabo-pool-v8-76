@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy } from 'lucide-react';
-import { SaboChallengeCard } from '@/components/SaboChallengeCard';
+import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import type { SaboChallenge } from '@/types/sabo-challenge';
 
 // Mock data based on SABO challenge system
@@ -162,14 +162,23 @@ export default function SaboChallengesPage() {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {challenges.map(challenge => (
-          <SaboChallengeCard
+          <UnifiedChallengeCard
             key={challenge.id}
-            challenge={challenge}
-            currentUserId={CURRENT_USER_ID}
-            onScoreRack={handleScoreRack}
-            onAccept={handleAccept}
-            onDecline={handleDecline}
-            onStart={handleStart}
+            challenge={{
+              id: challenge.id,
+              challenger_id: challenge.challenger_id,
+              opponent_id: challenge.opponent_id,
+              bet_points: challenge.stake_amount,
+              race_to: challenge.race_to,
+              challenge_type: 'sabo',
+              status: challenge.status as any,
+              created_at: challenge.created_at,
+              expires_at: challenge.expires_at,
+              challenger_score: challenge.challenger_final_score,
+              opponent_score: challenge.opponent_final_score,
+              winner_id: challenge.winner_id
+            }}
+            variant="default"
           />
         ))}
       </div>

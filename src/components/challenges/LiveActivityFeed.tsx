@@ -23,14 +23,7 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
   const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Debug logging to track data
-  console.log('🔴 LiveActivityFeed Debug:', {
-    liveMatches: liveMatches?.length || 0,
-    upcomingMatches: upcomingMatches?.length || 0,
-    recentResults: recentResults?.length || 0,
-    openChallenges: openChallenges?.length || 0,
-    loading
-  });
+  // Debug logging removed for production
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
