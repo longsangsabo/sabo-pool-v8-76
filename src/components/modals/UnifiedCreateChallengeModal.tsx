@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useChallenges } from '@/hooks/useChallenges';
 import { toast } from 'sonner';
 import { Search, Trophy, MapPin, Clock, Users, HelpCircle, Calculator, Loader2, Globe, Target, Shield, Star } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
@@ -54,6 +55,7 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
   variant = 'standard'
 }) => {
   const { user } = useAuth();
+  const { createChallenge } = useChallenges();
   const [loading, setLoading] = useState(false);
   const [challengeType, setChallengeType] = useState<'direct' | 'open'>('direct');
   const [showSaboInfo, setShowSaboInfo] = useState(false);
@@ -222,41 +224,31 @@ const UnifiedCreateChallengeModal: React.FC<UnifiedCreateChallengeModalProps> = 
     try {
       // ✅ Create challenge data with proper open challenge support
       const challengeData: any = {
-        challenger_id: user?.id,
         bet_points: formData.bet_points,
         race_to: formData.race_to,
         message: formData.message || null,
         club_id: formData.club_id,
-        status: 'pending', // Always pending initially
         scheduled_time: formData.scheduled_time || null,
-        is_sabo: formData.is_sabo,
-        expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 48h expiration
-        is_open_challenge: challengeType === 'open'
+        is_sabo: formData.is_sabo
       };
 
-      // For direct challenges, set opponent_id. For open challenges, leave it null
+      // For direct challenges, set opponent_id. For open challenges, set to 'open'
       if (challengeType === 'direct') {
         challengeData.opponent_id = formData.opponent_id;
       } else {
-        challengeData.opponent_id = null; // Explicitly set to null for open challenges
+        challengeData.opponent_id = 'open'; // This will be handled by createChallenge hook
       }
 
       if (formData.is_sabo) {
         const handicap = calculateHandicap();
         if (handicap) {
-          challengeData.sabo_handicap_data = {
-            challenger_rank: currentUserProfile?.current_rank,
-            opponent_rank: selectedPlayer?.current_rank,
-            handicap_info: JSON.stringify(handicap)
-          };
+          challengeData.handicap_1_rank = handicap.handicapChallenger;
+          challengeData.handicap_05_rank = handicap.handicapOpponent;
         }
       }
 
-      const { error } = await supabase
-        .from('challenges')
-        .insert([challengeData]);
-
-      if (error) throw error;
+      // Use the hook's createChallenge function
+      await createChallenge(challengeData);
 
       toast.success(
         challengeType === 'direct' 
