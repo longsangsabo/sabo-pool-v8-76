@@ -21,6 +21,7 @@ import LiveActivityFeed from '@/components/challenges/LiveActivityFeed';
 import ResponsiveDebugInfo from '@/components/debug/ResponsiveDebugInfo';
 import MobileChallengeManager from '@/components/challenges/MobileChallengeManager';
 import { ChallengeDebugPanel } from '@/components/ChallengeDebugPanel';
+import { ChallengeMatchCard } from '@/components/challenges/ChallengeMatchCard';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 import { toast } from 'sonner';
@@ -99,7 +100,9 @@ const EnhancedChallengesPageV2: React.FC = () => {
     error,
     acceptChallenge,
     declineChallenge,
-    fetchChallenges
+    fetchChallenges,
+    submitScore,
+    isSubmittingScore
   } = useOptimizedChallenges();
 
   // Hook để lấy matches từ challenges đã được accept
@@ -144,6 +147,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
   ).map(convertToLocalChallenge);
   
   const activeChallenges = myChallenges.filter(c => c.status === 'accepted');
+  const myMatches = myChallenges.filter(c => c.status === 'accepted' || c.status === 'completed');
   const openChallenges = challenges.filter(c => 
     c.status === 'pending' && !c.opponent_id
   ).map(convertToLocalChallenge);
@@ -816,12 +820,18 @@ const EnhancedChallengesPageV2: React.FC = () => {
 
             {/* Enhanced Tabs for Desktop */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm h-12">
+              <TabsList className="grid w-full grid-cols-4 bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-lg shadow-sm h-12">
                 <TabsTrigger 
                   value="my-challenges"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
                 >
                   Thách đấu của tôi ({getFilteredChallenges(myChallenges).length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="my-matches"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-200 font-medium text-sm"
+                >
+                  📊 Trận đấu của tôi ({getFilteredChallenges(myMatches).length})
                 </TabsTrigger>
                 <TabsTrigger 
                   value="active-challenges"
@@ -859,6 +869,34 @@ const EnhancedChallengesPageV2: React.FC = () => {
                         <Plus className="w-4 h-4 mr-2" />
                         🎯 Tạo thách đấu
                       </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="my-matches" className="space-y-6">
+                {getFilteredChallenges(myMatches).length > 0 ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {getFilteredChallenges(myMatches).map(challenge => (
+                      <ChallengeMatchCard
+                        key={challenge.id}
+                        challenge={challenge as any}
+                        currentUserId={user?.id || ''}
+                        onSubmitScore={submitScore}
+                        isSubmittingScore={isSubmittingScore}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <Card className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-200/30">
+                    <CardContent className="p-16 text-center">
+                      <div className="p-4 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 w-fit mx-auto mb-6">
+                        <Trophy className="w-16 h-16 text-blue-600 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-foreground mb-3">Chưa có trận đấu nào</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Khi bạn chấp nhận thách đấu, trận đấu sẽ hiển thị ở đây để bạn có thể nhập tỷ số.
+                      </p>
                     </CardContent>
                   </Card>
                 )}

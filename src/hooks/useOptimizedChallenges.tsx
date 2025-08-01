@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -18,6 +19,8 @@ interface UseOptimizedChallengesReturn {
   cancelChallenge: (challengeId: string) => Promise<void>;
   getPendingChallenges: () => Challenge[];
   getAcceptedChallenges: () => Challenge[];
+  submitScore: (challengeId: string, challengerScore: number, opponentScore: number) => Promise<any>;
+  isSubmittingScore: boolean;
 }
 
 // Cache for profiles to avoid re-fetching
@@ -29,6 +32,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   // Debounced fetch to prevent multiple calls
   const fetchChallenges = useCallback(async () => {
@@ -352,6 +356,123 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
     return challenges.filter(c => c.status === 'accepted');
   }, [challenges]);
 
+  // Submit score for challenge
+  const submitScoreMutation = useMutation({
+    mutationFn: async ({ challengeId, challengerScore, opponentScore }: {
+      challengeId: string;
+      challengerScore: number;
+      opponentScore: number;
+    }) => {
+      if (!user) throw new Error('User not authenticated');
+      
+      console.log('🎯 Submitting score for challenge:', challengeId, { challengerScore, opponentScore });
+
+      // Get challenge details
+      const challenge = challenges.find(c => c.id === challengeId);
+      if (!challenge) throw new Error('Challenge not found');
+
+      // Determine winner
+      const winnerId = challengerScore > opponentScore 
+        ? challenge.challenger_id
+        : challenge.opponent_id;
+
+      // Update challenge with scores and status
+      const { data: challengeData, error: challengeError } = await supabase
+        .from('challenges')
+        .update({
+          challenger_score: challengerScore,
+          opponent_score: opponentScore,
+          status: 'completed',
+          completed_at: new Date().toISOString()
+        })
+        .eq('id', challengeId)
+        .select()
+        .maybeSingle();
+
+      if (challengeError) throw challengeError;
+      if (!challengeData) throw new Error('Challenge not found');
+
+      // Create or update match record
+      const { data: matchData, error: matchError } = await supabase
+        .from('matches')
+        .upsert({
+          challenge_id: challengeId,
+          player1_id: challengeData.challenger_id,
+          player2_id: challengeData.opponent_id,
+          score_player1: challengerScore,
+          score_player2: opponentScore,
+          winner_id: winnerId,
+          status: 'completed',
+          played_at: new Date().toISOString(),
+          match_type: 'challenge'
+        }, {
+          onConflict: 'challenge_id'
+        })
+        .select()
+        .single();
+
+      if (matchError) throw matchError;
+
+      // Process SPA points and ELO
+      try {
+        const { data: spaResult, error: spaError } = await supabase.rpc(
+          'credit_spa_points',
+          {
+            p_user_id: winnerId,
+            p_points: challengeData.bet_points || 100,
+            p_description: `Challenge victory - ${challengerScore}:${opponentScore}`
+          }
+        );
+
+        if (spaError) {
+          console.warn('Failed to credit SPA points:', spaError);
+        }
+      } catch (error) {
+        console.warn('SPA points processing failed:', error);
+      }
+
+      // Send notification to opponent
+      const opponentId = challengeData.challenger_id === user?.id 
+        ? challengeData.opponent_id 
+        : challengeData.challenger_id;
+
+      if (opponentId) {
+        try {
+          await supabase.functions.invoke('send-notification', {
+            body: {
+              user_id: opponentId,
+              type: 'challenge_completed',
+              title: '🏆 Trận đấu đã hoàn thành!',
+              message: `Tỷ số trận đấu của bạn: ${challengerScore}-${opponentScore}. Kiểm tra kết quả chi tiết.`,
+              metadata: {
+                challenge_id: challengeId,
+                final_score: `${challengerScore}-${opponentScore}`,
+                winner_id: winnerId
+              }
+            }
+          });
+        } catch (error) {
+          console.warn('Failed to send notification:', error);
+        }
+      }
+
+      return { challengeData, matchData };
+    },
+    onSuccess: () => {
+      // Refresh challenges and invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['challenges'] });
+      queryClient.invalidateQueries({ queryKey: ['matches'] });
+      queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
+      queryClient.invalidateQueries({ queryKey: ['wallets'] });
+      fetchChallenges();
+      toast.success('Đã ghi nhận tỷ số thành công!');
+    },
+    onError: (error) => {
+      console.error('Error submitting score:', error);
+      toast.error('Lỗi khi ghi nhận tỷ số');
+    }
+  });
+
   // Optimized real-time subscription - single channel
   useEffect(() => {
     if (!user) return;
@@ -376,6 +497,10 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
     };
   }, [user, fetchChallenges]);
 
+  const submitScore = useCallback(async (challengeId: string, challengerScore: number, opponentScore: number) => {
+    return submitScoreMutation.mutateAsync({ challengeId, challengerScore, opponentScore });
+  }, [submitScoreMutation]);
+
   return {
     challenges,
     receivedChallenges,
@@ -390,5 +515,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
     cancelChallenge,
     getPendingChallenges,
     getAcceptedChallenges,
+    submitScore,
+    isSubmittingScore: submitScoreMutation.isPending,
   };
 };
