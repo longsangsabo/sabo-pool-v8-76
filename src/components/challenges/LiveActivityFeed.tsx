@@ -23,11 +23,26 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
   const { liveMatches, upcomingMatches, recentResults, loading, refreshAll } = useOptimizedMatches();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // Debug logging to track data
+  console.log('🔴 LiveActivityFeed Debug:', {
+    liveMatches: liveMatches?.length || 0,
+    upcomingMatches: upcomingMatches?.length || 0,
+    recentResults: recentResults?.length || 0,
+    openChallenges: openChallenges?.length || 0,
+    loading
+  });
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await refreshAll();
-    setIsRefreshing(false);
-    toast.success('Đã cập nhật dữ liệu mới nhất');
+    try {
+      await refreshAll();
+      toast.success('Đã cập nhật dữ liệu mới nhất');
+    } catch (error) {
+      console.error('Error refreshing:', error);
+      toast.error('Lỗi khi cập nhật dữ liệu');
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const handleWatchMatch = (matchId: string) => {
@@ -45,8 +60,30 @@ const LiveActivityFeed: React.FC<LiveActivityFeedProps> = ({
     // In production, navigate to match result details
   };
 
+  // Show loading state for debugging
+  if (loading) {
+    return (
+      <div className="space-y-8 my-8">
+        <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full"></div>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              🔴 Hoạt động trực tiếp
+            </h2>
+          </div>
+          <p className="text-muted-foreground text-sm mt-1">Đang tải dữ liệu...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8 my-8">
+    <div className="space-y-8 my-8 border-2 border-dashed border-primary/20 rounded-lg p-4">
+      {/* Debug info header */}
+      <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+        Debug: Live={liveMatches?.length || 0}, Upcoming={upcomingMatches?.length || 0}, Recent={recentResults?.length || 0}, Open={openChallenges?.length || 0}
+      </div>
+      
       {/* Feed Header */}
       <div className="flex items-center justify-between bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6 shadow-lg">
         <div>

@@ -604,10 +604,15 @@ const EnhancedChallengesPageV2: React.FC = () => {
         </div>
 
         {/* Live Activity Feed - Main Content Area */}
-        <LiveActivityFeed
-          openChallenges={openChallenges}
-          onJoinChallenge={handleJoinOpenChallenge}
-        />
+                        <div className="w-full">
+                          <div className="text-xs text-muted-foreground mb-2 bg-muted/30 p-2 rounded">
+                            Debug: Rendering LiveActivityFeed with {openChallenges?.length || 0} open challenges
+                          </div>
+                          <LiveActivityFeed
+                            openChallenges={openChallenges}
+                            onJoinChallenge={handleJoinOpenChallenge}
+                          />
+                        </div>
 
         {/* Advanced Management Section - Desktop Optimized */}
         <Card className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg">
