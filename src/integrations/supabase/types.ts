@@ -4361,6 +4361,10 @@ export type Database = {
           loser_destination: string
         }[]
       }
+      recalculate_all_player_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       recover_tournament_automation: {
         Args: { p_tournament_id?: string }
         Returns: Json
@@ -4571,6 +4575,10 @@ export type Database = {
           p_description?: string
         }
         Returns: Json
+      }
+      update_win_streak: {
+        Args: { p_user_id: string }
+        Returns: undefined
       }
       validate_double_elimination_structure: {
         Args: { p_tournament_id: string }
