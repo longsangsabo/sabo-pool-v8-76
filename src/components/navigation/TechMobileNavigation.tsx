@@ -5,7 +5,6 @@ import {
   Home, 
   User, 
   Trophy, 
-  Calendar, 
   BarChart3,
   Settings 
 } from 'lucide-react';
@@ -28,14 +27,8 @@ export const TechMobileNavigation: React.FC = () => {
       active: location.pathname === '/challenges'
     },
     {
-      icon: <Calendar />,
-      label: 'Lịch',
-      path: '/calendar',
-      active: location.pathname === '/calendar'
-    },
-    {
       icon: <BarChart3 />,
-      label: 'Bảng xếp hạng',
+      label: 'BXH',
       path: '/leaderboard',
       active: location.pathname === '/leaderboard'
     },
