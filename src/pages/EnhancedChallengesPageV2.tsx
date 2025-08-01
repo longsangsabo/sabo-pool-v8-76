@@ -241,7 +241,7 @@ const EnhancedChallengesPageV2: React.FC = () => {
     try {
       const { error } = await supabase
         .from('matches')
-        .update({ status: 'confirmed' })
+        .update({ status: 'in_progress' })
         .eq('id', matchId);
 
       if (error) throw error;
