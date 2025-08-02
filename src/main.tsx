@@ -5,8 +5,6 @@ import App from './App.tsx';
 import './index.css';
 // Removed Sentry to improve loading speed
 
-console.log('🚀 Starting application...');
-
 // Simple error handling
 window.addEventListener('error', (event) => {
   console.error('Global error:', event.error?.message || event.message);
@@ -34,17 +32,13 @@ if (!rootElement) {
 }
 
 try {
-  console.log('Creating React root...');
   const root = createRoot(rootElement);
   
-  console.log('Rendering App component...');
   root.render(
     <StrictMode>
       <App />
     </StrictMode>
   );
-  
-  console.log('✅ App rendered successfully!');
   
 } catch (error) {
   console.error('Failed to render app:', error);
