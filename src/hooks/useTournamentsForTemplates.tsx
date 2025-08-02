@@ -21,12 +21,11 @@ export const useTournamentsForTemplates = () => {
   const fetchTournaments = async () => {
     try {
       setLoading(true);
-
+      
       // Fetch tournaments with valid statuses only
       const { data, error } = await supabase
         .from('tournaments')
-        .select(
-          `
+        .select(`
           id,
           name,
           status,
@@ -37,17 +36,9 @@ export const useTournamentsForTemplates = () => {
           tournament_start,
           club_id,
           description
-        `
-        )
+        `)
         .is('deleted_at', null) // Filter out soft deleted tournaments
-        .in('status', [
-          'registration_open',
-          'registration_closed',
-          'upcoming',
-          'ongoing',
-          'active',
-          'completed',
-        ]) // Show relevant tournament statuses
+        .in('status', ['registration_open', 'registration_closed', 'upcoming', 'ongoing', 'active', 'completed']) // Show relevant tournament statuses
         .order('created_at', { ascending: false }); // Sort by newest first
 
       if (error) {
@@ -71,6 +62,6 @@ export const useTournamentsForTemplates = () => {
   return {
     tournaments,
     loading,
-    refetch: fetchTournaments,
+    refetch: fetchTournaments
   };
 };

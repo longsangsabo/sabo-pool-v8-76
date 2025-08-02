@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -28,13 +22,9 @@ interface SimpleProfileContextType {
   refreshProfile: () => Promise<void>;
 }
 
-const SimpleProfileContext = createContext<
-  SimpleProfileContextType | undefined
->(undefined);
+const SimpleProfileContext = createContext<SimpleProfileContextType | undefined>(undefined);
 
-export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<SimpleProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
@@ -55,9 +45,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select(
-          'id, user_id, full_name, display_name, phone, avatar_url, role, verified_rank'
-        )
+        .select('id, user_id, full_name, display_name, phone, avatar_url, role, verified_rank')
         .eq('user_id', user.id)
         .single();
 
@@ -69,7 +57,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
       console.log('[SimpleProfileContext] Profile fetched successfully:', {
         id: data?.id,
         verified_rank: data?.verified_rank,
-        full_name: data?.full_name,
+        full_name: data?.full_name
       });
 
       setProfile(data);
@@ -81,27 +69,24 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [user]);
 
   // Simple update function
-  const updateProfile = useCallback(
-    async (updates: Partial<SimpleProfile>): Promise<boolean> => {
-      if (!user || !profile) return false;
+  const updateProfile = useCallback(async (updates: Partial<SimpleProfile>): Promise<boolean> => {
+    if (!user || !profile) return false;
 
-      try {
-        const { error } = await supabase
-          .from('profiles')
-          .update(updates)
-          .eq('user_id', user.id);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('user_id', user.id);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        setProfile(prev => (prev ? { ...prev, ...updates } : null));
-        return true;
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        return false;
-      }
-    },
-    [user, profile]
-  );
+      setProfile(prev => prev ? { ...prev, ...updates } : null);
+      return true;
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      return false;
+    }
+  }, [user, profile]);
 
   const refreshProfile = useCallback(async () => {
     await fetchProfile();
@@ -111,11 +96,8 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (!user) return;
 
-    console.log(
-      '[SimpleProfileContext] Setting up real-time subscription for user:',
-      user.id
-    );
-
+    console.log('[SimpleProfileContext] Setting up real-time subscription for user:', user.id);
+    
     const channel = supabase
       .channel('simple-profile-changes')
       .on(
@@ -124,34 +106,28 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
           event: 'UPDATE',
           schema: 'public',
           table: 'profiles',
-          filter: `user_id=eq.${user.id}`,
+          filter: `user_id=eq.${user.id}`
         },
-        payload => {
-          console.log(
-            '[SimpleProfileContext] Real-time profile update received:',
-            payload
-          );
-
+        (payload) => {
+          console.log('[SimpleProfileContext] Real-time profile update received:', payload);
+          
           // Check specifically for verified_rank changes with null safety
           const oldRank = payload.old?.verified_rank;
           const newRank = payload.new?.verified_rank;
-
+          
           if (oldRank !== newRank) {
             console.log('[SimpleProfileContext] Verified rank changed:', {
               old: oldRank,
-              new: newRank,
+              new: newRank
             });
-
+            
             // Force immediate profile refresh
             fetchProfile();
           }
         }
       )
-      .subscribe(status => {
-        console.log(
-          '[SimpleProfileContext] Real-time subscription status:',
-          status
-        );
+      .subscribe((status) => {
+        console.log('[SimpleProfileContext] Real-time subscription status:', status);
       });
 
     return () => {
@@ -188,12 +164,12 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [fetchProfile]);
 
   return (
-    <SimpleProfileContext.Provider
-      value={{
-        profile,
-        isLoading,
-        updateProfile,
-        refreshProfile,
+    <SimpleProfileContext.Provider 
+      value={{ 
+        profile, 
+        isLoading, 
+        updateProfile, 
+        refreshProfile 
       }}
     >
       {children}
@@ -204,9 +180,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useSimpleProfile = () => {
   const context = useContext(SimpleProfileContext);
   if (!context) {
-    throw new Error(
-      'useSimpleProfile must be used within SimpleProfileProvider'
-    );
+    throw new Error('useSimpleProfile must be used within SimpleProfileProvider');
   }
   return context;
 };

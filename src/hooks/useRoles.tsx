@@ -25,10 +25,7 @@ export const useRoles = () => {
         if (error) {
           console.error('useRoles: Error fetching roles:', error);
           // For RLS policy errors, return empty array (regular user)
-          if (
-            error.message?.includes('RLS') ||
-            error.message?.includes('policy')
-          ) {
+          if (error.message?.includes('RLS') || error.message?.includes('policy')) {
             return [];
           }
           throw error;
@@ -48,10 +45,7 @@ export const useRoles = () => {
     gcTime: 10 * 60 * 1000,
     retry: (failureCount, error: any) => {
       // Don't retry RLS policy errors
-      if (
-        error?.message?.includes('RLS') ||
-        error?.message?.includes('policy')
-      ) {
+      if (error?.message?.includes('RLS') || error?.message?.includes('policy')) {
         return false;
       }
       return failureCount < 1;
@@ -72,6 +66,6 @@ export const useRoles = () => {
     isClubOwner: hasRole('club_owner'),
     isUser: hasRole('user'),
     isLoading: query.isLoading,
-    error: query.error,
+    error: query.error
   };
 };

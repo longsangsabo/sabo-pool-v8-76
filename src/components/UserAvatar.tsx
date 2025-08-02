@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -27,14 +28,14 @@ interface UserAvatarProps {
   compact?: boolean;
 }
 
-const UserAvatar = ({
-  user,
+const UserAvatar = ({ 
+  user, 
   userId,
-  size = 'md',
-  className,
-  showRank = false,
+  size = 'md', 
+  className, 
+  showRank = false, 
   showName = true,
-  compact = false,
+  compact = false 
 }: UserAvatarProps) => {
   // Constants defined at the top
   const sizeClasses = {
@@ -52,21 +53,15 @@ const UserAvatar = ({
   } as const;
 
   // Auto-fetch user data if userId is provided
-  const {
-    data: fetchedUserData,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: fetchedUserData, isLoading, refetch } = useQuery({
     queryKey: ['user-avatar', userId],
     queryFn: async () => {
       if (!userId) return null;
-
+      
       // Fetch user profile data
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select(
-          'user_id, full_name, display_name, avatar_url, verified_rank, elo'
-        )
+        .select('user_id, full_name, display_name, avatar_url, verified_rank, elo')
         .eq('user_id', userId)
         .single();
 
@@ -86,7 +81,7 @@ const UserAvatar = ({
         verified_rank: ranking?.current_rank || 'K',
         rank: ranking?.current_rank || 'K',
         current_rank: ranking?.current_rank || 'K',
-        elo: ranking?.elo_points || profile.elo,
+        elo: ranking?.elo_points || profile.elo
       };
     },
     enabled: !!userId && !user,
@@ -105,7 +100,7 @@ const UserAvatar = ({
           event: '*',
           schema: 'public',
           table: 'profiles',
-          filter: `user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`
         },
         () => refetch()
       )
@@ -115,7 +110,7 @@ const UserAvatar = ({
           event: '*',
           schema: 'public',
           table: 'player_rankings',
-          filter: `user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`
         },
         () => refetch()
       )
@@ -132,10 +127,8 @@ const UserAvatar = ({
   // Handle loading state when auto-fetching
   if (userId && !user && isLoading) {
     return (
-      <div
-        className={`${sizeClasses[size]} bg-muted rounded-full flex items-center justify-center`}
-      >
-        <Loader2 className='w-3 h-3 animate-spin text-muted-foreground' />
+      <div className={`${sizeClasses[size]} bg-muted rounded-full flex items-center justify-center`}>
+        <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -144,10 +137,8 @@ const UserAvatar = ({
   if (!activeUser) {
     if (userId) {
       return (
-        <div
-          className={`${sizeClasses[size]} bg-muted rounded-full flex items-center justify-center`}
-        >
-          <span className='text-muted-foreground text-xs'>TBD</span>
+        <div className={`${sizeClasses[size]} bg-muted rounded-full flex items-center justify-center`}>
+          <span className="text-muted-foreground text-xs">TBD</span>
         </div>
       );
     }
@@ -157,23 +148,23 @@ const UserAvatar = ({
   const normalizedRank = getNormalizedRank({
     verified_rank: activeUser.verified_rank,
     current_rank: activeUser.current_rank,
-    rank: activeUser.rank,
+    rank: activeUser.rank
   });
 
   if (compact) {
     return (
-      <div className='flex items-center gap-2'>
-        <div className='relative'>
+      <div className="flex items-center gap-2">
+        <div className="relative">
           <Avatar className={`${sizeClasses[size]} ${className}`}>
             <AvatarImage src={activeUser.avatar} alt={activeUser.name} />
-            <AvatarFallback className='text-xs'>
+            <AvatarFallback className="text-xs">
               {activeUser.name?.charAt(0)?.toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
           {showRank && (
-            <div className='absolute -bottom-1 -right-1'>
-              <RankBadge
-                rank={normalizedRank}
+            <div className="absolute -bottom-1 -right-1">
+              <RankBadge 
+                rank={normalizedRank} 
                 size={rankSize[size]}
                 showTooltip={false}
               />
@@ -181,10 +172,8 @@ const UserAvatar = ({
           )}
         </div>
         {showName && (
-          <div className='min-w-0 flex-1'>
-            <div className='text-sm font-medium truncate'>
-              {activeUser.name}
-            </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-medium truncate">{activeUser.name}</div>
           </div>
         )}
       </div>
@@ -192,8 +181,8 @@ const UserAvatar = ({
   }
 
   return (
-    <div className='flex items-center gap-3'>
-      <div className='relative'>
+    <div className="flex items-center gap-3">
+      <div className="relative">
         <Avatar className={`${sizeClasses[size]} ${className}`}>
           <AvatarImage src={activeUser.avatar} alt={activeUser.name} />
           <AvatarFallback>
@@ -201,9 +190,9 @@ const UserAvatar = ({
           </AvatarFallback>
         </Avatar>
         {showRank && (
-          <div className='absolute -bottom-1 -right-1'>
-            <RankBadge
-              rank={normalizedRank}
+          <div className="absolute -bottom-1 -right-1">
+            <RankBadge 
+              rank={normalizedRank} 
               size={rankSize[size]}
               showTooltip={true}
             />
@@ -211,8 +200,8 @@ const UserAvatar = ({
         )}
       </div>
       {showName && (
-        <div className='min-w-0 flex-1'>
-          <div className='font-medium truncate'>{activeUser.name}</div>
+        <div className="min-w-0 flex-1">
+          <div className="font-medium truncate">{activeUser.name}</div>
         </div>
       )}
     </div>

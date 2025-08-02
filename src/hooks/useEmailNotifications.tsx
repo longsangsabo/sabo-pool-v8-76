@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { emailService } from '@/services/emailService';
@@ -20,7 +21,7 @@ export const useEmailNotifications = () => {
           console.error('Failed to send welcome email:', error);
         }
       };
-
+      
       // Delay to ensure user registration is complete
       setTimeout(sendWelcomeEmail, 2000);
     }
@@ -28,7 +29,7 @@ export const useEmailNotifications = () => {
 
   const sendTournamentConfirmation = async (tournamentName: string) => {
     if (!user || !profile) return;
-
+    
     try {
       await emailService.sendTournamentConfirmation(
         user.email || '',
@@ -44,7 +45,7 @@ export const useEmailNotifications = () => {
 
   const sendMatchResultNotification = async (matchResult: any) => {
     if (!user || !profile) return;
-
+    
     try {
       await emailService.sendMatchResultNotification(
         user.email || '',
@@ -57,12 +58,9 @@ export const useEmailNotifications = () => {
     }
   };
 
-  const sendRankingUpdateNotification = async (
-    newRank: string,
-    oldRank: string
-  ) => {
+  const sendRankingUpdateNotification = async (newRank: string, oldRank: string) => {
     if (!user || !profile) return;
-
+    
     try {
       await emailService.sendRankingUpdateNotification(
         user.email || '',
@@ -78,7 +76,7 @@ export const useEmailNotifications = () => {
 
   const sendPaymentConfirmation = async (paymentDetails: any) => {
     if (!user || !profile) return;
-
+    
     try {
       await emailService.sendPaymentConfirmation(
         user.email || '',

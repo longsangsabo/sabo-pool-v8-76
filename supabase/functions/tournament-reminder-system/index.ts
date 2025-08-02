@@ -1,10 +1,9 @@
-import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 interface TournamentMatch {
@@ -33,9 +32,9 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('⏰ Starting tournament reminder system...');
 
     const now = new Date();
-    const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const in2Hours = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    const in30Minutes = new Date(now.getTime() + 30 * 60 * 1000);
+    const in24Hours = new Date(now.getTime() + (24 * 60 * 60 * 1000));
+    const in2Hours = new Date(now.getTime() + (2 * 60 * 60 * 1000));
+    const in30Minutes = new Date(now.getTime() + (30 * 60 * 1000));
 
     let totalNotifications = 0;
 
@@ -72,8 +71,8 @@ const handler = async (req: Request): Promise<Response> => {
               tournament_name: tournament.name,
               tournament_start: tournament.tournament_start,
               venue: tournament.venue_address,
-              reminder_type: '24h_advance',
-            },
+              reminder_type: '24h_advance'
+            }
           }));
 
           const { error: notifError } = await supabase
@@ -82,9 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           if (!notifError) {
             totalNotifications += notifications.length;
-            console.log(
-              `📢 Sent 24h reminders for "${tournament.name}" to ${notifications.length} participants`
-            );
+            console.log(`📢 Sent 24h reminders for "${tournament.name}" to ${notifications.length} participants`);
           }
         }
       }
@@ -94,12 +91,10 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('🕐 Checking for matches starting in 2 hours...');
     const { data: matchesIn2h, error: m2Error } = await supabase
       .from('tournament_matches')
-      .select(
-        `
+      .select(`
         id, tournament_id, player1_id, player2_id, scheduled_time,
         tournaments(name, venue_address)
-      `
-      )
+      `)
       .gte('scheduled_time', now.toISOString())
       .lte('scheduled_time', in2Hours.toISOString())
       .eq('status', 'scheduled');
@@ -109,7 +104,7 @@ const handler = async (req: Request): Promise<Response> => {
     } else {
       for (const match of matchesIn2h || []) {
         const notifications = [];
-
+        
         if (match.player1_id) {
           notifications.push({
             user_id: match.player1_id,
@@ -124,8 +119,8 @@ const handler = async (req: Request): Promise<Response> => {
               tournament_name: match.tournaments?.name,
               scheduled_time: match.scheduled_time,
               venue: match.tournaments?.venue_address,
-              reminder_type: '2h_match',
-            },
+              reminder_type: '2h_match'
+            }
           });
         }
 
@@ -143,8 +138,8 @@ const handler = async (req: Request): Promise<Response> => {
               tournament_name: match.tournaments?.name,
               scheduled_time: match.scheduled_time,
               venue: match.tournaments?.venue_address,
-              reminder_type: '2h_match',
-            },
+              reminder_type: '2h_match'
+            }
           });
         }
 
@@ -155,9 +150,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           if (!notifError) {
             totalNotifications += notifications.length;
-            console.log(
-              `📢 Sent 2h match reminders for tournament "${match.tournaments?.name}" to ${notifications.length} players`
-            );
+            console.log(`📢 Sent 2h match reminders for tournament "${match.tournaments?.name}" to ${notifications.length} players`);
           }
         }
       }
@@ -167,12 +160,10 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('⚡ Checking for matches starting in 30 minutes...');
     const { data: matchesIn30m, error: m30Error } = await supabase
       .from('tournament_matches')
-      .select(
-        `
+      .select(`
         id, tournament_id, player1_id, player2_id, scheduled_time,
         tournaments(name, venue_address)
-      `
-      )
+      `)
       .gte('scheduled_time', now.toISOString())
       .lte('scheduled_time', in30Minutes.toISOString())
       .eq('status', 'scheduled');
@@ -182,7 +173,7 @@ const handler = async (req: Request): Promise<Response> => {
     } else {
       for (const match of matchesIn30m || []) {
         const notifications = [];
-
+        
         if (match.player1_id) {
           notifications.push({
             user_id: match.player1_id,
@@ -197,8 +188,8 @@ const handler = async (req: Request): Promise<Response> => {
               tournament_name: match.tournaments?.name,
               scheduled_time: match.scheduled_time,
               venue: match.tournaments?.venue_address,
-              reminder_type: '30m_urgent',
-            },
+              reminder_type: '30m_urgent'
+            }
           });
         }
 
@@ -216,8 +207,8 @@ const handler = async (req: Request): Promise<Response> => {
               tournament_name: match.tournaments?.name,
               scheduled_time: match.scheduled_time,
               venue: match.tournaments?.venue_address,
-              reminder_type: '30m_urgent',
-            },
+              reminder_type: '30m_urgent'
+            }
           });
         }
 
@@ -228,26 +219,26 @@ const handler = async (req: Request): Promise<Response> => {
 
           if (!notifError) {
             totalNotifications += notifications.length;
-            console.log(
-              `🚨 Sent URGENT 30m reminders for tournament "${match.tournaments?.name}" to ${notifications.length} players`
-            );
+            console.log(`🚨 Sent URGENT 30m reminders for tournament "${match.tournaments?.name}" to ${notifications.length} players`);
           }
         }
       }
     }
 
     // Log the automation activity
-    await supabase.from('system_logs').insert({
-      log_type: 'tournament_reminder_system',
-      message: 'Tournament reminder system completed',
-      metadata: {
-        tournaments_24h: tournamentsIn24h?.length || 0,
-        matches_2h: matchesIn2h?.length || 0,
-        matches_30m: matchesIn30m?.length || 0,
-        total_notifications_sent: totalNotifications,
-        execution_time: new Date().toISOString(),
-      },
-    });
+    await supabase
+      .from('system_logs')
+      .insert({
+        log_type: 'tournament_reminder_system',
+        message: 'Tournament reminder system completed',
+        metadata: {
+          tournaments_24h: tournamentsIn24h?.length || 0,
+          matches_2h: matchesIn2h?.length || 0,
+          matches_30m: matchesIn30m?.length || 0,
+          total_notifications_sent: totalNotifications,
+          execution_time: new Date().toISOString()
+        }
+      });
 
     const result = {
       success: true,
@@ -255,7 +246,7 @@ const handler = async (req: Request): Promise<Response> => {
       matches_2h_reminders: matchesIn2h?.length || 0,
       matches_30m_urgent: matchesIn30m?.length || 0,
       total_notifications_sent: totalNotifications,
-      message: `Sent ${totalNotifications} reminder notifications`,
+      message: `Sent ${totalNotifications} reminder notifications`
     };
 
     console.log('🎉 Tournament reminder system completed:', result);
@@ -267,19 +258,19 @@ const handler = async (req: Request): Promise<Response> => {
         ...corsHeaders,
       },
     });
+
   } catch (error: any) {
     console.error('💥 Error in tournament reminder system:', error);
-
+    
     return new Response(
-      JSON.stringify({
+      JSON.stringify({ 
         error: error.message,
-        success: false,
-      }),
-      {
+        success: false 
+      }), {
         status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders,
+        headers: { 
+          'Content-Type': 'application/json', 
+          ...corsHeaders 
         },
       }
     );

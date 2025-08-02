@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -73,10 +74,7 @@ const renderWithRouter = (component: React.ReactElement) => {
 describe('TournamentCard', () => {
   test('renders tournament information correctly', () => {
     const { getByText } = renderWithRouter(
-      <TournamentCard
-        tournament={TournamentAdapter.createMockEnhanced()}
-        onView={() => {}}
-      />
+      <TournamentCard tournament={TournamentAdapter.createMockEnhanced()} onView={() => {}} />
     );
 
     expect(getByText('Test Tournament')).toBeInTheDocument();
@@ -87,10 +85,7 @@ describe('TournamentCard', () => {
 
   test('shows registration open status', () => {
     const { getByText } = renderWithRouter(
-      <TournamentCard
-        tournament={TournamentAdapter.createMockEnhanced()}
-        onView={() => {}}
-      />
+      <TournamentCard tournament={TournamentAdapter.createMockEnhanced()} onView={() => {}} />
     );
 
     expect(getByText('Đang mở đăng ký')).toBeInTheDocument();
@@ -111,10 +106,7 @@ describe('TournamentCard', () => {
 
   test('displays correct date format', () => {
     const { getByText } = renderWithRouter(
-      <TournamentCard
-        tournament={TournamentAdapter.createMockEnhanced()}
-        onView={() => {}}
-      />
+      <TournamentCard tournament={TournamentAdapter.createMockEnhanced()} onView={() => {}} />
     );
 
     expect(getByText(/1\/12\/2024/)).toBeInTheDocument();

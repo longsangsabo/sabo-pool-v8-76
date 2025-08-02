@@ -63,8 +63,7 @@ export const useReferrals = () => {
       totalReferrals: referrals.length,
       totalEarned: 0,
       pendingRewards: referrals.filter(r => r.status === 'pending').length,
-      successfulReferrals: referrals.filter(r => r.status === 'completed')
-        .length,
-    },
+      successfulReferrals: referrals.filter(r => r.status === 'completed').length
+    }
   };
 };

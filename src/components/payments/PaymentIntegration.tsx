@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
 
 /**
@@ -16,8 +10,8 @@ export function PaymentIntegration() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='flex items-center gap-2'>
-          <AlertTriangle className='h-5 w-5 text-amber-500' />
+        <CardTitle className="flex items-center gap-2">
+          <AlertTriangle className="h-5 w-5 text-amber-500" />
           Payment System
         </CardTitle>
         <CardDescription>
@@ -25,8 +19,8 @@ export function PaymentIntegration() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='text-center py-8'>
-          <p className='text-muted-foreground'>
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">
             This feature will be available soon
           </p>
         </div>

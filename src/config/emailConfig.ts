@@ -1,3 +1,4 @@
+
 export const EMAIL_TEMPLATES = {
   WELCOME: 'welcome',
   TOURNAMENT_CONFIRMATION: 'tournament_confirmation',
@@ -33,10 +34,7 @@ export const EMAIL_SETTINGS = {
   },
   replyTo: 'support@saboarena.com',
   unsubscribe: 'https://saboarena.com/unsubscribe',
-  baseUrl:
-    typeof window !== 'undefined'
-      ? window.location.origin
-      : 'https://saboarena.com',
+  baseUrl: typeof window !== 'undefined' ? window.location.origin : 'https://saboarena.com',
 };
 
 // Auto-email triggers configuration

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -21,10 +22,10 @@ interface Registration {
   payment_status: string;
   registration_date?: string;
   created_at: string;
-
+  
   notes?: string;
   profiles?: Player; // This matches the Supabase query structure
-  player?: Player; // This is what we'll transform to
+  player?: Player;   // This is what we'll transform to
 }
 
 export const useTournamentRegistrations = (tournamentId: string) => {
@@ -47,8 +48,7 @@ export const useTournamentRegistrations = (tournamentId: string) => {
       // Fetch tournament registrations with enhanced player data
       const { data, error: fetchError } = await supabase
         .from('tournament_registrations')
-        .select(
-          `
+        .select(`
           id,
           tournament_id,
           user_id,
@@ -64,16 +64,12 @@ export const useTournamentRegistrations = (tournamentId: string) => {
             avatar_url,
             verified_rank
           )
-        `
-        )
+        `)
         .eq('tournament_id', tournamentId)
         .order('created_at', { ascending: true });
 
       if (fetchError) {
-        console.error(
-          '❌ Error fetching tournament registrations:',
-          fetchError
-        );
+        console.error('❌ Error fetching tournament registrations:', fetchError);
         throw fetchError;
       }
 
@@ -82,26 +78,22 @@ export const useTournamentRegistrations = (tournamentId: string) => {
       // Transform the data to match our interface
       const transformedData = (data || []).map(reg => ({
         ...reg,
-        player: reg.profiles
-          ? {
-              id: reg.profiles.id,
-              user_id: reg.profiles.user_id,
-              full_name: reg.profiles.full_name,
-              display_name: reg.profiles.display_name,
-              avatar_url: reg.profiles.avatar_url,
-              current_rank: 'K', // Default rank
-              verified_rank: reg.profiles.verified_rank,
-              elo: 1000, // Default ELO
-            }
-          : undefined,
+        player: reg.profiles ? {
+          id: reg.profiles.id,
+          user_id: reg.profiles.user_id,
+          full_name: reg.profiles.full_name,
+          display_name: reg.profiles.display_name,
+          avatar_url: reg.profiles.avatar_url,
+          current_rank: 'K', // Default rank
+          verified_rank: reg.profiles.verified_rank,
+          elo: 1000 // Default ELO
+        } : undefined
       }));
 
       setRegistrations(transformedData);
     } catch (err) {
       console.error('❌ Error in fetchRegistrations:', err);
-      setError(
-        err instanceof Error ? err.message : 'Failed to fetch registrations'
-      );
+      setError(err instanceof Error ? err.message : 'Failed to fetch registrations');
       setRegistrations([]);
     } finally {
       setLoading(false);
@@ -112,10 +104,7 @@ export const useTournamentRegistrations = (tournamentId: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
-      '🔄 Setting up real-time subscription for registrations:',
-      tournamentId
-    );
+    console.log('🔄 Setting up real-time subscription for registrations:', tournamentId);
 
     const channel = supabase
       .channel(`tournament-registrations-${tournamentId}`)
@@ -125,11 +114,11 @@ export const useTournamentRegistrations = (tournamentId: string) => {
           event: '*',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `tournament_id=eq.${tournamentId}`,
+          filter: `tournament_id=eq.${tournamentId}`
         },
-        payload => {
+        (payload) => {
           console.log('🔄 Registration real-time update:', payload);
-
+          
           // Immediately refetch to ensure accuracy with profile data
           fetchRegistrations();
         }
@@ -151,6 +140,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
     loading,
     error,
     fetchRegistrations,
-    refetch: fetchRegistrations,
+    refetch: fetchRegistrations
   };
 };

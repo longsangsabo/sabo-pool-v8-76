@@ -12,19 +12,16 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
   }>({
     isProcessing: false,
     lastAction: null,
-    pendingCount: 0,
+    pendingCount: 0
   });
 
   useEffect(() => {
-    console.log(
-      '🔄 Setting up comprehensive tournament sync for:',
-      tournamentId
-    );
-
+    console.log('🔄 Setting up comprehensive tournament sync for:', tournamentId);
+    
     // Create a comprehensive realtime channel for tournament updates
     const channel = supabase
       .channel(`tournament_sync_enhanced_${tournamentId || 'all'}`)
-
+      
       // Listen to tournament status changes
       .on(
         'postgres_changes',
@@ -32,23 +29,21 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: '*',
           schema: 'public',
           table: 'tournaments',
-          ...(tournamentId && { filter: `id=eq.${tournamentId}` }),
+          ...(tournamentId && { filter: `id=eq.${tournamentId}` })
         },
-        payload => {
+        (payload) => {
           console.log('🏆 Tournament change detected:', payload);
           setLastUpdate(new Date());
-
+          
           if (payload.eventType === 'UPDATE') {
             const oldRecord = payload.old as any;
             const newRecord = payload.new as any;
-
+            
             // Tournament status changes
             if (oldRecord?.status !== newRecord?.status) {
               switch (newRecord.status) {
                 case 'completed':
-                  toast.success(
-                    `🎉 Giải đấu "${newRecord.name}" đã hoàn thành!`
-                  );
+                  toast.success(`🎉 Giải đấu "${newRecord.name}" đã hoàn thành!`);
                   break;
                 case 'ongoing':
                   toast.info(`🚀 Giải đấu "${newRecord.name}" đã bắt đầu!`);
@@ -58,7 +53,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
                   break;
               }
             }
-
+            
             // Visibility changes
             if (oldRecord?.is_visible !== newRecord?.is_visible) {
               if (!newRecord.is_visible) {
@@ -70,7 +65,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           }
         }
       )
-
+      
       // Listen to tournament matches completion
       .on(
         'postgres_changes',
@@ -78,29 +73,25 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'tournament_matches',
-          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` }),
+          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` })
         },
-        payload => {
+        (payload) => {
           console.log('⚔️ Tournament match updated:', payload);
           setLastUpdate(new Date());
-
+          
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
-
+          
           // Match completion with instant feedback
-          if (
-            oldRecord?.status !== 'completed' &&
-            newRecord?.status === 'completed'
-          ) {
+          if (oldRecord?.status !== 'completed' && newRecord?.status === 'completed') {
             // Show immediate feedback
             setAutomationActivity(prev => ({
               ...prev,
               isProcessing: true,
-              lastAction: 'Đang advance winner...',
+              lastAction: 'Đang advance winner...'
             }));
-
-            if (newRecord.bracket_type === 'finals') {
-              // SABO_REBUILD: Updated bracket type
+            
+            if (newRecord.bracket_type === 'finals') { // SABO_REBUILD: Updated bracket type
               toast.success(`🏁 Trận chung kết đã kết thúc!`);
             } else {
               toast.info(`✅ Trận đấu hoàn thành, đang tiến vòng...`);
@@ -108,7 +99,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           }
         }
       )
-
+      
       // Listen to tournament results updates
       .on(
         'postgres_changes',
@@ -116,18 +107,18 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: '*',
           schema: 'public',
           table: 'tournament_results',
-          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` }),
+          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` })
         },
-        payload => {
+        (payload) => {
           console.log('🏆 Tournament results updated:', payload);
           setLastUpdate(new Date());
-
+          
           if (payload.eventType === 'INSERT') {
             toast.success(`📊 Kết quả giải đấu đã được cập nhật!`);
           }
         }
       )
-
+      
       // Listen to SPA points changes
       .on(
         'postgres_changes',
@@ -135,9 +126,9 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: 'INSERT',
           schema: 'public',
           table: 'spa_points_log',
-          filter: 'source_type=eq.tournament',
+          filter: 'source_type=eq.tournament'
         },
-        payload => {
+        (payload) => {
           const newRecord = payload.new as any;
           if (!tournamentId || newRecord.source_id === tournamentId) {
             console.log('💎 SPA points awarded:', payload);
@@ -146,7 +137,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           }
         }
       )
-
+      
       // Listen to notifications
       .on(
         'postgres_changes',
@@ -154,14 +145,14 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: 'type=eq.tournament_completed',
+          filter: 'type=eq.tournament_completed'
         },
-        payload => {
+        (payload) => {
           console.log('🔔 Tournament notification:', payload);
           setLastUpdate(new Date());
         }
       )
-
+      
       // Listen to automation log for detailed feedback
       .on(
         'postgres_changes',
@@ -169,55 +160,52 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           event: 'INSERT',
           schema: 'public',
           table: 'tournament_automation_log',
-          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` }),
+          ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` })
         },
-        payload => {
+        (payload) => {
           const logData = payload.new as any;
           console.log('🤖 Automation log update:', logData);
           setLastUpdate(new Date());
-
+          
           if (logData.automation_type === 'auto_winner_advancement') {
             if (logData.status === 'completed') {
               setAutomationActivity(prev => ({
                 ...prev,
                 isProcessing: false,
-                lastAction: 'Winner advanced thành công',
+                lastAction: 'Winner advanced thành công'
               }));
               toast.success('🎯 Đã tiến vòng thành công!');
             } else if (logData.status === 'failed') {
               setAutomationActivity(prev => ({
                 ...prev,
                 isProcessing: false,
-                lastAction: 'Lỗi advance winner',
+                lastAction: 'Lỗi advance winner'
               }));
               toast.error('❌ Lỗi tiến vòng: ' + logData.error_message);
             } else if (logData.status === 'processing') {
               setAutomationActivity(prev => ({
                 ...prev,
                 isProcessing: true,
-                lastAction: 'Đang xử lý advance winner...',
+                lastAction: 'Đang xử lý advance winner...'
               }));
             }
           }
-
-          if (
-            logData.automation_type === 'tournament_completion' &&
-            logData.status === 'completed'
-          ) {
+          
+          if (logData.automation_type === 'tournament_completion' && logData.status === 'completed') {
             setAutomationActivity(prev => ({
               ...prev,
               isProcessing: false,
-              lastAction: 'Tournament completed',
+              lastAction: 'Tournament completed'
             }));
             toast.success('🏆 Giải đấu đã hoàn thành tự động!');
           }
         }
       )
-
-      .subscribe(status => {
+      
+      .subscribe((status) => {
         console.log(`🔗 Tournament sync status: ${status}`);
         setIsConnected(status === 'SUBSCRIBED');
-
+        
         if (status === 'SUBSCRIBED') {
           toast.success('🔄 Đã kết nối realtime');
         } else if (status === 'CHANNEL_ERROR') {
@@ -232,10 +220,10 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
     };
   }, [tournamentId]);
 
-  return {
-    isConnected,
-    lastUpdate,
+  return { 
+    isConnected, 
+    lastUpdate, 
     automationActivity,
-    isAutomationProcessing: automationActivity.isProcessing,
+    isAutomationProcessing: automationActivity.isProcessing
   };
 };

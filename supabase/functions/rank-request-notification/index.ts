@@ -1,10 +1,9 @@
-import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 interface RankRequestData {
@@ -39,8 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (action === 'create') {
       // Create new rank request
-      const { user_id, club_id, requested_rank, reason }: RankRequestData =
-        body;
+      const { user_id, club_id, requested_rank, reason }: RankRequestData = body;
 
       // 1. Create rank request record
       const { data: rankRequest, error: requestError } = await supabase
@@ -49,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
           user_id,
           club_id,
           requested_rank,
-          status: 'pending',
+          status: 'pending'
         })
         .select()
         .single();
@@ -72,21 +70,15 @@ const handler = async (req: Request): Promise<Response> => {
           .from('club_profiles')
           .select('club_name, user_id')
           .eq('id', club_id)
-          .single(),
+          .single()
       ]);
 
       if (userResult.error || clubResult.error) {
-        console.error(
-          '❌ Error fetching user/club data:',
-          userResult.error || clubResult.error
-        );
+        console.error('❌ Error fetching user/club data:', userResult.error || clubResult.error);
         throw userResult.error || clubResult.error;
       }
 
-      const userName =
-        userResult.data.display_name ||
-        userResult.data.full_name ||
-        'Người chơi';
+      const userName = userResult.data.display_name || userResult.data.full_name || 'Người chơi';
       const clubName = clubResult.data.club_name;
       const clubOwnerId = clubResult.data.user_id;
 
@@ -104,9 +96,9 @@ const handler = async (req: Request): Promise<Response> => {
             user_id: user_id,
             club_id: club_id,
             requested_rank: requested_rank,
-            user_name: userName,
+            user_name: userName
           },
-          link: `/club-management?tab=rank-requests&request_id=${rankRequest.id}`,
+          link: `/club-management?tab=rank-requests&request_id=${rankRequest.id}`
         });
 
       if (notificationError) {
@@ -120,32 +112,26 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({
           success: true,
           message: 'Yêu cầu đăng ký hạng đã được gửi và thông báo cho club',
-          request_id: rankRequest.id,
+          request_id: rankRequest.id
         }),
         {
           status: 200,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
         }
       );
+
     } else if (action === 'update') {
       // Update existing rank request
-      const {
-        rank_request_id,
-        action: updateAction,
-        rejection_reason,
-        scheduled_time,
-      }: RankUpdateData = body;
+      const { rank_request_id, action: updateAction, rejection_reason, scheduled_time }: RankUpdateData = body;
 
       // Get rank request details
       const { data: rankRequest, error: rankError } = await supabase
         .from('rank_requests')
-        .select(
-          `
+        .select(`
           *,
           profiles!rank_requests_user_id_fkey(full_name, display_name),
           club_profiles!rank_requests_club_id_fkey(club_name, user_id)
-        `
-        )
+        `)
         .eq('id', rank_request_id)
         .single();
 
@@ -156,7 +142,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Update rank request status
       const updateData: any = {
         status: updateAction,
-        updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
 
       if (updateAction === 'approved') {
@@ -225,29 +211,33 @@ const handler = async (req: Request): Promise<Response> => {
       return new Response(
         JSON.stringify({
           success: true,
-          message: 'Rank request updated successfully',
+          message: 'Rank request updated successfully'
         }),
         {
           status: 200,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
         }
       );
     }
 
-    return new Response(JSON.stringify({ error: 'Invalid action' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
-    });
+    return new Response(
+      JSON.stringify({ error: 'Invalid action' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      }
+    );
+
   } catch (error: any) {
     console.error('❌ Rank request notification error:', error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message,
+        error: error.message
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
       }
     );
   }

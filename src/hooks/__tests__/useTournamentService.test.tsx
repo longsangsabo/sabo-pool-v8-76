@@ -7,25 +7,25 @@ import { useTournamentService } from '../useTournamentService';
 import { useAuth } from '../useAuth';
 import { TournamentRepository } from '@/repositories/tournamentRepository';
 import { RankingService } from '@/services/rankingService';
-import {
-  mockSupabase,
-  setupSupabaseMocks,
+import { 
+  mockSupabase, 
+  setupSupabaseMocks, 
   mockToast,
   mockTournaments,
-  mockUsers,
+  mockUsers 
 } from '@/test/mocks/supabase';
 
 // Mock dependencies
 vi.mock('@/integrations/supabase/client', () => ({
-  supabase: mockSupabase,
+  supabase: mockSupabase
 }));
 
 vi.mock('sonner', () => ({
-  toast: mockToast,
+  toast: mockToast
 }));
 
 vi.mock('../useAuth', () => ({
-  useAuth: vi.fn(),
+  useAuth: vi.fn()
 }));
 
 vi.mock('@/repositories/tournamentRepository', () => ({
@@ -37,7 +37,8 @@ vi.mock('@/repositories/tournamentRepository', () => ({
     generateBracket: vi.fn(),
     updateTournamentResults: vi.fn(),
     checkUserRegistration: vi.fn(),
-  },
+    
+  }
 }));
 
 vi.mock('@/services/rankingService', () => ({
@@ -45,7 +46,7 @@ vi.mock('@/services/rankingService', () => ({
     calculateTournamentRewards: vi.fn(),
     getTournamentPositions: vi.fn(),
     formatPosition: vi.fn(),
-  },
+  }
 }));
 
 // Test wrapper component
@@ -58,7 +59,9 @@ const createWrapper = () => {
   });
 
   return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
   );
 };
 
@@ -66,38 +69,28 @@ describe('useTournamentService', () => {
   beforeEach(() => {
     setupSupabaseMocks();
     vi.clearAllMocks();
-
+    
     // Default mock for useAuth
     (useAuth as any).mockReturnValue({
-      user: mockUsers[0],
+      user: mockUsers[0]
     });
 
     // Default mocks for repository
-    (TournamentRepository.getTournaments as any).mockResolvedValue(
-      mockTournaments
-    );
-    (TournamentRepository.createTournament as any).mockResolvedValue(
-      mockTournaments[0]
-    );
-    (TournamentRepository.registerPlayer as any).mockResolvedValue({
-      id: 'reg-1',
-    });
+    (TournamentRepository.getTournaments as any).mockResolvedValue(mockTournaments);
+    (TournamentRepository.createTournament as any).mockResolvedValue(mockTournaments[0]);
+    (TournamentRepository.registerPlayer as any).mockResolvedValue({ id: 'reg-1' });
     (TournamentRepository.cancelRegistration as any).mockResolvedValue(true);
-    (TournamentRepository.generateBracket as any).mockResolvedValue({
-      success: true,
-    });
+    (TournamentRepository.generateBracket as any).mockResolvedValue({ success: true });
     (TournamentRepository.updateTournamentResults as any).mockResolvedValue([]);
     (TournamentRepository.checkUserRegistration as any).mockResolvedValue(null);
+    
 
     // Default mocks for ranking service
     (RankingService.calculateTournamentRewards as any).mockReturnValue({
       eloPoints: 50,
-      spaPoints: 100,
+      spaPoints: 100
     });
-    (RankingService.getTournamentPositions as any).mockReturnValue([
-      'CHAMPION',
-      'RUNNER_UP',
-    ]);
+    (RankingService.getTournamentPositions as any).mockReturnValue(['CHAMPION', 'RUNNER_UP']);
     (RankingService.formatPosition as any).mockReturnValue('1st Place');
   });
 
@@ -138,7 +131,7 @@ describe('useTournamentService', () => {
       const tournamentData = {
         name: 'New Tournament',
         description: 'Test tournament',
-        tournament_type: 'single_elimination',
+        tournament_type: 'single_elimination'
       };
 
       await act(async () => {
@@ -149,11 +142,9 @@ describe('useTournamentService', () => {
         ...tournamentData,
         created_by: mockUsers[0].id,
         status: 'upcoming',
-        current_participants: 0,
+        current_participants: 0
       });
-      expect(mockToast.success).toHaveBeenCalledWith(
-        'Giải đấu đã được tạo thành công!'
-      );
+      expect(mockToast.success).toHaveBeenCalledWith('Giải đấu đã được tạo thành công!');
     });
 
     it('should handle creation errors', async () => {
@@ -174,9 +165,7 @@ describe('useTournamentService', () => {
         }
       });
 
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Có lỗi xảy ra khi tạo giải đấu'
-      );
+      expect(mockToast.error).toHaveBeenCalledWith('Có lỗi xảy ra khi tạo giải đấu');
     });
 
     it('should require authenticated user', async () => {
@@ -215,11 +204,9 @@ describe('useTournamentService', () => {
         user_id: mockUsers[0].id,
         registration_status: 'pending',
         payment_status: 'unpaid',
-        status: 'pending',
+        status: 'pending'
       });
-      expect(mockToast.success).toHaveBeenCalledWith(
-        'Đăng ký giải đấu thành công!'
-      );
+      expect(mockToast.success).toHaveBeenCalledWith('Đăng ký giải đấu thành công!');
     });
 
     it('should handle registration errors', async () => {
@@ -238,9 +225,7 @@ describe('useTournamentService', () => {
         }
       });
 
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Có lỗi khi đăng ký giải đấu'
-      );
+      expect(mockToast.error).toHaveBeenCalledWith('Có lỗi khi đăng ký giải đấu');
     });
   });
 
@@ -281,9 +266,7 @@ describe('useTournamentService', () => {
         tournamentId,
         seedingMethod
       );
-      expect(mockToast.success).toHaveBeenCalledWith(
-        'Bracket đã được tạo thành công!'
-      );
+      expect(mockToast.success).toHaveBeenCalledWith('Bracket đã được tạo thành công!');
     });
   });
 
@@ -301,8 +284,8 @@ describe('useTournamentService', () => {
           player_rank: 'G' as const,
           matches_played: 5,
           matches_won: 5,
-          matches_lost: 0,
-        },
+          matches_lost: 0
+        }
       ];
 
       await act(async () => {
@@ -311,9 +294,7 @@ describe('useTournamentService', () => {
 
       expect(RankingService.calculateTournamentRewards).toHaveBeenCalled();
       expect(TournamentRepository.updateTournamentResults).toHaveBeenCalled();
-      expect(mockToast.success).toHaveBeenCalledWith(
-        'Kết quả giải đấu đã được cập nhật!'
-      );
+      expect(mockToast.success).toHaveBeenCalledWith('Kết quả giải đấu đã được cập nhật!');
     });
   });
 
@@ -323,15 +304,9 @@ describe('useTournamentService', () => {
         wrapper: createWrapper(),
       });
 
-      const rewards = result.current.calculateTournamentRewards(
-        'CHAMPION',
-        'G'
-      );
+      const rewards = result.current.calculateTournamentRewards('CHAMPION', 'G');
 
-      expect(RankingService.calculateTournamentRewards).toHaveBeenCalledWith(
-        'CHAMPION',
-        'G'
-      );
+      expect(RankingService.calculateTournamentRewards).toHaveBeenCalledWith('CHAMPION', 'G');
       expect(rewards).toEqual({ eloPoints: 50, spaPoints: 100 });
     });
 
@@ -354,8 +329,7 @@ describe('useTournamentService', () => {
       const tournamentId = 'tournament-1';
 
       await act(async () => {
-        const registration =
-          await result.current.checkUserRegistration(tournamentId);
+        const registration = await result.current.checkUserRegistration(tournamentId);
         expect(registration).toBeNull();
       });
 
@@ -364,6 +338,7 @@ describe('useTournamentService', () => {
         mockUsers[0].id
       );
     });
+
   });
 
   describe('Loading States', () => {

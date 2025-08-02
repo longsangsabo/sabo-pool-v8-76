@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useMemo } from 'react';
@@ -13,12 +8,10 @@ import { useAuth } from './useAuth';
 const TOURNAMENT_QUERY_KEYS = {
   all: ['tournaments'] as const,
   lists: () => [...TOURNAMENT_QUERY_KEYS.all, 'list'] as const,
-  list: (filters: TournamentFilters) =>
-    [...TOURNAMENT_QUERY_KEYS.lists(), filters] as const,
+  list: (filters: TournamentFilters) => [...TOURNAMENT_QUERY_KEYS.lists(), filters] as const,
   details: () => [...TOURNAMENT_QUERY_KEYS.all, 'detail'] as const,
   detail: (id: string) => [...TOURNAMENT_QUERY_KEYS.details(), id] as const,
-  registrations: (id: string) =>
-    [...TOURNAMENT_QUERY_KEYS.detail(id), 'registrations'] as const,
+  registrations: (id: string) => [...TOURNAMENT_QUERY_KEYS.detail(id), 'registrations'] as const,
   stats: () => [...TOURNAMENT_QUERY_KEYS.all, 'stats'] as const,
 };
 
@@ -46,14 +39,13 @@ export const useOptimizedTournaments = (filters: TournamentFilters = {}) => {
       const offset = pageParam * PAGE_SIZE;
 
       // Use the optimized database function if available
-      let query = supabase.from('tournaments').select(
-        `
+      let query = supabase
+        .from('tournaments')
+        .select(`
           *,
           current_participants,
           tournament_registrations(count)
-        `,
-        { count: 'exact' }
-      );
+        `, { count: 'exact' });
 
       // Apply filters
       if (filters.search) {
@@ -64,14 +56,10 @@ export const useOptimizedTournaments = (filters: TournamentFilters = {}) => {
       }
 
       // Apply sorting
-      const sortColumn =
-        filters.sortBy === 'participants'
-          ? 'current_participants'
-          : filters.sortBy === 'status'
-            ? 'status'
-            : 'tournament_start';
+      const sortColumn = filters.sortBy === 'participants' ? 'current_participants' : 
+                        filters.sortBy === 'status' ? 'status' : 'tournament_start';
       const ascending = filters.sortOrder === 'asc';
-
+      
       query = query.order(sortColumn, { ascending });
 
       // Add pagination
@@ -85,11 +73,11 @@ export const useOptimizedTournaments = (filters: TournamentFilters = {}) => {
         tournaments: data || [],
         totalCount: count || 0,
         hasNextPage: (data?.length || 0) === PAGE_SIZE,
-        nextCursor: pageParam + 1,
+        nextCursor: pageParam + 1
       };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage: PaginatedTournaments) =>
+    getNextPageParam: (lastPage: PaginatedTournaments) => 
       lastPage.hasNextPage ? lastPage.nextCursor : undefined,
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes (renamed from cacheTime)
@@ -105,8 +93,7 @@ export const useOptimizedTournament = (id: string) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tournaments')
-        .select(
-          `
+        .select(`
           *,
           tournament_registrations(
             id,
@@ -124,8 +111,7 @@ export const useOptimizedTournament = (id: string) => {
             total_rounds,
             total_players
           )
-        `
-        )
+        `)
         .eq('id', id)
         .single();
 
@@ -151,7 +137,7 @@ export const useTournamentPrefetch = () => {
           .select('*')
           .eq('id', id)
           .single();
-
+        
         if (error) throw error;
         return data;
       },
@@ -168,13 +154,13 @@ export const useTournamentPrefetch = () => {
           .select('*')
           .order('tournament_start', { ascending: true })
           .limit(20);
-
+        
         if (error) throw error;
         return {
           tournaments: data || [],
           totalCount: data?.length || 0,
           hasNextPage: false,
-          nextCursor: undefined,
+          nextCursor: undefined
         };
       },
       initialPageParam: 0,
@@ -191,20 +177,14 @@ export const useOptimizedTournamentRegistration = () => {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async ({
-      tournamentId,
-      action,
-    }: {
-      tournamentId: string;
-      action: 'register' | 'unregister';
-    }) => {
+    mutationFn: async ({ tournamentId, action }: { tournamentId: string; action: 'register' | 'unregister' }) => {
       if (action === 'register') {
         const { data, error } = await supabase
           .from('tournament_registrations')
           .insert({
             tournament_id: tournamentId,
             user_id: user?.id || '',
-            registration_status: 'confirmed',
+            registration_status: 'confirmed'
           })
           .select()
           .single();
@@ -223,23 +203,21 @@ export const useOptimizedTournamentRegistration = () => {
     },
     onSuccess: (data, variables) => {
       // Update tournament list cache
-      queryClient.invalidateQueries({
-        queryKey: TOURNAMENT_QUERY_KEYS.lists(),
-      });
-
+      queryClient.invalidateQueries({ queryKey: TOURNAMENT_QUERY_KEYS.lists() });
+      
       // Update specific tournament cache
-      queryClient.invalidateQueries({
-        queryKey: TOURNAMENT_QUERY_KEYS.detail(variables.tournamentId),
+      queryClient.invalidateQueries({ 
+        queryKey: TOURNAMENT_QUERY_KEYS.detail(variables.tournamentId) 
       });
 
       // Show success message
       toast.success(
-        variables.action === 'register'
-          ? 'Đăng ký giải đấu thành công!'
+        variables.action === 'register' 
+          ? 'Đăng ký giải đấu thành công!' 
           : 'Hủy đăng ký thành công!'
       );
     },
-    onError: error => {
+    onError: (error) => {
       console.error('Tournament registration error:', error);
       toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
     },
@@ -256,13 +234,13 @@ export const useTournamentBackgroundSync = () => {
         // Sync active tournaments
         await queryClient.refetchQueries({
           queryKey: TOURNAMENT_QUERY_KEYS.list({ status: 'registration_open' }),
-          type: 'active',
+          type: 'active'
         });
 
         // Sync ongoing tournaments
         await queryClient.refetchQueries({
           queryKey: TOURNAMENT_QUERY_KEYS.list({ status: 'ongoing' }),
-          type: 'active',
+          type: 'active'
         });
       } catch (error) {
         console.error('Background sync error:', error);
@@ -285,9 +263,7 @@ export const useTournamentPerformanceTracking = () => {
 
     // Log slow queries (>1 second)
     if (executionTime > 1000) {
-      console.warn(
-        `Slow tournament query detected: ${queryType} took ${executionTime}ms`
-      );
+      console.warn(`Slow tournament query detected: ${queryType} took ${executionTime}ms`);
     }
 
     // You could send this to analytics or performance monitoring

@@ -1,3 +1,4 @@
+
 export interface Season2 {
   id: string;
   season_name: string;

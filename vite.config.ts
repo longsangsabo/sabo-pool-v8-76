@@ -28,136 +28,78 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // ✅ PHASE 4: Build performance optimization
-    target: 'esnext',
-    minify: 'esbuild', // Faster than terser
-    cssCodeSplit: true,
-    sourcemap: false, // Disable sourcemaps for faster build
-    chunkSizeWarningLimit: 500, // Reduce warning limit to catch large chunks
-    
-    // ✅ Advanced Rollup optimizations
     rollupOptions: {
-      // Increase parallel operations for faster builds
-      maxParallelFileOps: 16, // Increased from 12
-      
-      // ✅ PHASE 4: Advanced build optimizations
-      treeshake: {
-        preset: 'recommended',
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        unknownGlobalSideEffects: false,
-      },
-      
-      // ✅ External dependencies to reduce bundle size
-      external: (id) => {
-        // Don't externalize core dependencies
-        if (id.includes('react') || id.includes('@supabase') || id.includes('@tanstack')) {
-          return false;
-        }
-        // Externalize heavy optional dependencies
-        return id.includes('date-fns/locale') && !id.includes('date-fns/locale/vi');
-      },
-      
-      // Output configuration for optimal chunking
       output: {
-        // ✅ PHASE 6: Caching strategy - Stable chunk names
-        chunkFileNames: (chunkInfo) => {
-          // Vendor chunks - Long cache (1 year)
-          if (chunkInfo.name.includes('vendor')) {
-            return 'assets/vendor/[name]-[hash].js';
+        manualChunks: (id) => {
+          // Admin code splitting - separate chunk for admin
+          if (id.includes('/admin/') || id.includes('AdminRouter') || id.includes('AdminProvider')) {
+            return 'admin';
           }
-          // Admin chunks - Medium cache (1 month)  
-          if (chunkInfo.name.includes('admin')) {
-            return 'assets/admin/[name]-[hash].js';
+          
+          // Core React libraries
+          if (id.includes('react') || id.includes('react-dom')) {
+            return 'react-vendor';
           }
-          // App chunks - Short cache (1 week)
-          return 'assets/app/[name]-[hash].js';
+          
+          // Routing
+          if (id.includes('react-router-dom')) {
+            return 'router';
+          }
+          
+          // UI Components (split by usage frequency)
+          if (id.includes('@radix-ui/react-dialog') || 
+              id.includes('@radix-ui/react-dropdown-menu') || 
+              id.includes('@radix-ui/react-slot')) {
+            return 'ui-core';
+          }
+          
+          if (id.includes('@radix-ui/react-select') || 
+              id.includes('@radix-ui/react-checkbox') || 
+              id.includes('react-hook-form')) {
+            return 'ui-forms';
+          }
+          
+          if (id.includes('@radix-ui/react-tabs') || 
+              id.includes('@radix-ui/react-accordion') || 
+              id.includes('@radix-ui/react-navigation-menu')) {
+            return 'ui-advanced';
+          }
+          
+          // Data & State Management
+          if (id.includes('@tanstack/react-query') || id.includes('@supabase/supabase-js')) {
+            return 'data';
+          }
+          
+          // Utilities
+          if (id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) {
+            return 'utils';
+          }
+          
+          // Charts & Visualization
+          if (id.includes('recharts') || id.includes('d3')) {
+            return 'charts';
+          }
+          
+          // Performance & Virtualization
+          if (id.includes('react-window')) {
+            return 'performance';
+          }
+          
+          // Less frequently used libraries
+          if (id.includes('framer-motion') || id.includes('react-helmet-async')) {
+            return 'misc';
+          }
         },
-        
-        assetFileNames: (assetInfo) => {
-          // CSS files
-          if (assetInfo.name?.endsWith('.css')) {
-            return 'assets/css/[name]-[hash].css';
-          }
-          // Images
-          if (/\.(png|jpe?g|webp|svg|gif)$/.test(assetInfo.name || '')) {
-            return 'assets/images/[name]-[hash][extname]';
-          }
-          // Other assets
-          return 'assets/[name]-[hash][extname]';
-        },
-        // ✅ OPTIMAL: Let Vite handle chunking automatically
-        // Vite's automatic chunking is often better than manual
-        manualChunks: undefined,
       },
     },
-  },
-  // ✅ PHASE 1: Advanced dependency optimization
-  optimizeDeps: {
-    // Pre-bundle critical dependencies for faster builds
-    include: [
-      // CORE - Load đầu tiên (Highest priority)
-      'react',
-      'react-dom',
-      'react-router-dom',
-      
-      // AUTH & DATA - Critical for app functionality
-      '@supabase/supabase-js',
-      '@supabase/auth-js',
-      '@tanstack/react-query',
-      
-      // UI ESSENTIALS - Frequently used
-      'lucide-react',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      'class-variance-authority',
-      'clsx',
-      'tailwind-merge',
-      
-      // UTILITIES - Small but frequently used
-      'sonner',
-      'next-themes',
-      'react-helmet-async',
-    ],
-    
-    // EXCLUDE heavy dependencies for lazy loading
-    exclude: [
-      'framer-motion', // 76KB - Load only when needed
-      'recharts', // Heavy charts - Load on demand  
-      'date-fns/locale', // Locale files - Load specific locale only
-      '@radix-ui/react-calendar', // Large component - Lazy load
-      '@radix-ui/react-tooltip', // Non-critical - Lazy load
-    ],
-    
-    // Force dependency re-optimization
-    force: false,
-    
-    // Entry points for better chunking
-    entries: [
-      'src/main.tsx',
-      'src/pages/**/index.tsx'
-    ],
-  },
-  // ✅ PHASE 4: Advanced esbuild optimization
-  esbuild: {
+    chunkSizeWarningLimit: 1000,
+    // Enable build optimizations
     target: 'esnext',
-    platform: 'browser',
-    format: 'esm',
-    
-    // Production optimizations
-    drop: mode === 'production' ? ['console', 'debugger'] : [],
-    
-    // Faster builds
-    keepNames: false,
-    minifyIdentifiers: true,
-    minifySyntax: true,
-    minifyWhitespace: true,
-    
-    // Tree shaking
-    treeShaking: true,
-    
-    // Source maps only in development
-    sourcemap: mode === 'development',
+    minify: 'esbuild',
+    // Split CSS
+    cssCodeSplit: true,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 }));
