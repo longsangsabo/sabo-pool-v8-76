@@ -37,6 +37,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
 
     // Listen for popstate events (back/forward navigation)
     window.addEventListener('popstate', handleUrlChange);
+    return () => window.removeEventListener('popstate', handleUrlChange);
 
     return () => {
       window.removeEventListener('popstate', handleUrlChange);

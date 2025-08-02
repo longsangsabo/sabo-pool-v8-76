@@ -64,6 +64,7 @@ export const CLSMonitor: React.FC<CLSMonitorProps> = ({
     };
 
     window.addEventListener('beforeunload', reportCLS);
+    return () => window.removeEventListener('beforeunload', reportCLS);
 
     return () => {
       observer.disconnect();

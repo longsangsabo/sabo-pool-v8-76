@@ -46,9 +46,18 @@ export const useNetworkOptimization = () => {
     window.addEventListener('online', handleOnlineStatus);
     window.addEventListener('offline', handleOnlineStatus);
 
-    if ('connection' in navigator) {
-      (navigator as any).connection.addEventListener('change', updateConnectionInfo);
+    const connection = (navigator as any).connection;
+    if (connection) {
+      connection.addEventListener('change', updateConnectionInfo);
     }
+    
+    return () => {
+      window.removeEventListener('online', handleOnlineStatus);
+      window.removeEventListener('offline', handleOnlineStatus);
+      if (connection) {
+        connection.removeEventListener('change', updateConnectionInfo);
+      }
+    };
 
     return () => {
       window.removeEventListener('online', handleOnlineStatus);

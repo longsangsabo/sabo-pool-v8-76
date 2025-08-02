@@ -39,6 +39,11 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
+    
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
 
     return () => {
       window.removeEventListener(
