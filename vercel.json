@@ -24,10 +24,10 @@
     "NODE_ENV": "production",
     "SKIP_HUSKY": "1"
   },
-  "installCommand": "npm ci --ignore-scripts --production",
+  "installCommand": "npm ci --ignore-scripts --omit=optional",
   "functions": {
     "api/**/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs20.x"
     }
   },
   "headers": [
