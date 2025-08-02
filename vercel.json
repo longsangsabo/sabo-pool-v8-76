@@ -21,8 +21,10 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "SKIP_HUSKY": "1"
   },
+  "installCommand": "npm ci --ignore-scripts",
   "functions": {
     "api/**/*.js": {
       "runtime": "nodejs18.x"
