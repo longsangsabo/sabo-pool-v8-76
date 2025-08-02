@@ -10,27 +10,32 @@ export interface TechCardProps {
   interactive?: boolean;
 }
 
-export const TechCard: React.FC<TechCardProps> = ({ 
+export const TechCard = React.forwardRef<HTMLDivElement, TechCardProps>(({ 
   children, 
   className, 
   variant = 'default',
   interactive = false 
-}) => (
-  <div className={cn(
-    'sabo-tech-card',
-    variant === 'premium' && 'tech-card-premium',
-    variant === 'active' && 'tech-card-active',
-    variant === 'disabled' && 'tech-card-disabled',
-    interactive && 'tech-card-interactive',
-    className
-  )}>
+}, ref) => (
+  <div 
+    ref={ref}
+    className={cn(
+      'sabo-tech-card',
+      variant === 'premium' && 'tech-card-premium',
+      variant === 'active' && 'tech-card-active',
+      variant === 'disabled' && 'tech-card-disabled',
+      interactive && 'tech-card-interactive',
+      className
+    )}
+  >
     <div className="tech-card-border"></div>
     <div className="tech-card-content">
       {children}
     </div>
     <div className="tech-card-corners"></div>
   </div>
-);
+));
+
+TechCard.displayName = 'TechCard';
 
 export interface TechButtonProps {
   children: React.ReactNode;
