@@ -30,39 +30,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Admin code splitting - separate chunk for admin pages only
-          if (id.includes('/pages/admin/') || id.includes('/components/admin/')) {
-            return 'admin';
-          }
-          
-          // Core React libraries
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-vendor';
-          }
-          
-          // Routing
-          if (id.includes('react-router-dom')) {
-            return 'router';
-          }
-          
-          // UI Components (consolidated from 3 chunks to 1)
-          if (id.includes('@radix-ui/') || id.includes('react-hook-form')) {
-            return 'ui-components';
-          }
-          
-          // Data & State Management
-          if (id.includes('@tanstack/react-query') || id.includes('@supabase/supabase-js')) {
-            return 'data';
-          }
-          
-          // Extensions (consolidated charts, performance, misc)
-          if (id.includes('recharts') || id.includes('d3') || id.includes('react-window') || 
-              id.includes('framer-motion') || id.includes('react-helmet-async') ||
-              id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) {
-            return 'extensions';
-          }
-        },
+        // Disabled manual chunking to rely on Vite's automatic chunking
+        // This resolves initialization errors with 'ft', 'As', and createContext
+        
         // Ensure proper chunk naming and avoid conflicts
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
@@ -76,7 +46,5 @@ export default defineConfig(({ mode }) => ({
     // Split CSS
     cssCodeSplit: true,
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-  },
+  // Removed optimizeDeps configuration to prevent React conflicts and rely fully on Vite's automatic dependency optimization
 }));
