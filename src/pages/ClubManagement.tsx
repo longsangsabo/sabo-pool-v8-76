@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Calendar, BarChart3, Settings, Users, Calculator } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, Settings, Users, Calculator, Swords } from 'lucide-react';
 import RankVerificationTab from '@/components/club-management/RankVerificationTab';
 import MemberManagementTab from '@/components/club-management/MemberManagementTab';
 import ScheduleManagementTab from '@/components/club-management/ScheduleManagementTab';
 import AdminTournamentResults from '@/components/tournament/AdminTournamentResults';
+import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
+import ClubChallengesTab from '@/pages/challenges/components/tabs/ClubChallengesTab';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { AppProviders } from '@/contexts/AppProviders';
 
 const ClubManagement = () => {
   const { user } = useAuth();
@@ -78,7 +81,7 @@ const ClubManagement = () => {
       </div>
 
       <Tabs defaultValue="verification" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="verification" className="flex items-center space-x-2">
             <Trophy className="w-4 h-4" />
             <span className="hidden sm:inline">Xác thực hạng</span>
@@ -86,6 +89,14 @@ const ClubManagement = () => {
           <TabsTrigger value="members" className="flex items-center space-x-2">
             <Users className="w-4 h-4" />
             <span className="hidden sm:inline">Thành viên</span>
+          </TabsTrigger>
+          <TabsTrigger value="tournaments-management" className="flex items-center space-x-2">
+            <Trophy className="w-4 h-4" />
+            <span className="hidden sm:inline">Giải đấu & Sơ đồ</span>
+          </TabsTrigger>
+          <TabsTrigger value="challenges" className="flex items-center space-x-2">
+            <Swords className="w-4 h-4" />
+            <span className="hidden sm:inline">Thách đấu</span>
           </TabsTrigger>
           <TabsTrigger value="schedule" className="flex items-center space-x-2">
             <Calendar className="w-4 h-4" />
@@ -111,6 +122,16 @@ const ClubManagement = () => {
 
         <TabsContent value="members" className="space-y-6">
           <MemberManagementTab clubId={clubId} />
+        </TabsContent>
+
+        <TabsContent value="tournaments-management" className="space-y-6">
+          <AppProviders clubId={clubId}>
+            <ClubTournamentManagement clubId={clubId} />
+          </AppProviders>
+        </TabsContent>
+
+        <TabsContent value="challenges" className="space-y-6">
+          <ClubChallengesTab clubId={clubId} />
         </TabsContent>
 
         <TabsContent value="schedule" className="space-y-6">
