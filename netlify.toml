@@ -3,9 +3,10 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "9"
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
   NODE_ENV = "production"
+  SKIP_HUSKY = "1"
 
 # Enhanced SPA Redirect for React Router
 [[redirects]]
