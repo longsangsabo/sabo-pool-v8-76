@@ -31,8 +31,8 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Admin code splitting - separate chunk for admin
-          if (id.includes('/admin/') || id.includes('AdminRouter') || id.includes('AdminProvider')) {
+          // Admin code splitting - separate chunk for admin pages only
+          if (id.includes('/pages/admin/') || id.includes('/components/admin/')) {
             return 'admin';
           }
           
@@ -46,23 +46,9 @@ export default defineConfig(({ mode }) => ({
             return 'router';
           }
           
-          // UI Components (split by usage frequency)
-          if (id.includes('@radix-ui/react-dialog') || 
-              id.includes('@radix-ui/react-dropdown-menu') || 
-              id.includes('@radix-ui/react-slot')) {
-            return 'ui-core';
-          }
-          
-          if (id.includes('@radix-ui/react-select') || 
-              id.includes('@radix-ui/react-checkbox') || 
-              id.includes('react-hook-form')) {
-            return 'ui-forms';
-          }
-          
-          if (id.includes('@radix-ui/react-tabs') || 
-              id.includes('@radix-ui/react-accordion') || 
-              id.includes('@radix-ui/react-navigation-menu')) {
-            return 'ui-advanced';
+          // UI Components (consolidated from 3 chunks to 1)
+          if (id.includes('@radix-ui/') || id.includes('react-hook-form')) {
+            return 'ui-components';
           }
           
           // Data & State Management
@@ -70,26 +56,17 @@ export default defineConfig(({ mode }) => ({
             return 'data';
           }
           
-          // Utilities
-          if (id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) {
-            return 'utils';
-          }
-          
-          // Charts & Visualization
-          if (id.includes('recharts') || id.includes('d3')) {
-            return 'charts';
-          }
-          
-          // Performance & Virtualization
-          if (id.includes('react-window')) {
-            return 'performance';
-          }
-          
-          // Less frequently used libraries
-          if (id.includes('framer-motion') || id.includes('react-helmet-async')) {
-            return 'misc';
+          // Extensions (consolidated charts, performance, misc)
+          if (id.includes('recharts') || id.includes('d3') || id.includes('react-window') || 
+              id.includes('framer-motion') || id.includes('react-helmet-async') ||
+              id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) {
+            return 'extensions';
           }
         },
+        // Ensure proper chunk naming and avoid conflicts
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       },
     },
     chunkSizeWarningLimit: 1000,
