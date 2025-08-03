@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TournamentGlobalProvider } from './TournamentGlobalContext';
 import { LoadingStateProvider } from './LoadingStateContext';
@@ -9,7 +8,10 @@ interface AppProvidersProps {
   clubId?: string;
 }
 
-export const AppProviders: React.FC<AppProvidersProps> = ({ children, clubId }) => {
+export const AppProviders: React.FC<AppProvidersProps> = ({
+  children,
+  clubId,
+}) => {
   return (
     <ErrorStateProvider>
       <LoadingStateProvider>

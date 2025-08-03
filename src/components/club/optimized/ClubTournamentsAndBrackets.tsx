@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
 import { TournamentSection } from '@/components/error-boundary/SectionWrappers';
@@ -8,7 +7,9 @@ interface ClubTournamentsAndBracketsProps {
   clubId: string;
 }
 
-const ClubTournamentsAndBrackets: React.FC<ClubTournamentsAndBracketsProps> = ({ clubId }) => {
+const ClubTournamentsAndBrackets: React.FC<ClubTournamentsAndBracketsProps> = ({
+  clubId,
+}) => {
   return (
     <AppProviders clubId={clubId}>
       <TournamentSection>

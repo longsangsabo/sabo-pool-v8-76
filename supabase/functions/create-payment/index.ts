@@ -81,7 +81,8 @@ serve(async req => {
 
     // Get user from auth header
     const token = authHeader.replace('Bearer ', '');
-    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    const { data: userData, error: userError } =
+      await supabase.auth.getUser(token);
     if (userError || !userData.user) {
       throw new Error('Invalid authentication token');
     }
@@ -99,19 +100,25 @@ serve(async req => {
       throw new Error('Missing required parameters: userId and amount');
     }
 
-    console.log('Payment request details:', { userId, amount, type, paymentMethod });
+    console.log('Payment request details:', {
+      userId,
+      amount,
+      type,
+      paymentMethod,
+    });
 
     // Create transaction reference
     const transactionRef = `SABO_${userId.substring(0, 8)}_${Date.now()}`;
 
     // Save transaction to database
-    const { data: transactionData, error: transactionError } = await supabase.rpc('create_payment_transaction', {
-      p_user_id: userId,
-      p_amount: amount,
-      p_transaction_ref: transactionRef,
-      p_transaction_type: type,
-      p_payment_method: paymentMethod,
-    });
+    const { data: transactionData, error: transactionError } =
+      await supabase.rpc('create_payment_transaction', {
+        p_user_id: userId,
+        p_amount: amount,
+        p_transaction_ref: transactionRef,
+        p_transaction_type: type,
+        p_payment_method: paymentMethod,
+      });
 
     if (transactionError) {
       console.error('Database error:', transactionError);
@@ -122,7 +129,10 @@ serve(async req => {
 
     // VNPay configuration
     const vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    const siteUrl = Deno.env.get('SITE_URL') || req.headers.get('origin') || 'https://knxevbkkkiadgppxbphh.supabase.co';
+    const siteUrl =
+      Deno.env.get('SITE_URL') ||
+      req.headers.get('origin') ||
+      'https://knxevbkkkiadgppxbphh.supabase.co';
     const returnUrl = `${siteUrl.replace('/rest/v1', '')}/functions/v1/payment-callback`;
 
     const date = new Date();
@@ -140,7 +150,10 @@ serve(async req => {
       vnp_OrderType: 'other',
       vnp_Locale: 'vn',
       vnp_ReturnUrl: returnUrl,
-      vnp_IpAddr: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1',
+      vnp_IpAddr:
+        req.headers.get('x-forwarded-for') ||
+        req.headers.get('x-real-ip') ||
+        '127.0.0.1',
       vnp_CreateDate: createDate,
     };
 

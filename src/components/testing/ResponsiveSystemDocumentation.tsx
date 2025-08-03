@@ -4,7 +4,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Copy, BookOpen, Code, Lightbulb, AlertTriangle, CheckCircle } from 'lucide-react';
+import {
+  Copy,
+  BookOpen,
+  Code,
+  Lightbulb,
+  AlertTriangle,
+  CheckCircle,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export const ResponsiveSystemDocumentation: React.FC = () => {
@@ -15,31 +22,31 @@ export const ResponsiveSystemDocumentation: React.FC = () => {
     navigator.clipboard.writeText(code);
     setCopiedCode(label);
     toast({
-      title: "Code copied!",
+      title: 'Code copied!',
       description: `${label} copied to clipboard`,
     });
     setTimeout(() => setCopiedCode(''), 2000);
   };
 
-  const CodeBlock: React.FC<{ 
-    code: string; 
-    language?: string; 
+  const CodeBlock: React.FC<{
+    code: string;
+    language?: string;
     title: string;
   }> = ({ code, language = 'tsx', title }) => (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <h4 className="text-sm font-medium">{title}</h4>
+    <div className='space-y-2'>
+      <div className='flex items-center justify-between'>
+        <h4 className='text-sm font-medium'>{title}</h4>
         <Button
-          variant="outline"
-          size="sm"
+          variant='outline'
+          size='sm'
           onClick={() => copyToClipboard(code, title)}
-          className="h-8"
+          className='h-8'
         >
-          <Copy className="h-3 w-3 mr-1" />
+          <Copy className='h-3 w-3 mr-1' />
           {copiedCode === title ? 'Copied!' : 'Copy'}
         </Button>
       </div>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
+      <pre className='bg-muted p-4 rounded-lg overflow-x-auto text-sm'>
         <code className={`language-${language}`}>{code}</code>
       </pre>
     </div>
@@ -48,37 +55,40 @@ export const ResponsiveSystemDocumentation: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <BookOpen className="h-5 w-5" />
+        <div className='flex items-center gap-2'>
+          <BookOpen className='h-5 w-5' />
           <CardTitle>Responsive System Documentation</CardTitle>
         </div>
       </CardHeader>
-      
+
       <CardContent>
-        <Tabs defaultValue="getting-started" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="getting-started">Getting Started</TabsTrigger>
-            <TabsTrigger value="components">Components</TabsTrigger>
-            <TabsTrigger value="best-practices">Best Practices</TabsTrigger>
-            <TabsTrigger value="troubleshooting">Troubleshooting</TabsTrigger>
-            <TabsTrigger value="migration">Migration</TabsTrigger>
+        <Tabs defaultValue='getting-started' className='space-y-4'>
+          <TabsList className='grid w-full grid-cols-5'>
+            <TabsTrigger value='getting-started'>Getting Started</TabsTrigger>
+            <TabsTrigger value='components'>Components</TabsTrigger>
+            <TabsTrigger value='best-practices'>Best Practices</TabsTrigger>
+            <TabsTrigger value='troubleshooting'>Troubleshooting</TabsTrigger>
+            <TabsTrigger value='migration'>Migration</TabsTrigger>
           </TabsList>
 
           {/* Getting Started Tab */}
-          <TabsContent value="getting-started" className="space-y-6">
+          <TabsContent value='getting-started' className='space-y-6'>
             <div>
-              <h3 className="text-lg font-semibold mb-4">🚀 Quick Start Guide</h3>
-              
-              <Alert className="mb-4">
-                <CheckCircle className="h-4 w-4" />
+              <h3 className='text-lg font-semibold mb-4'>
+                🚀 Quick Start Guide
+              </h3>
+
+              <Alert className='mb-4'>
+                <CheckCircle className='h-4 w-4' />
                 <AlertDescription>
-                  <strong>3-Mode Responsive System:</strong> Mobile (&lt;768px), Tablet (768-1024px), Desktop (≥1024px)
+                  <strong>3-Mode Responsive System:</strong> Mobile (&lt;768px),
+                  Tablet (768-1024px), Desktop (≥1024px)
                 </AlertDescription>
               </Alert>
 
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 <CodeBlock
-                  title="Basic Hook Usage"
+                  title='Basic Hook Usage'
                   code={`import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
 const MyComponent = () => {
@@ -95,7 +105,7 @@ const MyComponent = () => {
                 />
 
                 <CodeBlock
-                  title="Layout Component Usage"
+                  title='Layout Component Usage'
                   code={`import { ResponsiveLayout } from '@/components/layouts/ResponsiveLayout';
 
 const App = () => {
@@ -113,7 +123,7 @@ const App = () => {
                 />
 
                 <CodeBlock
-                  title="Role-Based Layout Usage"
+                  title='Role-Based Layout Usage'
                   code={`import { RoleBasedLayout } from '@/components/layouts/RoleBasedLayout';
 
 const App = () => {
@@ -134,13 +144,15 @@ const App = () => {
           </TabsContent>
 
           {/* Components Tab */}
-          <TabsContent value="components" className="space-y-6">
+          <TabsContent value='components' className='space-y-6'>
             <div>
-              <h3 className="text-lg font-semibold mb-4">📱 Mobile Components</h3>
-              
-              <div className="space-y-4">
+              <h3 className='text-lg font-semibold mb-4'>
+                📱 Mobile Components
+              </h3>
+
+              <div className='space-y-4'>
                 <CodeBlock
-                  title="Mobile Optimized Button"
+                  title='Mobile Optimized Button'
                   code={`import { MobileTouchButton } from '@/components/mobile/MobileOptimizedComponents';
 
 <MobileTouchButton 
@@ -153,7 +165,7 @@ const App = () => {
                 />
 
                 <CodeBlock
-                  title="Mobile Card Component"
+                  title='Mobile Card Component'
                   code={`import { MobileCard } from '@/components/mobile/MobileOptimizedComponents';
 
 <MobileCard interactive padding="lg">
@@ -163,7 +175,7 @@ const App = () => {
                 />
 
                 <CodeBlock
-                  title="Mobile Bottom Sheet"
+                  title='Mobile Bottom Sheet'
                   code={`import { MobileSheet } from '@/components/mobile/MobileOptimizedComponents';
 
 const [isOpen, setIsOpen] = useState(false);
@@ -180,11 +192,13 @@ const [isOpen, setIsOpen] = useState(false);
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">📋 Tablet Components</h3>
-              
-              <div className="space-y-4">
+              <h3 className='text-lg font-semibold mb-4'>
+                📋 Tablet Components
+              </h3>
+
+              <div className='space-y-4'>
                 <CodeBlock
-                  title="Tablet Optimized Container"
+                  title='Tablet Optimized Container'
                   code={`import { TabletOptimizedContainer } from '@/components/tablet/TabletOptimizedComponents';
 
 <TabletOptimizedContainer title="My Page">
@@ -198,7 +212,7 @@ const [isOpen, setIsOpen] = useState(false);
                 />
 
                 <CodeBlock
-                  title="Tablet Grid System"
+                  title='Tablet Grid System'
                   code={`import { TabletGrid, TabletCard } from '@/components/tablet/TabletOptimizedComponents';
 
 <TabletGrid columns={3} gap="lg">
@@ -212,36 +226,43 @@ const [isOpen, setIsOpen] = useState(false);
           </TabsContent>
 
           {/* Best Practices Tab */}
-          <TabsContent value="best-practices" className="space-y-6">
+          <TabsContent value='best-practices' className='space-y-6'>
             <div>
-              <h3 className="text-lg font-semibold mb-4">✅ Development Best Practices</h3>
-              
-              <div className="grid gap-4">
+              <h3 className='text-lg font-semibold mb-4'>
+                ✅ Development Best Practices
+              </h3>
+
+              <div className='grid gap-4'>
                 <Alert>
-                  <Lightbulb className="h-4 w-4" />
+                  <Lightbulb className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Performance:</strong> Always use useOptimizedResponsive instead of useResponsive for better performance with 150ms debouncing.
+                    <strong>Performance:</strong> Always use
+                    useOptimizedResponsive instead of useResponsive for better
+                    performance with 150ms debouncing.
                   </AlertDescription>
                 </Alert>
 
                 <Alert>
-                  <Lightbulb className="h-4 w-4" />
+                  <Lightbulb className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Memoization:</strong> Wrap layout components with React.memo() to prevent unnecessary re-renders during breakpoint changes.
+                    <strong>Memoization:</strong> Wrap layout components with
+                    React.memo() to prevent unnecessary re-renders during
+                    breakpoint changes.
                   </AlertDescription>
                 </Alert>
 
                 <Alert>
-                  <Lightbulb className="h-4 w-4" />
+                  <Lightbulb className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Early Returns:</strong> Use early return patterns in responsive components to minimize conditional rendering.
+                    <strong>Early Returns:</strong> Use early return patterns in
+                    responsive components to minimize conditional rendering.
                   </AlertDescription>
                 </Alert>
               </div>
 
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 <CodeBlock
-                  title="Memoized Responsive Component"
+                  title='Memoized Responsive Component'
                   code={`import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 
@@ -262,7 +283,7 @@ const MyResponsiveComponent = memo(({ children }) => {
                 />
 
                 <CodeBlock
-                  title="Touch Target Standards"
+                  title='Touch Target Standards'
                   code={`// Minimum touch target sizes
 const TOUCH_TARGETS = {
   mobile: {
@@ -288,7 +309,7 @@ const TOUCH_TARGETS = {
                 />
 
                 <CodeBlock
-                  title="Safe Area Implementation"
+                  title='Safe Area Implementation'
                   code={`// CSS for safe area support
 .safe-area-optimized {
   padding-top: max(env(safe-area-inset-top), 0px);
@@ -307,21 +328,26 @@ const TOUCH_TARGETS = {
           </TabsContent>
 
           {/* Troubleshooting Tab */}
-          <TabsContent value="troubleshooting" className="space-y-6">
+          <TabsContent value='troubleshooting' className='space-y-6'>
             <div>
-              <h3 className="text-lg font-semibold mb-4">🔧 Common Issues & Solutions</h3>
-              
-              <div className="space-y-4">
+              <h3 className='text-lg font-semibold mb-4'>
+                🔧 Common Issues & Solutions
+              </h3>
+
+              <div className='space-y-4'>
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Issue:</strong> Layout jumping during breakpoint transitions<br/>
-                    <strong>Solution:</strong> Use CSS transitions and avoid sudden dimension changes
+                    <strong>Issue:</strong> Layout jumping during breakpoint
+                    transitions
+                    <br />
+                    <strong>Solution:</strong> Use CSS transitions and avoid
+                    sudden dimension changes
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Smooth Transition Fix"
+                  title='Smooth Transition Fix'
                   code={`// Add smooth transitions to prevent layout jumps
 .responsive-container {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -346,15 +372,18 @@ const ResponsiveImage = () => {
                 />
 
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Issue:</strong> Excessive re-renders on window resize<br/>
-                    <strong>Solution:</strong> Increase debounce delay or use CSS-only solutions where possible
+                    <strong>Issue:</strong> Excessive re-renders on window
+                    resize
+                    <br />
+                    <strong>Solution:</strong> Increase debounce delay or use
+                    CSS-only solutions where possible
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Performance Optimization"
+                  title='Performance Optimization'
                   code={`// For components that don't need immediate updates
 const DEBOUNCE_DELAY = 300; // Increase from default 150ms
 
@@ -370,15 +399,17 @@ const expensiveValue = useMemo(() => {
                 />
 
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Issue:</strong> Touch targets too small on mobile<br/>
-                    <strong>Solution:</strong> Use mobile-optimized components with minimum 44px touch targets
+                    <strong>Issue:</strong> Touch targets too small on mobile
+                    <br />
+                    <strong>Solution:</strong> Use mobile-optimized components
+                    with minimum 44px touch targets
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Touch Target Fix"
+                  title='Touch Target Fix'
                   code={`// Wrong - Touch targets too small
 <button className="p-1 text-sm">Small Button</button>
 
@@ -394,20 +425,21 @@ import { MobileTouchButton } from '@/components/mobile/MobileOptimizedComponents
           </TabsContent>
 
           {/* Migration Tab */}
-          <TabsContent value="migration" className="space-y-6">
+          <TabsContent value='migration' className='space-y-6'>
             <div>
-              <h3 className="text-lg font-semibold mb-4">🔄 Migration Guide</h3>
-              
-              <div className="space-y-4">
+              <h3 className='text-lg font-semibold mb-4'>🔄 Migration Guide</h3>
+
+              <div className='space-y-4'>
                 <Alert>
-                  <CheckCircle className="h-4 w-4" />
+                  <CheckCircle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Step 1:</strong> Replace legacy useResponsive with useOptimizedResponsive
+                    <strong>Step 1:</strong> Replace legacy useResponsive with
+                    useOptimizedResponsive
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Hook Migration"
+                  title='Hook Migration'
                   code={`// Old (Legacy)
 import { useResponsive } from '@/hooks/useResponsive';
 
@@ -419,14 +451,15 @@ const { isMobile, isTablet, isDesktop } = useOptimizedResponsive();`}
                 />
 
                 <Alert>
-                  <CheckCircle className="h-4 w-4" />
+                  <CheckCircle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Step 2:</strong> Update layout components to use new responsive patterns
+                    <strong>Step 2:</strong> Update layout components to use new
+                    responsive patterns
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Layout Migration"
+                  title='Layout Migration'
                   code={`// Old - Manual responsive logic
 const MyComponent = () => {
   const { isMobile } = useResponsive();
@@ -450,14 +483,15 @@ const MyComponent = () => {
                 />
 
                 <Alert>
-                  <CheckCircle className="h-4 w-4" />
+                  <CheckCircle className='h-4 w-4' />
                   <AlertDescription>
-                    <strong>Step 3:</strong> Upgrade to mobile/tablet optimized components
+                    <strong>Step 3:</strong> Upgrade to mobile/tablet optimized
+                    components
                   </AlertDescription>
                 </Alert>
 
                 <CodeBlock
-                  title="Component Migration"
+                  title='Component Migration'
                   code={`// Old - Basic responsive button
 <button className={isMobile ? 'mobile-btn' : 'desktop-btn'}>
   Click me

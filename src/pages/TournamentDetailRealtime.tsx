@@ -9,15 +9,15 @@ import { ParticipantListRealtime } from '@/components/tournament/ParticipantList
 import AutomationMonitor from '@/components/tournament/AutomationMonitor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { 
-  Users, 
-  Trophy, 
-  Calendar, 
-  MapPin, 
+import {
+  Users,
+  Trophy,
+  Calendar,
+  MapPin,
   DollarSign,
   Clock,
   Shield,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 interface Tournament {
@@ -52,7 +52,9 @@ export const TournamentDetailRealtime: React.FC = () => {
   }, [id]);
 
   const loadCurrentUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     setCurrentUser(user);
   };
 
@@ -87,14 +89,12 @@ export const TournamentDetailRealtime: React.FC = () => {
 
     setRegistering(true);
     try {
-      const { error } = await supabase
-        .from('tournament_registrations')
-        .insert({
-          tournament_id: tournament.id,
-          user_id: currentUser.id,
-          registration_status: 'confirmed',
-          registration_date: new Date().toISOString()
-        });
+      const { error } = await supabase.from('tournament_registrations').insert({
+        tournament_id: tournament.id,
+        user_id: currentUser.id,
+        registration_status: 'confirmed',
+        registration_date: new Date().toISOString(),
+      });
 
       if (error) {
         console.error('Registration error:', error);
@@ -117,39 +117,47 @@ export const TournamentDetailRealtime: React.FC = () => {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
   const getStatusBadge = (status: string) => {
     const configs = {
-      registration_open: { text: "Đang mở ĐK", className: "bg-green-100 text-green-800" },
-      upcoming: { text: "Sắp diễn ra", className: "bg-orange-100 text-orange-800" },
-      ongoing: { text: "Đang diễn ra", className: "bg-purple-100 text-purple-800" },
-      completed: { text: "Đã kết thúc", className: "bg-gray-100 text-gray-600" }
+      registration_open: {
+        text: 'Đang mở ĐK',
+        className: 'bg-green-100 text-green-800',
+      },
+      upcoming: {
+        text: 'Sắp diễn ra',
+        className: 'bg-orange-100 text-orange-800',
+      },
+      ongoing: {
+        text: 'Đang diễn ra',
+        className: 'bg-purple-100 text-purple-800',
+      },
+      completed: {
+        text: 'Đã kết thúc',
+        className: 'bg-gray-100 text-gray-600',
+      },
     };
-    
+
     const config = configs[status as keyof typeof configs] || configs.upcoming;
-    return (
-      <Badge className={config.className}>
-        {config.text}
-      </Badge>
-    );
+    return <Badge className={config.className}>{config.text}</Badge>;
   };
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="h-64 bg-gray-200 rounded"></div>
-              <div className="h-96 bg-gray-200 rounded"></div>
+      <div className='container mx-auto p-6'>
+        <div className='animate-pulse space-y-6'>
+          <div className='h-8 bg-gray-200 rounded w-1/3'></div>
+          <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+            <div className='lg:col-span-2 space-y-6'>
+              <div className='h-64 bg-gray-200 rounded'></div>
+              <div className='h-96 bg-gray-200 rounded'></div>
             </div>
-            <div className="space-y-6">
-              <div className="h-48 bg-gray-200 rounded"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+            <div className='space-y-6'>
+              <div className='h-48 bg-gray-200 rounded'></div>
+              <div className='h-64 bg-gray-200 rounded'></div>
             </div>
           </div>
         </div>
@@ -159,48 +167,55 @@ export const TournamentDetailRealtime: React.FC = () => {
 
   if (!tournament) {
     return (
-      <div className="container mx-auto p-6">
+      <div className='container mx-auto p-6'>
         <Card>
-          <CardContent className="p-8 text-center">
-            <Trophy className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Không tìm thấy giải đấu</h2>
-            <p className="text-gray-500">Giải đấu có thể đã bị xóa hoặc không tồn tại.</p>
+          <CardContent className='p-8 text-center'>
+            <Trophy className='mx-auto h-16 w-16 text-gray-400 mb-4' />
+            <h2 className='text-xl font-semibold text-gray-900 mb-2'>
+              Không tìm thấy giải đấu
+            </h2>
+            <p className='text-gray-500'>
+              Giải đấu có thể đã bị xóa hoặc không tồn tại.
+            </p>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  const canRegister = ['registration_open', 'upcoming'].includes(tournament.status) &&
+  const canRegister =
+    ['registration_open', 'upcoming'].includes(tournament.status) &&
     tournament.current_participants < tournament.max_participants;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className='container mx-auto p-6 space-y-6'>
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className='flex items-start justify-between'>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{tournament.name}</h1>
-          <div className="flex items-center gap-4">
+          <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+            {tournament.name}
+          </h1>
+          <div className='flex items-center gap-4'>
             {getStatusBadge(tournament.status)}
-            <span className="text-sm text-gray-500">
+            <span className='text-sm text-gray-500'>
               Tạo ngày {formatDate(tournament.created_at)}
             </span>
           </div>
         </div>
         {canRegister && currentUser && (
-          <Button 
+          <Button
             onClick={handleRegister}
             disabled={registering}
-            className="bg-green-600 hover:bg-green-700"
+            className='bg-green-600 hover:bg-green-700'
           >
             {registering ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2'></div>
                 Đang đăng ký...
               </>
             ) : (
               <>
-                <Users className="mr-2 h-4 w-4" />
+                <Users className='mr-2 h-4 w-4' />
                 Đăng ký ngay
               </>
             )}
@@ -208,61 +223,63 @@ export const TournamentDetailRealtime: React.FC = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className='lg:col-span-2 space-y-6'>
           {/* Tournament Info */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5" />
+              <CardTitle className='flex items-center gap-2'>
+                <Trophy className='h-5 w-5' />
                 Thông tin giải đấu
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className='space-y-4'>
               {tournament.description && (
                 <div>
-                  <h4 className="font-medium mb-2">Mô tả</h4>
-                  <p className="text-gray-600">{tournament.description}</p>
+                  <h4 className='font-medium mb-2'>Mô tả</h4>
+                  <p className='text-gray-600'>{tournament.description}</p>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-blue-500" />
+              <div className='grid grid-cols-2 gap-4'>
+                <div className='flex items-center gap-3'>
+                  <Calendar className='h-5 w-5 text-blue-500' />
                   <div>
-                    <div className="font-medium">Thời gian thi đấu</div>
-                    <div className="text-sm text-gray-500">
+                    <div className='font-medium'>Thời gian thi đấu</div>
+                    <div className='text-sm text-gray-500'>
                       {formatDate(tournament.tournament_start)}
                     </div>
                   </div>
                 </div>
 
                 {tournament.venue_address && (
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-red-500" />
+                  <div className='flex items-center gap-3'>
+                    <MapPin className='h-5 w-5 text-red-500' />
                     <div>
-                      <div className="font-medium">Địa điểm</div>
-                      <div className="text-sm text-gray-500">{tournament.venue_address}</div>
+                      <div className='font-medium'>Địa điểm</div>
+                      <div className='text-sm text-gray-500'>
+                        {tournament.venue_address}
+                      </div>
                     </div>
                   </div>
                 )}
 
-                <div className="flex items-center gap-3">
-                  <DollarSign className="h-5 w-5 text-green-500" />
+                <div className='flex items-center gap-3'>
+                  <DollarSign className='h-5 w-5 text-green-500' />
                   <div>
-                    <div className="font-medium">Phí tham gia</div>
-                    <div className="text-sm text-gray-500">
+                    <div className='font-medium'>Phí tham gia</div>
+                    <div className='text-sm text-gray-500'>
                       {tournament.entry_fee.toLocaleString('vi-VN')} VNĐ
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-orange-500" />
+                <div className='flex items-center gap-3'>
+                  <Clock className='h-5 w-5 text-orange-500' />
                   <div>
-                    <div className="font-medium">Hạn đăng ký</div>
-                    <div className="text-sm text-gray-500">
+                    <div className='font-medium'>Hạn đăng ký</div>
+                    <div className='text-sm text-gray-500'>
                       {formatDate(tournament.registration_end)}
                     </div>
                   </div>
@@ -275,39 +292,46 @@ export const TournamentDetailRealtime: React.FC = () => {
           <TournamentStatsRealtime tournament={tournament} />
 
           {/* Participant List */}
-          <ParticipantListRealtime 
-            tournamentId={tournament.id} 
-            maxParticipants={tournament.max_participants} 
+          <ParticipantListRealtime
+            tournamentId={tournament.id}
+            maxParticipants={tournament.max_participants}
           />
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Quick Stats */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
+              <CardTitle className='flex items-center gap-2'>
+                <Shield className='h-5 w-5' />
                 Thống kê nhanh
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Loại giải:</span>
-                <span className="font-medium">{tournament.tournament_type}</span>
+            <CardContent className='space-y-3'>
+              <div className='flex justify-between'>
+                <span className='text-gray-600'>Loại giải:</span>
+                <span className='font-medium'>
+                  {tournament.tournament_type}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tổng chỗ:</span>
-                <span className="font-medium">{tournament.max_participants}</span>
+              <div className='flex justify-between'>
+                <span className='text-gray-600'>Tổng chỗ:</span>
+                <span className='font-medium'>
+                  {tournament.max_participants}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Đã đăng ký:</span>
-                <span className="font-medium text-blue-600">{tournament.current_participants}</span>
+              <div className='flex justify-between'>
+                <span className='text-gray-600'>Đã đăng ký:</span>
+                <span className='font-medium text-blue-600'>
+                  {tournament.current_participants}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Còn lại:</span>
-                <span className="font-medium text-green-600">
-                  {tournament.max_participants - tournament.current_participants}
+              <div className='flex justify-between'>
+                <span className='text-gray-600'>Còn lại:</span>
+                <span className='font-medium text-green-600'>
+                  {tournament.max_participants -
+                    tournament.current_participants}
                 </span>
               </div>
             </CardContent>
@@ -319,32 +343,38 @@ export const TournamentDetailRealtime: React.FC = () => {
           {/* Live Updates Status */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5" />
+              <CardTitle className='flex items-center gap-2'>
+                <Zap className='h-5 w-5' />
                 Real-time Status
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Live Updates</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-600">Active</span>
+              <div className='space-y-3'>
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm text-gray-600'>Live Updates</span>
+                  <div className='flex items-center gap-2'>
+                    <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
+                    <span className='text-sm font-medium text-green-600'>
+                      Active
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Auto Sync</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-600">Running</span>
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm text-gray-600'>Auto Sync</span>
+                  <div className='flex items-center gap-2'>
+                    <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
+                    <span className='text-sm font-medium text-green-600'>
+                      Running
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Database</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-600">Connected</span>
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm text-gray-600'>Database</span>
+                  <div className='flex items-center gap-2'>
+                    <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
+                    <span className='text-sm font-medium text-green-600'>
+                      Connected
+                    </span>
                   </div>
                 </div>
               </div>

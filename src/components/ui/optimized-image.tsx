@@ -30,7 +30,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   priority = false,
   width,
   height,
-  aspectRatio
+  aspectRatio,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -75,9 +75,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   // Generate responsive image sources
   const generateSrcSet = useCallback((baseSrc: string) => {
     const sizes = [400, 800, 1200, 1600];
-    return sizes
-      .map(size => `${baseSrc}?w=${size}&q=80 ${size}w`)
-      .join(', ');
+    return sizes.map(size => `${baseSrc}?w=${size}&q=80 ${size}w`).join(', ');
   }, []);
 
   // Calculate container styles with fixed dimensions
@@ -91,10 +89,10 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
 
   if (error) {
     return (
-      <div 
+      <div
         ref={imgRef}
         className={cn(
-          "flex items-center justify-center bg-muted text-muted-foreground text-sm",
+          'flex items-center justify-center bg-muted text-muted-foreground text-sm',
           className
         )}
         style={containerStyle}
@@ -105,22 +103,26 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   }
 
   return (
-    <div 
-      ref={imgRef} 
-      className={cn("relative overflow-hidden", className)}
+    <div
+      ref={imgRef}
+      className={cn('relative overflow-hidden', className)}
       style={containerStyle}
     >
       {/* Placeholder */}
       {(!isLoaded || !isInView) && (
-        <div 
+        <div
           className={cn(
-            "absolute inset-0 bg-muted animate-pulse",
-            placeholderSrc && "bg-cover bg-center"
+            'absolute inset-0 bg-muted animate-pulse',
+            placeholderSrc && 'bg-cover bg-center'
           )}
-          style={placeholderSrc ? { backgroundImage: `url(${placeholderSrc})` } : undefined}
+          style={
+            placeholderSrc
+              ? { backgroundImage: `url(${placeholderSrc})` }
+              : undefined
+          }
         />
       )}
-      
+
       {/* Main image */}
       {isInView && (
         <img
@@ -129,13 +131,15 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           width={width}
           height={height}
           srcSet={generateSrcSet(src)}
-          sizes={sizes || "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
+          sizes={
+            sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          }
           loading={loading}
           onLoad={handleLoad}
           onError={handleError}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
-            isLoaded ? "opacity-100" : "opacity-0"
+            'absolute inset-0 w-full h-full object-cover transition-opacity duration-300',
+            isLoaded ? 'opacity-100' : 'opacity-0'
           )}
         />
       )}
@@ -157,23 +161,23 @@ export const OptimizedAvatar: React.FC<OptimizedAvatarProps> = ({
   alt,
   size = 'md',
   fallback,
-  className
+  className,
 }) => {
   const [error, setError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   const sizeClasses = {
     sm: 'h-8 w-8',
-    md: 'h-10 w-10', 
+    md: 'h-10 w-10',
     lg: 'h-12 w-12',
-    xl: 'h-16 w-16'
+    xl: 'h-16 w-16',
   };
 
   const sizePx = {
     sm: { width: 32, height: 32 },
     md: { width: 40, height: 40 },
     lg: { width: 48, height: 48 },
-    xl: { width: 64, height: 64 }
+    xl: { width: 64, height: 64 },
   };
 
   const handleError = useCallback(() => {
@@ -187,9 +191,9 @@ export const OptimizedAvatar: React.FC<OptimizedAvatarProps> = ({
   const fallbackText = fallback || alt.charAt(0).toUpperCase();
 
   return (
-    <div 
+    <div
       className={cn(
-        "relative rounded-full overflow-hidden bg-muted flex items-center justify-center flex-shrink-0",
+        'relative rounded-full overflow-hidden bg-muted flex items-center justify-center flex-shrink-0',
         sizeClasses[size],
         className
       )}
@@ -200,9 +204,9 @@ export const OptimizedAvatar: React.FC<OptimizedAvatarProps> = ({
     >
       {/* Skeleton placeholder */}
       {src && !isLoaded && !error && (
-        <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
+        <div className='absolute inset-0 bg-muted animate-pulse rounded-full' />
       )}
-      
+
       {src && !error ? (
         <img
           src={src}
@@ -212,13 +216,13 @@ export const OptimizedAvatar: React.FC<OptimizedAvatarProps> = ({
           onError={handleError}
           onLoad={handleLoad}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-200",
-            isLoaded ? "opacity-100" : "opacity-0"
+            'absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-200',
+            isLoaded ? 'opacity-100' : 'opacity-0'
           )}
-          loading="lazy"
+          loading='lazy'
         />
       ) : (
-        <span className="text-sm font-medium text-muted-foreground absolute inset-0 flex items-center justify-center">
+        <span className='text-sm font-medium text-muted-foreground absolute inset-0 flex items-center justify-center'>
           {fallbackText}
         </span>
       )}
@@ -229,13 +233,14 @@ export const OptimizedAvatar: React.FC<OptimizedAvatarProps> = ({
 // Image preloader utility
 export const preloadImages = (urls: string[]): Promise<void[]> => {
   return Promise.all(
-    urls.map(url => 
-      new Promise<void>((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve();
-        img.onerror = reject;
-        img.src = url;
-      })
+    urls.map(
+      url =>
+        new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = reject;
+          img.src = url;
+        })
     )
   );
 };
@@ -254,19 +259,22 @@ export const useImageOptimization = () => {
     }
   }, []);
 
-  const optimizeImageUrl = useCallback((src: string, width?: number, quality = 80) => {
-    if (!src) return '';
-    
-    // Add optimization parameters if URL supports it
-    const url = new URL(src, window.location.origin);
-    if (width) url.searchParams.set('w', width.toString());
-    url.searchParams.set('q', quality.toString());
-    
-    return url.toString();
-  }, []);
+  const optimizeImageUrl = useCallback(
+    (src: string, width?: number, quality = 80) => {
+      if (!src) return '';
+
+      // Add optimization parameters if URL supports it
+      const url = new URL(src, window.location.origin);
+      if (width) url.searchParams.set('w', width.toString());
+      url.searchParams.set('q', quality.toString());
+
+      return url.toString();
+    },
+    []
+  );
 
   return {
     preloadCriticalImages,
-    optimizeImageUrl
+    optimizeImageUrl,
   };
 };

@@ -29,12 +29,9 @@ interface ChallengeVerificationModalProps {
   onSubmit: (data: { notes: string; images: string[] }) => void;
 }
 
-export const ChallengeVerificationModal: React.FC<ChallengeVerificationModalProps> = ({
-  challenge,
-  isOpen,
-  onClose,
-  onSubmit,
-}) => {
+export const ChallengeVerificationModal: React.FC<
+  ChallengeVerificationModalProps
+> = ({ challenge, isOpen, onClose, onSubmit }) => {
   const [notes, setNotes] = useState('');
   const [images, setImages] = useState<string[]>([]);
 
@@ -56,35 +53,42 @@ export const ChallengeVerificationModal: React.FC<ChallengeVerificationModalProp
       }
 
       // Convert files to base64 strings
-      Promise.all(imageFiles.map(file => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            if (event.target?.result) {
-              resolve(event.target.result as string);
-            } else {
-              reject('Lỗi đọc tệp.');
-            }
-          };
-          reader.onerror = () => reject('Lỗi đọc tệp.');
-          reader.readAsDataURL(file);
+      Promise.all(
+        imageFiles.map(file => {
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = event => {
+              if (event.target?.result) {
+                resolve(event.target.result as string);
+              } else {
+                reject('Lỗi đọc tệp.');
+              }
+            };
+            reader.onerror = () => reject('Lỗi đọc tệp.');
+            reader.readAsDataURL(file);
+          });
+        })
+      )
+        .then(base64Images => {
+          setImages(prevImages => [...prevImages, ...base64Images]);
+        })
+        .catch(error => {
+          console.error('Lỗi xử lý tệp:', error);
+          alert('Có lỗi xảy ra khi xử lý tệp.');
         });
-      }))
-      .then(base64Images => {
-        setImages(prevImages => [...prevImages, ...base64Images]);
-      })
-      .catch(error => {
-        console.error('Lỗi xử lý tệp:', error);
-        alert('Có lỗi xảy ra khi xử lý tệp.');
-      });
     }
   };
 
   const removeImage = (indexToRemove: number) => {
-    setImages(prevImages => prevImages.filter((_, index) => index !== indexToRemove));
+    setImages(prevImages =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
   };
 
-  const opponent = challenge?.opponent_profile || challenge?.opponent || challenge?.challenged_profile;
+  const opponent =
+    challenge?.opponent_profile ||
+    challenge?.opponent ||
+    challenge?.challenged_profile;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -109,8 +113,8 @@ export const ChallengeVerificationModal: React.FC<ChallengeVerificationModalProp
                 vs {opponent?.full_name || 'Unknown Player'}
               </h3>
               <p className='text-sm text-gray-600'>
-                Cược: {challenge?.bet_points || 0} điểm •{' '}
-                Rank: {opponent?.verified_rank || opponent?.current_rank || 'K'}
+                Cược: {challenge?.bet_points || 0} điểm • Rank:{' '}
+                {opponent?.verified_rank || opponent?.current_rank || 'K'}
               </p>
             </div>
           </div>
@@ -138,13 +142,20 @@ export const ChallengeVerificationModal: React.FC<ChallengeVerificationModalProp
                 onChange={handleImageUpload}
                 className='hidden'
               />
-              <Label htmlFor='images' className='bg-gray-100 rounded-md p-2 text-center cursor-pointer block'>
+              <Label
+                htmlFor='images'
+                className='bg-gray-100 rounded-md p-2 text-center cursor-pointer block'
+              >
                 Chọn hình ảnh
               </Label>
               <div className='mt-2 grid grid-cols-3 gap-2'>
                 {images.map((image, index) => (
                   <div key={index} className='relative'>
-                    <img src={image} alt={`Hình ảnh ${index + 1}`} className='rounded-md' />
+                    <img
+                      src={image}
+                      alt={`Hình ảnh ${index + 1}`}
+                      className='rounded-md'
+                    />
                     <button
                       onClick={() => removeImage(index)}
                       className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700'

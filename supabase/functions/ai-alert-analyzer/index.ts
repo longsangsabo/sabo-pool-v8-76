@@ -1,46 +1,52 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 // OpenAI pricing per 1M tokens (as of 2025)
 const OPENAI_PRICING = {
-  'gpt-4.1-2025-04-14': { input: 2.50, output: 10.00 },
-  'gpt-4.1-mini-2025-04-14': { input: 0.15, output: 0.60 },
-  'o3-2025-04-16': { input: 15.00, output: 60.00 },
-  'o4-mini-2025-04-16': { input: 3.00, output: 12.00 }
+  'gpt-4.1-2025-04-14': { input: 2.5, output: 10.0 },
+  'gpt-4.1-mini-2025-04-14': { input: 0.15, output: 0.6 },
+  'o3-2025-04-16': { input: 15.0, output: 60.0 },
+  'o4-mini-2025-04-16': { input: 3.0, output: 12.0 },
 } as const;
 
-function calculateOpenAICost(modelId: string, promptTokens: number, completionTokens: number): number {
+function calculateOpenAICost(
+  modelId: string,
+  promptTokens: number,
+  completionTokens: number
+): number {
   const pricing = OPENAI_PRICING[modelId as keyof typeof OPENAI_PRICING];
   if (!pricing) return 0;
-  
+
   const inputCost = (promptTokens / 1000000) * pricing.input;
   const outputCost = (completionTokens / 1000000) * pricing.output;
-  
+
   return inputCost + outputCost;
 }
 
-async function logOpenAIUsage(supabase: any, usage: {
-  model_id: string;
-  task_type: string;
-  prompt_tokens: number;
-  completion_tokens: number;
-  total_tokens: number;
-  cost_usd: number;
-  response_time_ms: number;
-  success: boolean;
-  error_message?: string;
-  user_id?: string;
-  function_name: string;
-}): Promise<void> {
+async function logOpenAIUsage(
+  supabase: any,
+  usage: {
+    model_id: string;
+    task_type: string;
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+    cost_usd: number;
+    response_time_ms: number;
+    success: boolean;
+    error_message?: string;
+    user_id?: string;
+    function_name: string;
+  }
+): Promise<void> {
   try {
-    const { error } = await supabase
-      .from('openai_usage_logs')
-      .insert([usage]);
+    const { error } = await supabase.from('openai_usage_logs').insert([usage]);
 
     if (error) {
       console.error('Failed to log OpenAI usage:', error);
@@ -67,25 +73,35 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { action, data, model } = await req.json();
-    
+
     // Model selection with smart defaults
     const getOptimalModel = (action: string, userModel?: string): string => {
-      if (userModel && ['gpt-4.1-2025-04-14', 'gpt-4.1-mini-2025-04-14', 'o3-2025-04-16', 'o4-mini-2025-04-16'].includes(userModel)) {
+      if (
+        userModel &&
+        [
+          'gpt-4.1-2025-04-14',
+          'gpt-4.1-mini-2025-04-14',
+          'o3-2025-04-16',
+          'o4-mini-2025-04-16',
+        ].includes(userModel)
+      ) {
         return userModel;
       }
-      
+
       // Smart model recommendations based on task complexity
       const taskModels = {
-        'analyze_alert': 'o3-2025-04-16',        // Complex reasoning needed
-        'predict_incidents': 'o3-2025-04-16',    // Deep analysis required  
-        'suggest_resolution': 'gpt-4.1-2025-04-14', // Balanced approach
-        'generate_summary': 'gpt-4.1-mini-2025-04-14', // Fast and efficient
-        'chat_query': 'gpt-4.1-2025-04-14'      // General purpose
+        analyze_alert: 'o3-2025-04-16', // Complex reasoning needed
+        predict_incidents: 'o3-2025-04-16', // Deep analysis required
+        suggest_resolution: 'gpt-4.1-2025-04-14', // Balanced approach
+        generate_summary: 'gpt-4.1-mini-2025-04-14', // Fast and efficient
+        chat_query: 'gpt-4.1-2025-04-14', // General purpose
       };
-      
-      return taskModels[action as keyof typeof taskModels] || 'gpt-4.1-2025-04-14';
+
+      return (
+        taskModels[action as keyof typeof taskModels] || 'gpt-4.1-2025-04-14'
+      );
     };
-    
+
     const selectedModel = getOptimalModel(action, model);
 
     console.log('🤖 AI Alert Analyzer - Action:', action);
@@ -93,7 +109,7 @@ const handler = async (req: Request): Promise<Response> => {
     switch (action) {
       case 'analyze_alert': {
         const { alertData, context } = data;
-        
+
         const analysisPrompt = `
 Bạn là AI expert trong việc phân tích alerts hệ thống SABO Pool Arena Hub.
 
@@ -119,22 +135,29 @@ Hãy phân tích alert này và trả về JSON response với:
 }`;
 
         const startTime = Date.now();
-        const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are an expert system analyst specializing in alert analysis for pool/billiards gaming platforms. Respond only with valid JSON.' },
-              { role: 'user', content: analysisPrompt }
-            ],
-            temperature: selectedModel.includes('o3') ? 0.1 : 0.3, // Lower temp for reasoning models
-            max_tokens: selectedModel.includes('o3') ? 3000 : 1500
-          }),
-        });
+        const aiResponse = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${openAIApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: selectedModel,
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    'You are an expert system analyst specializing in alert analysis for pool/billiards gaming platforms. Respond only with valid JSON.',
+                },
+                { role: 'user', content: analysisPrompt },
+              ],
+              temperature: selectedModel.includes('o3') ? 0.1 : 0.3, // Lower temp for reasoning models
+              max_tokens: selectedModel.includes('o3') ? 3000 : 1500,
+            }),
+          }
+        );
 
         const aiData = await aiResponse.json();
         const analysis = JSON.parse(aiData.choices[0].message.content);
@@ -145,7 +168,11 @@ Hãy phân tích alert này và trả về JSON response với:
         const promptTokens = usage.prompt_tokens || 0;
         const completionTokens = usage.completion_tokens || 0;
         const totalTokens = usage.total_tokens || 0;
-        const cost = calculateOpenAICost(selectedModel, promptTokens, completionTokens);
+        const cost = calculateOpenAICost(
+          selectedModel,
+          promptTokens,
+          completionTokens
+        );
 
         // Log to database (fire and forget)
         logOpenAIUsage(supabase, {
@@ -157,7 +184,7 @@ Hãy phân tích alert này và trả về JSON response với:
           cost_usd: cost,
           response_time_ms: responseTime,
           success: true,
-          function_name: 'ai-alert-analyzer'
+          function_name: 'ai-alert-analyzer',
         }).catch(err => console.error('Failed to log usage:', err));
 
         // Store analysis in database
@@ -167,7 +194,7 @@ Hãy phân tích alert này và trả về JSON response với:
             alert_id: alertData.id,
             analysis_data: analysis,
             ai_model: selectedModel,
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString(),
           })
           .select()
           .single();
@@ -176,18 +203,21 @@ Hãy phân tích alert này và trả về JSON response với:
           console.error('Error saving analysis:', error);
         }
 
-        return new Response(JSON.stringify({
-          success: true,
-          analysis,
-          analysis_id: savedAnalysis?.id
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            analysis,
+            analysis_id: savedAnalysis?.id,
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       case 'generate_summary': {
         const { alerts, timeframe } = data;
-        
+
         const summaryPrompt = `
 Tạo báo cáo tóm tắt alerts cho SABO Pool Arena Hub trong khoảng thời gian: ${timeframe}
 
@@ -205,38 +235,48 @@ Format: Markdown tiếng Việt, dễ đọc và chuyên nghiệp.
 `;
 
         const startTime = Date.now();
-        const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are a technical report writer for gaming platform operations. Create detailed, actionable reports in Vietnamese.' },
-              { role: 'user', content: summaryPrompt }
-            ],
-            temperature: selectedModel.includes('o3') ? 0.2 : 0.4,
-            max_tokens: selectedModel.includes('o3') ? 4000 : 2000
-          }),
-        });
+        const aiResponse = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${openAIApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: selectedModel,
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    'You are a technical report writer for gaming platform operations. Create detailed, actionable reports in Vietnamese.',
+                },
+                { role: 'user', content: summaryPrompt },
+              ],
+              temperature: selectedModel.includes('o3') ? 0.2 : 0.4,
+              max_tokens: selectedModel.includes('o3') ? 4000 : 2000,
+            }),
+          }
+        );
 
         const aiData = await aiResponse.json();
         const summary = aiData.choices[0].message.content;
 
-        return new Response(JSON.stringify({
-          success: true,
-          summary,
-          generated_at: new Date().toISOString()
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            summary,
+            generated_at: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       case 'suggest_resolution': {
         const { alertData, historicalData } = data;
-        
+
         const resolutionPrompt = `
 Alert cần giải quyết:
 ${JSON.stringify(alertData, null, 2)}
@@ -254,38 +294,48 @@ Hãy đưa ra hướng dẫn giải quyết chi tiết với:
 Format: Markdown với step-by-step instructions.
 `;
 
-        const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are a senior DevOps engineer with expertise in gaming platform operations. Provide detailed, practical troubleshooting guides.' },
-              { role: 'user', content: resolutionPrompt }
-            ],
-            temperature: selectedModel.includes('o3') ? 0.1 : 0.2,
-            max_tokens: selectedModel.includes('o3') ? 3000 : 2000
-          }),
-        });
+        const aiResponse = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${openAIApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: selectedModel,
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    'You are a senior DevOps engineer with expertise in gaming platform operations. Provide detailed, practical troubleshooting guides.',
+                },
+                { role: 'user', content: resolutionPrompt },
+              ],
+              temperature: selectedModel.includes('o3') ? 0.1 : 0.2,
+              max_tokens: selectedModel.includes('o3') ? 3000 : 2000,
+            }),
+          }
+        );
 
         const aiData = await aiResponse.json();
         const resolution = aiData.choices[0].message.content;
 
-        return new Response(JSON.stringify({
-          success: true,
-          resolution_guide: resolution,
-          generated_at: new Date().toISOString()
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            resolution_guide: resolution,
+            generated_at: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       case 'predict_incidents': {
         const { systemMetrics, alertHistory } = data;
-        
+
         const predictionPrompt = `
 Dựa trên system metrics và alert history, hãy dự đoán các incidents có thể xảy ra:
 
@@ -313,38 +363,48 @@ Trả về JSON với format:
 }
 `;
 
-        const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are a predictive analytics expert for system reliability. Analyze patterns and predict potential issues with high accuracy.' },
-              { role: 'user', content: predictionPrompt }
-            ],
-            temperature: selectedModel.includes('o3') ? 0.05 : 0.1,
-            max_tokens: selectedModel.includes('o3') ? 3000 : 1500
-          }),
-        });
+        const aiResponse = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${openAIApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: selectedModel,
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    'You are a predictive analytics expert for system reliability. Analyze patterns and predict potential issues with high accuracy.',
+                },
+                { role: 'user', content: predictionPrompt },
+              ],
+              temperature: selectedModel.includes('o3') ? 0.05 : 0.1,
+              max_tokens: selectedModel.includes('o3') ? 3000 : 1500,
+            }),
+          }
+        );
 
         const aiData = await aiResponse.json();
         const predictions = JSON.parse(aiData.choices[0].message.content);
 
-        return new Response(JSON.stringify({
-          success: true,
-          predictions,
-          generated_at: new Date().toISOString()
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            predictions,
+            generated_at: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       case 'chat_query': {
         const { query, alertContext } = data;
-        
+
         const chatPrompt = `
 Bạn là AI assistant chuyên về hệ thống alerts của SABO Pool Arena Hub.
 
@@ -356,57 +416,70 @@ User query: ${query}
 Hãy trả lời câu hỏi một cách chi tiết, chính xác và hữu ích. Nếu cần thêm thông tin, hãy đề xuất những gì user nên cung cấp.
 `;
 
-        const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are a helpful AI assistant specializing in system monitoring and alert management for gaming platforms. Respond in Vietnamese when appropriate.' },
-              { role: 'user', content: chatPrompt }
-            ],
-            temperature: selectedModel.includes('o3') ? 0.3 : 0.5,
-            max_tokens: selectedModel.includes('o3') ? 2000 : 1000
-          }),
-        });
+        const aiResponse = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${openAIApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: selectedModel,
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    'You are a helpful AI assistant specializing in system monitoring and alert management for gaming platforms. Respond in Vietnamese when appropriate.',
+                },
+                { role: 'user', content: chatPrompt },
+              ],
+              temperature: selectedModel.includes('o3') ? 0.3 : 0.5,
+              max_tokens: selectedModel.includes('o3') ? 2000 : 1000,
+            }),
+          }
+        );
 
         const aiData = await aiResponse.json();
         const response = aiData.choices[0].message.content;
 
-        return new Response(JSON.stringify({
-          success: true,
-          response,
-          timestamp: new Date().toISOString()
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            response,
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       default:
-        return new Response(JSON.stringify({
-          success: false,
-          error: 'Invalid action'
-        }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: 'Invalid action',
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
     }
-
   } catch (error: any) {
     console.error('💥 Error in AI Alert Analyzer:', error);
-    
+
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error.message,
-        success: false
-      }), {
+        success: false,
+      }),
+      {
         status: 500,
-        headers: { 
-          'Content-Type': 'application/json', 
-          ...corsHeaders 
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
         },
       }
     );

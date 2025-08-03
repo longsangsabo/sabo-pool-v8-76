@@ -28,11 +28,11 @@ export function useRealtimeSPA() {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'spa_points_log'
+          table: 'spa_points_log',
         },
-        async (payload) => {
+        async payload => {
           const newRecord = payload.new as any;
-          
+
           // Get user name for the update
           const { data: profile } = await supabase
             .from('profiles')
@@ -46,20 +46,17 @@ export function useRealtimeSPA() {
             category: newRecord.category || 'unknown',
             description: newRecord.description,
             timestamp: newRecord.created_at,
-            user_name: profile?.full_name || 'Unknown User'
+            user_name: profile?.full_name || 'Unknown User',
           };
 
           setRecentUpdates(prev => [spaUpdate, ...prev.slice(0, 19)]); // Keep last 20 updates
 
           // Show notification for current user's updates
           if (newRecord.user_id === user.id && newRecord.points > 0) {
-            toast.success(
-              `🎯 +${newRecord.points} SPA điểm!`,
-              {
-                description: newRecord.description,
-                duration: 4000
-              }
-            );
+            toast.success(`🎯 +${newRecord.points} SPA điểm!`, {
+              description: newRecord.description,
+              duration: 4000,
+            });
           }
         }
       )
@@ -69,26 +66,26 @@ export function useRealtimeSPA() {
           event: 'UPDATE',
           schema: 'public',
           table: 'player_rankings',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
-          
+
           const spaChange = newRecord.spa_points - oldRecord.spa_points;
-          
+
           if (spaChange !== 0) {
             toast.info(
               `SPA điểm đã cập nhật: ${spaChange > 0 ? '+' : ''}${spaChange}`,
               {
                 description: `Tổng: ${newRecord.spa_points.toLocaleString()} SPA`,
-                duration: 3000
+                duration: 3000,
               }
             );
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
       });
 
@@ -101,10 +98,12 @@ export function useRealtimeSPA() {
   const getRecentGlobalUpdates = async () => {
     const { data } = await supabase
       .from('spa_points_log')
-      .select(`
+      .select(
+        `
         *,
         profiles!inner(full_name)
-      `)
+      `
+      )
       .order('created_at', { ascending: false })
       .limit(20);
 
@@ -115,9 +114,9 @@ export function useRealtimeSPA() {
         category: log.category || 'unknown',
         description: log.description,
         timestamp: log.created_at,
-        user_name: (log.profiles as any)?.full_name || 'Unknown User'
+        user_name: (log.profiles as any)?.full_name || 'Unknown User',
       }));
-      
+
       setRecentUpdates(updates);
     }
   };
@@ -125,6 +124,6 @@ export function useRealtimeSPA() {
   return {
     recentUpdates,
     isConnected,
-    getRecentGlobalUpdates
+    getRecentGlobalUpdates,
   };
 }

@@ -19,6 +19,6 @@ export const useServerSideAuth = () => {
   return {
     loading,
     logAdminAction,
-    data: { isAdmin: true, canAccess: true }
+    data: { isAdmin: true, canAccess: true },
   };
 };

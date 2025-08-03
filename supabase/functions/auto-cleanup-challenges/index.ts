@@ -1,14 +1,15 @@
 // Edge function to automatically cleanup expired challenges
 // This can be called periodically or by a cron job
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
+};
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -22,7 +23,9 @@ Deno.serve(async (req) => {
     console.log('Starting automatic challenge cleanup...');
 
     // Call the cleanup function
-    const { data: result, error } = await supabase.rpc('cleanup_expired_challenges');
+    const { data: result, error } = await supabase.rpc(
+      'cleanup_expired_challenges'
+    );
 
     if (error) {
       console.error('Cleanup error:', error);
@@ -38,19 +41,18 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         expired_challenges: result,
-        cleanup_time: new Date().toISOString()
+        cleanup_time: new Date().toISOString(),
       }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
-
   } catch (error) {
     console.error('Edge function error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: corsHeaders }
-    );
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 });

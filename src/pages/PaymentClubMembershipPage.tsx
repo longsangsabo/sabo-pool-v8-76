@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -66,7 +65,7 @@ const PaymentClubMembershipPage = () => {
       };
 
       await depositFunds(paymentData.amount, paymentData.description);
-      
+
       toast({
         title: 'Thanh toán thành công',
         description: `Đã đăng ký thành viên ${selectedClub.name}`,
@@ -90,9 +89,7 @@ const PaymentClubMembershipPage = () => {
         <div className='relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20'>
           <div className='max-w-md mx-auto'>
             <div>
-              <h1 className='text-2xl font-semibold'>
-                Đăng ký thành viên CLB
-              </h1>
+              <h1 className='text-2xl font-semibold'>Đăng ký thành viên CLB</h1>
             </div>
             <div className='divide-y divide-gray-200'>
               <div className='py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
@@ -101,7 +98,15 @@ const PaymentClubMembershipPage = () => {
                   <Select
                     onValueChange={value => {
                       const club = clubs?.find(club => club.id === value);
-                      setSelectedClub(club ? { ...club, created_at: new Date().toISOString(), updated_at: new Date().toISOString() } : null);
+                      setSelectedClub(
+                        club
+                          ? {
+                              ...club,
+                              created_at: new Date().toISOString(),
+                              updated_at: new Date().toISOString(),
+                            }
+                          : null
+                      );
                     }}
                   >
                     <SelectTrigger className='w-full'>
@@ -133,19 +138,13 @@ const PaymentClubMembershipPage = () => {
                       <SelectValue placeholder='Chọn gói hội viên' />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem
-                        value='Basic||100000||basic'
-                      >
+                      <SelectItem value='Basic||100000||basic'>
                         Gói Cơ Bản - 100.000 VND
                       </SelectItem>
-                      <SelectItem
-                        value='Premium||200000||premium'
-                      >
+                      <SelectItem value='Premium||200000||premium'>
                         Gói Cao Cấp - 200.000 VND
                       </SelectItem>
-                      <SelectItem
-                        value='VIP||500000||vip'
-                      >
+                      <SelectItem value='VIP||500000||vip'>
                         Gói VIP - 500.000 VND
                       </SelectItem>
                     </SelectContent>

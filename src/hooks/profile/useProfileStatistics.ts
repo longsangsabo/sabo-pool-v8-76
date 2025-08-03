@@ -13,7 +13,7 @@ export const useProfileStatistics = (userId?: string) => {
     data: statistics,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['profile-statistics', targetUserId],
     queryFn: async (): Promise<ProfileStatistics | null> => {
@@ -40,6 +40,6 @@ export const useProfileStatistics = (userId?: string) => {
     isLoading,
     error,
     refetch,
-    refreshStatistics
+    refreshStatistics,
   };
 };

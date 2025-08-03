@@ -7,21 +7,24 @@ interface AutomationMonitorProps {
   className?: string;
 }
 
-const AutomationMonitor: React.FC<AutomationMonitorProps> = ({ tournamentId, className }) => {
+const AutomationMonitor: React.FC<AutomationMonitorProps> = ({
+  tournamentId,
+  className,
+}) => {
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle>Automation Monitor</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
+        <div className='space-y-2'>
+          <div className='flex items-center justify-between'>
             <span>Status</span>
-            <Badge variant="outline">Active</Badge>
+            <Badge variant='outline'>Active</Badge>
           </div>
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <span>Last Check</span>
-            <span className="text-sm text-muted-foreground">Just now</span>
+            <span className='text-sm text-muted-foreground'>Just now</span>
           </div>
         </div>
       </CardContent>

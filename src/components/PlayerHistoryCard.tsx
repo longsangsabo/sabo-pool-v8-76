@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSeasonHistory } from '../hooks/useSeasonHistory';
 import { SeasonHistory, UserBestSeason } from '../types/seasonHistory';
@@ -36,16 +35,21 @@ export const PlayerHistoryCard: React.FC<PlayerHistoryCardProps> = ({
       setBestSeason(best);
     } else if (historyResponse.player_history.length > 0) {
       // Convert the best season from history if getUserBestSeason returns null
-      const bestFromHistory = historyResponse.player_history.reduce((prev, current) => 
-        (prev.ranking_points > current.ranking_points) ? prev : current
+      const bestFromHistory = historyResponse.player_history.reduce(
+        (prev, current) =>
+          prev.ranking_points > current.ranking_points ? prev : current
       );
       setBestSeason({
         season_name: bestFromHistory.season_name,
         season_year: bestFromHistory.season_year,
         final_rank: bestFromHistory.final_rank,
         ranking_points: bestFromHistory.ranking_points,
-        achievement_level: bestFromHistory.final_rank <= 3 ? 'Elite' : 
-                          bestFromHistory.final_rank <= 10 ? 'Advanced' : 'Intermediate'
+        achievement_level:
+          bestFromHistory.final_rank <= 3
+            ? 'Elite'
+            : bestFromHistory.final_rank <= 10
+              ? 'Advanced'
+              : 'Intermediate',
       });
     }
   };

@@ -35,7 +35,7 @@ const DailyNotificationSystem = () => {
             badge: '/favicon.ico',
           });
         }
-        
+
         // Schedule next day's notification
         scheduleNotification();
       }, timeUntilNotification);

@@ -6,13 +6,18 @@ export interface MatchResultData {
   player2_id: string;
   winner_id?: string;
   loser_id?: string;
-  
+
   // Score tracking
   player1_score: number;
   player2_score: number;
   total_frames: number;
-  match_format: 'race_to_5' | 'race_to_7' | 'race_to_9' | 'race_to_10' | 'race_to_11';
-  
+  match_format:
+    | 'race_to_5'
+    | 'race_to_7'
+    | 'race_to_9'
+    | 'race_to_10'
+    | 'race_to_11';
+
   // ELO and ranking
   player1_elo_before: number;
   player2_elo_before: number;
@@ -20,25 +25,25 @@ export interface MatchResultData {
   player2_elo_after: number;
   player1_elo_change: number;
   player2_elo_change: number;
-  
+
   // Result verification
   result_status: 'pending' | 'verified' | 'disputed' | 'rejected';
   verification_method?: 'manual' | 'qr_code' | 'referee' | 'auto';
   verified_at?: string;
   verified_by?: string;
-  
+
   // Player confirmations
   player1_confirmed: boolean;
   player2_confirmed: boolean;
   player1_confirmed_at?: string;
   player2_confirmed_at?: string;
-  
+
   // Match details
   match_date: string;
   duration_minutes?: number;
   club_id?: string;
   referee_id?: string;
-  
+
   // Additional stats
   player1_stats?: {
     longest_run?: number;
@@ -55,12 +60,12 @@ export interface MatchResultData {
     fouls?: number;
   };
   match_notes?: string;
-  
+
   // Metadata
   created_at: string;
   updated_at: string;
   created_by?: string;
-  
+
   // Related data
   player1?: {
     id: string;
@@ -97,7 +102,12 @@ export interface MatchResultFormData {
   player2_id: string;
   player1_score: number;
   player2_score: number;
-  match_format: 'race_to_5' | 'race_to_7' | 'race_to_9' | 'race_to_10' | 'race_to_11';
+  match_format:
+    | 'race_to_5'
+    | 'race_to_7'
+    | 'race_to_9'
+    | 'race_to_10'
+    | 'race_to_11';
   match_date: string;
   duration_minutes?: number;
   club_id?: string;
@@ -132,7 +142,7 @@ export interface MatchDispute {
   resolved_by?: string;
   created_at: string;
   updated_at: string;
-  
+
   // Related data
   match_result?: MatchResultData;
   disputer?: {
@@ -156,7 +166,7 @@ export interface EloHistoryEntry {
   match_result: 'win' | 'loss' | 'draw';
   k_factor: number;
   created_at: string;
-  
+
   // Related data
   opponent?: {
     id: string;
@@ -179,7 +189,7 @@ export interface RankingSnapshot {
   current_streak: number;
   peak_elo?: number;
   created_at: string;
-  
+
   // Related data
   player?: {
     id: string;

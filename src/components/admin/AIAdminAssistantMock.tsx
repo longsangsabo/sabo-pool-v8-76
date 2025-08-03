@@ -6,13 +6,13 @@ const AIAdminAssistantMock = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-yellow-500" />
+        <CardTitle className='flex items-center gap-2'>
+          <AlertTriangle className='w-5 h-5 text-yellow-500' />
           AI Admin Assistant
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-muted-foreground">
+        <p className='text-muted-foreground'>
           AI Admin Assistant đang được phát triển. Vui lòng quay lại sau.
         </p>
       </CardContent>

@@ -10,7 +10,9 @@ export interface BottomNavigationProps {
   items: NavigationItem[];
 }
 
-export const BottomNavigation: React.FC<BottomNavigationProps> = ({ items }) => {
+export const BottomNavigation: React.FC<BottomNavigationProps> = ({
+  items,
+}) => {
   const location = useLocation();
 
   // Get notification counts for badges
@@ -46,10 +48,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ items }) => 
   // Get badge count for specific paths
   const getBadgeCount = (item: NavigationItem): number => {
     if (!item.badge) return 0;
-    
+
     if (item.path.includes('notification')) return notificationCount || 0;
     if (item.path.includes('challenge')) return challengeCount || 0;
-    
+
     return 0;
   };
 
@@ -61,46 +63,50 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ items }) => 
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border lg:hidden">
-      <div className="flex items-center justify-around py-2 px-2 safe-area-pb">
-        {items.map((item) => {
+    <nav className='fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border lg:hidden'>
+      <div className='flex items-center justify-around py-2 px-2 safe-area-pb'>
+        {items.map(item => {
           const Icon = item.icon;
           const active = isActive(item.path);
           const badgeCount = getBadgeCount(item);
-          
+
           return (
             <NavLink
               key={item.path}
               to={item.path}
               className={cn(
-                "relative flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 rounded-lg transition-all duration-200",
-                "hover:bg-muted/50 active:scale-95",
-                active 
-                  ? "text-primary bg-primary/10" 
-                  : "text-muted-foreground hover:text-foreground"
+                'relative flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 rounded-lg transition-all duration-200',
+                'hover:bg-muted/50 active:scale-95',
+                active
+                  ? 'text-primary bg-primary/10'
+                  : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              <div className="relative">
-                <Icon className={cn(
-                  "w-5 h-5 transition-colors",
-                  active && "fill-current"
-                )} />
-                
+              <div className='relative'>
+                <Icon
+                  className={cn(
+                    'w-5 h-5 transition-colors',
+                    active && 'fill-current'
+                  )}
+                />
+
                 {/* Badge */}
                 {badgeCount > 0 && (
                   <Badge
-                    variant="destructive"
-                    className="absolute -top-2 -right-2 w-5 h-5 text-xs p-0 flex items-center justify-center min-w-[20px] h-5"
+                    variant='destructive'
+                    className='absolute -top-2 -right-2 w-5 h-5 text-xs p-0 flex items-center justify-center min-w-[20px] h-5'
                   >
                     {badgeCount > 99 ? '99+' : badgeCount}
                   </Badge>
                 )}
               </div>
-              
-              <span className={cn(
-                "text-xs mt-1 font-medium truncate w-full text-center leading-tight",
-                active ? "text-primary" : "text-muted-foreground"
-              )}>
+
+              <span
+                className={cn(
+                  'text-xs mt-1 font-medium truncate w-full text-center leading-tight',
+                  active ? 'text-primary' : 'text-muted-foreground'
+                )}
+              >
                 {item.label}
               </span>
             </NavLink>

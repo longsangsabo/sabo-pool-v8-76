@@ -33,7 +33,7 @@ const RankHistory = () => {
         {
           id: '1',
           old_rank: 'I',
-          new_rank: 'H+', 
+          new_rank: 'H+',
           old_points: 1200,
           new_points: 1350,
           reason: 'Won tournament match',
@@ -47,7 +47,7 @@ const RankHistory = () => {
           new_points: 1200,
           reason: 'Challenge victory',
           created_at: new Date(Date.now() - 172800000).toISOString(),
-        }
+        },
       ];
       setHistory(mockHistory);
     } catch (error) {
@@ -58,12 +58,17 @@ const RankHistory = () => {
   };
 
   const getRankColor = (rank: string) => {
-    if (rank?.startsWith('E')) return 'bg-purple-100 text-purple-800 border-purple-200';
+    if (rank?.startsWith('E'))
+      return 'bg-purple-100 text-purple-800 border-purple-200';
     if (rank?.startsWith('F')) return 'bg-red-100 text-red-800 border-red-200';
-    if (rank?.startsWith('G')) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    if (rank?.startsWith('H')) return 'bg-green-100 text-green-800 border-green-200';
-    if (rank?.startsWith('I')) return 'bg-blue-100 text-blue-800 border-blue-200';
-    if (rank?.startsWith('K')) return 'bg-gray-100 text-gray-800 border-gray-200';
+    if (rank?.startsWith('G'))
+      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    if (rank?.startsWith('H'))
+      return 'bg-green-100 text-green-800 border-green-200';
+    if (rank?.startsWith('I'))
+      return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (rank?.startsWith('K'))
+      return 'bg-gray-100 text-gray-800 border-gray-200';
     return 'bg-gray-100 text-gray-800';
   };
 

@@ -45,18 +45,18 @@ export function useChallengeWorkflow() {
         // Temporarily return null until tables are ready
         return null;
       },
-      enabled: !!challengeId
+      enabled: !!challengeId,
     });
   };
 
   const getChallengeConversations = (challengeId: string) => {
     return useQuery({
-      queryKey: ['challenge-conversations', challengeId], 
+      queryKey: ['challenge-conversations', challengeId],
       queryFn: async () => {
         // Temporarily return empty array until tables are ready
         return [];
       },
-      enabled: !!challengeId
+      enabled: !!challengeId,
     });
   };
 
@@ -65,16 +65,16 @@ export function useChallengeWorkflow() {
     mutationFn: async ({ challengeId }: { challengeId: string }) => {
       toast.success('Trận đấu đã bắt đầu!');
       return { success: true };
-    }
+    },
   });
 
   const submitScore = useMutation({
-    mutationFn: async ({ 
-      challengeId, 
-      challengerScore, 
+    mutationFn: async ({
+      challengeId,
+      challengerScore,
       opponentScore,
-      isChallenger 
-    }: { 
+      isChallenger,
+    }: {
       challengeId: string;
       challengerScore: number;
       opponentScore: number;
@@ -85,16 +85,19 @@ export function useChallengeWorkflow() {
         challengerScore,
         opponentScore,
         isChallenger,
-        userId: user?.id
+        userId: user?.id,
       });
 
-      const { data, error } = await supabase.functions.invoke('challenge-score-update', {
-        body: {
-          challengeId,
-          challengerScore,
-          opponentScore
+      const { data, error } = await supabase.functions.invoke(
+        'challenge-score-update',
+        {
+          body: {
+            challengeId,
+            challengerScore,
+            opponentScore,
+          },
         }
-      });
+      );
 
       if (error) {
         console.error('Score submission error:', error);
@@ -107,13 +110,13 @@ export function useChallengeWorkflow() {
 
       return data.result;
     },
-    onSuccess: (result) => {
+    onSuccess: result => {
       console.log('Score submitted successfully:', result);
-      
+
       // Use refetchQueries instead of invalidateQueries to avoid full page reload
       queryClient.refetchQueries({ queryKey: ['challenges'] });
       queryClient.refetchQueries({ queryKey: ['player-rankings'] });
-      
+
       toast.success(
         `🎯 Trận đấu hoàn thành! Người thắng nhận ${result.points_awarded} SPA điểm`,
         { duration: 5000 }
@@ -122,40 +125,63 @@ export function useChallengeWorkflow() {
     onError: (error: Error) => {
       console.error('Error submitting score:', error);
       toast.error(`Lỗi: ${error.message}`);
-    }
+    },
   });
 
   const confirmResult = useMutation({
-    mutationFn: async ({ challengeId, isChallenger }: { challengeId: string; isChallenger: boolean }) => {
+    mutationFn: async ({
+      challengeId,
+      isChallenger,
+    }: {
+      challengeId: string;
+      isChallenger: boolean;
+    }) => {
       toast.success('Kết quả đã được xác nhận!');
       return { success: true };
-    }
+    },
   });
 
   const sendMessage = useMutation({
-    mutationFn: async ({ challengeId, message }: { challengeId: string; message: string }) => {
+    mutationFn: async ({
+      challengeId,
+      message,
+    }: {
+      challengeId: string;
+      message: string;
+    }) => {
       return { success: true };
-    }
+    },
   });
 
   const acceptChallenge = useMutation({
-    mutationFn: async ({ challengeId, scheduledTime }: { challengeId: string; scheduledTime?: string }) => {
+    mutationFn: async ({
+      challengeId,
+      scheduledTime,
+    }: {
+      challengeId: string;
+      scheduledTime?: string;
+    }) => {
       if (!user?.id) throw new Error('User not authenticated');
 
       const { data, error } = await supabase.rpc('accept_challenge', {
         p_challenge_id: challengeId,
-        p_user_id: user.id
+        p_user_id: user.id,
       });
 
       if (error) throw error;
       if (!data) return null;
-      
+
       // Safe type checking after null check
       const result = data as any;
-      if (result && typeof result === 'object' && 'error' in result && result.error) {
+      if (
+        result &&
+        typeof result === 'object' &&
+        'error' in result &&
+        result.error
+      ) {
         throw new Error(result.error as string);
       }
-      
+
       return result;
     },
     onSuccess: () => {
@@ -164,17 +190,23 @@ export function useChallengeWorkflow() {
     },
     onError: (error: Error) => {
       toast.error(`Lỗi: ${error.message}`);
-    }
+    },
   });
 
   const scheduleChallenge = useMutation({
-    mutationFn: async ({ challengeId, scheduledTime }: { challengeId: string; scheduledTime: string }) => {
+    mutationFn: async ({
+      challengeId,
+      scheduledTime,
+    }: {
+      challengeId: string;
+      scheduledTime: string;
+    }) => {
       // Update challenge with scheduled time
       const { data, error } = await supabase
         .from('challenges')
         .update({
           scheduled_time: scheduledTime,
-          status: 'accepted'
+          status: 'accepted',
         })
         .eq('id', challengeId)
         .select()
@@ -186,7 +218,7 @@ export function useChallengeWorkflow() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['challenges'] });
       toast.success('Lịch thi đấu đã được cập nhật!');
-    }
+    },
   });
 
   return {
@@ -203,6 +235,6 @@ export function useChallengeWorkflow() {
     isConfirming: confirmResult.isPending,
     isSendingMessage: sendMessage.isPending,
     isAccepting: acceptChallenge.isPending,
-    isScheduling: scheduleChallenge.isPending
+    isScheduling: scheduleChallenge.isPending,
   };
 }

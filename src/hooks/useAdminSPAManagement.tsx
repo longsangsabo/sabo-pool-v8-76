@@ -30,16 +30,16 @@ export function useAdminSPAManagement() {
     queryKey: ['admin-check', user?.id],
     queryFn: async () => {
       if (!user?.id) return false;
-      
+
       const { data } = await supabase
         .from('profiles')
         .select('is_admin')
         .eq('user_id', user.id)
         .single();
-      
+
       return data?.is_admin || false;
     },
-    enabled: !!user?.id
+    enabled: !!user?.id,
   });
 
   // Get all players with SPA for admin management
@@ -48,7 +48,8 @@ export function useAdminSPAManagement() {
     queryFn: async () => {
       const { data } = await supabase
         .from('player_rankings')
-        .select(`
+        .select(
+          `
           user_id,
           spa_points,
           profiles!inner(
@@ -56,18 +57,21 @@ export function useAdminSPAManagement() {
             display_name,
             current_rank
           )
-        `)
+        `
+        )
         .order('spa_points', { ascending: false });
 
-      return data?.map(item => ({
-        user_id: item.user_id,
-        spa_points: item.spa_points,
-        full_name: (item.profiles as any)?.full_name || 'Unknown',
-        display_name: (item.profiles as any)?.display_name || 'Unknown',
-        current_rank: (item.profiles as any)?.current_rank || 'Unranked'
-      })) || [];
+      return (
+        data?.map(item => ({
+          user_id: item.user_id,
+          spa_points: item.spa_points,
+          full_name: (item.profiles as any)?.full_name || 'Unknown',
+          display_name: (item.profiles as any)?.display_name || 'Unknown',
+          current_rank: (item.profiles as any)?.current_rank || 'Unranked',
+        })) || []
+      );
     },
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   // Get SPA adjustment history
@@ -83,16 +87,21 @@ export function useAdminSPAManagement() {
           difference: 100,
           reason: 'Manual adjustment for tournament win',
           admin_id: user?.id || '',
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ] as SPAAdjustment[];
     },
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   // Manually adjust SPA points
   const adjustSPAMutation = useMutation({
-    mutationFn: async ({ user_id, amount, reason, admin_notes }: SPATransaction) => {
+    mutationFn: async ({
+      user_id,
+      amount,
+      reason,
+      admin_notes,
+    }: SPATransaction) => {
       if (!isAdmin) throw new Error('Unauthorized');
 
       // Get current SPA points
@@ -122,7 +131,7 @@ export function useAdminSPAManagement() {
         p_user_id: user_id,
         p_points: amount,
         p_description: `Admin adjustment: ${reason}`,
-        p_admin_id: user?.id
+        p_admin_id: user?.id,
       });
 
       if (logError) throw logError;
@@ -133,26 +142,26 @@ export function useAdminSPAManagement() {
         new_amount: newAmount,
         difference: amount,
         reason,
-        admin_notes
+        admin_notes,
       };
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['admin-spa-players'] });
       queryClient.invalidateQueries({ queryKey: ['spa-adjustment-history'] });
       queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
-      
+
       toast.success(
         `SPA đã được điều chỉnh ${data.difference > 0 ? '+' : ''}${data.difference}`,
         {
           description: `Tổng mới: ${data.new_amount.toLocaleString()} SPA`,
-          duration: 4000
+          duration: 4000,
         }
       );
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error adjusting SPA:', error);
       toast.error('Lỗi khi điều chỉnh SPA points');
-    }
+    },
   });
 
   // Bulk SPA adjustment
@@ -161,32 +170,38 @@ export function useAdminSPAManagement() {
       if (!isAdmin) throw new Error('Unauthorized');
 
       const results = [];
-      
+
       for (const transaction of transactions) {
         try {
           const result = await adjustSPAMutation.mutateAsync(transaction);
           results.push(result);
         } catch (error) {
-          console.error(`Failed to adjust SPA for user ${transaction.user_id}:`, error);
+          console.error(
+            `Failed to adjust SPA for user ${transaction.user_id}:`,
+            error
+          );
         }
       }
 
       return results;
     },
-    onSuccess: (results) => {
-      toast.success(
-        `Đã điều chỉnh SPA cho ${results.length} người chơi`,
-        {
-          description: 'Tất cả thay đổi đã được áp dụng',
-          duration: 4000
-        }
-      );
-    }
+    onSuccess: results => {
+      toast.success(`Đã điều chỉnh SPA cho ${results.length} người chơi`, {
+        description: 'Tất cả thay đổi đã được áp dụng',
+        duration: 4000,
+      });
+    },
   });
 
   // Reset player SPA to zero
   const resetPlayerSPAMutation = useMutation({
-    mutationFn: async ({ user_id, reason }: { user_id: string; reason: string }) => {
+    mutationFn: async ({
+      user_id,
+      reason,
+    }: {
+      user_id: string;
+      reason: string;
+    }) => {
       if (!isAdmin) throw new Error('Unauthorized');
 
       const { data: currentRanking } = await supabase
@@ -198,7 +213,7 @@ export function useAdminSPAManagement() {
       if (!currentRanking) throw new Error('Player not found');
 
       const oldAmount = currentRanking.spa_points;
-      
+
       // Reset to zero
       const { error } = await supabase
         .from('player_rankings')
@@ -212,27 +227,27 @@ export function useAdminSPAManagement() {
         p_user_id: user_id,
         p_points: -oldAmount,
         p_description: `Admin reset: ${reason}`,
-        p_admin_id: user?.id
+        p_admin_id: user?.id,
       });
 
       return { user_id, old_amount: oldAmount, reason };
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['admin-spa-players'] });
       queryClient.invalidateQueries({ queryKey: ['spa-adjustment-history'] });
-      
+
       toast.success(
         `Đã reset SPA points (${data.old_amount.toLocaleString()} → 0)`,
         {
           description: data.reason,
-          duration: 4000
+          duration: 4000,
         }
       );
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error resetting SPA:', error);
       toast.error('Lỗi khi reset SPA points');
-    }
+    },
   });
 
   return {
@@ -246,6 +261,6 @@ export function useAdminSPAManagement() {
     resetPlayerSPA: resetPlayerSPAMutation.mutateAsync,
     isAdjusting: adjustSPAMutation.isPending,
     isBulkAdjusting: bulkAdjustSPAMutation.isPending,
-    isResetting: resetPlayerSPAMutation.isPending
+    isResetting: resetPlayerSPAMutation.isPending,
   };
 }

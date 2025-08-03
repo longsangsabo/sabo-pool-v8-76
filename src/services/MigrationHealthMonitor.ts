@@ -18,13 +18,13 @@ export class MigrationHealthMonitor {
 
   static async getHealthStatus() {
     console.log('Mock get health status');
-    return { 
-      success: true, 
+    return {
+      success: true,
       status: {
         database: 'healthy',
         migrations: 'up_to_date',
-        cleanup: 'complete'
-      }
+        cleanup: 'complete',
+      },
     };
   }
 }

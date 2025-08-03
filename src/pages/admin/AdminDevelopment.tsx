@@ -20,16 +20,16 @@ const AdminDevelopment = () => {
     return (
       <div className='flex items-center justify-center h-64'>
         <div className='text-center'>
-          <h2 className='text-2xl font-bold text-gray-900 mb-4'>{t('common.access_denied')}</h2>
+          <h2 className='text-2xl font-bold text-gray-900 mb-4'>
+            {t('common.access_denied')}
+          </h2>
           <p className='text-gray-600'>{t('common.no_permission')}</p>
         </div>
       </div>
     );
   }
 
-  return (
-    <DevelopmentTools />
-  );
+  return <DevelopmentTools />;
 };
 
 export default AdminDevelopment;

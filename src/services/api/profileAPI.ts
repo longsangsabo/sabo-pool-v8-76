@@ -33,7 +33,15 @@ export interface ProfileStatistics {
 export interface UserActivity {
   id: string;
   user_id: string;
-  activity_type: 'match' | 'achievement' | 'rank_change' | 'spa_points' | 'tournament' | 'challenge' | 'club' | 'social';
+  activity_type:
+    | 'match'
+    | 'achievement'
+    | 'rank_change'
+    | 'spa_points'
+    | 'tournament'
+    | 'challenge'
+    | 'club'
+    | 'social';
   title: string;
   description: string | null;
   metadata: Record<string, any>;
@@ -102,7 +110,9 @@ class ProfileAPI {
   /**
    * Get complete profile data for a user
    */
-  async getCompleteProfile(userId: string): Promise<CompleteProfileData | null> {
+  async getCompleteProfile(
+    userId: string
+  ): Promise<CompleteProfileData | null> {
     try {
       // 1. Get basic profile
       const { data: profile, error: profileError } = await supabase
@@ -135,14 +145,16 @@ class ProfileAPI {
       // 4. Get user achievements with definition details
       const { data: achievements } = await supabase
         .from('user_achievements')
-        .select(`
+        .select(
+          `
           *,
           achievement_definitions!inner(
             icon_url,
             badge_color,
             rarity
           )
-        `)
+        `
+        )
         .eq('user_id', userId)
         .order('earned_at', { ascending: false });
 
@@ -162,7 +174,7 @@ class ProfileAPI {
         spa_points_history: spa_points_history || [],
         completion_percentage: profile.completion_percentage || 0,
         member_since: profile.member_since || profile.created_at,
-        total_spa_points: profile.total_spa_points || 0
+        total_spa_points: profile.total_spa_points || 0,
       };
     } catch (error) {
       console.error('Error in getCompleteProfile:', error);
@@ -173,7 +185,9 @@ class ProfileAPI {
   /**
    * Get profile statistics for a user
    */
-  async getProfileStatistics(userId: string): Promise<ProfileStatistics | null> {
+  async getProfileStatistics(
+    userId: string
+  ): Promise<ProfileStatistics | null> {
     try {
       const { data, error } = await supabase
         .from('profile_statistics')
@@ -181,7 +195,8 @@ class ProfileAPI {
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+      if (error && error.code !== 'PGRST116') {
+        // PGRST116 = no rows returned
         console.error('Error fetching profile statistics:', error);
         return null;
       }
@@ -197,8 +212,8 @@ class ProfileAPI {
    * Get user activities with pagination
    */
   async getUserActivities(
-    userId: string, 
-    limit = 20, 
+    userId: string,
+    limit = 20,
     offset = 0,
     activityType?: string
   ): Promise<UserActivity[]> {
@@ -236,14 +251,16 @@ class ProfileAPI {
     try {
       const { data, error } = await supabase
         .from('user_achievements')
-        .select(`
+        .select(
+          `
           *,
           achievement_definitions!inner(
             icon_url,
             badge_color,
             rarity
           )
-        `)
+        `
+        )
         .eq('user_id', userId)
         .order('earned_at', { ascending: false });
 
@@ -262,7 +279,9 @@ class ProfileAPI {
   /**
    * Get available achievements (not yet earned)
    */
-  async getAvailableAchievements(userId: string): Promise<AchievementDefinition[]> {
+  async getAvailableAchievements(
+    userId: string
+  ): Promise<AchievementDefinition[]> {
     try {
       // Get user's earned achievements
       const { data: userAchievements } = await supabase
@@ -283,7 +302,9 @@ class ProfileAPI {
         query = query.not('id', 'in', `(${earnedIds.join(',')})`);
       }
 
-      const { data, error } = await query.order('category', { ascending: true });
+      const { data, error } = await query.order('category', {
+        ascending: true,
+      });
 
       if (error) {
         console.error('Error fetching available achievements:', error);
@@ -341,7 +362,7 @@ class ProfileAPI {
         .from('profiles')
         .update({
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
 
@@ -351,7 +372,9 @@ class ProfileAPI {
       }
 
       // Trigger completion percentage recalculation
-      await supabase.rpc('calculate_profile_completion', { target_user_id: userId });
+      await supabase.rpc('calculate_profile_completion', {
+        target_user_id: userId,
+      });
 
       return true;
     } catch (error) {
@@ -365,8 +388,8 @@ class ProfileAPI {
    */
   async refreshProfileStatistics(userId: string): Promise<boolean> {
     try {
-      const { error } = await supabase.rpc('update_profile_statistics', { 
-        target_user_id: userId 
+      const { error } = await supabase.rpc('update_profile_statistics', {
+        target_user_id: userId,
       });
 
       if (error) {
@@ -388,14 +411,16 @@ class ProfileAPI {
     try {
       const { data, error } = await supabase
         .from('profile_statistics')
-        .select(`
+        .select(
+          `
           *,
           profiles!inner(
             display_name,
             avatar_url,
             verified_rank
           )
-        `)
+        `
+        )
         .order('elo_rating', { ascending: false })
         .limit(limit);
 
@@ -417,7 +442,7 @@ class ProfileAPI {
   async getUserRanking(userId: string): Promise<number | null> {
     try {
       const { data, error } = await supabase.rpc('get_user_ranking', {
-        target_user_id: userId
+        target_user_id: userId,
       });
 
       if (error) {

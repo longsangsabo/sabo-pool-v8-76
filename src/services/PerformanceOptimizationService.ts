@@ -1,4 +1,3 @@
-
 import { debounce } from 'lodash';
 
 interface CacheEntry<T = any> {
@@ -22,7 +21,7 @@ class PerformanceOptimizationService {
   // Memoization with TTL
   memoize<T>(key: string, fn: () => T, ttl: number = this.DEFAULT_TTL): T {
     const cached = this.cache.get(key);
-    
+
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
       this.updateMetrics(key, 'cache_hit');
       return cached.data;
@@ -32,18 +31,15 @@ class PerformanceOptimizationService {
     this.cache.set(key, {
       data: result,
       timestamp: Date.now(),
-      ttl
+      ttl,
     });
-    
+
     this.updateMetrics(key, 'cache_miss');
     return result;
   }
 
   // Direct debounce method for compatibility
-  debounce<T extends (...args: any[]) => any>(
-    fn: T,
-    delay: number = 300
-  ): T {
+  debounce<T extends (...args: any[]) => any>(fn: T, delay: number = 300): T {
     return debounce(fn, delay) as T;
   }
 
@@ -60,7 +56,7 @@ class PerformanceOptimizationService {
     const start = performance.now();
     const result = fn();
     const end = performance.now();
-    
+
     this.updateRenderMetrics(key, end - start);
     return result;
   }
@@ -68,7 +64,7 @@ class PerformanceOptimizationService {
   // Lazy loading utility
   createLazyComponent<T>(importFn: () => Promise<T>) {
     let componentPromise: Promise<T> | null = null;
-    
+
     return () => {
       if (!componentPromise) {
         componentPromise = importFn();
@@ -88,14 +84,18 @@ class PerformanceOptimizationService {
   }
 
   // Get performance metrics
-  getMetrics(key?: string): PerformanceMetrics | Map<string, PerformanceMetrics> {
+  getMetrics(
+    key?: string
+  ): PerformanceMetrics | Map<string, PerformanceMetrics> {
     if (key) {
-      return this.metrics.get(key) || {
-        renderCount: 0,
-        lastRenderTime: 0,
-        averageRenderTime: 0,
-        cacheHitRate: 0
-      };
+      return (
+        this.metrics.get(key) || {
+          renderCount: 0,
+          lastRenderTime: 0,
+          averageRenderTime: 0,
+          cacheHitRate: 0,
+        }
+      );
     }
     return this.metrics;
   }
@@ -105,7 +105,7 @@ class PerformanceOptimizationService {
       renderCount: 0,
       lastRenderTime: 0,
       averageRenderTime: 0,
-      cacheHitRate: 0
+      cacheHitRate: 0,
     };
 
     if (type === 'cache_hit') {
@@ -122,13 +122,14 @@ class PerformanceOptimizationService {
       renderCount: 0,
       lastRenderTime: 0,
       averageRenderTime: 0,
-      cacheHitRate: 0
+      cacheHitRate: 0,
     };
 
     current.renderCount++;
     current.lastRenderTime = renderTime;
-    current.averageRenderTime = 
-      (current.averageRenderTime * (current.renderCount - 1) + renderTime) / current.renderCount;
+    current.averageRenderTime =
+      (current.averageRenderTime * (current.renderCount - 1) + renderTime) /
+      current.renderCount;
 
     this.metrics.set(key, current);
   }
@@ -137,6 +138,9 @@ class PerformanceOptimizationService {
 export const performanceService = new PerformanceOptimizationService();
 
 // Auto cleanup cache every 10 minutes
-setInterval(() => {
-  performanceService.cleanupCache();
-}, 10 * 60 * 1000);
+setInterval(
+  () => {
+    performanceService.cleanupCache();
+  },
+  10 * 60 * 1000
+);

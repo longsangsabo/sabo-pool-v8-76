@@ -30,7 +30,7 @@ export const useRealtimeNotifications = () => {
           if (notification.type === 'challenge_accepted') {
             // Parse metadata for popup display
             const metadata = notification.metadata || {};
-            
+
             setPopupData({
               id: notification.id,
               challenge_id: metadata.challenge_id,
@@ -40,9 +40,9 @@ export const useRealtimeNotifications = () => {
               bet_points: metadata.bet_points || 0,
               race_to: metadata.race_to || 5,
               message: metadata.message,
-              location: metadata.location
+              location: metadata.location,
             });
-            
+
             setShowPopup(true);
           } else {
             // Show regular toast notification
@@ -115,19 +115,20 @@ export const useRealtimeNotifications = () => {
     toast.success('Trận đấu đã được xác nhận và sẵn sàng!');
   };
 
-  return { 
-    isConnected, 
-    showPopup, 
-    popupData, 
-    handleClosePopup, 
+  return {
+    isConnected,
+    showPopup,
+    popupData,
+    handleClosePopup,
     handleAcceptChallenge,
-    PopupComponent: () => popupData ? (
-      <ChallengeJoinedPopup
-        open={showPopup}
-        onClose={handleClosePopup}
-        challengeData={popupData}
-        onAccept={handleAcceptChallenge}
-      />
-    ) : null
+    PopupComponent: () =>
+      popupData ? (
+        <ChallengeJoinedPopup
+          open={showPopup}
+          onClose={handleClosePopup}
+          challengeData={popupData}
+          onAccept={handleAcceptChallenge}
+        />
+      ) : null,
   };
 };

@@ -1,9 +1,12 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { Challenge, CreateChallengeData, AcceptChallengeRequest } from '@/types/challenge';
+import {
+  Challenge,
+  CreateChallengeData,
+  AcceptChallengeRequest,
+} from '@/types/challenge';
 
 export const useChallenges = () => {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
@@ -42,8 +45,8 @@ export const useChallenges = () => {
           challenger_id: c.challenger_id?.slice(-8),
           opponent_id: c.opponent_id?.slice(-8) || 'NULL',
           status: c.status,
-          created_at: c.created_at
-        }))
+          created_at: c.created_at,
+        })),
       });
 
       if (fetchError) {
@@ -61,11 +64,12 @@ export const useChallenges = () => {
       let profiles: any[] = [];
       let playerRankings: any[] = [];
       let clubProfiles: any[] = [];
-      
+
       if (userIds.size > 0) {
         const { data: profilesData } = await supabase
           .from('profiles')
-          .select(`
+          .select(
+            `
             user_id, 
             full_name, 
             display_name, 
@@ -73,9 +77,10 @@ export const useChallenges = () => {
             elo, 
             avatar_url,
             current_rank
-          `)
+          `
+          )
           .in('user_id', Array.from(userIds));
-        
+
         profiles = profilesData || [];
 
         // Fetch player rankings for SPA points
@@ -83,7 +88,7 @@ export const useChallenges = () => {
           .from('player_rankings')
           .select('user_id, spa_points, elo_points')
           .in('user_id', Array.from(userIds));
-        
+
         playerRankings = rankingsData || [];
       }
 
@@ -95,75 +100,103 @@ export const useChallenges = () => {
       const profileMap = new Map();
       const rankingMap = new Map();
       const clubMap = new Map();
-      
+
       profiles.forEach(profile => {
         profileMap.set(profile.user_id, profile);
       });
-      
+
       playerRankings.forEach(ranking => {
         rankingMap.set(ranking.user_id, ranking);
       });
-      
+
       clubProfiles.forEach(club => {
         clubMap.set(club.id, club);
       });
 
       // Map challenges with enriched profile and club data
-      const enrichedChallenges = challengesData?.map(challenge => {
-        const challengerProfile = profileMap.get(challenge.challenger_id);
-        const opponentProfile = profileMap.get(challenge.opponent_id);
-        const challengerRanking = rankingMap.get(challenge.challenger_id);
-        const opponentRanking = rankingMap.get(challenge.opponent_id);
-        // const clubProfile = clubMap.get(challenge.club_id); // TODO: Add when club_id field exists
-        const clubProfile = null;
+      const enrichedChallenges =
+        challengesData?.map(challenge => {
+          const challengerProfile = profileMap.get(challenge.challenger_id);
+          const opponentProfile = profileMap.get(challenge.opponent_id);
+          const challengerRanking = rankingMap.get(challenge.challenger_id);
+          const opponentRanking = rankingMap.get(challenge.opponent_id);
+          // const clubProfile = clubMap.get(challenge.club_id); // TODO: Add when club_id field exists
+          const clubProfile = null;
 
-        return {
-          ...challenge,
-          challenger_profile: challengerProfile ? {
-            ...challengerProfile,
-            spa_points: challengerRanking?.spa_points || 0,
-            elo_points: challengerRanking?.elo_points || 1000
-          } : null,
-          opponent_profile: opponentProfile ? {
-            ...opponentProfile,
-            spa_points: opponentRanking?.spa_points || 0,
-            elo_points: opponentRanking?.elo_points || 1000
-          } : null,
-          club_profiles: clubProfile ? {
-            club_name: clubProfile.club_name,
-            address: clubProfile.address,
-            phone: clubProfile.phone
-          } : null,
-          current_user_profile: profileMap.get(user.id)
-        };
-      }) || [];
+          return {
+            ...challenge,
+            challenger_profile: challengerProfile
+              ? {
+                  ...challengerProfile,
+                  spa_points: challengerRanking?.spa_points || 0,
+                  elo_points: challengerRanking?.elo_points || 1000,
+                }
+              : null,
+            opponent_profile: opponentProfile
+              ? {
+                  ...opponentProfile,
+                  spa_points: opponentRanking?.spa_points || 0,
+                  elo_points: opponentRanking?.elo_points || 1000,
+                }
+              : null,
+            club_profiles: clubProfile
+              ? {
+                  club_name: clubProfile.club_name,
+                  address: clubProfile.address,
+                  phone: clubProfile.phone,
+                }
+              : null,
+            current_user_profile: profileMap.get(user.id),
+          };
+        }) || [];
 
       // ✅ Enhanced logging for debugging
       console.log('🔍 [useChallenges] Processing enriched challenges:', {
         total: enrichedChallenges.length,
         currentUser: user.id.slice(-8),
         byStatus: {
-          pending: enrichedChallenges.filter(c => c.status === 'pending').length,
-          accepted: enrichedChallenges.filter(c => c.status === 'accepted').length,
-          completed: enrichedChallenges.filter(c => c.status === 'completed').length
+          pending: enrichedChallenges.filter(c => c.status === 'pending')
+            .length,
+          accepted: enrichedChallenges.filter(c => c.status === 'accepted')
+            .length,
+          completed: enrichedChallenges.filter(c => c.status === 'completed')
+            .length,
         },
-        openChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending').length,
-        myOpenChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id === user.id).length,
-        otherOpenChallenges: enrichedChallenges.filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user.id).length,
+        openChallenges: enrichedChallenges.filter(
+          c => !c.opponent_id && c.status === 'pending'
+        ).length,
+        myOpenChallenges: enrichedChallenges.filter(
+          c =>
+            !c.opponent_id &&
+            c.status === 'pending' &&
+            c.challenger_id === user.id
+        ).length,
+        otherOpenChallenges: enrichedChallenges.filter(
+          c =>
+            !c.opponent_id &&
+            c.status === 'pending' &&
+            c.challenger_id !== user.id
+        ).length,
         sampleOtherOpen: enrichedChallenges
-          .filter(c => !c.opponent_id && c.status === 'pending' && c.challenger_id !== user.id)
+          .filter(
+            c =>
+              !c.opponent_id &&
+              c.status === 'pending' &&
+              c.challenger_id !== user.id
+          )
           .slice(0, 3)
           .map(c => ({
             id: c.id.slice(-8),
             challenger: c.challenger_profile?.full_name || 'Unknown',
             bet_points: c.bet_points,
-            race_to: c.race_to
-          }))
+            race_to: c.race_to,
+          })),
       });
 
       setChallenges(enrichedChallenges as unknown as Challenge[]);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       console.error('❌ Challenge fetch error:', err);
       toast.error(`Error loading challenges: ${errorMessage}`);
@@ -182,7 +215,7 @@ export const useChallenges = () => {
       // Daily limit temporarily disabled
       // TODO: Re-enable daily limit when needed
       console.log('Daily challenge limit temporarily disabled');
-      
+
       /*
       // Check daily limit (2 challenges per day)
       const today = new Date().toISOString().split('T')[0];
@@ -207,7 +240,8 @@ export const useChallenges = () => {
       expiresAt.setHours(expiresAt.getHours() + 48);
 
       // ✅ Support for open challenges - set opponent_id to null for open challenges
-      const isOpenChallenge = !challengeData.opponent_id || challengeData.opponent_id === 'open';
+      const isOpenChallenge =
+        !challengeData.opponent_id || challengeData.opponent_id === 'open';
 
       const newChallenge = {
         challenger_id: user.id,
@@ -236,30 +270,38 @@ export const useChallenges = () => {
       // Fetch profile data separately for consistency
       const { data: challengerProfile } = await supabase
         .from('profiles')
-        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
+        .select(
+          'user_id, full_name, display_name, verified_rank, elo, avatar_url'
+        )
         .eq('user_id', user.id)
         .maybeSingle();
 
       const { data: opponentProfile } = await supabase
         .from('profiles')
-        .select('user_id, full_name, display_name, verified_rank, elo, avatar_url')
+        .select(
+          'user_id, full_name, display_name, verified_rank, elo, avatar_url'
+        )
         .eq('user_id', challengeData.opponent_id)
         .maybeSingle();
-      
+
       const enrichedChallenge = {
         ...data,
         challenger_profile: challengerProfile,
         opponent_profile: opponentProfile,
-        current_user_profile: challengerProfile
+        current_user_profile: challengerProfile,
       };
 
       // Update local state with type assertion
-      setChallenges(prev => [enrichedChallenge as unknown as Challenge, ...prev]);
+      setChallenges(prev => [
+        enrichedChallenge as unknown as Challenge,
+        ...prev,
+      ]);
       toast.success('Challenge created successfully!');
-      
+
       return enrichedChallenge;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create challenge';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to create challenge';
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -272,37 +314,56 @@ export const useChallenges = () => {
     }
 
     try {
-      console.log('🎯 Attempting to accept challenge:', challengeId, 'User:', user.id);
+      console.log(
+        '🎯 Attempting to accept challenge:',
+        challengeId,
+        'User:',
+        user.id
+      );
 
       // ✅ Use the new database function for safe open challenge acceptance
-      const { data: result, error } = await supabase.rpc('accept_open_challenge', {
-        p_challenge_id: challengeId,
-        p_user_id: user.id
-      });
+      const { data: result, error } = await supabase.rpc(
+        'accept_open_challenge',
+        {
+          p_challenge_id: challengeId,
+          p_user_id: user.id,
+        }
+      );
 
       if (error) {
         console.error('❌ Error calling accept_open_challenge:', error);
         throw new Error(`Không thể tham gia thách đấu: ${error.message}`);
       }
 
-      if (result && typeof result === 'object' && 'success' in result && !result.success) {
-        const errorMsg = 'error' in result ? String(result.error) : 'Không thể tham gia thách đấu';
+      if (
+        result &&
+        typeof result === 'object' &&
+        'success' in result &&
+        !result.success
+      ) {
+        const errorMsg =
+          'error' in result
+            ? String(result.error)
+            : 'Không thể tham gia thách đấu';
         console.error('❌ Challenge acceptance failed:', errorMsg);
         throw new Error(errorMsg);
       }
 
       console.log('✅ Challenge accepted successfully:', result);
-      toast.success('Tham gia thách đấu thành công! Trận đấu đã được lên lịch.');
+      toast.success(
+        'Tham gia thách đấu thành công! Trận đấu đã được lên lịch.'
+      );
 
       // Update local state to remove the challenge from open challenges
       setChallenges(prev => prev.filter(c => c.id !== challengeId));
-      
+
       // Refetch challenges to update the list with latest data
       await fetchChallenges();
-      
+
       return result;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
       console.error('❌ Accept challenge error:', err);
       throw new Error(errorMessage);
     }
@@ -315,7 +376,12 @@ export const useChallenges = () => {
     }
 
     try {
-      console.log('🎯 Attempting to accept challenge (old method):', challengeId, 'User:', user.id);
+      console.log(
+        '🎯 Attempting to accept challenge (old method):',
+        challengeId,
+        'User:',
+        user.id
+      );
 
       // First, get the challenge to check if it's open or specific
       const { data: challengeData, error: fetchError } = await supabase
@@ -327,7 +393,9 @@ export const useChallenges = () => {
 
       if (fetchError) {
         console.error('❌ Error fetching challenge:', fetchError);
-        throw new Error(`Không thể tải thông tin thách đấu: ${fetchError.message}`);
+        throw new Error(
+          `Không thể tải thông tin thách đấu: ${fetchError.message}`
+        );
       }
 
       if (!challengeData) {
@@ -348,7 +416,7 @@ export const useChallenges = () => {
         isMyOwnChallenge,
         challenger_id: challengeData.challenger_id,
         opponent_id: challengeData.opponent_id,
-        user_id: user.id
+        user_id: user.id,
       });
 
       if (isMyOwnChallenge) {
@@ -356,12 +424,16 @@ export const useChallenges = () => {
       }
 
       if (!isOpenChallenge && !isSpecificChallenge) {
-        throw new Error('Bạn không phải là đối thủ được chỉ định cho thách đấu này');
+        throw new Error(
+          'Bạn không phải là đối thủ được chỉ định cho thách đấu này'
+        );
       }
 
       // Update challenge based on type
-      const finalOpponentId = isOpenChallenge ? user.id : challengeData.opponent_id;
-      const updateData = isOpenChallenge 
+      const finalOpponentId = isOpenChallenge
+        ? user.id
+        : challengeData.opponent_id;
+      const updateData = isOpenChallenge
         ? {
             status: 'accepted' as const,
             opponent_id: user.id,
@@ -400,18 +472,19 @@ export const useChallenges = () => {
       console.log('🏆 Match data to insert:', {
         player1_id: challengeData.challenger_id,
         player2_id: finalOpponentId,
-        challenge_id: challengeId
+        challenge_id: challengeId,
       });
-      
+
       const matchData = {
         player1_id: challengeData.challenger_id,
         player2_id: finalOpponentId,
         challenge_id: challengeId,
         status: 'scheduled' as const,
         match_type: 'challenge' as const,
-        scheduled_time: challengeData.scheduled_time || new Date().toISOString(),
+        scheduled_time:
+          challengeData.scheduled_time || new Date().toISOString(),
         score_player1: 0,
-        score_player2: 0
+        score_player2: 0,
       };
 
       console.log('📋 Final match data:', matchData);
@@ -428,27 +501,32 @@ export const useChallenges = () => {
           message: matchError.message,
           code: matchError.code,
           details: matchError.details,
-          hint: matchError.hint
+          hint: matchError.hint,
         });
         // Don't throw error here since challenge was already accepted
         // This is a non-critical failure that can be handled later
         console.warn('⚠️ Challenge accepted but match record creation failed');
-        toast.warning('Tham gia thách đấu thành công! (Ghi chú: Cần refresh để xem trận đấu)');
+        toast.warning(
+          'Tham gia thách đấu thành công! (Ghi chú: Cần refresh để xem trận đấu)'
+        );
       } else {
         console.log('✅ Match record created successfully:', matchRecord);
-        toast.success('Tham gia thách đấu thành công! Trận đấu đã được lên lịch.');
+        toast.success(
+          'Tham gia thách đấu thành công! Trận đấu đã được lên lịch.'
+        );
       }
 
       // Update local state to remove the challenge from open challenges (for open challenges)
-      // or update status (for specific challenges) 
+      // or update status (for specific challenges)
       setChallenges(prev => prev.filter(c => c.id !== challengeId));
-      
+
       // Refetch challenges to update the list with latest data
       await fetchChallenges();
-      
+
       return { challenge: data, match: matchRecord };
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Không thể tham gia thách đấu';
       console.error('❌ Accept challenge error:', err);
       throw new Error(errorMessage);
     }
@@ -482,16 +560,19 @@ export const useChallenges = () => {
       }
 
       // Update local state
-      setChallenges(prev => 
-        prev.map(challenge => 
-          challenge.id === challengeId ? { ...challenge, status: 'declined' } : challenge
+      setChallenges(prev =>
+        prev.map(challenge =>
+          challenge.id === challengeId
+            ? { ...challenge, status: 'declined' }
+            : challenge
         )
       );
 
       toast.success('Challenge declined');
       return data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to decline challenge';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to decline challenge';
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -499,7 +580,10 @@ export const useChallenges = () => {
 
   // Legacy method for backward compatibility
   const respondToChallenge = {
-    mutateAsync: async ({ challengeId, status }: {
+    mutateAsync: async ({
+      challengeId,
+      status,
+    }: {
       challengeId: string;
       status: 'accepted' | 'declined';
     }) => {
@@ -508,7 +592,7 @@ export const useChallenges = () => {
       } else {
         return declineChallenge(challengeId);
       }
-    }
+    },
   };
 
   const cancelChallenge = async (challengeId: string) => {
@@ -553,8 +637,11 @@ export const useChallenges = () => {
           table: 'challenges',
           filter: `or(challenger_id.eq.${user.id},opponent_id.eq.${user.id})`,
         },
-        (payload) => {
-          console.log('🔄 Challenge updated, triggering immediate refresh:', payload);
+        payload => {
+          console.log(
+            '🔄 Challenge updated, triggering immediate refresh:',
+            payload
+          );
           // Immediate refresh to ensure data consistency
           setTimeout(() => fetchChallenges(), 100);
         }
@@ -567,7 +654,7 @@ export const useChallenges = () => {
           table: 'challenges',
           filter: `opponent_id.is.null`,
         },
-        (payload) => {
+        payload => {
           console.log('🔄 New open challenge created, refreshing:', payload);
           // Refresh to show new open challenges
           setTimeout(() => fetchChallenges(), 100);
@@ -580,15 +667,20 @@ export const useChallenges = () => {
           schema: 'public',
           table: 'profiles',
         },
-        (payload) => {
-          console.log('🔄 Profile updated, checking if challenge refresh needed:', payload);
-          
+        payload => {
+          console.log(
+            '🔄 Profile updated, checking if challenge refresh needed:',
+            payload
+          );
+
           // Check if the updated profile affects any current challenges
           const updatedUserId = payload.new?.user_id;
-          const hasRelevantChallenge = challenges.some(c => 
-            c.challenger_id === updatedUserId || c.opponent_id === updatedUserId
+          const hasRelevantChallenge = challenges.some(
+            c =>
+              c.challenger_id === updatedUserId ||
+              c.opponent_id === updatedUserId
           );
-          
+
           if (hasRelevantChallenge) {
             console.log('✅ Profile affects current challenges, refreshing...');
             setTimeout(() => fetchChallenges(), 100);
@@ -602,8 +694,11 @@ export const useChallenges = () => {
           schema: 'public',
           table: 'club_profiles',
         },
-        (payload) => {
-          console.log('🔄 Club profile updated, checking challenge refresh:', payload);
+        payload => {
+          console.log(
+            '🔄 Club profile updated, checking challenge refresh:',
+            payload
+          );
           // Refresh if any challenges involve this club
           setTimeout(() => fetchChallenges(), 100);
         }
@@ -627,7 +722,7 @@ export const useChallenges = () => {
       // Separate received and sent challenges
       const received = challenges.filter(c => c.opponent_id === user.id);
       const sent = challenges.filter(c => c.challenger_id === user.id);
-      
+
       setReceivedChallenges(received);
       setSentChallenges(sent);
     }

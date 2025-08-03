@@ -18,19 +18,19 @@ export const useNotificationService = () => {
     getNotificationPreferences: async () => ({
       in_app: true,
       email: true,
-      sms: false
+      sms: false,
     }),
     updateNotificationPreferences: async (prefs: any) => prefs,
     notificationLogs: [] as NotificationLog[],
     markAsRead: async (id: string) => {},
-    stats: { 
-      total: 0, 
-      unread: 0, 
+    stats: {
+      total: 0,
+      unread: 0,
       high_priority: 0,
       total_notifications: 0,
-      by_category: {}
+      by_category: {},
     },
     fetchNotificationLogs: async () => {},
-    loading: false
+    loading: false,
   };
 };

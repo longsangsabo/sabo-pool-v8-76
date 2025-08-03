@@ -7,22 +7,22 @@ interface TournamentStatusBadgeProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export const TournamentStatusBadge: React.FC<TournamentStatusBadgeProps> = ({ 
-  status, 
-  size = 'md' 
+export const TournamentStatusBadge: React.FC<TournamentStatusBadgeProps> = ({
+  status,
+  size = 'md',
 }) => {
   const getStatusIcon = () => {
     switch (status) {
       case 'completed':
-        return <Trophy className="h-3 w-3" />;
+        return <Trophy className='h-3 w-3' />;
       case 'ongoing':
-        return <Play className="h-3 w-3" />;
+        return <Play className='h-3 w-3' />;
       case 'scheduled':
-        return <Clock className="h-3 w-3" />;
+        return <Clock className='h-3 w-3' />;
       case 'cancelled':
-        return <XCircle className="h-3 w-3" />;
+        return <XCircle className='h-3 w-3' />;
       default:
-        return <CheckCircle className="h-3 w-3" />;
+        return <CheckCircle className='h-3 w-3' />;
     }
   };
 
@@ -61,8 +61,8 @@ export const TournamentStatusBadge: React.FC<TournamentStatusBadgeProps> = ({
   };
 
   return (
-    <Badge 
-      variant={getStatusVariant()} 
+    <Badge
+      variant={getStatusVariant()}
       className={`flex items-center gap-1 ${size === 'sm' ? 'text-xs px-2 py-1' : size === 'lg' ? 'text-sm px-3 py-1.5' : ''}`}
     >
       {getStatusIcon()}

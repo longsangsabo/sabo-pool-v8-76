@@ -27,9 +27,12 @@ export const usePlayerDashboard = () => {
 
       try {
         // Call the dashboard stats function
-        const { data, error } = await (supabase as any).rpc('calculate_player_dashboard_stats', {
-          p_user_id: user.id
-        });
+        const { data, error } = await (supabase as any).rpc(
+          'calculate_player_dashboard_stats',
+          {
+            p_user_id: user.id,
+          }
+        );
 
         if (error) {
           console.error('Dashboard stats error:', error);
@@ -37,8 +40,10 @@ export const usePlayerDashboard = () => {
         }
 
         // Get additional activity stats
-        const { data: activityData, error: activityError } = await (supabase as any).rpc('get_player_activity_stats', {
-          p_user_id: user.id
+        const { data: activityData, error: activityError } = await (
+          supabase as any
+        ).rpc('get_player_activity_stats', {
+          p_user_id: user.id,
         });
 
         if (activityError) {

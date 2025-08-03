@@ -11,15 +11,19 @@ interface FollowButtonProps {
   showIcon?: boolean;
 }
 
-const FollowButton = ({ 
-  userId, 
+const FollowButton = ({
+  userId,
   isFollowing: propIsFollowing,
   size = 'sm',
   variant = 'outline',
-  showIcon = true 
+  showIcon = true,
 }: FollowButtonProps) => {
-  const { isFollowing: hookIsFollowing, followUser, unfollowUser } = useSocial();
-  
+  const {
+    isFollowing: hookIsFollowing,
+    followUser,
+    unfollowUser,
+  } = useSocial();
+
   // Use prop first, then fallback to hook
   const isFollowing = propIsFollowing ?? hookIsFollowing(userId);
 
@@ -39,22 +43,16 @@ const FollowButton = ({
       size={size}
       onClick={handleToggleFollow}
       disabled={isLoading}
-      className="flex items-center gap-2"
+      className='flex items-center gap-2'
     >
-      {showIcon && (
-        isFollowing ? (
-          <UserMinus className="w-4 h-4" />
+      {showIcon &&
+        (isFollowing ? (
+          <UserMinus className='w-4 h-4' />
         ) : (
-          <UserPlus className="w-4 h-4" />
-        )
-      )}
+          <UserPlus className='w-4 h-4' />
+        ))}
       <span>
-        {isLoading
-          ? 'Đang xử lý...'
-          : isFollowing
-          ? 'Bỏ theo dõi'
-          : 'Theo dõi'
-        }
+        {isLoading ? 'Đang xử lý...' : isFollowing ? 'Bỏ theo dõi' : 'Theo dõi'}
       </span>
     </Button>
   );

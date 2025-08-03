@@ -15,7 +15,11 @@ export interface PerformanceMetric {
     transferSize?: number;
     encodedBodySize?: number;
     decodedBodySize?: number;
-    type?: 'navigation_timing' | 'large_resource' | 'slow_resource' | 'custom_timer';
+    type?:
+      | 'navigation_timing'
+      | 'large_resource'
+      | 'slow_resource'
+      | 'custom_timer';
     url?: string;
     duration?: number;
     [key: string]: any;

@@ -14,25 +14,50 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   signOut: () => Promise<void>;
-  signIn: (email: string, password: string) => Promise<{ data?: any; error?: any }>;
-  signUp: (email: string, password: string, metadata?: any) => Promise<{ data?: any; error?: any }>;
+  signIn: (
+    email: string,
+    password: string
+  ) => Promise<{ data?: any; error?: any }>;
+  signUp: (
+    email: string,
+    password: string,
+    metadata?: any
+  ) => Promise<{ data?: any; error?: any }>;
   signInWithGoogle: () => Promise<{ data?: any; error?: any }>;
   signInWithFacebook: () => Promise<{ data?: any; error?: any }>;
-  signInWithPhone: (phone: string, password: string) => Promise<{ data?: any; error?: any }>;
-  signInWithEmail: (email: string, password: string) => Promise<{ data?: any; error?: any }>;
-  signUpWithPhone: (phone: string, password: string, fullName?: string, referralCode?: string) => Promise<{ data?: any; error?: any }>;
-  signUpWithEmail: (email: string, password: string, fullName?: string, referralCode?: string) => Promise<{ data?: any; error?: any }>;
+  signInWithPhone: (
+    phone: string,
+    password: string
+  ) => Promise<{ data?: any; error?: any }>;
+  signInWithEmail: (
+    email: string,
+    password: string
+  ) => Promise<{ data?: any; error?: any }>;
+  signUpWithPhone: (
+    phone: string,
+    password: string,
+    fullName?: string,
+    referralCode?: string
+  ) => Promise<{ data?: any; error?: any }>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    fullName?: string,
+    referralCode?: string
+  ) => Promise<{ data?: any; error?: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     loading: true,
     isAuthenticated: false,
     profile: null,
-    session: null
+    session: null,
   });
 
   // Setup auth monitoring on mount
@@ -45,76 +70,86 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     console.log('🔧 Auth: Initializing authentication system...');
 
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (!isMounted) return;
-        
-        console.log('🔧 Auth: State change event:', event, session?.user?.id || 'no user');
-        
-        // Handle authentication state changes
-        const newState = {
-          user: session?.user || null,
-          loading: false,
-          isAuthenticated: !!session?.user,
-          profile: null,
-          session
-        };
-        
-        setAuthState(newState);
-        
-        // Handle specific events
-        if (event === 'SIGNED_OUT') {
-          console.log('🔧 Auth: User signed out, clearing state');
-          // Clear any remaining auth data on sign out
-          localStorage.removeItem('supabase.auth.token');
-          sessionStorage.clear();
-        } else if (event === 'SIGNED_IN' && session?.user) {
-          console.log('🔧 Auth: User signed in:', session.user.id);
-        } else if (event === 'TOKEN_REFRESHED') {
-          console.log('🔧 Auth: Token refreshed for user:', session?.user?.id);
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
-      
-      if (error) {
-        console.error('🔧 Auth: Error getting session:', error);
-        // Clear corrupted session data
-        localStorage.removeItem('supabase.auth.token');
-        sessionStorage.clear();
-        setAuthState({
-          user: null,
-          loading: false,
-          isAuthenticated: false,
-          profile: null,
-          session: null
-        });
-        return;
-      }
-      
-      console.log('🔧 Auth: Initial session check:', session?.user?.id || 'no user');
-      setAuthState({
+
+      console.log(
+        '🔧 Auth: State change event:',
+        event,
+        session?.user?.id || 'no user'
+      );
+
+      // Handle authentication state changes
+      const newState = {
         user: session?.user || null,
         loading: false,
         isAuthenticated: !!session?.user,
         profile: null,
-        session
-      });
-    }).catch((error) => {
-      console.error('🔧 Auth: Session check failed:', error);
-      if (isMounted) {
-        setAuthState({
-          user: null,
-          loading: false,
-          isAuthenticated: false,
-          profile: null,
-          session: null
-        });
+        session,
+      };
+
+      setAuthState(newState);
+
+      // Handle specific events
+      if (event === 'SIGNED_OUT') {
+        console.log('🔧 Auth: User signed out, clearing state');
+        // Clear any remaining auth data on sign out
+        localStorage.removeItem('supabase.auth.token');
+        sessionStorage.clear();
+      } else if (event === 'SIGNED_IN' && session?.user) {
+        console.log('🔧 Auth: User signed in:', session.user.id);
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log('🔧 Auth: Token refreshed for user:', session?.user?.id);
       }
     });
+
+    // THEN check for existing session
+    supabase.auth
+      .getSession()
+      .then(({ data: { session }, error }) => {
+        if (!isMounted) return;
+
+        if (error) {
+          console.error('🔧 Auth: Error getting session:', error);
+          // Clear corrupted session data
+          localStorage.removeItem('supabase.auth.token');
+          sessionStorage.clear();
+          setAuthState({
+            user: null,
+            loading: false,
+            isAuthenticated: false,
+            profile: null,
+            session: null,
+          });
+          return;
+        }
+
+        console.log(
+          '🔧 Auth: Initial session check:',
+          session?.user?.id || 'no user'
+        );
+        setAuthState({
+          user: session?.user || null,
+          loading: false,
+          isAuthenticated: !!session?.user,
+          profile: null,
+          session,
+        });
+      })
+      .catch(error => {
+        console.error('🔧 Auth: Session check failed:', error);
+        if (isMounted) {
+          setAuthState({
+            user: null,
+            loading: false,
+            isAuthenticated: false,
+            profile: null,
+            session: null,
+          });
+        }
+      });
 
     return () => {
       isMounted = false;
@@ -125,43 +160,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async (): Promise<void> => {
     try {
       console.log('🔧 Auth: Starting sign out process...');
-      
+
       // Clear local state first to prevent UI flickering
       setAuthState({
         user: null,
         loading: false,
         isAuthenticated: false,
         profile: null,
-        session: null
+        session: null,
       });
-      
+
       // Clear any auth-related storage
       localStorage.removeItem('supabase.auth.token');
       sessionStorage.clear();
-      
+
       // Perform Supabase sign out
       await supabase.auth.signOut({ scope: 'global' });
-      
+
       console.log('🔧 Auth: Sign out completed successfully');
-      
+
       // Force redirect to auth page
       window.location.href = '/auth';
     } catch (error) {
       console.error('🔧 Auth: Sign out error:', error);
-      
+
       // Even if sign out fails, clear local state and redirect
       setAuthState({
         user: null,
         loading: false,
         isAuthenticated: false,
         profile: null,
-        session: null
+        session: null,
       });
-      
+
       // Clear storage anyway
       localStorage.removeItem('supabase.auth.token');
       sessionStorage.clear();
-      
+
       // Force redirect
       window.location.href = '/auth';
     }
@@ -171,7 +206,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       });
       return { data, error };
     } catch (error) {
@@ -187,8 +222,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: metadata
-        }
+          data: metadata,
+        },
       });
       return { data, error };
     } catch (error) {
@@ -232,13 +267,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Extended signup functions for backward compatibility
   const signInWithPhone = signIn;
   const signInWithEmail = signIn;
-  
-  const signUpWithPhone = async (phone: string, password: string, fullName?: string, referralCode?: string) => {
-    return signUp(phone, password, { full_name: fullName, referral_code: referralCode });
+
+  const signUpWithPhone = async (
+    phone: string,
+    password: string,
+    fullName?: string,
+    referralCode?: string
+  ) => {
+    return signUp(phone, password, {
+      full_name: fullName,
+      referral_code: referralCode,
+    });
   };
-  
-  const signUpWithEmail = async (email: string, password: string, fullName?: string, referralCode?: string) => {
-    return signUp(email, password, { full_name: fullName, referral_code: referralCode });
+
+  const signUpWithEmail = async (
+    email: string,
+    password: string,
+    fullName?: string,
+    referralCode?: string
+  ) => {
+    return signUp(email, password, {
+      full_name: fullName,
+      referral_code: referralCode,
+    });
   };
 
   const value: AuthContextType = {
@@ -251,14 +302,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signInWithPhone,
     signInWithEmail,
     signUpWithPhone,
-    signUpWithEmail
+    signUpWithEmail,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

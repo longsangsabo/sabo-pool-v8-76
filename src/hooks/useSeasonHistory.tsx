@@ -1,15 +1,14 @@
-
 import { useState } from 'react';
-import { 
-  SeasonHistory, 
-  SeasonHistoryFilters, 
-  CurrentSeason, 
-  SeasonProgress, 
-  SeasonComparison, 
-  PlayerHistoryResponse, 
+import {
+  SeasonHistory,
+  SeasonHistoryFilters,
+  CurrentSeason,
+  SeasonProgress,
+  SeasonComparison,
+  PlayerHistoryResponse,
   BestSeasonData,
   UserBestSeason,
-  SeasonStats
+  SeasonStats,
 } from '../types/seasonHistory';
 
 export const useSeasonHistory = () => {
@@ -31,34 +30,37 @@ export const useSeasonHistory = () => {
         total_players: 150,
         highest_points: 2500,
         average_points: 1450,
-        lowest_points: 800
+        lowest_points: 800,
       };
-      
+
       return {
         data: mockData,
         count: 0,
-        stats: mockStats
+        stats: mockStats,
       };
     } catch (err) {
       setError('Failed to fetch season history');
-      return { 
-        data: [], 
-        count: 0, 
+      return {
+        data: [],
+        count: 0,
         stats: {
           season_name: 'S2',
           season_year: 2024,
           total_players: 0,
           highest_points: 0,
           average_points: 0,
-          lowest_points: 0
-        }
+          lowest_points: 0,
+        },
       };
     } finally {
       setLoading(false);
     }
   };
 
-  const getSeasonStats = async (seasonName: string, seasonYear: number): Promise<SeasonStats> => {
+  const getSeasonStats = async (
+    seasonName: string,
+    seasonYear: number
+  ): Promise<SeasonStats> => {
     try {
       return {
         season_name: seasonName,
@@ -66,7 +68,7 @@ export const useSeasonHistory = () => {
         total_players: 150,
         highest_points: 2500,
         average_points: 1450,
-        lowest_points: 800
+        lowest_points: 800,
       };
     } catch (err) {
       setError('Failed to fetch season stats');
@@ -74,11 +76,13 @@ export const useSeasonHistory = () => {
     }
   };
 
-  const getAvailableSeasons = async (): Promise<Array<{ season_name: string; season_year: number }>> => {
+  const getAvailableSeasons = async (): Promise<
+    Array<{ season_name: string; season_year: number }>
+  > => {
     try {
       return [
         { season_name: 'S2', season_year: 2024 },
-        { season_name: 'S1', season_year: 2024 }
+        { season_name: 'S1', season_year: 2024 },
       ];
     } catch (err) {
       setError('Failed to fetch available seasons');
@@ -101,7 +105,7 @@ export const useSeasonHistory = () => {
         end_date: '2024-12-31',
         status: 'ongoing',
         total_participants: 150,
-        days_remaining: Math.max(0, daysRemaining)
+        days_remaining: Math.max(0, daysRemaining),
       };
     } catch (err) {
       setError('Failed to fetch current season');
@@ -109,14 +113,21 @@ export const useSeasonHistory = () => {
     }
   };
 
-  const getSeasonProgress = async (seasonName: string, seasonYear: number): Promise<SeasonProgress> => {
+  const getSeasonProgress = async (
+    seasonName: string,
+    seasonYear: number
+  ): Promise<SeasonProgress> => {
     try {
       const startDate = new Date('2024-01-01');
       const endDate = new Date('2024-12-31');
       const today = new Date();
-      
-      const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-      const elapsedDays = Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+
+      const totalDays = Math.ceil(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
+      );
+      const elapsedDays = Math.ceil(
+        (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
+      );
       const remainingDays = Math.max(0, totalDays - elapsedDays);
       const progressPercentage = Math.min(100, (elapsedDays / totalDays) * 100);
 
@@ -130,7 +141,7 @@ export const useSeasonHistory = () => {
         rating_change: 50,
         progress_percentage: progressPercentage,
         days_elapsed: Math.max(0, elapsedDays),
-        days_remaining: remainingDays
+        days_remaining: remainingDays,
       };
     } catch (err) {
       setError('Failed to fetch season progress');
@@ -149,7 +160,7 @@ export const useSeasonHistory = () => {
           matches_played: 10,
           total_players: 150,
           highest_points: 2500,
-          average_points: 1450
+          average_points: 1450,
         },
         previous_season: {
           season_name: 'S1',
@@ -159,12 +170,12 @@ export const useSeasonHistory = () => {
           matches_played: 8,
           total_players: 120,
           highest_points: 2200,
-          average_points: 1350
+          average_points: 1350,
         },
         improvement: {
           rank_change: 1,
           points_change: 100,
-          matches_change: 2
+          matches_change: 2,
         },
         top_players_change: [
           {
@@ -174,9 +185,9 @@ export const useSeasonHistory = () => {
             current_points: 2500,
             previous_points: 2200,
             rank_change: 1,
-            points_change: 300
-          }
-        ]
+            points_change: 300,
+          },
+        ],
       };
     } catch (err) {
       setError('Failed to fetch season comparison');
@@ -184,11 +195,13 @@ export const useSeasonHistory = () => {
     }
   };
 
-  const searchPlayerHistory = async (nickname: string): Promise<PlayerHistoryResponse> => {
+  const searchPlayerHistory = async (
+    nickname: string
+  ): Promise<PlayerHistoryResponse> => {
     try {
       return {
         player_history: [],
-        total_seasons: 0
+        total_seasons: 0,
       };
     } catch (err) {
       setError('Failed to search player history');
@@ -196,14 +209,16 @@ export const useSeasonHistory = () => {
     }
   };
 
-  const getUserBestSeason = async (nickname: string): Promise<UserBestSeason | null> => {
+  const getUserBestSeason = async (
+    nickname: string
+  ): Promise<UserBestSeason | null> => {
     try {
       return {
         season_name: 'S2',
         season_year: 2024,
         final_rank: 1,
         ranking_points: 1200,
-        achievement_level: 'Elite'
+        achievement_level: 'Elite',
       };
     } catch (err) {
       setError('Failed to fetch best season');

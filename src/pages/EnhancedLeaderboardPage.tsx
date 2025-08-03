@@ -94,10 +94,11 @@ const EnhancedLeaderboardPage = () => {
 
   const getRegionalStats = (region: string) => {
     const regionRankings = rankings.filter(
-      r => r.user_profiles?.provinces && 
-           typeof r.user_profiles.provinces === 'object' &&
-           'region' in r.user_profiles.provinces &&
-           r.user_profiles.provinces.region === region
+      r =>
+        r.user_profiles?.provinces &&
+        typeof r.user_profiles.provinces === 'object' &&
+        'region' in r.user_profiles.provinces &&
+        r.user_profiles.provinces.region === region
     );
     return {
       count: regionRankings.length,
@@ -158,20 +159,22 @@ const EnhancedLeaderboardPage = () => {
       let filteredData = mockRankings;
 
       if (filters.rank_category) {
-        filteredData = filteredData.filter(r => 
+        filteredData = filteredData.filter(r =>
           r.current_rank.startsWith(filters.rank_category)
         );
       }
 
       if (filters.region) {
-        filteredData = filteredData.filter(r =>
-          r.user_profiles?.provinces?.region === filters.region
+        filteredData = filteredData.filter(
+          r => r.user_profiles?.provinces?.region === filters.region
         );
       }
 
       if (filters.province_id) {
-        filteredData = filteredData.filter(r =>
-          r.user_profiles?.provinces?.code === provinces.find(p => p.id === filters.province_id)?.code
+        filteredData = filteredData.filter(
+          r =>
+            r.user_profiles?.provinces?.code ===
+            provinces.find(p => p.id === filters.province_id)?.code
         );
       }
 
@@ -187,16 +190,13 @@ const EnhancedLeaderboardPage = () => {
   const getRankColor = (rank: string) => {
     if (rank.startsWith('E'))
       return 'border-purple-200 bg-purple-50 text-purple-800';
-    if (rank.startsWith('F'))
-      return 'border-red-200 bg-red-50 text-red-800';
+    if (rank.startsWith('F')) return 'border-red-200 bg-red-50 text-red-800';
     if (rank.startsWith('G'))
       return 'border-yellow-200 bg-yellow-50 text-yellow-800';
     if (rank.startsWith('H'))
       return 'border-green-200 bg-green-50 text-green-800';
-    if (rank.startsWith('I'))
-      return 'border-blue-200 bg-blue-50 text-blue-800';
-    if (rank.startsWith('K'))
-      return 'border-gray-200 bg-gray-50 text-gray-800';
+    if (rank.startsWith('I')) return 'border-blue-200 bg-blue-50 text-blue-800';
+    if (rank.startsWith('K')) return 'border-gray-200 bg-gray-50 text-gray-800';
     return 'border-gray-200 bg-gray-50 text-gray-800';
   };
 

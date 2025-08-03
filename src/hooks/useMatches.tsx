@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '../integrations/supabase/client';
 import { Match } from '../types/common';
@@ -7,14 +6,16 @@ export const useMatches = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const createMatch = async (matchData: Partial<Match>): Promise<Match | null> => {
+  const createMatch = async (
+    matchData: Partial<Match>
+  ): Promise<Match | null> => {
     setLoading(true);
     setError('');
 
     try {
       // Mock match creation since the database doesn't have all required fields
       console.log('Mock creating match:', matchData);
-      
+
       const mockMatch: Match = {
         id: Date.now().toString(),
         player1_id: matchData.player1_id || '',
@@ -39,6 +40,6 @@ export const useMatches = () => {
   return {
     loading,
     error,
-    createMatch
+    createMatch,
   };
 };

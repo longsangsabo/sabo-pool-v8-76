@@ -3,7 +3,11 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
-import { profileAPI, type UserAchievement, type AchievementDefinition } from '@/services/api/profileAPI';
+import {
+  profileAPI,
+  type UserAchievement,
+  type AchievementDefinition,
+} from '@/services/api/profileAPI';
 
 export const useUserAchievements = (userId?: string) => {
   const { user } = useAuth();
@@ -13,7 +17,7 @@ export const useUserAchievements = (userId?: string) => {
     data: achievements,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['user-achievements', targetUserId],
     queryFn: async (): Promise<UserAchievement[]> => {
@@ -32,7 +36,7 @@ export const useUserAchievements = (userId?: string) => {
     achievements: achievements || [],
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -44,7 +48,7 @@ export const useAvailableAchievements = (userId?: string) => {
     data: availableAchievements,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['available-achievements', targetUserId],
     queryFn: async (): Promise<AchievementDefinition[]> => {
@@ -63,7 +67,7 @@ export const useAvailableAchievements = (userId?: string) => {
     availableAchievements: availableAchievements || [],
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -71,32 +75,49 @@ export const useAvailableAchievements = (userId?: string) => {
 export const useAchievementOverview = (userId?: string) => {
   const { user } = useAuth();
   const targetUserId = userId || user?.id;
-  
-  const { achievements, isLoading: earnedLoading } = useUserAchievements(targetUserId);
-  const { availableAchievements, isLoading: availableLoading } = useAvailableAchievements(targetUserId);
+
+  const { achievements, isLoading: earnedLoading } =
+    useUserAchievements(targetUserId);
+  const { availableAchievements, isLoading: availableLoading } =
+    useAvailableAchievements(targetUserId);
 
   // Calculate achievement statistics
   const stats = {
     total_earned: achievements.length,
     total_available: availableAchievements.length,
     total_achievements: achievements.length + availableAchievements.length,
-    completion_percentage: achievements.length + availableAchievements.length > 0 
-      ? Math.round((achievements.length / (achievements.length + availableAchievements.length)) * 100)
-      : 0,
-    total_spa_points_earned: achievements.reduce((sum, ach) => sum + ach.spa_points_earned, 0),
+    completion_percentage:
+      achievements.length + availableAchievements.length > 0
+        ? Math.round(
+            (achievements.length /
+              (achievements.length + availableAchievements.length)) *
+              100
+          )
+        : 0,
+    total_spa_points_earned: achievements.reduce(
+      (sum, ach) => sum + ach.spa_points_earned,
+      0
+    ),
     categories: {
-      match: achievements.filter(a => a.achievement_category === 'match').length,
-      tournament: achievements.filter(a => a.achievement_category === 'tournament').length,
-      social: achievements.filter(a => a.achievement_category === 'social').length,
-      progression: achievements.filter(a => a.achievement_category === 'progression').length,
-      special: achievements.filter(a => a.achievement_category === 'special').length,
-    }
+      match: achievements.filter(a => a.achievement_category === 'match')
+        .length,
+      tournament: achievements.filter(
+        a => a.achievement_category === 'tournament'
+      ).length,
+      social: achievements.filter(a => a.achievement_category === 'social')
+        .length,
+      progression: achievements.filter(
+        a => a.achievement_category === 'progression'
+      ).length,
+      special: achievements.filter(a => a.achievement_category === 'special')
+        .length,
+    },
   };
 
   return {
     achievements,
     availableAchievements,
     stats,
-    isLoading: earnedLoading || availableLoading
+    isLoading: earnedLoading || availableLoading,
   };
 };

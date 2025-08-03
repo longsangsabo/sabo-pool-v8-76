@@ -60,8 +60,8 @@ function removeConsoleStatements(filePath) {
 function fixEventListenerMemoryLeaks(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    let modified = false;
-    let modifiedContent = content;
+    const modified = false;
+    const modifiedContent = content;
     
     // Check for addEventListener without corresponding removeEventListener
     const addEventListenerMatches = content.match(/addEventListener\s*\(/g);
@@ -92,8 +92,8 @@ function fixEventListenerMemoryLeaks(filePath) {
 function optimizeComponentPerformance(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    let modified = false;
-    let modifiedContent = content;
+    const modified = false;
+    const modifiedContent = content;
     
     // Check for missing React.memo on functional components
     if (content.includes('export const') && content.includes(': React.FC') && !content.includes('React.memo')) {
@@ -118,7 +118,7 @@ function performEnhancedProductionCleanup() {
   console.log('🚀 Starting ENHANCED production deployment cleanup...\n');
   
   const srcFiles = findFiles('./src', ['.ts', '.tsx']);
-  let stats = {
+  const stats = {
     consoleCleanedCount: 0,
     memoryLeakIssues: 0,
     performanceIssues: 0,

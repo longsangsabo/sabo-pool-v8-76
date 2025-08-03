@@ -28,7 +28,7 @@ export const useRewardTemplates = () => {
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
-      
+
       if (error) {
         console.error('Error fetching reward templates:', error);
         throw error;
@@ -38,24 +38,26 @@ export const useRewardTemplates = () => {
   });
 
   // Convert template to TournamentRewards format
-  const convertTemplatesToRewards = (templates: RewardTemplate[]): TournamentRewards => {
+  const convertTemplatesToRewards = (
+    templates: RewardTemplate[]
+  ): TournamentRewards => {
     if (templates.length === 0) {
       return {
         totalPrize: 0,
         showPrizes: false,
         positions: [],
-        specialAwards: []
+        specialAwards: [],
       };
     }
 
     const template = templates[0]; // Use the first active template
     const rewardStructure = template.reward_structure as any;
-    
+
     return {
       totalPrize: rewardStructure?.totalPrize || 0,
       showPrizes: rewardStructure?.showPrizes || false,
       positions: rewardStructure?.positions || [],
-      specialAwards: rewardStructure?.specialAwards || []
+      specialAwards: rewardStructure?.specialAwards || [],
     };
   };
 
@@ -69,8 +71,10 @@ export const useRewardTemplates = () => {
         .eq('is_active', true);
 
       // Insert new template
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) {
         throw new Error('User must be authenticated to create templates');
       }
@@ -82,14 +86,14 @@ export const useRewardTemplates = () => {
         rank_category: 'all',
         reward_structure: rewards as any,
         is_active: true,
-        created_by: user.id
+        created_by: user.id,
       };
 
       const { data, error } = await supabase
         .from('tournament_reward_templates')
         .insert([templateData])
         .select();
-      
+
       if (error) throw error;
       return data;
     },
@@ -97,14 +101,17 @@ export const useRewardTemplates = () => {
       queryClient.invalidateQueries({ queryKey: ['reward-templates'] });
       toast.success('Đã lưu template phần thưởng thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Failed to save reward template:', error);
       toast.error('Lỗi khi lưu template phần thưởng. Vui lòng thử lại.');
-    }
+    },
   });
 
   // Copy template to tournament prize tiers
-  const copyTemplateToTournament = async (tournamentId: string, rewards: TournamentRewards) => {
+  const copyTemplateToTournament = async (
+    tournamentId: string,
+    rewards: TournamentRewards
+  ) => {
     try {
       // Clear existing prize tiers
       await supabase
@@ -121,13 +128,13 @@ export const useRewardTemplates = () => {
         elo_points: position.eloPoints || 0,
         spa_points: position.spaPoints || 0,
         is_visible: position.isVisible !== false,
-        physical_items: position.items || []
+        physical_items: position.items || [],
       }));
 
       const { error } = await supabase
         .from('tournament_prize_tiers')
         .insert(prizeData);
-      
+
       if (error) throw error;
 
       toast.success('Đã áp dụng template vào giải đấu!');
@@ -146,6 +153,7 @@ export const useRewardTemplates = () => {
     isSaving: saveTemplateMutation.isPending,
     convertTemplatesToRewards,
     copyTemplateToTournament,
-    refetch: () => queryClient.invalidateQueries({ queryKey: ['reward-templates'] })
+    refetch: () =>
+      queryClient.invalidateQueries({ queryKey: ['reward-templates'] }),
   };
 };

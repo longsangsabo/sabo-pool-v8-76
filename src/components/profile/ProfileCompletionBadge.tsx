@@ -12,38 +12,42 @@ interface ProfileCompletionBadgeProps {
 const ProfileCompletionBadge: React.FC<ProfileCompletionBadgeProps> = ({
   completionPercentage,
   showDetails = false,
-  className = ''
+  className = '',
 }) => {
   const getCompletionLevel = (percentage: number) => {
-    if (percentage >= 90) return {
-      level: 'Complete',
-      color: 'bg-green-100 text-green-800',
-      icon: CheckCircle,
-      message: 'Hồ sơ hoàn thiện!'
-    };
-    if (percentage >= 70) return {
-      level: 'Nearly Complete',
-      color: 'bg-blue-100 text-blue-800',
-      icon: Target,
-      message: 'Gần hoàn thiện'
-    };
-    if (percentage >= 50) return {
-      level: 'Partial',
-      color: 'bg-yellow-100 text-yellow-800',
-      icon: Target,
-      message: 'Cần bổ sung thêm'
-    };
-    if (percentage >= 25) return {
-      level: 'Basic',
-      color: 'bg-orange-100 text-orange-800',
-      icon: AlertCircle,
-      message: 'Thiếu nhiều thông tin'
-    };
+    if (percentage >= 90)
+      return {
+        level: 'Complete',
+        color: 'bg-green-100 text-green-800',
+        icon: CheckCircle,
+        message: 'Hồ sơ hoàn thiện!',
+      };
+    if (percentage >= 70)
+      return {
+        level: 'Nearly Complete',
+        color: 'bg-blue-100 text-blue-800',
+        icon: Target,
+        message: 'Gần hoàn thiện',
+      };
+    if (percentage >= 50)
+      return {
+        level: 'Partial',
+        color: 'bg-yellow-100 text-yellow-800',
+        icon: Target,
+        message: 'Cần bổ sung thêm',
+      };
+    if (percentage >= 25)
+      return {
+        level: 'Basic',
+        color: 'bg-orange-100 text-orange-800',
+        icon: AlertCircle,
+        message: 'Thiếu nhiều thông tin',
+      };
     return {
       level: 'Incomplete',
       color: 'bg-red-100 text-red-800',
       icon: AlertCircle,
-      message: 'Hồ sơ chưa đầy đủ'
+      message: 'Hồ sơ chưa đầy đủ',
     };
   };
 
@@ -53,7 +57,7 @@ const ProfileCompletionBadge: React.FC<ProfileCompletionBadgeProps> = ({
   if (!showDetails) {
     return (
       <Badge className={`${completion.color} ${className}`}>
-        <IconComponent className="w-3 h-3 mr-1" />
+        <IconComponent className='w-3 h-3 mr-1' />
         {completionPercentage}%
       </Badge>
     );
@@ -61,29 +65,24 @@ const ProfileCompletionBadge: React.FC<ProfileCompletionBadgeProps> = ({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-700">
+      <div className='flex items-center justify-between'>
+        <span className='text-sm font-medium text-gray-700'>
           Hoàn thiện hồ sơ
         </span>
         <Badge className={completion.color}>
-          <IconComponent className="w-3 h-3 mr-1" />
+          <IconComponent className='w-3 h-3 mr-1' />
           {completionPercentage}%
         </Badge>
       </div>
-      
-      <Progress 
-        value={completionPercentage} 
-        className="h-2"
-      />
-      
-      <p className="text-xs text-gray-500">
-        {completion.message}
-      </p>
-      
+
+      <Progress value={completionPercentage} className='h-2' />
+
+      <p className='text-xs text-gray-500'>{completion.message}</p>
+
       {completionPercentage < 90 && (
-        <div className="text-xs text-gray-600 space-y-1">
-          <p className="font-medium">Để nâng cao điểm hoàn thiện:</p>
-          <ul className="list-disc list-inside space-y-1 text-gray-500">
+        <div className='text-xs text-gray-600 space-y-1'>
+          <p className='font-medium'>Để nâng cao điểm hoàn thiện:</p>
+          <ul className='list-disc list-inside space-y-1 text-gray-500'>
             {completionPercentage < 50 && (
               <>
                 <li>Thêm ảnh đại diện</li>

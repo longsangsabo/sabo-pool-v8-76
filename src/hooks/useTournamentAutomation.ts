@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -17,7 +16,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
     lastTriggered: null,
     successCount: 0,
     errorCount: 0,
-    currentStatus: 'idle'
+    currentStatus: 'idle',
   });
 
   const [isFixing, setIsFixing] = useState(false);
@@ -31,7 +30,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
       lastTriggered: null,
       successCount: 0,
       errorCount: 0,
-      currentStatus: 'idle'
+      currentStatus: 'idle',
     });
   }, [tournamentId]);
 
@@ -42,11 +41,14 @@ export const useTournamentAutomation = (tournamentId?: string) => {
     setIsFixing(true);
     try {
       console.log('🔧 Starting enhanced tournament progression fix...');
-      
+
       // First, try the comprehensive fix function
-      const { data: fixResult, error: fixError } = await supabase.rpc('fix_all_tournament_progression', {
-        p_tournament_id: tournamentId
-      });
+      const { data: fixResult, error: fixError } = await supabase.rpc(
+        'fix_all_tournament_progression',
+        {
+          p_tournament_id: tournamentId,
+        }
+      );
 
       if (fixError) {
         console.error('❌ Fix function error:', fixError);
@@ -72,21 +74,33 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
       // Force advancement for each completed match
       if (matches && matches.length > 0) {
-        console.log(`🎯 Force advancing ${matches.length} completed matches...`);
-        
+        console.log(
+          `🎯 Force advancing ${matches.length} completed matches...`
+        );
+
         // Use the new corrected advance function for the entire tournament
         try {
-          const { data: advanceResult, error: advanceError } = await supabase.rpc('repair_double_elimination_bracket', {
-            p_tournament_id: tournamentId
-          });
+          const { data: advanceResult, error: advanceError } =
+            await supabase.rpc('repair_double_elimination_bracket', {
+              p_tournament_id: tournamentId,
+            });
 
           if (advanceError) {
-            console.warn(`⚠️ Could not advance tournament ${tournamentId}:`, advanceError);
+            console.warn(
+              `⚠️ Could not advance tournament ${tournamentId}:`,
+              advanceError
+            );
           } else {
-            console.log(`✅ Successfully advanced tournament ${tournamentId}:`, advanceResult);
+            console.log(
+              `✅ Successfully advanced tournament ${tournamentId}:`,
+              advanceResult
+            );
           }
         } catch (err) {
-          console.warn(`⚠️ Exception advancing tournament ${tournamentId}:`, err);
+          console.warn(
+            `⚠️ Exception advancing tournament ${tournamentId}:`,
+            err
+          );
         }
       }
 
@@ -95,18 +109,17 @@ export const useTournamentAutomation = (tournamentId?: string) => {
         ...prev,
         lastTriggered: new Date(),
         successCount: prev.successCount + 1,
-        currentStatus: 'idle'
+        currentStatus: 'idle',
       }));
 
       toast.success('🎯 Tournament progression fixed successfully!');
-      
     } catch (error: any) {
       console.error('❌ Error fixing tournament progression:', error);
-      
+
       setAutomationStatus(prev => ({
         ...prev,
         errorCount: prev.errorCount + 1,
-        currentStatus: 'error'
+        currentStatus: 'error',
       }));
 
       toast.error(`❌ Failed to fix progression: ${error.message}`);
@@ -119,7 +132,9 @@ export const useTournamentAutomation = (tournamentId?: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up real-time double elimination automation monitoring...');
+    console.log(
+      '🔄 Setting up real-time double elimination automation monitoring...'
+    );
 
     const channel = supabase
       .channel(`tournament_automation_${tournamentId}`)
@@ -129,26 +144,29 @@ export const useTournamentAutomation = (tournamentId?: string) => {
           event: 'UPDATE',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        async (payload) => {
+        async payload => {
           console.log('🎯 Tournament match updated:', payload);
-          
+
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
 
           // If a match was just completed with a winner
-          if (newRecord.status === 'completed' && 
-              newRecord.winner_id && 
-              (!oldRecord.winner_id || oldRecord.status !== 'completed')) {
-            
-            console.log('🏆 Match completed with winner, trigger should auto-advance...');
-            
+          if (
+            newRecord.status === 'completed' &&
+            newRecord.winner_id &&
+            (!oldRecord.winner_id || oldRecord.status !== 'completed')
+          ) {
+            console.log(
+              '🏆 Match completed with winner, trigger should auto-advance...'
+            );
+
             // Update automation status
             setAutomationStatus(prev => ({
               ...prev,
               lastTriggered: new Date(),
-              currentStatus: 'processing'
+              currentStatus: 'processing',
             }));
 
             // Wait for trigger to process, then verify advancement happened
@@ -167,24 +185,41 @@ export const useTournamentAutomation = (tournamentId?: string) => {
                 if (automationLogs && automationLogs.length > 0) {
                   const latestLog = automationLogs[0];
                   console.log('🔍 Found automation log:', latestLog);
-                  
+
                   setAutomationStatus(prev => ({
                     ...prev,
-                    successCount: latestLog.status === 'completed' ? prev.successCount + 1 : prev.successCount,
-                    errorCount: latestLog.status === 'failed' ? prev.errorCount + 1 : prev.errorCount,
-                    currentStatus: latestLog.status === 'completed' ? 'idle' : 'error'
+                    successCount:
+                      latestLog.status === 'completed'
+                        ? prev.successCount + 1
+                        : prev.successCount,
+                    errorCount:
+                      latestLog.status === 'failed'
+                        ? prev.errorCount + 1
+                        : prev.errorCount,
+                    currentStatus:
+                      latestLog.status === 'completed' ? 'idle' : 'error',
                   }));
-                  
+
                   if (latestLog.status === 'completed') {
-                    toast.success('🎯 Double elimination automation processed successfully!');
+                    toast.success(
+                      '🎯 Double elimination automation processed successfully!'
+                    );
                   } else {
-                    console.warn('⚠️ Automation failed, triggering manual fix...');
-                    toast.warning('Automation issue detected, attempting manual fix...');
+                    console.warn(
+                      '⚠️ Automation failed, triggering manual fix...'
+                    );
+                    toast.warning(
+                      'Automation issue detected, attempting manual fix...'
+                    );
                     await fixTournamentProgression();
                   }
                 } else {
-                  console.warn('⚠️ No automation log found, triggering manual fix...');
-                  toast.warning('Automation not triggered, running manual fix...');
+                  console.warn(
+                    '⚠️ No automation log found, triggering manual fix...'
+                  );
+                  toast.warning(
+                    'Automation not triggered, running manual fix...'
+                  );
                   await fixTournamentProgression();
                 }
               } catch (err) {
@@ -192,7 +227,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
                 setAutomationStatus(prev => ({
                   ...prev,
                   errorCount: prev.errorCount + 1,
-                  currentStatus: 'error'
+                  currentStatus: 'error',
                 }));
               }
             }, 3000); // Wait 3 seconds for trigger to process
@@ -210,6 +245,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
   return {
     automationStatus,
     fixTournamentProgression,
-    isFixing
+    isFixing,
   };
 };

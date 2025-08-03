@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -104,16 +103,24 @@ export const EnhancedAuthFlow: React.FC<EnhancedAuthFlowProps> = ({
 
     if (!validateForm(true)) return;
 
-    try {      
-      const { error } = await signUp(authData.phone || authData.email, authData.password, authData.fullName);
+    try {
+      const { error } = await signUp(
+        authData.phone || authData.email,
+        authData.password,
+        authData.fullName
+      );
       if (error) {
         toast.error(error.message || 'Đăng ký thất bại');
       } else {
         setStep('location');
-        toast.success('🎉 Đăng ký thành công! Email xác thực đã được gửi đến hộp thư của bạn.');
-        
+        toast.success(
+          '🎉 Đăng ký thành công! Email xác thực đã được gửi đến hộp thư của bạn.'
+        );
+
         // Auto-trigger welcome email (handled by useEmailNotifications hook)
-        console.log('New user registered, welcome email will be sent automatically');
+        console.log(
+          'New user registered, welcome email will be sent automatically'
+        );
       }
     } catch (error: any) {
       toast.error(error.message || 'Đăng ký thất bại');
@@ -123,7 +130,9 @@ export const EnhancedAuthFlow: React.FC<EnhancedAuthFlowProps> = ({
   const handleLocationSetup = async () => {
     try {
       await requestLocationPermission();
-      toast.success('🎯 Vị trí đã được thiết lập! Bạn sẽ nhận được đề xuất giải đấu phù hợp.');
+      toast.success(
+        '🎯 Vị trí đã được thiết lập! Bạn sẽ nhận được đề xuất giải đấu phù hợp.'
+      );
       onSuccess?.();
     } catch (error) {
       // Location is optional, continue anyway
@@ -443,7 +452,10 @@ export const EnhancedAuthFlow: React.FC<EnhancedAuthFlowProps> = ({
                     </AlertDescription>
                   </Alert>
                   <div className='space-y-3'>
-                    <Button onClick={handleLocationSetup} className='w-full bg-blue-600 hover:bg-blue-700'>
+                    <Button
+                      onClick={handleLocationSetup}
+                      className='w-full bg-blue-600 hover:bg-blue-700'
+                    >
                       🎯 Cho phép truy cập vị trí
                     </Button>
                     <Button

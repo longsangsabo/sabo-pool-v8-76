@@ -30,7 +30,7 @@ export const useAdmin = () => {
       // Mock admin check since admin_users table doesn't exist
       // For demo purposes, make first user an admin
       const mockIsAdmin = user?.email === 'admin@example.com';
-      
+
       if (mockIsAdmin) {
         setIsAdmin(true);
         setAdminUser({

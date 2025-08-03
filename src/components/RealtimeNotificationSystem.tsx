@@ -8,7 +8,7 @@ import { useAutoMatchNotifications } from '@/hooks/useAutoMatchNotifications';
 const RealtimeNotificationSystem: React.FC = () => {
   const { user } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
-  
+
   // Initialize auto match notifications system
   useAutoMatchNotifications();
 
@@ -23,9 +23,9 @@ const RealtimeNotificationSystem: React.FC = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const notification = payload.new as any;
           showNotificationToast(notification);
         }
@@ -36,16 +36,16 @@ const RealtimeNotificationSystem: React.FC = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'challenges',
-          filter: `opponent_id=eq.${user.id}`
+          filter: `opponent_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const challenge = payload.new as any;
           toast.info('Bạn nhận được thách đấu mới!', {
             description: 'Kiểm tra trang thách đấu để phản hồi',
             action: {
               label: 'Xem',
-              onClick: () => window.location.href = '/challenges'
-            }
+              onClick: () => (window.location.href = '/challenges'),
+            },
           });
         }
       )
@@ -55,16 +55,16 @@ const RealtimeNotificationSystem: React.FC = () => {
           event: 'UPDATE',
           schema: 'public',
           table: 'tournament_registrations',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           const registration = payload.new as any;
           if (registration.status === 'confirmed') {
             toast.success('Đăng ký giải đấu thành công!');
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
       });
 
@@ -80,27 +80,29 @@ const RealtimeNotificationSystem: React.FC = () => {
         case 'tournament_update':
         case 'tournament_start':
         case 'tournament_match':
-          return <Trophy className="h-4 w-4" />;
+          return <Trophy className='h-4 w-4' />;
         case 'challenge_received':
         case 'challenge_accepted':
-          return <Swords className="h-4 w-4" />;
+          return <Swords className='h-4 w-4' />;
         case 'match_completed':
         case 'match_result':
-          return <Target className="h-4 w-4" />;
+          return <Target className='h-4 w-4' />;
         case 'ranking_update':
-          return <Users className="h-4 w-4" />;
+          return <Users className='h-4 w-4' />;
         default:
-          return <Bell className="h-4 w-4" />;
+          return <Bell className='h-4 w-4' />;
       }
     };
 
     const toastOptions = {
       description: notification.message,
       icon: getIcon(notification.type),
-      action: notification.action_url ? {
-        label: 'Xem chi tiết',
-        onClick: () => window.location.href = notification.action_url
-      } : undefined
+      action: notification.action_url
+        ? {
+            label: 'Xem chi tiết',
+            onClick: () => (window.location.href = notification.action_url),
+          }
+        : undefined,
     };
 
     switch (notification.priority) {

@@ -1,4 +1,3 @@
-
 export interface MarketplaceItem {
   id: string;
   seller_id: string;

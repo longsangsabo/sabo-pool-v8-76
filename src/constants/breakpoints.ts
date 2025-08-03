@@ -14,7 +14,10 @@ export const getBreakpoint = (width: number): Breakpoint => {
   return 'desktop';
 };
 
-export const isBreakpoint = (width: number, breakpoint: Breakpoint): boolean => {
+export const isBreakpoint = (
+  width: number,
+  breakpoint: Breakpoint
+): boolean => {
   switch (breakpoint) {
     case 'mobile':
       return width < BREAKPOINTS.mobile;

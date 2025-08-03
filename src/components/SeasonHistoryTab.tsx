@@ -1,7 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSeasonHistory } from '../hooks/useSeasonHistory';
-import { SeasonHistory, SeasonHistoryFilters, SeasonStats } from '../types/seasonHistory';
+import {
+  SeasonHistory,
+  SeasonHistoryFilters,
+  SeasonStats,
+} from '../types/seasonHistory';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -336,7 +339,11 @@ export const SeasonHistoryTab: React.FC<SeasonHistoryTabProps> = ({
                             #{player.final_rank}
                           </Badge>
                         </td>
-                        <td className='p-3 font-medium'>{player.nickname || player.profiles?.nickname || 'Unknown'}</td>
+                        <td className='p-3 font-medium'>
+                          {player.nickname ||
+                            player.profiles?.nickname ||
+                            'Unknown'}
+                        </td>
                         <td className='p-3 text-right font-mono'>
                           {formatPoints(player.ranking_points)}
                         </td>

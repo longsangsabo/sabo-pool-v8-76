@@ -31,9 +31,11 @@ export const useAdminDashboard = () => {
     queryKey: ['admin-dashboard-stats'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.rpc('calculate_admin_dashboard_stats');
+        const { data, error } = await supabase.rpc(
+          'calculate_admin_dashboard_stats'
+        );
         if (error) throw error;
-        return (data as unknown) as AdminDashboardStats;
+        return data as unknown as AdminDashboardStats;
       } catch (error) {
         console.error('Admin dashboard stats error:', error);
         throw error;
@@ -53,33 +55,33 @@ export const useAdminDashboard = () => {
           { data: recentUsers },
           { data: recentTournaments },
           { data: recentClubs },
-          { data: recentMatches }
+          { data: recentMatches },
         ] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('user_id, full_name, created_at')
-          .eq('is_demo_user', false)
-          .order('created_at', { ascending: false })
-          .limit(3),
-        
-        supabase
-          .from('tournaments')
-          .select('id, name, created_at, created_by')
-          .order('created_at', { ascending: false })
-          .limit(3),
-        
-        supabase
-          .from('club_registrations')
-          .select('id, club_name, created_at, user_id')
-          .eq('status', 'pending')
-          .order('created_at', { ascending: false })
-          .limit(3),
-        
-        supabase
-          .from('matches')
-          .select('id, created_at, player1_id, player2_id')
-          .order('created_at', { ascending: false })
-          .limit(3)
+          supabase
+            .from('profiles')
+            .select('user_id, full_name, created_at')
+            .eq('is_demo_user', false)
+            .order('created_at', { ascending: false })
+            .limit(3),
+
+          supabase
+            .from('tournaments')
+            .select('id, name, created_at, created_by')
+            .order('created_at', { ascending: false })
+            .limit(3),
+
+          supabase
+            .from('club_registrations')
+            .select('id, club_name, created_at, user_id')
+            .eq('status', 'pending')
+            .order('created_at', { ascending: false })
+            .limit(3),
+
+          supabase
+            .from('matches')
+            .select('id, created_at, player1_id, player2_id')
+            .order('created_at', { ascending: false })
+            .limit(3),
         ]);
 
         const activities: RecentActivity[] = [];
@@ -91,7 +93,7 @@ export const useAdminDashboard = () => {
             type: 'user_registration',
             description: `${user.full_name || 'Người dùng mới'} đã đăng ký`,
             created_at: user.created_at,
-            user_id: user.user_id
+            user_id: user.user_id,
           });
         });
 
@@ -102,7 +104,7 @@ export const useAdminDashboard = () => {
             type: 'tournament_created',
             description: `Giải đấu "${tournament.name}" được tạo`,
             created_at: tournament.created_at,
-            user_id: tournament.created_by
+            user_id: tournament.created_by,
           });
         });
 
@@ -113,7 +115,7 @@ export const useAdminDashboard = () => {
             type: 'club_registration',
             description: `CLB "${club.club_name}" đăng ký`,
             created_at: club.created_at,
-            user_id: club.user_id
+            user_id: club.user_id,
           });
         });
 
@@ -123,13 +125,17 @@ export const useAdminDashboard = () => {
             id: `match-${match.id}`,
             type: 'match_created',
             description: 'Trận đấu mới được tạo',
-            created_at: match.created_at
+            created_at: match.created_at,
           });
         });
 
         // Sort by created_at and take top 10
         return activities
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          )
           .slice(0, 10);
       } catch (error) {
         console.error('Recent activity fetch error:', error);
@@ -149,6 +155,6 @@ export const useAdminDashboard = () => {
     refetch: () => {
       statsQuery.refetch();
       recentActivityQuery.refetch();
-    }
+    },
   };
 };

@@ -1,5 +1,9 @@
 import React from 'react';
-import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
+import {
+  UseFormRegister,
+  UseFormHandleSubmit,
+  FieldErrors,
+} from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export interface BasicProfileFormProps {
@@ -17,7 +21,7 @@ const BasicProfileForm: React.FC<BasicProfileFormProps> = ({
   handleUpdateProfile = () => {},
   errors = {},
   isDirty = false,
-  isValid = true
+  isValid = true,
 }) => {
   return (
     <Card>

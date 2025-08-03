@@ -44,7 +44,9 @@ export interface SABOProgressData {
   };
 }
 
-export const useSABOTournamentProgress = (tournamentId: string): SABOProgressData | null => {
+export const useSABOTournamentProgress = (
+  tournamentId: string
+): SABOProgressData | null => {
   const { data: matches } = useSABOTournamentMatches(tournamentId);
 
   const progress = useMemo(() => {
@@ -55,7 +57,7 @@ export const useSABOTournamentProgress = (tournamentId: string): SABOProgressDat
     const saboProgress = SABOLogicCore.getTournamentProgress(matches);
 
     // Helper function to count completed matches
-    const countCompleted = (matchList: any[]) => 
+    const countCompleted = (matchList: any[]) =>
       matchList.filter(m => m.status === 'completed').length;
 
     // Winners Bracket Progress
@@ -64,13 +66,23 @@ export const useSABOTournamentProgress = (tournamentId: string): SABOProgressDat
     const winnersRound3 = organized.winners.filter(m => m.round_number === 3);
 
     // Losers Branch A Progress
-    const losersRound101 = organized.losers_branch_a.filter(m => m.round_number === 101);
-    const losersRound102 = organized.losers_branch_a.filter(m => m.round_number === 102);
-    const losersRound103 = organized.losers_branch_a.filter(m => m.round_number === 103);
+    const losersRound101 = organized.losers_branch_a.filter(
+      m => m.round_number === 101
+    );
+    const losersRound102 = organized.losers_branch_a.filter(
+      m => m.round_number === 102
+    );
+    const losersRound103 = organized.losers_branch_a.filter(
+      m => m.round_number === 103
+    );
 
     // Losers Branch B Progress
-    const losersRound201 = organized.losers_branch_b.filter(m => m.round_number === 201);
-    const losersRound202 = organized.losers_branch_b.filter(m => m.round_number === 202);
+    const losersRound201 = organized.losers_branch_b.filter(
+      m => m.round_number === 201
+    );
+    const losersRound202 = organized.losers_branch_b.filter(
+      m => m.round_number === 202
+    );
 
     // Finals Progress
     const semifinals = organized.semifinals;
@@ -81,71 +93,71 @@ export const useSABOTournamentProgress = (tournamentId: string): SABOProgressDat
         total: 14,
         completed: countCompleted(organized.winners),
         rounds: {
-          round1: { 
-            total: winnersRound1.length, 
-            completed: countCompleted(winnersRound1) 
+          round1: {
+            total: winnersRound1.length,
+            completed: countCompleted(winnersRound1),
           },
-          round2: { 
-            total: winnersRound2.length, 
-            completed: countCompleted(winnersRound2) 
+          round2: {
+            total: winnersRound2.length,
+            completed: countCompleted(winnersRound2),
           },
-          round3: { 
-            total: winnersRound3.length, 
-            completed: countCompleted(winnersRound3) 
-          }
-        }
+          round3: {
+            total: winnersRound3.length,
+            completed: countCompleted(winnersRound3),
+          },
+        },
       },
       losers_a: {
         total: 7,
         completed: countCompleted(organized.losers_branch_a),
         rounds: {
-          round101: { 
-            total: losersRound101.length, 
-            completed: countCompleted(losersRound101) 
+          round101: {
+            total: losersRound101.length,
+            completed: countCompleted(losersRound101),
           },
-          round102: { 
-            total: losersRound102.length, 
-            completed: countCompleted(losersRound102) 
+          round102: {
+            total: losersRound102.length,
+            completed: countCompleted(losersRound102),
           },
-          round103: { 
-            total: losersRound103.length, 
-            completed: countCompleted(losersRound103) 
-          }
-        }
+          round103: {
+            total: losersRound103.length,
+            completed: countCompleted(losersRound103),
+          },
+        },
       },
       losers_b: {
         total: 3,
         completed: countCompleted(organized.losers_branch_b),
         rounds: {
-          round201: { 
-            total: losersRound201.length, 
-            completed: countCompleted(losersRound201) 
+          round201: {
+            total: losersRound201.length,
+            completed: countCompleted(losersRound201),
           },
-          round202: { 
-            total: losersRound202.length, 
-            completed: countCompleted(losersRound202) 
-          }
-        }
+          round202: {
+            total: losersRound202.length,
+            completed: countCompleted(losersRound202),
+          },
+        },
       },
       finals: {
         total: 3,
         completed: countCompleted([...semifinals, ...final]),
-        semifinals: { 
-          total: semifinals.length, 
-          completed: countCompleted(semifinals) 
+        semifinals: {
+          total: semifinals.length,
+          completed: countCompleted(semifinals),
         },
-        final: { 
-          total: final.length, 
-          completed: countCompleted(final) 
-        }
+        final: {
+          total: final.length,
+          completed: countCompleted(final),
+        },
       },
       overall: {
         total: saboProgress.totalMatches,
         completed: saboProgress.completedMatches,
         percentage: saboProgress.progressPercentage,
         currentStage: saboProgress.currentStage,
-        nextActions: saboProgress.nextActions
-      }
+        nextActions: saboProgress.nextActions,
+      },
     };
   }, [matches]);
 

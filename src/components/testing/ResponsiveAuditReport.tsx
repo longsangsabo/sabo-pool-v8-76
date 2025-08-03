@@ -20,63 +20,64 @@ export const ResponsiveAuditReport: React.FC = () => {
 
   const runAudit = async () => {
     setIsRunning(true);
-    
+
     // Simulate audit process
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     const auditResults: AuditIssue[] = [
       {
         type: 'success',
         component: 'useOptimizedResponsive',
         issue: 'Hook is properly implemented and optimized',
-        priority: 'low'
+        priority: 'low',
       },
       {
         type: 'success',
         component: 'BREAKPOINTS',
-        issue: 'Breakpoint constants are standardized (mobile: 768px, tablet: 1024px)',
-        priority: 'low'
+        issue:
+          'Breakpoint constants are standardized (mobile: 768px, tablet: 1024px)',
+        priority: 'low',
       },
       {
         type: 'success',
         component: 'AdminResponsiveLayout',
         issue: 'Using correct hook and breakpoint logic',
-        priority: 'low'
+        priority: 'low',
       },
       {
         type: 'success',
         component: 'ClubResponsiveLayout',
         issue: 'Properly implements 3-mode responsive pattern',
-        priority: 'low'
+        priority: 'low',
       },
       {
         type: 'success',
         component: 'OptimizedResponsiveLayout',
         issue: 'Optimized for performance with proper memoization',
-        priority: 'low'
+        priority: 'low',
       },
       {
         type: 'success',
         component: 'AdminSidebar',
         issue: 'Props interface correctly defined with collapsed?: boolean',
-        priority: 'low'
+        priority: 'low',
       },
       {
         type: 'warning',
         component: 'Profile Components',
         issue: 'Some profile components still using legacy useResponsive hook',
         fix: 'Replace with useOptimizedResponsive for consistency',
-        priority: 'medium'
+        priority: 'medium',
       },
       {
         type: 'warning',
         component: 'CommunityPage',
         issue: 'Using legacy useResponsive hook',
         fix: 'Update to useOptimizedResponsive',
-        priority: 'medium'
-      }
+        priority: 'medium',
+      },
     ];
-    
+
     setIssues(auditResults);
     setLastRun(new Date());
     setIsRunning(false);
@@ -85,11 +86,11 @@ export const ResponsiveAuditReport: React.FC = () => {
   const getIssueIcon = (type: AuditIssue['type']) => {
     switch (type) {
       case 'error':
-        return <XCircle className="h-4 w-4 text-destructive" />;
+        return <XCircle className='h-4 w-4 text-destructive' />;
       case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-warning" />;
+        return <AlertTriangle className='h-4 w-4 text-warning' />;
       case 'success':
-        return <CheckCircle className="h-4 w-4 text-success" />;
+        return <CheckCircle className='h-4 w-4 text-success' />;
     }
   };
 
@@ -97,11 +98,11 @@ export const ResponsiveAuditReport: React.FC = () => {
     const variants = {
       error: 'destructive',
       warning: 'secondary',
-      success: 'default'
+      success: 'default',
     } as const;
-    
+
     return (
-      <Badge variant={variants[type]} className="ml-2">
+      <Badge variant={variants[type]} className='ml-2'>
         {type}
       </Badge>
     );
@@ -111,14 +112,10 @@ export const ResponsiveAuditReport: React.FC = () => {
     const colors = {
       high: 'bg-red-100 text-red-800',
       medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-green-100 text-green-800'
+      low: 'bg-green-100 text-green-800',
     };
-    
-    return (
-      <Badge className={`ml-2 ${colors[priority]}`}>
-        {priority}
-      </Badge>
-    );
+
+    return <Badge className={`ml-2 ${colors[priority]}`}>{priority}</Badge>;
   };
 
   const errorCount = issues.filter(i => i.type === 'error').length;
@@ -128,68 +125,72 @@ export const ResponsiveAuditReport: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className='flex items-center justify-between'>
           <CardTitle>Phase 6: Responsive System Audit</CardTitle>
-          <Button 
-            onClick={runAudit} 
+          <Button
+            onClick={runAudit}
             disabled={isRunning}
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
           >
             {isRunning ? (
               <>
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                <RefreshCw className='h-4 w-4 mr-2 animate-spin' />
                 Running Audit...
               </>
             ) : (
               <>
-                <RefreshCw className="h-4 w-4 mr-2" />
+                <RefreshCw className='h-4 w-4 mr-2' />
                 Run Audit
               </>
             )}
           </Button>
         </div>
-        
+
         {lastRun && (
-          <p className="text-sm text-muted-foreground">
+          <p className='text-sm text-muted-foreground'>
             Last run: {lastRun.toLocaleTimeString()}
           </p>
         )}
       </CardHeader>
-      
-      <CardContent className="space-y-4">
+
+      <CardContent className='space-y-4'>
         {/* Summary */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-3 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">{successCount}</div>
-            <div className="text-sm text-green-600">Passed</div>
+        <div className='grid grid-cols-3 gap-4'>
+          <div className='text-center p-3 bg-green-50 rounded-lg'>
+            <div className='text-2xl font-bold text-green-600'>
+              {successCount}
+            </div>
+            <div className='text-sm text-green-600'>Passed</div>
           </div>
-          <div className="text-center p-3 bg-yellow-50 rounded-lg">
-            <div className="text-2xl font-bold text-yellow-600">{warningCount}</div>
-            <div className="text-sm text-yellow-600">Warnings</div>
+          <div className='text-center p-3 bg-yellow-50 rounded-lg'>
+            <div className='text-2xl font-bold text-yellow-600'>
+              {warningCount}
+            </div>
+            <div className='text-sm text-yellow-600'>Warnings</div>
           </div>
-          <div className="text-center p-3 bg-red-50 rounded-lg">
-            <div className="text-2xl font-bold text-red-600">{errorCount}</div>
-            <div className="text-sm text-red-600">Errors</div>
+          <div className='text-center p-3 bg-red-50 rounded-lg'>
+            <div className='text-2xl font-bold text-red-600'>{errorCount}</div>
+            <div className='text-sm text-red-600'>Errors</div>
           </div>
         </div>
 
         {/* Issues List */}
-        <div className="space-y-3">
+        <div className='space-y-3'>
           {issues.map((issue, index) => (
             <Alert key={index}>
-              <div className="flex items-start space-x-3">
+              <div className='flex items-start space-x-3'>
                 {getIssueIcon(issue.type)}
-                <div className="flex-1">
-                  <div className="flex items-center">
-                    <span className="font-medium">{issue.component}</span>
+                <div className='flex-1'>
+                  <div className='flex items-center'>
+                    <span className='font-medium'>{issue.component}</span>
                     {getIssueBadge(issue.type)}
                     {getPriorityBadge(issue.priority)}
                   </div>
-                  <AlertDescription className="mt-1">
+                  <AlertDescription className='mt-1'>
                     {issue.issue}
                     {issue.fix && (
-                      <div className="mt-1 text-sm font-medium text-blue-600">
+                      <div className='mt-1 text-sm font-medium text-blue-600'>
                         Fix: {issue.fix}
                       </div>
                     )}
@@ -201,30 +202,38 @@ export const ResponsiveAuditReport: React.FC = () => {
         </div>
 
         {/* Recommendations */}
-        <Card className="bg-blue-50">
+        <Card className='bg-blue-50'>
           <CardHeader>
-            <CardTitle className="text-sm">Phase 6 Completion Status</CardTitle>
+            <CardTitle className='text-sm'>Phase 6 Completion Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <span>✅ Breakpoint standardization (mobile: 768px, tablet: 1024px, desktop: 1024px+)</span>
+            <div className='space-y-2 text-sm'>
+              <div className='flex items-center space-x-2'>
+                <CheckCircle className='h-4 w-4 text-green-600' />
+                <span>
+                  ✅ Breakpoint standardization (mobile: 768px, tablet: 1024px,
+                  desktop: 1024px+)
+                </span>
               </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <span>✅ Core layout components using useOptimizedResponsive</span>
+              <div className='flex items-center space-x-2'>
+                <CheckCircle className='h-4 w-4 text-green-600' />
+                <span>
+                  ✅ Core layout components using useOptimizedResponsive
+                </span>
               </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+              <div className='flex items-center space-x-2'>
+                <CheckCircle className='h-4 w-4 text-green-600' />
                 <span>✅ AdminSidebar props interface standardized</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                <span>⚠️ Some legacy components need migration to useOptimizedResponsive</span>
+              <div className='flex items-center space-x-2'>
+                <AlertTriangle className='h-4 w-4 text-yellow-600' />
+                <span>
+                  ⚠️ Some legacy components need migration to
+                  useOptimizedResponsive
+                </span>
               </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+              <div className='flex items-center space-x-2'>
+                <CheckCircle className='h-4 w-4 text-green-600' />
                 <span>✅ Navigation patterns standardized across layouts</span>
               </div>
             </div>

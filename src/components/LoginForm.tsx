@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -31,28 +30,28 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+    <form onSubmit={handleSubmit} className='space-y-4'>
+      <div className='space-y-2'>
+        <Label htmlFor='email'>Email</Label>
         <Input
-          id="email"
-          type="email"
+          id='email'
+          type='email'
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           required
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Mật khẩu</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='password'>Mật khẩu</Label>
         <Input
-          id="password"
-          type="password"
+          id='password'
+          type='password'
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           required
         />
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type='submit' className='w-full' disabled={loading}>
         {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
       </Button>
     </form>

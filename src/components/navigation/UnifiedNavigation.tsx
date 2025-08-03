@@ -19,7 +19,9 @@ interface UnifiedNavigationProps {
  * - Desktop/Tablet: TopBar + SideNavigation
  * - Role-based navigation items (User/Club/Admin)
  */
-export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({ children }) => {
+export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({
+  children,
+}) => {
   const { user } = useAuth();
   const { isMobile, isTablet, isDesktop } = useOptimizedResponsive();
   const { isAdmin } = useAdminCheck();
@@ -27,39 +29,37 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({ children }
 
   // Determine user role for navigation config
   const userRole = isAdmin ? 'admin' : isClubOwner ? 'club' : 'user';
-  
+
   // Get device type for layout
   const deviceType = isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
-  
+
   // Get navigation configuration
   const navConfig = getNavigationConfig(userRole, deviceType);
 
   // If user is not authenticated, show minimal navigation
   if (!user) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className='min-h-screen bg-background'>
         <TopBar showAuthButtons={true} />
-        <main className="pt-16">
-          {children}
-        </main>
+        <main className='pt-16'>{children}</main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className='min-h-screen bg-background'>
       {/* Top Bar - Always present */}
-      <TopBar 
+      <TopBar
         userRole={userRole}
         showSearch={navConfig.showSearch}
         showNotifications={navConfig.showNotifications}
         showUserMenu={true}
       />
 
-      <div className="flex">
+      <div className='flex'>
         {/* Side Navigation - Desktop/Tablet only */}
         {navConfig.showSidebar && (
-          <SideNavigation 
+          <SideNavigation
             userRole={userRole}
             items={navConfig.sidebarItems}
             collapsed={false}
@@ -67,7 +67,7 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({ children }
         )}
 
         {/* Main Content */}
-        <main 
+        <main
           className={`
             flex-1 
             ${navConfig.showSidebar ? 'ml-64' : ''}
@@ -81,9 +81,7 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({ children }
 
       {/* Bottom Navigation - Mobile only */}
       {navConfig.showBottomNav && (
-        <BottomNavigation 
-          items={navConfig.bottomNavItems}
-        />
+        <BottomNavigation items={navConfig.bottomNavItems} />
       )}
     </div>
   );

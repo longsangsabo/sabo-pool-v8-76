@@ -13,7 +13,13 @@ export interface SaboChallenge {
   handicap_1_rank: number;
   handicap_05_rank: number;
   message?: string;
-  status: 'pending' | 'accepted' | 'declined' | 'ongoing' | 'completed' | 'expired';
+  status:
+    | 'pending'
+    | 'accepted'
+    | 'declined'
+    | 'ongoing'
+    | 'completed'
+    | 'expired';
   created_at: string;
   expires_at: string;
   accepted_at?: string;
@@ -21,7 +27,7 @@ export interface SaboChallenge {
   challenger_final_score?: number;
   opponent_final_score?: number;
   winner_id?: string;
-  
+
   // Relations
   challenger?: {
     id: string;
@@ -83,27 +89,35 @@ export function useSaboChallenges() {
   };
 
   // Helper: Calculate handicap between two players
-  const calculateHandicap = (challengerRank: string, opponentRank: string, stake: number) => {
+  const calculateHandicap = (
+    challengerRank: string,
+    opponentRank: string,
+    stake: number
+  ) => {
     const challenger = parseRank(challengerRank);
     const opponent = parseRank(opponentRank);
-    
+
     const rankDiff = Math.abs(challenger.mainIndex - opponent.mainIndex);
     if (rankDiff > 1) {
-      throw new Error(`Invalid challenge: Can only challenge within ±1 main rank. Difference: ${rankDiff}`);
+      throw new Error(
+        `Invalid challenge: Can only challenge within ±1 main rank. Difference: ${rankDiff}`
+      );
     }
 
     let handicapChallenger = 0;
     let handicapOpponent = 0;
 
     if (rankDiff === 1) {
-      const handicapAmount = HANDICAP_TABLE[stake as keyof typeof HANDICAP_TABLE].main_rank;
+      const handicapAmount =
+        HANDICAP_TABLE[stake as keyof typeof HANDICAP_TABLE].main_rank;
       if (challenger.mainIndex > opponent.mainIndex) {
         handicapOpponent = handicapAmount;
       } else {
         handicapChallenger = handicapAmount;
       }
     } else if (rankDiff === 0 && challenger.hasPlus !== opponent.hasPlus) {
-      const handicapAmount = HANDICAP_TABLE[stake as keyof typeof HANDICAP_TABLE].sub_rank;
+      const handicapAmount =
+        HANDICAP_TABLE[stake as keyof typeof HANDICAP_TABLE].sub_rank;
       if (challenger.hasPlus && !opponent.hasPlus) {
         handicapOpponent = handicapAmount;
       } else if (!challenger.hasPlus && opponent.hasPlus) {
@@ -132,7 +146,8 @@ export function useSaboChallenges() {
 
       const { data, error: fetchError } = await supabase
         .from('challenges')
-        .select(`
+        .select(
+          `
           *,
           challenger:profiles!challenger_id(
             user_id, full_name, display_name, avatar_url
@@ -140,51 +155,59 @@ export function useSaboChallenges() {
           opponent:profiles!opponent_id(
             user_id, full_name, display_name, avatar_url
           )
-        `)
+        `
+        )
         .or(`challenger_id.eq.${user.id},opponent_id.eq.${user.id}`)
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
-      
+
       // Transform to SaboChallenge format with proper type casting
-      const transformedData: SaboChallenge[] = (data || []).map((item: any) => ({
-        id: item.id,
-        challenger_id: item.challenger_id,
-        opponent_id: item.opponent_id || '',
-        stake_amount: item.bet_points || 0,
-        race_to: item.race_to || 8,
-        handicap_1_rank: item.handicap_1_rank || 0,
-        handicap_05_rank: item.handicap_05_rank || 0,
-        message: item.message,
-        status: item.status as any,
-        created_at: item.created_at,
-        expires_at: item.expires_at || '',
-        accepted_at: item.responded_at,
-        score_confirmation_timestamp: item.score_confirmation_timestamp,
-        challenger_final_score: item.challenger_final_score || 0,
-        opponent_final_score: item.opponent_final_score || 0,
-        winner_id: undefined, // Not in challenges table yet
-        challenger: item.challenger ? {
-          id: item.challenger.user_id,
-          full_name: item.challenger.full_name,
-          display_name: item.challenger.display_name,
-          current_elo: 1000, // Default value
-          current_rank: 'K', // Default value
-          avatar_url: item.challenger.avatar_url,
-        } : undefined,
-        opponent: item.opponent ? {
-          id: item.opponent.user_id,
-          full_name: item.opponent.full_name,
-          display_name: item.opponent.display_name,
-          current_elo: 1000, // Default value
-          current_rank: 'K', // Default value
-          avatar_url: item.opponent.avatar_url,
-        } : undefined,
-      }));
-      
+      const transformedData: SaboChallenge[] = (data || []).map(
+        (item: any) => ({
+          id: item.id,
+          challenger_id: item.challenger_id,
+          opponent_id: item.opponent_id || '',
+          stake_amount: item.bet_points || 0,
+          race_to: item.race_to || 8,
+          handicap_1_rank: item.handicap_1_rank || 0,
+          handicap_05_rank: item.handicap_05_rank || 0,
+          message: item.message,
+          status: item.status as any,
+          created_at: item.created_at,
+          expires_at: item.expires_at || '',
+          accepted_at: item.responded_at,
+          score_confirmation_timestamp: item.score_confirmation_timestamp,
+          challenger_final_score: item.challenger_final_score || 0,
+          opponent_final_score: item.opponent_final_score || 0,
+          winner_id: undefined, // Not in challenges table yet
+          challenger: item.challenger
+            ? {
+                id: item.challenger.user_id,
+                full_name: item.challenger.full_name,
+                display_name: item.challenger.display_name,
+                current_elo: 1000, // Default value
+                current_rank: 'K', // Default value
+                avatar_url: item.challenger.avatar_url,
+              }
+            : undefined,
+          opponent: item.opponent
+            ? {
+                id: item.opponent.user_id,
+                full_name: item.opponent.full_name,
+                display_name: item.opponent.display_name,
+                current_elo: 1000, // Default value
+                current_rank: 'K', // Default value
+                avatar_url: item.opponent.avatar_url,
+              }
+            : undefined,
+        })
+      );
+
       setChallenges(transformedData);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch challenges';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch challenges';
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -198,12 +221,15 @@ export function useSaboChallenges() {
 
     try {
       if (!validateStake(challengeData.stake_amount)) {
-        throw new Error('Invalid stake amount. Must be 100, 200, 300, 400, 500, or 600 SPA');
+        throw new Error(
+          'Invalid stake amount. Must be 100, 200, 300, 400, 500, or 600 SPA'
+        );
       }
 
       // Calculate race-to (simplified without rank checking for now)
-      const raceTo = RACE_TO_TABLE[challengeData.stake_amount as keyof typeof RACE_TO_TABLE];
-      
+      const raceTo =
+        RACE_TO_TABLE[challengeData.stake_amount as keyof typeof RACE_TO_TABLE];
+
       // Default handicap values for now (can be enhanced later)
       const handicapChallenger = 0;
       const handicapOpponent = 0;
@@ -227,7 +253,8 @@ export function useSaboChallenges() {
       const { data, error: insertError } = await supabase
         .from('challenges')
         .insert([newChallenge])
-        .select(`
+        .select(
+          `
           *,
           challenger:profiles!challenger_id(
             user_id, full_name, display_name, avatar_url
@@ -235,7 +262,8 @@ export function useSaboChallenges() {
           opponent:profiles!opponent_id(
             user_id, full_name, display_name, avatar_url
           )
-        `)
+        `
+        )
         .single();
 
       if (insertError) throw insertError;
@@ -252,31 +280,40 @@ export function useSaboChallenges() {
         message: (data as any).message || data.challenge_message || '',
         status: data.status as any,
         created_at: data.created_at,
-        expires_at: (data as any).expires_at || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        challenger: (data as any).challenger ? {
-          id: (data as any).challenger.user_id,
-          full_name: (data as any).challenger.full_name,
-          display_name: (data as any).challenger.display_name,
-          current_elo: 1000,
-          current_rank: 'K',
-          avatar_url: (data as any).challenger.avatar_url,
-        } : undefined,
-        opponent: (data as any).opponent ? {
-          id: (data as any).opponent.user_id,
-          full_name: (data as any).opponent.full_name,
-          display_name: (data as any).opponent.display_name,
-          current_elo: 1000,
-          current_rank: 'K',
-          avatar_url: (data as any).opponent.avatar_url,
-        } : undefined,
+        expires_at:
+          (data as any).expires_at ||
+          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        challenger: (data as any).challenger
+          ? {
+              id: (data as any).challenger.user_id,
+              full_name: (data as any).challenger.full_name,
+              display_name: (data as any).challenger.display_name,
+              current_elo: 1000,
+              current_rank: 'K',
+              avatar_url: (data as any).challenger.avatar_url,
+            }
+          : undefined,
+        opponent: (data as any).opponent
+          ? {
+              id: (data as any).opponent.user_id,
+              full_name: (data as any).opponent.full_name,
+              display_name: (data as any).opponent.display_name,
+              current_elo: 1000,
+              current_rank: 'K',
+              avatar_url: (data as any).opponent.avatar_url,
+            }
+          : undefined,
       };
 
       setChallenges(prev => [transformedChallenge, ...prev]);
-      toast.success(`Challenge created! Race-to ${raceTo} with handicap: You ${handicapChallenger} - Opponent ${handicapOpponent}`);
-      
+      toast.success(
+        `Challenge created! Race-to ${raceTo} with handicap: You ${handicapChallenger} - Opponent ${handicapOpponent}`
+      );
+
       return transformedChallenge;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create challenge';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to create challenge';
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -302,10 +339,14 @@ export function useSaboChallenges() {
       if (error) throw error;
       if (!data) throw new Error('Challenge not found or already processed');
 
-      setChallenges(prev => 
-        prev.map(challenge => 
-          challenge.id === challengeId 
-            ? { ...challenge, status: 'accepted', accepted_at: data.responded_at }
+      setChallenges(prev =>
+        prev.map(challenge =>
+          challenge.id === challengeId
+            ? {
+                ...challenge,
+                status: 'accepted',
+                accepted_at: data.responded_at,
+              }
             : challenge
         )
       );
@@ -313,7 +354,8 @@ export function useSaboChallenges() {
       toast.success('Challenge accepted!');
       return data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to accept challenge';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to accept challenge';
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }

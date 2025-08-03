@@ -1,14 +1,13 @@
-
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Trophy, 
-  Building2, 
-  CreditCard, 
-  BarChart3, 
-  Settings 
+import {
+  LayoutDashboard,
+  Users,
+  Trophy,
+  Building2,
+  CreditCard,
+  BarChart3,
+  Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,26 +25,27 @@ export const AdminTabletNavigation: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-safe-bottom">
-      <div className="flex justify-around items-center py-3 max-w-6xl mx-auto">
-        {tabletNavItems.map((item) => {
+    <nav className='fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-safe-bottom'>
+      <div className='flex justify-around items-center py-3 max-w-6xl mx-auto'>
+        {tabletNavItems.map(item => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path || 
-                         (item.path !== '/admin' && location.pathname.startsWith(item.path));
+          const isActive =
+            location.pathname === item.path ||
+            (item.path !== '/admin' && location.pathname.startsWith(item.path));
 
           return (
             <NavLink
               key={item.path}
               to={item.path}
               className={cn(
-                "flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors",
+                'flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors',
                 isActive
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? 'text-primary bg-primary/10'
+                  : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-sm font-medium">{item.label}</span>
+              <Icon className='h-5 w-5' />
+              <span className='text-sm font-medium'>{item.label}</span>
             </NavLink>
           );
         })}

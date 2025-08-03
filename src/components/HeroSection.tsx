@@ -20,10 +20,10 @@ const HeroSection = () => {
         {/* Logo area */}
         <div className='mb-8'>
           <div className='flex justify-center mb-6'>
-            <img 
-              src="/lovable-uploads/5edec650-8645-4f77-a54a-e6d9bfc42ee6.png" 
-              alt="SABO ARENA Logo"
-              className="h-20 md:h-24 w-auto object-contain"
+            <img
+              src='/lovable-uploads/5edec650-8645-4f77-a54a-e6d9bfc42ee6.png'
+              alt='SABO ARENA Logo'
+              className='h-20 md:h-24 w-auto object-contain'
             />
           </div>
         </div>

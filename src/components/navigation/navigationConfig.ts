@@ -1,8 +1,8 @@
-import { 
-  Home, 
-  Swords, 
-  Trophy, 
-  Users, 
+import {
+  Home,
+  Swords,
+  Trophy,
+  Users,
   User,
   Calendar,
   Wallet,
@@ -24,7 +24,7 @@ import {
   FileText,
   Zap,
   Code,
-  Bot
+  Bot,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -49,56 +49,164 @@ export interface NavigationConfig {
 // ===== USER NAVIGATION ITEMS =====
 export const USER_NAV_ITEMS: NavigationItem[] = [
   { path: '/dashboard', label: 'Trang chủ', icon: Home, section: 'main' },
-  { path: '/challenges', label: 'Thách đấu', icon: Swords, badge: true, section: 'main' },
+  {
+    path: '/challenges',
+    label: 'Thách đấu',
+    icon: Swords,
+    badge: true,
+    section: 'main',
+  },
   { path: '/tournaments', label: 'Giải đấu', icon: Trophy, section: 'main' },
   { path: '/leaderboard', label: 'BXH', icon: BarChart3, section: 'main' },
   { path: '/profile', label: 'Hồ sơ', icon: User, section: 'main' },
-  
+
   // Secondary items (sidebar only)
   { path: '/calendar', label: 'Lịch', icon: Calendar, section: 'secondary' },
   { path: '/wallet', label: 'Ví', icon: Wallet, section: 'secondary' },
-  { path: '/notifications', label: 'Thông báo', icon: Bell, badge: true, section: 'secondary' },
+  {
+    path: '/notifications',
+    label: 'Thông báo',
+    icon: Bell,
+    badge: true,
+    section: 'secondary',
+  },
   { path: '/settings', label: 'Cài đặt', icon: Settings, section: 'secondary' },
 ];
 
 // ===== CLUB OWNER NAVIGATION ITEMS =====
 export const CLUB_NAV_ITEMS: NavigationItem[] = [
-  { path: '/club-management', label: 'Dashboard CLB', icon: LayoutDashboard, section: 'main' },
-  { path: '/club-management/tournaments', label: 'Giải đấu', icon: Trophy, section: 'main' },
-  { path: '/club-management/members', label: 'Thành viên', icon: Users, section: 'main' },
-  { path: '/club-management/schedule', label: 'Lịch trình', icon: Calendar, section: 'main' },
-  { path: '/club-management/settings', label: 'Cài đặt CLB', icon: Settings, section: 'main' },
-  
+  {
+    path: '/club-management',
+    label: 'Dashboard CLB',
+    icon: LayoutDashboard,
+    section: 'main',
+  },
+  {
+    path: '/club-management/tournaments',
+    label: 'Giải đấu',
+    icon: Trophy,
+    section: 'main',
+  },
+  {
+    path: '/club-management/members',
+    label: 'Thành viên',
+    icon: Users,
+    section: 'main',
+  },
+  {
+    path: '/club-management/schedule',
+    label: 'Lịch trình',
+    icon: Calendar,
+    section: 'main',
+  },
+  {
+    path: '/club-management/settings',
+    label: 'Cài đặt CLB',
+    icon: Settings,
+    section: 'main',
+  },
+
   // User features still available
   { path: '/dashboard', label: 'Dashboard User', icon: Home, section: 'user' },
-  { path: '/challenges', label: 'Thách đấu', icon: Swords, badge: true, section: 'user' },
+  {
+    path: '/challenges',
+    label: 'Thách đấu',
+    icon: Swords,
+    badge: true,
+    section: 'user',
+  },
   { path: '/profile', label: 'Hồ sơ', icon: User, section: 'user' },
 ];
 
 // ===== ADMIN NAVIGATION ITEMS =====
 export const ADMIN_NAV_ITEMS: NavigationItem[] = [
   // Core admin functions
-  { path: '/admin', label: 'Dashboard Admin', icon: BarChart3, section: 'core' },
+  {
+    path: '/admin',
+    label: 'Dashboard Admin',
+    icon: BarChart3,
+    section: 'core',
+  },
   { path: '/admin/users', label: 'Người dùng', icon: Users, section: 'core' },
-  { path: '/admin/tournaments', label: 'Giải đấu', icon: Trophy, section: 'core' },
+  {
+    path: '/admin/tournaments',
+    label: 'Giải đấu',
+    icon: Trophy,
+    section: 'core',
+  },
   { path: '/admin/clubs', label: 'CLB', icon: Building, section: 'core' },
-  { path: '/admin/challenges', label: 'Thách đấu', icon: Target, section: 'core' },
-  
+  {
+    path: '/admin/challenges',
+    label: 'Thách đấu',
+    icon: Target,
+    section: 'core',
+  },
+
   // Management
-  { path: '/admin/transactions', label: 'Giao dịch', icon: Receipt, section: 'management' },
-  { path: '/admin/payments', label: 'Thanh toán', icon: DollarSign, section: 'management' },
-  { path: '/admin/analytics', label: 'Phân tích', icon: TrendingUp, section: 'management' },
-  { path: '/admin/reports', label: 'Báo cáo', icon: FileText, section: 'management' },
-  
+  {
+    path: '/admin/transactions',
+    label: 'Giao dịch',
+    icon: Receipt,
+    section: 'management',
+  },
+  {
+    path: '/admin/payments',
+    label: 'Thanh toán',
+    icon: DollarSign,
+    section: 'management',
+  },
+  {
+    path: '/admin/analytics',
+    label: 'Phân tích',
+    icon: TrendingUp,
+    section: 'management',
+  },
+  {
+    path: '/admin/reports',
+    label: 'Báo cáo',
+    icon: FileText,
+    section: 'management',
+  },
+
   // System
-  { path: '/admin/database', label: 'Database', icon: Database, section: 'system' },
-  { path: '/admin/automation', label: 'Tự động hóa', icon: Zap, section: 'system' },
-  { path: '/admin/development', label: 'Development', icon: Code, section: 'system' },
-  { path: '/admin/ai-assistant', label: 'AI Assistant', icon: Bot, section: 'system' },
-  { path: '/admin/settings', label: 'Cài đặt', icon: Settings, section: 'system' },
-  
+  {
+    path: '/admin/database',
+    label: 'Database',
+    icon: Database,
+    section: 'system',
+  },
+  {
+    path: '/admin/automation',
+    label: 'Tự động hóa',
+    icon: Zap,
+    section: 'system',
+  },
+  {
+    path: '/admin/development',
+    label: 'Development',
+    icon: Code,
+    section: 'system',
+  },
+  {
+    path: '/admin/ai-assistant',
+    label: 'AI Assistant',
+    icon: Bot,
+    section: 'system',
+  },
+  {
+    path: '/admin/settings',
+    label: 'Cài đặt',
+    icon: Settings,
+    section: 'system',
+  },
+
   // Emergency
-  { path: '/admin/emergency', label: 'Khẩn cấp', icon: AlertTriangle, section: 'emergency' },
+  {
+    path: '/admin/emergency',
+    label: 'Khẩn cấp',
+    icon: AlertTriangle,
+    section: 'emergency',
+  },
 ];
 
 // ===== DEVICE-SPECIFIC CONFIGURATIONS =====

@@ -19,7 +19,9 @@ const AdminAIAssistant = () => {
     return (
       <div className='flex items-center justify-center h-64'>
         <div className='text-center'>
-          <h2 className='text-2xl font-bold text-gray-900 mb-4'>{t('common.access_denied')}</h2>
+          <h2 className='text-2xl font-bold text-gray-900 mb-4'>
+            {t('common.access_denied')}
+          </h2>
           <p className='text-gray-600'>{t('common.no_permission')}</p>
         </div>
       </div>
@@ -27,15 +29,17 @@ const AdminAIAssistant = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">AI Admin Assistant</h1>
-        <p className="text-muted-foreground">
+    <div className='space-y-6'>
+      <div className='text-center mb-8'>
+        <h1 className='text-3xl font-bold text-foreground mb-2'>
+          AI Admin Assistant
+        </h1>
+        <p className='text-muted-foreground'>
           Trợ lý AI thông minh hỗ trợ quản lý và phân tích dữ liệu hệ thống
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className='max-w-4xl mx-auto'>
         <AIAdminAssistant />
       </div>
     </div>

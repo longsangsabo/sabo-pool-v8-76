@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
@@ -6,17 +5,19 @@ import { Notification } from '@/types/common';
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [deletedNotifications, setDeletedNotifications] = useState<Notification[]>([]);
+  const [deletedNotifications, setDeletedNotifications] = useState<
+    Notification[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
 
   const fetchNotifications = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       // Fetch active notifications (not deleted)
       const { data: activeData, error: activeError } = await supabase
@@ -41,21 +42,26 @@ export const useNotifications = () => {
       if (deletedError) throw deletedError;
 
       // Transform active notifications
-      const transformedNotifications: Notification[] = (activeData || []).map(notification => ({
-        id: notification.id,
-        user_id: notification.user_id,
-        title: notification.title,
-        message: notification.message,
-        type: notification.type,
-        created_at: notification.created_at,
-        read_at: notification.is_read ? notification.updated_at : undefined,
-        priority: (notification.priority as 'low' | 'medium' | 'high') || 'medium',
-        action_url: notification.action_url,
-        metadata: {},
-      }));
+      const transformedNotifications: Notification[] = (activeData || []).map(
+        notification => ({
+          id: notification.id,
+          user_id: notification.user_id,
+          title: notification.title,
+          message: notification.message,
+          type: notification.type,
+          created_at: notification.created_at,
+          read_at: notification.is_read ? notification.updated_at : undefined,
+          priority:
+            (notification.priority as 'low' | 'medium' | 'high') || 'medium',
+          action_url: notification.action_url,
+          metadata: {},
+        })
+      );
 
       // Transform deleted notifications
-      const transformedDeletedNotifications: Notification[] = (deletedData || []).map(notification => ({
+      const transformedDeletedNotifications: Notification[] = (
+        deletedData || []
+      ).map(notification => ({
         id: notification.id,
         user_id: notification.user_id,
         title: notification.title,
@@ -63,7 +69,8 @@ export const useNotifications = () => {
         type: notification.type,
         created_at: notification.created_at,
         read_at: notification.is_read ? notification.updated_at : undefined,
-        priority: (notification.priority as 'low' | 'medium' | 'high') || 'medium',
+        priority:
+          (notification.priority as 'low' | 'medium' | 'high') || 'medium',
         action_url: notification.action_url,
         metadata: {},
         deleted_at: notification.deleted_at,
@@ -107,9 +114,7 @@ export const useNotifications = () => {
     if (!user) return;
 
     try {
-      const unreadIds = notifications
-        .filter(n => !n.read_at)
-        .map(n => n.id);
+      const unreadIds = notifications.filter(n => !n.read_at).map(n => n.id);
 
       if (unreadIds.length === 0) return;
 
@@ -124,7 +129,9 @@ export const useNotifications = () => {
       const now = new Date().toISOString();
       setNotifications(prev =>
         prev.map(notification =>
-          notification.read_at ? notification : { ...notification, read_at: now }
+          notification.read_at
+            ? notification
+            : { ...notification, read_at: now }
         )
       );
     } catch (err: any) {
@@ -146,10 +153,15 @@ export const useNotifications = () => {
       if (error) throw error;
 
       // Move notification from active to deleted list
-      const deletedNotification = notifications.find(n => n.id === notificationId);
+      const deletedNotification = notifications.find(
+        n => n.id === notificationId
+      );
       if (deletedNotification) {
         setNotifications(prev => prev.filter(n => n.id !== notificationId));
-        setDeletedNotifications(prev => [...prev, { ...deletedNotification, deleted_at: new Date().toISOString() }]);
+        setDeletedNotifications(prev => [
+          ...prev,
+          { ...deletedNotification, deleted_at: new Date().toISOString() },
+        ]);
       }
     } catch (err: any) {
       console.error('Error deleting notification:', err);
@@ -169,10 +181,15 @@ export const useNotifications = () => {
       if (error) throw error;
 
       // Move notification from deleted to active list
-      const restoredNotification = deletedNotifications.find(n => n.id === notificationId);
+      const restoredNotification = deletedNotifications.find(
+        n => n.id === notificationId
+      );
       if (restoredNotification) {
-        setDeletedNotifications(prev => prev.filter(n => n.id !== notificationId));
-        const { deleted_at, ...cleanNotification } = restoredNotification as any;
+        setDeletedNotifications(prev =>
+          prev.filter(n => n.id !== notificationId)
+        );
+        const { deleted_at, ...cleanNotification } =
+          restoredNotification as any;
         setNotifications(prev => [cleanNotification, ...prev]);
       }
     } catch (err: any) {
@@ -192,7 +209,9 @@ export const useNotifications = () => {
 
       if (error) throw error;
 
-      setDeletedNotifications(prev => prev.filter(n => n.id !== notificationId));
+      setDeletedNotifications(prev =>
+        prev.filter(n => n.id !== notificationId)
+      );
     } catch (err: any) {
       console.error('Error permanently deleting notification:', err);
     }

@@ -42,18 +42,20 @@ export const useComprehensiveTournamentFix = () => {
     setIsChecking(true);
     try {
       console.log('🏥 Checking tournament advancement health...');
-      
-      const { data, error } = await supabase.rpc('check_tournament_advancement_health');
-      
+
+      const { data, error } = await supabase.rpc(
+        'check_tournament_advancement_health'
+      );
+
       if (error) {
         console.error('❌ Health check error:', error);
         toast.error('Lỗi khi kiểm tra sức khỏe tournaments');
         return null;
       }
-      
+
       const result = data as unknown as HealthCheckResult;
       console.log('📊 Health check results:', result);
-      
+
       const { statistics } = result;
       if (statistics.tournaments_with_issues > 0) {
         toast.warning(
@@ -62,7 +64,7 @@ export const useComprehensiveTournamentFix = () => {
       } else {
         toast.success('✅ Tất cả tournaments đều khỏe mạnh!');
       }
-      
+
       return result;
     } catch (error) {
       console.error('❌ Exception in health check:', error);
@@ -78,22 +80,24 @@ export const useComprehensiveTournamentFix = () => {
     try {
       console.log('🔧 Starting comprehensive tournament fix...');
       toast.loading('Đang sửa chữa tất cả tournaments có vấn đề...');
-      
-      const { data, error } = await supabase.rpc('fix_all_unadvanced_tournaments');
-      
+
+      const { data, error } = await supabase.rpc(
+        'fix_all_unadvanced_tournaments'
+      );
+
       if (error) {
         console.error('❌ Fix error:', error);
         toast.error('Lỗi khi sửa chữa tournaments');
         return null;
       }
-      
+
       const result = data as unknown as FixResult;
       console.log('🎯 Fix results:', result);
-      
+
       if (result.success) {
         const message = `✅ Đã kiểm tra ${result.total_tournaments_checked} tournaments, sửa thành công ${result.tournaments_fixed} tournaments`;
         toast.success(message);
-        
+
         // Show detailed results if any tournaments were fixed
         if (result.tournaments_fixed > 0) {
           console.log('📝 Fixed tournaments details:', result.details);
@@ -101,7 +105,7 @@ export const useComprehensiveTournamentFix = () => {
       } else {
         toast.error(`❌ Sửa chữa thất bại: ${result.message}`);
       }
-      
+
       return result;
     } catch (error) {
       console.error('❌ Exception in fix:', error);
@@ -114,17 +118,17 @@ export const useComprehensiveTournamentFix = () => {
 
   const runComprehensiveCheck = async () => {
     console.log('🚀 Running comprehensive tournament check and fix...');
-    
+
     // First check health
     const healthResult = await checkTournamentHealth();
     if (!healthResult) return;
-    
+
     // If there are issues, offer to fix them
     if (healthResult.statistics.tournaments_with_issues > 0) {
       const shouldFix = window.confirm(
         `Phát hiện ${healthResult.statistics.tournaments_with_issues} tournaments có vấn đề advancement. Bạn có muốn tự động sửa chữa không?`
       );
-      
+
       if (shouldFix) {
         await fixAllUnadvancedTournaments();
         // Check again after fixing
@@ -138,6 +142,6 @@ export const useComprehensiveTournamentFix = () => {
     isFixing,
     checkTournamentHealth,
     fixAllUnadvancedTournaments,
-    runComprehensiveCheck
+    runComprehensiveCheck,
   };
 };

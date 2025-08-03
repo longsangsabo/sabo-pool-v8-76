@@ -32,7 +32,7 @@ export const useTournamentService = () => {
     data: tournaments = [],
     isLoading: tournamentsLoading,
     error: tournamentsError,
-    refetch: refetchTournaments
+    refetch: refetchTournaments,
   } = useQuery({
     queryKey: ['tournaments'],
     queryFn: () => TournamentRepository.getTournaments(),
@@ -43,29 +43,29 @@ export const useTournamentService = () => {
   const createTournamentMutation = useMutation({
     mutationFn: async (tournamentData: any) => {
       if (!user?.id) throw new Error('Must be logged in');
-      
+
       return TournamentRepository.createTournament({
         ...tournamentData,
         created_by: user.id,
         status: TOURNAMENT_STATUS.REGISTRATION_OPEN,
-        current_participants: 0
+        current_participants: 0,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tournaments'] });
       toast.success('Giải đấu đã được tạo thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Create tournament error:', error);
       toast.error('Có lỗi xảy ra khi tạo giải đấu');
-    }
+    },
   });
 
   // Register for tournament mutation
   const registerMutation = useMutation({
     mutationFn: async (tournamentId: string) => {
       if (!user?.id) throw new Error('Must be logged in');
-      
+
       return TournamentRepository.registerPlayer(tournamentId);
     },
     onSuccess: () => {
@@ -73,17 +73,17 @@ export const useTournamentService = () => {
       queryClient.invalidateQueries({ queryKey: ['tournament-registrations'] });
       toast.success('Đăng ký giải đấu thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Registration error:', error);
       toast.error('Có lỗi khi đăng ký giải đấu');
-    }
+    },
   });
 
   // Cancel registration mutation
   const cancelRegistrationMutation = useMutation({
     mutationFn: async (tournamentId: string) => {
       if (!user?.id) throw new Error('Must be logged in');
-      
+
       return TournamentRepository.cancelRegistration(tournamentId);
     },
     onSuccess: () => {
@@ -91,16 +91,19 @@ export const useTournamentService = () => {
       queryClient.invalidateQueries({ queryKey: ['tournament-registrations'] });
       toast.success('Đã hủy đăng ký giải đấu');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Cancel registration error:', error);
       toast.error('Có lỗi khi hủy đăng ký');
-    }
+    },
   });
 
   // Calculate tournament rewards
-  const calculateTournamentRewards = useCallback((position: TournamentPosition, playerRank: RankCode) => {
-    return RankingService.calculateTournamentRewards(position, playerRank);
-  }, []);
+  const calculateTournamentRewards = useCallback(
+    (position: TournamentPosition, playerRank: RankCode) => {
+      return RankingService.calculateTournamentRewards(position, playerRank);
+    },
+    []
+  );
 
   // Calculate all possible rewards for display
   const getAllTournamentRewards = useCallback((playerRank: RankCode) => {
@@ -108,13 +111,16 @@ export const useTournamentService = () => {
     return positions.map(position => ({
       position,
       positionDisplay: RankingService.formatPosition(position),
-      ...RankingService.calculateTournamentRewards(position, playerRank)
+      ...RankingService.calculateTournamentRewards(position, playerRank),
     }));
   }, []);
 
   // Generate tournament bracket
   const generateBracketMutation = useMutation({
-    mutationFn: async ({ tournamentId, seedingMethod = 'elo_ranking' }: {
+    mutationFn: async ({
+      tournamentId,
+      seedingMethod = 'elo_ranking',
+    }: {
       tournamentId: string;
       seedingMethod?: string;
     }) => {
@@ -124,17 +130,17 @@ export const useTournamentService = () => {
       queryClient.invalidateQueries({ queryKey: ['tournament-brackets'] });
       toast.success('Bracket đã được tạo thành công!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Generate bracket error:', error);
       toast.error('Có lỗi khi tạo bracket');
-    }
+    },
   });
 
   // Finalize tournament results
   const finalizeTournamentMutation = useMutation({
-    mutationFn: async ({ 
-      tournamentId, 
-      results 
+    mutationFn: async ({
+      tournamentId,
+      results,
     }: {
       tournamentId: string;
       results: Array<{
@@ -148,18 +154,22 @@ export const useTournamentService = () => {
     }) => {
       // Calculate rewards for each player using RankingService
       const resultsWithRewards = results.map(result => {
-        const position = RankingService.getTournamentPositions().find(pos => {
-          const positionRank = result.final_position;
-          if (pos === 'CHAMPION') return positionRank === 1;
-          if (pos === 'RUNNER_UP') return positionRank === 2;
-          if (pos === 'THIRD_PLACE') return positionRank === 3;
-          if (pos === 'FOURTH_PLACE') return positionRank === 4;
-          if (pos === 'TOP_8') return positionRank <= 8;
-          if (pos === 'TOP_16') return positionRank <= 16;
-          return true; // PARTICIPATION
-        }) || 'PARTICIPATION';
+        const position =
+          RankingService.getTournamentPositions().find(pos => {
+            const positionRank = result.final_position;
+            if (pos === 'CHAMPION') return positionRank === 1;
+            if (pos === 'RUNNER_UP') return positionRank === 2;
+            if (pos === 'THIRD_PLACE') return positionRank === 3;
+            if (pos === 'FOURTH_PLACE') return positionRank === 4;
+            if (pos === 'TOP_8') return positionRank <= 8;
+            if (pos === 'TOP_16') return positionRank <= 16;
+            return true; // PARTICIPATION
+          }) || 'PARTICIPATION';
 
-        const rewards = RankingService.calculateTournamentRewards(position, result.player_rank);
+        const rewards = RankingService.calculateTournamentRewards(
+          position,
+          result.player_rank
+        );
 
         return {
           tournament_id: tournamentId,
@@ -169,7 +179,7 @@ export const useTournamentService = () => {
           spa_earned: rewards.spaPoints,
           matches_played: result.matches_played,
           matches_won: result.matches_won,
-          matches_lost: result.matches_lost
+          matches_lost: result.matches_lost,
         };
       });
 
@@ -180,24 +190,26 @@ export const useTournamentService = () => {
       queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
       toast.success('Kết quả giải đấu đã được cập nhật!');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Finalize tournament error:', error);
       toast.error('Có lỗi khi cập nhật kết quả');
-    }
+    },
   });
 
   // Check user registration status
-  const checkUserRegistration = useCallback(async (tournamentId: string) => {
-    if (!user?.id) return null;
-    
-    try {
-      return await TournamentRepository.checkUserRegistration(tournamentId);
-    } catch (error) {
-      console.error('Check registration error:', error);
-      return null;
-    }
-  }, [user?.id]);
+  const checkUserRegistration = useCallback(
+    async (tournamentId: string) => {
+      if (!user?.id) return null;
 
+      try {
+        return await TournamentRepository.checkUserRegistration(tournamentId);
+      } catch (error) {
+        console.error('Check registration error:', error);
+        return null;
+      }
+    },
+    [user?.id]
+  );
 
   return {
     // Data
@@ -216,7 +228,7 @@ export const useTournamentService = () => {
     calculateTournamentRewards,
     getAllTournamentRewards,
     checkUserRegistration,
-    
+
     refetchTournaments,
 
     // Mutation states
@@ -224,6 +236,6 @@ export const useTournamentService = () => {
     isRegistering: registerMutation.isPending,
     isCancelling: cancelRegistrationMutation.isPending,
     isGeneratingBracket: generateBracketMutation.isPending,
-    isFinalizing: finalizeTournamentMutation.isPending
+    isFinalizing: finalizeTournamentMutation.isPending,
   };
 };

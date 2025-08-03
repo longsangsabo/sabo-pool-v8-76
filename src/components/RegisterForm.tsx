@@ -139,7 +139,9 @@ const RegisterForm = () => {
     console.log('Checking existing user with email:', email, 'phone:', phone);
 
     // Check email in auth.users through profiles
-    const { data: existingProfile, error: profileError } = await (supabase as any)
+    const { data: existingProfile, error: profileError } = await (
+      supabase as any
+    )
       .from('profiles')
       .select('user_id, phone')
       .or(`phone.eq.${phone}`)

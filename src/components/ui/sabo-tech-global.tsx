@@ -10,30 +10,25 @@ export interface TechCardProps {
   interactive?: boolean;
 }
 
-export const TechCard = React.forwardRef<HTMLDivElement, TechCardProps>(({ 
-  children, 
-  className, 
-  variant = 'default',
-  interactive = false 
-}, ref) => (
-  <div 
-    ref={ref}
-    className={cn(
-      'sabo-tech-card',
-      variant === 'premium' && 'tech-card-premium',
-      variant === 'active' && 'tech-card-active',
-      variant === 'disabled' && 'tech-card-disabled',
-      interactive && 'tech-card-interactive',
-      className
-    )}
-  >
-    <div className="tech-card-border"></div>
-    <div className="tech-card-content">
-      {children}
+export const TechCard = React.forwardRef<HTMLDivElement, TechCardProps>(
+  ({ children, className, variant = 'default', interactive = false }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'sabo-tech-card',
+        variant === 'premium' && 'tech-card-premium',
+        variant === 'active' && 'tech-card-active',
+        variant === 'disabled' && 'tech-card-disabled',
+        interactive && 'tech-card-interactive',
+        className
+      )}
+    >
+      <div className='tech-card-border'></div>
+      <div className='tech-card-content'>{children}</div>
+      <div className='tech-card-corners'></div>
     </div>
-    <div className="tech-card-corners"></div>
-  </div>
-));
+  )
+);
 
 TechCard.displayName = 'TechCard';
 
@@ -54,9 +49,9 @@ export const TechButton: React.FC<TechButtonProps> = ({
   size = 'md',
   disabled = false,
   className,
-  fullWidth = false
+  fullWidth = false,
 }) => (
-  <button 
+  <button
     className={cn(
       'sabo-tech-button',
       `tech-btn-${size}`,
@@ -68,9 +63,9 @@ export const TechButton: React.FC<TechButtonProps> = ({
     onClick={onClick}
     disabled={disabled}
   >
-    <div className="tech-btn-border"></div>
-    <span className="tech-btn-text">{children}</span>
-    <div className="tech-btn-glow"></div>
+    <div className='tech-btn-border'></div>
+    <span className='tech-btn-text'>{children}</span>
+    <div className='tech-btn-glow'></div>
   </button>
 );
 
@@ -91,23 +86,21 @@ export const TechInput: React.FC<TechInputProps> = ({
   type = 'text',
   className,
   disabled = false,
-  label
+  label,
 }) => (
   <div className={cn('sabo-tech-input', className)}>
-    {label && (
-      <label className="tech-input-label">{label}</label>
-    )}
-    <div className="tech-input-wrapper">
-      <div className="tech-input-border"></div>
-      <input 
-        className="tech-input-field"
+    {label && <label className='tech-input-label'>{label}</label>}
+    <div className='tech-input-wrapper'>
+      <div className='tech-input-border'></div>
+      <input
+        className='tech-input-field'
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         disabled={disabled}
       />
-      <div className="tech-input-corners"></div>
+      <div className='tech-input-corners'></div>
     </div>
   </div>
 );
@@ -123,22 +116,18 @@ export const TechHeader: React.FC<TechHeaderProps> = ({
   title,
   subtitle,
   className,
-  actions
+  actions,
 }) => (
   <div className={cn('sabo-tech-header', className)}>
-    <div className="tech-header-border"></div>
-    <div className="tech-header-content">
-      <div className="tech-header-titles">
-        <h1 className="tech-header-title">{title}</h1>
-        {subtitle && <p className="tech-header-subtitle">{subtitle}</p>}
+    <div className='tech-header-border'></div>
+    <div className='tech-header-content'>
+      <div className='tech-header-titles'>
+        <h1 className='tech-header-title'>{title}</h1>
+        {subtitle && <p className='tech-header-subtitle'>{subtitle}</p>}
       </div>
-      {actions && (
-        <div className="tech-header-actions">
-          {actions}
-        </div>
-      )}
+      {actions && <div className='tech-header-actions'>{actions}</div>}
     </div>
-    <div className="tech-header-circuit"></div>
+    <div className='tech-header-circuit'></div>
   </div>
 );
 
@@ -154,20 +143,20 @@ export interface TechNavigationProps {
 
 export const TechNavigation: React.FC<TechNavigationProps> = ({
   items,
-  onNavigate
+  onNavigate,
 }) => (
-  <div className="sabo-tech-navigation">
-    <div className="tech-nav-border"></div>
-    <div className="tech-nav-items">
+  <div className='sabo-tech-navigation'>
+    <div className='tech-nav-border'></div>
+    <div className='tech-nav-items'>
       {items.map((item, index) => (
-        <div 
+        <div
           key={index}
           className={cn('tech-nav-item', item.active && 'active')}
           onClick={() => onNavigate?.(item.path)}
         >
-          <div className="nav-item-glow"></div>
-          <div className="nav-item-icon">{item.icon}</div>
-          <span className="nav-item-label">{item.label}</span>
+          <div className='nav-item-glow'></div>
+          <div className='nav-item-icon'>{item.icon}</div>
+          <span className='nav-item-label'>{item.label}</span>
         </div>
       ))}
     </div>
@@ -187,16 +176,16 @@ export const TechStatCard: React.FC<TechStatCardProps> = ({
   value,
   icon,
   variant = 'primary',
-  className
+  className,
 }) => (
   <div className={cn('tech-stat-card', `tech-stat-${variant}`, className)}>
-    <div className="tech-stat-border"></div>
-    <div className="tech-stat-content">
-      {icon && <div className="tech-stat-icon">{icon}</div>}
-      <div className="tech-stat-value">{value}</div>
-      <div className="tech-stat-label">{label}</div>
+    <div className='tech-stat-border'></div>
+    <div className='tech-stat-content'>
+      {icon && <div className='tech-stat-icon'>{icon}</div>}
+      <div className='tech-stat-value'>{value}</div>
+      <div className='tech-stat-label'>{label}</div>
     </div>
-    <div className="tech-stat-glow"></div>
+    <div className='tech-stat-glow'></div>
   </div>
 );
 
@@ -215,9 +204,9 @@ export const TechListItem: React.FC<TechListItemProps> = ({
   active = false,
   className,
   leftIcon,
-  rightIcon
+  rightIcon,
 }) => (
-  <div 
+  <div
     className={cn(
       'tech-list-item',
       active && 'tech-list-item-active',
@@ -226,11 +215,11 @@ export const TechListItem: React.FC<TechListItemProps> = ({
     )}
     onClick={onClick}
   >
-    <div className="tech-list-border"></div>
-    <div className="tech-list-content">
-      {leftIcon && <div className="tech-list-icon-left">{leftIcon}</div>}
-      <div className="tech-list-main">{children}</div>
-      {rightIcon && <div className="tech-list-icon-right">{rightIcon}</div>}
+    <div className='tech-list-border'></div>
+    <div className='tech-list-content'>
+      {leftIcon && <div className='tech-list-icon-left'>{leftIcon}</div>}
+      <div className='tech-list-main'>{children}</div>
+      {rightIcon && <div className='tech-list-icon-right'>{rightIcon}</div>}
     </div>
   </div>
 );
@@ -248,27 +237,27 @@ export const TechModal: React.FC<TechModalProps> = ({
   onClose,
   title,
   children,
-  className
+  className,
 }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="tech-modal-overlay" onClick={onClose}>
-      <div 
+    <div className='tech-modal-overlay' onClick={onClose}>
+      <div
         className={cn('tech-modal', className)}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
-        <div className="tech-modal-border"></div>
-        <div className="tech-modal-content">
+        <div className='tech-modal-border'></div>
+        <div className='tech-modal-content'>
           {title && (
-            <div className="tech-modal-header">
-              <h2 className="tech-modal-title">{title}</h2>
-              <button className="tech-modal-close" onClick={onClose}>×</button>
+            <div className='tech-modal-header'>
+              <h2 className='tech-modal-title'>{title}</h2>
+              <button className='tech-modal-close' onClick={onClose}>
+                ×
+              </button>
             </div>
           )}
-          <div className="tech-modal-body">
-            {children}
-          </div>
+          <div className='tech-modal-body'>{children}</div>
         </div>
       </div>
     </div>

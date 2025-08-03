@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  User, 
-  Phone, 
-  MapPin, 
-  Award, 
-  CheckCircle, 
-  Clock, 
+import {
+  User,
+  Phone,
+  MapPin,
+  Award,
+  CheckCircle,
+  Clock,
   ArrowRight,
   Camera,
   Shield,
   Star,
-  Target
+  Target,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -52,7 +58,7 @@ const UserOnboardingFlow = () => {
     city: '',
     district: '',
     skill_level: 'beginner',
-    bio: ''
+    bio: '',
   });
   const [loading, setLoading] = useState(false);
   const [existingProfile, setExistingProfile] = useState<any>(null);
@@ -81,7 +87,7 @@ const UserOnboardingFlow = () => {
           city: '',
           district: '',
           skill_level: data.skill_level || 'beginner',
-          bio: data.bio || ''
+          bio: data.bio || '',
         });
       }
     } catch (error) {
@@ -90,110 +96,150 @@ const UserOnboardingFlow = () => {
   };
 
   const BasicInfoStep = () => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className='space-y-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div>
-          <label className="block text-sm font-medium mb-2">Họ và tên *</label>
+          <label className='block text-sm font-medium mb-2'>Họ và tên *</label>
           <Input
             value={profile.full_name}
-            onChange={(e) => setProfile(prev => ({ ...prev, full_name: e.target.value }))}
-            placeholder="Nhập họ và tên đầy đủ"
+            onChange={e =>
+              setProfile(prev => ({ ...prev, full_name: e.target.value }))
+            }
+            placeholder='Nhập họ và tên đầy đủ'
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Tên hiển thị *</label>
+          <label className='block text-sm font-medium mb-2'>
+            Tên hiển thị *
+          </label>
           <Input
             value={profile.display_name}
-            onChange={(e) => setProfile(prev => ({ ...prev, display_name: e.target.value }))}
-            placeholder="Tên hiển thị trong game"
+            onChange={e =>
+              setProfile(prev => ({ ...prev, display_name: e.target.value }))
+            }
+            placeholder='Tên hiển thị trong game'
           />
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium mb-2">Số điện thoại *</label>
+        <label className='block text-sm font-medium mb-2'>
+          Số điện thoại *
+        </label>
         <Input
           value={profile.phone}
-          onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
-          placeholder="Số điện thoại liên hệ"
+          onChange={e =>
+            setProfile(prev => ({ ...prev, phone: e.target.value }))
+          }
+          placeholder='Số điện thoại liên hệ'
         />
       </div>
       <div>
-        <label className="block text-sm font-medium mb-2">Giới thiệu bản thân</label>
+        <label className='block text-sm font-medium mb-2'>
+          Giới thiệu bản thân
+        </label>
         <Textarea
           value={profile.bio}
-          onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
-          placeholder="Kể về bản thân bạn, kinh nghiệm chơi bi-a..."
-          className="min-h-[100px]"
+          onChange={e => setProfile(prev => ({ ...prev, bio: e.target.value }))}
+          placeholder='Kể về bản thân bạn, kinh nghiệm chơi bi-a...'
+          className='min-h-[100px]'
         />
       </div>
     </div>
   );
 
   const LocationStep = () => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className='space-y-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div>
-          <label className="block text-sm font-medium mb-2">Thành phố *</label>
+          <label className='block text-sm font-medium mb-2'>Thành phố *</label>
           <select
             value={profile.city}
-            onChange={(e) => setProfile(prev => ({ ...prev, city: e.target.value }))}
-            className="w-full p-2 border rounded-md"
+            onChange={e =>
+              setProfile(prev => ({ ...prev, city: e.target.value }))
+            }
+            className='w-full p-2 border rounded-md'
           >
-            <option value="">Chọn thành phố</option>
-            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-            <option value="Hà Nội">Hà Nội</option>
-            <option value="Đà Nẵng">Đà Nẵng</option>
-            <option value="Cần Thơ">Cần Thơ</option>
-            <option value="Hải Phòng">Hải Phòng</option>
-            <option value="Nha Trang">Nha Trang</option>
-            <option value="Huế">Huế</option>
-            <option value="Vũng Tàu">Vũng Tàu</option>
+            <option value=''>Chọn thành phố</option>
+            <option value='Hồ Chí Minh'>Hồ Chí Minh</option>
+            <option value='Hà Nội'>Hà Nội</option>
+            <option value='Đà Nẵng'>Đà Nẵng</option>
+            <option value='Cần Thơ'>Cần Thơ</option>
+            <option value='Hải Phòng'>Hải Phòng</option>
+            <option value='Nha Trang'>Nha Trang</option>
+            <option value='Huế'>Huế</option>
+            <option value='Vũng Tàu'>Vũng Tàu</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Quận/Huyện *</label>
+          <label className='block text-sm font-medium mb-2'>Quận/Huyện *</label>
           <Input
             value={profile.district}
-            onChange={(e) => setProfile(prev => ({ ...prev, district: e.target.value }))}
-            placeholder="Nhập quận/huyện"
+            onChange={e =>
+              setProfile(prev => ({ ...prev, district: e.target.value }))
+            }
+            placeholder='Nhập quận/huyện'
           />
         </div>
       </div>
-      <div className="p-4 bg-muted/30 rounded-lg">
-        <p className="text-sm text-muted-foreground">
-          Thông tin vị trí giúp chúng tôi tìm kiếm đối thủ và câu lạc bộ gần bạn nhất.
+      <div className='p-4 bg-muted/30 rounded-lg'>
+        <p className='text-sm text-muted-foreground'>
+          Thông tin vị trí giúp chúng tôi tìm kiếm đối thủ và câu lạc bộ gần bạn
+          nhất.
         </p>
       </div>
     </div>
   );
 
   const SkillLevelStep = () => (
-    <div className="space-y-4">
-      <div className="grid gap-4">
+    <div className='space-y-4'>
+      <div className='grid gap-4'>
         {[
-          { value: 'beginner', title: 'Người mới', description: 'Mới bắt đầu chơi bi-a, đang học cơ bản' },
-          { value: 'intermediate', title: 'Trung bình', description: 'Đã chơi được 6 tháng - 2 năm, biết các kỹ thuật cơ bản' },
-          { value: 'advanced', title: 'Giỏi', description: 'Chơi được 2+ năm, thành thạo nhiều kỹ thuật' },
-          { value: 'expert', title: 'Chuyên nghiệp', description: 'Tham gia các giải đấu, có thể dạy người khác' }
-        ].map((level) => (
+          {
+            value: 'beginner',
+            title: 'Người mới',
+            description: 'Mới bắt đầu chơi bi-a, đang học cơ bản',
+          },
+          {
+            value: 'intermediate',
+            title: 'Trung bình',
+            description:
+              'Đã chơi được 6 tháng - 2 năm, biết các kỹ thuật cơ bản',
+          },
+          {
+            value: 'advanced',
+            title: 'Giỏi',
+            description: 'Chơi được 2+ năm, thành thạo nhiều kỹ thuật',
+          },
+          {
+            value: 'expert',
+            title: 'Chuyên nghiệp',
+            description: 'Tham gia các giải đấu, có thể dạy người khác',
+          },
+        ].map(level => (
           <button
             key={level.value}
-            onClick={() => setProfile(prev => ({ ...prev, skill_level: level.value }))}
+            onClick={() =>
+              setProfile(prev => ({ ...prev, skill_level: level.value }))
+            }
             className={`p-4 border rounded-lg text-left transition-colors ${
-              profile.skill_level === level.value 
-                ? 'border-primary bg-primary/5' 
+              profile.skill_level === level.value
+                ? 'border-primary bg-primary/5'
                 : 'border-gray-200 hover:bg-muted/50'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div className={`w-4 h-4 rounded-full border-2 ${
-                profile.skill_level === level.value 
-                  ? 'border-primary bg-primary' 
-                  : 'border-gray-300'
-              }`} />
+            <div className='flex items-center gap-3'>
+              <div
+                className={`w-4 h-4 rounded-full border-2 ${
+                  profile.skill_level === level.value
+                    ? 'border-primary bg-primary'
+                    : 'border-gray-300'
+                }`}
+              />
               <div>
-                <h4 className="font-medium">{level.title}</h4>
-                <p className="text-sm text-muted-foreground">{level.description}</p>
+                <h4 className='font-medium'>{level.title}</h4>
+                <p className='text-sm text-muted-foreground'>
+                  {level.description}
+                </p>
               </div>
             </div>
           </button>
@@ -203,34 +249,34 @@ const UserOnboardingFlow = () => {
   );
 
   const PhoneVerificationStep = () => (
-    <div className="space-y-4">
-      <div className="text-center">
-        <Phone className="w-12 h-12 mx-auto text-primary mb-4" />
-        <h3 className="text-lg font-semibold mb-2">Xác minh số điện thoại</h3>
-        <p className="text-muted-foreground mb-4">
+    <div className='space-y-4'>
+      <div className='text-center'>
+        <Phone className='w-12 h-12 mx-auto text-primary mb-4' />
+        <h3 className='text-lg font-semibold mb-2'>Xác minh số điện thoại</h3>
+        <p className='text-muted-foreground mb-4'>
           Chúng tôi đã gửi mã xác minh đến số {profile.phone}
         </p>
       </div>
-      
-      <div className="max-w-xs mx-auto">
+
+      <div className='max-w-xs mx-auto'>
         <Input
           value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value)}
-          placeholder="Nhập mã 6 số"
-          className="text-center text-2xl font-mono"
+          onChange={e => setVerificationCode(e.target.value)}
+          placeholder='Nhập mã 6 số'
+          className='text-center text-2xl font-mono'
           maxLength={6}
         />
       </div>
-      
-      <div className="text-center space-y-2">
+
+      <div className='text-center space-y-2'>
         <Button
-          variant="outline"
+          variant='outline'
           onClick={() => sendVerificationCode()}
           disabled={loading}
         >
           Gửi lại mã
         </Button>
-        <p className="text-sm text-muted-foreground">
+        <p className='text-sm text-muted-foreground'>
           Không nhận được mã? Kiểm tra tin nhắn rác hoặc thử lại sau 60s
         </p>
       </div>
@@ -238,29 +284,29 @@ const UserOnboardingFlow = () => {
   );
 
   const CompletionStep = () => (
-    <div className="text-center space-y-4">
-      <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-        <CheckCircle className="w-10 h-10 text-green-500" />
+    <div className='text-center space-y-4'>
+      <div className='w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center'>
+        <CheckCircle className='w-10 h-10 text-green-500' />
       </div>
-      <h3 className="text-xl font-semibold">Chào mừng đến với SPA!</h3>
-      <p className="text-muted-foreground">
+      <h3 className='text-xl font-semibold'>Chào mừng đến với SPA!</h3>
+      <p className='text-muted-foreground'>
         Hồ sơ của bạn đã được tạo thành công. Bây giờ bạn có thể:
       </p>
-      <div className="grid gap-3 text-left max-w-md mx-auto">
-        <div className="flex items-center gap-3">
-          <Target className="w-5 h-5 text-primary" />
+      <div className='grid gap-3 text-left max-w-md mx-auto'>
+        <div className='flex items-center gap-3'>
+          <Target className='w-5 h-5 text-primary' />
           <span>Tham gia thách đấu với người chơi khác</span>
         </div>
-        <div className="flex items-center gap-3">
-          <Award className="w-5 h-5 text-primary" />
+        <div className='flex items-center gap-3'>
+          <Award className='w-5 h-5 text-primary' />
           <span>Đăng ký các giải đấu</span>
         </div>
-        <div className="flex items-center gap-3">
-          <Star className="w-5 h-5 text-primary" />
+        <div className='flex items-center gap-3'>
+          <Star className='w-5 h-5 text-primary' />
           <span>Tích lũy điểm SPA và leo hạng</span>
         </div>
-        <div className="flex items-center gap-3">
-          <MapPin className="w-5 h-5 text-primary" />
+        <div className='flex items-center gap-3'>
+          <MapPin className='w-5 h-5 text-primary' />
           <span>Tìm kiếm câu lạc bộ gần bạn</span>
         </div>
       </div>
@@ -293,33 +339,53 @@ const UserOnboardingFlow = () => {
       id: 'basic_info',
       title: 'Thông tin cơ bản',
       description: 'Nhập thông tin cá nhân của bạn',
-      status: currentStep === 0 ? 'active' : currentStep > 0 ? 'completed' : 'pending',
+      status:
+        currentStep === 0
+          ? 'active'
+          : currentStep > 0
+            ? 'completed'
+            : 'pending',
       required: true,
-      component: <BasicInfoStep />
+      component: <BasicInfoStep />,
     },
     {
       id: 'location',
       title: 'Vị trí',
       description: 'Cho chúng tôi biết bạn ở đâu',
-      status: currentStep === 1 ? 'active' : currentStep > 1 ? 'completed' : 'pending',
+      status:
+        currentStep === 1
+          ? 'active'
+          : currentStep > 1
+            ? 'completed'
+            : 'pending',
       required: true,
-      component: <LocationStep />
+      component: <LocationStep />,
     },
     {
       id: 'skill_level',
       title: 'Trình độ chơi',
       description: 'Đánh giá kỹ năng bi-a của bạn',
-      status: currentStep === 2 ? 'active' : currentStep > 2 ? 'completed' : 'pending',
+      status:
+        currentStep === 2
+          ? 'active'
+          : currentStep > 2
+            ? 'completed'
+            : 'pending',
       required: true,
-      component: <SkillLevelStep />
+      component: <SkillLevelStep />,
     },
     {
       id: 'phone_verification',
       title: 'Xác minh SĐT',
       description: 'Xác minh số điện thoại để bảo mật',
-      status: currentStep === 3 ? 'active' : currentStep > 3 ? 'completed' : 'pending',
+      status:
+        currentStep === 3
+          ? 'active'
+          : currentStep > 3
+            ? 'completed'
+            : 'pending',
       required: true,
-      component: <PhoneVerificationStep />
+      component: <PhoneVerificationStep />,
     },
     {
       id: 'completion',
@@ -327,8 +393,8 @@ const UserOnboardingFlow = () => {
       description: 'Chào mừng bạn đến với SPA!',
       status: currentStep === 4 ? 'active' : 'pending',
       required: false,
-      component: <CompletionStep />
-    }
+      component: <CompletionStep />,
+    },
   ];
 
   const validateCurrentStep = () => {
@@ -378,7 +444,7 @@ const UserOnboardingFlow = () => {
         ...profile,
         email_verified: true,
         onboarding_completed: true,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (existingProfile) {
@@ -386,36 +452,30 @@ const UserOnboardingFlow = () => {
           .from('profiles')
           .update(profileData)
           .eq('user_id', user.id);
-        
+
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from('profiles')
-          .insert(profileData);
-        
+        const { error } = await supabase.from('profiles').insert(profileData);
+
         if (error) throw error;
 
         // Create initial wallet
-        await supabase
-          .from('wallets')
-          .insert({
-            user_id: user.id,
-            balance: 0,
-            points_balance: 100 // Welcome bonus
-          });
+        await supabase.from('wallets').insert({
+          user_id: user.id,
+          balance: 0,
+          points_balance: 100, // Welcome bonus
+        });
 
         // Create initial player ranking
-        await supabase
-          .from('player_rankings')
-          .insert({
-            user_id: user.id,
-            elo_points: 1000,
-            elo: 1000,
-            spa_points: 0,
-            total_matches: 0,
-            wins: 0,
-            losses: 0
-          });
+        await supabase.from('player_rankings').insert({
+          user_id: user.id,
+          elo_points: 1000,
+          elo: 1000,
+          spa_points: 0,
+          total_matches: 0,
+          wins: 0,
+          losses: 0,
+        });
       }
 
       toast.success('Đã lưu hồ sơ thành công!');
@@ -431,11 +491,11 @@ const UserOnboardingFlow = () => {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className='max-w-2xl mx-auto space-y-6'>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <User className='w-5 h-5' />
             Thiết lập hồ sơ người dùng
           </CardTitle>
           <CardDescription>
@@ -444,16 +504,16 @@ const UserOnboardingFlow = () => {
         </CardHeader>
         <CardContent>
           {/* Progress Bar */}
-          <div className="mb-6">
-            <div className="flex justify-between text-sm mb-2">
+          <div className='mb-6'>
+            <div className='flex justify-between text-sm mb-2'>
               <span>Tiến độ hoàn thành</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className='h-2' />
           </div>
 
           {/* Steps Overview */}
-          <div className="flex justify-between mb-8">
+          <div className='flex justify-between mb-8'>
             {steps.map((step, index) => (
               <div
                 key={step.id}
@@ -461,62 +521,70 @@ const UserOnboardingFlow = () => {
                   index < steps.length - 1 ? 'relative' : ''
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-                  step.status === 'completed' ? 'bg-green-500 text-white' :
-                  step.status === 'active' ? 'bg-primary text-white' :
-                  'bg-gray-200 text-gray-500'
-                }`}>
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
+                    step.status === 'completed'
+                      ? 'bg-green-500 text-white'
+                      : step.status === 'active'
+                        ? 'bg-primary text-white'
+                        : 'bg-gray-200 text-gray-500'
+                  }`}
+                >
                   {step.status === 'completed' ? (
-                    <CheckCircle className="w-4 h-4" />
+                    <CheckCircle className='w-4 h-4' />
                   ) : (
-                    <span className="text-xs font-bold">{index + 1}</span>
+                    <span className='text-xs font-bold'>{index + 1}</span>
                   )}
                 </div>
-                <span className="text-xs font-medium">{step.title}</span>
-                
+                <span className='text-xs font-medium'>{step.title}</span>
+
                 {index < steps.length - 1 && (
-                  <div className="absolute top-4 left-1/2 w-full h-0.5 bg-gray-200 -z-10" />
+                  <div className='absolute top-4 left-1/2 w-full h-0.5 bg-gray-200 -z-10' />
                 )}
               </div>
             ))}
           </div>
 
           {/* Current Step Content */}
-          <div className="mb-8">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">{currentStepData.title}</h3>
-              <p className="text-muted-foreground">{currentStepData.description}</p>
+          <div className='mb-8'>
+            <div className='mb-4'>
+              <h3 className='text-lg font-semibold'>{currentStepData.title}</h3>
+              <p className='text-muted-foreground'>
+                {currentStepData.description}
+              </p>
             </div>
             {currentStepData.component}
           </div>
 
           {/* Navigation Buttons */}
           {currentStep < steps.length - 1 && (
-            <div className="flex justify-between">
+            <div className='flex justify-between'>
               <Button
-                variant="outline"
+                variant='outline'
                 onClick={previousStep}
                 disabled={currentStep === 0}
               >
                 Quay lại
               </Button>
               <Button
-                onClick={currentStep === steps.length - 2 ? saveProfile : nextStep}
+                onClick={
+                  currentStep === steps.length - 2 ? saveProfile : nextStep
+                }
                 disabled={!validateCurrentStep() || loading}
               >
-                {loading ? 'Đang lưu...' : 
-                 currentStep === steps.length - 2 ? 'Hoàn tất' : 'Tiếp tục'}
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {loading
+                  ? 'Đang lưu...'
+                  : currentStep === steps.length - 2
+                    ? 'Hoàn tất'
+                    : 'Tiếp tục'}
+                <ArrowRight className='w-4 h-4 ml-2' />
               </Button>
             </div>
           )}
 
           {currentStep === steps.length - 1 && (
-            <div className="text-center">
-              <Button
-                onClick={() => window.location.href = '/'}
-                size="lg"
-              >
+            <div className='text-center'>
+              <Button onClick={() => (window.location.href = '/')} size='lg'>
                 Bắt đầu sử dụng SPA
               </Button>
             </div>

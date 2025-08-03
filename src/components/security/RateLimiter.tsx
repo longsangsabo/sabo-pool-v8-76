@@ -42,7 +42,9 @@ class RateLimiter {
     // Check if still blocked
     if (state.blockedUntil && now < state.blockedUntil) {
       const remainingTime = Math.ceil((state.blockedUntil - now) / 1000);
-      toast.error(`Bạn đã bị tạm khóa. Vui lòng thử lại sau ${remainingTime} giây`);
+      toast.error(
+        `Bạn đã bị tạm khóa. Vui lòng thử lại sau ${remainingTime} giây`
+      );
       return false;
     }
 
@@ -61,8 +63,12 @@ class RateLimiter {
     // Block if exceeded
     if (state.attempts > this.config.maxAttempts) {
       state.blockedUntil = now + this.config.blockDurationMs;
-      const blockDurationMinutes = Math.ceil(this.config.blockDurationMs / 60000);
-      toast.error(`Quá nhiều lần thử. Bạn đã bị tạm khóa trong ${blockDurationMinutes} phút`);
+      const blockDurationMinutes = Math.ceil(
+        this.config.blockDurationMs / 60000
+      );
+      toast.error(
+        `Quá nhiều lần thử. Bạn đã bị tạm khóa trong ${blockDurationMinutes} phút`
+      );
       return false;
     }
 
@@ -107,23 +113,35 @@ const apiLimiter = new RateLimiter({
 export const useRateLimit = (type: 'payment' | 'login' | 'api' = 'api') => {
   const getLimiter = () => {
     switch (type) {
-      case 'payment': return paymentLimiter;
-      case 'login': return loginLimiter;
-      default: return apiLimiter;
+      case 'payment':
+        return paymentLimiter;
+      case 'login':
+        return loginLimiter;
+      default:
+        return apiLimiter;
     }
   };
 
-  const checkLimit = useCallback((key: string = 'default') => {
-    return getLimiter().checkLimit(key);
-  }, [type]);
+  const checkLimit = useCallback(
+    (key: string = 'default') => {
+      return getLimiter().checkLimit(key);
+    },
+    [type]
+  );
 
-  const reset = useCallback((key: string = 'default') => {
-    getLimiter().reset(key);
-  }, [type]);
+  const reset = useCallback(
+    (key: string = 'default') => {
+      getLimiter().reset(key);
+    },
+    [type]
+  );
 
-  const getRemainingAttempts = useCallback((key: string = 'default') => {
-    return getLimiter().getRemainingAttempts(key);
-  }, [type]);
+  const getRemainingAttempts = useCallback(
+    (key: string = 'default') => {
+      return getLimiter().getRemainingAttempts(key);
+    },
+    [type]
+  );
 
   return { checkLimit, reset, getRemainingAttempts };
 };

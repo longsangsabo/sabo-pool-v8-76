@@ -1,9 +1,10 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface ScoreConfirmationEmailRequest {
@@ -19,7 +20,7 @@ interface ScoreConfirmationEmailRequest {
   action_type: 'score_entered' | 'score_confirmed' | 'club_final_confirmation';
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -41,13 +42,16 @@ serve(async (req) => {
       opponent_score,
       club_name,
       match_time,
-      action_type
+      action_type,
     }: ScoreConfirmationEmailRequest = await req.json();
 
     if (!challenge_id || !recipient_email || !recipient_name) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -56,7 +60,10 @@ serve(async (req) => {
       console.log('Email: Missing Resend API key, skipping email delivery');
       return new Response(
         JSON.stringify({ error: 'Email service not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -70,14 +77,14 @@ serve(async (req) => {
       opponent_score,
       club_name,
       match_time,
-      action_type
+      action_type,
     });
 
     // Send email using Resend
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
+        Authorization: `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -98,20 +105,22 @@ serve(async (req) => {
     console.log('Score confirmation email sent successfully:', result);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Score confirmation email sent successfully',
-        email_id: result.id 
+        email_id: result.id,
       }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
-
   } catch (error) {
     console.error('Error sending score confirmation email:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });
 
@@ -135,14 +144,17 @@ function generateEmailContent(params: {
     opponent_score,
     club_name,
     match_time,
-    action_type
+    action_type,
   } = params;
 
-  const baseUrl = Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
+  const baseUrl =
+    Deno.env.get('SITE_URL') || 'https://knxevbkkkiadgppxbphh.supabase.co';
   const challengeUrl = `${baseUrl}/challenges?tab=dang-dien-ra&highlight=${challenge_id}`;
-  
+
   const scoreDisplay = `${challenger_name}: ${challenger_score} - ${opponent_name}: ${opponent_score}`;
-  const timeDisplay = match_time ? new Date(match_time).toLocaleString('vi-VN') : 'Thời gian chưa xác định';
+  const timeDisplay = match_time
+    ? new Date(match_time).toLocaleString('vi-VN')
+    : 'Thời gian chưa xác định';
   const clubDisplay = club_name || 'CLB chưa xác định';
 
   let subject: string;

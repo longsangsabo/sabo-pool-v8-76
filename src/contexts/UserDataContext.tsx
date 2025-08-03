@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,7 +11,9 @@ interface UserData {
 
 const UserDataContext = createContext<UserData | undefined>(undefined);
 
-export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +54,9 @@ export const UserDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [user?.id]);
 
   return (
-    <UserDataContext.Provider value={{ profile, userProfile: profile, isLoading, error }}>
+    <UserDataContext.Provider
+      value={{ profile, userProfile: profile, isLoading, error }}
+    >
       {children}
     </UserDataContext.Provider>
   );

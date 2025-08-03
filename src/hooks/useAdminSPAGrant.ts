@@ -20,30 +20,34 @@ export const useAdminSPAGrant = () => {
   const { data: users = [], isLoading: isSearching } = useQuery({
     queryKey: ['admin-search-users', searchQuery],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       // Search users in profiles table instead of using non-existent function
       const { data, error } = await supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           user_id,
           full_name,
           display_name,
           phone,
           player_rankings!inner(spa_points)
-        `)
+        `
+        )
         .ilike('full_name', `%${searchQuery}%`)
         .limit(20);
 
       if (error) throw error;
-      
+
       return data?.map(profile => ({
         user_id: profile.user_id,
         full_name: profile.full_name || '',
         display_name: profile.display_name || '',
         phone: profile.phone || '',
-        current_spa: (profile.player_rankings as any)?.spa_points || 0
+        current_spa: (profile.player_rankings as any)?.spa_points || 0,
       })) as User[];
     },
     enabled: searchQuery.length >= 2,
@@ -54,13 +58,15 @@ export const useAdminSPAGrant = () => {
     mutationFn: async ({
       userId,
       amount,
-      reason
+      reason,
     }: {
       userId: string;
       amount: number;
       reason: string;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       // Use existing credit_spa_points function instead
@@ -68,7 +74,7 @@ export const useAdminSPAGrant = () => {
         p_user_id: userId,
         p_points: amount,
         p_description: reason,
-        p_admin_id: user.id
+        p_admin_id: user.id,
       });
 
       if (error) throw error;
@@ -77,24 +83,25 @@ export const useAdminSPAGrant = () => {
     onSuccess: (data, variables) => {
       const user = users.find(u => u.user_id === variables.userId);
       toast({
-        title: "Thành công",
+        title: 'Thành công',
         description: `Đã cấp ${variables.amount} SPA cho ${user?.full_name}`,
       });
-      
+
       // Refresh user search results
       queryClient.invalidateQueries({ queryKey: ['admin-search-users'] });
     },
     onError: (error: Error) => {
       toast({
-        title: "Lỗi",
-        description: error.message === 'Unauthorized: Not admin' 
-          ? 'Bạn không có quyền thực hiện thao tác này'
-          : error.message === 'User not found'
-          ? 'Không tìm thấy người dùng'
-          : error.message === 'Invalid amount'
-          ? 'Số điểm không hợp lệ'
-          : 'Có lỗi xảy ra khi cấp SPA',
-        variant: "destructive",
+        title: 'Lỗi',
+        description:
+          error.message === 'Unauthorized: Not admin'
+            ? 'Bạn không có quyền thực hiện thao tác này'
+            : error.message === 'User not found'
+              ? 'Không tìm thấy người dùng'
+              : error.message === 'Invalid amount'
+                ? 'Số điểm không hợp lệ'
+                : 'Có lỗi xảy ra khi cấp SPA',
+        variant: 'destructive',
       });
     },
   });

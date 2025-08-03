@@ -23,7 +23,10 @@ const HybridArenaProfile: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
-    if (tabParam && ['activities', 'basic', 'rank', 'club'].includes(tabParam)) {
+    if (
+      tabParam &&
+      ['activities', 'basic', 'rank', 'club'].includes(tabParam)
+    ) {
       setActiveTab(tabParam);
     }
   }, []);
@@ -49,9 +52,9 @@ const HybridArenaProfile: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="profile-page-arena">
-        <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className='profile-page-arena'>
+        <div className='flex justify-center items-center min-h-screen'>
+          <Loader2 className='w-8 h-8 animate-spin text-primary' />
         </div>
       </div>
     );
@@ -59,23 +62,23 @@ const HybridArenaProfile: React.FC = () => {
 
   if (error) {
     return (
-      <div className="profile-page-arena">
-        <div className="flex justify-center items-center min-h-screen p-4">
-          <Card className="w-full max-w-md bg-background/90 border-primary/20">
-            <CardContent className="pt-6">
-              <div className="text-center space-y-4">
-                <div className="text-destructive font-medium">
+      <div className='profile-page-arena'>
+        <div className='flex justify-center items-center min-h-screen p-4'>
+          <Card className='w-full max-w-md bg-background/90 border-primary/20'>
+            <CardContent className='pt-6'>
+              <div className='text-center space-y-4'>
+                <div className='text-destructive font-medium'>
                   Có lỗi khi tải thông tin profile
                 </div>
-                <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
+                <div className='text-sm text-muted-foreground bg-muted/50 p-3 rounded-md'>
                   {error.message}
                 </div>
-                <Button 
-                  onClick={() => refetch()} 
-                  variant="outline" 
-                  className="w-full border-primary/30 hover:bg-primary/10"
+                <Button
+                  onClick={() => refetch()}
+                  variant='outline'
+                  className='w-full border-primary/30 hover:bg-primary/10'
                 >
-                  <RefreshCw className="mr-2 h-4 w-4" />
+                  <RefreshCw className='mr-2 h-4 w-4' />
                   Thử lại
                 </Button>
               </div>
@@ -89,45 +92,47 @@ const HybridArenaProfile: React.FC = () => {
   const renderContent = () => {
     if (isMobile) {
       return (
-        <div className="profile-page-arena min-h-screen relative">
+        <div className='profile-page-arena min-h-screen relative'>
           {/* Theme Toggle Button */}
-          <div className="theme-toggle-container">
+          <div className='theme-toggle-container'>
             <ThemeToggle />
           </div>
-          
-          <div className="container mx-auto px-4 py-6 space-y-6">
+
+          <div className='container mx-auto px-4 py-6 space-y-6'>
             {/* Arena Logo */}
             <ArenaLogo />
-            
+
             {/* Arena Mirror Avatar */}
-            <MirrorAvatar 
+            <MirrorAvatar
               avatarUrl={profile?.avatar_url}
-              username={profile?.display_name || profile?.full_name || 'Người chơi'}
+              username={
+                profile?.display_name || profile?.full_name || 'Người chơi'
+              }
               rank={profile?.verified_rank || 'Chưa xác minh'}
             />
-            
+
             {/* Mobile Arena Stats */}
             <ArenaProfileStats profile={profile} />
-            
+
             {/* Mobile Arena Quick Actions */}
-            <ArenaQuickActions 
-              profile={profile} 
+            <ArenaQuickActions
+              profile={profile}
               onNavigateToClubTab={handleNavigateToClubTab}
               onNavigateToRankTab={handleNavigateToRankTab}
             />
-            
+
             {/* Mobile Arena Content */}
-            <ArenaProfileContent 
+            <ArenaProfileContent
               profile={profile}
               activeTab={activeTab}
               onTabChange={handleTabChange}
             />
-            
+
             {/* Mobile Arena Activities */}
             {activeTab === 'activities' && (
               <ArenaActivities activities={profile?.recent_activities || []} />
             )}
-            
+
             {/* Arena Navigation */}
             <ArenaNavigation />
           </div>
@@ -136,46 +141,48 @@ const HybridArenaProfile: React.FC = () => {
     }
 
     return (
-      <div className="profile-page-arena">
-        <div className="container mx-auto px-4 py-8">
+      <div className='profile-page-arena'>
+        <div className='container mx-auto px-4 py-8'>
           {/* Arena Logo */}
           <ArenaLogo />
-          
+
           {/* Arena Mirror Avatar */}
-          <MirrorAvatar 
+          <MirrorAvatar
             avatarUrl={profile?.avatar_url}
-            username={profile?.display_name || profile?.full_name || 'Người chơi'}
+            username={
+              profile?.display_name || profile?.full_name || 'Người chơi'
+            }
             rank={profile?.verified_rank || 'Chưa xác minh'}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-8">
+          <div className='grid grid-cols-1 lg:grid-cols-4 gap-6 mt-8'>
             {/* Desktop Left Sidebar */}
-            <div className="lg:col-span-1 space-y-6">
-              <ArenaQuickActions 
-                profile={profile} 
+            <div className='lg:col-span-1 space-y-6'>
+              <ArenaQuickActions
+                profile={profile}
                 onNavigateToClubTab={handleNavigateToClubTab}
                 onNavigateToRankTab={handleNavigateToRankTab}
               />
-              <ArenaActivities 
-                activities={profile?.recent_activities || []} 
-                className="hidden lg:block"
+              <ArenaActivities
+                activities={profile?.recent_activities || []}
+                className='hidden lg:block'
               />
             </div>
 
             {/* Desktop Main Content */}
-            <div className="lg:col-span-3 space-y-6">
+            <div className='lg:col-span-3 space-y-6'>
               {/* Desktop Arena Stats */}
               <ArenaProfileStats profile={profile} />
-              
+
               {/* Desktop Arena Content */}
-              <ArenaProfileContent 
+              <ArenaProfileContent
                 profile={profile}
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
               />
             </div>
           </div>
-          
+
           {/* Arena Navigation */}
           <ArenaNavigation />
         </div>
@@ -183,11 +190,7 @@ const HybridArenaProfile: React.FC = () => {
     );
   };
 
-  return (
-    <ProfileErrorBoundary>
-      {renderContent()}
-    </ProfileErrorBoundary>
-  );
+  return <ProfileErrorBoundary>{renderContent()}</ProfileErrorBoundary>;
 };
 
 export default HybridArenaProfile;

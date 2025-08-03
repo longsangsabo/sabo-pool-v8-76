@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useProfileCache } from './useProfileCache';
@@ -86,19 +85,25 @@ export const useTournamentMatches = (tournamentId: string | null) => {
 
       // Fetch all profiles at once using cache
       const profiles = await getMultipleProfiles(Array.from(userIds));
-      const profileMap = profiles.reduce((acc, profile) => {
-        acc[profile.user_id] = profile;
-        return acc;
-      }, {} as Record<string, any>);
+      const profileMap = profiles.reduce(
+        (acc, profile) => {
+          acc[profile.user_id] = profile;
+          return acc;
+        },
+        {} as Record<string, any>
+      );
 
       // Map matches with cached profiles
       const matchesWithProfiles = (matchesData || []).map(match => ({
         ...match,
         player1: match.player1_id ? profileMap[match.player1_id] || null : null,
-        player2: match.player2_id ? profileMap[match.player2_id] || null : null
+        player2: match.player2_id ? profileMap[match.player2_id] || null : null,
       }));
 
-      console.log('✅ Matches with cached profiles:', matchesWithProfiles.length);
+      console.log(
+        '✅ Matches with cached profiles:',
+        matchesWithProfiles.length
+      );
       setMatches(matchesWithProfiles);
       setLastUpdateTime(new Date());
     } catch (err: any) {
@@ -113,10 +118,13 @@ export const useTournamentMatches = (tournamentId: string | null) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log('🔄 Setting up optimized real-time subscription for tournament:', tournamentId);
-    
+    console.log(
+      '🔄 Setting up optimized real-time subscription for tournament:',
+      tournamentId
+    );
+
     let debounceTimer: NodeJS.Timeout;
-    let updateQueue = new Set<string>();
+    const updateQueue = new Set<string>();
 
     const debouncedRefetch = () => {
       clearTimeout(debounceTimer);
@@ -137,33 +145,43 @@ export const useTournamentMatches = (tournamentId: string | null) => {
           event: '*',
           schema: 'public',
           table: 'tournament_matches',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
-          console.log('🔄 Tournament match real-time update:', payload.eventType, payload.new);
-          
+        payload => {
+          console.log(
+            '🔄 Tournament match real-time update:',
+            payload.eventType,
+            payload.new
+          );
+
           // Queue the update and debounce
           if (payload.new && 'id' in payload.new) {
             updateQueue.add(payload.new.id as string);
           }
-          
+
           // Immediate UI update for critical changes
-          if (payload.eventType === 'UPDATE' && payload.new && 'id' in payload.new) {
+          if (
+            payload.eventType === 'UPDATE' &&
+            payload.new &&
+            'id' in payload.new
+          ) {
             setMatches(currentMatches => {
               const updatedMatches = [...currentMatches];
-              const matchIndex = updatedMatches.findIndex(m => m.id === payload.new.id);
-              
+              const matchIndex = updatedMatches.findIndex(
+                m => m.id === payload.new.id
+              );
+
               if (matchIndex >= 0) {
                 updatedMatches[matchIndex] = {
                   ...updatedMatches[matchIndex],
-                  ...payload.new
+                  ...payload.new,
                 };
               }
-              
+
               return updatedMatches;
             });
           }
-          
+
           debouncedRefetch();
         }
       )
@@ -173,19 +191,29 @@ export const useTournamentMatches = (tournamentId: string | null) => {
           event: 'INSERT',
           schema: 'public',
           table: 'tournament_automation_log',
-          filter: `tournament_id=eq.${tournamentId}`
+          filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           const logData = payload.new as any;
-          console.log('🤖 Automation event:', logData.automation_type, logData.status);
-          
-          if (logData.automation_type === 'auto_winner_advancement' && logData.status === 'completed') {
+          console.log(
+            '🤖 Automation event:',
+            logData.automation_type,
+            logData.status
+          );
+
+          if (
+            logData.automation_type === 'auto_winner_advancement' &&
+            logData.status === 'completed'
+          ) {
             // Immediate refresh for successful automation
             setTimeout(() => fetchMatches(), 200);
           }
-          
+
           // Trigger refresh for semifinals completion
-          if (logData.automation_type === 'semifinal_advancement' && logData.status === 'completed') {
+          if (
+            logData.automation_type === 'semifinal_advancement' &&
+            logData.status === 'completed'
+          ) {
             setTimeout(() => fetchMatches(), 300);
           }
         }
@@ -208,6 +236,6 @@ export const useTournamentMatches = (tournamentId: string | null) => {
     loading,
     error,
     lastUpdateTime,
-    refetch: fetchMatches
+    refetch: fetchMatches,
   };
 };

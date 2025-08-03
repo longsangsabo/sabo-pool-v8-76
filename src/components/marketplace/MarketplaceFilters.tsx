@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Search, Filter, SlidersHorizontal } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -80,26 +79,26 @@ const MarketplaceFilters = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+      <div className='relative'>
+        <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4' />
         <Input
-          placeholder="Tìm kiếm sản phẩm..."
+          placeholder='Tìm kiếm sản phẩm...'
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10"
+          onChange={e => onSearchChange(e.target.value)}
+          className='pl-10'
         />
       </div>
 
       {/* Quick Filters */}
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className='flex items-center gap-3 flex-wrap'>
         <Select value={category} onValueChange={onCategoryChange}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Chọn danh mục" />
+          <SelectTrigger className='w-48'>
+            <SelectValue placeholder='Chọn danh mục' />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((cat) => (
+            {categories.map(cat => (
               <SelectItem key={cat.value} value={cat.value}>
                 {cat.label}
               </SelectItem>
@@ -108,11 +107,11 @@ const MarketplaceFilters = ({
         </Select>
 
         <Select value={location} onValueChange={onLocationChange}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Chọn địa điểm" />
+          <SelectTrigger className='w-48'>
+            <SelectValue placeholder='Chọn địa điểm' />
           </SelectTrigger>
           <SelectContent>
-            {locations.map((loc) => (
+            {locations.map(loc => (
               <SelectItem key={loc.value} value={loc.value}>
                 {loc.label}
               </SelectItem>
@@ -123,8 +122,8 @@ const MarketplaceFilters = ({
         {/* Advanced Filters */}
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4" />
+            <Button variant='outline' className='flex items-center gap-2'>
+              <SlidersHorizontal className='w-4 h-4' />
               Bộ lọc nâng cao
             </Button>
           </SheetTrigger>
@@ -136,16 +135,16 @@ const MarketplaceFilters = ({
               </SheetDescription>
             </SheetHeader>
 
-            <div className="space-y-6 mt-6">
+            <div className='space-y-6 mt-6'>
               {/* Condition Filter */}
-              <div className="space-y-2">
+              <div className='space-y-2'>
                 <Label>Tình trạng sản phẩm</Label>
                 <Select value={condition} onValueChange={onConditionChange}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Chọn tình trạng" />
+                    <SelectValue placeholder='Chọn tình trạng' />
                   </SelectTrigger>
                   <SelectContent>
-                    {conditions.map((cond) => (
+                    {conditions.map(cond => (
                       <SelectItem key={cond.value} value={cond.value}>
                         {cond.label}
                       </SelectItem>
@@ -155,30 +154,36 @@ const MarketplaceFilters = ({
               </div>
 
               {/* Price Range Filter */}
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 <Label>Khoảng giá (VNĐ)</Label>
-                <div className="px-3">
+                <div className='px-3'>
                   <Slider
                     value={priceRange}
-                    onValueChange={(value) => onPriceRangeChange(value as [number, number])}
+                    onValueChange={value =>
+                      onPriceRangeChange(value as [number, number])
+                    }
                     max={100000000}
                     min={0}
                     step={100000}
-                    className="w-full"
+                    className='w-full'
                   />
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className='flex justify-between text-sm text-gray-600'>
                   <span>{formatPrice(priceRange[0])} đ</span>
                   <span>{formatPrice(priceRange[1])} đ</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <Button onClick={onApplyFilters} className="flex-1">
+              <div className='flex gap-3 pt-4'>
+                <Button onClick={onApplyFilters} className='flex-1'>
                   Áp dụng
                 </Button>
-                <Button variant="outline" onClick={onClearFilters} className="flex-1">
+                <Button
+                  variant='outline'
+                  onClick={onClearFilters}
+                  className='flex-1'
+                >
                   Xóa bộ lọc
                 </Button>
               </div>

@@ -24,7 +24,7 @@ export const useSystemMessages = () => {
         notification_message: message,
         notification_action_url: actionUrl,
         notification_metadata: metadata || {},
-        notification_priority: priority
+        notification_priority: priority,
       });
     } catch (error) {
       console.error('Error in createSystemMessage:', error);
@@ -50,7 +50,10 @@ export const useSystemMessages = () => {
   }, [user, profile]);
 
   // System maintenance notifications
-  const notifySystemMaintenance = async (startTime: string, endTime: string) => {
+  const notifySystemMaintenance = async (
+    startTime: string,
+    endTime: string
+  ) => {
     try {
       // Get all users
       const { data: users, error } = await supabase
@@ -65,7 +68,7 @@ export const useSystemMessages = () => {
         notification_type: 'system_maintenance',
         notification_title: 'Thông báo bảo trì hệ thống',
         notification_message: `Hệ thống sẽ tạm dừng hoạt động từ ${startTime} đến ${endTime} để bảo trì và nâng cấp. Vui lòng sắp xếp thời gian phù hợp. Cảm ơn bạn đã thành hình!`,
-        notification_priority: 'high'
+        notification_priority: 'high',
       }));
 
       if (notifications && notifications.length > 0) {
@@ -78,7 +81,11 @@ export const useSystemMessages = () => {
   };
 
   // Tournament updates
-  const notifyTournamentUpdate = async (tournamentId: string, eventType: string, message: string) => {
+  const notifyTournamentUpdate = async (
+    tournamentId: string,
+    eventType: string,
+    message: string
+  ) => {
     try {
       // Get tournament participants
       const { data: participants, error } = await supabase
@@ -89,7 +96,7 @@ export const useSystemMessages = () => {
 
       if (error) throw error;
 
-      participants?.forEach(async (participant) => {
+      participants?.forEach(async participant => {
         await createSystemMessage(
           participant.user_id,
           `tournament_${eventType}`,
@@ -105,7 +112,11 @@ export const useSystemMessages = () => {
   };
 
   // Club registration confirmation
-  const notifyClubRegistrationSubmitted = async (userId: string, clubName: string, registrationId: string) => {
+  const notifyClubRegistrationSubmitted = async (
+    userId: string,
+    clubName: string,
+    registrationId: string
+  ) => {
     try {
       await createSystemMessage(
         userId,
@@ -116,7 +127,7 @@ export const useSystemMessages = () => {
         '/profile?tab=club',
         {
           club_name: clubName,
-          registration_id: registrationId
+          registration_id: registrationId,
         }
       );
     } catch (error) {
@@ -125,7 +136,11 @@ export const useSystemMessages = () => {
   };
 
   // Club status updates
-  const notifyClubStatusUpdate = async (clubId: string, status: string, reason?: string) => {
+  const notifyClubStatusUpdate = async (
+    clubId: string,
+    status: string,
+    reason?: string
+  ) => {
     try {
       const { data: clubData, error } = await supabase
         .from('club_registrations')
@@ -172,7 +187,12 @@ export const useSystemMessages = () => {
   };
 
   // Rank verification updates
-  const notifyRankVerification = async (playerId: string, status: string, rank: string, reason?: string) => {
+  const notifyRankVerification = async (
+    playerId: string,
+    status: string,
+    rank: string,
+    reason?: string
+  ) => {
     try {
       let title = '';
       let message = '';
@@ -212,16 +232,21 @@ export const useSystemMessages = () => {
   };
 
   // Achievement notifications
-  const notifyAchievement = async (playerId: string, achievementType: string, achievementData: any) => {
+  const notifyAchievement = async (
+    playerId: string,
+    achievementType: string,
+    achievementData: any
+  ) => {
     try {
       let title = '';
       let message = '';
-      let emoji = '🎉';
+      const emoji = '🎉';
 
       switch (achievementType) {
         case 'first_win':
           title = 'Chiến thắng đầu tiên! 🎱';
-          message = 'Chúc mừng chiến thắng đầu tiên của bạn! Đây là bước đầu của hành trình chinh phục thế giới bi-a.';
+          message =
+            'Chúc mừng chiến thắng đầu tiên của bạn! Đây là bước đầu của hành trình chinh phục thế giới bi-a.';
           break;
         case 'win_streak':
           title = `Chuỗi chiến thắng ${achievementData.streak} trận! 🔥`;

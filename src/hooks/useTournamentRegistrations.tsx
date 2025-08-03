@@ -21,7 +21,7 @@ interface Registration {
   created_at: string;
   priority_order?: number;
   profiles?: Player; // This matches the Supabase query structure
-  player?: Player;   // This is what we'll transform to
+  player?: Player; // This is what we'll transform to
 }
 
 export const useTournamentRegistrations = (tournamentId: string) => {
@@ -40,7 +40,8 @@ export const useTournamentRegistrations = (tournamentId: string) => {
       // Fetch tournament registrations with enhanced player data
       const { data, error } = await supabase
         .from('tournament_registrations')
-        .select(`
+        .select(
+          `
           id,
           tournament_id,
           user_id,
@@ -57,7 +58,8 @@ export const useTournamentRegistrations = (tournamentId: string) => {
             verified_rank,
             elo
           )
-        `)
+        `
+        )
         .eq('tournament_id', tournamentId)
         .order('priority_order', { ascending: true, nullsLast: true })
         .order('created_at', { ascending: true });
@@ -67,19 +69,24 @@ export const useTournamentRegistrations = (tournamentId: string) => {
         setRegistrations([]);
       } else {
         // Transform the data to match our interface
-        const transformedData = (data || []).map(reg => ({
-          ...reg,
-          player: reg.profiles ? {
-            id: reg.profiles.id,
-            user_id: reg.profiles.user_id,
-            full_name: reg.profiles.full_name,
-            display_name: reg.profiles.display_name,
-            avatar_url: reg.profiles.avatar_url,
-            current_rank: reg.profiles.current_rank,
-            verified_rank: reg.profiles.verified_rank,
-            elo: reg.profiles.elo || 1000
-          } : undefined
-        } as Registration));
+        const transformedData = (data || []).map(
+          reg =>
+            ({
+              ...reg,
+              player: reg.profiles
+                ? {
+                    id: reg.profiles.id,
+                    user_id: reg.profiles.user_id,
+                    full_name: reg.profiles.full_name,
+                    display_name: reg.profiles.display_name,
+                    avatar_url: reg.profiles.avatar_url,
+                    current_rank: reg.profiles.current_rank,
+                    verified_rank: reg.profiles.verified_rank,
+                    elo: reg.profiles.elo || 1000,
+                  }
+                : undefined,
+            }) as Registration
+        );
 
         setRegistrations(transformedData);
       }
@@ -98,6 +105,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
   return {
     registrations,
     loading,
-    fetchRegistrations
+    fetchRegistrations,
   };
 };

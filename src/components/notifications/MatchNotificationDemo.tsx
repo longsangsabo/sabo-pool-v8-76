@@ -17,7 +17,7 @@ export const MatchNotificationDemo: React.FC = () => {
       avatar_url: '',
       rank: 'Master',
       elo: 1850,
-      is_online: true
+      is_online: true,
     },
     player2: {
       id: 'user2',
@@ -25,7 +25,7 @@ export const MatchNotificationDemo: React.FC = () => {
       avatar_url: '',
       rank: 'Expert',
       elo: 1720,
-      is_online: true
+      is_online: true,
     },
     start_time: new Date().toISOString(),
     location: 'SABO Billiards Club - Vũng Tàu',
@@ -33,8 +33,8 @@ export const MatchNotificationDemo: React.FC = () => {
     match_format: 'Race to 9',
     head_to_head: {
       player1_wins: 3,
-      player2_wins: 2
-    }
+      player2_wins: 2,
+    },
   };
 
   const handleJoinMatch = () => {
@@ -53,20 +53,21 @@ export const MatchNotificationDemo: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      <Card className="max-w-md mx-auto">
+    <div className='p-6'>
+      <Card className='max-w-md mx-auto'>
         <CardHeader>
-          <CardTitle className="text-center">Match Notification Demo</CardTitle>
+          <CardTitle className='text-center'>Match Notification Demo</CardTitle>
         </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground mb-4">
-            Click the button below to preview the redesigned match notification popup
+        <CardContent className='text-center'>
+          <p className='text-muted-foreground mb-4'>
+            Click the button below to preview the redesigned match notification
+            popup
           </p>
-          <Button 
+          <Button
             onClick={() => setIsPopupOpen(true)}
-            className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold"
+            className='bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold'
           >
-            <Play className="w-4 h-4 mr-2" />
+            <Play className='w-4 h-4 mr-2' />
             Show Match Notification
           </Button>
         </CardContent>
@@ -76,7 +77,7 @@ export const MatchNotificationDemo: React.FC = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         match={mockMatch}
-        currentUserId="user1"
+        currentUserId='user1'
         onJoinMatch={handleJoinMatch}
         onViewBracket={handleViewBracket}
         onPostpone={handlePostpone}

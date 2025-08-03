@@ -97,7 +97,9 @@ export const useSeasons = () => {
 
       setCurrentSeason(mockCurrentSeason);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch current season');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch current season'
+      );
       setCurrentSeason(null);
     } finally {
       setLoading(false);
@@ -129,7 +131,9 @@ export const useSeasons = () => {
 
       setStandings(mockStandings);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch season standings');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch season standings'
+      );
     } finally {
       setLoading(false);
     }
@@ -167,30 +171,35 @@ export const useSeasons = () => {
     }
   }, []);
 
-  const updateSeason = useCallback(async (id: string, updates: Partial<LocalSeason>) => {
-    setLoading(true);
-    setError('');
+  const updateSeason = useCallback(
+    async (id: string, updates: Partial<LocalSeason>) => {
+      setLoading(true);
+      setError('');
 
-    try {
-      // Mock update season since seasons table doesn't exist
-      const updatedSeason = seasons.find(s => s.id === id);
-      if (!updatedSeason) throw new Error('Season not found');
+      try {
+        // Mock update season since seasons table doesn't exist
+        const updatedSeason = seasons.find(s => s.id === id);
+        if (!updatedSeason) throw new Error('Season not found');
 
-      const newSeason: LocalSeason = {
-        ...updatedSeason,
-        ...updates,
-        updated_at: new Date().toISOString(),
-      };
+        const newSeason: LocalSeason = {
+          ...updatedSeason,
+          ...updates,
+          updated_at: new Date().toISOString(),
+        };
 
-      setSeasons(prev => prev.map(s => s.id === id ? newSeason : s));
-      return newSeason;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update season');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [seasons]);
+        setSeasons(prev => prev.map(s => (s.id === id ? newSeason : s)));
+        return newSeason;
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to update season'
+        );
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [seasons]
+  );
 
   const deleteSeason = useCallback(async (id: string) => {
     setLoading(true);
@@ -206,77 +215,104 @@ export const useSeasons = () => {
     }
   }, []);
 
-  const createSeasonStanding = useCallback(async (standingData: Partial<LocalSeasonStanding>) => {
-    setLoading(true);
-    setError('');
+  const createSeasonStanding = useCallback(
+    async (standingData: Partial<LocalSeasonStanding>) => {
+      setLoading(true);
+      setError('');
 
-    try {
-      // Mock create season standing since season_standings table doesn't exist
-      const newStanding: LocalSeasonStanding = {
-        id: Date.now().toString(),
-        season_id: standingData.season_id || '',
-        user_id: standingData.user_id || '',
-        total_elo_points: standingData.total_elo_points || 0,
-        tournaments_played: standingData.tournaments_played || 0,
-        best_finish: standingData.best_finish || 0,
-        total_prize_money: standingData.total_prize_money || 0,
-        current_rank: standingData.current_rank || 0,
-        previous_rank: standingData.previous_rank,
-        rank_change: standingData.rank_change,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
+      try {
+        // Mock create season standing since season_standings table doesn't exist
+        const newStanding: LocalSeasonStanding = {
+          id: Date.now().toString(),
+          season_id: standingData.season_id || '',
+          user_id: standingData.user_id || '',
+          total_elo_points: standingData.total_elo_points || 0,
+          tournaments_played: standingData.tournaments_played || 0,
+          best_finish: standingData.best_finish || 0,
+          total_prize_money: standingData.total_prize_money || 0,
+          current_rank: standingData.current_rank || 0,
+          previous_rank: standingData.previous_rank,
+          rank_change: standingData.rank_change,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
 
-      setStandings(prev => [newStanding, ...prev]);
-      return newStanding;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create season standing');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        setStandings(prev => [newStanding, ...prev]);
+        return newStanding;
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to create season standing'
+        );
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-  const updateSeasonStanding = useCallback(async (id: string, updates: Partial<LocalSeasonStanding>) => {
-    setLoading(true);
-    setError('');
+  const updateSeasonStanding = useCallback(
+    async (id: string, updates: Partial<LocalSeasonStanding>) => {
+      setLoading(true);
+      setError('');
 
-    try {
-      // Mock update season standing since season_standings table doesn't exist
-      const existingStanding = standings.find(s => s.id === id);
-      if (!existingStanding) throw new Error('Standing not found');
+      try {
+        // Mock update season standing since season_standings table doesn't exist
+        const existingStanding = standings.find(s => s.id === id);
+        if (!existingStanding) throw new Error('Standing not found');
 
-      const updatedStanding: LocalSeasonStanding = {
-        ...existingStanding,
-        ...updates,
-        updated_at: new Date().toISOString(),
-      };
+        const updatedStanding: LocalSeasonStanding = {
+          ...existingStanding,
+          ...updates,
+          updated_at: new Date().toISOString(),
+        };
 
-      setStandings(prev => prev.map(s => s.id === id ? updatedStanding : s));
-      return updatedStanding;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update season standing');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [standings]);
+        setStandings(prev =>
+          prev.map(s => (s.id === id ? updatedStanding : s))
+        );
+        return updatedStanding;
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to update season standing'
+        );
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [standings]
+  );
 
-  const getSeasonById = useCallback((id: string) => {
-    return seasons.find(season => season.id === id);
-  }, [seasons]);
+  const getSeasonById = useCallback(
+    (id: string) => {
+      return seasons.find(season => season.id === id);
+    },
+    [seasons]
+  );
 
   const getCurrentSeasonStandings = useCallback(() => {
     if (!currentSeason) return [];
-    return standings.filter(standing => standing.season_id === currentSeason.id);
+    return standings.filter(
+      standing => standing.season_id === currentSeason.id
+    );
   }, [currentSeason, standings]);
 
   const calculateTotalPrizePool = useCallback(() => {
-    return seasons.reduce((total, season) => total + season.total_prize_pool, 0);
+    return seasons.reduce(
+      (total, season) => total + season.total_prize_pool,
+      0
+    );
   }, [seasons]);
 
   const calculateTotalParticipants = useCallback(() => {
-    return seasons.reduce((total, season) => total + (season.total_participants || 0), 0);
+    return seasons.reduce(
+      (total, season) => total + (season.total_participants || 0),
+      0
+    );
   }, [seasons]);
 
   const calculateAveragePrizePool = useCallback(() => {

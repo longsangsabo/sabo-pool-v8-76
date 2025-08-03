@@ -11,20 +11,22 @@ import { useTournamentRealtime } from '@/hooks/useTournamentRealtime';
 
 interface EnhancedTournamentCardProps {
   tournament: import('@/types/tournament-extended').EnhancedTournament;
-  onView?: (tournament: import('@/types/tournament-extended').EnhancedTournament) => void;
+  onView?: (
+    tournament: import('@/types/tournament-extended').EnhancedTournament
+  ) => void;
   onTournamentClick?: (id: string) => void;
   onRegister?: (id: string) => void;
   isRegistered?: (id: string) => boolean;
   className?: string;
 }
 
-export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({ 
-  tournament, 
+export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({
+  tournament,
   onView,
   onTournamentClick,
   onRegister,
   isRegistered,
-  className
+  className,
 }) => {
   const { user } = useAuth();
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
@@ -60,7 +62,7 @@ export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -123,14 +125,17 @@ export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({
   };
 
   const buttonContent = getButtonContent();
-  const currentParticipants = participants.length || tournament.current_participants || 0;
+  const currentParticipants =
+    participants.length || tournament.current_participants || 0;
 
   return (
     <>
-      <Card className={`hover:shadow-lg transition-shadow duration-200 ${className || ''}`}>
-        <CardHeader className="pb-4">
-          <div className="flex justify-between items-start">
-            <CardTitle className="text-lg font-bold line-clamp-2">
+      <Card
+        className={`hover:shadow-lg transition-shadow duration-200 ${className || ''}`}
+      >
+        <CardHeader className='pb-4'>
+          <div className='flex justify-between items-start'>
+            <CardTitle className='text-lg font-bold line-clamp-2'>
               {tournament.name}
             </CardTitle>
             <Badge className={getStatusBadgeColor(tournament.status)}>
@@ -139,53 +144,57 @@ export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {/* Tournament Details */}
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-gray-600">
-              <Calendar className="h-4 w-4" />
+          <div className='space-y-2 text-sm'>
+            <div className='flex items-center gap-2 text-gray-600'>
+              <Calendar className='h-4 w-4' />
               <span>{formatDate(tournament.tournament_start)}</span>
             </div>
-            
-            <div className="flex items-center gap-2 text-gray-600">
-              <MapPin className="h-4 w-4" />
+
+            <div className='flex items-center gap-2 text-gray-600'>
+              <MapPin className='h-4 w-4' />
               <span>{tournament.venue_address || 'Chưa có thông tin'}</span>
             </div>
-            
-            <div className="flex items-center gap-2 text-gray-600">
-              <Users className="h-4 w-4" />
-              <span>{currentParticipants}/{tournament.max_participants} người</span>
+
+            <div className='flex items-center gap-2 text-gray-600'>
+              <Users className='h-4 w-4' />
+              <span>
+                {currentParticipants}/{tournament.max_participants} người
+              </span>
             </div>
-            
-            <div className="flex items-center gap-2 text-gray-600">
-              <Trophy className="h-4 w-4" />
-              <span>{tournament.entry_fee?.toLocaleString('vi-VN') || '0'} VNĐ</span>
+
+            <div className='flex items-center gap-2 text-gray-600'>
+              <Trophy className='h-4 w-4' />
+              <span>
+                {tournament.entry_fee?.toLocaleString('vi-VN') || '0'} VNĐ
+              </span>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-              style={{ 
-                width: `${Math.min((currentParticipants / tournament.max_participants) * 100, 100)}%` 
+          <div className='w-full bg-gray-200 rounded-full h-2'>
+            <div
+              className='bg-blue-600 h-2 rounded-full transition-all duration-300'
+              style={{
+                width: `${Math.min((currentParticipants / tournament.max_participants) * 100, 100)}%`,
               }}
             />
           </div>
 
           {/* Registration status for user */}
           {userRegistration && (
-            <div className="py-2">
+            <div className='py-2'>
               <RegistrationStatusBadge registration={userRegistration} />
             </div>
           )}
 
           {/* Action buttons */}
-          <div className="flex gap-2 pt-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex-1"
+          <div className='flex gap-2 pt-2'>
+            <Button
+              variant='outline'
+              size='sm'
+              className='flex-1'
               onClick={() => {
                 if (onView) onView(tournament);
                 if (onTournamentClick) onTournamentClick(tournament.id);
@@ -193,10 +202,10 @@ export const EnhancedTournamentCard: React.FC<EnhancedTournamentCardProps> = ({
             >
               👁️ Xem chi tiết
             </Button>
-            
-            <Button 
-              size="sm" 
-              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400"
+
+            <Button
+              size='sm'
+              className='flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400'
               disabled={buttonContent.disabled}
               onClick={() => {
                 if (!buttonContent.disabled) {

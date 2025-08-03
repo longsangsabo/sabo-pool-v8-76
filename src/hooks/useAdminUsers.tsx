@@ -35,7 +35,11 @@ export const useAdminUsers = () => {
   const queryClient = useQueryClient();
 
   // Fetch all users
-  const { data: users = [], isLoading, error } = useQuery({
+  const {
+    data: users = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['admin-users'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -54,15 +58,15 @@ export const useAdminUsers = () => {
 
   // Update user ban status
   const updateUserBanMutation = useMutation({
-    mutationFn: async ({ 
-      userId, 
-      banStatus, 
-      banReason, 
-      banExpiresAt 
-    }: { 
-      userId: string; 
-      banStatus: string; 
-      banReason?: string; 
+    mutationFn: async ({
+      userId,
+      banStatus,
+      banReason,
+      banExpiresAt,
+    }: {
+      userId: string;
+      banStatus: string;
+      banReason?: string;
       banExpiresAt?: string | null;
     }) => {
       const { error } = await supabase
@@ -78,15 +82,22 @@ export const useAdminUsers = () => {
       if (error) throw error;
 
       // Get current user for admin_id
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       // Log admin action - using notifications table instead of non-existent admin_actions
       if (user) {
         await supabase.rpc('send_enhanced_notification', {
           p_user_id: userId,
-          p_title: banStatus === 'banned' ? 'Tài khoản bị khóa' : 'Tài khoản được mở khóa',
-          p_message: banReason || `Trạng thái tài khoản đã được cập nhật thành ${banStatus}`,
-          p_type: 'admin_action'
+          p_title:
+            banStatus === 'banned'
+              ? 'Tài khoản bị khóa'
+              : 'Tài khoản được mở khóa',
+          p_message:
+            banReason ||
+            `Trạng thái tài khoản đã được cập nhật thành ${banStatus}`,
+          p_type: 'admin_action',
         });
       }
     },
@@ -97,7 +108,7 @@ export const useAdminUsers = () => {
         description: 'Đã cập nhật trạng thái người dùng',
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error updating user ban status:', error);
       toast({
         title: 'Lỗi',
@@ -121,15 +132,17 @@ export const useAdminUsers = () => {
       if (error) throw error;
 
       // Get current user for admin_id
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       // Log admin action - using notifications table instead of non-existent admin_actions
       if (user) {
         await supabase.rpc('send_enhanced_notification', {
           p_user_id: userId,
           p_title: 'Vai trò được cập nhật',
           p_message: `Vai trò của bạn đã được thay đổi thành ${role}`,
-          p_type: 'admin_action'
+          p_type: 'admin_action',
         });
       }
     },
@@ -140,7 +153,7 @@ export const useAdminUsers = () => {
         description: 'Đã cập nhật vai trò người dùng',
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error updating user role:', error);
       toast({
         title: 'Lỗi',

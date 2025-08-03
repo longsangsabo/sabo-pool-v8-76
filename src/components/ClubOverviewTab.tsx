@@ -10,48 +10,48 @@ import TestCopyTemplate from '@/components/test/TestCopyTemplate';
 
 const ClubOverviewTab = () => {
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Tổng quan</h2>
-        <p className="text-muted-foreground">
+        <h2 className='text-2xl font-bold text-foreground'>Tổng quan</h2>
+        <p className='text-muted-foreground'>
           Dashboard tổng hợp và thống kê chi tiết của câu lạc bộ
         </p>
       </div>
-      
-      <Tabs defaultValue="dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4" />
+
+      <Tabs defaultValue='dashboard' className='space-y-4'>
+        <TabsList className='grid w-full grid-cols-4'>
+          <TabsTrigger value='dashboard' className='flex items-center gap-2'>
+            <BarChart3 className='w-4 h-4' />
             Dashboard
           </TabsTrigger>
-          <TabsTrigger value="trust" className="flex items-center gap-2">
-            <Star className="w-4 h-4" />
+          <TabsTrigger value='trust' className='flex items-center gap-2'>
+            <Star className='w-4 h-4' />
             Điểm tin cậy
           </TabsTrigger>
-          <TabsTrigger value="statistics" className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
+          <TabsTrigger value='statistics' className='flex items-center gap-2'>
+            <TrendingUp className='w-4 h-4' />
             Thống kê chi tiết
           </TabsTrigger>
-          <TabsTrigger value="test" className="flex items-center gap-2">
-            <TestTube className="w-4 h-4" />
+          <TabsTrigger value='test' className='flex items-center gap-2'>
+            <TestTube className='w-4 h-4' />
             Backend Test
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="dashboard">
+        <TabsContent value='dashboard'>
           <ClubDashboardOverview />
         </TabsContent>
 
-        <TabsContent value="trust">
+        <TabsContent value='trust'>
           <TrustScoreDisplay />
         </TabsContent>
 
-        <TabsContent value="statistics">
+        <TabsContent value='statistics'>
           <ClubStatsDashboard />
         </TabsContent>
 
-        <TabsContent value="test">
-          <div className="space-y-6">
+        <TabsContent value='test'>
+          <div className='space-y-6'>
             <TestCopyTemplate />
             <RankRequestDebugger />
             <RankingWorkflowTest />

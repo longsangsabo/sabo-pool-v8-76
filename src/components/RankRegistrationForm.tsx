@@ -14,7 +14,13 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Trophy, Loader2, AlertTriangle, CheckCircle, FileImage } from 'lucide-react';
+import {
+  Trophy,
+  Loader2,
+  AlertTriangle,
+  CheckCircle,
+  FileImage,
+} from 'lucide-react';
 import { useRankRequests } from '@/hooks/useRankRequests';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -41,8 +47,13 @@ interface EvidenceFile {
 
 const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
   const { user, profile } = useAuth();
-  const { createRankRequest, rankRequests, getStatusText, getStatusColor, checkExistingPendingRequest } =
-    useRankRequests();
+  const {
+    createRankRequest,
+    rankRequests,
+    getStatusText,
+    getStatusColor,
+    checkExistingPendingRequest,
+  } = useRankRequests();
 
   const [clubs, setClubs] = useState<Club[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +94,7 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
         .order('club_name');
 
       if (error) throw error;
-      setClubs(data as any || []);
+      setClubs((data as any) || []);
     } catch (error) {
       console.error('Error fetching clubs:', error);
       toast.error('Lỗi khi tải danh sách CLB');
@@ -94,7 +105,7 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
 
   const fetchUserRankRequests = async () => {
     if (!user?.id) return;
-    
+
     try {
       // First get rank requests
       const { data: requests, error: requestsError } = await supabase
@@ -104,12 +115,12 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
         .order('created_at', { ascending: false });
 
       if (requestsError) throw requestsError;
-      
+
       if (!requests || requests.length === 0) {
         setUserRankRequests([]);
         return;
       }
-      
+
       // Get club data separately
       const clubIds = [...new Set(requests.map(req => req.club_id))];
       const { data: clubs, error: clubsError } = await supabase
@@ -118,15 +129,19 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
         .in('id', clubIds);
 
       if (clubsError) throw clubsError;
-      
+
       const transformedRequests = requests.map(req => ({
         ...req,
         club: {
-          name: clubs?.find(club => (club as any).id === (req as any).user_id)?.name || 'Unknown Club',
-          address: clubs?.find(club => (club as any).id === (req as any).user_id)?.address || ''
-        }
+          name:
+            clubs?.find(club => (club as any).id === (req as any).user_id)
+              ?.name || 'Unknown Club',
+          address:
+            clubs?.find(club => (club as any).id === (req as any).user_id)
+              ?.address || '',
+        },
       }));
-      
+
       setUserRankRequests(transformedRequests);
     } catch (error) {
       console.error('Error fetching user rank requests:', error);
@@ -143,17 +158,22 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
     setSubmitting(true);
     try {
       // Check for existing pending request before attempting to create
-      const existingRequest = await checkExistingPendingRequest(user.id, formData.club_id);
+      const existingRequest = await checkExistingPendingRequest(
+        user.id,
+        formData.club_id
+      );
       if (existingRequest) {
-        toast.error('Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này. Vui lòng chờ CLB xét duyệt trước khi gửi yêu cầu mới.');
+        toast.error(
+          'Bạn đã có yêu cầu rank đang chờ xét duyệt tại CLB này. Vui lòng chờ CLB xét duyệt trước khi gửi yêu cầu mới.'
+        );
         return;
       }
 
-        await createRankRequest({
-          requested_rank: formData.requested_rank, // Keep as string to match DB schema
+      await createRankRequest({
+        requested_rank: formData.requested_rank, // Keep as string to match DB schema
         club_id: formData.club_id,
         user_id: user?.id,
-        evidence_files: evidenceFiles
+        evidence_files: evidenceFiles,
       });
 
       reset();
@@ -170,7 +190,8 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
       }
     } catch (error) {
       console.error('Error submitting rank request:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Lỗi khi gửi yêu cầu rank';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Lỗi khi gửi yêu cầu rank';
       toast.error(errorMessage);
     } finally {
       setSubmitting(false);
@@ -179,19 +200,32 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
 
   const getRankDescription = (rank: number) => {
     switch (rank) {
-      case 1000: return 'K - Người mới tập (2-4 bi khi hình dễ)';
-      case 1100: return 'K+ - Biết luật, kê cơ đúng';
-      case 1200: return 'I - Người chơi cơ bản (3-5 bi, chưa điều được chấm)';
-      case 1300: return 'I+ - Tân binh tiến bộ';
-      case 1400: return 'H - Trung bình (đi 5-8 bi, có thể "rùa" 1 chấm hình dễ)';
-      case 1500: return 'H+ - Chuẩn bị lên G';
-      case 1600: return 'G - Khá (clear 1 chấm + 3-7 bi kế, bắt đầu điều bi 3 băng)';
-      case 1700: return 'G+ - Trình phong trào "ngon"';
-      case 1800: return 'F - Giỏi (60-80% clear 1 chấm, đôi khi phá 2 chấm)';
-      case 1900: return 'F+ - Cao nhất nhóm trung cấp';
-      case 2000: return 'E - Xuất sắc (90-100% clear 1 chấm, 70% phá 2 chấm)';
-      case 2100: return 'E+ - Sát ngưỡng lên D (chưa mở)';
-      default: return '';
+      case 1000:
+        return 'K - Người mới tập (2-4 bi khi hình dễ)';
+      case 1100:
+        return 'K+ - Biết luật, kê cơ đúng';
+      case 1200:
+        return 'I - Người chơi cơ bản (3-5 bi, chưa điều được chấm)';
+      case 1300:
+        return 'I+ - Tân binh tiến bộ';
+      case 1400:
+        return 'H - Trung bình (đi 5-8 bi, có thể "rùa" 1 chấm hình dễ)';
+      case 1500:
+        return 'H+ - Chuẩn bị lên G';
+      case 1600:
+        return 'G - Khá (clear 1 chấm + 3-7 bi kế, bắt đầu điều bi 3 băng)';
+      case 1700:
+        return 'G+ - Trình phong trào "ngon"';
+      case 1800:
+        return 'F - Giỏi (60-80% clear 1 chấm, đôi khi phá 2 chấm)';
+      case 1900:
+        return 'F+ - Cao nhất nhóm trung cấp';
+      case 2000:
+        return 'E - Xuất sắc (90-100% clear 1 chấm, 70% phá 2 chấm)';
+      case 2100:
+        return 'E+ - Sát ngưỡng lên D (chưa mở)';
+      default:
+        return '';
     }
   };
 
@@ -286,7 +320,9 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
                   {clubs.map(club => (
                     <SelectItem key={club.id} value={club.id}>
                       <div className='flex flex-col'>
-                        <span className='font-medium'>{(club as any).name}</span>
+                        <span className='font-medium'>
+                          {(club as any).name}
+                        </span>
                         <span className='text-sm text-gray-500'>
                           {club.address}
                         </span>
@@ -330,21 +366,15 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
                   <SelectItem value='1500'>
                     1500 ELO - H+ (Chuẩn bị lên G)
                   </SelectItem>
-                  <SelectItem value='1600'>
-                    1600 ELO - G (Khá)
-                  </SelectItem>
+                  <SelectItem value='1600'>1600 ELO - G (Khá)</SelectItem>
                   <SelectItem value='1700'>
                     1700 ELO - G+ (Trình phong trào "ngon")
                   </SelectItem>
-                  <SelectItem value='1800'>
-                    1800 ELO - F (Giỏi)
-                  </SelectItem>
+                  <SelectItem value='1800'>1800 ELO - F (Giỏi)</SelectItem>
                   <SelectItem value='1900'>
                     1900 ELO - F+ (Cao nhất nhóm trung cấp)
                   </SelectItem>
-                  <SelectItem value='2000'>
-                    2000 ELO - E (Xuất sắc)
-                  </SelectItem>
+                  <SelectItem value='2000'>2000 ELO - E (Xuất sắc)</SelectItem>
                   <SelectItem value='2100'>
                     2100 ELO - E+ (Sát ngưỡng lên D)
                   </SelectItem>
@@ -368,8 +398,8 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
 
             {/* Evidence Upload */}
             <div>
-              <Label className="flex items-center gap-2 mb-3">
-                <FileImage className="w-4 h-4" />
+              <Label className='flex items-center gap-2 mb-3'>
+                <FileImage className='w-4 h-4' />
                 Bằng chứng (Không bắt buộc)
               </Label>
               <EvidenceUpload
@@ -379,8 +409,9 @@ const RankRegistrationForm = ({ onSuccess }: RankRegistrationFormProps) => {
                 userId={user?.id}
                 disabled={submitting}
               />
-              <p className="text-sm text-muted-foreground mt-2">
-                Upload hình ảnh lịch sử tham gia giải đấu, bảng xếp hạng, hoặc thành tích để CLB có thể đánh giá chính xác hơn.
+              <p className='text-sm text-muted-foreground mt-2'>
+                Upload hình ảnh lịch sử tham gia giải đấu, bảng xếp hạng, hoặc
+                thành tích để CLB có thể đánh giá chính xác hơn.
               </p>
             </div>
 

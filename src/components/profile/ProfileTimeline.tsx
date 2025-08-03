@@ -100,7 +100,9 @@ export const ProfileTimeline: React.FC<ProfileTimelineProps> = ({ userId }) => {
             type: 'event',
             post_type: 'event',
             content: 'Tham gia sự kiện mới',
-            created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+            created_at: new Date(
+              Date.now() - 1000 * 60 * 60 * 24
+            ).toISOString(), // 1 day ago
             likes_count: 12,
             comments_count: 5,
             event: {
@@ -116,7 +118,9 @@ export const ProfileTimeline: React.FC<ProfileTimelineProps> = ({ userId }) => {
             post_type: 'post',
             content:
               'Hôm nay là một ngày tuyệt vời để chơi pool! Đã luyện tập được 3 tiếng và cảm thấy kỹ thuật đã cải thiện rất nhiều. Ai muốn thách đấu không? 🎱',
-            created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 days ago
+            created_at: new Date(
+              Date.now() - 1000 * 60 * 60 * 24 * 2
+            ).toISOString(), // 2 days ago
             likes_count: 23,
             comments_count: 7,
             images: ['/images/pool-practice.jpg'],

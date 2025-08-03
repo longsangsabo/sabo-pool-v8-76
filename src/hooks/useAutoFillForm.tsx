@@ -11,14 +11,18 @@ export const useAutoFillForm = <TFormValues extends Record<string, any>>(
   }
 ) => {
   const { playerProfile, clubProfile } = useProfileContext();
-  const { playerFields = [], clubFields = [], autoFillOnMount = false } = options;
-  
+  const {
+    playerFields = [],
+    clubFields = [],
+    autoFillOnMount = false,
+  } = options;
+
   // Auto-fill player info
   const fillPlayerInfo = () => {
     if (!playerProfile) return;
-    
+
     const valuesToSet = {} as Partial<TFormValues>;
-    
+
     playerFields.forEach(field => {
       const fieldName = field as string;
       if (playerProfile[fieldName as keyof typeof playerProfile]) {
@@ -28,18 +32,18 @@ export const useAutoFillForm = <TFormValues extends Record<string, any>>(
         }
       }
     });
-    
+
     if (Object.keys(valuesToSet).length > 0) {
       form.reset({ ...form.getValues(), ...valuesToSet });
     }
   };
-  
+
   // Auto-fill club info
   const fillClubInfo = () => {
     if (!clubProfile) return;
-    
+
     const valuesToSet = {} as Partial<TFormValues>;
-    
+
     clubFields.forEach(field => {
       const fieldName = field as string;
       if (clubProfile[fieldName as keyof typeof clubProfile]) {
@@ -49,30 +53,30 @@ export const useAutoFillForm = <TFormValues extends Record<string, any>>(
         }
       }
     });
-    
+
     if (Object.keys(valuesToSet).length > 0) {
       form.reset({ ...form.getValues(), ...valuesToSet });
     }
   };
-  
+
   // Fill all available info
   const fillAllInfo = () => {
     fillPlayerInfo();
     fillClubInfo();
   };
-  
+
   // Auto-fill on mount if enabled
   useEffect(() => {
     if (autoFillOnMount && (playerProfile || clubProfile)) {
       fillAllInfo();
     }
   }, [playerProfile, clubProfile, autoFillOnMount]);
-  
+
   return {
     fillPlayerInfo,
     fillClubInfo,
     fillAllInfo,
     hasPlayerProfile: !!playerProfile,
-    hasClubProfile: !!clubProfile
+    hasClubProfile: !!clubProfile,
   };
 };

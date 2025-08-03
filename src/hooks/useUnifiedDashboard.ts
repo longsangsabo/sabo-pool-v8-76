@@ -11,15 +11,15 @@ export const useUnifiedDashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useAdminCheck();
   const { isClubOwner, isLoading: clubLoading } = useClubRole();
-  
+
   // Admin dashboard data
   const adminData = useAdminDashboard();
-  
+
   // Social feed data for regular users
   const socialData = useSocialFeed();
-  
+
   const isLoading = authLoading || adminLoading || clubLoading;
-  
+
   // Determine user role and dashboard type
   const getDashboardType = () => {
     if (!user) return 'guest';
@@ -27,9 +27,9 @@ export const useUnifiedDashboard = () => {
     if (isClubOwner) return 'club';
     return 'player';
   };
-  
+
   const dashboardType = getDashboardType();
-  
+
   // Return appropriate data based on role
   const getDashboardData = () => {
     switch (dashboardType) {
@@ -61,7 +61,7 @@ export const useUnifiedDashboard = () => {
         };
     }
   };
-  
+
   return {
     user,
     dashboardType,
@@ -73,6 +73,6 @@ export const useUnifiedDashboard = () => {
       } else if (dashboardType === 'player') {
         socialData.refreshFeed();
       }
-    }
+    },
   };
 };

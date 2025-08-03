@@ -1,12 +1,11 @@
-
 import { supabase } from '@/integrations/supabase/client';
-import type { 
-  EmailTemplate, 
-  EmailConfig, 
-  MatchResult, 
+import type {
+  EmailTemplate,
+  EmailConfig,
+  MatchResult,
   PaymentDetails,
   TournamentEmailData,
-  RankingUpdateData 
+  RankingUpdateData,
 } from '@/types/email';
 
 export const EMAIL_CONFIG: EmailConfig = {
@@ -30,27 +29,53 @@ export class EmailService {
     await this.sendEmail(userEmail, template);
   }
 
-  async sendTournamentConfirmation(userEmail: string, tournamentName: string, userName: string): Promise<void> {
-    const template = this.getTournamentConfirmationTemplate(tournamentName, userName);
+  async sendTournamentConfirmation(
+    userEmail: string,
+    tournamentName: string,
+    userName: string
+  ): Promise<void> {
+    const template = this.getTournamentConfirmationTemplate(
+      tournamentName,
+      userName
+    );
     await this.sendEmail(userEmail, template);
   }
 
-  async sendMatchResultNotification(userEmail: string, matchResult: MatchResult, userName: string): Promise<void> {
+  async sendMatchResultNotification(
+    userEmail: string,
+    matchResult: MatchResult,
+    userName: string
+  ): Promise<void> {
     const template = this.getMatchResultTemplate(matchResult, userName);
     await this.sendEmail(userEmail, template);
   }
 
-  async sendRankingUpdateNotification(userEmail: string, newRank: string, oldRank: string, userName: string): Promise<void> {
+  async sendRankingUpdateNotification(
+    userEmail: string,
+    newRank: string,
+    oldRank: string,
+    userName: string
+  ): Promise<void> {
     const template = this.getRankingUpdateTemplate(newRank, oldRank, userName);
     await this.sendEmail(userEmail, template);
   }
 
-  async sendPaymentConfirmation(userEmail: string, paymentDetails: PaymentDetails, userName: string): Promise<void> {
-    const template = this.getPaymentConfirmationTemplate(paymentDetails, userName);
+  async sendPaymentConfirmation(
+    userEmail: string,
+    paymentDetails: PaymentDetails,
+    userName: string
+  ): Promise<void> {
+    const template = this.getPaymentConfirmationTemplate(
+      paymentDetails,
+      userName
+    );
     await this.sendEmail(userEmail, template);
   }
 
-  async sendPasswordResetEmail(userEmail: string, resetLink: string): Promise<void> {
+  async sendPasswordResetEmail(
+    userEmail: string,
+    resetLink: string
+  ): Promise<void> {
     const template = this.getPasswordResetTemplate(resetLink);
     await this.sendEmail(userEmail, template);
   }
@@ -62,7 +87,7 @@ export class EmailService {
       console.log(`Sending email to: ${to}`);
       console.log(`Subject: ${template.subject}`);
       console.log(`Content: ${template.text}`);
-      
+
       // Store email log in database for tracking
       await this.logEmail(to, template.subject, 'sent');
     } catch (error) {
@@ -72,7 +97,11 @@ export class EmailService {
     }
   }
 
-  private async logEmail(to: string, subject: string, status: 'sent' | 'failed'): Promise<void> {
+  private async logEmail(
+    to: string,
+    subject: string,
+    status: 'sent' | 'failed'
+  ): Promise<void> {
     try {
       // Log email activity for audit purposes
       console.log(`Email log: ${to} - ${subject} - ${status}`);
@@ -125,11 +154,14 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Chào mừng ${userName} đến với SABO Pool Arena! Tham gia ngay để thi đấu và kết nối với cộng đồng Billiards. Truy cập: ${window.location.origin}/dashboard`
+      text: `Chào mừng ${userName} đến với SABO Pool Arena! Tham gia ngay để thi đấu và kết nối với cộng đồng Billiards. Truy cập: ${window.location.origin}/dashboard`,
     };
   }
 
-  private getTournamentConfirmationTemplate(tournamentName: string, userName: string): EmailTemplate {
+  private getTournamentConfirmationTemplate(
+    tournamentName: string,
+    userName: string
+  ): EmailTemplate {
     return {
       subject: `✅ Xác nhận đăng ký giải đấu: ${tournamentName}`,
       html: `
@@ -175,11 +207,14 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Xác nhận đăng ký giải đấu ${tournamentName} thành công cho ${userName}. Chi tiết tại: ${window.location.origin}/tournaments`
+      text: `Xác nhận đăng ký giải đấu ${tournamentName} thành công cho ${userName}. Chi tiết tại: ${window.location.origin}/tournaments`,
     };
   }
 
-  private getMatchResultTemplate(matchResult: MatchResult, userName: string): EmailTemplate {
+  private getMatchResultTemplate(
+    matchResult: MatchResult,
+    userName: string
+  ): EmailTemplate {
     const isWinner = matchResult.winner === userName;
     const resultColor = isWinner ? '#10b981' : '#ef4444';
     const resultText = isWinner ? 'THẮNG' : 'THUA';
@@ -211,21 +246,25 @@ export class EmailService {
             </div>
           </div>
 
-          ${isWinner ? `
+          ${
+            isWinner
+              ? `
           <div style="background: #dcfce7; border: 2px solid #10b981; border-radius: 10px; padding: 20px; margin: 25px 0;">
             <h4 style="color: #059669; margin-bottom: 15px;">🎉 Chúc mừng chiến thắng!</h4>
             <p style="color: #374151; margin: 0;">
               Bạn đã có một trận đấu xuất sắc! Hãy tiếp tục nỗ lực để đạt được nhiều thành công hơn nữa.
             </p>
           </div>
-          ` : `
+          `
+              : `
           <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 20px; margin: 25px 0;">
             <h4 style="color: #dc2626; margin-bottom: 15px;">💪 Đừng bỏ cuộc!</h4>
             <p style="color: #374151; margin: 0;">
               Mỗi trận đấu đều là cơ hội học hỏi. Hãy tiếp tục luyện tập và chuẩn bị cho những thử thách tiếp theo!
             </p>
           </div>
-          `}
+          `
+          }
 
           <div style="text-align: center; margin: 30px 0;">
             <a href="${window.location.origin}/matches" 
@@ -242,11 +281,15 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Kết quả trận đấu: Bạn đã ${resultText}! Chi tiết tại: ${window.location.origin}/matches`
+      text: `Kết quả trận đấu: Bạn đã ${resultText}! Chi tiết tại: ${window.location.origin}/matches`,
     };
   }
 
-  private getRankingUpdateTemplate(newRank: string, oldRank: string, userName: string): EmailTemplate {
+  private getRankingUpdateTemplate(
+    newRank: string,
+    oldRank: string,
+    userName: string
+  ): EmailTemplate {
     const isPromotion = newRank > oldRank;
     const changeColor = isPromotion ? '#10b981' : '#ef4444';
     const changeText = isPromotion ? 'THĂNG HẠNG' : 'XUỐNG HẠNG';
@@ -287,21 +330,25 @@ export class EmailService {
             </p>
           </div>
 
-          ${isPromotion ? `
+          ${
+            isPromotion
+              ? `
           <div style="background: #dcfce7; border: 2px solid #10b981; border-radius: 10px; padding: 20px; margin: 25px 0;">
             <h4 style="color: #059669; margin-bottom: 15px;">🎉 Xuất sắc!</h4>
             <p style="color: #374151; margin: 0;">
               Chúc mừng bạn đã thăng hạng! Thành tích này là kết quả của sự nỗ lực và kỹ năng thi đấu tuyệt vời.
             </p>
           </div>
-          ` : `
+          `
+              : `
           <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 20px; margin: 25px 0;">
             <h4 style="color: #dc2626; margin-bottom: 15px;">💪 Tiếp tục cố gắng!</h4>
             <p style="color: #374151; margin: 0;">
               Đây là cơ hội để bạn trở lại mạnh mẽ hơn. Hãy luyện tập chăm chỉ và cải thiện kỹ năng của mình!
             </p>
           </div>
-          `}
+          `
+          }
 
           <div style="text-align: center; margin: 30px 0;">
             <a href="${window.location.origin}/leaderboard" 
@@ -318,11 +365,14 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Xếp hạng cập nhật: ${userName} từ #${oldRank} → #${newRank}. Chi tiết: ${window.location.origin}/leaderboard`
+      text: `Xếp hạng cập nhật: ${userName} từ #${oldRank} → #${newRank}. Chi tiết: ${window.location.origin}/leaderboard`,
     };
   }
 
-  private getPaymentConfirmationTemplate(paymentDetails: PaymentDetails, userName: string): EmailTemplate {
+  private getPaymentConfirmationTemplate(
+    paymentDetails: PaymentDetails,
+    userName: string
+  ): EmailTemplate {
     return {
       subject: '💳 Xác nhận thanh toán - SABO Pool Arena',
       html: `
@@ -387,7 +437,7 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Thanh toán thành công ${paymentDetails.amount || '100,000'} VNĐ cho ${paymentDetails.service || 'dịch vụ'}. Mã: ${paymentDetails.transactionId || 'TXN_' + Date.now()}`
+      text: `Thanh toán thành công ${paymentDetails.amount || '100,000'} VNĐ cho ${paymentDetails.service || 'dịch vụ'}. Mã: ${paymentDetails.transactionId || 'TXN_' + Date.now()}`,
     };
   }
 
@@ -447,7 +497,7 @@ export class EmailService {
           </div>
         </div>
       `,
-      text: `Yêu cầu đặt lại mật khẩu SABO Pool Arena. Link: ${resetLink} (có hiệu lực 1 giờ)`
+      text: `Yêu cầu đặt lại mật khẩu SABO Pool Arena. Link: ${resetLink} (có hiệu lực 1 giờ)`,
     };
   }
 }

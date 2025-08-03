@@ -119,7 +119,7 @@ const AvatarManager = ({
     <>
       {/* Avatar Display & Edit Button */}
       <div className='relative inline-block'>
-        <div 
+        <div
           className='w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 flex-shrink-0'
           style={{ width: '96px', height: '96px' }}
         >
@@ -130,7 +130,7 @@ const AvatarManager = ({
               width={96}
               height={96}
               className='w-24 h-24 rounded-full object-cover'
-              loading="eager"
+              loading='eager'
             />
           ) : (
             <span className='text-white text-2xl font-medium'>

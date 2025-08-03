@@ -66,7 +66,7 @@ export const SCHEMA_DEFINITIONS = {
     required: ['id', 'challenger_id', 'bet_points'],
     // NOTE: challenges table does NOT have:
     // - winner_id (winner determined by score comparison)
-    // - loser_id (loser determined by score comparison)  
+    // - loser_id (loser determined by score comparison)
     // - completed_at (use score_confirmation_timestamp instead)
     // - challenger_score (use challenger_final_score instead)
     // - opponent_score (use opponent_final_score instead)
@@ -263,36 +263,49 @@ export const SCHEMA_DEFINITIONS = {
  * Validates if a column exists in a table schema
  */
 export function validateColumn(table: string, column: string): boolean {
-  const tableSchema = SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
+  const tableSchema =
+    SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
     console.warn(`Table '${table}' not found in schema definitions`);
     return false;
   }
-  
+
   const exists = tableSchema.columns.includes(column as any);
   if (!exists) {
-    console.error(`Column '${column}' does not exist in table '${table}'. Available columns:`, [...tableSchema.columns]);
+    console.error(
+      `Column '${column}' does not exist in table '${table}'. Available columns:`,
+      [...tableSchema.columns]
+    );
   }
-  
+
   return exists;
 }
 
 /**
  * Validates if required columns are present for a table operation
  */
-export function validateRequiredColumns(table: string, columns: string[]): boolean {
-  const tableSchema = SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
+export function validateRequiredColumns(
+  table: string,
+  columns: string[]
+): boolean {
+  const tableSchema =
+    SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
     console.warn(`Table '${table}' not found in schema definitions`);
     return false;
   }
-  
-  const missingRequired = tableSchema.required.filter(col => !columns.includes(col));
+
+  const missingRequired = tableSchema.required.filter(
+    col => !columns.includes(col)
+  );
   if (missingRequired.length > 0) {
-    console.error(`Missing required columns for table '${table}':`, missingRequired);
+    console.error(
+      `Missing required columns for table '${table}':`,
+      missingRequired
+    );
     return false;
   }
-  
+
   return true;
 }
 
@@ -300,7 +313,8 @@ export function validateRequiredColumns(table: string, columns: string[]): boole
  * Gets all available columns for a table
  */
 export function getTableColumns(table: string): string[] {
-  const tableSchema = SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
+  const tableSchema =
+    SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   return tableSchema ? [...tableSchema.columns] : [];
 }
 
@@ -308,16 +322,23 @@ export function getTableColumns(table: string): string[] {
  * Gets required columns for a table
  */
 export function getRequiredColumns(table: string): string[] {
-  const tableSchema = SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
+  const tableSchema =
+    SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   return tableSchema ? [...tableSchema.required] : [];
 }
 
 /**
  * Development helper: Log schema mismatches
  */
-export function logSchemaMismatch(table: string, attemptedColumn: string, suggestedColumns?: string[]) {
+export function logSchemaMismatch(
+  table: string,
+  attemptedColumn: string,
+  suggestedColumns?: string[]
+) {
   console.group(`🚨 Schema Mismatch Detected`);
-  console.error(`Attempted to use column '${attemptedColumn}' on table '${table}'`);
+  console.error(
+    `Attempted to use column '${attemptedColumn}' on table '${table}'`
+  );
   console.log(`Available columns:`, getTableColumns(table));
   if (suggestedColumns?.length) {
     console.log(`Suggested alternatives:`, suggestedColumns);

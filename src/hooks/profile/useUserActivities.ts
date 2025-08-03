@@ -20,7 +20,7 @@ export const useUserActivities = (
     isFetchingNextPage,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useInfiniteQuery({
     queryKey: ['user-activities', targetUserId, activityType, limit],
     queryFn: async ({ pageParam = 0 }) => {
@@ -37,10 +37,10 @@ export const useUserActivities = (
 
       return {
         activities,
-        nextPage: activities.length === limit ? pageParam + 1 : undefined
+        nextPage: activities.length === limit ? pageParam + 1 : undefined,
       };
     },
-    getNextPageParam: (lastPage) => lastPage.nextPage,
+    getNextPageParam: lastPage => lastPage.nextPage,
     enabled: !!targetUserId,
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
@@ -56,7 +56,7 @@ export const useUserActivities = (
     isFetchingNextPage,
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -69,7 +69,7 @@ export const useRecentActivities = (userId?: string, limit = 10) => {
     data: activities,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['recent-activities', targetUserId, limit],
     queryFn: async (): Promise<UserActivity[]> => {
@@ -88,6 +88,6 @@ export const useRecentActivities = (userId?: string, limit = 10) => {
     activities: activities || [],
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };

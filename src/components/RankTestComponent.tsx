@@ -9,7 +9,10 @@ export const RankTestComponent = () => {
   const [testResults, setTestResults] = useState<string[]>([]);
 
   const addTestResult = (message: string) => {
-    setTestResults(prev => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev.slice(0, 9)]);
+    setTestResults(prev => [
+      `${new Date().toLocaleTimeString()}: ${message}`,
+      ...prev.slice(0, 9),
+    ]);
   };
 
   const testProfileUpdate = async () => {
@@ -22,7 +25,9 @@ export const RankTestComponent = () => {
         addTestResult('Failed to get profile');
       }
     } catch (error) {
-      addTestResult(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addTestResult(
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   };
 
@@ -36,10 +41,12 @@ export const RankTestComponent = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: 'type=eq.rank_approved'
+          filter: 'type=eq.rank_approved',
         },
-        (payload) => {
-          addTestResult(`🎉 Rank approved notification: ${payload.new.message}`);
+        payload => {
+          addTestResult(
+            `🎉 Rank approved notification: ${payload.new.message}`
+          );
           // Auto-refresh profile when rank approval notification comes in
           testProfileUpdate();
         }
@@ -57,24 +64,27 @@ export const RankTestComponent = () => {
   }, []);
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className='w-full max-w-md'>
       <CardHeader>
         <CardTitle>Rank Verification Test</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className='space-y-4'>
         <div>
-          <p><strong>Current Rank:</strong> {profile?.current_rank || 'Loading...'}</p>
+          <p>
+            <strong>Current Rank:</strong>{' '}
+            {profile?.current_rank || 'Loading...'}
+          </p>
         </div>
-        
-        <Button onClick={testProfileUpdate} className="w-full">
+
+        <Button onClick={testProfileUpdate} className='w-full'>
           Refresh Profile
         </Button>
-        
+
         <div>
-          <h4 className="font-semibold mb-2">Test Results:</h4>
-          <div className="max-h-48 overflow-y-auto space-y-1">
+          <h4 className='font-semibold mb-2'>Test Results:</h4>
+          <div className='max-h-48 overflow-y-auto space-y-1'>
             {testResults.map((result, index) => (
-              <div key={index} className="text-sm p-2 bg-muted rounded">
+              <div key={index} className='text-sm p-2 bg-muted rounded'>
                 {result}
               </div>
             ))}

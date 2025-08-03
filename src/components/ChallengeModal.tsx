@@ -58,7 +58,7 @@ const ChallengeModal = ({
         <div className='space-y-6'>
           {/* Challenge Status Banner */}
           <ChallengeStatusBanner />
-          
+
           {/* Opponent Info */}
           <div className='flex items-center space-x-3 p-3 bg-gray-50 rounded-lg'>
             <UserAvatar

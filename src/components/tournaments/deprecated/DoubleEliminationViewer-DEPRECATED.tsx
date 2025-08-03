@@ -12,13 +12,15 @@ interface DoubleEliminationViewerProps {
   adminMode?: boolean;
 }
 
-export const DoubleEliminationViewer: React.FC<DoubleEliminationViewerProps> = () => {
+export const DoubleEliminationViewer: React.FC<
+  DoubleEliminationViewerProps
+> = () => {
   return (
-    <Alert className="border-red-500 bg-red-50">
-      <AlertTriangle className="h-4 w-4" />
-      <AlertDescription className="text-red-800">
-        <strong>DEPRECATED COMPONENT:</strong> This component has been replaced by SABODoubleEliminationViewer. 
-        Please use the new SABO system instead.
+    <Alert className='border-red-500 bg-red-50'>
+      <AlertTriangle className='h-4 w-4' />
+      <AlertDescription className='text-red-800'>
+        <strong>DEPRECATED COMPONENT:</strong> This component has been replaced
+        by SABODoubleEliminationViewer. Please use the new SABO system instead.
       </AlertDescription>
     </Alert>
   );

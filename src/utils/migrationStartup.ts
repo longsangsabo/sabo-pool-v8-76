@@ -22,8 +22,8 @@ export const getMigrationSystemStatus = async () => {
       isHealthy: true,
       needsMigration: false,
       alertCount: 0,
-      isMonitoring: false
-    }
+      isMonitoring: false,
+    },
   };
 };
 
@@ -31,5 +31,5 @@ export default {
   initializeMigrationSystem,
   cleanupMigrationSystem,
   triggerManualMigration,
-  getMigrationSystemStatus
+  getMigrationSystemStatus,
 };

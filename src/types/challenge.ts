@@ -1,4 +1,3 @@
-
 import { UserProfile, Club } from './tournament';
 
 export interface ChallengeProfile {
@@ -32,7 +31,14 @@ export interface Challenge {
   handicap_1_rank?: number;
   handicap_05_rank?: number;
   message?: string;
-  status: 'pending' | 'accepted' | 'declined' | 'ongoing' | 'completed' | 'cancelled' | 'expired';
+  status:
+    | 'pending'
+    | 'accepted'
+    | 'declined'
+    | 'ongoing'
+    | 'completed'
+    | 'cancelled'
+    | 'expired';
   scheduled_time?: string;
   expires_at?: string;
   accepted_at?: string;
@@ -48,8 +54,14 @@ export interface Challenge {
   club_confirmed?: boolean;
   club_confirmed_by?: string;
   club_confirmed_at?: string;
-  score_confirmation_status?: 'pending' | 'waiting_confirmation' | 'completed' | 'score_entered' | 'score_confirmed' | 'club_confirmed';
-  
+  score_confirmation_status?:
+    | 'pending'
+    | 'waiting_confirmation'
+    | 'completed'
+    | 'score_entered'
+    | 'score_confirmed'
+    | 'club_confirmed';
+
   // New 3-step workflow fields
   score_entered_by?: string;
   score_confirmed_by?: string;
@@ -65,17 +77,17 @@ export interface Challenge {
   verified_at?: string;
   created_at: string;
   updated_at?: string;
-  
+
   // New consistent profile relations
   challenger_profile?: ChallengeProfile;
   opponent_profile?: ChallengeProfile;
   club?: Club;
   verifier?: UserProfile;
-  
+
   // Admin fields
   admin_created_by?: string;
   admin_notes?: string;
-  
+
   // Legacy support for existing components - keep these for backward compatibility
   challenged_id?: string; // Alias for opponent_id
   challenger?: ChallengeProfile; // Keep for backward compatibility

@@ -10,7 +10,7 @@ export const useLeaderboard = (limit = 50) => {
     data: leaderboard,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['leaderboard', limit],
     queryFn: async () => {
@@ -24,7 +24,7 @@ export const useLeaderboard = (limit = 50) => {
     leaderboard: leaderboard || [],
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -36,7 +36,7 @@ export const useUserRanking = (userId?: string) => {
     data: ranking,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ['user-ranking', targetUserId],
     queryFn: async (): Promise<number | null> => {
@@ -55,7 +55,7 @@ export const useUserRanking = (userId?: string) => {
     ranking,
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -63,7 +63,7 @@ export const useUserRanking = (userId?: string) => {
 export const useLeaderboardWithUserPosition = (userId?: string, limit = 50) => {
   const { user } = useAuth();
   const targetUserId = userId || user?.id;
-  
+
   const { leaderboard, isLoading: leaderboardLoading } = useLeaderboard(limit);
   const { ranking, isLoading: rankingLoading } = useUserRanking(targetUserId);
 
@@ -73,8 +73,8 @@ export const useLeaderboardWithUserPosition = (userId?: string, limit = 50) => {
   );
 
   const isUserInTopRanks = !!userInLeaderboard;
-  const userPosition = userInLeaderboard 
-    ? leaderboard.indexOf(userInLeaderboard) + 1 
+  const userPosition = userInLeaderboard
+    ? leaderboard.indexOf(userInLeaderboard) + 1
     : ranking;
 
   return {
@@ -82,6 +82,6 @@ export const useLeaderboardWithUserPosition = (userId?: string, limit = 50) => {
     userPosition,
     isUserInTopRanks,
     ranking,
-    isLoading: leaderboardLoading || rankingLoading
+    isLoading: leaderboardLoading || rankingLoading,
   };
 };

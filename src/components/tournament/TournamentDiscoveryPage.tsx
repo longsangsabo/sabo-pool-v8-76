@@ -17,7 +17,6 @@ import { useTournaments } from '@/hooks/useTournaments';
 import { TournamentRecommendationCard } from './TournamentRecommendationCard';
 import { TournamentSkeleton } from './TournamentSkeleton';
 
-
 const TournamentDiscoveryPage = () => {
   const {
     tournaments,

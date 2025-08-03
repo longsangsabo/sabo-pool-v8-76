@@ -91,7 +91,7 @@ export function useCleanup() {
   return {
     timers,
     events,
-    cleanup
+    cleanup,
   };
 }
 
@@ -119,33 +119,41 @@ export class SubscriptionManager {
 export const globalCleanup = {
   memoryLeakDetection: {
     enabled: process.env.NODE_ENV === 'development',
-    
+
     detectLeaks() {
       if (!this.enabled) return;
-      
+
       // Check for potential memory leaks
       const timers = (window as any).__timers_created || 0;
       const listeners = (window as any).__listeners_created || 0;
-      
+
       if (timers > 100) {
-        console.warn('🚨 Potential timer leak detected:', timers, 'timers created');
+        console.warn(
+          '🚨 Potential timer leak detected:',
+          timers,
+          'timers created'
+        );
       }
-      
+
       if (listeners > 100) {
-        console.warn('🚨 Potential event listener leak detected:', listeners, 'listeners created');
+        console.warn(
+          '🚨 Potential event listener leak detected:',
+          listeners,
+          'listeners created'
+        );
       }
-    }
+    },
   },
-  
+
   performanceMonitoring: {
     enabled: process.env.NODE_ENV === 'production',
-    
+
     trackPerformance() {
       if (!this.enabled || typeof window === 'undefined') return;
-      
+
       // Track Core Web Vitals
       if ('PerformanceObserver' in window) {
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (entry.entryType === 'largest-contentful-paint') {
               const lcp = entry.startTime;
@@ -155,11 +163,11 @@ export const globalCleanup = {
             }
           }
         });
-        
+
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
       }
-    }
-  }
+    },
+  },
 };
 
 // Production error boundary utility
@@ -167,24 +175,24 @@ export const productionErrorHandler = {
   setup() {
     if (process.env.NODE_ENV === 'production') {
       // Global error handler
-      window.addEventListener('error', (event) => {
+      window.addEventListener('error', event => {
         // Only log critical errors in production
         if (event.error && !event.error.message?.includes('script error')) {
           console.error('Production error:', {
             message: event.error.message,
             stack: event.error.stack?.substring(0, 1000), // Limit stack trace
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
       });
 
       // Unhandled promise rejection handler
-      window.addEventListener('unhandledrejection', (event) => {
+      window.addEventListener('unhandledrejection', event => {
         console.error('Unhandled rejection:', {
           reason: event.reason?.toString?.() || 'Unknown',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       });
     }
-  }
+  },
 };

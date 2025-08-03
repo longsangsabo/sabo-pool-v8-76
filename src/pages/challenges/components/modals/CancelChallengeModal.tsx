@@ -24,7 +24,7 @@ const CancelChallengeModal: React.FC<CancelChallengeModalProps> = ({
   onClose,
   onConfirm,
   challengerName,
-  opponentName
+  opponentName,
 }) => {
   const [reason, setReason] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,53 +55,54 @@ const CancelChallengeModal: React.FC<CancelChallengeModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-yellow-500" />
+          <div className='flex items-center gap-2'>
+            <AlertTriangle className='h-5 w-5 text-yellow-500' />
             <DialogTitle>Hủy thách đấu</DialogTitle>
           </div>
         </DialogHeader>
-        
-        <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
+
+        <div className='space-y-4'>
+          <div className='text-sm text-muted-foreground'>
             Bạn có chắc chắn muốn hủy thách đấu với{' '}
-            <span className="font-medium text-foreground">
+            <span className='font-medium text-foreground'>
               {opponentName || challengerName || 'đối thủ này'}
-            </span>?
+            </span>
+            ?
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="reason">Lý do hủy thách đấu *</Label>
+
+          <div className='space-y-2'>
+            <Label htmlFor='reason'>Lý do hủy thách đấu *</Label>
             <Textarea
-              id="reason"
-              placeholder="Vui lòng nhập lý do hủy thách đấu..."
+              id='reason'
+              placeholder='Vui lòng nhập lý do hủy thách đấu...'
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              className="min-h-[80px]"
+              onChange={e => setReason(e.target.value)}
+              className='min-h-[80px]'
               disabled={isSubmitting}
             />
-            <div className="text-xs text-muted-foreground">
+            <div className='text-xs text-muted-foreground'>
               Lý do này sẽ được gửi thông báo cho đối thủ
             </div>
           </div>
         </div>
 
-        <DialogFooter className="flex gap-2">
+        <DialogFooter className='flex gap-2'>
           <Button
-            variant="outline"
+            variant='outline'
             onClick={handleClose}
             disabled={isSubmitting}
           >
             Đóng
           </Button>
           <Button
-            variant="destructive"
+            variant='destructive'
             onClick={handleSubmit}
             disabled={!reason.trim() || isSubmitting}
-            className="gap-2"
+            className='gap-2'
           >
-            {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+            {isSubmitting && <Loader2 className='h-4 w-4 animate-spin' />}
             Xác nhận hủy
           </Button>
         </DialogFooter>

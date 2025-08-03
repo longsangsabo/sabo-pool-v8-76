@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,7 +35,12 @@ interface MatchCompletionModalProps {
   onMatchCompleted: () => void;
 }
 
-const MatchCompletionModal = ({ isOpen, onClose, match, onMatchCompleted }: MatchCompletionModalProps) => {
+const MatchCompletionModal = ({
+  isOpen,
+  onClose,
+  match,
+  onMatchCompleted,
+}: MatchCompletionModalProps) => {
   const { user } = useAuth();
   const [winner, setWinner] = useState<string>('');
   const [myScore, setMyScore] = useState('');
@@ -53,23 +63,26 @@ const MatchCompletionModal = ({ isOpen, onClose, match, onMatchCompleted }: Matc
     setLoading(true);
 
     try {
-      const player1Score = isPlayer1 ? parseInt(myScore) : parseInt(opponentScore);
-      const player2Score = isPlayer1 ? parseInt(opponentScore) : parseInt(myScore);
+      const player1Score = isPlayer1
+        ? parseInt(myScore)
+        : parseInt(opponentScore);
+      const player2Score = isPlayer1
+        ? parseInt(opponentScore)
+        : parseInt(myScore);
 
       // Mock match completion since table doesn't exist
       const error = null; // Mock success
-      
+
       if (error) throw error;
 
       toast.success('Đã cập nhật kết quả trận đấu!');
       onMatchCompleted();
       onClose();
-      
+
       // Show rating modal after a short delay
       setTimeout(() => {
         setShowRatingModal(true);
       }, 500);
-
     } catch (error) {
       console.error('Error updating match:', error);
       toast.error('Lỗi khi cập nhật kết quả');
@@ -88,94 +101,96 @@ const MatchCompletionModal = ({ isOpen, onClose, match, onMatchCompleted }: Matc
   return (
     <>
       <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="max-w-md">
+        <DialogContent className='max-w-md'>
           <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <Trophy className="w-5 h-5 mr-2" />
+            <DialogTitle className='flex items-center'>
+              <Trophy className='w-5 h-5 mr-2' />
               Xác nhận kết quả trận đấu
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-6">
+          <div className='space-y-6'>
             {/* Players Info */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <Avatar className="w-8 h-8">
+            <div className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
+              <div className='flex items-center space-x-2'>
+                <Avatar className='w-8 h-8'>
                   <AvatarImage src={user.user_metadata?.avatar_url} />
                   <AvatarFallback>
                     {user.user_metadata?.full_name?.charAt(0) || 'Tôi'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-medium">Tôi</span>
+                <span className='font-medium'>Tôi</span>
               </div>
-              
-              <Users className="w-5 h-5 text-gray-400" />
-              
-              <div className="flex items-center space-x-2">
-                <Avatar className="w-8 h-8">
+
+              <Users className='w-5 h-5 text-gray-400' />
+
+              <div className='flex items-center space-x-2'>
+                <Avatar className='w-8 h-8'>
                   <AvatarImage src={match.profiles?.avatar_url} />
                   <AvatarFallback>
                     {match.profiles?.full_name?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-medium">{opponentName}</span>
+                <span className='font-medium'>{opponentName}</span>
               </div>
             </div>
 
             {/* Winner Selection */}
             <div>
-              <Label className="text-base font-medium mb-3 block">Ai là người thắng?</Label>
+              <Label className='text-base font-medium mb-3 block'>
+                Ai là người thắng?
+              </Label>
               <RadioGroup value={winner} onValueChange={setWinner}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={user.id} id="me" />
-                  <Label htmlFor="me">Tôi thắng</Label>
+                <div className='flex items-center space-x-2'>
+                  <RadioGroupItem value={user.id} id='me' />
+                  <Label htmlFor='me'>Tôi thắng</Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={opponentId} id="opponent" />
-                  <Label htmlFor="opponent">{opponentName} thắng</Label>
+                <div className='flex items-center space-x-2'>
+                  <RadioGroupItem value={opponentId} id='opponent' />
+                  <Label htmlFor='opponent'>{opponentName} thắng</Label>
                 </div>
               </RadioGroup>
             </div>
 
             {/* Score Input */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <div>
-                <Label htmlFor="myScore">Tỉ số của tôi</Label>
+                <Label htmlFor='myScore'>Tỉ số của tôi</Label>
                 <Input
-                  id="myScore"
-                  type="number"
-                  min="0"
+                  id='myScore'
+                  type='number'
+                  min='0'
                   value={myScore}
-                  onChange={(e) => setMyScore(e.target.value)}
-                  placeholder="0"
+                  onChange={e => setMyScore(e.target.value)}
+                  placeholder='0'
                 />
               </div>
               <div>
-                <Label htmlFor="opponentScore">Tỉ số đối thủ</Label>
+                <Label htmlFor='opponentScore'>Tỉ số đối thủ</Label>
                 <Input
-                  id="opponentScore"
-                  type="number"
-                  min="0"
+                  id='opponentScore'
+                  type='number'
+                  min='0'
                   value={opponentScore}
-                  onChange={(e) => setOpponentScore(e.target.value)}
-                  placeholder="0"
+                  onChange={e => setOpponentScore(e.target.value)}
+                  placeholder='0'
                 />
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="flex space-x-2">
+            <div className='flex space-x-2'>
               <Button
-                variant="outline"
+                variant='outline'
                 onClick={handleClose}
-                className="flex-1"
+                className='flex-1'
                 disabled={loading}
               >
                 Hủy
               </Button>
               <Button
                 onClick={handleSubmit}
-                className="flex-1"
+                className='flex-1'
                 disabled={loading || !winner || !myScore || !opponentScore}
               >
                 {loading ? 'Đang lưu...' : 'Xác nhận kết quả'}

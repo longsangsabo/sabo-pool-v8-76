@@ -4,12 +4,12 @@ export class AutomatedMigrationService {
     console.log('Mock: Detecting player ID columns');
     return { columns: [] };
   }
-  
+
   static async detectPlayerIdForeignKeys() {
     console.log('Mock: Detecting player ID foreign keys');
     return { foreignKeys: [] };
   }
-  
+
   static async detectPlayerIdInFunctions() {
     console.log('Mock: Detecting player ID in functions');
     return { functions: [] };

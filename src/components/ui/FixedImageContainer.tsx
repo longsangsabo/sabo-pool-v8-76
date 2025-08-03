@@ -18,7 +18,7 @@ export const FixedImageContainer: React.FC<FixedImageContainerProps> = ({
   height,
   className,
   children,
-  aspectRatio
+  aspectRatio,
 }) => {
   const containerStyle: React.CSSProperties = {
     width: `${width}px`,
@@ -33,10 +33,7 @@ export const FixedImageContainer: React.FC<FixedImageContainerProps> = ({
 
   return (
     <div
-      className={cn(
-        "relative overflow-hidden flex-shrink-0",
-        className
-      )}
+      className={cn('relative overflow-hidden flex-shrink-0', className)}
       style={containerStyle}
     >
       {children}

@@ -11,11 +11,12 @@ interface UseRealtimeTournamentsProps {
   initialTournaments?: Tournament[];
 }
 
-export const useRealtimeTournaments = ({ 
-  filters = {}, 
-  initialTournaments = [] 
+export const useRealtimeTournaments = ({
+  filters = {},
+  initialTournaments = [],
 }: UseRealtimeTournamentsProps = {}) => {
-  const [tournaments, setTournaments] = useState<Tournament[]>(initialTournaments);
+  const [tournaments, setTournaments] =
+    useState<Tournament[]>(initialTournaments);
   const [loading, setLoading] = useState(initialTournaments.length === 0);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,12 +28,14 @@ export const useRealtimeTournaments = ({
 
       let query = supabase
         .from('tournaments')
-        .select(`
+        .select(
+          `
           *,
           physical_prizes,
           spa_points_config,
           elo_points_config
-        `)
+        `
+        )
         .order('created_at', { ascending: false });
 
       // Apply status filter
@@ -53,11 +56,13 @@ export const useRealtimeTournaments = ({
       const { data, error: fetchError } = await query;
 
       if (fetchError) throw fetchError;
-      
-      setTournaments(data as any[] || []);
+
+      setTournaments((data as any[]) || []);
     } catch (err) {
       console.error('❌ Error fetching tournaments:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch tournaments');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch tournaments'
+      );
     } finally {
       setLoading(false);
     }
@@ -81,11 +86,11 @@ export const useRealtimeTournaments = ({
         {
           event: '*',
           schema: 'public',
-          table: 'tournaments'
+          table: 'tournaments',
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournaments list updated via real-time:', payload);
-          
+
           switch (payload.eventType) {
             case 'INSERT':
               if (payload.new) {
@@ -94,10 +99,10 @@ export const useRealtimeTournaments = ({
               break;
             case 'UPDATE':
               if (payload.new) {
-                setTournaments(prev => 
-                  prev.map(tournament => 
-                    tournament.id === payload.new.id 
-                      ? { ...tournament, ...payload.new } as any
+                setTournaments(prev =>
+                  prev.map(tournament =>
+                    tournament.id === payload.new.id
+                      ? ({ ...tournament, ...payload.new } as any)
                       : tournament
                   )
                 );
@@ -105,7 +110,7 @@ export const useRealtimeTournaments = ({
               break;
             case 'DELETE':
               if (payload.old) {
-                setTournaments(prev => 
+                setTournaments(prev =>
                   prev.filter(tournament => tournament.id !== payload.old.id)
                 );
               }
@@ -118,9 +123,9 @@ export const useRealtimeTournaments = ({
         {
           event: '*',
           schema: 'public',
-          table: 'tournament_registrations'
+          table: 'tournament_registrations',
         },
-        (payload) => {
+        payload => {
           console.log('🔄 Tournament registrations updated, refreshing list');
           // Refetch tournaments to get updated participant counts
           fetchTournaments();
@@ -138,6 +143,6 @@ export const useRealtimeTournaments = ({
     tournaments,
     loading,
     error,
-    refetch: fetchTournaments
+    refetch: fetchTournaments,
   };
 };

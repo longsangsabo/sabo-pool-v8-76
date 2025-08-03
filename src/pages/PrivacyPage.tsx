@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 const PrivacyPage = () => {
   return (
     <div className='min-h-screen bg-gray-50 p-4'>
@@ -16,21 +15,29 @@ const PrivacyPage = () => {
         </CardHeader>
         <CardContent className='space-y-6'>
           <section>
-            <h2 className='text-xl font-semibold mb-3'>1. Thông tin chúng tôi thu thập</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              1. Thông tin chúng tôi thu thập
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Chúng tôi thu thập các thông tin sau:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
                 <li>Thông tin cá nhân: Họ tên, email, số điện thoại</li>
-                <li>Thông tin tài khoản: Tên đăng nhập, mật khẩu (được mã hóa)</li>
+                <li>
+                  Thông tin tài khoản: Tên đăng nhập, mật khẩu (được mã hóa)
+                </li>
                 <li>Thông tin game: Lịch sử chơi, thống kê, thành tích</li>
-                <li>Thông tin thiết bị: IP address, loại thiết bị, trình duyệt</li>
+                <li>
+                  Thông tin thiết bị: IP address, loại thiết bị, trình duyệt
+                </li>
                 <li>Cookies và dữ liệu theo dõi</li>
               </ul>
             </div>
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>2. Cách chúng tôi sử dụng thông tin</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              2. Cách chúng tôi sử dụng thông tin
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Thông tin của bạn được sử dụng để:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -46,7 +53,10 @@ const PrivacyPage = () => {
           <section>
             <h2 className='text-xl font-semibold mb-3'>3. Chia sẻ thông tin</h2>
             <div className='space-y-2 text-muted-foreground'>
-              <p>Chúng tôi không bán hoặc cho thuê thông tin cá nhân của bạn. Thông tin có thể được chia sẻ trong các trường hợp:</p>
+              <p>
+                Chúng tôi không bán hoặc cho thuê thông tin cá nhân của bạn.
+                Thông tin có thể được chia sẻ trong các trường hợp:
+              </p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
                 <li>Với sự đồng ý của bạn</li>
                 <li>Để tuân thủ pháp luật hoặc quy định</li>
@@ -71,7 +81,9 @@ const PrivacyPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>5. Quyền của người dùng</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              5. Quyền của người dùng
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Bạn có quyền:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -86,7 +98,9 @@ const PrivacyPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>6. Cookies và theo dõi</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              6. Cookies và theo dõi
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Chúng tôi sử dụng cookies để:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>
@@ -95,21 +109,35 @@ const PrivacyPage = () => {
                 <li>Cải thiện trải nghiệm người dùng</li>
                 <li>Hiển thị nội dung phù hợp</li>
               </ul>
-              <p className='mt-2'>Bạn có thể tắt cookies trong cài đặt trình duyệt.</p>
+              <p className='mt-2'>
+                Bạn có thể tắt cookies trong cài đặt trình duyệt.
+              </p>
             </div>
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>7. Dữ liệu của trẻ em</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              7. Dữ liệu của trẻ em
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
-              <p>Dịch vụ của chúng tôi dành cho người từ 13 tuổi trở lên. Chúng tôi không cố ý thu thập thông tin từ trẻ em dưới 13 tuổi. Nếu phát hiện, chúng tôi sẽ xóa ngay lập tức.</p>
+              <p>
+                Dịch vụ của chúng tôi dành cho người từ 13 tuổi trở lên. Chúng
+                tôi không cố ý thu thập thông tin từ trẻ em dưới 13 tuổi. Nếu
+                phát hiện, chúng tôi sẽ xóa ngay lập tức.
+              </p>
             </div>
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>8. Thay đổi chính sách</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              8. Thay đổi chính sách
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
-              <p>Chúng tôi có thể cập nhật chính sách này theo thời gian. Thay đổi quan trọng sẽ được thông báo qua email hoặc thông báo trên ứng dụng.</p>
+              <p>
+                Chúng tôi có thể cập nhật chính sách này theo thời gian. Thay
+                đổi quan trọng sẽ được thông báo qua email hoặc thông báo trên
+                ứng dụng.
+              </p>
             </div>
           </section>
 
@@ -126,7 +154,9 @@ const PrivacyPage = () => {
           </section>
 
           <section>
-            <h2 className='text-xl font-semibold mb-3'>10. Tuân thủ pháp luật</h2>
+            <h2 className='text-xl font-semibold mb-3'>
+              10. Tuân thủ pháp luật
+            </h2>
             <div className='space-y-2 text-muted-foreground'>
               <p>Chính sách này tuân thủ:</p>
               <ul className='list-disc list-inside space-y-1 ml-4'>

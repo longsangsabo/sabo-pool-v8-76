@@ -18,7 +18,8 @@ interface Tournament {
 
 const ClubBracketManagementTab = ({ clubId }: { clubId?: string }) => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
+  const [selectedTournament, setSelectedTournament] =
+    useState<Tournament | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const ClubBracketManagementTab = ({ clubId }: { clubId?: string }) => {
   const loadTournaments = async () => {
     try {
       setLoading(true);
-      
+
       let query = supabase
         .from('tournaments')
         .select('id, name, status, max_participants, tournament_type, club_id')
@@ -54,31 +55,26 @@ const ClubBracketManagementTab = ({ clubId }: { clubId?: string }) => {
 
   if (selectedTournament) {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
-            onClick={() => setSelectedTournament(null)}
-          >
+      <div className='space-y-4'>
+        <div className='flex items-center gap-4'>
+          <Button variant='outline' onClick={() => setSelectedTournament(null)}>
             ← Quay lại danh sách
           </Button>
-          <h3 className="text-lg font-semibold">{selectedTournament.name}</h3>
+          <h3 className='text-lg font-semibold'>{selectedTournament.name}</h3>
         </div>
-        
-        <Tabs defaultValue="bracket" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="bracket">Bảng đấu</TabsTrigger>
-            <TabsTrigger value="management">Quản lý trận đấu</TabsTrigger>
+
+        <Tabs defaultValue='bracket' className='w-full'>
+          <TabsList className='grid w-full grid-cols-2'>
+            <TabsTrigger value='bracket'>Bảng đấu</TabsTrigger>
+            <TabsTrigger value='management'>Quản lý trận đấu</TabsTrigger>
           </TabsList>
-          
-          <TabsContent value="bracket">
+
+          <TabsContent value='bracket'>
             <AdminBracketViewer tournamentId={selectedTournament.id} />
           </TabsContent>
-          
-          <TabsContent value="management">
-            <TournamentManagementFlow 
-              tournamentId={selectedTournament.id}
-            />
+
+          <TabsContent value='management'>
+            <TournamentManagementFlow tournamentId={selectedTournament.id} />
           </TabsContent>
         </Tabs>
       </div>
@@ -88,53 +84,60 @@ const ClubBracketManagementTab = ({ clubId }: { clubId?: string }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-primary" />
+        <CardTitle className='flex items-center gap-2'>
+          <Trophy className='h-5 w-5 text-primary' />
           Quản lý Bảng đấu Club
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <p className="text-muted-foreground">
+        <div className='space-y-4'>
+          <p className='text-muted-foreground'>
             Quản lý bảng đấu và trận đấu cho các giải đấu của club
           </p>
 
           {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
-              <p className="mt-2 text-muted-foreground">Đang tải...</p>
+            <div className='text-center py-8'>
+              <div className='animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto'></div>
+              <p className='mt-2 text-muted-foreground'>Đang tải...</p>
             </div>
           ) : tournaments.length === 0 ? (
-            <div className="text-center py-8">
-              <Trophy className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">Chưa có giải đấu nào có bảng đấu</p>
+            <div className='text-center py-8'>
+              <Trophy className='h-12 w-12 text-muted-foreground mx-auto mb-4' />
+              <p className='text-muted-foreground'>
+                Chưa có giải đấu nào có bảng đấu
+              </p>
             </div>
           ) : (
-            <div className="grid gap-4">
-              {tournaments.map((tournament) => (
-                <Card key={tournament.id} className="hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => setSelectedTournament(tournament)}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <h4 className="font-medium mb-1">{tournament.name}</h4>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
+            <div className='grid gap-4'>
+              {tournaments.map(tournament => (
+                <Card
+                  key={tournament.id}
+                  className='hover:shadow-md transition-shadow cursor-pointer'
+                  onClick={() => setSelectedTournament(tournament)}
+                >
+                  <CardContent className='p-4'>
+                    <div className='flex items-center justify-between'>
+                      <div className='flex-1'>
+                        <h4 className='font-medium mb-1'>{tournament.name}</h4>
+                        <div className='flex items-center gap-4 text-sm text-muted-foreground'>
+                          <div className='flex items-center gap-1'>
+                            <Users className='h-4 w-4' />
                             <span>Tối đa: {tournament.max_participants}</span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Settings className="h-4 w-4" />
+                          <div className='flex items-center gap-1'>
+                            <Settings className='h-4 w-4' />
                             <span>{tournament.tournament_type}</span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Trophy className="h-4 w-4" />
-                            <span className="capitalize">{tournament.status}</span>
+                          <div className='flex items-center gap-1'>
+                            <Trophy className='h-4 w-4' />
+                            <span className='capitalize'>
+                              {tournament.status}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      
-                      <Button variant="outline" size="sm">
+
+                      <Button variant='outline' size='sm'>
                         Quản lý →
                       </Button>
                     </div>

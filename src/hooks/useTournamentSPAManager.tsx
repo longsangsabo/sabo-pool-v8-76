@@ -7,7 +7,13 @@ import { useAdvancedSPAPoints } from '@/hooks/useAdvancedSPAPoints';
 interface TournamentResult {
   tournamentId: string;
   playerId: string;
-  position: 'champion' | 'runner_up' | 'top_3' | 'top_4' | 'top_8' | 'participation';
+  position:
+    | 'champion'
+    | 'runner_up'
+    | 'top_3'
+    | 'top_4'
+    | 'top_8'
+    | 'participation';
   playerRank: string;
   tournamentType?: 'normal' | 'season' | 'open';
 }
@@ -32,23 +38,26 @@ export function useTournamentSPAManager() {
   const awardTournamentSPAMutation = useMutation({
     mutationFn: async (results: TournamentResult[]) => {
       const spaResults: SPACalculationResult[] = [];
-      
+
       for (const result of results) {
         // Calculate SPA points using the database rules
-        const basePoints = calculateTournamentPoints(result.position, result.playerRank);
-        
+        const basePoints = calculateTournamentPoints(
+          result.position,
+          result.playerRank
+        );
+
         // Apply tournament type multiplier
         let multiplier = 1.0;
         if (result.tournamentType === 'season') multiplier = 1.5;
         if (result.tournamentType === 'open') multiplier = 2.0;
-        
+
         const finalPoints = Math.floor(basePoints * multiplier);
-        
+
         // Award the SPA points
         const { error } = await supabase.rpc('credit_spa_points', {
           p_user_id: result.playerId,
           p_points: finalPoints,
-          p_description: `Giải đấu - ${result.position} (${result.tournamentType || 'normal'})`
+          p_description: `Giải đấu - ${result.position} (${result.tournamentType || 'normal'})`,
         });
 
         if (error) throw error;
@@ -66,52 +75,55 @@ export function useTournamentSPAManager() {
           breakdown: {
             basePoints,
             multiplier,
-            finalPoints
-          }
+            finalPoints,
+          },
         });
       }
 
       return spaResults;
     },
-    onSuccess: (results) => {
+    onSuccess: results => {
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ['wallets'] });
       queryClient.invalidateQueries({ queryKey: ['player-rankings'] });
       queryClient.invalidateQueries({ queryKey: ['leaderboards'] });
-      
+
       // Show success notifications
       results.forEach(result => {
-        const multiplierText = result.breakdown.multiplier !== 1.0 
-          ? ` (x${result.breakdown.multiplier})` 
-          : '';
-        
-        toast.success(
-          `🏆 +${result.spaPoints} SPA điểm!`,
-          {
-            description: `Giải đấu - ${result.position}${multiplierText}`,
-            duration: 5000
-          }
-        );
+        const multiplierText =
+          result.breakdown.multiplier !== 1.0
+            ? ` (x${result.breakdown.multiplier})`
+            : '';
+
+        toast.success(`🏆 +${result.spaPoints} SPA điểm!`, {
+          description: `Giải đấu - ${result.position}${multiplierText}`,
+          duration: 5000,
+        });
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error awarding tournament SPA:', error);
       toast.error('Lỗi khi trao điểm SPA giải đấu');
-    }
+    },
   });
 
-  const calculateBulkSPA = async (results: TournamentResult[]): Promise<SPACalculationResult[]> => {
+  const calculateBulkSPA = async (
+    results: TournamentResult[]
+  ): Promise<SPACalculationResult[]> => {
     const calculations: SPACalculationResult[] = [];
-    
+
     for (const result of results) {
-      const basePoints = calculateTournamentPoints(result.position, result.playerRank);
+      const basePoints = calculateTournamentPoints(
+        result.position,
+        result.playerRank
+      );
       let multiplier = 1.0;
-      
+
       if (result.tournamentType === 'season') multiplier = 1.5;
       if (result.tournamentType === 'open') multiplier = 2.0;
-      
+
       const finalPoints = Math.floor(basePoints * multiplier);
-      
+
       calculations.push({
         playerId: result.playerId,
         spaPoints: finalPoints,
@@ -120,11 +132,11 @@ export function useTournamentSPAManager() {
         breakdown: {
           basePoints,
           multiplier,
-          finalPoints
-        }
+          finalPoints,
+        },
       });
     }
-    
+
     return calculations;
   };
 
@@ -151,6 +163,6 @@ export function useTournamentSPAManager() {
     awardBulkSPA,
     calculateBulkSPA,
     isProcessing,
-    isAwarding: awardTournamentSPAMutation.isPending
+    isAwarding: awardTournamentSPAMutation.isPending,
   };
 }

@@ -30,13 +30,13 @@ export const useGameConfigStats = () => {
       setLoading(true);
 
       // Use existing tables instead of non-existent ones
-      const [
-        { count: ranksCount },
-        { count: tournamentsCount }
-      ] = await Promise.all([
-        supabase.from('ranks').select('*', { count: 'exact', head: true }),
-        supabase.from('tournaments').select('*', { count: 'exact', head: true })
-      ]);
+      const [{ count: ranksCount }, { count: tournamentsCount }] =
+        await Promise.all([
+          supabase.from('ranks').select('*', { count: 'exact', head: true }),
+          supabase
+            .from('tournaments')
+            .select('*', { count: 'exact', head: true }),
+        ]);
 
       // Fetch system metrics
       const { data: playerStats } = await supabase
@@ -57,9 +57,13 @@ export const useGameConfigStats = () => {
       const recentChanges = [];
 
       // Calculate average ELO
-      const averageElo = playerStats && playerStats.length > 0
-        ? Math.round(playerStats.reduce((sum, p) => sum + (p.elo || 1000), 0) / playerStats.length)
-        : 1000;
+      const averageElo =
+        playerStats && playerStats.length > 0
+          ? Math.round(
+              playerStats.reduce((sum, p) => sum + (p.elo || 1000), 0) /
+                playerStats.length
+            )
+          : 1000;
 
       setStats({
         eloRules: 0,
@@ -70,7 +74,7 @@ export const useGameConfigStats = () => {
         totalMatches: matchesCount || 0,
         tournamentResults: tournamentResultsCount || 0,
         averageElo,
-        recentChanges: recentChanges || []
+        recentChanges: recentChanges || [],
       });
 
       // Check for inconsistencies (simplified version)
@@ -82,12 +86,11 @@ export const useGameConfigStats = () => {
           table: 'ranks',
           type: 'missing',
           description: `Expected at least 5 ranks, found ${ranksCount || 0}`,
-          severity: 'high'
+          severity: 'high',
         });
       }
 
       setInconsistencies(issues);
-
     } catch (error) {
       console.error('Error fetching game config stats:', error);
     } finally {
@@ -103,6 +106,6 @@ export const useGameConfigStats = () => {
     stats,
     inconsistencies,
     loading,
-    refetch: fetchStats
+    refetch: fetchStats,
   };
 };
