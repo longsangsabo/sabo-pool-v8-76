@@ -1,0 +1,27 @@
+{
+  "name": "sabo-pool-audit-dashboard",
+  "version": "1.0.0",
+  "description": "Audit dashboard for Sabo Pool project",
+  "main": "audit-server.js",
+  "scripts": {
+    "start": "node audit-server.js",
+    "start:simple": "node simple-server.js",
+    "analyze:component": "node scripts/simple-component-consolidation.js",
+    "analyze:dependency": "node scripts/simple-dependency-analyzer.js",
+    "analyze:performance": "node scripts/simple-performance-analyzer.js",
+    "analyze:security": "node scripts/simple-security-analyzer.js",
+    "analyze:test": "node scripts/simple-test-analyzer.js",
+    "analyze:all": "node scripts/master-audit-orchestrator.js"
+  },
+  "keywords": [
+    "audit",
+    "dashboard",
+    "code-quality",
+    "analysis"
+  ],
+  "author": "Sabo Pool Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

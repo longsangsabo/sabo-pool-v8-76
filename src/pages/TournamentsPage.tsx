@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import OptimizedTournamentCard from '@/components/tournament/OptimizedTournamentCard';
+import { UnifiedTournamentCard } from '@/components/tournament/UnifiedTournamentCard';
 import { EnhancedTournamentDetailsModal } from '@/components/tournament/EnhancedTournamentDetailsModal';
-import { SimpleRegistrationModal } from '@/components/tournament/SimpleRegistrationModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -384,50 +383,31 @@ const TournamentsPage = () => {
           className={`grid grid-cols-1 ${isMobile ? 'gap-3' : 'md:grid-cols-2 lg:grid-cols-3 gap-6'}`}
         >
           {filteredTournaments.map(tournament => (
-            <OptimizedTournamentCard
+            <UnifiedTournamentCard
               key={tournament.id}
               tournament={tournament}
-              onViewDetails={() => {
+              variant="interactive"
+              onView={() => {
                 setSelectedTournament(tournament);
                 setIsModalOpen(true);
               }}
-              onRegister={() => {
-                if (!user) {
-                  toast({
-                    title: 'Cần đăng nhập',
-                    description:
-                      'Bạn cần đăng nhập để đăng ký tham gia giải đấu',
-                    variant: 'destructive',
-                  });
-                  return;
-                }
-
-                setRegistrationTournament(tournament);
-                setShowRegistrationModal(true);
+              onRegisterSuccess={() => {
+                toast({
+                  title: 'Đăng ký thành công',
+                  description: 'Vui lòng chờ xác nhận từ ban tổ chức.',
+                });
+                fetchTournaments(); // Refresh the list
               }}
             />
           ))}
         </div>
       )}
 
-      {/* Tournament Details Modal */}
-      <EnhancedTournamentDetailsModal
-        tournament={selectedTournament}
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
-
-      {/* Registration Modal */}
-      {registrationTournament && (
-        <SimpleRegistrationModal
-          tournament={registrationTournament}
-          isOpen={showRegistrationModal}
-          onClose={() => setShowRegistrationModal(false)}
-          onSuccess={() => {
-            fetchTournaments(); // Refresh tournaments list
-            setShowRegistrationModal(false);
-            setRegistrationTournament(null);
-          }}
+      {selectedTournament && (
+        <EnhancedTournamentDetailsModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          tournament={selectedTournament}
         />
       )}
     </div>

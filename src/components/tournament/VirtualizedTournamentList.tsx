@@ -12,7 +12,7 @@ import { Tournament } from '@/types/tournament';
 import { TournamentAdapter } from '@/utils/tournamentAdapter';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { performanceMonitor } from '@/utils/performance';
-import { EnhancedTournamentCard } from './EnhancedTournamentCard';
+import { UnifiedTournamentCard } from './UnifiedTournamentCard';
 
 interface VirtualizedTournamentListProps {
   tournaments: Tournament[];
@@ -59,11 +59,12 @@ const TournamentListItem = memo<{
 
   return (
     <div style={style} className='p-2'>
-      <EnhancedTournamentCard
-        tournament={TournamentAdapter.toEnhanced(tournament)}
-        onTournamentClick={onTournamentClick}
-        onRegister={onRegister}
-        isRegistered={isRegistered}
+      <UnifiedTournamentCard
+        tournament={TournamentAdapter.enhance(tournament)}
+        variant="interactive"
+        onView={() => onTournamentClick(tournament.id)}
+        onRegisterSuccess={() => onRegister(tournament.id)}
+        isRegistered={(id) => isRegistered(id)}
         className='h-full'
       />
     </div>

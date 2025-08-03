@@ -1,0 +1,29 @@
+Unused dependencies
+* @sentry/tracing
+* @types/jest
+* lighthouse
+* madge
+* pixelmatch
+* puppeteer
+Unused devDependencies
+* @eslint/js
+* @lhci/cli
+* @tailwindcss/typography
+* @testing-library/user-event
+* autoprefixer
+* eslint-formatter-compact
+* eslint-plugin-react-refresh
+* globals
+* msw
+* postcss
+* ts-jest
+* typescript-eslint
+Missing dependencies
+* @typescript-eslint/eslint-config-recommended: ./.eslintrc.json
+* express: ./demo-server.js
+* glob: ./eslint-console-cleanup.js
+* cors: ./server.js
+* helmet: ./server.js
+* morgan: ./server.js
+* @vitejs/plugin-react: ./vitest.config.ts
+* lodash: ./src/services/PerformanceOptimizationService.ts
