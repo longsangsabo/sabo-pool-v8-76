@@ -294,7 +294,8 @@ const AuthPage = () => {
           </CardHeader>
 
           <CardContent className='space-y-6'>
-            {/* Social Login - only for login/register */}
+            {/* Social Login - TEMPORARILY HIDDEN */}
+            {/* 
             {(mode === 'login' || mode === 'register') && (
               <>
                 <div className='space-y-3'>
@@ -314,6 +315,7 @@ const AuthPage = () => {
                 </div>
               </>
             )}
+            */}
 
             {/* Forgot Password Form */}
             {mode === 'forgot-password' && (

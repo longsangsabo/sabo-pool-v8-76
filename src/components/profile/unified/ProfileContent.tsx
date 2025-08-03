@@ -41,6 +41,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     { id: 'overview', label: 'Tổng quan', icon: User },
     { id: 'stats', label: 'Thống kê', icon: BarChart3 },
     { id: 'achievements', label: 'Thành tích', icon: Award },
+    { id: 'rank', label: 'Đăng ký hạng', icon: Trophy },
+    { id: 'club', label: 'Câu lạc bộ', icon: Users },
     { id: 'settings', label: 'Cài đặt', icon: Settings },
   ];
 
@@ -49,9 +51,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
       <Card className={arenaMode ? 'bg-slate-800/50 border-cyan-500/30' : ''}>
         <Tabs value={activeTab} onValueChange={onTabChange}>
           <TabsList
-            className={`grid w-full grid-cols-4 ${arenaMode ? 'bg-slate-700' : ''}`}
+            className={`grid w-full grid-cols-3 ${arenaMode ? 'bg-slate-700' : ''}`}
           >
-            {tabs.map(tab => {
+            {tabs.slice(0, 6).map(tab => {
               const Icon = tab.icon;
               return (
                 <TabsTrigger key={tab.id} value={tab.id} className='text-xs'>
@@ -266,6 +268,123 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             </div>
           </TabsContent>
 
+          <TabsContent value='rank' className='mt-4'>
+            <div className='space-y-4'>
+              <h3
+                className={`text-sm font-medium ${arenaMode ? 'text-cyan-300' : ''}`}
+              >
+                Đăng ký xác minh hạng
+              </h3>
+
+              <div
+                className={`p-4 rounded-lg ${arenaMode ? 'bg-slate-700/50' : 'bg-muted/50'}`}
+              >
+                <div className='flex items-center gap-3 mb-3'>
+                  <Award className='w-5 h-5 text-amber-600' />
+                  <span
+                    className={`text-sm font-medium ${arenaMode ? 'text-cyan-300' : ''}`}
+                  >
+                    Hạng hiện tại
+                  </span>
+                </div>
+                <Badge
+                  variant={profile?.verified_rank ? 'default' : 'secondary'}
+                  className='mb-3'
+                >
+                  {profile?.verified_rank || 'Chưa xếp hạng'}
+                </Badge>
+                <p
+                  className={`text-xs ${arenaMode ? 'text-slate-400' : 'text-muted-foreground'}`}
+                >
+                  Đăng ký xác minh hạng để tham gia các giải đấu chính thức và
+                  nâng cao uy tín trong cộng đồng.
+                </p>
+              </div>
+
+              <div className='space-y-2'>
+                <Button
+                  className='w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'
+                  onClick={() => (window.location.href = '/rank-registration')}
+                >
+                  <Award className='w-4 h-4 mr-2' />
+                  {profile?.verified_rank
+                    ? 'Cập nhật hạng'
+                    : 'Đăng ký xác minh hạng'}
+                </Button>
+                <Button variant='outline' className='w-full'>
+                  <Trophy className='w-4 h-4 mr-2' />
+                  Xem thông tin về hệ thống hạng
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value='club' className='mt-4'>
+            <div className='space-y-4'>
+              <h3
+                className={`text-sm font-medium ${arenaMode ? 'text-cyan-300' : ''}`}
+              >
+                Câu lạc bộ của bạn
+              </h3>
+
+              {profile?.club_id ? (
+                <div
+                  className={`p-4 rounded-lg ${arenaMode ? 'bg-slate-700/50' : 'bg-muted/50'}`}
+                >
+                  <div className='flex items-center gap-3 mb-3'>
+                    <Users className='w-5 h-5 text-blue-600' />
+                    <span
+                      className={`text-sm font-medium ${arenaMode ? 'text-cyan-300' : ''}`}
+                    >
+                      {profile.club_name || 'Câu lạc bộ'}
+                    </span>
+                  </div>
+                  <Badge variant='default' className='mb-3'>
+                    {profile.club_role || 'Thành viên'}
+                  </Badge>
+                  <div className='space-y-2'>
+                    <Button variant='outline' className='w-full'>
+                      <Users className='w-4 h-4 mr-2' />
+                      Xem thông tin CLB
+                    </Button>
+                    <Button variant='outline' className='w-full'>
+                      <Settings className='w-4 h-4 mr-2' />
+                      Quản lý thành viên
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className='text-center py-8'>
+                  <Users className='w-12 h-12 text-muted-foreground mx-auto mb-4' />
+                  <p
+                    className={`text-sm ${arenaMode ? 'text-slate-400' : 'text-muted-foreground'} mb-3`}
+                  >
+                    Bạn chưa tham gia câu lạc bộ nào
+                  </p>
+                  <div className='space-y-2'>
+                    <Button
+                      className='w-full'
+                      onClick={() => (window.location.href = '/clubs')}
+                    >
+                      <Users className='w-4 h-4 mr-2' />
+                      Tìm câu lạc bộ
+                    </Button>
+                    <Button
+                      variant='outline'
+                      className='w-full'
+                      onClick={() =>
+                        (window.location.href = '/club-registration')
+                      }
+                    >
+                      <Target className='w-4 h-4 mr-2' />
+                      Tạo câu lạc bộ mới
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
           <TabsContent value='settings' className='mt-4'>
             <div className='space-y-4'>
               <h3
@@ -300,7 +419,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
     <Card>
       <Tabs value={activeTab} onValueChange={onTabChange}>
         <CardHeader>
-          <TabsList className='grid w-full grid-cols-4'>
+          <TabsList className='grid w-full grid-cols-6'>
             {tabs.map(tab => {
               const Icon = tab.icon;
               return (
@@ -438,6 +557,158 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 Hệ thống thành tích sẽ được hiển thị ở đây
               </p>
             </div>
+          </TabsContent>
+
+          <TabsContent value='rank' className='space-y-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <div>
+                <h3 className='text-sm font-medium mb-4 flex items-center gap-2'>
+                  <Award className='w-4 h-4' />
+                  Hạng hiện tại
+                </h3>
+                <div className='p-4 bg-muted/50 rounded-lg'>
+                  <div className='flex items-center justify-between mb-3'>
+                    <span className='text-sm text-muted-foreground'>
+                      Hạng được xác minh
+                    </span>
+                    <Badge
+                      variant={profile?.verified_rank ? 'default' : 'secondary'}
+                    >
+                      {profile?.verified_rank || 'Chưa xếp hạng'}
+                    </Badge>
+                  </div>
+                  <div className='flex items-center justify-between mb-3'>
+                    <span className='text-sm text-muted-foreground'>
+                      ELO Rating
+                    </span>
+                    <span className='text-sm font-medium'>
+                      {profile?.elo_rating || 1000}
+                    </span>
+                  </div>
+                  <p className='text-xs text-muted-foreground'>
+                    Đăng ký xác minh hạng để tham gia các giải đấu chính thức và
+                    nâng cao uy tín trong cộng đồng.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className='text-sm font-medium mb-4 flex items-center gap-2'>
+                  <Trophy className='w-4 h-4' />
+                  Hành động
+                </h3>
+                <div className='space-y-3'>
+                  <Button
+                    className='w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'
+                    onClick={() => (window.location.href = '/rank-registration')}
+                  >
+                    <Award className='w-4 h-4 mr-2' />
+                    {profile?.verified_rank
+                      ? 'Cập nhật hạng'
+                      : 'Đăng ký xác minh hạng'}
+                  </Button>
+                  <Button variant='outline' className='w-full'>
+                    <Trophy className='w-4 h-4 mr-2' />
+                    Xem thông tin về hệ thống hạng
+                  </Button>
+                  <Button variant='outline' className='w-full'>
+                    <Star className='w-4 h-4 mr-2' />
+                    Lịch sử ELO
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value='club' className='space-y-6'>
+            {profile?.club_id ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div>
+                  <h3 className='text-sm font-medium mb-4 flex items-center gap-2'>
+                    <Users className='w-4 h-4' />
+                    Thông tin câu lạc bộ
+                  </h3>
+                  <div className='p-4 bg-muted/50 rounded-lg'>
+                    <div className='flex items-center gap-3 mb-3'>
+                      <Users className='w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center' />
+                      <div>
+                        <div className='font-medium'>
+                          {profile.club_name || 'Câu lạc bộ'}
+                        </div>
+                        <Badge variant='outline' className='text-xs'>
+                          {profile.club_role || 'Thành viên'}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className='space-y-2 text-sm'>
+                      <div className='flex justify-between'>
+                        <span className='text-muted-foreground'>Vai trò:</span>
+                        <span>{profile.club_role || 'Thành viên'}</span>
+                      </div>
+                      <div className='flex justify-between'>
+                        <span className='text-muted-foreground'>
+                          Ngày tham gia:
+                        </span>
+                        <span>
+                          {profile.club_joined_date || 'Không rõ'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className='text-sm font-medium mb-4 flex items-center gap-2'>
+                    <Settings className='w-4 h-4' />
+                    Quản lý
+                  </h3>
+                  <div className='space-y-3'>
+                    <Button variant='outline' className='w-full'>
+                      <Users className='w-4 h-4 mr-2' />
+                      Xem thông tin CLB
+                    </Button>
+                    <Button variant='outline' className='w-full'>
+                      <Settings className='w-4 h-4 mr-2' />
+                      Quản lý thành viên
+                    </Button>
+                    <Button variant='outline' className='w-full'>
+                      <Calendar className='w-4 h-4 mr-2' />
+                      Lịch sự kiện CLB
+                    </Button>
+                    <Button variant='outline' className='w-full text-red-600'>
+                      <Target className='w-4 h-4 mr-2' />
+                      Rời khỏi CLB
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='text-center py-8'>
+                <Users className='w-16 h-16 text-muted-foreground mx-auto mb-6' />
+                <h3 className='text-lg font-medium mb-2'>
+                  Bạn chưa tham gia câu lạc bộ nào
+                </h3>
+                <p className='text-muted-foreground mb-6'>
+                  Hãy tham gia hoặc tạo một câu lạc bộ để kết nối với cộng đồng
+                  billiards
+                </p>
+                <div className='flex gap-3 justify-center'>
+                  <Button onClick={() => (window.location.href = '/clubs')}>
+                    <Users className='w-4 h-4 mr-2' />
+                    Tìm câu lạc bộ
+                  </Button>
+                  <Button
+                    variant='outline'
+                    onClick={() =>
+                      (window.location.href = '/club-registration')
+                    }
+                  >
+                    <Target className='w-4 h-4 mr-2' />
+                    Tạo câu lạc bộ mới
+                  </Button>
+                </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value='settings' className='space-y-6'>
