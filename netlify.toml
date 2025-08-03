@@ -11,12 +11,23 @@
   CI = "true"
   NPM_CONFIG_INCLUDE = "dev"
 
-# Enhanced SPA Redirect for React Router
+# Static assets should be served normally (not redirected)
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+
+# API Routes (Edge Functions)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA Redirect for React Router (only for non-asset requests)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
 
 # Enhanced Security Headers
 [[headers]]
@@ -26,9 +37,9 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; connect-src 'self' https://exlqvlbawytbglioqfbc.supabase.co wss://exlqvlbawytbglioqfbc.supabase.co; font-src 'self' https://fonts.gstatic.com"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://app.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; connect-src 'self' https://exlqvlbawytbglioqfbc.supabase.co wss://exlqvlbawytbglioqfbc.supabase.co; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://app.netlify.com; child-src 'self'"
 
 # Optimized Cache for Static Assets
 [[headers]]
@@ -36,17 +47,26 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache JavaScript files
+# Cache and proper MIME type for JavaScript files
 [[headers]]
   for = "*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript; charset=utf-8"
 
-# Cache CSS files
+# Cache and proper MIME type for CSS files
 [[headers]]
   for = "*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css; charset=utf-8"
+
+# Cache and proper MIME type for module JavaScript files
+[[headers]]
+  for = "*.mjs"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript; charset=utf-8"
 
 # Cache fonts
 [[headers]]
@@ -59,12 +79,6 @@
   for = "/sw.js"
   [headers.values]
     Cache-Control = "no-cache"
-
-# API Routes (Edge Functions)
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
 # Performance optimizations
 [build.processing]
@@ -79,6 +93,19 @@
   pretty_urls = true
 [build.processing.images]
   compress = true
+
+# Ensure proper MIME types for assets
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # Environment variables for production
 [context.production.environment]

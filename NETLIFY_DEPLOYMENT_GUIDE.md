@@ -19,7 +19,7 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@vitejs/plugin-react-swc' imp
    ```json
    {
      "dependencies": {
-       "@vitejs/plugin-react-swc": "^3.5.0",
+       "@vitejs/plugin-react-swc": "^3.11.0",
        "vite": "^5.4.1",
        "typescript": "^5.8.3",
        "rollup-plugin-visualizer": "^6.0.3",
