@@ -8,6 +8,13 @@ import { Badge } from '@/components/ui/badge';
 import { Bell, Menu, Search, Settings, Building, Home } from 'lucide-react';
 import { ClubRoleSwitch } from './ClubRoleSwitch';
 import { UserModeSwitch } from './UserModeSwitch';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface ClubDesktopHeaderProps {
@@ -56,12 +63,6 @@ export const ClubDesktopHeader: React.FC<ClubDesktopHeaderProps> = ({
             <Home className='h-4 w-4' />
             <span>Quay về trang chủ</span>
           </Button>
-
-          {/* Role Switch Buttons */}
-          <div className='flex items-center gap-3'>
-            <UserModeSwitch />
-            <ClubRoleSwitch />
-          </div>
         </div>
 
         <div className='flex items-center gap-4'>
@@ -70,8 +71,8 @@ export const ClubDesktopHeader: React.FC<ClubDesktopHeaderProps> = ({
             <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
             <input
               type='text'
-              placeholder='Tìm kiếm...'
-              className='pl-10 pr-4 py-2 w-80 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20'
+              placeholder='Tìm kiếm thành viên, giải đấu...'
+              className='pl-10 pr-4 py-2 w-60 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20'
             />
           </div>
 
@@ -88,14 +89,44 @@ export const ClubDesktopHeader: React.FC<ClubDesktopHeaderProps> = ({
             <Settings className='h-5 w-5' />
           </Button>
 
-          {/* User Avatar */}
-          <Avatar className='h-8 w-8'>
-            <AvatarImage src={user?.user_metadata?.avatar_url} />
-            <AvatarFallback>
-              {user?.user_metadata?.full_name?.charAt(0) ||
-                user?.email?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          {/* User Menu with Role Switches */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost' className='flex items-center gap-2 p-1'>
+                <Avatar className='h-8 w-8'>
+                  <AvatarImage src={user?.user_metadata?.avatar_url} />
+                  <AvatarFallback>
+                    {user?.user_metadata?.full_name?.charAt(0) ||
+                      user?.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className='hidden md:block text-sm font-medium'>
+                  {user?.user_metadata?.full_name || user?.email}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-56'>
+              <div className='p-2'>
+                <div className='mb-2'>
+                  <label className='text-xs font-medium text-muted-foreground'>
+                    Chế độ người dùng
+                  </label>
+                  <UserModeSwitch />
+                </div>
+                <div className='mb-2'>
+                  <label className='text-xs font-medium text-muted-foreground'>
+                    Vai trò CLB
+                  </label>
+                  <ClubRoleSwitch />
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
+                <Settings className='w-4 h-4 mr-2' />
+                Hồ sơ cá nhân
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

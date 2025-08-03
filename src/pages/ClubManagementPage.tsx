@@ -20,7 +20,7 @@ import ClubChallengesTab from '@/pages/challenges/components/tabs/ClubChallenges
 import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
 import ClubMembersAndNotifications from '@/components/club/optimized/ClubMembersAndNotifications';
 import ClubManagementAudit from '@/components/club/testing/ClubManagementAudit';
-import { ClubResponsiveLayout } from '@/components/layouts/ClubResponsiveLayout';
+import { ClubDesktopLayout } from '@/components/layouts/ClubDesktopLayout';
 import { useRankUpdates } from '@/hooks/useRankUpdates';
 import { AppProviders } from '@/contexts/AppProviders';
 
@@ -95,7 +95,7 @@ const ClubManagementPage = () => {
   }
 
   return (
-    <ClubResponsiveLayout>
+    <ClubDesktopLayout>
       <div className='mb-8'>
         <h1 className='text-3xl font-bold text-foreground'>
           Quản lý Câu lạc bộ
@@ -186,7 +186,7 @@ const ClubManagementPage = () => {
           <ClubSettingsTab />
         </TabsContent>
       </Tabs>
-    </ClubResponsiveLayout>
+    </ClubDesktopLayout>
   );
 };
 

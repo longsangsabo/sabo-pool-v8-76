@@ -27,13 +27,30 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
 }) => {
   const location = useLocation();
 
-  const menuItems = [
+  const managementItems = [
     {
       title: 'Tổng quan',
       icon: BarChart3,
       href: '/club-management',
       description: 'Dashboard và thống kê',
     },
+    {
+      title: 'Thành viên',
+      icon: Users,
+      href: '/club-management/members',
+      description: 'Quản lý thành viên',
+      badge: clubProfile?.pending_members || 0,
+    },
+    {
+      title: 'Xác thực hạng',
+      icon: UserCheck,
+      href: '/club-management/verification',
+      description: 'Duyệt yêu cầu hạng',
+      badge: clubProfile?.pending_verifications || 0,
+    },
+  ];
+
+  const operationsItems = [
     {
       title: 'Giải đấu',
       icon: Trophy,
@@ -47,28 +64,19 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
       description: 'Tham gia thách đấu',
     },
     {
-      title: 'Xác thực hạng',
-      icon: UserCheck,
-      href: '/club-management/verification',
-      description: 'Duyệt yêu cầu hạng',
+      title: 'Lịch trình',
+      icon: Calendar,
+      href: '/club-management/schedule',
+      description: 'Quản lý lịch',
     },
-    {
-      title: 'Thành viên',
-      icon: Users,
-      href: '/club-management/members',
-      description: 'Quản lý thành viên',
-    },
+  ];
+
+  const systemItems = [
     {
       title: 'Thông báo',
       icon: Bell,
       href: '/club-management/notifications',
       description: 'Gửi thông báo',
-    },
-    {
-      title: 'Lịch trình',
-      icon: Calendar,
-      href: '/club-management/schedule',
-      description: 'Quản lý lịch',
     },
     {
       title: 'Thanh toán',
@@ -112,37 +120,130 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
 
       {/* Navigation */}
       <ScrollArea className='flex-1'>
-        <nav className='p-2 space-y-1'>
-          {menuItems.map(item => {
-            const isActive = location.pathname === item.href;
-            return (
-              <NavLink
-                key={item.href}
-                to={item.href}
-                className={({ isActive }) =>
-                  cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    'hover:bg-accent hover:text-accent-foreground',
-                    isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground'
-                  )
-                }
-              >
-                <item.icon
-                  className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
-                />
-                {!collapsed && (
-                  <div className='flex-1 min-w-0'>
-                    <div className='truncate'>{item.title}</div>
-                    <div className='text-xs opacity-70 truncate'>
-                      {item.description}
+        <nav className='p-2 space-y-4'>
+          {/* Management Section */}
+          <div>
+            {!collapsed && (
+              <h3 className='px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2'>
+                Quản lý
+              </h3>
+            )}
+            <div className='space-y-1'>
+              {managementItems.map(item => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group',
+                      'hover:bg-accent hover:text-accent-foreground',
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground'
+                    )
+                  }
+                >
+                  <item.icon
+                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                  />
+                  {!collapsed && (
+                    <div className='flex-1 min-w-0'>
+                      <div className='flex items-center justify-between'>
+                        <span className='truncate'>{item.title}</span>
+                        {item.badge && item.badge > 0 && (
+                          <span className='ml-2 px-1.5 py-0.5 text-xs bg-destructive text-destructive-foreground rounded-full'>
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className='text-xs opacity-70 truncate'>
+                        {item.description}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </NavLink>
-            );
-          })}
+                  )}
+                  {collapsed && item.badge && item.badge > 0 && (
+                    <span className='absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full'></span>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+
+          {/* Operations Section */}
+          <div>
+            {!collapsed && (
+              <h3 className='px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2'>
+                Hoạt động
+              </h3>
+            )}
+            <div className='space-y-1'>
+              {operationsItems.map(item => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                      'hover:bg-accent hover:text-accent-foreground',
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground'
+                    )
+                  }
+                >
+                  <item.icon
+                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                  />
+                  {!collapsed && (
+                    <div className='flex-1 min-w-0'>
+                      <div className='truncate'>{item.title}</div>
+                      <div className='text-xs opacity-70 truncate'>
+                        {item.description}
+                      </div>
+                    </div>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+
+          {/* System Section */}
+          <div>
+            {!collapsed && (
+              <h3 className='px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2'>
+                Hệ thống
+              </h3>
+            )}
+            <div className='space-y-1'>
+              {systemItems.map(item => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                      'hover:bg-accent hover:text-accent-foreground',
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground'
+                    )
+                  }
+                >
+                  <item.icon
+                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                  />
+                  {!collapsed && (
+                    <div className='flex-1 min-w-0'>
+                      <div className='truncate'>{item.title}</div>
+                      <div className='text-xs opacity-70 truncate'>
+                        {item.description}
+                      </div>
+                    </div>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         </nav>
       </ScrollArea>
 
