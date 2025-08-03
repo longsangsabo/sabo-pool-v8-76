@@ -34,7 +34,7 @@ export const useTournaments = () => {
         tournament_type: tournament.tournament_type as 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss',
         game_format: (tournament.game_format || '8_ball') as '8_ball' | '9_ball' | '10_ball' | 'straight_pool',
         registration_start: tournament.registration_start || tournament.created_at,
-        registration_end: tournament.registration_end || tournament.start_date || tournament.created_at,
+        registration_end: tournament.registration_end || tournament.created_at,
         tournament_start: tournament.start_date || tournament.created_at,
         tournament_end: tournament.end_date || tournament.start_date || tournament.created_at,
         club_id: tournament.club_id || '',
