@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { setupAuthMonitoring } from '@/utils/authRecovery';
+import { formatPhoneToE164 } from '@/utils/validation';
 
 interface AuthState {
   user: User | null;
@@ -270,8 +271,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // Phone OTP authentication functions
   const signInWithPhone = async (phone: string) => {
     try {
+      const formattedPhone = formatPhoneToE164(phone);
       const { data, error } = await supabase.auth.signInWithOtp({
-        phone: phone,
+        phone: formattedPhone,
       });
       return { data, error };
     } catch (error) {
@@ -285,13 +287,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     referralCode?: string
   ) => {
     try {
+      const formattedPhone = formatPhoneToE164(phone);
       const { data, error } = await supabase.auth.signInWithOtp({
-        phone: phone,
+        phone: formattedPhone,
         options: {
           data: {
             full_name: fullName,
             referral_code: referralCode,
-            phone: phone,
+            phone: formattedPhone,
           },
         },
       });
@@ -303,8 +306,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const verifyOtp = async (phone: string, token: string, type: 'sms') => {
     try {
+      const formattedPhone = formatPhoneToE164(phone);
       const { data, error } = await supabase.auth.verifyOtp({
-        phone: phone,
+        phone: formattedPhone,
         token: token,
         type: type,
       });
