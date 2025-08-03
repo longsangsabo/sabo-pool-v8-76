@@ -185,8 +185,6 @@ const EnhancedLoginPage = () => {
           <OAuthSetupGuide />
 
           <AuthDivider />
-
-          {/* Email Only */}
           <div className='space-y-4'>
             <form onSubmit={handleEmailSubmit} className='space-y-4'>
                 <div>
