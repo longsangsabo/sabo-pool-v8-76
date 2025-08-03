@@ -265,7 +265,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Extended signup functions for backward compatibility
-  const signInWithPhone = signIn;
+  const signInWithPhone = async (phone: string, password: string) => {
+    // Convert phone to email format for Supabase compatibility
+    const emailFormatted = `${phone}@saboarena.local`;
+    return signIn(emailFormatted, password);
+  };
   const signInWithEmail = signIn;
 
   const signUpWithPhone = async (
@@ -274,9 +278,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     fullName?: string,
     referralCode?: string
   ) => {
-    return signUp(phone, password, {
+    // For now, treat phone number as username but still use email/password auth
+    // Convert phone to email format for Supabase compatibility
+    const emailFormatted = `${phone}@saboarena.local`;
+    
+    return signUp(emailFormatted, password, {
       full_name: fullName,
       referral_code: referralCode,
+      phone: phone, // Store actual phone in metadata
     });
   };
 
