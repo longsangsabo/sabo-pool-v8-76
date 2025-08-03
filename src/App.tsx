@@ -33,7 +33,7 @@ const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
 const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
-const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(() => import('@/pages/EnhancedChallengesPageV2'));
@@ -93,7 +93,7 @@ const AppContent = () => {
 
            {/* Protected routes with MainLayout - these will show the sidebar */}
            <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="dashboard" element={<UnifiedDashboard />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="challenges" element={<EnhancedChallengesPageV2 />} />
               <Route path="community" element={<CommunityPage />} />
