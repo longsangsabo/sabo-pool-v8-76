@@ -95,7 +95,10 @@ const EnhancedRegisterPage = () => {
             ? 'Đăng ký thành công! Bạn và người giới thiệu đều nhận được 100 SPA!'
             : 'Đăng ký thành công! Chào mừng bạn đến với SABO ARENA!'
         );
-        navigate('/dashboard');
+        // Small delay to ensure auth state is updated
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 100);
       }
     } catch (error) {
       console.error('OTP verification error:', error);

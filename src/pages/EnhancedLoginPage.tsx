@@ -85,7 +85,10 @@ const EnhancedLoginPage = () => {
         handleAuthError(error);
       } else {
         toast.success('Đăng nhập thành công!');
-        navigate('/dashboard');
+        // Small delay to ensure auth state is updated
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 100);
       }
     } catch (error) {
       console.error('OTP verification error:', error);

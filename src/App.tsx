@@ -74,11 +74,20 @@ const queryClient = new QueryClient({
 
 // Component để sử dụng hooks bên trong providers
 const AppContent = () => {
+  return (
+    <div className='min-h-screen bg-background'>
+      <AppContentWithHooks />
+    </div>
+  );
+};
+
+// Separate component for hooks that require AuthProvider
+const AppContentWithHooks = () => {
   // ✅ Initialize realtime notifications (now inside AuthProvider)
   const { PopupComponent } = useRealtimeNotifications();
 
   return (
-    <div className='min-h-screen bg-background'>
+    <>
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
           {/* Public routes - no authentication required */}
@@ -248,7 +257,7 @@ const AppContent = () => {
       </Suspense>
       {/* ✅ Render notification popup */}
       <PopupComponent />
-    </div>
+    </>
   );
 };
 
@@ -264,7 +273,7 @@ const App = () => {
         <HelmetProvider>
           <Router>
             <CombinedProviders>
-              <AppContent />
+              <AppContentWithHooks />
             </CombinedProviders>
             <Toaster />
           </Router>
