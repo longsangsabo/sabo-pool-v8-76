@@ -216,7 +216,10 @@ export const MatchScoreEntry: React.FC<MatchScoreEntryProps> = ({
                   min='0'
                   max='999'
                   value={player1Score}
-                  onChange={e => setPlayer1Score(parseInt(e.target.value) || 0)}
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value >= 0) setPlayer1Score(value);
+                  }}
                   className='w-16 text-center'
                   disabled={isUpdating}
                 />
@@ -226,7 +229,10 @@ export const MatchScoreEntry: React.FC<MatchScoreEntryProps> = ({
                   min='0'
                   max='999'
                   value={player2Score}
-                  onChange={e => setPlayer2Score(parseInt(e.target.value) || 0)}
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value >= 0) setPlayer2Score(value);
+                  }}
                   className='w-16 text-center'
                   disabled={isUpdating}
                 />

@@ -38,6 +38,13 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
       return;
     }
 
+    // Validate scores are not negative
+    if (player1Score < 0 || player2Score < 0) {
+      toast.error('Tỷ số không thể âm!');
+      return;
+    }
+
+    // Validate scores are not tied
     if (player1Score === player2Score) {
       toast.error('Không thể hòa trong giải đấu loại trực tiếp!');
       return;
@@ -189,7 +196,10 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
               <Input
                 type='number'
                 value={player1Score}
-                onChange={e => setPlayer1Score(parseInt(e.target.value) || 0)}
+                onChange={e => {
+                  const value = parseInt(e.target.value) || 0;
+                  if (value >= 0) setPlayer1Score(value);
+                }}
                 min='0'
                 className='text-center text-lg font-bold'
               />
@@ -200,7 +210,10 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
               <Input
                 type='number'
                 value={player2Score}
-                onChange={e => setPlayer2Score(parseInt(e.target.value) || 0)}
+                onChange={e => {
+                  const value = parseInt(e.target.value) || 0;
+                  if (value >= 0) setPlayer2Score(value);
+                }}
                 min='0'
                 className='text-center text-lg font-bold'
               />

@@ -114,6 +114,12 @@ export const SABOMatchCard: React.FC<SABOMatchCardProps> = ({
       player2: parseInt(player2Score),
     };
 
+    // Validate scores are not negative
+    if (scores.player1 < 0 || scores.player2 < 0) {
+      alert('Tỷ số không thể âm!');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
@@ -406,7 +412,12 @@ export const SABOMatchCard: React.FC<SABOMatchCardProps> = ({
                 <Input
                   type='number'
                   value={player1Score}
-                  onChange={e => setPlayer1Score(e.target.value)}
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '' || parseInt(value) >= 0) {
+                      setPlayer1Score(value);
+                    }
+                  }}
                   placeholder='0'
                   className='h-8'
                 />
@@ -418,7 +429,12 @@ export const SABOMatchCard: React.FC<SABOMatchCardProps> = ({
                 <Input
                   type='number'
                   value={player2Score}
-                  onChange={e => setPlayer2Score(e.target.value)}
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '' || parseInt(value) >= 0) {
+                      setPlayer2Score(value);
+                    }
+                  }}
                   placeholder='0'
                   className='h-8'
                 />

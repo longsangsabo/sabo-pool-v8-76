@@ -224,7 +224,12 @@ export const DoubleEliminationMatchCard: React.FC<
                   className='w-16 px-2 py-1 border border-blue-300 rounded text-center text-sm font-medium bg-white focus:outline-none focus:ring-1 focus:ring-blue-500'
                   placeholder='0'
                   value={player1Score}
-                  onChange={e => setPlayer1Score(e.target.value)}
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '' || parseInt(value) >= 0) {
+                      setPlayer1Score(value);
+                    }
+                  }}
                 />
               </div>
             )}
@@ -294,7 +299,12 @@ export const DoubleEliminationMatchCard: React.FC<
                   className='w-16 px-2 py-1 border border-purple-300 rounded text-center text-sm font-medium bg-white focus:outline-none focus:ring-1 focus:ring-purple-500'
                   placeholder='0'
                   value={player2Score}
-                  onChange={e => setPlayer2Score(e.target.value)}
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '' || parseInt(value) >= 0) {
+                      setPlayer2Score(value);
+                    }
+                  }}
                 />
               </div>
             )}

@@ -230,7 +230,12 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
                     className='w-20 px-3 py-2 border border-blue-300 rounded-md text-center font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg'
                     placeholder='0'
                     value={player1Score}
-                    onChange={e => setPlayer1Score(e.target.value)}
+                    onChange={e => {
+                      const value = e.target.value;
+                      if (value === '' || parseInt(value) >= 0) {
+                        setPlayer1Score(value);
+                      }
+                    }}
                     autoComplete='off'
                     tabIndex={0}
                   />
@@ -311,7 +316,12 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
                     className='w-20 px-3 py-2 border border-purple-300 rounded-md text-center font-bold bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg'
                     placeholder='0'
                     value={player2Score}
-                    onChange={e => setPlayer2Score(e.target.value)}
+                    onChange={e => {
+                      const value = e.target.value;
+                      if (value === '' || parseInt(value) >= 0) {
+                        setPlayer2Score(value);
+                      }
+                    }}
                     autoComplete='off'
                     tabIndex={0}
                   />
@@ -407,6 +417,12 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
 
                 const score1 = parseInt(player1Score) || 0;
                 const score2 = parseInt(player2Score) || 0;
+
+                // Validate scores are not negative
+                if (score1 < 0 || score2 < 0) {
+                  toast.error('Tỷ số không thể âm!');
+                  return;
+                }
 
                 if (!score1 && !score2) {
                   toast.error('Vui lòng nhập tỷ số cho cả hai người chơi');
