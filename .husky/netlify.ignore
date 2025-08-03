@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Kiểm tra xem môi trường có phải là CI không
+if [ "$CI" = "true" ]; then
+  echo "Skipping husky in CI environment"
+  exit 1
+fi
+
+# Nếu không phải CI, chạy bình thường
+exit 0

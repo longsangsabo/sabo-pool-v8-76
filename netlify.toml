@@ -1,12 +1,14 @@
 [build]
-  command = "npm run build"
+  command = "SKIP_HUSKY=1 npm run build"
   publish = "dist"
+  ignore = "git log -1 --pretty=%B | grep dependabot"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   NODE_ENV = "production"
   SKIP_HUSKY = "1"
+  CI = "true"
 
 # Enhanced SPA Redirect for React Router
 [[redirects]]

@@ -22,7 +22,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "prepare": "husky install",
+    "prepare": "[ -z \"$SKIP_HUSKY\" ] && husky install || echo \"Skipping husky install\"",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
     "functions:deploy": "supabase functions deploy rank-request-notification",
