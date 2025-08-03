@@ -2,6 +2,45 @@
 
 ## Common Errors and Solutions
 
+### DevDependency Missing in Production Build
+
+**Error Message:**
+
+```
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@vitejs/plugin-react-swc' imported from /opt/build/repo/vite.config.ts
+```
+
+**Cause:** Netlify runs with `NODE_ENV=production` which causes npm to skip devDependencies, but Vite build tools are needed for the build process.
+
+**Solution:**
+
+1. **Move critical build dependencies from devDependencies to dependencies:**
+
+   ```json
+   {
+     "dependencies": {
+       "@vitejs/plugin-react-swc": "^3.5.0",
+       "vite": "^5.4.1",
+       "typescript": "^5.8.3",
+       "rollup-plugin-visualizer": "^6.0.3",
+       "lovable-tagger": "^1.1.7"
+     }
+   }
+   ```
+
+2. **Update build command to explicitly install dev dependencies:**
+
+   ```toml
+   [build]
+     command = "SKIP_HUSKY=1 npm ci --include=dev && npm run build"
+   ```
+
+3. **Set environment variable to include dev dependencies:**
+   ```toml
+   [build.environment]
+     NPM_CONFIG_INCLUDE = "dev"
+   ```
+
 ### Husky Installation Errors
 
 **Error Message:**
