@@ -1,47 +1,17 @@
 
 import React, { memo } from 'react';
-import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
-import { ClubDesktopLayout } from './ClubDesktopLayout';
-import { ClubMobileLayout } from './ClubMobileLayout';
-import { ClubTabletLayout } from './ClubTabletLayout';
+import { UnifiedNavigation } from '@/components/navigation/UnifiedNavigation';
 
 interface ClubResponsiveLayoutProps {
   children: React.ReactNode;
 }
 
 const ClubResponsiveLayoutBase: React.FC<ClubResponsiveLayoutProps> = ({ children }) => {
-  const { isMobile, isTablet, isDesktop } = useOptimizedResponsive();
-
-  // Early return pattern - only render one layout
-  if (isMobile) {
-    return (
-      <ClubMobileLayout>
-        {children}
-      </ClubMobileLayout>
-    );
-  }
-  
-  if (isTablet) {
-    return (
-      <ClubTabletLayout>
-        {children}
-      </ClubTabletLayout>
-    );
-  }
-  
-  if (isDesktop) {
-    return (
-      <ClubDesktopLayout>
-        {children}
-      </ClubDesktopLayout>
-    );
-  }
-
-  // Fallback to mobile layout
+  // UnifiedNavigation will automatically handle club role detection and responsive layout
   return (
-    <ClubMobileLayout>
+    <UnifiedNavigation>
       {children}
-    </ClubMobileLayout>
+    </UnifiedNavigation>
   );
 };
 

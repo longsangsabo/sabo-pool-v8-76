@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Trophy, Building, Shield, History } from 'lucide-react';
+import { User, Trophy, Building, Shield, History, TrendingUp } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import EditableProfileForm from '@/components/profile/EditableProfileForm';
 import ClubManagementTab from '@/components/profile/ClubManagementTab';
 import RankVerificationForm from '@/components/RankVerificationForm';
 import ActivitiesTab from '@/components/profile/ActivitiesTab';
+import TournamentEloHistory from '../TournamentEloHistory';
 
 interface ProfileContentProps {
   profile: any;
@@ -30,6 +31,12 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
       label: isMobile ? 'Hoạt động' : 'Hoạt động & Thách đấu',
       icon: Trophy,
       content: <ActivitiesTab />
+    },
+    {
+      value: 'elo-history',
+      label: isMobile ? 'ELO' : 'Lịch sử ELO',
+      icon: TrendingUp,
+      content: <TournamentEloHistory />
     },
     {
       value: 'basic',

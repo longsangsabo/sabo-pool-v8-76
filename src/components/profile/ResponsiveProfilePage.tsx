@@ -29,7 +29,7 @@ const ResponsiveProfilePage: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
-    if (tabParam && ['activities', 'basic', 'rank', 'club'].includes(tabParam)) {
+    if (tabParam && ['activities', 'elo-history', 'basic', 'rank', 'club'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, []);

@@ -1,98 +1,111 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
-import {
-  Home,
-  Search,
-  Plus,
-  MessageCircle,
-  User,
-  Target,
-  Trophy,
-  Wallet,
-} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { NavigationItem } from './navigationConfig';
+import { cn } from '@/lib/utils';
 
-interface BottomNavigationProps {
-  unreadMessages?: number;
-  unreadNotifications?: number;
+export interface BottomNavigationProps {
+  items: NavigationItem[];
 }
 
-export const BottomNavigation: React.FC<BottomNavigationProps> = ({
-  unreadMessages = 0,
-  unreadNotifications = 0,
-}) => {
+export const BottomNavigation: React.FC<BottomNavigationProps> = ({ items }) => {
   const location = useLocation();
 
-  const navigationItems = [
-    {
-      path: '/',
-      icon: <Home className='h-5 w-5' />,
-      label: 'Trang chủ',
-      active: location.pathname === '/',
+  // Get notification counts for badges
+  const { data: notificationCount } = useQuery({
+    queryKey: ['notification-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('notifications')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_read', false)
+        .is('deleted_at', null);
+
+      if (error) throw error;
+      return count || 0;
     },
-    {
-      path: '/discovery',
-      icon: <Search className='h-5 w-5' />,
-      label: 'Khám phá',
-      active: location.pathname.startsWith('/discovery'),
+    refetchInterval: 30000,
+  });
+
+  const { data: challengeCount } = useQuery({
+    queryKey: ['pending-challenges-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('challenges')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
+      if (error) throw error;
+      return count || 0;
     },
-    {
-      path: '/challenges',
-      icon: <Target className='h-5 w-5' />,
-      label: 'Thách đấu',
-      active: location.pathname.startsWith('/challenges'),
-    },
-    {
-      path: '/tournaments',
-      icon: <Trophy className='h-5 w-5' />,
-      label: 'Giải đấu',
-      active: location.pathname.startsWith('/tournaments'),
-    },
-    {
-      path: '/chat',
-      icon: <MessageCircle className='h-5 w-5' />,
-      label: 'Chat',
-      active: location.pathname.startsWith('/chat'),
-      badge: unreadMessages,
-    },
-    {
-      path: '/wallet',
-      icon: <Wallet className='h-5 w-5' />,
-      label: 'Ví',
-      active: location.pathname.startsWith('/wallet'),
-    },
-    {
-      path: '/profile',
-      icon: <User className='h-5 w-5' />,
-      label: 'Cá nhân',
-      active: location.pathname.startsWith('/profile'),
-    },
-  ];
+    refetchInterval: 30000,
+  });
+
+  // Get badge count for specific paths
+  const getBadgeCount = (item: NavigationItem): number => {
+    if (!item.badge) return 0;
+    
+    if (item.path.includes('notification')) return notificationCount || 0;
+    if (item.path.includes('challenge')) return challengeCount || 0;
+    
+    return 0;
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/' || path === '/dashboard') {
+      return location.pathname === '/' || location.pathname === '/dashboard';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
-    <nav className='fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 md:hidden'>
-      <div className='flex items-center justify-around px-2 py-2'>
-        {navigationItems.map(item => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex flex-col items-center justify-center w-full py-2 px-1 rounded-lg transition-colors ${
-              item.active
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-            }`}
-          >
-            <div className='relative'>
-              {item.icon}
-              {item.badge && item.badge > 0 && (
-                <Badge className='absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-red-500 text-white'>
-                  {item.badge > 99 ? '99+' : item.badge}
-                </Badge>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border lg:hidden">
+      <div className="flex items-center justify-around py-2 px-2 safe-area-pb">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item.path);
+          const badgeCount = getBadgeCount(item);
+          
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={cn(
+                "relative flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 rounded-lg transition-all duration-200",
+                "hover:bg-muted/50 active:scale-95",
+                active 
+                  ? "text-primary bg-primary/10" 
+                  : "text-muted-foreground hover:text-foreground"
               )}
-            </div>
-            <span className='text-xs mt-1 font-medium'>{item.label}</span>
-          </Link>
-        ))}
+            >
+              <div className="relative">
+                <Icon className={cn(
+                  "w-5 h-5 transition-colors",
+                  active && "fill-current"
+                )} />
+                
+                {/* Badge */}
+                {badgeCount > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-2 -right-2 w-5 h-5 text-xs p-0 flex items-center justify-center min-w-[20px] h-5"
+                  >
+                    {badgeCount > 99 ? '99+' : badgeCount}
+                  </Badge>
+                )}
+              </div>
+              
+              <span className={cn(
+                "text-xs mt-1 font-medium truncate w-full text-center leading-tight",
+                active ? "text-primary" : "text-muted-foreground"
+              )}>
+                {item.label}
+              </span>
+            </NavLink>
+          );
+        })}
       </div>
     </nav>
   );

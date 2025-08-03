@@ -26,6 +26,9 @@ const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
 
+// Navigation Test Page
+const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
+
 // Public pages that should also be accessible to logged-in users
 const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
 const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
@@ -34,7 +37,7 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
-const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(() => import('@/pages/EnhancedChallengesPageV2'));
 const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
@@ -94,7 +97,7 @@ const AppContent = () => {
            {/* Protected routes with MainLayout - these will show the sidebar */}
            <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
               <Route path="dashboard" element={<UnifiedDashboard />} />
-              <Route path="profile" element={<ProfilePage />} />
+              <Route path="profile" element={<UnifiedProfilePage />} />
               <Route path="challenges" element={<EnhancedChallengesPageV2 />} />
               <Route path="community" element={<CommunityPage />} />
               <Route path="calendar" element={<CalendarPage />} />
@@ -104,6 +107,9 @@ const AppContent = () => {
               <Route path="feed" element={<FeedPage />} />
               <Route path="marketplace" element={<MarketplacePage />} />
               <Route path="auth-test" element={<AuthTestPage />} />
+              
+              {/* Navigation Test Page - Development only */}
+              <Route path="navigation-test" element={<NavigationTestPage />} />
              
              {/* Public pages accessible through sidebar when logged in */}
              <Route path="tournaments" element={<TournamentPage />} />

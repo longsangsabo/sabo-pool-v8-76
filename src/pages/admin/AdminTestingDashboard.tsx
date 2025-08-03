@@ -12,6 +12,8 @@ import { UserExperienceValidator } from '@/components/testing/UserExperienceVali
 import { ProductionDeploymentDashboard } from '@/components/testing/ProductionDeploymentDashboard';
 import { PostDeploymentMonitoring } from '@/components/testing/PostDeploymentMonitoring';
 import { AdminTestingGuide } from '@/components/testing/AdminTestingGuide';
+import { EloSystemValidator } from '@/components/testing/EloSystemValidator';
+import { EloHistoryChecker } from '@/components/admin/EloHistoryChecker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -130,9 +132,11 @@ export const AdminTestingDashboard: React.FC = () => {
 
       {/* Testing Tabs */}
       <Tabs defaultValue="guide" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-9">
+        <TabsList className="grid w-full grid-cols-11">
           <TabsTrigger value="guide">Hướng Dẫn</TabsTrigger>
           <TabsTrigger value="audit">Audit</TabsTrigger>
+          <TabsTrigger value="elo">ELO System</TabsTrigger>
+          <TabsTrigger value="elo-history">ELO History</TabsTrigger>
           <TabsTrigger value="responsive">Tests</TabsTrigger>
           <TabsTrigger value="cross-device">Cross-Device</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -148,6 +152,14 @@ export const AdminTestingDashboard: React.FC = () => {
 
         <TabsContent value="audit" className="space-y-4">
           <ResponsiveAuditReport />
+        </TabsContent>
+
+        <TabsContent value="elo" className="space-y-4">
+          <EloSystemValidator />
+        </TabsContent>
+
+        <TabsContent value="elo-history" className="space-y-4">
+          <EloHistoryChecker />
         </TabsContent>
 
         <TabsContent value="responsive" className="space-y-4">

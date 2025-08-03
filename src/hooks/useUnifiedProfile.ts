@@ -1,9 +1,11 @@
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { usePlayerDashboard } from '@/hooks/usePlayerDashboard';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { profileAPI, type CompleteProfileData } from '@/services/api/profileAPI';
+import { useEffect } from 'react';
 
 interface UnifiedProfileData {
   // Basic profile info
@@ -35,22 +37,57 @@ interface UnifiedProfileData {
   club_profile?: any;
   recent_activities?: any[];
   achievements?: any[];
+  
+  // New backend data (if available)
+  statistics?: any;
+  total_spa_points?: number;
+  member_since?: string;
 }
 
 export const useUnifiedProfile = () => {
   const { user } = useAuth();
   const { handleError } = useErrorHandler();
+  const queryClient = useQueryClient();
   const { data: dashboardStats, isLoading: dashboardLoading } = usePlayerDashboard();
 
-  const { data: profileData, isLoading: profileLoading, error, refetch } = useQuery({
+  const { 
+    data: profileData, 
+    isLoading: profileLoading, 
+    error, 
+    refetch,
+    isError 
+  } = useQuery({
     queryKey: ['unified-profile', user?.id],
-    queryFn: async () => {
+    queryFn: async (): Promise<UnifiedProfileData | null> => {
       if (!user?.id) {
         throw new Error('User not authenticated');
       }
 
       try {
-        // Step 1: Fetch or create basic profile
+        // Try new API first
+        try {
+          const newData = await profileAPI.getCompleteProfile(user.id);
+          if (newData && newData.profile) {
+            return {
+              ...newData.profile,
+              statistics: newData.statistics,
+              recent_activities: newData.recent_activities,
+              achievements: newData.achievements,
+              total_spa_points: newData.total_spa_points,
+              member_since: newData.member_since,
+              // Legacy compatibility
+              matches_played: newData.statistics?.total_matches || 0,
+              matches_won: newData.statistics?.matches_won || 0,
+              matches_lost: newData.statistics?.matches_lost || 0,
+              win_percentage: newData.statistics?.win_percentage || 0,
+              spa_points: newData.total_spa_points || 0,
+            };
+          }
+        } catch (newApiError) {
+          console.warn('New API failed, falling back to legacy:', newApiError);
+        }
+
+        // Fallback to legacy data fetching (ORIGINAL WORKING CODE)
         let profile = null;
         
         const { data: existingProfile, error: profileFetchError } = await supabase
@@ -95,7 +132,7 @@ export const useUnifiedProfile = () => {
           throw new Error('Failed to get or create profile');
         }
 
-        // Step 2: Fetch club profile (optional, won't fail if not exists)
+        // Fetch club profile (optional, won't fail if not exists)
         let clubProfile = null;
         try {
           const { data: clubData, error: clubError } = await supabase
@@ -111,7 +148,7 @@ export const useUnifiedProfile = () => {
           console.warn('Club profile fetch failed (non-critical):', clubFetchError);
         }
 
-        // Step 3: Fetch recent activities (optional, won't fail if empty)
+        // Fetch recent activities (optional, won't fail if empty)
         let recentActivities = [];
         try {
           const [matchesResult, challengesResult] = await Promise.allSettled([
@@ -179,6 +216,28 @@ export const useUnifiedProfile = () => {
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
+  // Set up real-time subscription (only if new API is working)
+  useEffect(() => {
+    if (!user?.id || !profileData?.statistics) return;
+
+    try {
+      const subscription = profileAPI.subscribeToProfileUpdates(
+        user.id,
+        (payload) => {
+          console.log('Profile update received:', payload);
+          // Invalidate and refetch profile data on real-time updates
+          queryClient.invalidateQueries({ queryKey: ['unified-profile', user.id] });
+        }
+      );
+
+      return () => {
+        profileAPI.unsubscribe(subscription);
+      };
+    } catch (error) {
+      console.warn('Real-time subscription failed:', error);
+    }
+  }, [user?.id, queryClient, profileData?.statistics]);
+
   // Combine profile data with dashboard stats
   const unifiedData: UnifiedProfileData | null = profileData && dashboardStats ? {
     ...profileData,
@@ -189,11 +248,76 @@ export const useUnifiedProfile = () => {
     completion_percentage: calculateCompletionPercentage(profileData)
   } : null;
 
+  const refreshProfile = async () => {
+    if (user?.id) {
+      // Try new API first, fallback to refetch
+      try {
+        if (profileData?.statistics) {
+          await profileAPI.refreshProfileStatistics(user.id);
+        }
+      } catch (error) {
+        console.warn('New API refresh failed:', error);
+      }
+      // Refetch the profile data
+      return refetch();
+    }
+  };
+
+  const updateProfile = async (updates: Partial<any>) => {
+    if (!user?.id) {
+      throw new Error('User not authenticated');
+    }
+
+    try {
+      // Try new API first
+      if (profileData?.statistics) {
+        const success = await profileAPI.updateProfile(user.id, updates);
+        if (success) {
+          queryClient.invalidateQueries({ queryKey: ['unified-profile', user.id] });
+          return true;
+        }
+      }
+      
+      // Fallback to direct Supabase update
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['unified-profile', user.id] });
+      return true;
+    } catch (error) {
+      console.error('Profile update error:', error);
+      handleError(error as Error, { 
+        section: 'Profile', 
+        action: 'update', 
+        userId: user.id 
+      });
+      throw error;
+    }
+  };
+
   return {
     data: unifiedData,
     isLoading: profileLoading || dashboardLoading,
     error,
-    refetch
+    isError,
+    refetch,
+    refreshProfile,
+    updateProfile,
+    // Direct access to new data structure (if available)
+    completeData: profileData?.statistics ? profileData : null,
+    statistics: profileData?.statistics,
+    activities: profileData?.recent_activities || [],
+    achievements: profileData?.achievements || [],
+    spaPointsHistory: profileData?.spa_points_history || [],
   };
 };
 

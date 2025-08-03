@@ -4,6 +4,7 @@ import { UserDataProvider } from './UserDataContext';
 import { LanguageProvider } from './LanguageContext';
 import { ResponsiveLayoutProvider } from './ResponsiveLayoutContext';
 import { AppProviders } from './AppProviders';
+import { AvatarProvider } from './AvatarContext';
 
 import { AuthErrorBoundary } from '@/components/error/AuthErrorBoundary';
 import { ThemeProvider } from '@/hooks/useTheme';
@@ -18,15 +19,17 @@ const CombinedProvidersComponent: React.FC<CombinedProvidersProps> = ({ children
     <AuthErrorBoundary>
       <ThemeProvider defaultTheme="system" storageKey="sabo-ui-theme">
         <AuthProvider>
-          <LanguageProvider>
-            <ResponsiveLayoutProvider>
-              <UserDataProvider>
-                <AppProviders>
-                  {children}
-                </AppProviders>
-              </UserDataProvider>
-            </ResponsiveLayoutProvider>
-          </LanguageProvider>
+          <AvatarProvider>
+            <LanguageProvider>
+              <ResponsiveLayoutProvider>
+                <UserDataProvider>
+                  <AppProviders>
+                    {children}
+                  </AppProviders>
+                </UserDataProvider>
+              </ResponsiveLayoutProvider>
+            </LanguageProvider>
+          </AvatarProvider>
         </AuthProvider>
       </ThemeProvider>
     </AuthErrorBoundary>
