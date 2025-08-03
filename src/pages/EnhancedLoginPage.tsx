@@ -10,6 +10,7 @@ import {
   PhoneTabContent,
   EmailTabContent,
 } from '@/components/auth/EnhancedAuthTabs';
+import { OtpVerification } from '@/components/auth/OtpVerification';
 import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { AuthDivider } from '@/components/auth/AuthDivider';
@@ -19,7 +20,7 @@ import { handleAuthError } from '@/utils/authHelpers';
 const EnhancedLoginPage = () => {
   // Phone login state
   const [phone, setPhone] = useState('');
-  const [phonePassword, setPhonePassword] = useState('');
+  const [showPhoneOtp, setShowPhoneOtp] = useState(false);
 
   // Email login state
   const [email, setEmail] = useState('');
@@ -30,6 +31,7 @@ const EnhancedLoginPage = () => {
   const {
     signInWithPhone,
     signInWithEmail,
+    verifyOtp,
     user,
     loading: authLoading,
   } = useAuth();
@@ -44,8 +46,8 @@ const EnhancedLoginPage = () => {
   const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!phone || !phonePassword) {
-      toast.error('Vui lòng nhập đầy đủ thông tin');
+    if (!phone) {
+      toast.error('Vui lòng nhập số điện thoại');
       return;
     }
 
@@ -58,8 +60,27 @@ const EnhancedLoginPage = () => {
     setLoading(true);
 
     try {
-      const { error } = await signInWithPhone(phone, phonePassword);
+      const { error } = await signInWithPhone(phone);
 
+      if (error) {
+        handleAuthError(error);
+      } else {
+        toast.success('Mã OTP đã được gửi đến số điện thoại của bạn!');
+        setShowPhoneOtp(true);
+      }
+    } catch (error) {
+      console.error('Phone login error:', error);
+      toast.error('Có lỗi xảy ra khi đăng nhập');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePhoneOtpVerify = async (token: string) => {
+    setLoading(true);
+    try {
+      const { error } = await verifyOtp(phone, token, 'sms');
+      
       if (error) {
         handleAuthError(error);
       } else {
@@ -67,8 +88,26 @@ const EnhancedLoginPage = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      console.error('Phone login error:', error);
-      toast.error('Có lỗi xảy ra khi đăng nhập');
+      console.error('OTP verification error:', error);
+      toast.error('Có lỗi xảy ra khi xác thực OTP');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setLoading(true);
+    try {
+      const { error } = await signInWithPhone(phone);
+      
+      if (error) {
+        handleAuthError(error);
+      } else {
+        toast.success('Mã OTP mới đã được gửi!');
+      }
+    } catch (error) {
+      console.error('Resend OTP error:', error);
+      toast.error('Có lỗi xảy ra khi gửi lại OTP');
     } finally {
       setLoading(false);
     }
@@ -147,47 +186,41 @@ const EnhancedLoginPage = () => {
           {/* Phone/Email Tabs */}
           <EnhancedAuthTabs defaultTab='phone'>
             <PhoneTabContent>
-              <form onSubmit={handlePhoneSubmit} className='space-y-4'>
-                <div>
-                  <label className='block text-gray-700 text-sm font-medium mb-2'>
-                    Số điện thoại
-                  </label>
-                  <Input
-                    type='tel'
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    placeholder='0987654321'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
-                    disabled={loading}
-                    maxLength={10}
-                    inputMode='numeric'
-                  />
-                </div>
+              {!showPhoneOtp ? (
+                <form onSubmit={handlePhoneSubmit} className='space-y-4'>
+                  <div>
+                    <label className='block text-gray-700 text-sm font-medium mb-2'>
+                      Số điện thoại
+                    </label>
+                    <Input
+                      type='tel'
+                      value={phone}
+                      onChange={e => setPhone(e.target.value)}
+                      placeholder='0987654321'
+                      className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                      required
+                      disabled={loading}
+                      maxLength={10}
+                      inputMode='numeric'
+                    />
+                  </div>
 
-                <div>
-                  <label className='block text-gray-700 text-sm font-medium mb-2'>
-                    Mật khẩu
-                  </label>
-                  <Input
-                    type='password'
-                    value={phonePassword}
-                    onChange={e => setPhonePassword(e.target.value)}
-                    placeholder='Nhập mật khẩu'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
+                  <Button
+                    type='submit'
                     disabled={loading}
-                  />
-                </div>
-
-                <Button
-                  type='submit'
-                  disabled={loading}
-                  className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                >
-                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                </Button>
-              </form>
+                    className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
+                  >
+                    {loading ? 'Đang gửi OTP...' : 'Gửi mã OTP'}
+                  </Button>
+                </form>
+              ) : (
+                <OtpVerification
+                  phone={phone}
+                  onVerifySuccess={handlePhoneOtpVerify}
+                  onResendOtp={handleResendOtp}
+                  loading={loading}
+                />
+              )}
             </PhoneTabContent>
 
             <EmailTabContent>

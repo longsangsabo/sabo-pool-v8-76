@@ -136,11 +136,11 @@ const AuthPage = () => {
 
       if (mode === 'login') {
         result = isPhone
-          ? await signInWithPhone(phone, password)
+          ? await signInWithPhone(phone)
           : await signInWithEmail(email, password);
       } else {
         result = isPhone
-          ? await signUpWithPhone(phone, password, fullName)
+          ? await signUpWithPhone(phone, fullName)
           : await signUpWithEmail(email, password, fullName);
       }
 

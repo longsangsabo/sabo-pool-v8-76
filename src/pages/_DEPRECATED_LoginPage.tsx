@@ -74,7 +74,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const { error } = await signInWithPhone(phone, phonePassword);
+      const { error } = await signInWithPhone(phone);
 
       if (error) {
         handleAuthError(error);

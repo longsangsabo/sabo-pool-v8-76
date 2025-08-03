@@ -11,6 +11,7 @@ import {
   PhoneTabContent,
   EmailTabContent,
 } from '@/components/auth/EnhancedAuthTabs';
+import { OtpVerification } from '@/components/auth/OtpVerification';
 import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { AuthDivider } from '@/components/auth/AuthDivider';
@@ -21,9 +22,8 @@ import { Gift } from 'lucide-react';
 
 const EnhancedRegisterPage = () => {
   const [phone, setPhone] = useState('');
-  const [phonePassword, setPhonePassword] = useState('');
-  const [phoneConfirmPassword, setPhoneConfirmPassword] = useState('');
   const [phoneFullName, setPhoneFullName] = useState('');
+  const [showPhoneOtp, setShowPhoneOtp] = useState(false);
 
   const [email, setEmail] = useState('');
   const [emailPassword, setEmailPassword] = useState('');
@@ -35,14 +35,14 @@ const EnhancedRegisterPage = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { signUpWithPhone, signUpWithEmail } = useAuth();
+  const { signUpWithPhone, signUpWithEmail, verifyOtp } = useAuth();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get('ref');
 
   const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!phone || !phonePassword || !phoneConfirmPassword || !phoneFullName) {
+    if (!phone || !phoneFullName) {
       toast.error('Vui lòng nhập đầy đủ thông tin');
       return;
     }
@@ -59,26 +59,34 @@ const EnhancedRegisterPage = () => {
       return;
     }
 
-    if (phonePassword !== phoneConfirmPassword) {
-      toast.error('Mật khẩu xác nhận không khớp');
-      return;
-    }
-
-    if (phonePassword.length < 6) {
-      toast.error('Mật khẩu phải có ít nhất 6 ký tự');
-      return;
-    }
-
     setLoading(true);
 
     try {
       const { error } = await signUpWithPhone(
         phone,
-        phonePassword,
         phoneFullName,
         referralCode
       );
 
+      if (error) {
+        handleAuthError(error);
+      } else {
+        toast.success('Mã OTP đã được gửi đến số điện thoại của bạn!');
+        setShowPhoneOtp(true);
+      }
+    } catch (error) {
+      console.error('Phone registration error:', error);
+      toast.error('Có lỗi xảy ra khi đăng ký');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePhoneOtpVerify = async (token: string) => {
+    setLoading(true);
+    try {
+      const { error } = await verifyOtp(phone, token, 'sms');
+      
       if (error) {
         handleAuthError(error);
       } else {
@@ -90,8 +98,30 @@ const EnhancedRegisterPage = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      console.error('Phone registration error:', error);
-      toast.error('Có lỗi xảy ra khi đăng ký');
+      console.error('OTP verification error:', error);
+      toast.error('Có lỗi xảy ra khi xác thực OTP');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setLoading(true);
+    try {
+      const { error } = await signUpWithPhone(
+        phone,
+        phoneFullName,
+        referralCode
+      );
+      
+      if (error) {
+        handleAuthError(error);
+      } else {
+        toast.success('Mã OTP mới đã được gửi!');
+      }
+    } catch (error) {
+      console.error('Resend OTP error:', error);
+      toast.error('Có lỗi xảy ra khi gửi lại OTP');
     } finally {
       setLoading(false);
     }
@@ -189,58 +219,49 @@ const EnhancedRegisterPage = () => {
 
           <EnhancedAuthTabs defaultTab='phone'>
             <PhoneTabContent>
-              <form onSubmit={handlePhoneSubmit} className='space-y-4'>
-                <Input
-                  type='text'
-                  value={phoneFullName}
-                  onChange={e => setPhoneFullName(e.target.value)}
-                  placeholder='Họ và tên'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
+              {!showPhoneOtp ? (
+                <form onSubmit={handlePhoneSubmit} className='space-y-4'>
+                  <Input
+                    type='text'
+                    value={phoneFullName}
+                    onChange={e => setPhoneFullName(e.target.value)}
+                    placeholder='Họ và tên'
+                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                    required
+                    disabled={loading}
+                  />
+                  <Input
+                    type='tel'
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder='0961167717'
+                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                    required
+                    disabled={loading}
+                    maxLength={10}
+                    inputMode='numeric'
+                  />
+                  <TermsCheckbox
+                    checked={phoneTermsAccepted}
+                    onCheckedChange={setPhoneTermsAccepted}
+                    disabled={loading}
+                  />
+                  <Button
+                    type='submit'
+                    disabled={loading || !phoneTermsAccepted}
+                    className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
+                  >
+                    {loading ? 'Đang gửi OTP...' : 'Gửi mã OTP'}
+                  </Button>
+                </form>
+              ) : (
+                <OtpVerification
+                  phone={phone}
+                  onVerifySuccess={handlePhoneOtpVerify}
+                  onResendOtp={handleResendOtp}
+                  loading={loading}
                 />
-                <Input
-                  type='tel'
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  placeholder='0961167717'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                  maxLength={10}
-                  inputMode='numeric'
-                />
-                <Input
-                  type='password'
-                  value={phonePassword}
-                  onChange={e => setPhonePassword(e.target.value)}
-                  placeholder='Mật khẩu (ít nhất 6 ký tự)'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <Input
-                  type='password'
-                  value={phoneConfirmPassword}
-                  onChange={e => setPhoneConfirmPassword(e.target.value)}
-                  placeholder='Xác nhận mật khẩu'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <TermsCheckbox
-                  checked={phoneTermsAccepted}
-                  onCheckedChange={setPhoneTermsAccepted}
-                  disabled={loading}
-                />
-                <Button
-                  type='submit'
-                  disabled={loading || !phoneTermsAccepted}
-                  className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                >
-                  {loading ? 'Đang đăng ký...' : 'Đăng ký'}
-                </Button>
-              </form>
+              )}
             </PhoneTabContent>
 
             <EmailTabContent>
