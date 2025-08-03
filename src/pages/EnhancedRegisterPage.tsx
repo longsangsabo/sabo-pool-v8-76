@@ -220,54 +220,8 @@ const EnhancedRegisterPage = () => {
           <OAuthSetupGuide />
           <AuthDivider />
 
-          <EnhancedAuthTabs defaultTab='phone'>
-            <PhoneTabContent>
-              {!showPhoneOtp ? (
-                <form onSubmit={handlePhoneSubmit} className='space-y-4'>
-                  <Input
-                    type='text'
-                    value={phoneFullName}
-                    onChange={e => setPhoneFullName(e.target.value)}
-                    placeholder='Họ và tên'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
-                    disabled={loading}
-                  />
-                  <Input
-                    type='tel'
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    placeholder='0961167717'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
-                    disabled={loading}
-                    maxLength={10}
-                    inputMode='numeric'
-                  />
-                  <TermsCheckbox
-                    checked={phoneTermsAccepted}
-                    onCheckedChange={setPhoneTermsAccepted}
-                    disabled={loading}
-                  />
-                  <Button
-                    type='submit'
-                    disabled={loading || !phoneTermsAccepted}
-                    className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                  >
-                    {loading ? 'Đang gửi OTP...' : 'Gửi mã OTP'}
-                  </Button>
-                </form>
-              ) : (
-                <OtpVerification
-                  phone={phone}
-                  onVerifySuccess={handlePhoneOtpVerify}
-                  onResendOtp={handleResendOtp}
-                  loading={loading}
-                />
-              )}
-            </PhoneTabContent>
-
-            <EmailTabContent>
+          {/* Email Only */}
+          <div className='space-y-4'>
               <form onSubmit={handleEmailSubmit} className='space-y-4'>
                 <Input
                   type='text'
@@ -318,8 +272,7 @@ const EnhancedRegisterPage = () => {
                   {loading ? 'Đang đăng ký...' : 'Đăng ký'}
                 </Button>
               </form>
-            </EmailTabContent>
-          </EnhancedAuthTabs>
+          </div>
 
           <div className='text-center mt-6 space-y-4'>
             <div className='text-gray-600 text-sm'>

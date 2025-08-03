@@ -186,48 +186,9 @@ const EnhancedLoginPage = () => {
 
           <AuthDivider />
 
-          {/* Phone/Email Tabs */}
-          <EnhancedAuthTabs defaultTab='phone'>
-            <PhoneTabContent>
-              {!showPhoneOtp ? (
-                <form onSubmit={handlePhoneSubmit} className='space-y-4'>
-                  <div>
-                    <label className='block text-gray-700 text-sm font-medium mb-2'>
-                      Số điện thoại
-                    </label>
-                    <Input
-                      type='tel'
-                      value={phone}
-                      onChange={e => setPhone(e.target.value)}
-                      placeholder='0987654321'
-                      className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                      required
-                      disabled={loading}
-                      maxLength={10}
-                      inputMode='numeric'
-                    />
-                  </div>
-
-                  <Button
-                    type='submit'
-                    disabled={loading}
-                    className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                  >
-                    {loading ? 'Đang gửi OTP...' : 'Gửi mã OTP'}
-                  </Button>
-                </form>
-              ) : (
-                <OtpVerification
-                  phone={phone}
-                  onVerifySuccess={handlePhoneOtpVerify}
-                  onResendOtp={handleResendOtp}
-                  loading={loading}
-                />
-              )}
-            </PhoneTabContent>
-
-            <EmailTabContent>
-              <form onSubmit={handleEmailSubmit} className='space-y-4'>
+          {/* Email Only */}
+          <div className='space-y-4'>
+            <form onSubmit={handleEmailSubmit} className='space-y-4'>
                 <div>
                   <label className='block text-gray-700 text-sm font-medium mb-2'>
                     Email
@@ -265,9 +226,8 @@ const EnhancedLoginPage = () => {
                 >
                   {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </Button>
-              </form>
-            </EmailTabContent>
-          </EnhancedAuthTabs>
+            </form>
+          </div>
 
           <div className='text-center mt-6 space-y-4'>
             <Link
