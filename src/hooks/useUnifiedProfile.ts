@@ -363,7 +363,7 @@ export const useUnifiedProfile = () => {
     statistics: profileData?.statistics,
     activities: profileData?.recent_activities || [],
     achievements: profileData?.achievements || [],
-    spaPointsHistory: profileData?.spa_points_history || [],
+    spaPointsHistory: [],
   };
 };
 

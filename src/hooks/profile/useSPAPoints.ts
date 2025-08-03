@@ -43,7 +43,8 @@ export const useSPAPointsHistory = (
         nextPage: transactions.length === limit ? pageParam + 1 : undefined,
       };
     },
-    getNextPageParam: lastPage => lastPage.nextPage,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
     enabled: !!targetUserId,
     staleTime: 1 * 60 * 1000, // 1 minute
     gcTime: 10 * 60 * 1000, // 10 minutes
