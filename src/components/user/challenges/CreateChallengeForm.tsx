@@ -1,26 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
-import { Badge } from './ui/badge';
-import { Swords, Target, Users, Calendar, MapPin } from 'lucide-react';
-import {
-  CreateChallengeRequest,
-  getChallengeConfig,
-  isValidBetPoints,
-  CHALLENGE_CONFIGS,
-} from '../types/challenge';
-import { Club } from '../types/tournament';
-import { supabase } from '../integrations/supabase/client';
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface CreateChallengeFormProps {
   onChallengeCreated?: (challenge: any) => void;
@@ -352,3 +345,5 @@ export const CreateChallengeForm: React.FC<CreateChallengeFormProps> = ({
     </Card>
   );
 };
+
+export default CreateChallengeForm;

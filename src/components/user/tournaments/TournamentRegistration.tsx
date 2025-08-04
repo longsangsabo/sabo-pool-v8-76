@@ -508,3 +508,5 @@ export const TournamentRegistration: React.FC<TournamentRegistrationProps> = ({
     </div>
   );
 };
+
+export default TournamentRegistration;
