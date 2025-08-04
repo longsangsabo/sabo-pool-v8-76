@@ -1,5 +1,5 @@
 import React from 'react';
-import { TechStatCard } from '@/components/ui/sabo-tech-global';
+import { TechStatCard } from '@/shared/components/ui/sabo-tech-global';
 import { Trophy, Target, Users, Star, TrendingUp } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 

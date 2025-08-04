@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 
 interface MobileReactionBarProps {
   likes: number;

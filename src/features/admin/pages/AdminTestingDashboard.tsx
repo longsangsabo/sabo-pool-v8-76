@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { ResponsiveTestSuite } from '@/components/testing/ResponsiveTestSuite';
 import { PerformanceMonitor } from '@/components/testing/PerformanceMonitor';
 import { IntegrationTestSuite } from '@/components/testing/IntegrationTestSuite';
@@ -13,9 +13,9 @@ import { ProductionDeploymentDashboard } from '@/components/testing/ProductionDe
 import { PostDeploymentMonitoring } from '@/components/testing/PostDeploymentMonitoring';
 import { AdminTestingGuide } from '@/components/testing/AdminTestingGuide';
 import { EloSystemValidator } from '@/components/testing/EloSystemValidator';
-import { EloHistoryChecker } from '@/components/admin/EloHistoryChecker';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { EloHistoryChecker } from '@/features/admin/components/EloHistoryChecker';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
 

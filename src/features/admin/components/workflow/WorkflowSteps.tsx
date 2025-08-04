@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, Lock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 
 interface WorkflowStep {
   id: number;

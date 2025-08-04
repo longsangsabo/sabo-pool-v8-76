@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/shared/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+} from '@/shared/components/ui/select';
+import { Badge } from '@/shared/components/ui/badge';
 import { Trash2, UserPlus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';

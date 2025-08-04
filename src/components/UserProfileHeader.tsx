@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/shared/components/ui/card';
 import UserAvatar from '@/components/UserAvatar';
 import { useAuth } from '@/hooks/useAuth';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/shared/components/ui/badge';
 import { Crown, Star, Coins } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 

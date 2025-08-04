@@ -3,9 +3,9 @@
 // Automatically redirecting to new SABO system
 
 import React from 'react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { AlertTriangle, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import { SABODoubleEliminationViewer } from '@/tournaments/sabo/SABODoubleEliminationViewer';
 
 interface DoubleEliminationViewerProps {

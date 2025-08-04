@@ -110,20 +110,107 @@ PORT=3000
 
 ## 📁 Project Structure
 
+The project follows a **feature-based architecture** that organizes code by business domain rather than technical type:
+
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── ui/             # Base UI components
-│   ├── auth/           # Authentication components
-│   ├── tournament/     # Tournament components
-│   └── ...
-├── pages/              # Page components
-├── hooks/              # Custom React hooks
-├── utils/              # Utility functions
-├── types/              # TypeScript type definitions
-├── integrations/       # External service integrations
-└── main.tsx           # Application entry point
+├── features/              # Feature modules
+│   ├── admin/             # Admin dashboards and tools
+│   │   ├── components/    # Admin-specific UI components
+│   │   ├── hooks/         # Admin-specific business logic
+│   │   └── pages/         # Admin routes
+│   ├── club/              # Club management features
+│   ├── tournament/        # Tournament management
+│   ├── challenger/        # Challenge system
+│   └── user/              # User profile features
+├── core/                  # Core application modules
+│   ├── auth/              # Authentication
+│   ├── router/            # Routing configuration
+│   └── providers/         # Context providers
+├── shared/                # Shared resources
+│   ├── components/        # Reusable UI components
+│   ├── hooks/             # Shared custom hooks
+│   └── utils/             # Helper functions
+├── pages/                 # Main application pages
+├── hooks/                 # Application-level hooks
+├── integrations/          # External service integrations
+└── assets/                # Static assets
 ```
+
+## 🔄 Import Paths & Aliases
+
+### Path Aliases
+
+The project uses path aliases to simplify imports. These are configured in `vite.config.ts` and `tsconfig.json`:
+
+```js
+// Sample path aliases
+'@/'          // src directory
+'@/features'  // feature modules
+'@/core'      // core modules
+'@/shared'    // shared components
+```
+
+### Import Examples
+
+```tsx
+// ✅ DO: Use absolute imports with aliases
+import { AdminLayout } from '@/features/admin/components/AdminLayout';
+import { useAuth } from '@/core/auth/hooks/useAuth';
+import { Button } from '@/shared/components/Button';
+
+// ❌ DON'T: Use relative imports across feature boundaries
+import { AdminLayout } from '../../features/admin/components/AdminLayout';
+```
+
+## 🧩 Module Organization
+
+### Feature Boundaries
+
+Each feature module contains all necessary components, hooks, and utilities to implement its functionality:
+
+```
+/features/tournament/
+├── components/       # UI components
+├── hooks/            # Business logic
+├── types/            # TypeScript types
+├── utils/            # Helper functions
+└── pages/            # Route components
+```
+
+### Shared vs. Feature-Specific Components
+
+- **Shared Components**: Generic, reusable UI elements that aren't tied to business logic
+- **Feature Components**: Specialized components with business logic for specific features
+
+### State Management
+
+- **Server State**: React Query for data fetching, caching, and synchronization
+- **UI State**: React Context API for feature-specific state
+- **Form State**: React Hook Form for form handling
+
+## 🚀 Development Guidelines
+
+### Adding New Features
+
+1. **Create Feature Directory**: Add a new directory under `/src/features/`
+2. **Define Component Structure**: Create subdirectories for components, hooks, etc.
+3. **Implement Logic**: Build components and business logic
+4. **Add Routes**: Register routes in the router
+5. **Export Public API**: Only export what's needed by other features
+
+### Component Guidelines
+
+- Use **PascalCase** for component names: `TournamentBracket.tsx`
+- Keep components focused on a single responsibility
+- Extract complex logic to custom hooks
+- Prefer composition over inheritance
+
+### Import Guidelines
+
+- Use absolute imports with aliases
+- Avoid importing across feature boundaries except through public APIs
+- Import shared components directly
 
 ## 🤝 Contributing
 

@@ -6,13 +6,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Textarea } from '@/shared/components/ui/textarea';
+import { Badge } from '@/shared/components/ui/badge';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { ModelSelector } from '@/components/ModelSelector';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/shared/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
 interface TestResult {

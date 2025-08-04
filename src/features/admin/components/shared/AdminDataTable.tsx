@@ -6,18 +6,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../ui/table';
-import { Button } from '../../ui/button';
-import { Input } from '../../ui/input';
-import { Badge } from '../../ui/badge';
-import { Card, CardContent } from '../../ui/card';
+} from '@/shared/components/ui/table';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent } from '@/shared/components/ui/card';
 import { Search, Filter, MoreHorizontal } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
 
 export interface ColumnDef<T> {
   key: keyof T | string;

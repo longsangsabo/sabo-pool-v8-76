@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/shared/components/ui/select';
 import {
   RefreshCw,
   PlayCircle,
@@ -19,9 +19,9 @@ import {
   Table,
   Settings,
 } from 'lucide-react';
-import { EnhancedMatchCard } from '@/components/tournament/EnhancedMatchCard';
-import { EditScoreModal } from '@/components/tournament/EditScoreModal';
-import { TournamentBracket } from '@/components/tournament/TournamentBracket';
+import { EnhancedMatchCard } from '@/features/tournament/components/EnhancedMatchCard';
+import { EditScoreModal } from '@/features/tournament/components/EditScoreModal';
+import { TournamentBracket } from '@/features/tournament/components/TournamentBracket';
 import {
   useMatchManagement,
   TournamentMatch,

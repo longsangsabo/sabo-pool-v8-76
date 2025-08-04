@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
-import { AdminDataTable, ColumnDef } from '@/components/admin/shared/AdminDataTable';
-import { BulkAction } from '@/components/admin/shared/AdminBulkActions';
-import { AdminStatusBadge } from '@/components/admin/shared/AdminStatusBadge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
+import { AdminDataTable, ColumnDef } from '@/features/admin/components/shared/AdminDataTable';
+import { BulkAction } from '@/features/admin/components/shared/AdminBulkActions';
+import { AdminStatusBadge } from '@/features/admin/components/shared/AdminStatusBadge';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Badge } from '@/shared/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
@@ -15,15 +15,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/shared/components/ui/dialog';
+import { Textarea } from '@/shared/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/shared/components/ui/select';
 import {
   Search,
   Users,

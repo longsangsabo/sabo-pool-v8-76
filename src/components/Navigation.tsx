@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Menu,
   X,
@@ -24,8 +24,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { checkUserAdminStatus } from '@/utils/adminHelpers';
 import { supabase } from '@/integrations/supabase/client';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/components/ui/avatar';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -33,8 +33,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+} from '@/shared/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/shared/components/ui/theme-toggle';
 
 const Navigation = () => {
   const { user, signOut } = useAuth();

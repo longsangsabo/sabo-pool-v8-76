@@ -1,14 +1,14 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+} from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   Trophy,
   Users,

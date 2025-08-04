@@ -4,7 +4,7 @@ import {
   TechCard,
   TechButton,
   TechListItem,
-} from '@/components/ui/sabo-tech-global';
+} from '@/shared/components/ui/sabo-tech-global';
 import {
   Building,
   Trophy,

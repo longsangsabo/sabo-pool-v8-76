@@ -1,6 +1,6 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui/card';
 import { Settings, Database, Users, Trophy } from 'lucide-react';
 import { SABOMigrationManager } from './SABOMigrationManager';
 import { TournamentStatusFixer } from '../debug/TournamentStatusFixer';

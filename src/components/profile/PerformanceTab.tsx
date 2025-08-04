@@ -1,8 +1,8 @@
 import React from 'react';
 import { RankEloCard } from '@/components/ranking/RankEloCard';
 import { SPAPointsCard } from '@/components/ranking/SPAPointsCard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
 import { Gamepad2, History, Calendar } from 'lucide-react';
 import MyChallengesTab from '@/components/MyChallengesTab';
 import { useAuth } from '@/hooks/useAuth';

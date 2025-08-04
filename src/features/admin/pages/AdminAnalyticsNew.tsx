@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { 
   BarChart3, 
   Users, 
@@ -20,8 +20,8 @@ import {
   Target,
   Zap
 } from 'lucide-react';
-import { AdminCoreProvider } from '@/components/admin/core/AdminCoreProvider';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
+import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 
 interface MetricCard {
   title: string;

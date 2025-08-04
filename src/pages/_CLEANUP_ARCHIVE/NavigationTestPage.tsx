@@ -1,7 +1,7 @@
 import React from 'react';
 import { UnifiedNavigation } from '@/components/navigation/UnifiedNavigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import { Smartphone, Monitor, Tablet, Check, X } from 'lucide-react';
 
 /**

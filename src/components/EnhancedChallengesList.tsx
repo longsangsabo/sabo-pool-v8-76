@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Clock, Trophy, MapPin, Users, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { useEnhancedChallenges } from '@/hooks/useEnhancedChallenges';
 import { Challenge } from '@/types/challenge'; // Use the comprehensive challenge types
 import ChallengeResponseModal from './ChallengeResponseModal';

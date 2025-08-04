@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '@/shared/components/ui/card';
 import { Trophy, Users, Calendar, Target } from 'lucide-react';
 
 const TournamentBracketPage: React.FC = () => {

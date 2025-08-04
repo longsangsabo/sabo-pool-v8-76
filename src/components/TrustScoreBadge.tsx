@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { TrustScoreCompact } from '@/components/ui/trust-score-badge';
+import { TrustScoreCompact } from '@/shared/components/ui/trust-score-badge';
 
 interface TrustScoreBadgeProps {
   userId?: string;

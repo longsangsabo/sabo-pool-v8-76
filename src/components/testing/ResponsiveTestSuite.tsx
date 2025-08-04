@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { BREAKPOINTS, MEDIA_QUERIES } from '@/constants/breakpoints';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
 
 export const ResponsiveTestSuite: React.FC = () => {
   const responsive = useOptimizedResponsive();

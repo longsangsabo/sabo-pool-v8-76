@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/ui/dialog';
+import { Button } from '@/shared/components/ui/button';
 import { Info, Trophy, Star, Calculator } from 'lucide-react';
 import { RANK_ELO, TOURNAMENT_ELO_REWARDS } from '@/utils/eloConstants';
 import { formatRankDisplay, getRankColor } from '@/utils/rankUtils';

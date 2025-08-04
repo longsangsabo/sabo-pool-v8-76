@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { SPAAnalyticsDashboard } from '@/components/analytics/SPAAnalyticsDashboard';
 import { RealtimeSPAFeed } from '@/components/spa/RealtimeSPAFeed';
-import { AdminSPAManager } from '@/components/admin/AdminSPAManager';
+import { AdminSPAManager } from '@/features/admin/components/AdminSPAManager';
 import { EnhancedSPALeaderboard } from '@/components/spa/EnhancedSPALeaderboard';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 

@@ -1,4 +1,4 @@
-import { Progress } from '@/components/ui/progress';
+import { Progress } from '@/shared/components/ui/progress';
 import { RankBadge } from './RankBadge';
 
 interface RankProgressBarProps {

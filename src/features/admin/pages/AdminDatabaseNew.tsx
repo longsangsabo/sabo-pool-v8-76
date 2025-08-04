@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Label } from '@/shared/components/ui/label';
+import { Badge } from '@/shared/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Textarea } from '@/shared/components/ui/textarea';
+import { Progress } from '@/shared/components/ui/progress';
 import { 
   Database, 
   Play, 
@@ -29,8 +29,8 @@ import {
   FileText,
   Save
 } from 'lucide-react';
-import { AdminCoreProvider } from '@/components/admin/core/AdminCoreProvider';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
+import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 import { toast } from 'sonner';
 
 interface DatabaseMetric {

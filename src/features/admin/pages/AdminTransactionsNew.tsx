@@ -16,18 +16,18 @@ import {
   CreditCard,
   Filter
 } from 'lucide-react';
-import { AdminCoreProvider } from '@/components/admin/core/AdminCoreProvider';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
-import { AdminDataTable, ColumnDef } from '@/components/admin/shared/AdminDataTable';
-import { AdminStatusBadge } from '@/components/admin/shared/AdminStatusBadge';
-import { AdminStatsGrid } from '@/components/admin/shared/AdminStatsGrid';
-import { EnhancedAdminDataTable, BulkAction } from '@/components/admin/shared/AdminBulkActions';
+import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
+import { AdminDataTable, ColumnDef } from '@/features/admin/components/shared/AdminDataTable';
+import { AdminStatusBadge } from '@/features/admin/components/shared/AdminStatusBadge';
+import { AdminStatsGrid } from '@/features/admin/components/shared/AdminStatsGrid';
+import { EnhancedAdminDataTable, BulkAction } from '@/features/admin/components/shared/AdminBulkActions';
 import { useAdminTransactions, useAdminTransactionStats, AdminTransaction } from '@/hooks/admin/useAdminData';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { toast } from 'sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 
 // Transaction type and payment method badges
 const TransactionTypeBadge = ({ type }: { type: string }) => {

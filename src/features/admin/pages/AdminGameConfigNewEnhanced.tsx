@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { Settings, Trophy, Star, BarChart3, Target, CheckCircle, Shield } from 'lucide-react';
-import { EloRulesManager } from '@/components/admin/game-config/EloRulesManager';
-import { RankDefinitionsManager } from '@/components/admin/game-config/RankDefinitionsManager';
-import { SPARewardsManager } from '@/components/admin/game-config/SPARewardsManager';
-import { TournamentRewardsManager } from '@/components/admin/game-config/TournamentRewardsManager';
-import { GameConfigOverview } from '@/components/admin/game-config/GameConfigOverview';
-import { GameConfigSync } from '@/components/admin/game-config/GameConfigSync';
-import { DatabaseMigrationRunner } from '@/components/admin/game-config/DatabaseMigrationRunner';
-import { OfficialELOIntegrationStatus } from '@/components/admin/game-config/OfficialELOIntegrationStatus';
-import { ELOIntegrationValidator } from '@/components/admin/game-config/ELOIntegrationValidator';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
+import { EloRulesManager } from '@/features/admin/components/game-config/EloRulesManager';
+import { RankDefinitionsManager } from '@/features/admin/components/game-config/RankDefinitionsManager';
+import { SPARewardsManager } from '@/features/admin/components/game-config/SPARewardsManager';
+import { TournamentRewardsManager } from '@/features/admin/components/game-config/TournamentRewardsManager';
+import { GameConfigOverview } from '@/features/admin/components/game-config/GameConfigOverview';
+import { GameConfigSync } from '@/features/admin/components/game-config/GameConfigSync';
+import { DatabaseMigrationRunner } from '@/features/admin/components/game-config/DatabaseMigrationRunner';
+import { OfficialELOIntegrationStatus } from '@/features/admin/components/game-config/OfficialELOIntegrationStatus';
+import { ELOIntegrationValidator } from '@/features/admin/components/game-config/ELOIntegrationValidator';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 import { DatabaseTest } from '@/components/DatabaseTest';
 import { useAdminGameConfig } from '@/hooks/useAdminGameConfig';
 

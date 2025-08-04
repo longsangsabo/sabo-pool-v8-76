@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
-// import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Label } from '@/shared/components/ui/label';
+import { Badge } from '@/shared/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
+import { Textarea } from '@/shared/components/ui/textarea';
+import { Switch } from '@/shared/components/ui/switch';
+import { Separator } from '@/shared/components/ui/separator';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
+// import { DatePickerWithRange } from '@/shared/components/ui/date-range-picker';
 import { 
   FileText, 
   BarChart3,
@@ -61,8 +61,8 @@ import {
   Smartphone,
   MessageSquare
 } from 'lucide-react';
-import { AdminCoreProvider } from '@/components/admin/core/AdminCoreProvider';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
+import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 import { toast } from 'sonner';
 
 interface Report {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { RankBadge } from '@/components/ranking/RankBadge';
 import { getNormalizedRank } from '@/lib/rankUtils';
 import { supabase } from '@/integrations/supabase/client';

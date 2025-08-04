@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { DesktopLayout } from '../desktop/DesktopLayout';
 import { UserMobileLayout } from '../mobile/UserMobileLayout';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
 
 interface LayoutProps {
   children: React.ReactNode;

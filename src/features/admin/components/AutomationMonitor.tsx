@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { AlertAnalyzer } from './AlertAnalyzer';
 // Temporarily disable CacheManager to fix React error
 // import { CacheManager } from './CacheManager';
 import MobileOptimizedTable from '@/components/mobile/MobileOptimizedTable';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
+} from '@/shared/components/ui/dialog';
+import { Progress } from '@/shared/components/ui/progress';
+import { Switch } from '@/shared/components/ui/switch';
 import {
   TooltipProvider,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from '@/shared/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Input } from '@/shared/components/ui/input';
+import { Progress } from '@/shared/components/ui/progress';
 import { useAvatarUpload } from '@/hooks/useFileUpload';
 import { useAuth } from '@/hooks/useAuth';
 import { Upload, Check, X } from 'lucide-react';

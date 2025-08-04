@@ -1,5 +1,5 @@
 import React from 'react';
-import { DisabledAdminComponent } from '../../DisabledAdminComponent';
+import { DisabledAdminComponent } from '@/features/admin/components/DisabledAdminComponent';
 
 const DataCleanupStep = () => {
   return (

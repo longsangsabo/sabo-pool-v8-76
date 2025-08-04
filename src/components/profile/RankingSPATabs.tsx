@@ -6,7 +6,7 @@ import { RankProgressBar } from '@/components/ranking/RankProgressBar';
 import { type RankCode } from '@/utils/rankUtils';
 import { isEligibleForPromotion } from '@/utils/rankUtils';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 
 interface PlayerData {
   rank: RankCode;

@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Separator } from '@/shared/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import {
   Trophy,
   Plus,
@@ -19,19 +19,19 @@ import {
 // Import components
 import TournamentManagementHub, {
   TournamentManagementHubRef,
-} from '@/components/tournament/TournamentManagementHub';
-import { EnhancedTournamentForm } from '@/components/tournament/EnhancedTournamentForm';
-import EnhancedTableManager from '@/components/tournament/EnhancedTableManager';
+} from '@/features/tournament/components/TournamentManagementHub';
+import { EnhancedTournamentForm } from '@/features/tournament/components/EnhancedTournamentForm';
+import EnhancedTableManager from '@/features/tournament/components/EnhancedTableManager';
 import TournamentPaymentManager from '@/components/TournamentPaymentManager';
-import { SingleEliminationTemplate } from '@/components/tournament/templates/SingleEliminationTemplate';
-import { DoubleEliminationTemplate } from '@/components/tournament/templates/DoubleEliminationTemplate';
-import { TournamentSelector } from '@/components/shared/TournamentSelector';
-import { TournamentBracket } from '@/components/tournament/TournamentBracket';
+import { SingleEliminationTemplate } from '@/features/tournament/components/templates/SingleEliminationTemplate';
+import { DoubleEliminationTemplate } from '@/features/tournament/components/templates/DoubleEliminationTemplate';
+import { TournamentSelector } from '@/shared/components/TournamentSelector';
+import { TournamentBracket } from '@/features/tournament/components/TournamentBracket';
 
-import { ManualResultsGenerator } from '@/components/tournament/ManualResultsGenerator';
-import TournamentResults from '@/components/tournament/TournamentResults';
-import { TournamentControlPanel } from '@/components/tournament/TournamentControlPanel';
-import { TournamentMatchManager } from '@/components/tournament/TournamentMatchManager';
+import { ManualResultsGenerator } from '@/features/tournament/components/ManualResultsGenerator';
+import TournamentResults from '@/features/tournament/components/TournamentResults';
+import { TournamentControlPanel } from '@/features/tournament/components/TournamentControlPanel';
+import { TournamentMatchManager } from '@/features/tournament/components/TournamentMatchManager';
 
 // Import contexts
 import { TournamentProvider } from '@/contexts/TournamentContext';

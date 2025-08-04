@@ -21,8 +21,8 @@ import EnhancedPlayerCard from '@/components/EnhancedPlayerCard';
 import ChallengeModal from '@/components/ChallengeModal';
 import DiscoveryFilters from '@/components/DiscoveryFilters';
 import DiscoveryStats from '@/components/DiscoveryStats';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import { UserProfile } from '@/types/common';
 
 const EnhancedDiscoveryPage = () => {

@@ -16,14 +16,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+} from '@/shared/components/ui/card';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Input } from '@/shared/components/ui/input';
+import { Badge } from '@/shared/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ErrorBoundary from '@/components/ui/error-boundary';
-import { LoadingState } from '@/components/ui/loading-state';
+import ErrorBoundary from '@/shared/components/ui/error-boundary';
+import { LoadingState } from '@/shared/components/ui/loading-state';
 
 // Lazy load remaining components
 const UserTestingManager = lazy(() => import('./UserTestingManager'));

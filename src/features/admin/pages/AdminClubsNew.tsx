@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
-import { AdminDataTable, ColumnDef } from '@/components/admin/shared/AdminDataTable';
-import { AdminStatusBadge } from '@/components/admin/shared/AdminStatusBadge';
-import { AdminStatsGrid, StatCardProps, statConfigs } from '@/components/admin/shared/AdminStatsGrid';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
+import { AdminDataTable, ColumnDef } from '@/features/admin/components/shared/AdminDataTable';
+import { AdminStatusBadge } from '@/features/admin/components/shared/AdminStatusBadge';
+import { AdminStatsGrid, StatCardProps, statConfigs } from '@/features/admin/components/shared/AdminStatsGrid';
 import { useAdminClubs, useAdminClubStats } from '@/hooks/admin/useAdminData';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Input } from '@/shared/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { 
   Building, 
   CheckCircle, 

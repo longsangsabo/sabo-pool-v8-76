@@ -330,11 +330,9 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
 
         if (matchError) {
           console.error('❌ Error creating match record:', matchError);
-
-            '⚠️ Challenge accepted but match record creation failed'
-          );
+          console.warn('⚠️ Challenge accepted but match record creation failed');
         } else {
-
+          console.log('✅ Challenge accepted and match record created');
         }
 
         // ✅ Send notification to challenger when someone joins their open challenge
@@ -474,9 +472,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
     }) => {
       if (!user) throw new Error('User not authenticated');
 
-        challengerScore,
-        opponentScore,
-      });
+      console.log("Submitting scores:", { challengerScore, opponentScore });
 
       // Get challenge details
       const challenge = challenges.find(c => c.id === challengeId);
@@ -540,10 +536,10 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         );
 
         if (spaError) {
-
+          console.error("Error crediting SPA points:", spaError);
         }
       } catch (error) {
-
+        console.error("Exception crediting SPA points:", error);
       }
 
       // Send notification to opponent
@@ -568,7 +564,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
             },
           });
         } catch (error) {
-
+          console.error("Error sending notification:", error);
         }
       }
 

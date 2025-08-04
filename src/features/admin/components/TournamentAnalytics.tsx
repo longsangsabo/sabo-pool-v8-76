@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/shared/components/ui/card';
 import { BarChart3, TrendingUp, Users, Trophy } from 'lucide-react';
 
 interface TournamentAnalyticsProps {

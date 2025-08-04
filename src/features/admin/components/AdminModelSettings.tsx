@@ -12,22 +12,22 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
+} from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Label } from '@/shared/components/ui/label';
+import { Switch } from '@/shared/components/ui/switch';
+import { Slider } from '@/shared/components/ui/slider';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from '@/shared/components/ui/select';
+import { Badge } from '@/shared/components/ui/badge';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { ModelSelector, GPT_MODELS } from '@/components/ModelSelector';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/shared/components/ui/use-toast';
 
 interface AdminModelSettings {
   autoRecommendations: boolean;

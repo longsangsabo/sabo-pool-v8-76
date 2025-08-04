@@ -5,9 +5,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   AlertTriangle,
   CheckCircle,
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { useDoubleEliminationBracket } from '@/hooks/useDoubleEliminationBracket';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 
 interface Tournament {
   id: string;

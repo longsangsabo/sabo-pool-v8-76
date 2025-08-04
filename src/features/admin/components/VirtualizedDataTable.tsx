@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Input } from '@/shared/components/ui/input';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import { Search, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 
 interface Column {

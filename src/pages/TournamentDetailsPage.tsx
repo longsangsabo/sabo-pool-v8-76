@@ -1,5 +1,5 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { EnhancedTournamentDetailsModal } from '@/components/tournament/EnhancedTournamentDetailsModal';
+import { EnhancedTournamentDetailsModal } from '@/features/tournament/components/EnhancedTournamentDetailsModal';
 import { useTournament } from '@/hooks/useTournament';
 import { useEffect } from 'react';
 

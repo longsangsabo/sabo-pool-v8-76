@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Card } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar';
 import { Edit, Ban, Eye } from 'lucide-react';
 
 interface UserProfile {

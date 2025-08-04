@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,10 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+} from '@/shared/components/ui/dialog';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Badge } from '@/shared/components/ui/badge';
+import { Separator } from '@/shared/components/ui/separator';
 import {
   RefreshCw,
   AlertTriangle,
@@ -21,7 +21,7 @@ import {
   GitBranch,
 } from 'lucide-react';
 import { useGameConfigSync } from '@/hooks/useGameConfigSync';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
 
 export const GameConfigSync: React.FC = () => {
   const [syncDialogOpen, setSyncDialogOpen] = useState(false);

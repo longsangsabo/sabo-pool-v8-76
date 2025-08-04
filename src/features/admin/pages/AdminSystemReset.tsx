@@ -1,5 +1,5 @@
 import React from 'react';
-import { SystemResetPanel } from '@/components/admin/SystemResetPanel';
+import { SystemResetPanel } from '@/features/admin/components/SystemResetPanel';
 
 const AdminSystemReset: React.FC = () => {
   return (

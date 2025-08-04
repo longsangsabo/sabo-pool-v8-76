@@ -1,4 +1,4 @@
-import RankingSystemTest from '@/components/admin/RankingSystemTest';
+import RankingSystemTest from '@/features/admin/components/RankingSystemTest';
 import AdminLayout from '@/components/AdminLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';

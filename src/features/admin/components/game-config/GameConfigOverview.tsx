@@ -5,10 +5,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+} from '@/shared/components/ui/card';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Badge } from '@/shared/components/ui/badge';
+import { Separator } from '@/shared/components/ui/separator';
 import {
   Target,
   Star,

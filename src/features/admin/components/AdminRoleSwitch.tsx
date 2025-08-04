@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import { Building, Shield, ArrowRight } from 'lucide-react';
 import { useClubRole } from '@/hooks/useClubRole';
 import { useLanguage } from '@/contexts/LanguageContext';

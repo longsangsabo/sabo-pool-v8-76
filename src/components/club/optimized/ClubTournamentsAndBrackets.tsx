@@ -1,5 +1,5 @@
 import React from 'react';
-import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
+import ClubTournamentManagement from '@/features/club/components/ClubTournamentManagement';
 import { TournamentSection } from '@/components/error-boundary/SectionWrappers';
 import { AppProviders } from '@/contexts/AppProviders';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DisabledAdminComponent } from '@/components/admin/DisabledAdminComponent';
+import { DisabledAdminComponent } from '@/features/admin/components/DisabledAdminComponent';
 
 export const ChallengeExpiryManager = () => {
   return (

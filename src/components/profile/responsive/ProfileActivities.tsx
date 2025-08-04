@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import { Clock, Trophy, Users, Target } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { formatDistanceToNow } from 'date-fns';

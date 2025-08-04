@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent } from '@/shared/components/ui/card';
 import { Download, X, Smartphone, Star } from 'lucide-react';
 import { toast } from 'sonner';
 

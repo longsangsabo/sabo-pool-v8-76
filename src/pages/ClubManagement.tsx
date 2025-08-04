@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import {
   Trophy,
   Calendar,
@@ -13,8 +13,8 @@ import {
 import { RankVerificationTab } from '@/features/club/components/verification/RankVerificationTab';
 import { MemberList } from '@/features/club/components/members/MemberList';
 import { ScheduleManagement } from '@/features/club/components/schedule/ScheduleManagement';
-import AdminTournamentResults from '@/components/tournament/AdminTournamentResults';
-import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
+import AdminTournamentResults from '@/features/tournament/components/AdminTournamentResults';
+import ClubTournamentManagement from '@/features/club/components/ClubTournamentManagement';
 import ClubChallengesTab from '@/pages/challenges/components/tabs/ClubChallengesTab';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';

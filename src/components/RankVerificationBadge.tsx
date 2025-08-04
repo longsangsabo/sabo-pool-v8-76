@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trophy, Shield, Star, Crown } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/shared/components/ui/badge';
 
 interface RankVerificationBadgeProps {
   rank: string;

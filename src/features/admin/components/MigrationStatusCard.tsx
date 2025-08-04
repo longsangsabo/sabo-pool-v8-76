@@ -1,9 +1,9 @@
 import React from 'react';
 import { useAutomatedMigration } from '@/hooks/useAutomatedMigration';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Progress } from '@/shared/components/ui/progress';
 import { Play, Square, RotateCcw, CheckCircle } from 'lucide-react';
 
 export const MigrationStatusCard: React.FC = () => {

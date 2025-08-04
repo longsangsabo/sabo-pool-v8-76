@@ -1,18 +1,18 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Switch } from '@/shared/components/ui/switch';
+import { Label } from '@/shared/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+} from '@/shared/components/ui/select';
+import { Button } from '@/shared/components/ui/button';
+import { Separator } from '@/shared/components/ui/separator';
 import { Settings, Bell, Mail, MessageSquare, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 

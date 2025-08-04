@@ -3,18 +3,18 @@ import {
   TournamentProvider,
   useTournament,
 } from '@/contexts/TournamentContext';
-import { OptimizedRewardsSection } from '@/components/tournament/OptimizedRewardsSection';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { OptimizedRewardsSection } from '@/features/tournament/components/OptimizedRewardsSection';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Label } from '@/shared/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/shared/components/ui/select';
 import { TournamentTier, GameFormat } from '@/types/tournament-enums';
 import { RewardsService } from '@/services/RewardsService';
 import { Users, DollarSign, Trophy, Calendar } from 'lucide-react';

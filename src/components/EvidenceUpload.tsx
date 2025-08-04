@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Upload, X, FileImage, FileText, Eye } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';

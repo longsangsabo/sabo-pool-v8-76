@@ -1,7 +1,7 @@
 import React from 'react';
 import { Target, Trophy, Users, Crown } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/shared/components/ui/badge';
+import { Progress } from '@/shared/components/ui/progress';
 import type { SABOMatch } from '../SABOLogicCore';
 import { SABOLogicCore } from '../SABOLogicCore';
 

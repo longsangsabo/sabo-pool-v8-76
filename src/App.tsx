@@ -2,13 +2,13 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/shared/components/ui/sonner';
 import { CombinedProviders } from '@/contexts/CombinedProviders';
 import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { PublicRoute } from '@/components/auth/PublicRoute';
-import { AdminProtectedRoute } from '@/components/auth/AdminProtectedRoute';
+import { ProtectedRoute } from '@/core/auth/ProtectedRoute';
+import { PublicRoute } from '@/core/auth/PublicRoute';
+import { AdminProtectedRoute } from '@/core/auth/AdminProtectedRoute';
 import MainLayout from '@/components/MainLayout';
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 
@@ -37,7 +37,7 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
-const CLBManagement = lazy(() => import('@/features/CLB/components/SimpleCLBManagementFixed'));
+const CLBManagement = lazy(() => import('@/features/club/components/SimpleCLBManagement'));
 const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(

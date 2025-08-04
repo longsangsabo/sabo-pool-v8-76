@@ -14,14 +14,14 @@ import {
   Mail,
   Phone
 } from 'lucide-react';
-import { AdminDataTable, ColumnDef } from '@/components/admin/shared/AdminDataTable';
-import { EnhancedAdminDataTable, BulkAction } from '@/components/admin/shared/AdminBulkActions';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminDataTable, ColumnDef } from '@/features/admin/components/shared/AdminDataTable';
+import { EnhancedAdminDataTable, BulkAction } from '@/features/admin/components/shared/AdminBulkActions';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog';
+import { Input } from '@/shared/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { toast } from 'sonner';
 import { AdminTournament } from '@/hooks/admin/useAdminData';
 

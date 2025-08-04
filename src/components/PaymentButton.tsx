@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import { Crown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
 import { toast } from 'sonner';
 
 interface PaymentButtonProps {

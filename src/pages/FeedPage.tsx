@@ -10,14 +10,14 @@ import {
   Bell,
   RefreshCw,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardContent } from '@/shared/components/ui/card';
 
 import TournamentFeedCard from '@/components/TournamentFeedCard';
 import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
-import { EnhancedAuthFlow } from '@/components/auth/EnhancedAuthFlow';
+import { EnhancedAuthFlow } from '@/core/auth/EnhancedAuthFlow';
 import SocialFeedCard from '@/components/SocialFeedCard';
 import CreatePostModal from '@/components/CreatePostModal';
 import { useTournaments } from '@/hooks/useTournaments';

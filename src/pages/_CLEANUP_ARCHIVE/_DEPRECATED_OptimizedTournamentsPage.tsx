@@ -19,25 +19,25 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/shared/components/ui/dialog';
 import { Plus, Search, Filter, Radio, Zap } from 'lucide-react';
-// import { SimplifiedTournamentCreator } from '@/components/tournament/SimplifiedTournamentCreator';
-import { EnhancedTournamentForm } from '@/components/tournament/EnhancedTournamentForm';
+// import { SimplifiedTournamentCreator } from '@/features/tournament/components/SimplifiedTournamentCreator';
+import { EnhancedTournamentForm } from '@/features/tournament/components/EnhancedTournamentForm';
 import { TournamentProvider } from '@/contexts/TournamentContext';
 import { ProfileProvider } from '@/contexts/ProfileContext';
-import TournamentBroadcasting from '@/components/tournament/TournamentBroadcasting';
-import { TournamentRegistrationDashboard } from '@/components/tournament/TournamentRegistrationDashboard';
-import { VirtualizedTournamentList } from '@/components/tournament/VirtualizedTournamentList';
-import OptimizedTournamentCard from '@/components/tournament/OptimizedTournamentCard';
+import TournamentBroadcasting from '@/features/tournament/components/TournamentBroadcasting';
+import { TournamentRegistrationDashboard } from '@/features/tournament/components/TournamentRegistrationDashboard';
+import { VirtualizedTournamentList } from '@/features/tournament/components/VirtualizedTournamentList';
+import OptimizedTournamentCard from '@/features/tournament/components/OptimizedTournamentCard';
 import { useTournaments } from '@/hooks/useTournaments';
 import { useTournamentService } from '@/hooks/useTournamentService';
 import { useAuth } from '@/hooks/useAuth';

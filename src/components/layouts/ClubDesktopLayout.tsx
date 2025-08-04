@@ -4,8 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useClubRole } from '@/hooks/useClubRole';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ClubSidebar from '@/components/ClubSidebar';
-import { ClubDesktopHeader } from '@/components/club/ClubDesktopHeader';
-import { Button } from '@/components/ui/button';
+import { ClubDesktopHeader } from '@/features/club/components/ClubDesktopHeader';
+import { Button } from '@/shared/components/ui/button';
 import { Menu } from 'lucide-react';
 
 interface ClubDesktopLayoutProps {

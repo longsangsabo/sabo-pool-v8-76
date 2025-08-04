@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Badge } from '@/shared/components/ui/badge';
 import { Bell, Menu, Search, Settings, Building, Home } from 'lucide-react';
 import { ClubRoleSwitch } from './ClubRoleSwitch';
 import { UserModeSwitch } from './UserModeSwitch';
@@ -14,8 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+} from '@/shared/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/shared/components/ui/theme-toggle';
 
 interface ClubDesktopHeaderProps {
   onToggleSidebar: () => void;

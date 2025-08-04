@@ -5,12 +5,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/shared/components/ui/card';
+import { Progress } from '@/shared/components/ui/progress';
+import { Badge } from '@/shared/components/ui/badge';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Button } from '@/shared/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { performanceMonitor } from '@/lib/performanceMonitor';
 import { webVitalsTracker } from '@/lib/webVitalsTracker';
 import { supabase } from '@/integrations/supabase/client';

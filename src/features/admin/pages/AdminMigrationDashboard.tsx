@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Progress } from '@/shared/components/ui/progress';
 import { 
   CheckCircle, 
   Clock, 
@@ -18,8 +18,8 @@ import {
   Zap,
   TrendingUp
 } from 'lucide-react';
-import { AdminCoreProvider } from '@/components/admin/core/AdminCoreProvider';
-import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
+import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
+import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 
 interface MigrationItem {
   id: string;

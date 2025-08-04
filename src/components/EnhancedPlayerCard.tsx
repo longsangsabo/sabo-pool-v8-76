@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin, Clock, Trophy, Users, Zap } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/shared/components/ui/badge';
 
 interface PlayerCardProps {
   player: {

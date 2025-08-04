@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useAdminPermissions } from '../../../hooks/admin/useAdminPermissions';
-import { useAdminNotifications } from '../../../hooks/admin/useAdminNotifications';
-import { useAdminActions } from '../../../hooks/admin/useAdminActions';
+import { useAdminPermissions } from '@/hooks/admin/useAdminPermissions';
+import { useAdminNotifications } from '@/hooks/admin/useAdminNotifications';
+import { useAdminActions } from '@/hooks/admin/useAdminActions';
 
 interface AdminCoreContextType {
   permissions: any;

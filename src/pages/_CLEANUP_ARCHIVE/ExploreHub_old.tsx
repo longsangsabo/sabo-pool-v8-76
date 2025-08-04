@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card } from '@/shared/components/ui/card';
 import { Loader2, Compass, ShoppingBag, FileText, HelpCircle, Search, TrendingUp, Users, Star } from 'lucide-react';
 
 // Lazy load explore components

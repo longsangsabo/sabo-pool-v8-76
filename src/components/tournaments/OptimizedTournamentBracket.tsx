@@ -4,11 +4,11 @@ import { useTournaments } from '@/hooks/useTournaments';
 import { BracketRoundSection } from './BracketRoundSection';
 import { ScoreInputModal } from './ScoreInputModal';
 import { BracketFixButton } from './BracketFixButton';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
 import { Trophy, Crown, AlertTriangle, Activity } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import TournamentCompletionButton from '@/components/tournament/TournamentCompletionButton';
+import TournamentCompletionButton from '@/features/tournament/components/TournamentCompletionButton';
 import { autoAdvanceCompletedMatches } from '@/services/tournament/bracketAdvancement';
 import { useWinnerAdvancementListener } from '@/hooks/useWinnerAdvancementListener';
 

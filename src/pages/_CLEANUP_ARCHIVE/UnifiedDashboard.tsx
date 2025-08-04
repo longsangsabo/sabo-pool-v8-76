@@ -1,17 +1,17 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '@/shared/components/ui/skeleton';
 import { useUnifiedDashboard } from '@/hooks/useUnifiedDashboard';
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 
 // Import existing dashboard content for specific roles
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { AdminDashboard } from '@/features/admin/components/AdminDashboard';
 import MobileStoryReel from '@/components/mobile/cards/MobileStoryReel';
 import MobileFeedCard from '@/components/mobile/cards/MobileFeedCard';
 import MobileFloatingActionButton from '@/components/mobile/common/MobileFloatingActionButton';
-import { UserDashboard } from '@/components/user/dashboard';
+import { UserDashboard } from '@/features/user/components/dashboard';
 
 // Simple Dashboard content for guests
 const GuestDashboard = () => (

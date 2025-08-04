@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/shared/components/ui/card';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { Copy, ExternalLink, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 

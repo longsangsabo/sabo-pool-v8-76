@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TechNavigation } from '@/components/ui/sabo-tech-global';
+import { TechNavigation } from '@/shared/components/ui/sabo-tech-global';
 import {
   Home,
   User,

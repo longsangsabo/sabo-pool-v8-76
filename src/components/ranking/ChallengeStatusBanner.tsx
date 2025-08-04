@@ -1,6 +1,6 @@
 import { AlertCircle, Trophy, Zap } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Badge } from '@/shared/components/ui/badge';
 import { useDailyChallenges } from '@/hooks/useDailyChallenges';
 
 export const ChallengeStatusBanner = () => {

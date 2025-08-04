@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/shared/components/ui/card';
 import { AlertTriangle, Calculator } from 'lucide-react';
 
 export const ELOValidationPanel: React.FC = () => {

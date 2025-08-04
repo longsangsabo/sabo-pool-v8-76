@@ -1,18 +1,18 @@
 import { Moon, Sun } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
 import { useTheme } from '@/hooks/useTheme';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from '@/shared/components/ui/tooltip';
 
 export function ThemeToggle() {
   const { setTheme, isDark } = useTheme();

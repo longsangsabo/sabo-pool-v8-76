@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Button } from '../../ui/button';
-import { Checkbox } from '../../ui/checkbox';
+import { Button } from '@/shared/components/ui/button';
+import { Checkbox } from '@/shared/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../../ui/dialog';
+} from '@/shared/components/ui/dialog';
 import { ChevronDown, CheckSquare, Square, Trash2, Check, X, Settings } from 'lucide-react';
 import { AdminDataTable, type ColumnDef } from './AdminDataTable';
 

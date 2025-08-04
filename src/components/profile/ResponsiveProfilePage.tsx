@@ -9,8 +9,8 @@ import { ProfileContent } from './responsive/ProfileContent';
 import { ProfileActivities } from './responsive/ProfileActivities';
 import ProfileErrorBoundary from './ProfileErrorBoundary';
 import { Loader2, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent } from '@/shared/components/ui/card';
 
 const ResponsiveProfilePage: React.FC = () => {
   const { isMobile } = useOptimizedResponsive();

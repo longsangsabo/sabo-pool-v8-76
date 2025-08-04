@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Switch } from '@/shared/components/ui/switch';
+import { Label } from '@/shared/components/ui/label';
+import { Input } from '@/shared/components/ui/input';
 import {
   Search,
   RefreshCw,
@@ -19,8 +19,8 @@ import {
 } from 'lucide-react';
 // Tournament service removed - using direct Supabase calls instead
 import { TournamentActions } from './TournamentActions';
-import TournamentStatusControlButton from '@/components/tournament/TournamentStatusControlButton';
-import ForceStartTournamentButton from '@/components/tournament/ForceStartTournamentButton';
+import TournamentStatusControlButton from '@/features/tournament/components/TournamentStatusControlButton';
+import ForceStartTournamentButton from '@/features/tournament/components/ForceStartTournamentButton';
 import { EnhancedTournament } from '@/types/tournament-extended';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,7 +34,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@/shared/components/ui/alert-dialog';
 
 const TournamentManagement: React.FC = () => {
   const [tournaments, setTournaments] = useState<EnhancedTournament[]>([]);

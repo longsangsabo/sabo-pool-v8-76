@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Badge } from '@/shared/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useOptimizedChallenges } from '@/hooks/useOptimizedChallenges';
 import { toast } from 'sonner';

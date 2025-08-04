@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { Trophy, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { RANK_ELO } from '@/utils/eloConstants';
 import { eloToSaboRank, saboRankToElo } from '@/utils/eloToSaboRank';

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
 import {
   Form,
   FormControl,
@@ -11,7 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/shared/components/ui/form';
 import { Lock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Target } from 'lucide-react';

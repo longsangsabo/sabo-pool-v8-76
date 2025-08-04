@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import {
   Wallet,
   History,
@@ -14,11 +14,11 @@ import {
   ArrowUpRight,
   Settings,
 } from 'lucide-react';
-import { WalletOverview } from '@/components/user/wallet/WalletOverview';
-import { TransactionHistory } from '@/components/user/wallet/TransactionHistory';
-import { MembershipUpgradeTab } from '@/components/user/wallet/MembershipUpgradeTab';
-import { PaymentModal } from '@/components/user/wallet/PaymentModal';
-import { TransferModal } from '@/components/user/wallet/TransferModal';
+import { WalletOverview } from '@/features/user/components/wallet/WalletOverview';
+import { TransactionHistory } from '@/features/user/components/wallet/TransactionHistory';
+import { MembershipUpgradeTab } from '@/features/user/components/wallet/MembershipUpgradeTab';
+import { PaymentModal } from '@/features/user/components/wallet/PaymentModal';
+import { TransferModal } from '@/features/user/components/wallet/TransferModal';
 
 interface WalletData {
   balance: number;

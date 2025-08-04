@@ -1,8 +1,8 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
 import { Loader2, Wallet, CreditCard, Crown, History, DollarSign, TrendingUp, TrendingDown, Plus, ArrowUpRight, ArrowDownRight, Target, Gift, Settings } from 'lucide-react';
 import { useFinancials } from '@/hooks/useFinancials';
 import { useChallengeBetting } from '@/hooks/useChallengeBetting';

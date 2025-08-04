@@ -5,10 +5,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/shared/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { Users, UserPlus } from 'lucide-react';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingState } from '@/shared/components/ui/loading-state';
 import { DemoUserManager } from './DemoUserManager';
 import QuickRealUserCreator from './QuickRealUserCreator';
 

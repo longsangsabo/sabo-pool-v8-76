@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/ui/checkbox';
+import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Link } from 'react-router-dom';
 
 interface TermsCheckboxProps {

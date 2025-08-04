@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import { RefreshCw, Wrench } from 'lucide-react';
 import { toast } from 'sonner';
 import { fixBracketProgression } from '@/services/tournament/bracketAdvancement';

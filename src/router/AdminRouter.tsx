@@ -12,33 +12,33 @@ const AdminLoadingFallback = () => (
 
 // Direct lazy imports to avoid circular dependencies
 // Enhanced New Admin Pages - Primary
-const AdminDashboardNew = lazy(() => import('@/pages/admin/AdminDashboardNew'));
-const AdminUsersNew = lazy(() => import('@/pages/admin/AdminUsersNew'));
-const AdminClubsNew = lazy(() => import('@/pages/admin/AdminClubsNew'));
-const AdminRankVerificationNew = lazy(() => import('@/pages/admin/AdminRankVerificationNew'));
-const AdminTransactionsNew = lazy(() => import('@/pages/admin/AdminTransactionsNew'));
-const AdminChallengesNew = lazy(() => import('@/pages/admin/AdminChallengesNewClean'));
-const AdminPaymentsNew = lazy(() => import('@/pages/admin/AdminPaymentsNew'));
-const AdminEmergencyNew = lazy(() => import('@/pages/admin/AdminEmergencyNew'));
-const AdminGuideNew = lazy(() => import('@/pages/admin/AdminGuideNew'));
-const AdminReportsNew = lazy(() => import('@/pages/admin/AdminReportsNew'));
-const AdminAnalyticsNew = lazy(() => import('@/pages/admin/AdminAnalyticsNew'));
-const AdminScheduleNew = lazy(() => import('@/pages/admin/AdminScheduleNew'));
-const AdminNotificationsNew = lazy(() => import('@/pages/admin/AdminNotificationsNew'));
-const AdminDatabaseNew = lazy(() => import('@/pages/admin/AdminDatabaseNew'));
-const AdminAutomationNew = lazy(() => import('@/pages/admin/AdminAutomationNew'));
-const AdminDevelopmentNew = lazy(() => import('@/pages/admin/AdminDevelopmentNew'));
-const AdminAIAssistantNew = lazy(() => import('@/pages/admin/AdminAIAssistantNew'));
-const AdminSettingsNew = lazy(() => import('@/pages/admin/AdminSettingsNew'));
+const AdminDashboardNew = lazy(() => import('@/features/admin/pages/AdminDashboardNew'));
+const AdminUsersNew = lazy(() => import('@/features/admin/pages/AdminUsersNew'));
+const AdminClubsNew = lazy(() => import('@/features/admin/pages/AdminClubsNew'));
+const AdminRankVerificationNew = lazy(() => import('@/features/admin/pages/AdminRankVerificationNew'));
+const AdminTransactionsNew = lazy(() => import('@/features/admin/pages/AdminTransactionsNew'));
+const AdminChallengesNew = lazy(() => import('@/features/admin/pages/AdminChallengesNewClean'));
+const AdminPaymentsNew = lazy(() => import('@/features/admin/pages/AdminPaymentsNew'));
+const AdminEmergencyNew = lazy(() => import('@/features/admin/pages/AdminEmergencyNew'));
+const AdminGuideNew = lazy(() => import('@/features/admin/pages/AdminGuideNew'));
+const AdminReportsNew = lazy(() => import('@/features/admin/pages/AdminReportsNew'));
+const AdminAnalyticsNew = lazy(() => import('@/features/admin/pages/AdminAnalyticsNew'));
+const AdminScheduleNew = lazy(() => import('@/features/admin/pages/AdminScheduleNew'));
+const AdminNotificationsNew = lazy(() => import('@/features/admin/pages/AdminNotificationsNew'));
+const AdminDatabaseNew = lazy(() => import('@/features/admin/pages/AdminDatabaseNew'));
+const AdminAutomationNew = lazy(() => import('@/features/admin/pages/AdminAutomationNew'));
+const AdminDevelopmentNew = lazy(() => import('@/features/admin/pages/AdminDevelopmentNew'));
+const AdminAIAssistantNew = lazy(() => import('@/features/admin/pages/AdminAIAssistantNew'));
+const AdminSettingsNew = lazy(() => import('@/features/admin/pages/AdminSettingsNew'));
 
 // Special Admin Pages - Keep
-const AdminSystemReset = lazy(() => import('@/pages/admin/AdminSystemReset'));
-const AdminTestingDashboard = lazy(() => import('@/pages/admin/AdminTestingDashboard'));
-const AdminMigrationDashboard = lazy(() => import('@/pages/admin/AdminMigrationDashboard'));
+const AdminSystemReset = lazy(() => import('@/features/admin/pages/AdminSystemReset'));
+const AdminTestingDashboard = lazy(() => import('@/features/admin/pages/AdminTestingDashboard'));
+const AdminMigrationDashboard = lazy(() => import('@/features/admin/pages/AdminMigrationDashboard'));
 
 // Enhanced Tournament & Game Config
-const AdminTournamentsNewEnhanced = lazy(() => import('@/pages/admin/AdminTournamentsNewEnhanced'));
-const AdminGameConfigNewEnhanced = lazy(() => import('@/pages/admin/AdminGameConfigNewEnhanced'));
+const AdminTournamentsNewEnhanced = lazy(() => import('@/features/admin/pages/AdminTournamentsNewEnhanced'));
+const AdminGameConfigNewEnhanced = lazy(() => import('@/features/admin/pages/AdminGameConfigNewEnhanced'));
 
 const AdminRouter = () => {
   return (

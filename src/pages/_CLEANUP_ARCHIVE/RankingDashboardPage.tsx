@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import ELORankingDashboard from '@/components/user/ranking/ELORankingDashboard';
+import ELORankingDashboard from '@/features/user/components/ranking/ELORankingDashboard';
 import { SEOHead } from '@/components/SEOHead';
 import PageLayout from '@/components/layout/PageLayout';
 

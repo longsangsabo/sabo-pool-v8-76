@@ -5,8 +5,8 @@ import {
   SaboTechCard,
   SaboTechInput,
   SaboTechAvatar,
-} from '@/components/ui/sabo-tech-border';
-import { Badge } from '@/components/ui/badge';
+} from '@/shared/components/ui/sabo-tech-border';
+import { Badge } from '@/shared/components/ui/badge';
 
 /**
  * Demo component showcasing the SABO Tech Border System

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/shared/components/ui/card';
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 
 interface IntegratedWorkflowStepProps {

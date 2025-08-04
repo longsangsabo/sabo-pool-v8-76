@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+import { Label } from '@/shared/components/ui/label';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/shared/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import {
   Eye,
   EyeOff,
@@ -26,8 +26,8 @@ import {
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useSmartNavigation } from '@/hooks/useSmartNavigation';
-import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
-import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
+import { FacebookLoginButton } from '@/core/auth/FacebookLoginButton';
+import { GoogleLoginButton } from '@/core/auth/GoogleLoginButton';
 import { handleAuthError } from '@/utils/authHelpers';
 
 type AuthMode = 'login' | 'register' | 'forgot-password' | 'reset-password';

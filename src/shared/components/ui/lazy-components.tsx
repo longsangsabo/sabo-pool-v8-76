@@ -4,8 +4,8 @@
  */
 
 import React, { Suspense, ComponentType } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Skeleton } from '@/shared/components/ui/skeleton';
+import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
 import { performanceMonitor, bundleMonitor } from '@/utils/performance';
 
 // Enhanced loading fallback with skeleton

@@ -16,15 +16,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Switch } from '@/shared/components/ui/switch';
+import { Label } from '@/shared/components/ui/label';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { ModelSelector, GPT_MODELS } from '@/components/ModelSelector';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/shared/components/ui/use-toast';
 import ModelTestingDemo from './ModelTestingDemo';
 import AdminModelSettings from './AdminModelSettings';
 import {

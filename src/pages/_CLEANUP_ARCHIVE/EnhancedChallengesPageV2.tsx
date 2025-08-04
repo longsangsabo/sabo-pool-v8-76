@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
+import { Badge } from '@/shared/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Input } from '@/shared/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/shared/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/useResponsive';
@@ -20,7 +20,7 @@ import { useState as useStateForMatches } from 'react';
 import UnifiedCreateChallengeModal from '@/components/modals/UnifiedCreateChallengeModal';
 import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import ChallengeDetailsModal from '@/components/ChallengeDetailsModal';
-import CreateChallengeButton from '@/components/user/challenges/CreateChallengeButton';
+import CreateChallengeButton from '@/features/user/components/challenges/CreateChallengeButton';
 
 import TrustScoreBadge from '@/components/TrustScoreBadge';
 import CompactStatCard from '@/components/challenges/CompactStatCard';
