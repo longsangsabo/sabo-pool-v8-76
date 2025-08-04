@@ -3,6 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import enTranslation from './locales/en/translation.json';
 import viTranslation from './locales/vi/translation.json';
+import enAuth from './locales/en/auth.json';
+import viAuth from './locales/vi/auth.json';
 
 i18n
   // detect user language
@@ -19,9 +21,11 @@ i18n
     resources: {
       en: {
         translation: enTranslation,
+        auth: enAuth,
       },
       vi: {
         translation: viTranslation,
+        auth: viAuth,
       },
     },
   });

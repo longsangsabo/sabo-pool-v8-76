@@ -1,5 +1,7 @@
 {
   "sidebar": {
+    "admin_panel": "Admin Panel",
+    "app_name": "SABO Pool Arena",
     "dashboard": "Dashboard",
     "users": "Users",
     "rank_verification": "Rank Verification",

@@ -1,4 +1,5 @@
 import { Target } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -7,6 +8,7 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
+  const { t } = useTranslation('auth');
   return (
     <div className='min-h-screen flex'>
       {/* Form Section - Left */}
@@ -30,23 +32,23 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
               <div className='w-12 h-12 bg-white rounded-lg flex items-center justify-center'>
                 <Target className='w-8 h-8 text-blue-700' />
               </div>
-              <span className='text-3xl font-bold'>SABO ARENA</span>
+              <span className='text-3xl font-bold'>{t('app_name')}</span>
             </div>
 
             {/* Tagline */}
             <h3 className='text-2xl font-semibold'>
-              Cộng đồng Bida Chuyên nghiệp Việt Nam
+              {t('tagline')}
             </h3>
 
             {/* Stats */}
             <div className='space-y-4'>
               <div className='flex items-center justify-center space-x-2'>
                 <div className='w-2 h-2 bg-amber-400 rounded-full'></div>
-                <span className='text-lg'>1,200+ Hội viên</span>
+                <span className='text-lg'>{t('stats.members')}</span>
               </div>
               <div className='flex items-center justify-center space-x-2'>
                 <div className='w-2 h-2 bg-amber-400 rounded-full'></div>
-                <span className='text-lg'>50+ Giải đấu</span>
+                <span className='text-lg'>{t('stats.tournaments')}</span>
               </div>
               <div className='flex items-center justify-center space-x-2'>
                 <div className='w-2 h-2 bg-amber-400 rounded-full'></div>

@@ -1,5 +1,7 @@
 {
   "sidebar": {
+    "admin_panel": "Bảng Điều Khiển Admin",
+    "app_name": "SABO Pool Arena",
     "dashboard": "Bảng điều khiển",
     "users": "Người dùng",
     "rank_verification": "Xác thực Xếp hạng",

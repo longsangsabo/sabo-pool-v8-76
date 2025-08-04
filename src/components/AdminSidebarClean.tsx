@@ -239,8 +239,8 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
           </div>
           {!collapsed && (
             <div>
-              <h2 className='font-semibold text-sm truncate text-white'>Admin Panel</h2>
-              <p className='text-xs text-slate-400 truncate'>SABO Pool Arena</p>
+              <h2 className='font-semibold text-sm truncate text-white'>{t('sidebar.admin_panel')}</h2>
+              <p className='text-xs text-slate-400 truncate'>{t('sidebar.app_name')}</p>
             </div>
           )}
         </div>
