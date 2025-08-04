@@ -48,29 +48,72 @@ export interface NavigationConfig {
 
 // ===== USER NAVIGATION ITEMS =====
 export const USER_NAV_ITEMS: NavigationItem[] = [
-  { path: '/dashboard', label: 'Trang chủ', icon: Home, section: 'main' },
+  // ===== MAIN HUBS SECTION =====
+  { 
+    path: '/dashboard', 
+    label: 'Dashboard Hub', 
+    icon: Home, 
+    section: 'hubs', 
+    description: 'Tổng quan • Analytics • Feed • Community' 
+  },
+  { 
+    path: '/tournaments', 
+    label: 'Tournament Hub', 
+    icon: Trophy, 
+    section: 'hubs', 
+    description: 'Giải đấu • Brackets • BXH • Lịch sử' 
+  },
   {
     path: '/challenges',
-    label: 'Thách đấu',
+    label: 'Challenges Hub',
     icon: Swords,
     badge: true,
-    section: 'main',
+    section: 'hubs',
+    description: 'Thách đấu • Quản lý • Hành động'
   },
-  { path: '/tournaments', label: 'Giải đấu', icon: Trophy, section: 'main' },
-  { path: '/leaderboard', label: 'BXH', icon: BarChart3, section: 'main' },
-  { path: '/profile', label: 'Hồ sơ', icon: User, section: 'main' },
+  { 
+    path: '/profile', 
+    label: 'Player Profile', 
+    icon: User, 
+    section: 'hubs', 
+    description: 'Hồ sơ • Thống kê • Thành tích • Cài đặt' 
+  },
 
-  // Secondary items (sidebar only)
-  { path: '/calendar', label: 'Lịch', icon: Calendar, section: 'secondary' },
-  { path: '/wallet', label: 'Ví', icon: Wallet, section: 'secondary' },
+  // ===== EXTENDED HUBS SECTION =====
+  { 
+    path: '/financial', 
+    label: 'Financial Hub', 
+    icon: Wallet, 
+    section: 'extended', 
+    description: 'Ví • Thanh toán • Hội viên • Lịch sử GD' 
+  },
+  { 
+    path: '/messages', 
+    label: 'Message Center', 
+    icon: MessageSquare, 
+    section: 'extended', 
+    badge: true,
+    description: 'Chat • Thông báo • Hộp thư • Cài đặt' 
+  },
+  { 
+    path: '/explore', 
+    label: 'Explore Hub', 
+    icon: Users, 
+    section: 'extended', 
+    description: 'Khám phá • Shop • Blog • Trợ giúp' 
+  },
+
+  // ===== QUICK ACCESS SECTION =====
+  { path: '/ranking', label: 'Global Ranking', icon: TrendingUp, section: 'quick' },
+  { path: '/calendar', label: 'Events Calendar', icon: Calendar, section: 'quick' },
   {
     path: '/notifications',
-    label: 'Thông báo',
+    label: 'Notifications',
     icon: Bell,
     badge: true,
-    section: 'secondary',
+    section: 'quick',
   },
-  { path: '/settings', label: 'Cài đặt', icon: Settings, section: 'secondary' },
+  { path: '/settings', label: 'Settings', icon: Settings, section: 'quick' },
 ];
 
 // ===== CLUB OWNER NAVIGATION ITEMS =====
@@ -281,8 +324,9 @@ export const getNavigationConfig = (
 // ===== NAVIGATION SECTIONS FOR SIDEBAR GROUPING =====
 export const NAVIGATION_SECTIONS = {
   user: {
-    main: 'Chính',
-    secondary: 'Tiện ích',
+    hubs: '🎯 Core Hubs',
+    extended: '🚀 Extended Hubs', 
+    quick: '⚡ Quick Access',
   },
   club: {
     main: 'Quản lý CLB',

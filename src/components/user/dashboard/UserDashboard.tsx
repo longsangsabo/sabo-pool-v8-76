@@ -90,50 +90,50 @@ const UserDashboard = () => {
         />
       </Helmet>
 
-      <div className='min-h-screen bg-gray-50'>
+      <div className='min-h-screen bg-background'>
         {/* Welcome Section */}
-        <div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white'>
-          <div className='container mx-auto px-4 py-8'>
+        <div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg mb-4'>
+          <div className='compact-container py-4 md:py-6'>
             <div className='flex items-center justify-between'>
               <div>
-                <h1 className='text-3xl font-bold mb-2'>
+                <h1 className='compact-title text-white mb-2'>
                   Chào mừng trở lại, {user?.user_metadata?.full_name || 'Player'}!
                 </h1>
-                <p className='text-blue-100'>
+                <p className='text-blue-100 responsive-text-sm'>
                   Sẵn sàng cho những trận đấu hôm nay?
                 </p>
               </div>
               <div className='hidden md:block'>
-                <Bell className='h-8 w-8 text-blue-200' />
+                <Bell className='h-6 w-6 md:h-8 md:w-8 text-blue-200' />
               </div>
             </div>
           </div>
         </div>
 
-        <div className='container mx-auto px-4 py-8 space-y-8'>
+        <div className='compact-container space-y-4 md:space-y-6'>
           {/* Player Stats */}
           <div>
-            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+            <h2 className='compact-title text-foreground mb-3 md:mb-4'>
               Thống kê cá nhân
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+            <div className='compact-grid compact-grid-cols-4'>
               {playerStats.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
                   <Card
                     key={stat.title}
-                    className='shadow-sm hover:shadow-md transition-shadow'
+                    className='compact-card shadow-sm hover:shadow-md transition-shadow'
                   >
-                    <CardContent className='p-6'>
-                      <div className='flex items-center justify-between mb-4'>
-                        <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                          <Icon className={`h-6 w-6 ${stat.color}`} />
+                    <CardContent className='compact-card-content'>
+                      <div className='flex items-center justify-between mb-2'>
+                        <div className={`p-2 md:p-3 rounded-lg ${stat.bgColor}`}>
+                          <Icon className={`h-4 w-4 md:h-6 md:w-6 ${stat.color}`} />
                         </div>
                       </div>
-                      <div className={`text-2xl font-bold mb-1 ${stat.color}`}>
+                      <div className={`responsive-text-lg font-bold mb-1 ${stat.color}`}>
                         {stat.value}
                       </div>
-                      <div className='text-sm text-gray-600'>{stat.title}</div>
+                      <div className='responsive-text-xs text-muted-foreground'>{stat.title}</div>
                     </CardContent>
                   </Card>
                 );
@@ -143,27 +143,27 @@ const UserDashboard = () => {
 
           {/* Quick Actions */}
           <div>
-            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+            <h2 className='compact-title text-foreground mb-3 md:mb-4'>
               Hành động nhanh
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+            <div className='compact-grid compact-grid-cols-4'>
               {quickActions.map((action, index) => {
                 const Icon = action.icon;
                 return (
                   <Link key={action.label} to={action.route}>
-                    <Card className='group hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-l-transparent hover:border-l-blue-500'>
-                      <CardContent className='p-6'>
-                        <div className='flex items-center space-x-4'>
+                    <Card className='compact-card group hover:shadow-lg transition-all duration-200 cursor-pointer border-l-4 border-l-transparent hover:border-l-blue-500'>
+                      <CardContent className='compact-card-content'>
+                        <div className='flex items-center space-x-2 md:space-x-3'>
                           <div
-                            className={`p-3 rounded-lg ${action.color} group-hover:scale-110 transition-transform`}
+                            className={`p-2 md:p-3 rounded-lg ${action.color} group-hover:scale-110 transition-transform`}
                           >
-                            <Icon className='h-6 w-6 text-white' />
+                            <Icon className='h-4 w-4 md:h-6 md:w-6 text-white' />
                           </div>
-                          <div className='flex-1'>
-                            <h3 className='font-semibold text-gray-900 group-hover:text-blue-600 transition-colors'>
+                          <div className='flex-1 min-w-0'>
+                            <h3 className='responsive-text-sm font-semibold text-foreground group-hover:text-blue-600 transition-colors truncate'>
                               {action.label}
                             </h3>
-                            <p className='text-sm text-gray-600 mt-1'>
+                            <p className='responsive-text-xs text-muted-foreground mt-1 hidden md:block'>
                               {action.description}
                             </p>
                           </div>
@@ -178,25 +178,25 @@ const UserDashboard = () => {
 
           {/* Recent Activity */}
           <div>
-            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+            <h2 className='compact-title text-foreground mb-3 md:mb-4'>
               Hoạt động gần đây
             </h2>
-            <Card>
-              <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                  <Activity className='h-5 w-5' />
+            <Card className='compact-card'>
+              <CardHeader className='compact-card-header'>
+                <CardTitle className='flex items-center gap-2 responsive-text-base'>
+                  <Activity className='h-4 w-4 md:h-5 md:w-5' />
                   Lịch sử hoạt động
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className='space-y-4'>
-                  <div className='flex items-center space-x-4 p-4 bg-gray-50 rounded-lg'>
+              <CardContent className='compact-card-content'>
+                <div className='space-y-2 md:space-y-3'>
+                  <div className='flex items-center space-x-3 p-2 md:p-3 bg-muted/50 rounded-lg'>
                     <div className='w-2 h-2 bg-green-500 rounded-full'></div>
-                    <div className='flex-1'>
-                      <p className='text-sm font-medium'>
+                    <div className='flex-1 min-w-0'>
+                      <p className='responsive-text-sm font-medium'>
                         Hoàn thành trận đấu với Player123
                       </p>
-                      <p className='text-xs text-gray-500'>2 giờ trước</p>
+                      <p className='responsive-text-xs text-muted-foreground'>2 giờ trước</p>
                     </div>
                   </div>
                   <div className='flex items-center space-x-4 p-4 bg-gray-50 rounded-lg'>

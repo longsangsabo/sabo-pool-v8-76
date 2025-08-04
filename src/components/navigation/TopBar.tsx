@@ -67,16 +67,16 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <header className='fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm'>
-      <div className='flex items-center justify-between h-16 px-4 max-w-full'>
+      <div className='flex items-center justify-between h-14 px-3 max-w-full'>
         {/* Left: Logo */}
         <div className='flex items-center'>
-          <Link to='/' className='flex items-center space-x-3'>
-            <div className='w-10 h-10 bg-gradient-to-r from-primary to-primary-glow rounded-lg flex items-center justify-center shadow-lg'>
-              <Circle className='w-6 h-6 text-primary-foreground font-bold' />
+          <Link to='/' className='flex items-center space-x-2'>
+            <div className='w-8 h-8 bg-gradient-to-r from-primary to-primary-glow rounded-lg flex items-center justify-center shadow-md'>
+              <Circle className='w-5 h-5 text-primary-foreground font-bold' />
             </div>
             <div className='hidden sm:flex flex-col'>
-              <span className='text-xl font-black text-foreground'>SABO</span>
-              <span className='text-sm text-primary font-bold -mt-1'>
+              <span className='text-lg font-black text-foreground'>SABO</span>
+              <span className='text-xs text-primary font-bold -mt-1'>
                 ARENA
               </span>
             </div>

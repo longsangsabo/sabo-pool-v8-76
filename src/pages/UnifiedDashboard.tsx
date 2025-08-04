@@ -11,7 +11,7 @@ import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import MobileStoryReel from '@/components/mobile/cards/MobileStoryReel';
 import MobileFeedCard from '@/components/mobile/cards/MobileFeedCard';
 import MobileFloatingActionButton from '@/components/mobile/common/MobileFloatingActionButton';
-import { RankingDashboard } from '@/components/ranking/RankingDashboard';
+import { UserDashboard } from '@/components/user/dashboard';
 
 // Simple Dashboard content for guests
 const GuestDashboard = () => (
@@ -167,9 +167,9 @@ const UnifiedDashboard = () => {
             <QuickActions dashboardType='player' />
           </div>
 
-          {/* Ranking Dashboard */}
+          {/* User Dashboard */}
           <div className='px-4'>
-            <RankingDashboard playerId={dashboard.user?.id} />
+            <UserDashboard />
           </div>
 
           {/* Social Feed */}

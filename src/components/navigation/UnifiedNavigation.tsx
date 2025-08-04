@@ -70,12 +70,16 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({
         <main
           className={`
             flex-1 
-            ${navConfig.showSidebar ? 'ml-64' : ''}
-            ${navConfig.showTopBar ? 'pt-16' : ''}
-            ${navConfig.showBottomNav ? 'pb-20' : ''}
+            ${navConfig.showSidebar ? 'ml-56' : ''}
+            ${navConfig.showTopBar ? 'pt-14' : ''}
+            ${navConfig.showBottomNav ? 'pb-16' : ''}
+            px-2 md:px-4 lg:px-6
+            max-w-full
           `}
         >
-          {children}
+          <div className="max-w-7xl mx-auto py-2 md:py-4">
+            {children}
+          </div>
         </main>
       </div>
 

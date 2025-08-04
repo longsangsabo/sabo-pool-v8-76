@@ -14,11 +14,11 @@ import {
   ArrowUpRight,
   Settings,
 } from 'lucide-react';
-import { WalletOverview } from '@/components/wallet/WalletOverview';
-import { TransactionHistory } from '@/components/wallet/TransactionHistory';
-import { MembershipUpgradeTab } from '@/components/wallet/MembershipUpgradeTab';
-import { PaymentModal } from '@/components/wallet/PaymentModal';
-import { TransferModal } from '@/components/wallet/TransferModal';
+import { WalletOverview } from '@/components/user/wallet/WalletOverview';
+import { TransactionHistory } from '@/components/user/wallet/TransactionHistory';
+import { MembershipUpgradeTab } from '@/components/user/wallet/MembershipUpgradeTab';
+import { PaymentModal } from '@/components/user/wallet/PaymentModal';
+import { TransferModal } from '@/components/user/wallet/TransferModal';
 
 interface WalletData {
   balance: number;

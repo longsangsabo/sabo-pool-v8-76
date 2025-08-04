@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 
-import TournamentFeedCard from '@/components/TournamentFeedCard';
+import TournamentFeedCard from '@/components/user/tournaments/TournamentFeedCard';
 import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import { EnhancedAuthFlow } from '@/components/auth/EnhancedAuthFlow';
 import SocialFeedCard from '@/components/SocialFeedCard';

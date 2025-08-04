@@ -134,6 +134,8 @@ const Navigation = () => {
       current: location.pathname === '/leaderboard',
     },
     { name: 'CLB', href: '/clubs', current: location.pathname === '/clubs' },
+    { name: 'Blog', href: '/blog', current: location.pathname === '/blog' },
+    { name: 'Cộng đồng', href: '/community', current: location.pathname === '/community' },
     {
       name: 'Về chúng tôi',
       href: '/about',
@@ -144,8 +146,13 @@ const Navigation = () => {
 
   const userMenuItems = user
     ? [
+        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { name: 'Feed', href: '/feed', icon: LayoutDashboard },
         { name: 'Hồ sơ cá nhân', href: '/profile', icon: User },
+        { name: 'Ranking', href: '/ranking', icon: Trophy },
+        { name: 'Thách đấu V2', href: '/enhanced-challenges', icon: Target },
+        { name: 'Khám phá', href: '/discovery', icon: Users },
+        { name: 'Marketplace', href: '/marketplace', icon: Crown },
         {
           name: 'Quản lý CLB',
           href: '/club-management',
@@ -155,6 +162,10 @@ const Navigation = () => {
         { name: 'Gói hội viên', href: '/membership', icon: Crown },
         { name: 'Ví của tôi', href: '/wallet', icon: Wallet },
         { name: 'Lịch sử trận đấu', href: '/matches', icon: History },
+        { name: 'Thông báo', href: '/notifications', icon: Bell },
+        { name: 'Chat', href: '/chat', icon: Mail },
+        { name: 'Lịch', href: '/calendar', icon: Settings },
+        { name: 'Phân tích', href: '/analytics', icon: Settings },
         { name: 'Cài đặt', href: '/settings', icon: Settings },
       ]
     : [];
@@ -408,6 +419,36 @@ const Navigation = () => {
                     </Badge>
                   )}
                 </Link>
+              )}
+
+              {/* Mobile User Menu Items */}
+              {user && (
+                <div className='pt-2 border-t border-border mt-2'>
+                  <div className='px-3 py-2'>
+                    <p className='text-sm font-medium text-foreground'>Trang cá nhân</p>
+                  </div>
+                  {userMenuItems.map(item => {
+                    const Icon = item.icon;
+                    // Skip club management if user is not a club owner
+                    if (item.requiresClub && !isClubOwner) return null;
+
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`flex items-center px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          location.pathname === item.href
+                            ? 'text-primary bg-primary/10'
+                            : 'text-muted-foreground hover:text-primary hover:bg-muted/50'
+                        }`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Icon className='w-5 h-5 mr-2' />
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
               )}
 
               {/* Mobile Admin & Club Links */}

@@ -15,51 +15,67 @@ import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 // ✅ Import debug utilities for tournament refresh
 import '@/utils/debugTournamentRefresh';
 
-// Lazy load components - Public pages
-const HomePage = lazy(() => import('@/pages/Home'));
-const LoginPage = lazy(() => import('@/pages/Login'));
-const RegisterPage = lazy(() => import('@/pages/Register'));
-const AboutPage = lazy(() => import('@/pages/AboutPage'));
-const ContactPage = lazy(() => import('@/pages/SimpleClubContactPage'));
-const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPage'));
-const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
+// ===== PUBLIC PAGES =====
+const HomePage = lazy(() => import('@/pages/public/Home'));
+const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
+const ContactPage = lazy(() => import('@/pages/club/SimpleClubContactPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPage'));
+const TermsOfServicePage = lazy(() => import('@/pages/public/TermsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
-const NewsPage = lazy(() => import('@/pages/BlogPage'));
+const NewsPage = lazy(() => import('@/pages/public/BlogPage'));
+const ClubsPage = lazy(() => import('@/pages/public/ClubsPage'));
+const LeaderboardPage = lazy(() => import('@/pages/public/LeaderboardPage'));
 
-// Navigation Test Page
-const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
+// Navigation Test Page - temporary
+// const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
 
-// Public pages that should also be accessible to logged-in users
-const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
-const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
-const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
-const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
+// ===== CLUB PAGES =====
+const ClubDetailPage = lazy(() => import('@/pages/club/ClubDetailPage'));
+const ClubManagementPage = lazy(() => import('@/pages/club/ClubManagementPage'));
+const ClubRegistrationPage = lazy(() => import('@/pages/club/ClubRegistrationPage'));
 
-// Protected pages - User dashboard and features
-const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
-const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
+// ===== USER HUBS =====
+const DashboardHub = lazy(() => import('@/pages/user/hubs/DashboardHub'));
+const TournamentHub = lazy(() => import('@/pages/user/hubs/TournamentHub'));
+const ChallengesHub = lazy(() => import('@/pages/user/hubs/ChallengesHub'));
+const PlayerProfileHub = lazy(() => import('@/pages/user/hubs/PlayerProfileHub'));
+const FinancialHub = lazy(() => import('@/pages/user/hubs/FinancialHub'));
+const MessageCenter = lazy(() => import('@/pages/user/hubs/MessageCenter'));
+const ExploreHub = lazy(() => import('@/pages/user/hubs/ExploreHub'));
+// ===== USER SETTINGS & PROFILE =====
+const SettingsPage = lazy(() => import('@/pages/user/settings/SettingsPage'));
+const SecurityPage = lazy(() => import('@/pages/user/settings/SecurityPage'));
+const RankingPage = lazy(() => import('@/pages/user/profile/RankingPage'));
+const RankRegistrationPage = lazy(() => import('@/pages/user/profile/RankRegistrationPage'));
+
+// ===== OTHER USER PAGES =====
+// const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage')); // Moved to PlayerProfileHub
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
-const EnhancedChallengesPageV2 = lazy(
-  () => import('@/pages/EnhancedChallengesPageV2')
-);
+// const EnhancedChallengesPageV2 = lazy(
+//   () => import('@/pages/EnhancedChallengesPageV2')
+// ); // Replaced by ChallengesHub
 const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
-const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
-const WalletPage = lazy(() => import('@/pages/PaymentPage'));
-const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
+const WalletPage = lazy(() => import('@/pages/user/hubs/FinancialHub')); // Payment functionality consolidated in FinancialHub
 const FeedPage = lazy(() => import('@/pages/FeedPage'));
-const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
+// const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage')); // Moved to ExploreHub
+// const RankingDashboardPage = lazy(() => import('@/pages/RankingDashboardPage')); // Moved to PlayerProfileHub
+// const DiscoveryPage = lazy(() => import('@/pages/DiscoveryPage')); // Moved to ExploreHub
+const AnalyticsPage = lazy(() => import('@/pages/AnalyticsPage'));
+// const NotificationsPage = lazy(() => import('@/pages/NotificationsPage')); // Moved to MessageCenter
+// const ChatPage = lazy(() => import('@/pages/ChatPage')); // Moved to MessageCenter
+// const MembershipPage = lazy(() => import('@/pages/MembershipPage')); // Moved to FinancialHub
+// const MatchHistoryPage = lazy(() => import('@/pages/MatchHistoryPage')); // Moved to TournamentHub
+// const InboxPage = lazy(() => import('@/pages/InboxPage')); // Moved to MessageCenter
+const HelpPage = lazy(() => import('@/pages/public/HelpPage'));
 
 // Admin components
 const AdminRouter = lazy(() => import('@/router/AdminRouter'));
 
-// Club components
-const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
-
 // Auth pages
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
-const AuthTestPage = lazy(() => import('@/pages/AuthTestPage'));
+// const AuthTestPage = lazy(() => import('@/pages/AuthTestPage')); // Test page - can be removed
 const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
-const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword'));
+// const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword')); // Functionality moved to AuthPage
 
 // Create a stable query client
 const queryClient = new QueryClient({
@@ -111,7 +127,7 @@ const AppContentWithHooks = () => {
             path='/auth/login'
             element={
               <PublicRoute>
-                <LoginPage />
+                <AuthPage />
               </PublicRoute>
             }
           />
@@ -119,7 +135,7 @@ const AppContentWithHooks = () => {
             path='/auth/register'
             element={
               <PublicRoute>
-                <RegisterPage />
+                <AuthPage />
               </PublicRoute>
             }
           />
@@ -127,7 +143,7 @@ const AppContentWithHooks = () => {
             path='/auth/forgot-password'
             element={
               <PublicRoute>
-                <ForgotPasswordPage />
+                <AuthPage />
               </PublicRoute>
             }
           />
@@ -142,26 +158,41 @@ const AppContentWithHooks = () => {
               </ProtectedRoute>
             }
           >
-            <Route path='dashboard' element={<UnifiedDashboard />} />
-            <Route path='profile' element={<UnifiedProfilePage />} />
-            <Route path='challenges' element={<EnhancedChallengesPageV2 />} />
+            <Route path='dashboard' element={<DashboardHub />} />
+            <Route path='tournaments' element={<TournamentHub />} />
+            <Route path='challenges' element={<ChallengesHub />} />
+            <Route path='enhanced-challenges' element={<ChallengesHub />} />
+            <Route path='profile' element={<PlayerProfileHub />} />
+            <Route path='financial' element={<FinancialHub />} />
+            <Route path='messages' element={<MessageCenter />} />
+            <Route path='explore' element={<ExploreHub />} />
             <Route path='community' element={<CommunityPage />} />
             <Route path='calendar' element={<CalendarPage />} />
             <Route path='settings' element={<SettingsPage />} />
             <Route path='wallet' element={<WalletPage />} />
+            <Route path='feed' element={<FeedPage />} />
+            <Route path='marketplace' element={<MarketplacePage />} />
+            <Route path='blog' element={<BlogPage />} />
+            <Route path='ranking' element={<RankingDashboardPage />} />
+            <Route path='discovery' element={<DiscoveryPage />} />
+            <Route path='analytics' element={<AnalyticsPage />} />
+            <Route path='notifications' element={<NotificationsPage />} />
+            <Route path='chat' element={<ChatPage />} />
+            <Route path='membership' element={<MembershipPage />} />
+            <Route path='matches' element={<MatchHistoryPage />} />
+            <Route path='inbox' element={<InboxPage />} />
+            <Route path='help' element={<HelpPage />} />
             <Route
               path='club-registration'
               element={<ClubRegistrationPage />}
             />
-            <Route path='feed' element={<FeedPage />} />
-            <Route path='marketplace' element={<MarketplacePage />} />
-            <Route path='auth-test' element={<AuthTestPage />} />
+            {/* <Route path='auth-test' element={<AuthTestPage />} /> */} {/* Test page removed */}
 
-            {/* Navigation Test Page - Development only */}
-            <Route path='navigation-test' element={<NavigationTestPage />} />
+            {/* Navigation Test Page - Temporarily disabled */}
+            {/* <Route path='navigation-test' element={<NavigationTestPage />} /> */}
 
             {/* Public pages accessible through sidebar when logged in */}
-            <Route path='tournaments' element={<TournamentPage />} />
+            <Route path='tournaments-list' element={<TournamentHub />} />
             <Route path='leaderboard' element={<LeaderboardPage />} />
             <Route path='clubs' element={<ClubsPage />} />
             <Route path='clubs/:id' element={<ClubDetailPage />} />
