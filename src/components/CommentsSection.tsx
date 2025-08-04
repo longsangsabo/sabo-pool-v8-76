@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Send, Heart, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import UserAvatar from './UserAvatar';
+import { UserAvatar } from './user/profile';
 
 interface Comment {
   id: string;

@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import UserAvatar from './UserAvatar';
+import { UserAvatar } from './user/profile';
 import SocialActions from './SocialActions';
 import CommentsSection from './CommentsSection';
 

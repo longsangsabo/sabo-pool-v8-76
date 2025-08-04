@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { UserDesktopSidebar } from './UserDesktopSidebar';
-import { UserDesktopHeader } from './UserDesktopHeader';
+import { cn } from '@/lib/utils';
+import { UserDesktopHeader } from '../user/navigation';
+import { UserDesktopSidebar } from '../user/navigation';
 
 interface DesktopLayoutProps {
   children?: React.ReactNode;
