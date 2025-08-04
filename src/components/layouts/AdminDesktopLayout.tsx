@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
-import AdminSidebar from '@/components/AdminSidebar';
+import AdminSidebarClean from '@/components/AdminSidebarClean';
 import { AdminDesktopHeader } from '@/components/admin/AdminDesktopHeader';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
@@ -36,7 +36,7 @@ export const AdminDesktopLayout: React.FC<AdminDesktopLayoutProps> = ({
       <div
         className={`transition-all duration-300 ${isSidebarCollapsed ? 'w-16' : 'w-64'}`}
       >
-        <AdminSidebar collapsed={isSidebarCollapsed} />
+        <AdminSidebarClean collapsed={isSidebarCollapsed} />
       </div>
 
       {/* Main Content */}

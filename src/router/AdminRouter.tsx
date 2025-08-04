@@ -11,62 +11,90 @@ const AdminLoadingFallback = () => (
 );
 
 // Direct lazy imports to avoid circular dependencies
-const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
-const AdminUsers = lazy(() => import('@/pages/admin/AdminUsers'));
-const AdminTournaments = lazy(() => import('@/pages/admin/AdminTournaments'));
-const AdminClubs = lazy(() => import('@/pages/admin/AdminClubs'));
-const AdminRankVerification = lazy(
-  () => import('@/pages/admin/AdminRankVerification')
-);
-const AdminTransactions = lazy(() => import('@/pages/admin/AdminTransactions'));
-const AdminGameConfig = lazy(() => import('@/pages/admin/AdminGameConfig'));
-const AdminChallenges = lazy(() => import('@/pages/admin/AdminChallenges'));
-const AdminPayments = lazy(() => import('@/pages/admin/AdminPayments'));
-const AdminEmergency = lazy(() => import('@/pages/admin/AdminEmergency'));
-const AdminGuide = lazy(() => import('@/pages/admin/AdminGuide'));
-const AdminReports = lazy(() => import('@/pages/admin/AdminReports'));
-const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
-const AdminSchedule = lazy(() => import('@/pages/admin/AdminSchedule'));
-const AdminNotifications = lazy(
-  () => import('@/pages/admin/AdminNotifications')
-);
-const AdminDatabase = lazy(() => import('@/pages/admin/AdminDatabase'));
-const AdminAutomation = lazy(() => import('@/pages/admin/AdminAutomation'));
-const AdminDevelopment = lazy(() => import('@/pages/admin/AdminDevelopment'));
-const AdminAIAssistant = lazy(() => import('@/pages/admin/AdminAIAssistant'));
-const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
+// Enhanced New Admin Pages - Primary
+const AdminDashboardNew = lazy(() => import('@/pages/admin/AdminDashboardNew'));
+const AdminUsersNew = lazy(() => import('@/pages/admin/AdminUsersNewClean'));
+const AdminClubsNew = lazy(() => import('@/pages/admin/AdminClubsNew'));
+const AdminRankVerificationNew = lazy(() => import('@/pages/admin/AdminRankVerificationNew'));
+const AdminTransactionsNew = lazy(() => import('@/pages/admin/AdminTransactionsNew'));
+const AdminChallengesNew = lazy(() => import('@/pages/admin/AdminChallengesNew'));
+const AdminPaymentsNew = lazy(() => import('@/pages/admin/AdminPaymentsNew'));
+const AdminEmergencyNew = lazy(() => import('@/pages/admin/AdminEmergencyNew'));
+const AdminGuideNew = lazy(() => import('@/pages/admin/AdminGuideNew'));
+const AdminReportsNew = lazy(() => import('@/pages/admin/AdminReportsNew'));
+const AdminAnalyticsNew = lazy(() => import('@/pages/admin/AdminAnalyticsNew'));
+const AdminScheduleNew = lazy(() => import('@/pages/admin/AdminScheduleNew'));
+const AdminNotificationsNew = lazy(() => import('@/pages/admin/AdminNotificationsNew'));
+const AdminDatabaseNew = lazy(() => import('@/pages/admin/AdminDatabaseNew'));
+const AdminAutomationNew = lazy(() => import('@/pages/admin/AdminAutomationNew'));
+const AdminDevelopmentNew = lazy(() => import('@/pages/admin/AdminDevelopmentNew'));
+const AdminAIAssistantNew = lazy(() => import('@/pages/admin/AdminAIAssistantNew'));
+const AdminSettingsNew = lazy(() => import('@/pages/admin/AdminSettingsNew'));
+
+// Special Admin Pages - Keep
 const AdminSystemReset = lazy(() => import('@/pages/admin/AdminSystemReset'));
-const AdminTestingDashboard = lazy(
-  () => import('@/pages/admin/AdminTestingDashboard')
-);
+const AdminTestingDashboard = lazy(() => import('@/pages/admin/AdminTestingDashboard'));
+const AdminMigrationDashboard = lazy(() => import('@/pages/admin/AdminMigrationDashboard'));
+
+// Enhanced Tournament & Game Config
+const AdminTournamentsNewEnhanced = lazy(() => import('@/pages/admin/AdminTournamentsNewEnhanced'));
+const AdminGameConfigNewEnhanced = lazy(() => import('@/pages/admin/AdminGameConfigNewEnhanced'));
 
 const AdminRouter = () => {
   return (
     <AdminLayout>
       <Suspense fallback={<AdminLoadingFallback />}>
         <Routes>
-          <Route index element={<AdminDashboard />} />
-          <Route path='users' element={<AdminUsers />} />
-          <Route path='tournaments' element={<AdminTournaments />} />
-          <Route path='clubs' element={<AdminClubs />} />
-          <Route path='rank-verification' element={<AdminRankVerification />} />
-          <Route path='transactions' element={<AdminTransactions />} />
-          <Route path='game-config' element={<AdminGameConfig />} />
-          <Route path='challenges' element={<AdminChallenges />} />
-          <Route path='payments' element={<AdminPayments />} />
-          <Route path='emergency' element={<AdminEmergency />} />
-          <Route path='guide' element={<AdminGuide />} />
-          <Route path='reports' element={<AdminReports />} />
-          <Route path='analytics' element={<AdminAnalytics />} />
-          <Route path='schedule' element={<AdminSchedule />} />
-          <Route path='notifications' element={<AdminNotifications />} />
-          <Route path='database' element={<AdminDatabase />} />
-          <Route path='automation' element={<AdminAutomation />} />
-          <Route path='development' element={<AdminDevelopment />} />
-          <Route path='ai-assistant' element={<AdminAIAssistant />} />
-          <Route path='settings' element={<AdminSettings />} />
+          <Route index element={<AdminDashboardNew />} />
+          <Route path='users' element={<AdminUsersNew />} />
+          <Route path='clubs' element={<AdminClubsNew />} />
+          <Route path='rank-verification' element={<AdminRankVerificationNew />} />
+          <Route path='transactions' element={<AdminTransactionsNew />} />
+          <Route path='challenges' element={<AdminChallengesNew />} />
+          <Route path='payments' element={<AdminPaymentsNew />} />
+          <Route path='emergency' element={<AdminEmergencyNew />} />
+          <Route path='guide' element={<AdminGuideNew />} />
+          <Route path='reports' element={<AdminReportsNew />} />
+          <Route path='analytics' element={<AdminAnalyticsNew />} />
+          <Route path='schedule' element={<AdminScheduleNew />} />
+          <Route path='notifications' element={<AdminNotificationsNew />} />
+          <Route path='database' element={<AdminDatabaseNew />} />
+          <Route path='automation' element={<AdminAutomationNew />} />
+          <Route path='development' element={<AdminDevelopmentNew />} />
+          <Route path='ai-assistant' element={<AdminAIAssistantNew />} />
+          <Route path='settings' element={<AdminSettingsNew />} />
+          
+          {/* Special Admin Tools */}
           <Route path='system-reset' element={<AdminSystemReset />} />
           <Route path='testing' element={<AdminTestingDashboard />} />
+          <Route path='migration' element={<AdminMigrationDashboard />} />
+          
+          {/* Enhanced Tournament & Game Config */}
+          <Route path='tournaments' element={<AdminTournamentsNewEnhanced />} />
+          <Route path='game-config' element={<AdminGameConfigNewEnhanced />} />
+          
+          {/* Legacy New Routes (for backward compatibility) */}
+          <Route path='clubs-new' element={<AdminClubsNew />} />
+          <Route path='users-new' element={<AdminUsersNew />} />
+          <Route path='transactions-new' element={<AdminTransactionsNew />} />
+          <Route path='tournaments-new' element={<AdminTournamentsNewEnhanced />} />
+          <Route path='analytics-new' element={<AdminAnalyticsNew />} />
+          <Route path='settings-new' element={<AdminSettingsNew />} />
+          <Route path='database-new' element={<AdminDatabaseNew />} />
+          <Route path='automation-new' element={<AdminAutomationNew />} />
+          <Route path='rank-verification-new' element={<AdminRankVerificationNew />} />
+          <Route path='challenges-new' element={<AdminChallengesNew />} />
+          <Route path='payments-new' element={<AdminPaymentsNew />} />
+          <Route path='game-config-new' element={<AdminGameConfigNewEnhanced />} />
+          <Route path='notifications-new' element={<AdminNotificationsNew />} />
+          <Route path='schedule-new' element={<AdminScheduleNew />} />
+          <Route path="reports-new" element={<AdminReportsNew />} />
+          <Route path="emergency-new" element={<AdminEmergencyNew />} />
+          <Route path="development-new" element={<AdminDevelopmentNew />} />
+          <Route path="ai-assistant-new" element={<AdminAIAssistantNew />} />
+          <Route path="guide-new" element={<AdminGuideNew />} />
+          <Route path="dashboard-new" element={<AdminDashboardNew />} />
+          
           <Route path='*' element={<Navigate to='/admin' replace />} />
         </Routes>
       </Suspense>

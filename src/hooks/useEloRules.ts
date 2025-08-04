@@ -21,25 +21,17 @@ export const useEloRules = () => {
   const fetchRules = async () => {
     try {
       setLoading(true);
-      // Return empty since table doesn't exist
-      const data: any[] = [];
-      const error = null;
+      const { data, error } = await supabase
+        .from('elo_rules')
+        .select('*')
+        .order('priority', { ascending: true });
 
       if (error) throw error;
       setRules(data || []);
-
-      // Update system info
-      setSystemInfo(prev => ({
-        ...prev,
-        lastUpdated: new Date(),
-      }));
     } catch (error) {
       console.error('Error fetching ELO rules:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch ELO rules',
-        variant: 'destructive',
-      });
+      // Return empty array if table doesn't exist yet
+      setRules([]);
     } finally {
       setLoading(false);
     }
@@ -47,17 +39,24 @@ export const useEloRules = () => {
 
   const createRule = async (ruleData: EloRuleFormData) => {
     try {
-      // Disable since table doesn't exist
-      console.log('ELO rule creation disabled - table does not exist');
+      const { data, error } = await supabase
+        .from('elo_rules')
+        .insert([ruleData])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await fetchRules();
       toast({
-        title: 'Info',
-        description: 'ELO rule management is currently disabled',
+        title: 'Success',
+        description: 'ELO rule created successfully',
       });
     } catch (error) {
       console.error('Error creating ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to create ELO rule',
+        description: 'Failed to create ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }
@@ -65,17 +64,23 @@ export const useEloRules = () => {
 
   const updateRule = async (id: string, ruleData: Partial<EloRuleFormData>) => {
     try {
-      // Disable since table doesn't exist
-      console.log('ELO rule update disabled - table does not exist');
+      const { error } = await supabase
+        .from('elo_rules')
+        .update(ruleData)
+        .eq('id', id);
+
+      if (error) throw error;
+
+      await fetchRules();
       toast({
-        title: 'Info',
-        description: 'ELO rule management is currently disabled',
+        title: 'Success',
+        description: 'ELO rule updated successfully',
       });
     } catch (error) {
       console.error('Error updating ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update ELO rule',
+        description: 'Failed to update ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }
@@ -83,17 +88,23 @@ export const useEloRules = () => {
 
   const deleteRule = async (id: string) => {
     try {
-      // Disable since table doesn't exist
-      console.log('ELO rule deletion disabled - table does not exist');
+      const { error } = await supabase
+        .from('elo_rules')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      await fetchRules();
       toast({
-        title: 'Info',
-        description: 'ELO rule management is currently disabled',
+        title: 'Success',
+        description: 'ELO rule deleted successfully',
       });
     } catch (error) {
       console.error('Error deleting ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to delete ELO rule',
+        description: 'Failed to delete ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }

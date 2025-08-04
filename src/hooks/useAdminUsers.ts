@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 export interface AdminUser {
   id: string;
@@ -29,7 +29,6 @@ export interface AdminUser {
 export const useAdminUsers = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const loadUsers = async () => {
@@ -60,11 +59,7 @@ export const useAdminUsers = () => {
       setUsers(formattedUsers);
     } catch (error) {
       console.error('Error loading users:', error);
-      toast({
-        title: 'Lỗi',
-        description: 'Không thể tải danh sách người dùng',
-        variant: 'destructive',
-      });
+      toast.error('Không thể tải danh sách người dùng');
     } finally {
       setIsLoading(false);
     }
@@ -99,20 +94,12 @@ export const useAdminUsers = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({
-        title: 'Thành công',
-        description: 'Đã cập nhật trạng thái người dùng',
-      });
+      toast.success('Đã cập nhật trạng thái người dùng');
       loadUsers();
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Lỗi',
-        description:
-          error.message || 'Không thể cập nhật trạng thái người dùng',
-        variant: 'destructive',
-      });
+      toast.error(error.message || 'Không thể cập nhật trạng thái người dùng');
     },
   });
 
@@ -129,19 +116,12 @@ export const useAdminUsers = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({
-        title: 'Thành công',
-        description: 'Đã cập nhật quyền người dùng',
-      });
+      toast.success('Đã cập nhật quyền người dùng');
       loadUsers();
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Lỗi',
-        description: error.message || 'Không thể cập nhật quyền người dùng',
-        variant: 'destructive',
-      });
+      toast.error(error.message || 'Không thể cập nhật quyền người dùng');
     },
   });
 
