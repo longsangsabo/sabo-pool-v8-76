@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-08-04T05:57:56.398Z",
+  "timestamp": "2025-08-04T09:18:46.149Z",
   "summary": {
-    "hardcodedStrings": 1073,
+    "hardcodedStrings": 1113,
     "missingInVietnamese": 0,
     "missingInEnglish": 0
   },
@@ -1163,6 +1163,61 @@
         "line": 302
       },
       {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "ELO Integration Validator",
+        "line": 87
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Overall Status",
+        "line": 121
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Progress",
+        "line": 129
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Passed",
+        "line": 138
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Warnings",
+        "line": 142
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Failed",
+        "line": 146
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Total",
+        "line": 150
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Validation Results",
+        "line": 161
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Quick Actions",
+        "line": 243
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Database Issues",
+        "line": 251
+      },
+      {
+        "file": "/components/admin/game-config/ELOIntegrationValidator.tsx",
+        "text": "Frontend Issues",
+        "line": 260
+      },
+      {
         "file": "/components/admin/game-config/EloRulesManager.tsx",
         "text": "ELO Calculation Rules",
         "line": 129
@@ -1210,12 +1265,12 @@
       {
         "file": "/components/admin/game-config/GameConfigOverview.tsx",
         "text": "System Metrics",
-        "line": 155
+        "line": 164
       },
       {
         "file": "/components/admin/game-config/GameConfigOverview.tsx",
         "text": "Recent Configuration Changes",
-        "line": 193
+        "line": 202
       },
       {
         "file": "/components/admin/game-config/GameConfigSync.tsx",
@@ -1251,6 +1306,51 @@
         "file": "/components/admin/game-config/GameConfigSync.tsx",
         "text": "Advanced Operations",
         "line": 171
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Official ELO System Integration",
+        "line": 89
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Overall Progress",
+        "line": 113
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Integrated",
+        "line": 122
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Ranks",
+        "line": 128
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "ELO Gap",
+        "line": 134
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Tournament Tiers",
+        "line": 140
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Official ELO System Features",
+        "line": 264
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "System Characteristics",
+        "line": 272
+      },
+      {
+        "file": "/components/admin/game-config/OfficialELOIntegrationStatus.tsx",
+        "text": "Tournament Integration",
+        "line": 293
       },
       {
         "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
@@ -3800,127 +3900,227 @@
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Analytics",
-        "line": 401
+        "line": 472
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Settings",
-        "line": 402
+        "line": 473
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "All Challenges",
-        "line": 427
+        "line": 498
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Open",
-        "line": 428
+        "line": 499
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Accepted",
-        "line": 429
+        "line": 500
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "In Progress",
-        "line": 430
+        "line": 501
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Completed",
-        "line": 431
+        "line": 502
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Disputed",
-        "line": 432
+        "line": 503
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Cancelled",
-        "line": 433
+        "line": 504
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Challenger",
-        "line": 490
+        "line": 561
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Opponent",
-        "line": 509
+        "line": 580
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "No challenges found",
-        "line": 593
+        "line": 664
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Status",
-        "line": 617
+        "line": 688
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Open",
-        "line": 627
+        "line": 698
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Accepted",
-        "line": 628
+        "line": 699
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "In Progress",
-        "line": 629
+        "line": 700
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Completed",
-        "line": 630
+        "line": 701
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Cancelled",
-        "line": 631
+        "line": 702
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Disputed",
-        "line": 632
+        "line": 703
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Sponsored Status",
-        "line": 639
+        "line": 710
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Select a Challenge",
-        "line": 738
+        "line": 809
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Challenge Analytics",
-        "line": 806
+        "line": 877
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Analytics Dashboard",
-        "line": 811
+        "line": 882
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "Challenge Settings",
-        "line": 824
+        "line": 895
       },
       {
         "file": "/pages/admin/AdminChallengesNew.tsx",
         "text": "System Settings",
-        "line": 829
+        "line": 900
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Challenger",
+        "line": 1029
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Opponent",
+        "line": 1030
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Bet Points",
+        "line": 1031
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Status",
+        "line": 1032
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Created",
+        "line": 1033
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Actions",
+        "line": 1034
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Challenger ID",
+        "line": 1142
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Opponent ID",
+        "line": 1146
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Bet Points",
+        "line": 1150
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Race To",
+        "line": 1166
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Challenger",
+        "line": 228
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Opponent",
+        "line": 229
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Bet Points",
+        "line": 230
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Status",
+        "line": 231
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Created",
+        "line": 232
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Actions",
+        "line": 233
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Challenger ID",
+        "line": 341
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Opponent ID",
+        "line": 345
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Bet Points",
+        "line": 349
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNewClean.tsx",
+        "text": "Race To",
+        "line": 365
       },
       {
         "file": "/pages/admin/AdminDashboardNew.tsx",
@@ -4330,7 +4530,7 @@
       {
         "file": "/pages/admin/AdminGameConfigNewEnhanced.tsx",
         "text": "Database Setup",
-        "line": 56
+        "line": 118
       },
       {
         "file": "/pages/admin/AdminGuideNew.tsx",
@@ -5305,42 +5505,42 @@
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Admin",
-        "line": 466
+        "line": 515
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Moderator",
-        "line": 467
+        "line": 516
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "User",
-        "line": 468
+        "line": 517
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Premium",
-        "line": 469
+        "line": 518
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "User",
-        "line": 635
+        "line": 700
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Premium",
-        "line": 636
+        "line": 701
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Moderator",
-        "line": 637
+        "line": 702
       },
       {
         "file": "/pages/admin/AdminUsersNew.tsx",
         "text": "Admin",
-        "line": 638
+        "line": 703
       },
       {
         "file": "/pages/challenges/ChallengesFeedMobile.tsx",
