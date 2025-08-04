@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .card { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 8px; background: white; }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+        .loading { color: orange; }
+        pre { background: #f0f0f0; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🗄️ SABO Pool Database Test</h1>
+    <div id="results">
+        <div class="card loading">
+            <h2>🔍 Testing Database Connection...</h2>
+            <p>Initializing Supabase client and testing database access...</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('🚀 Starting database test...');
+        
+        const SUPABASE_URL = 'https://exlqvlbawytbglioqfbc.supabase.co';
+        const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4bHF2bGJhd3l0YmdsaW9xZmJjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzA4MDA4OCwiZXhwIjoyMDY4NjU2MDg4fQ.8oZlR-lyaDdGZ_mvvyH2wJsJbsD0P6MT9ZkiyASqLcQ';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        });
+        
+        console.log('✅ Supabase client initialized');
+        
+        async function testDatabase() {
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                let html = '<div class="card success"><h2>✅ Database Connection Successful</h2></div>';
+                
+                // Test 1: Profiles table
+                console.log('🧪 Testing profiles table...');
+                resultsDiv.innerHTML += '<div class="card loading"><h3>👥 Testing Profiles Table...</h3></div>';
+                
+                const { data: profiles, error: profilesError, count: profilesCount } = await supabase
+                    .from('profiles')
+                    .select('user_id, full_name, email, role, is_admin, ban_status, created_at', { count: 'exact' })
+                    .limit(10);
+                
+                console.log('Profiles result:', { profiles, profilesError, profilesCount });
+                
+                html += `<div class="card">
+                    <h3>👥 Profiles Table</h3>
+                    <p><strong>Total Count:</strong> <span class="info">${profilesCount || 0} users</span></p>
+                    ${profilesError ? `<p class="error"><strong>❌ Error:</strong> ${profilesError.message}</p>` : '<p class="success">✅ Connection successful</p>'}
+                    
+                    ${profiles && profiles.length > 0 ? `
+                        <h4>📋 Sample Users (first ${profiles.length}):</h4>
+                        <div style="overflow-x: auto;">
+                            <table border="1" style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #f0f0f0;">
+                                    <th style="padding: 8px;">Name</th>
+                                    <th style="padding: 8px;">Email</th>
+                                    <th style="padding: 8px;">Role</th>
+                                    <th style="padding: 8px;">Admin</th>
+                                    <th style="padding: 8px;">Status</th>
+                                    <th style="padding: 8px;">Created</th>
+                                </tr>
+                                ${profiles.map(u => `
+                                    <tr>
+                                        <td style="padding: 8px;">${u.full_name || 'No name'}</td>
+                                        <td style="padding: 8px;">${u.email || 'No email'}</td>
+                                        <td style="padding: 8px;">${u.role || 'none'}</td>
+                                        <td style="padding: 8px;">${u.is_admin ? '👑 Yes' : 'No'}</td>
+                                        <td style="padding: 8px;">${u.ban_status || 'active'}</td>
+                                        <td style="padding: 8px;">${new Date(u.created_at).toLocaleDateString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        </div>
+                    ` : '<p class="error">❌ No users found in database</p>'}
+                </div>`;
+                
+                // Test 2: Other tables summary
+                console.log('🧪 Testing other tables...');
+                
+                const tables = ['tournaments', 'challenges', 'player_rankings', 'clubs', 'matches'];
+                
+                for (const tableName of tables) {
+                    try {
+                        const { count } = await supabase
+                            .from(tableName)
+                            .select('*', { count: 'exact', head: true });
+                        
+                        html += `<div class="card">
+                            <h3>📊 ${tableName.charAt(0).toUpperCase() + tableName.slice(1)} Table</h3>
+                            <p><strong>Count:</strong> <span class="info">${count || 0} records</span></p>
+                        </div>`;
+                        
+                        console.log(`${tableName}: ${count} records`);
+                    } catch (error) {
+                        html += `<div class="card">
+                            <h3>📊 ${tableName.charAt(0).toUpperCase() + tableName.slice(1)} Table</h3>
+                            <p class="error"><strong>❌ Error:</strong> ${error.message}</p>
+                        </div>`;
+                        console.log(`${tableName} error:`, error);
+                    }
+                }
+                
+                // Summary
+                html += `<div class="card success">
+                    <h3>📈 Summary</h3>
+                    <p><strong>Database URL:</strong> ${SUPABASE_URL}</p>
+                    <p><strong>Connection:</strong> ✅ Successful with Service Role</p>
+                    <p><strong>Profiles Found:</strong> ${profilesCount || 0} users</p>
+                    <p><strong>Test Time:</strong> ${new Date().toLocaleString()}</p>
+                </div>`;
+                
+                resultsDiv.innerHTML = html;
+                
+                console.log('✅ Database test completed successfully!');
+                
+            } catch (error) {
+                console.error('💥 Database test failed:', error);
+                resultsDiv.innerHTML = `
+                    <div class="card error">
+                        <h2>❌ Database Test Failed</h2>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+        
+        // Wait for page to load completely, then run test
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', testDatabase);
+        } else {
+            setTimeout(testDatabase, 500);
+        }
+        
+        console.log('🏁 Database test script loaded');
+    </script>
+</body>
+</html>

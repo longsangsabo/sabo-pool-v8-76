@@ -14,15 +14,17 @@ export const useRankDefinitions = () => {
         .select('*')
         .order('rank_order');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching ranks:', error);
+        // Set empty array if table doesn't exist or no data
+        setRanks([]);
+        return;
+      }
       setRanks(data || []);
     } catch (error) {
       console.error('Error fetching ranks:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch ranks',
-        variant: 'destructive',
-      });
+      // Don't show error toast if table doesn't exist yet
+      setRanks([]);
     } finally {
       setLoading(false);
     }

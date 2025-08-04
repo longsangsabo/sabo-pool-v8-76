@@ -185,7 +185,7 @@ const Navigation = () => {
                 key={item.name}
                 to={item.href}
                 onClick={() => {
-
+                  console.log(
                     `🔗 [Navigation] Clicking on: ${item.name} -> ${item.href}`
                   );
                 }}

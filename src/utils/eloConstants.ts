@@ -16,14 +16,15 @@ export const RANK_ELO = {
   'E+': 2100,
 } as const;
 
+// Official Tournament ELO Rewards from RANK_SYSTEM_README.md
 export const TOURNAMENT_ELO_REWARDS = {
-  CHAMPION: 100,
-  RUNNER_UP: 50,
-  THIRD_PLACE: 25,
-  FOURTH_PLACE: 12,
-  TOP_8: 6,
-  TOP_16: 3,
-  PARTICIPATION: 1,
+  CHAMPION: 80,      // Champion gets +80 ELO
+  RUNNER_UP: 40,     // Runner-up gets +40 ELO  
+  THIRD_PLACE: 20,   // 3rd place gets +20 ELO
+  FOURTH_PLACE: 15,  // 4th place gets +15 ELO
+  TOP_8: 10,         // Top 8 gets +10 ELO
+  TOP_16: 5,         // Top 16 gets +5 ELO
+  PARTICIPATION: 0,  // No participation bonus
 } as const;
 
 export const SPA_TOURNAMENT_REWARDS = {

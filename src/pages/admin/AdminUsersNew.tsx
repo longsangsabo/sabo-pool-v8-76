@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
 import { AdminDataTable, ColumnDef } from '@/components/admin/shared/AdminDataTable';
+import { BulkAction } from '@/components/admin/shared/AdminBulkActions';
 import { AdminStatusBadge } from '@/components/admin/shared/AdminStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,6 +41,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useAdminUsers, type AdminUser } from '@/hooks/useAdminUsers';
+import { DatabaseTest } from '@/components/DatabaseTest';
 import { toast } from 'sonner';
 
 const UserStatusBadge = ({ status }: { status: string | null }) => {
@@ -133,7 +135,7 @@ const UserManagementTable = ({
       sortable: true,
       render: (_, user) => (
         <div className="text-center">
-          <span className="font-bold text-blue-600">{user.elo || 1200}</span>
+          <span className="font-bold text-blue-600">{user.elo_points || 1000}</span>
           <div className="text-xs text-gray-500">points</div>
         </div>
       ),
@@ -300,7 +302,7 @@ const UserManagementTableWithBulkActions = ({
       sortable: true,
       render: (_, user) => (
         <div className="text-center">
-          <span className="font-bold text-blue-600">{user.elo || 1200}</span>
+          <span className="font-bold text-blue-600">{user.elo_points || 1000}</span>
           <div className="text-xs text-gray-500">points</div>
         </div>
       ),
@@ -363,11 +365,16 @@ const UserManagementTableWithBulkActions = ({
 function AdminUsersNewContent() {
   const {
     users,
-    isLoading,
-    updateUserBan,
-    updateUserRole,
-    isUpdatingBan,
-    isUpdatingRole,
+    loading,
+    error,
+    fetchUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    toggleUserBan,
+    grantSpaPoints,
+    getUserStats,
+    getUserActivities,
   } = useAdminUsers();
 
   const [activeTab, setActiveTab] = useState('all');
@@ -376,80 +383,122 @@ function AdminUsersNewContent() {
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [banReason, setBanReason] = useState('');
   const [newRole, setNewRole] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [userStats, setUserStats] = useState<any>(null);
 
-  // Calculate stats
-  const stats = {
+  // Load initial data
+  React.useEffect(() => {
+    console.log('AdminUsersNew: Starting to fetch users...');
+    fetchUsers().then(() => {
+      console.log('AdminUsersNew: Users fetched, count:', users.length);
+    }).catch((error) => {
+      console.error('AdminUsersNew: Error fetching users:', error);
+    });
+    loadStats();
+  }, []);
+
+  // Debug: Log users whenever they change
+  React.useEffect(() => {
+    console.log('AdminUsersNew: Users updated:', users.length, users);
+  }, [users]);
+
+  // Debug: Log loading state
+  React.useEffect(() => {
+    console.log('AdminUsersNew: Loading state:', loading);
+  }, [loading]);
+
+  const loadStats = async () => {
+    try {
+      console.log('AdminUsersNew: Loading stats...');
+      const stats = await getUserStats();
+      console.log('AdminUsersNew: Stats loaded:', stats);
+      setUserStats(stats);
+    } catch (error) {
+      console.error('Error loading stats:', error);
+    }
+  };
+
+  // Calculate stats from current data
+  const stats = userStats || {
     total: users.length,
-    active: users.filter(u => u.ban_status !== 'banned' && u.ban_status !== 'inactive').length,
-    inactive: users.filter(u => u.ban_status === 'inactive').length,
+    active: users.filter(u => u.ban_status === 'active').length,
     banned: users.filter(u => u.ban_status === 'banned').length,
+    admins: users.filter(u => u.is_admin === true).length,
   };
 
   // Filter users by tab
   const filteredUsers = users.filter(user => {
     switch (activeTab) {
       case 'active':
-        return user.ban_status !== 'banned' && user.ban_status !== 'inactive';
-      case 'inactive':
-        return user.ban_status === 'inactive';
+        return user.ban_status === 'active';
       case 'banned':
         return user.ban_status === 'banned';
+      case 'admins':
+        return user.is_admin === true;
       default:
         return true;
     }
   });
+
+  const handleSearchUsers = async (query: string) => {
+    setSearchQuery(query);
+    try {
+      await fetchUsers(query);
+    } catch (error) {
+      console.error('Search failed:', error);
+    }
+  };
 
   const handleBanUser = (user: AdminUser) => {
     setSelectedUser(user);
     setBanDialogOpen(true);
   };
 
-  const handleUnbanUser = (user: AdminUser) => {
-    updateUserBan({
-      userId: user.user_id,
-      banStatus: 'active',
-      banReason: null,
-      banExpiresAt: null,
-    });
-    toast.success(`Đã bỏ cấm người dùng ${user.full_name}`);
+  const handleUnbanUser = async (user: AdminUser) => {
+    try {
+      await toggleUserBan(user.user_id);
+      toast.success(`Đã bỏ cấm người dùng ${user.full_name}`);
+    } catch (error) {
+      console.error('Error unbanning user:', error);
+    }
   };
 
   const handleChangeRole = (user: AdminUser) => {
     setSelectedUser(user);
-    setNewRole(user.role || 'user');
+    setNewRole(user.role || 'player');
     setRoleDialogOpen(true);
   };
 
   const handleViewUser = (user: AdminUser) => {
     // TODO: Open user detail modal
-    alert(`Xem chi tiết người dùng: ${user.full_name}\nELO: ${user.elo || 1200}\nVai trò: ${user.role || 'user'}`);
+    alert(`Xem chi tiết người dùng: ${user.full_name}\nSPA Points: ${user.spa_points || 0}\nELO: ${user.elo_points || 1000}\nVai trò: ${user.role || 'player'}`);
   };
 
-  const confirmBanUser = () => {
+  const confirmBanUser = async () => {
     if (selectedUser) {
-      updateUserBan({
-        userId: selectedUser.user_id,
-        banStatus: 'banned',
-        banReason: banReason,
-        banExpiresAt: null,
-      });
-      setBanDialogOpen(false);
-      setBanReason('');
-      setSelectedUser(null);
-      toast.success(`Đã cấm người dùng ${selectedUser.full_name}`);
+      try {
+        await toggleUserBan(selectedUser.user_id, banReason);
+        setBanDialogOpen(false);
+        setBanReason('');
+        setSelectedUser(null);
+        toast.success(`Đã cấm người dùng ${selectedUser.full_name}`);
+      } catch (error) {
+        console.error('Error banning user:', error);
+      }
     }
   };
 
-  const confirmChangeRole = () => {
+  const confirmChangeRole = async () => {
     if (selectedUser && newRole) {
-      updateUserRole({
-        userId: selectedUser.user_id,
-        role: newRole,
-      });
-      setRoleDialogOpen(false);
-      setNewRole('');
-      setSelectedUser(null);
-      toast.success(`Đã thay đổi vai trò của ${selectedUser.full_name} thành ${newRole}`);
+      try {
+        await updateUser(selectedUser.user_id, { role: newRole as any });
+        setRoleDialogOpen(false);
+        setNewRole('');
+        setSelectedUser(null);
+        toast.success(`Đã thay đổi vai trò của ${selectedUser.full_name} thành ${newRole}`);
+      } catch (error) {
+        console.error('Error changing role:', error);
+      }
     }
   };
 
@@ -457,12 +506,12 @@ function AdminUsersNewContent() {
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium">Vai trò:</label>
-        <Select defaultValue="">
+        <Select defaultValue="all">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Tất cả vai trò" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tất cả vai trò</SelectItem>
+            <SelectItem value="all">Tất cả vai trò</SelectItem>
             <SelectItem value="admin">Admin</SelectItem>
             <SelectItem value="moderator">Moderator</SelectItem>
             <SelectItem value="user">User</SelectItem>
@@ -472,12 +521,12 @@ function AdminUsersNewContent() {
       </div>
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium">ELO Rating:</label>
-        <Select defaultValue="">
+        <Select defaultValue="all">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Tất cả rating" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tất cả rating</SelectItem>
+            <SelectItem value="all">Tất cả rating</SelectItem>
             <SelectItem value="beginner">Người mới ({'< 1400'})</SelectItem>
             <SelectItem value="intermediate">Trung bình (1400-1600)</SelectItem>
             <SelectItem value="advanced">Khá (1600-1800)</SelectItem>
@@ -507,6 +556,9 @@ function AdminUsersNewContent() {
       filters={filters}
     >
       <div className="space-y-6">
+        {/* DEBUG: Database Test Component */}
+        <DatabaseTest />
+        
         {/* Stats Cards - Simplified */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-card text-card-foreground rounded-lg border p-6">
@@ -530,10 +582,10 @@ function AdminUsersNewContent() {
           <div className="bg-card text-card-foreground rounded-lg border p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Không hoạt động</p>
-                <p className="text-2xl font-bold">{stats.inactive}</p>
+                <p className="text-sm font-medium">Quản trị viên</p>
+                <p className="text-2xl font-bold">{stats.admins}</p>
               </div>
-              <UserX className="h-8 w-8 text-muted-foreground" />
+              <Crown className="h-8 w-8 text-muted-foreground" />
             </div>
           </div>
           <div className="bg-card text-card-foreground rounded-lg border p-6">
@@ -558,9 +610,9 @@ function AdminUsersNewContent() {
               <UserCheck className="w-4 h-4" />
               Hoạt động ({stats.active})
             </TabsTrigger>
-            <TabsTrigger value="inactive" className="flex items-center gap-2">
-              <UserX className="w-4 h-4" />
-              Không hoạt động ({stats.inactive})
+            <TabsTrigger value="admins" className="flex items-center gap-2">
+              <Crown className="w-4 h-4" />
+              Quản trị viên ({stats.admins})
             </TabsTrigger>
             <TabsTrigger value="banned" className="flex items-center gap-2">
               <Shield className="w-4 h-4" />
@@ -569,9 +621,22 @@ function AdminUsersNewContent() {
           </TabsList>
 
           <TabsContent value={activeTab}>
+            {/* Search Bar */}
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Tìm kiếm người dùng theo tên, email, SĐT..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchUsers(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
             <UserManagementTableWithBulkActions
               users={filteredUsers}
-              loading={isLoading}
+              loading={loading}
               onBanUser={handleBanUser}
               onUnbanUser={handleUnbanUser}
               onChangeRole={handleChangeRole}
@@ -607,9 +672,9 @@ function AdminUsersNewContent() {
               <Button 
                 variant="destructive" 
                 onClick={confirmBanUser}
-                disabled={isUpdatingBan || !banReason.trim()}
+                disabled={loading || !banReason.trim()}
               >
-                {isUpdatingBan ? 'Đang xử lý...' : 'Cấm người dùng'}
+                {loading ? 'Đang xử lý...' : 'Cấm người dùng'}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -646,9 +711,9 @@ function AdminUsersNewContent() {
               </Button>
               <Button 
                 onClick={confirmChangeRole}
-                disabled={isUpdatingRole || !newRole}
+                disabled={loading || !newRole}
               >
-                {isUpdatingRole ? 'Đang xử lý...' : 'Thay đổi vai trò'}
+                {loading ? 'Đang xử lý...' : 'Thay đổi vai trò'}
               </Button>
             </DialogFooter>
           </DialogContent>

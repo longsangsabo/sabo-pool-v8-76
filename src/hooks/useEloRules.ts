@@ -24,9 +24,14 @@ export const useEloRules = () => {
       const { data, error } = await supabase
         .from('elo_rules')
         .select('*')
-        .order('priority', { ascending: true });
+        .order('tier_level', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching ELO rules:', error);
+        // Set empty array if table doesn't exist or no data
+        setRules([]);
+        return;
+      }
       setRules(data || []);
     } catch (error) {
       console.error('Error fetching ELO rules:', error);

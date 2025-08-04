@@ -35,10 +35,19 @@ export const GameConfigOverview: React.FC = () => {
 
   const configSections = [
     {
+      title: 'Official ELO Integration',
+      icon: CheckCircle,
+      count: stats?.officialEloIntegration?.componentsIntegrated || 0,
+      description: 'Components tích hợp với hệ thống ELO chính thức',
+      status: stats?.officialEloIntegration?.status || 'pending',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
+    },
+    {
       title: 'ELO Calculation Rules',
       icon: Target,
       count: stats?.eloRules || 0,
-      description: 'K-factors và tournament bonuses',
+      description: 'Tournament bonuses theo RANK_SYSTEM_README.md',
       status: 'active',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',

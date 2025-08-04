@@ -13,11 +13,11 @@ const AdminLoadingFallback = () => (
 // Direct lazy imports to avoid circular dependencies
 // Enhanced New Admin Pages - Primary
 const AdminDashboardNew = lazy(() => import('@/pages/admin/AdminDashboardNew'));
-const AdminUsersNew = lazy(() => import('@/pages/admin/AdminUsersNewClean'));
+const AdminUsersNew = lazy(() => import('@/pages/admin/AdminUsersNew'));
 const AdminClubsNew = lazy(() => import('@/pages/admin/AdminClubsNew'));
 const AdminRankVerificationNew = lazy(() => import('@/pages/admin/AdminRankVerificationNew'));
 const AdminTransactionsNew = lazy(() => import('@/pages/admin/AdminTransactionsNew'));
-const AdminChallengesNew = lazy(() => import('@/pages/admin/AdminChallengesNew'));
+const AdminChallengesNew = lazy(() => import('@/pages/admin/AdminChallengesNewClean'));
 const AdminPaymentsNew = lazy(() => import('@/pages/admin/AdminPaymentsNew'));
 const AdminEmergencyNew = lazy(() => import('@/pages/admin/AdminEmergencyNew'));
 const AdminGuideNew = lazy(() => import('@/pages/admin/AdminGuideNew'));
