@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -119,6 +120,7 @@ interface NotificationSettings {
 }
 
 const AdminNotificationsNew = () => {
+  const { t } = useTranslation();
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<NotificationTemplate | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -399,8 +401,8 @@ const AdminNotificationsNew = () => {
   return (
     <AdminCoreProvider>
       <AdminPageLayout
-        title="Notification Center"
-        description="Manage system notifications, announcements, and messaging campaigns"
+        title={t('notifications.title')}
+        description={t('notifications.description')}
         actions={pageActions}
       >
         <div className="space-y-6">
@@ -442,7 +444,7 @@ const AdminNotificationsNew = () => {
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="Search notifications..."
+                          placeholder={t('notifications.search_placeholder')}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-10"

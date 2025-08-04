@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -55,6 +56,7 @@ interface Setting {
 }
 
 const AdminSettingsNew = () => {
+  const { t } = useTranslation();
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showSensitive, setShowSensitive] = useState<Record<string, boolean>>({});
@@ -452,9 +454,9 @@ const AdminSettingsNew = () => {
 
   return (
     <AdminCoreProvider>
-      <AdminPageLayout
-        title="System Settings"
-        description="Configure application settings and preferences"
+            <AdminPageLayout
+        title={t('settings.title')}
+        description={t('settings.description')}
         actions={pageActions}
       >
         <div className="space-y-6">

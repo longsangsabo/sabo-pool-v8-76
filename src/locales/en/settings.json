@@ -1,0 +1,20 @@
+{
+  "title": "System Settings",
+  "description": "Configure system-wide settings, preferences, and administrative controls",
+  "general": "General",
+  "security": "Security",
+  "notifications": "Notifications",
+  "integrations": "Integrations",
+  "advanced": "Advanced",
+  "backup": "Backup",
+  "maintenance": "Maintenance",
+  "site_name": "Site Name",
+  "site_description": "Site Description",
+  "timezone": "Timezone",
+  "language": "Language",
+  "currency": "Currency",
+  "email_settings": "Email Settings",
+  "sms_settings": "SMS Settings",
+  "save_changes": "Save Changes",
+  "reset_defaults": "Reset to Defaults"
+}

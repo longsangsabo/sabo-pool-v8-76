@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -133,6 +134,7 @@ interface ChangelogItem {
 }
 
 const AdminGuideNew: React.FC = () => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedLevel, setSelectedLevel] = useState('all');
@@ -450,10 +452,11 @@ const AdminGuideNew: React.FC = () => {
   };
 
   return (
-    <AdminPageLayout
-      title="Documentation & Guides"
-      description="Comprehensive documentation, tutorials, and help resources"
-    >
+          <AdminPageLayout
+        title={t('guide.title')}
+        description={t('guide.description')}
+        actions={pageActions}
+      >
       <Tabs defaultValue="guides" className="space-y-6">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="guides" className="flex items-center gap-2">

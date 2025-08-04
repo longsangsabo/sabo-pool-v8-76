@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -60,6 +61,7 @@ interface BackupItem {
 }
 
 const AdminDatabaseNew = () => {
+  const { t } = useTranslation();
   const [queryText, setQueryText] = useState('');
   const [executing, setExecuting] = useState(false);
   const [queryResults, setQueryResults] = useState<QueryResult[]>([]);
@@ -231,9 +233,9 @@ const AdminDatabaseNew = () => {
 
   return (
     <AdminCoreProvider>
-      <AdminPageLayout
-        title="Database Management"
-        description="Advanced database administration and monitoring"
+            <AdminPageLayout
+        title={t('database.title')}
+        description={t('database.description')}
         actions={pageActions}
       >
         <div className="space-y-6">

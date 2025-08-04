@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -132,6 +133,7 @@ interface ScheduleSettings {
 }
 
 const AdminScheduleNew = () => {
+  const { t } = useTranslation();
   const [selectedEvent, setSelectedEvent] = useState<ScheduledEvent | null>(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('week');
@@ -503,8 +505,8 @@ const AdminScheduleNew = () => {
   return (
     <AdminCoreProvider>
       <AdminPageLayout
-        title="Schedule Manager"
-        description="Manage events, tournaments, maintenance windows, and automated scheduling"
+        title={t('schedule.title')}
+        description={t('schedule.description')}
         actions={pageActions}
       >
         <div className="space-y-6">
@@ -529,11 +531,11 @@ const AdminScheduleNew = () => {
           {/* Main Content Tabs */}
           <Tabs defaultValue="calendar" className="space-y-6">
             <TabsList>
-              <TabsTrigger value="calendar">Calendar View</TabsTrigger>
-              <TabsTrigger value="events">All Events</TabsTrigger>
-              <TabsTrigger value="templates">Templates</TabsTrigger>
-              <TabsTrigger value="automation">Automation</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
+              <TabsTrigger value="calendar">{t('schedule.calendar_view')}</TabsTrigger>
+              <TabsTrigger value="events">{t('schedule.all_events')}</TabsTrigger>
+              <TabsTrigger value="templates">{t('schedule.templates')}</TabsTrigger>
+              <TabsTrigger value="automation">{t('schedule.automation')}</TabsTrigger>
+              <TabsTrigger value="settings">{t('schedule.settings')}</TabsTrigger>
             </TabsList>
 
             {/* Calendar View Tab */}
@@ -542,7 +544,7 @@ const AdminScheduleNew = () => {
                 {/* Upcoming Events */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">Upcoming Events</h3>
+                    <h3 className="text-lg font-medium">{t('schedule.upcoming_events')}</h3>
                     <Select value={viewMode} onValueChange={(value: 'day' | 'week' | 'month') => setViewMode(value)}>
                       <SelectTrigger className="w-32">
                         <SelectValue />

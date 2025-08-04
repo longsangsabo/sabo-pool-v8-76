@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -31,11 +32,13 @@ export interface AdminSidebarProps {
 
 const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   const menuItems = [
     // === DASHBOARD & OVERVIEW ===
     {
-      title: '📈 Dashboard',
+      key: 'dashboard',
+      title: t('sidebar.dashboard'),
       icon: BarChart3,
       href: '/admin/dashboard-new',
       description: 'Enhanced analytics dashboard',
@@ -44,14 +47,16 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
     
     // === USER MANAGEMENT ===
     {
-      title: '👥 Users',
+      key: 'users',
+      title: t('sidebar.users'),
       icon: Users,
       href: '/admin/users-new',
       description: 'Advanced user management',
       group: 'users'
     },
     {
-      title: '🎯 Rank Verification',
+      key: 'rank_verification',
+      title: t('sidebar.rank_verification'),
       icon: UserCheck,
       href: '/admin/rank-verification-new',
       description: 'Advanced rank verification system',
@@ -60,21 +65,24 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === GAME MANAGEMENT ===
     {
-      title: '🏆 Tournaments',
+      key: 'tournaments',
+      title: t('sidebar.tournaments'),
       icon: Trophy,
       href: '/admin/tournaments-new',
       description: 'Advanced tournament management',
       group: 'game'
     },
     {
-      title: '⚔️ Challenges',
+      key: 'challenges',
+      title: t('sidebar.challenges'),
       icon: Target,
       href: '/admin/challenges-new',
       description: 'Advanced challenge management',
       group: 'game'
     },
     {
-      title: '🎮 Game Config',
+      key: 'game_config',
+      title: t('sidebar.game_config'),
       icon: Gamepad2,
       href: '/admin/game-config-new',
       description: 'Advanced game configuration',
@@ -83,21 +91,24 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === BUSINESS MANAGEMENT ===
     {
-      title: '🏢 Clubs',
+      key: 'clubs',
+      title: t('sidebar.clubs'),
       icon: Building,
       href: '/admin/clubs-new',
       description: 'Advanced club management',
       group: 'business'
     },
     {
-      title: '💳 Transactions',
+      key: 'transactions',
+      title: t('sidebar.transactions'),
       icon: Receipt,
       href: '/admin/transactions-new',
       description: 'Advanced transaction management',
       group: 'business'
     },
     {
-      title: '💰 Payments',
+      key: 'payments',
+      title: t('sidebar.payments'),
       icon: DollarSign,
       href: '/admin/payments-new',
       description: 'Advanced payment management',
@@ -106,14 +117,16 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === ANALYTICS & REPORTS ===
     {
-      title: '📊 Analytics',
+      key: 'analytics',
+      title: t('sidebar.analytics'),
       icon: TrendingUp,
       href: '/admin/analytics-new',
       description: 'Advanced analytics & insights',
       group: 'analytics'
     },
     {
-      title: '📋 Reports',
+      key: 'reports',
+      title: t('sidebar.reports'),
       icon: FileText,
       href: '/admin/reports-new',
       description: 'Advanced reporting system',
@@ -122,14 +135,16 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === COMMUNICATION ===
     {
-      title: '🔔 Notifications',
+      key: 'notifications',
+      title: t('sidebar.notifications'),
       icon: Bell,
       href: '/admin/notifications-new',
       description: 'Advanced notification system',
       group: 'communication'
     },
     {
-      title: '📅 Schedule',
+      key: 'schedule',
+      title: t('sidebar.schedule'),
       icon: Calendar,
       href: '/admin/schedule-new',
       description: 'Advanced scheduling system',
@@ -138,21 +153,24 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === SYSTEM & AUTOMATION ===
     {
-      title: '🗄️ Database',
+      key: 'database',
+      title: t('sidebar.database'),
       icon: Database,
       href: '/admin/database-new',
       description: 'Advanced database management',
       group: 'system'
     },
     {
-      title: '⚡ Automation',
+      key: 'automation',
+      title: t('sidebar.automation'),
       icon: Zap,
       href: '/admin/automation-new',
       description: 'Workflow automation center',
       group: 'system'
     },
     {
-      title: '🤖 AI Assistant',
+      key: 'ai_assistant',
+      title: t('sidebar.ai_assistant'),
       icon: Bot,
       href: '/admin/ai-assistant-new',
       description: 'AI automation & insights',
@@ -161,14 +179,16 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === SETTINGS & SUPPORT ===
     {
-      title: '⚙️ Settings',
+      key: 'settings',
+      title: t('sidebar.settings'),
       icon: Settings,
       href: '/admin/settings-new',
       description: 'Advanced system settings',
       group: 'settings'
     },
     {
-      title: '📚 Guide',
+      key: 'guide',
+      title: t('sidebar.guide'),
       icon: BookOpen,
       href: '/admin/guide-new',
       description: 'Documentation & help system',
@@ -177,14 +197,16 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
 
     // === EMERGENCY & DEVELOPMENT ===
     {
-      title: '🚨 Emergency',
+      key: 'emergency',
+      title: t('sidebar.emergency'),
       icon: AlertTriangle,
       href: '/admin/emergency-new',
       description: 'Emergency incident management',
       group: 'emergency'
     },
     {
-      title: '🔧 Development',
+      key: 'development',
+      title: t('sidebar.development'),
       icon: Code,
       href: '/admin/development-new',
       description: 'Development tools & utilities',

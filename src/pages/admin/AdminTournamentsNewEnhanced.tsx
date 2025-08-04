@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,6 +38,7 @@ import { vi } from 'date-fns/locale';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const AdminTournamentsNew = () => {
+  const { t } = useTranslation();
   const {
     tournaments,
     loading,
@@ -348,8 +350,8 @@ const AdminTournamentsNew = () => {
   }
 
   return (
-    <AdminPageLayout title="Quản lý Giải đấu"
-      description="Quản lý tất cả giải đấu billiards"
+    <AdminPageLayout title={t('tournaments.title')}
+      description={t('tournaments.description')}
     >
       <div className="space-y-6">
         {/* Header */}
@@ -362,7 +364,7 @@ const AdminTournamentsNew = () => {
             <DialogTrigger asChild>
               <Button onClick={resetForm}>
                 <Plus className="h-4 w-4 mr-2" />
-                Tạo giải đấu mới
+                {t('tournaments.create_tournament')}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -384,17 +386,25 @@ const AdminTournamentsNew = () => {
                   />
                 </div>
                 
+                <div>
+                  <Label htmlFor="name">{t('tournaments.tournament_name')} *</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    placeholder={t('tournaments.tournament_name_placeholder')}
+                  />
+                </div>
+                
                 <div className="col-span-2">
-                  <Label htmlFor="description">Mô tả</Label>
+                  <Label htmlFor="description">{t('tournaments.tournament_description')}</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder="Mô tả về giải đấu"
+                    placeholder={t('tournaments.tournament_description_placeholder')}
                   />
-                </div>
-                
-                <div>
+                </div>                <div>
                   <Label htmlFor="tournament_type">Loại giải đấu</Label>
                   <Select value={formData.tournament_type} onValueChange={(value: any) => setFormData({...formData, tournament_type: value})}>
                     <SelectTrigger>
@@ -425,7 +435,7 @@ const AdminTournamentsNew = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="max_participants">Số người tối đa</Label>
+                  <Label htmlFor="max_participants">{t('tournaments.max_participants')}</Label>
                   <Input
                     id="max_participants"
                     type="number"
@@ -435,7 +445,7 @@ const AdminTournamentsNew = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="entry_fee">Lệ phí tham gia (VND)</Label>
+                  <Label htmlFor="entry_fee">{t('tournaments.entry_fee')}</Label>
                   <Input
                     id="entry_fee"
                     type="number"

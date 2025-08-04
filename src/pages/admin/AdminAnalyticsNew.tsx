@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +39,7 @@ interface ChartData {
 }
 
 const AdminAnalyticsNew = () => {
+  const { t } = useTranslation();
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -212,8 +214,8 @@ const AdminAnalyticsNew = () => {
   return (
     <AdminCoreProvider>
       <AdminPageLayout
-        title="Advanced Analytics"
-        description="Real-time insights and comprehensive data analysis"
+        title={t('analytics.title')}
+        description={t('analytics.description')}
         actions={pageActions}
       >
         <div className="space-y-6">

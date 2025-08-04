@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,10 +31,11 @@ import { useAdminUsers, type AdminUser } from '@/hooks/useAdminUsers';
 import { toast } from 'sonner';
 
 const UserStatusBadge = ({ status }: { status: string | null }) => {
+  const { t } = useTranslation();
   const statusMap: Record<string, { label: string; variant: string }> = {
-    'banned': { label: 'Bị cấm', variant: 'destructive' },
-    'active': { label: 'Hoạt động', variant: 'default' },
-    'inactive': { label: 'Không hoạt động', variant: 'secondary' },
+    'banned': { label: t('users.status.banned'), variant: 'destructive' },
+    'active': { label: t('users.status.active'), variant: 'default' },
+    'inactive': { label: t('users.status.inactive'), variant: 'secondary' },
   };
 
   const statusInfo = statusMap[status || 'active'] || statusMap['active'];
@@ -46,14 +48,15 @@ const UserStatusBadge = ({ status }: { status: string | null }) => {
 };
 
 const RoleBadge = ({ role, isAdmin }: { role: string; isAdmin?: boolean }) => {
+  const { t } = useTranslation();
   if (isAdmin) {
-    return <Badge variant="destructive">Admin</Badge>;
+    return <Badge variant="destructive">{t('users.roles.admin')}</Badge>;
   }
   
   const roleMap: Record<string, { label: string; variant: string }> = {
-    'admin': { label: 'Quản trị viên', variant: 'destructive' },
-    'moderator': { label: 'Điều hành viên', variant: 'default' },
-    'user': { label: 'Người dùng', variant: 'secondary' },
+    'admin': { label: t('users.roles.admin'), variant: 'destructive' },
+    'moderator': { label: t('users.roles.moderator'), variant: 'default' },
+    'user': { label: t('users.roles.user'), variant: 'secondary' },
   };
 
   const roleInfo = roleMap[role] || roleMap['user'];
@@ -66,6 +69,7 @@ const RoleBadge = ({ role, isAdmin }: { role: string; isAdmin?: boolean }) => {
 };
 
 const AdminUsersNew = () => {
+  const { t } = useTranslation();
   const { users, isLoading, updateUserBan, updateUserRole } = useAdminUsers();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -111,9 +115,9 @@ const AdminUsersNew = () => {
         banStatus: null,
         banReason: null
       });
-      toast.success(`Đã bỏ cấm người dùng ${user.full_name}`);
+      toast.success(t('users.unban_success', { name: user.full_name }));
     } catch (error) {
-      toast.error('Lỗi khi bỏ cấm người dùng');
+      toast.error(t('users.unban_error'));
     }
   };
 
@@ -123,25 +127,25 @@ const AdminUsersNew = () => {
         userId: user.user_id,
         role: newRole
       });
-      toast.success(`Đã cập nhật quyền cho ${user.full_name}`);
+      toast.success(t('users.role_update_success', { name: user.full_name }));
     } catch (error) {
-      toast.error('Lỗi khi cập nhật quyền');
+      toast.error(t('users.role_update_error'));
     }
   };
 
   return (
     <AdminPageLayout
-      title="Quản lý người dùng"
-      description="Quản lý và theo dõi người dùng trong hệ thống"
+      title={t('users.title')}
+      description={t('users.description')}
       actions={
         <div className="flex gap-2">
           <Button size="sm">
             <Plus className="h-4 w-4 mr-2" />
-            Thêm người dùng
+            {t('users.add_user')}
           </Button>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Xuất dữ liệu
+            {t('users.export_data')}
           </Button>
         </div>
       }
@@ -156,40 +160,40 @@ const AdminUsersNew = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">Tất cả người dùng</p>
+              <p className="text-xs text-muted-foreground">{t('users.all')}</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Hoạt động</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('users.active')}</CardTitle>
               <UserCheck className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.active}</div>
-              <p className="text-xs text-muted-foreground">Người dùng hoạt động</p>
+              <p className="text-xs text-muted-foreground">{t('users.active_users')}</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Bị cấm</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('users.banned')}</CardTitle>
               <UserX className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.banned}</div>
-              <p className="text-xs text-muted-foreground">Tài khoản bị khóa</p>
+              <p className="text-xs text-muted-foreground">{t('users.banned_users')}</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Admin</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('users.admin')}</CardTitle>
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.admin}</div>
-              <p className="text-xs text-muted-foreground">Quản trị viên</p>
+              <p className="text-xs text-muted-foreground">{t('users.admin_users')}</p>
             </CardContent>
           </Card>
         </div>
@@ -199,7 +203,7 @@ const AdminUsersNew = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
-              placeholder="Tìm kiếm tên, số điện thoại, email..."
+              placeholder={t('users.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -210,10 +214,10 @@ const AdminUsersNew = () => {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">Tất cả ({stats.total})</TabsTrigger>
-            <TabsTrigger value="active">Hoạt động ({stats.active})</TabsTrigger>
-            <TabsTrigger value="banned">Bị cấm ({stats.banned})</TabsTrigger>
-            <TabsTrigger value="admin">Admin ({stats.admin})</TabsTrigger>
+            <TabsTrigger value="all">{t('users.all')} ({stats.total})</TabsTrigger>
+            <TabsTrigger value="active">{t('users.active')} ({stats.active})</TabsTrigger>
+            <TabsTrigger value="banned">{t('users.banned')} ({stats.banned})</TabsTrigger>
+            <TabsTrigger value="admin">{t('users.admin')} ({stats.admin})</TabsTrigger>
           </TabsList>
 
           <TabsContent value={activeTab}>
@@ -222,18 +226,18 @@ const AdminUsersNew = () => {
                 {isLoading ? (
                   <div className="p-8 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                    <p className="mt-2 text-muted-foreground">Đang tải...</p>
+                    <p className="mt-2 text-muted-foreground">{t('users.loading')}</p>
                   </div>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Người dùng</TableHead>
-                        <TableHead>Liên hệ</TableHead>
-                        <TableHead>Trạng thái</TableHead>
-                        <TableHead>Quyền</TableHead>
+                        <TableHead>{t('users.user')}</TableHead>
+                        <TableHead>{t('users.contact')}</TableHead>
+                        <TableHead>{t('users.status')}</TableHead>
+                        <TableHead>{t('users.role')}</TableHead>
                         <TableHead>ELO</TableHead>
-                        <TableHead>Thao tác</TableHead>
+                        <TableHead>{t('users.actions')}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

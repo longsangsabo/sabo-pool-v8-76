@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -80,6 +81,7 @@ interface AdminComment {
 }
 
 const AdminRankVerificationNew = () => {
+  const { t } = useTranslation();
   const [selectedRequest, setSelectedRequest] = useState<RankVerificationRequest | null>(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -310,9 +312,9 @@ const AdminRankVerificationNew = () => {
 
   const stats = [
     {
-      title: 'Pending Requests',
+      title: t('rank_verification.pending_verifications'),
       value: verificationRequests.filter(r => r.status === 'pending').length.toString(),
-      description: 'Awaiting review',
+      description: t('rank_verification.awaiting_review'),
       icon: Clock,
     },
     {
@@ -357,9 +359,9 @@ const AdminRankVerificationNew = () => {
 
   return (
     <AdminCoreProvider>
-      <AdminPageLayout
-        title="Rank Verification Center"
-        description="Review and approve player rank verification requests"
+            <AdminPageLayout
+        title={t('rank_verification.title')}
+        description={t('rank_verification.description')}
         actions={pageActions}
       >
         <div className="space-y-6">

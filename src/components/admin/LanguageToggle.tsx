@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 const LanguageToggle = () => {
-  const { language, setLanguage } = useLanguage();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language === 'vi' ? 'vi' : 'en';
 
   const toggleLanguage = () => {
-    setLanguage(language === 'vi' ? 'en' : 'vi');
+    i18n.changeLanguage(currentLang === 'vi' ? 'en' : 'vi');
   };
 
   return (
@@ -19,7 +20,7 @@ const LanguageToggle = () => {
     >
       <Globe className='h-4 w-4' />
       <span className='font-medium'>
-        {language === 'vi' ? '🇺🇸 EN' : '🇻🇳 VI'}
+        {currentLang === 'vi' ? '🇺🇸 EN' : '🇻🇳 VI'}
       </span>
     </Button>
   );

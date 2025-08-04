@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -106,6 +107,7 @@ interface PaymentAnalytics {
 }
 
 const AdminPaymentsNew = () => {
+  const { t } = useTranslation();
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -485,8 +487,8 @@ const AdminPaymentsNew = () => {
   return (
     <AdminCoreProvider>
       <AdminPageLayout
-        title="Payment Management"
-        description="Monitor, process, and manage all payment transactions"
+        title={t('payments.title')}
+        description={t('payments.description')}
         actions={pageActions}
       >
         <div className="space-y-6">
@@ -539,7 +541,7 @@ const AdminPaymentsNew = () => {
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="Search transactions, users..."
+                          placeholder={t('payments.search_placeholder')}
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           className="pl-10"

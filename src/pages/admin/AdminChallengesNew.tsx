@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,6 +92,7 @@ interface ChallengeDispute {
 }
 
 const AdminChallengesNew = () => {
+  const { t } = useTranslation();
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -368,8 +370,8 @@ const AdminChallengesNew = () => {
   return (
     <AdminCoreProvider>
       <AdminPageLayout
-        title="Challenge Management"
-        description="Manage player challenges, disputes, and match coordination"
+        title={t('challenges.title')}
+        description={t('challenges.description')}
         actions={pageActions}
       >
         <div className="space-y-6">
@@ -394,8 +396,8 @@ const AdminChallengesNew = () => {
           {/* Main Content Tabs */}
           <Tabs defaultValue="challenges" className="space-y-6">
             <TabsList>
-              <TabsTrigger value="challenges">All Challenges</TabsTrigger>
-              <TabsTrigger value="disputes">Disputes</TabsTrigger>
+              <TabsTrigger value="challenges">{t('challenges.all_challenges')}</TabsTrigger>
+              <TabsTrigger value="disputes">{t('challenges.disputes')}</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>

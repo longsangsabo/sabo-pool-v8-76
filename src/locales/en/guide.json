@@ -1,0 +1,16 @@
+{
+  "title": "Admin Guide & Help Center",
+  "description": "Comprehensive documentation, tutorials, and support resources for administrators",
+  "quick_start": "Quick Start",
+  "tutorials": "Tutorials",
+  "documentation": "Documentation",
+  "troubleshooting": "Troubleshooting",
+  "api_reference": "API Reference",
+  "faq": "FAQ",
+  "support": "Support",
+  "search_placeholder": "Search guides, documentation...",
+  "getting_started": "Getting Started",
+  "user_management": "User Management",
+  "tournament_setup": "Tournament Setup",
+  "payment_configuration": "Payment Configuration"
+}

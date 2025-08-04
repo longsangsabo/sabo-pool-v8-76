@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -164,6 +165,7 @@ interface ProcedureStep {
 }
 
 const AdminEmergencyNew = () => {
+  const { t } = useTranslation();
   const [selectedIncident, setSelectedIncident] = useState<EmergencyIncident | null>(null);
   const [selectedProcedure, setSelectedProcedure] = useState<EmergencyProcedure | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -723,9 +725,9 @@ const AdminEmergencyNew = () => {
 
   return (
     <AdminCoreProvider>
-      <AdminPageLayout
-        title="Emergency Response Center"
-        description="Manage critical incidents, emergency procedures, and crisis response coordination"
+            <AdminPageLayout
+        title={t('emergency.title')}
+        description={t('emergency.description')}
         actions={pageActions}
       >
         <div className="space-y-6">

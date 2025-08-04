@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   DollarSign, 
   TrendingUp, 
@@ -82,6 +83,7 @@ interface TransactionManagementProps {
 }
 
 const AdminTransactionsNew = () => {
+  const { t } = useTranslation();
   const { transactions, loading: transactionsLoading } = useAdminTransactions();
   const { stats, loading: statsLoading } = useAdminTransactionStats();
   const [activeTab, setActiveTab] = useState('all');
@@ -170,9 +172,9 @@ const AdminTransactionsNew = () => {
 
   return (
     <AdminCoreProvider>
-      <AdminPageLayout
-        title="Quản lý giao dịch"
-        description="Theo dõi và quản lý tất cả giao dịch tài chính trong hệ thống"
+            <AdminPageLayout
+        title={t('transactions.title')}
+        description={t('transactions.description')}
         actions={pageActions}
       >
         {/* Stats Grid */}
@@ -184,18 +186,18 @@ const AdminTransactionsNew = () => {
         <div className="space-y-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="all">Tất cả ({transactions.length})</TabsTrigger>
+              <TabsTrigger value="all">{t('transactions.all_transactions')} ({transactions.length})</TabsTrigger>
               <TabsTrigger value="pending">
-                Chờ xử lý ({transactions.filter(t => t.status === 'pending').length})
+                {t('transactions.pending')} ({transactions.filter(t => t.status === 'pending').length})
               </TabsTrigger>
               <TabsTrigger value="completed">
-                Hoàn thành ({transactions.filter(t => t.status === 'completed').length})
+                {t('transactions.completed')} ({transactions.filter(t => t.status === 'completed').length})
               </TabsTrigger>
               <TabsTrigger value="failed">
-                Thất bại ({transactions.filter(t => t.status === 'failed').length})
+                {t('transactions.failed')} ({transactions.filter(t => t.status === 'failed').length})
               </TabsTrigger>
               <TabsTrigger value="cancelled">
-                Đã hủy ({transactions.filter(t => t.status === 'cancelled').length})
+                {t('transactions.cancelled')} ({transactions.filter(t => t.status === 'cancelled').length})
               </TabsTrigger>
             </TabsList>
 

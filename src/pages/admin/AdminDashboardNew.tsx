@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageLayout } from '@/components/admin/shared/AdminPageLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -104,6 +105,7 @@ interface ChartData {
 }
 
 const AdminDashboardNew: React.FC = () => {
+  const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState('7d');
   const [refreshInterval, setRefreshInterval] = useState(30);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -111,66 +113,66 @@ const AdminDashboardNew: React.FC = () => {
   const [metrics, setMetrics] = useState<DashboardMetric[]>([
     {
       id: '1',
-      title: 'Total Users',
+      title: t('dashboard.total_users'),
       value: '24,567',
       change: 12.5,
       changeType: 'increase',
-      period: 'vs last week',
+      period: t('dashboard.vs_last_week'),
       icon: <Users className="h-5 w-5" />,
       color: 'text-blue-600',
       trend: [100, 120, 140, 135, 155, 145, 165, 180, 190, 185, 200, 195, 210, 225]
     },
     {
       id: '2',
-      title: 'Active Tournaments',
+      title: t('dashboard.active_tournaments'),
       value: 156,
       change: 8.3,
       changeType: 'increase',
-      period: 'vs last week',
+      period: t('dashboard.vs_last_week'),
       icon: <Trophy className="h-5 w-5" />,
       color: 'text-yellow-600',
       trend: [50, 55, 48, 62, 58, 65, 70, 68, 75, 72, 78, 80, 85, 90]
     },
     {
       id: '3',
-      title: 'Revenue',
+      title: t('dashboard.revenue'),
       value: '$48,392',
       change: 15.7,
       changeType: 'increase',
-      period: 'vs last week',
+      period: t('dashboard.vs_last_week'),
       icon: <DollarSign className="h-5 w-5" />,
       color: 'text-green-600',
       trend: [1000, 1200, 1100, 1400, 1300, 1500, 1600, 1550, 1700, 1650, 1800, 1750, 1900, 2000]
     },
     {
       id: '4',
-      title: 'Server Uptime',
+      title: t('dashboard.performance'),
       value: '99.98%',
       change: 0.02,
       changeType: 'increase',
-      period: 'vs last month',
+      period: t('dashboard.vs_last_month'),
       icon: <Activity className="h-5 w-5" />,
       color: 'text-emerald-600',
       trend: [99.95, 99.96, 99.97, 99.98, 99.99, 99.98, 99.97, 99.98, 99.99, 99.98, 99.97, 99.98, 99.99, 99.98]
     },
     {
       id: '5',
-      title: 'Daily Active Users',
+      title: t('dashboard.daily_active_users'),
       value: '12,834',
       change: -3.2,
       changeType: 'decrease',
-      period: 'vs yesterday',
+      period: t('dashboard.vs_yesterday'),
       icon: <Eye className="h-5 w-5" />,
       color: 'text-orange-600',
       trend: [800, 850, 820, 880, 860, 900, 920, 910, 950, 940, 980, 970, 1000, 950]
     },
     {
       id: '6',
-      title: 'Conversion Rate',
+      title: t('dashboard.avg_session_time'),
       value: '3.45%',
       change: 2.1,
       changeType: 'increase',
-      period: 'vs last week',
+      period: t('dashboard.vs_last_week'),
       icon: <Target className="h-5 w-5" />,
       color: 'text-purple-600',
       trend: [2.1, 2.3, 2.2, 2.5, 2.4, 2.7, 2.8, 2.9, 3.0, 2.9, 3.2, 3.1, 3.4, 3.5]
@@ -370,8 +372,8 @@ const AdminDashboardNew: React.FC = () => {
 
   return (
     <AdminPageLayout
-      title="Enhanced Analytics Dashboard"
-      description="Comprehensive real-time analytics and system insights"
+      title={t('dashboard.title')}
+      description={t('dashboard.overview')}
     >
       <div className="space-y-6">
         {/* Dashboard Controls */}
@@ -384,10 +386,10 @@ const AdminDashboardNew: React.FC = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1d">Last 24h</SelectItem>
-                    <SelectItem value="7d">Last 7 days</SelectItem>
-                    <SelectItem value="30d">Last 30 days</SelectItem>
-                    <SelectItem value="90d">Last 90 days</SelectItem>
+                    <SelectItem value="1d">{t('dashboard.time_range.1d')}</SelectItem>
+                    <SelectItem value="7d">{t('dashboard.time_range.7d')}</SelectItem>
+                    <SelectItem value="30d">{t('dashboard.time_range.30d')}</SelectItem>
+                    <SelectItem value="90d">{t('dashboard.time_range.90d')}</SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="flex items-center gap-2">
@@ -395,7 +397,7 @@ const AdminDashboardNew: React.FC = () => {
                     checked={autoRefresh}
                     onCheckedChange={setAutoRefresh}
                   />
-                  <Label>Auto Refresh</Label>
+                  <Label>{t('dashboard.auto_refresh')}</Label>
                 </div>
                 <Select value={refreshInterval.toString()} onValueChange={(value) => setRefreshInterval(parseInt(value))}>
                   <SelectTrigger className="w-24">
@@ -412,11 +414,11 @@ const AdminDashboardNew: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  {t('common.export')}
                 </Button>
                 <Button variant="outline" size="sm">
                   <Settings className="h-4 w-4 mr-2" />
-                  Customize
+                  {t('dashboard.customize')}
                 </Button>
                 <Button variant="outline" size="sm">
                   <RefreshCw className="h-4 w-4" />
@@ -462,7 +464,7 @@ const AdminDashboardNew: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
-                  Revenue Analytics
+                  {t('dashboard.revenue_analytics')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -480,7 +482,7 @@ const AdminDashboardNew: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <LineChart className="h-5 w-5" />
-                  User Growth Trend
+                  {t('dashboard.user_growth_trend')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -502,7 +504,7 @@ const AdminDashboardNew: React.FC = () => {
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Bell className="h-5 w-5" />
-                    System Alerts
+                    {t('dashboard.system_alerts')}
                   </div>
                   <Badge variant="secondary">{systemAlerts.filter(a => !a.resolved).length}</Badge>
                 </CardTitle>
@@ -533,7 +535,7 @@ const AdminDashboardNew: React.FC = () => {
                   </div>
                 ))}
                 <Button variant="outline" className="w-full" size="sm">
-                  View All Alerts
+                  {t('dashboard.view_all_alerts')}
                 </Button>
               </CardContent>
             </Card>
@@ -543,7 +545,7 @@ const AdminDashboardNew: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Star className="h-5 w-5" />
-                  Top Performers
+                  {t('dashboard.top_performers')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -577,7 +579,7 @@ const AdminDashboardNew: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
-              Recent Activity
+              {t('dashboard.recent_activity')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -609,7 +611,7 @@ const AdminDashboardNew: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <PieChart className="h-5 w-5" />
-                Device Usage
+                {t('dashboard.device_usage')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -633,7 +635,7 @@ const AdminDashboardNew: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Geographic Data
+                {t('dashboard.geographic_data')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -662,7 +664,7 @@ const AdminDashboardNew: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Heart className="h-5 w-5" />
-                User Satisfaction
+                {t('dashboard.user_satisfaction')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -684,7 +686,7 @@ const AdminDashboardNew: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5" />
-                Conversion Funnel
+                {t('dashboard.conversion_funnel')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
