@@ -84,9 +84,9 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (!clubError && clubData) {
         setClubProfile(clubData);
-        console.log('Club profile loaded:', clubData);
+
       } else {
-        console.log('No club profile found for user');
+
       }
     } catch (error) {
       console.error('Error fetching profiles:', error);

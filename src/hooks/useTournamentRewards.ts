@@ -24,7 +24,7 @@ export const useTournamentRewards = () => {
     queryKey: ['tournament-reward-templates'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('tournament_reward_templates')
+        .from('tournament_prize_templates')
         .select('*')
         .eq('is_active', true)
         .order('tournament_type', { ascending: true });
@@ -48,7 +48,7 @@ export const useTournamentRewards = () => {
       rewardData: Omit<TournamentReward, 'id' | 'created_at' | 'updated_at'>
     ) => {
       const { data, error } = await supabase
-        .from('tournament_reward_templates')
+        .from('tournament_prize_templates')
         .insert(rewardData as any)
         .select()
         .single();
@@ -83,7 +83,7 @@ export const useTournamentRewards = () => {
       ...rewardData
     }: Partial<TournamentReward> & { id: string }) => {
       const { data, error } = await supabase
-        .from('tournament_reward_templates')
+        .from('tournament_prize_templates')
         .update(rewardData)
         .eq('id', id)
         .select()
@@ -118,7 +118,7 @@ export const useTournamentRewards = () => {
   const deleteRewardMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('tournament_reward_templates')
+        .from('tournament_prize_templates')
         .delete()
         .eq('id', id);
 

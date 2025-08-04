@@ -206,7 +206,6 @@ export class TournamentTransaction {
    * Execute all rollback operations
    */
   private async rollback(): Promise<void> {
-    console.warn(`Executing rollback for ${this.context.operation}...`);
 
     // Execute rollback operations in reverse order
     for (const rollbackFn of this.rollbackStack.reverse()) {
@@ -392,7 +391,7 @@ export class TournamentAtomicOperations {
             }
           );
         } catch (advanceError) {
-          console.warn(
+
             'Winner advancement failed, but score was recorded:',
             advanceError
           );

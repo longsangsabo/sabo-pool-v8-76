@@ -16,7 +16,7 @@ export const useRealTimeTournamentState = () => {
     if (!user) {
       setRegistrationState({});
       setLoading({});
-      console.log('User logged out - cleared registration state');
+
     }
   }, [user]);
 
@@ -27,7 +27,7 @@ export const useRealTimeTournamentState = () => {
     const startAutoSync = () => {
       syncIntervalRef.current = setInterval(() => {
         setLastSync(new Date());
-        console.log('Auto-syncing registration state...');
+
       }, 30000); // 30 seconds
     };
 
@@ -86,7 +86,7 @@ export const useRealTimeTournamentState = () => {
             data &&
             data.length > 0 &&
             data[0].registration_status !== 'cancelled';
-          console.log(
+
             `Registration check for ${tournamentId}:`,
             isRegistered,
             data
@@ -110,7 +110,6 @@ export const useRealTimeTournamentState = () => {
     async (tournamentIds: string[]) => {
       if (!user?.id || tournamentIds.length === 0) return;
 
-      console.log(
         'Loading registration status for tournaments:',
         tournamentIds
       );
@@ -131,7 +130,7 @@ export const useRealTimeTournamentState = () => {
 
         setRegistrationState(prev => {
           const updated = { ...prev, ...newState };
-          console.log('Updated registration state:', updated);
+
           return updated;
         });
       } catch (error) {
@@ -144,7 +143,7 @@ export const useRealTimeTournamentState = () => {
   // Enhanced registration with immediate UI update
   const setRegistrationStatus = useCallback(
     (tournamentId: string, isRegistered: boolean) => {
-      console.log(
+
         `Setting registration status for ${tournamentId}:`,
         isRegistered
       );
@@ -171,7 +170,7 @@ export const useRealTimeTournamentState = () => {
   const isRegistered = useCallback(
     (tournamentId: string): boolean => {
       const status = registrationState[tournamentId];
-      console.log(`Getting registration status for ${tournamentId}:`, status);
+
       return status || false;
     },
     [registrationState]
@@ -188,7 +187,7 @@ export const useRealTimeTournamentState = () => {
   // Force refresh single tournament
   const refreshTournamentStatus = useCallback(
     async (tournamentId: string) => {
-      console.log('Force refreshing tournament:', tournamentId);
+
       const status = await checkRegistrationStatus(tournamentId);
       setRegistrationStatus(tournamentId, status);
       return status;
@@ -200,7 +199,7 @@ export const useRealTimeTournamentState = () => {
   const clearState = useCallback(() => {
     setRegistrationState({});
     setLoading({});
-    console.log('Cleared all registration state');
+
   }, []);
 
   return {

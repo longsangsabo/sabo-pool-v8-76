@@ -64,7 +64,6 @@ export const TournamentPerformanceMonitor: React.FC<
   // Monitor console errors related to tournament
   useEffect(() => {
     const originalError = console.error;
-    const originalWarn = console.warn;
 
     console.error = (...args) => {
       const message = args.join(' ');
@@ -77,7 +76,6 @@ export const TournamentPerformanceMonitor: React.FC<
       originalError(...args);
     };
 
-    console.warn = (...args) => {
       const message = args.join(' ');
       if (message.includes(tournamentId) || message.includes('tournament')) {
         setMetrics(prev => ({
@@ -90,7 +88,7 @@ export const TournamentPerformanceMonitor: React.FC<
 
     return () => {
       console.error = originalError;
-      console.warn = originalWarn;
+
     };
   }, [tournamentId]);
 

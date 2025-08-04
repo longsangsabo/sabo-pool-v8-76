@@ -61,7 +61,7 @@ export const SecuritySettings: React.FC<SecuritySettingsProps> = ({
   const handleChangePassword = () => {
     if (newPassword === confirmPassword && newPassword.length >= 8) {
       // Handle password change
-      // ...removed console.log('Password changed')
+
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');

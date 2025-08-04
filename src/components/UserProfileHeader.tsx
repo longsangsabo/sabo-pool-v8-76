@@ -22,7 +22,6 @@ const UserProfileHeader = () => {
 
     setLoading(true);
     try {
-      console.log('🔍 Loading complete profile data for user:', user.id);
 
       // Get profile, rankings, and wallet data in parallel
       const [profileResult, rankingsResult, walletResult] = await Promise.all([
@@ -48,10 +47,6 @@ const UserProfileHeader = () => {
         throw profileResult.error;
       }
 
-      console.log('✅ Profile data loaded:', profileResult.data);
-      console.log('✅ Rankings data loaded:', rankingsResult.data);
-      console.log('✅ Wallet data loaded:', walletResult.data);
-
       setProfile(profileResult.data);
       setRankings(rankingsResult.data);
       setWallet(walletResult.data);
@@ -71,8 +66,6 @@ const UserProfileHeader = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log('🔔 Setting up real-time subscriptions for profile updates');
-
     const profileChannel = supabase
       .channel('profile-realtime-updates')
       .on(
@@ -84,7 +77,7 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log('📊 Profile updated via real-time:', payload);
+
           setProfile(payload.new);
         }
       )
@@ -97,7 +90,7 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log('🏆 Rankings updated via real-time:', payload);
+
           setRankings(payload.new);
         }
       )
@@ -110,16 +103,16 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log('💰 Wallet updated via real-time:', payload);
+
           setWallet(payload.new);
         }
       )
       .subscribe(status => {
-        console.log('🔔 Real-time subscription status:', status);
+
       });
 
     return () => {
-      console.log('🔕 Cleaning up real-time subscriptions');
+
       supabase.removeChannel(profileChannel);
     };
   }, [user]);

@@ -27,14 +27,11 @@ export const sendClubNotification = async (
       booking_id: booking.id,
     };
 
-    console.log('Club notification data:', notificationData);
-
     // For now, we'll just log the notification
     // In the future, this can be expanded to send actual emails/SMS
     // or integrate with external services
 
     // Mock notification - in a real app, this would update the booking status
-    console.log('Mock: Club notified for booking', booking.id);
 
     return { success: true };
   } catch (error) {

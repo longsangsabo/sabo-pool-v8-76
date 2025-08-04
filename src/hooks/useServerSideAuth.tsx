@@ -8,7 +8,7 @@ export const useServerSideAuth = () => {
   const logAdminAction = async (action: string, details: any) => {
     try {
       // Mock implementation - log to console instead of database
-      console.log('Admin action:', action, details);
+
       return true;
     } catch (error) {
       console.error('Error logging admin action:', error);

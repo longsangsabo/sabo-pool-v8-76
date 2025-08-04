@@ -27,7 +27,6 @@ export const LoserBranchASection: React.FC<LoserBranchASectionProps> = ({
       [101, 102, 103].includes(match.round_number)
   );
 
-  console.log(
     `🔍 [LoserBranchA] Filtering matches for tournament ${tournamentId}:`,
     {
       totalMatches: matches.length,

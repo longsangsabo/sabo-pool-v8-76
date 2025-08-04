@@ -60,12 +60,12 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
     console.group(`🔧 Responsive Error Boundary - ${this.state.errorId}`);
     console.error('Error caught:', error);
     console.error('Error info:', errorInfo);
-    console.log('Screen dimensions:', {
+
       width: window.innerWidth,
       height: window.innerHeight,
       userAgent: navigator.userAgent,
     });
-    console.log('Is responsive-related:', isResponsiveError);
+
     console.groupEnd();
   };
 
@@ -106,8 +106,6 @@ class ResponsiveErrorBoundary extends Component<Props, State> {
         url: window.location.href,
         isResponsiveRelated: this.isResponsiveRelatedError(error),
       };
-
-      console.log('Error report prepared for monitoring:', errorReport);
 
       // Example API call to monitoring service
       // fetch('/api/errors', {

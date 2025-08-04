@@ -323,7 +323,7 @@ export const useDiscovery = () => {
       proposedDatetime?: string;
     }) => {
       // Mock challenge creation since challenges table has different schema
-      console.log('Mock create challenge:', {
+
         challenger_id: user?.id,
         opponent_id: challengedId, // Use opponent_id instead of challenged_id
         bet_points: betPoints,
@@ -333,7 +333,7 @@ export const useDiscovery = () => {
       });
 
       // Mock notification creation since notifications table doesn't exist
-      console.log('Mock create notification:', {
+
         user_id: challengedId,
         type: 'challenge_received',
         title: 'Bạn có thách đấu mới! ⚡',

@@ -1,0 +1,18 @@
+{
+  "title": "Transaction Manager",
+  "description": "Monitor, verify, and manage all platform transactions and payment processing",
+  "all_transactions": "All Transactions",
+  "pending": "Pending",
+  "completed": "Completed",
+  "failed": "Failed",
+  "cancelled": "Cancelled",
+  "refunds": "Refunds",
+  "search_placeholder": "Search transactions, users...",
+  "transaction_id": "Transaction ID",
+  "amount": "Amount",
+  "status": "Status",
+  "method": "Method",
+  "date": "Date",
+  "user": "User",
+  "actions": "Actions"
+}

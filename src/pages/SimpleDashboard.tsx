@@ -8,7 +8,6 @@ import CheckInWidget from '@/components/CheckInWidget';
 
 const SimpleDashboard = () => {
   const { user } = useAuth();
-  console.log('SimpleDashboard: Component is rendering');
 
   return (
     <>

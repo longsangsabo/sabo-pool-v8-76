@@ -3,7 +3,7 @@ import { SecuritySettings } from '@/components/security/SecuritySettings';
 
 const SecurityPage: React.FC = () => {
   const handleSaveSettings = (settings: any) => {
-    // ...removed console.log('Security settings saved:', settings)
+
     // Handle saving security settings
   };
 

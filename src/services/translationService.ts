@@ -56,7 +56,7 @@ class TranslationService {
   // Detect new pages by monitoring route changes
   detectNewPage(pagePath: string, componentName: string): void {
     if (!this.knownPages.has(pagePath)) {
-      console.log(`🆕 Phát hiện trang mới: ${pagePath}`);
+
       this.knownPages.add(pagePath);
       this.queuePageForTranslation(pagePath, componentName);
     }
@@ -98,7 +98,6 @@ class TranslationService {
     customKeys?: string[]
   ): Promise<void> {
     try {
-      console.log(`📝 Đưa trang vào hàng đợi dịch thuật: ${pagePath}`);
 
       // Use custom keys if provided, otherwise generate sample keys
       const translationKeys = customKeys || [
@@ -122,8 +121,6 @@ class TranslationService {
       this.tasks.push(newTask);
       this.saveTasks();
 
-      console.log('✅ Đã thêm task dịch thuật:', newTask);
-
       // Auto-process with a small delay
       setTimeout(() => {
         this.processTranslationQueue();
@@ -144,8 +141,6 @@ class TranslationService {
         return;
       }
 
-      console.log(`🔄 Xử lý ${pendingTasks.length} tasks dịch thuật`);
-
       for (const task of pendingTasks) {
         await this.translateTask(task);
       }
@@ -165,8 +160,6 @@ class TranslationService {
         this.saveTasks();
       }
 
-      console.log(`🔄 Bắt đầu dịch: ${task.page_path}`);
-
       // Simulate translation process
       await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -184,7 +177,6 @@ class TranslationService {
         this.saveTasks();
       }
 
-      console.log(`✅ Dịch thành công: ${task.page_path}`);
     } catch (error) {
       console.error(`❌ Lỗi khi dịch ${task.page_path}:`, error);
 
@@ -222,7 +214,7 @@ class TranslationService {
         .catch(() => ({ error: 'Network error' }));
 
       if (error) {
-        console.warn('Edge function unavailable, using fallback:', error);
+
         return this.generateFallbackTranslations(keys, targetLanguage);
       }
 
@@ -369,13 +361,13 @@ class TranslationService {
     pagePath: string,
     componentName: string
   ): Promise<void> {
-    console.log(`🔧 Dịch thủ công: ${pagePath}`);
+
     await this.queuePageForTranslation(pagePath, componentName);
   }
 
   // Batch translate all untranslated pages
   async batchTranslateAll(): Promise<void> {
-    console.log('🚀 Bắt đầu dịch hàng loạt tất cả trang');
+
     await this.processTranslationQueue();
   }
 
@@ -383,7 +375,7 @@ class TranslationService {
   clearAllTasks(): void {
     this.tasks = [];
     this.saveTasks();
-    console.log('🗑️ Đã xóa tất cả tasks dịch thuật');
+
   }
 }
 

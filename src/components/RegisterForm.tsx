@@ -136,7 +136,6 @@ const RegisterForm = () => {
 
   // Check for existing email/phone before registration
   const checkExistingUser = async (email: string, phone: string) => {
-    console.log('Checking existing user with email:', email, 'phone:', phone);
 
     // Check email in auth.users through profiles
     const { data: existingProfile, error: profileError } = await (
@@ -161,7 +160,7 @@ const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
-      console.log('Registration attempt:', {
+
         email: data.email,
         fullName: data.fullName,
         phone: data.phone,

@@ -50,13 +50,13 @@ const EnhancedMarketplacePage = () => {
   };
 
   const handleItemClick = (item: any) => {
-    console.log('Navigate to item detail:', item.id);
+
     // Navigate to item detail page
     toast.info(`Xem chi tiết: ${item.title}`);
   };
 
   const handleFavorite = (itemId: string) => {
-    console.log('Toggle favorite for item:', itemId);
+
     toast.success('Đã thêm vào danh sách yêu thích');
   };
 

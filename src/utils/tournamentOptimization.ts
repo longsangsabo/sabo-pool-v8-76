@@ -50,7 +50,6 @@ export const cleanupTournamentData = (tournamentId: string) => {
     .filter(key => key.includes(tournamentId))
     .forEach(key => operationTimestamps.delete(key));
 
-  console.log('🧹 Cleaned up tournament data for:', tournamentId);
 };
 
 // Debounced function utility
@@ -73,11 +72,10 @@ export const trackTournamentPerformance = (
   startTime: number
 ) => {
   const duration = Date.now() - startTime;
-  console.log(`⚡ ${operation} for tournament ${tournamentId}: ${duration}ms`);
 
   // Log slow operations
   if (duration > 2000) {
-    console.warn(`🐌 Slow operation detected: ${operation} took ${duration}ms`);
+
   }
 };
 

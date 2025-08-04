@@ -170,7 +170,7 @@ export const useTournamentOptimizations = (config: OptimizationConfig = {}) => {
     const memoryDelta = endMemory - startMemory;
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Performance [${label}]:`, {
+
         duration: `${duration.toFixed(2)}ms`,
         memoryDelta: `${(memoryDelta / 1024 / 1024).toFixed(2)}MB`,
         cacheHitRate: `${(

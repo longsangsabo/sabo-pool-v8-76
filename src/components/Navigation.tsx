@@ -99,7 +99,7 @@ const Navigation = () => {
 
     // Add timeout to prevent hanging
     const timeoutId = setTimeout(() => {
-      console.warn('User status check timed out');
+
       setIsClubOwner(false);
       setIsAdmin(false);
     }, 5000); // 5 second timeout

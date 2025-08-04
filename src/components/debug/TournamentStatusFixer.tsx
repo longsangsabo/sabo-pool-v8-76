@@ -22,7 +22,6 @@ export const TournamentStatusFixer: React.FC<TournamentStatusFixerProps> = ({
     setIsFixing(true);
 
     try {
-      console.log('🔧 Fixing tournament status for:', tournamentId);
 
       // Use proper tournament repair function
       const { data, error } = await supabase.rpc(
@@ -38,7 +37,6 @@ export const TournamentStatusFixer: React.FC<TournamentStatusFixerProps> = ({
         return;
       }
 
-      console.log('✅ Fix result:', data);
       setLastResult(data);
 
       if (

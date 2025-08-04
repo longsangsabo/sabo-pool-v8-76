@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELO Integration Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🎯 Official ELO System Integration Test</h1>
+    
+    <div id="status"></div>
+    
+    <button onclick="testConnection()">Test Database Connection</button>
+    <button onclick="testRankDefinitions()">Check Rank Definitions</button>
+    <button onclick="applyELOIntegration()">Apply ELO Integration</button>
+    <button onclick="validateIntegration()">Validate Integration</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const SUPABASE_URL = 'https://exlqvlbawytbglioqfbc.supabase.co';
+        const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4bHF2bGJhd3l0YmdsaW9xZmJjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzA4MDA4OCwiZXhwIjoyMDY4NjU2MDg4fQ.8oZlR-lyaDdGZ_mvvyH2wJsJbsD0P6MT9ZkiyASqLcQ';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+        
+        function addStatus(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            document.getElementById('status').appendChild(div);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testConnection() {
+            clearResults();
+            addStatus('🔍 Testing database connection...', 'info');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('rank_definitions')
+                    .select('count', { count: 'exact' })
+                    .limit(1);
+                
+                if (error) {
+                    addStatus(`❌ Connection failed: ${error.message}`, 'error');
+                } else {
+                    addStatus('✅ Database connection successful!', 'success');
+                }
+            } catch (err) {
+                addStatus(`💥 Connection error: ${err.message}`, 'error');
+            }
+        }
+        
+        async function testRankDefinitions() {
+            clearResults();
+            addStatus('📊 Checking current rank definitions...', 'info');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('rank_definitions')
+                    .select('rank_code, elo_requirement, rank_description')
+                    .order('elo_requirement');
+                
+                if (error) {
+                    addStatus(`❌ Error: ${error.message}`, 'error');
+                } else {
+                    addStatus(`✅ Found ${data.length} rank definitions`, 'success');
+                    
+                    let resultsHTML = '<h3>Current Rank Structure:</h3><table border="1" style="border-collapse: collapse; width: 100%;"><tr><th>Rank</th><th>ELO</th><th>Description</th></tr>';
+                    data.forEach(rank => {
+                        resultsHTML += `<tr><td>${rank.rank_code}</td><td>${rank.elo_requirement}</td><td>${rank.rank_description}</td></tr>`;
+                    });
+                    resultsHTML += '</table>';
+                    
+                    document.getElementById('results').innerHTML = resultsHTML;
+                }
+            } catch (err) {
+                addStatus(`💥 Error: ${err.message}`, 'error');
+            }
+        }
+        
+        async function applyELOIntegration() {
+            clearResults();
+            addStatus('🚀 Applying Official ELO System Integration...', 'info');
+            
+            const officialRanks = [
+                { rank_code: 'K', elo_requirement: 1000, rank_description: 'Tân thủ - 2-4 bi khi hình dễ, chưa nắm kỹ thuật' },
+                { rank_code: 'K+', elo_requirement: 1100, rank_description: 'Người chơi mới - 2-4 bi tốt hơn, hiểu luật và kỹ thuật cơ bản' },
+                { rank_code: 'I', elo_requirement: 1200, rank_description: 'Novice - 3-5 bi, chưa clear chấm, điều bi hạn chế' },
+                { rank_code: 'I+', elo_requirement: 1300, rank_description: 'Novice+ - 3-5 bi tiến bộ, nhắm & kê cơ chắc, học điều bi' },
+                { rank_code: 'H', elo_requirement: 1400, rank_description: 'Intermediate - 5-6 bi, rùa 1 chấm hình thuận' },
+                { rank_code: 'H+', elo_requirement: 1500, rank_description: 'Intermediate+ - 6-8 bi, clear 1 chấm hình dễ' },
+                { rank_code: 'G', elo_requirement: 1600, rank_description: 'Advanced - Clear 1 chấm + 3-7 bi, điều bi hoàn thiện' },
+                { rank_code: 'G+', elo_requirement: 1700, rank_description: 'Advanced+ - Clear 1 chấm + 3-7 bi, phá 2 chấm hình đẹp' },
+                { rank_code: 'F', elo_requirement: 1800, rank_description: 'Expert - 60% clear 1 chấm, safety cơ bản chắc' },
+                { rank_code: 'F+', elo_requirement: 1900, rank_description: 'Expert+ - 70% clear 1 chấm, điều bi 3 băng, safety hiệu quả' },
+                { rank_code: 'E', elo_requirement: 2000, rank_description: 'Master - 90% clear 1 chấm, phá 2 chấm khi thuận' },
+                { rank_code: 'E+', elo_requirement: 2100, rank_description: 'Elite - 90%+ clear 1 chấm, tiệm cận bán-chuyên' }
+            ];
+            
+            try {
+                let successCount = 0;
+                
+                for (const rank of officialRanks) {
+                    const { error } = await supabase
+                        .from('rank_definitions')
+                        .update({
+                            elo_requirement: rank.elo_requirement,
+                            rank_description: rank.rank_description
+                        })
+                        .eq('rank_code', rank.rank_code);
+                    
+                    if (error) {
+                        addStatus(`❌ Error updating ${rank.rank_code}: ${error.message}`, 'error');
+                    } else {
+                        successCount++;
+                        addStatus(`✅ Updated ${rank.rank_code} to ${rank.elo_requirement} ELO`, 'success');
+                    }
+                }
+                
+                addStatus(`🎉 Integration completed! Updated ${successCount}/${officialRanks.length} ranks`, 'success');
+                
+                // Add ELO configurations
+                const configs = [
+                    { config_key: 'elo_system_version', config_value: '"v2.0_official"', description: 'Official ELO system version', category: 'elo' },
+                    { config_key: 'elo_base_rating', config_value: '1000', description: 'Starting ELO for new players', category: 'elo' },
+                    { config_key: 'tournament_elo_champion', config_value: '80', description: 'Champion ELO reward', category: 'tournaments' }
+                ];
+                
+                for (const config of configs) {
+                    const { error } = await supabase
+                        .from('game_configurations')
+                        .upsert(config, { onConflict: 'config_key' });
+                    
+                    if (!error) {
+                        addStatus(`✅ Added config: ${config.config_key}`, 'success');
+                    }
+                }
+                
+            } catch (err) {
+                addStatus(`💥 Integration failed: ${err.message}`, 'error');
+            }
+        }
+        
+        async function validateIntegration() {
+            clearResults();
+            addStatus('🔍 Validating ELO Integration...', 'info');
+            
+            try {
+                // Check rank structure
+                const { data: ranks, error: rankError } = await supabase
+                    .from('rank_definitions')
+                    .select('rank_code, elo_requirement')
+                    .order('elo_requirement');
+                
+                if (rankError) {
+                    addStatus(`❌ Rank validation failed: ${rankError.message}`, 'error');
+                    return;
+                }
+                
+                // Validate official structure
+                const expectedRanks = ['K', 'K+', 'I', 'I+', 'H', 'H+', 'G', 'G+', 'F', 'F+', 'E', 'E+'];
+                const expectedELOs = [1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100];
+                
+                let validationPassed = true;
+                let resultsHTML = '<h3>Validation Results:</h3><table border="1" style="border-collapse: collapse; width: 100%;"><tr><th>Rank</th><th>Expected ELO</th><th>Actual ELO</th><th>Status</th></tr>';
+                
+                for (let i = 0; i < expectedRanks.length; i++) {
+                    const expectedRank = expectedRanks[i];
+                    const expectedELO = expectedELOs[i];
+                    const actualRank = ranks.find(r => r.rank_code === expectedRank);
+                    
+                    if (!actualRank) {
+                        resultsHTML += `<tr><td>${expectedRank}</td><td>${expectedELO}</td><td>Missing</td><td style="color: red;">❌ FAIL</td></tr>`;
+                        validationPassed = false;
+                    } else if (actualRank.elo_requirement !== expectedELO) {
+                        resultsHTML += `<tr><td>${expectedRank}</td><td>${expectedELO}</td><td>${actualRank.elo_requirement}</td><td style="color: orange;">⚠️  MISMATCH</td></tr>`;
+                        validationPassed = false;
+                    } else {
+                        resultsHTML += `<tr><td>${expectedRank}</td><td>${expectedELO}</td><td>${actualRank.elo_requirement}</td><td style="color: green;">✅ PASS</td></tr>`;
+                    }
+                }
+                
+                resultsHTML += '</table>';
+                document.getElementById('results').innerHTML = resultsHTML;
+                
+                if (validationPassed) {
+                    addStatus('🎉 Validation PASSED! Official ELO system is correctly integrated.', 'success');
+                } else {
+                    addStatus('⚠️ Validation FAILED! Some discrepancies found.', 'warning');
+                }
+                
+            } catch (err) {
+                addStatus(`💥 Validation error: ${err.message}`, 'error');
+            }
+        }
+        
+        // Auto-test connection on load
+        window.onload = () => {
+            addStatus('🎯 ELO Integration Test Interface Ready', 'info');
+            testConnection();
+        };
+    </script>
+</body>
+</html>

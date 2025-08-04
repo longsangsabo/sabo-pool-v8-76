@@ -139,7 +139,6 @@ export const useProfile = () => {
   useEffect(() => {
     if (!profile) return; // Only set up subscription after profile is loaded
 
-    console.log(
       '[useProfile] Setting up enhanced real-time subscription for user:',
       profile.user_id
     );
@@ -155,7 +154,7 @@ export const useProfile = () => {
           filter: `user_id=eq.${profile.user_id}`,
         },
         payload => {
-          console.log(
+
             '[useProfile] Real-time profile update received:',
             payload
           );
@@ -165,7 +164,7 @@ export const useProfile = () => {
           const newRank = payload.new?.verified_rank;
 
           if (oldRank !== newRank) {
-            console.log('[useProfile] Profile rank updated via real-time:', {
+
               old: oldRank,
               new: newRank,
             });
@@ -174,13 +173,13 @@ export const useProfile = () => {
             const refreshWithRetry = async (attempts = 3) => {
               for (let i = 0; i < attempts; i++) {
                 try {
-                  console.log(
+
                     `[useProfile] Refresh attempt ${i + 1}/${attempts}`
                   );
                   const updatedProfile = await getProfile();
                   if (updatedProfile) {
                     setProfile(updatedProfile);
-                    console.log(
+
                       '[useProfile] Profile updated successfully with new rank:',
                       updatedProfile.current_rank
                     );
@@ -213,7 +212,7 @@ export const useProfile = () => {
           filter: `user_id=eq.${profile.user_id}`,
         },
         payload => {
-          console.log(
+
             '[useProfile] Player rankings updated via real-time:',
             payload
           );
@@ -224,7 +223,7 @@ export const useProfile = () => {
               const updatedProfile = await getProfile();
               if (updatedProfile) {
                 setProfile(updatedProfile);
-                console.log(
+
                   '[useProfile] Profile updated with new ranking data'
                 );
               }
@@ -240,11 +239,11 @@ export const useProfile = () => {
         }
       )
       .subscribe(status => {
-        console.log('[useProfile] Real-time subscription status:', status);
+
       });
 
     return () => {
-      console.log('[useProfile] Cleaning up real-time subscription');
+
       supabase.removeChannel(channel);
     };
   }, [profile?.user_id]); // Depend on profile.user_id to avoid unnecessary re-subscriptions

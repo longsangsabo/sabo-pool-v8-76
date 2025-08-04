@@ -65,7 +65,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
   const loadRewardsFromDatabase = useCallback(
     async (tournament: any, rank: RankCode = getDefaultRank()) => {
       try {
-        console.log(
+
           '🔍 Loading rewards from database for tournament:',
           tournament.id
         );
@@ -87,10 +87,9 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
             },
             rank
           );
-          console.log('📝 Calculating rewards from tournament data');
+
         }
 
-        console.log('✅ Loaded rewards:', rewards);
         return (
           rewards || {
             totalPrize: 0,
@@ -216,7 +215,6 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
           throw new Error('Giải đấu không tồn tại');
         }
 
-        console.log('✅ Tournament loaded:', data);
         setTournament(data);
 
         // Load rewards
@@ -244,7 +242,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveTournamentRewards = useCallback(
     async (tournamentId: string, rewardsData: TournamentRewards) => {
       try {
-        console.log('💾 Saving tournament rewards:', {
+
           tournamentId,
           rewardsData,
         });
@@ -296,7 +294,7 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         if (!data) {
-          console.warn('⚠️ No tournament data found for:', tournamentId);
+
           return null;
         }
 
@@ -318,8 +316,6 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!user) {
         throw new Error('User must be authenticated');
       }
-
-      console.log('🔍 Loading latest tournament for user:', user.id);
 
       const { data, error: fetchError } = await supabase
         .from('tournaments')
@@ -354,12 +350,10 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       if (!data) {
-        console.log('ℹ️ No previous tournaments found for user');
+
         toast.info('Không tìm thấy giải đấu trước đó để sao chép dữ liệu');
         return null;
       }
-
-      console.log('✅ Latest tournament loaded:', data);
 
       // Create template data with updated dates
       const now = new Date();
@@ -522,9 +516,9 @@ export const TournamentProvider: React.FC<{ children: React.ReactNode }> = ({
         );
 
         if (success) {
-          console.log('✅ Reward template applied successfully');
+
         } else {
-          console.warn(
+
             '⚠️ Failed to apply reward template, but tournament created'
           );
         }

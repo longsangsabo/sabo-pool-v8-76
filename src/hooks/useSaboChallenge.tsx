@@ -70,7 +70,7 @@ export function useSaboChallenge() {
 
     try {
       // Mock data to avoid TypeScript issues - replace with actual API call when needed
-      console.log('Fetching SABO challenges for user:', user.id);
+
       return [];
     } catch (error) {
       console.error('Error fetching SABO challenges:', error);

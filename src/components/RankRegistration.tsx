@@ -59,7 +59,6 @@ const RankRegistration = () => {
   const fetchClubs = async () => {
     try {
       setIsLoadingClubs(true);
-      console.log('Fetching clubs...');
 
       // First try to get approved clubs
       const { data: approvedClubs, error: approvedError } = await supabase
@@ -73,11 +72,8 @@ const RankRegistration = () => {
         throw approvedError;
       }
 
-      console.log('Approved clubs found:', approvedClubs?.length || 0);
-
       // If no approved clubs, try to get all active clubs as fallback
       if (!approvedClubs || approvedClubs.length === 0) {
-        console.log('No approved clubs found, trying all active clubs...');
 
         const { data: allClubs, error: allError } = await supabase
           .from('clubs')
@@ -90,7 +86,6 @@ const RankRegistration = () => {
           throw allError;
         }
 
-        console.log('All active clubs found:', allClubs?.length || 0);
         setClubs((allClubs as any) || []);
       } else {
         setClubs(approvedClubs as any);

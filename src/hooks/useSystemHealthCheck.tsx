@@ -23,7 +23,7 @@ export const useSystemHealthCheck = (
     criticalIssueThreshold: 3,
   }
 ) => {
-  console.log('[HealthCheck] 🏥 Health check system initializing...');
+
   const queryClient = useQueryClient();
   const [healthChecks, setHealthChecks] = useState<HealthCheckItem[]>([
     {
@@ -49,7 +49,6 @@ export const useSystemHealthCheck = (
   const [criticalIssues, setCriticalIssues] = useState<string[]>([]);
 
   const performHealthCheck = async () => {
-    console.log('[HealthCheck] Starting system health check...');
 
     const results: HealthCheckItem[] = [];
 
@@ -147,11 +146,9 @@ export const useSystemHealthCheck = (
       );
     }
 
-    console.log('[HealthCheck] Health check completed:', results);
   };
 
   const autoFixCriticalIssues = async (issues: string[]) => {
-    console.log('[HealthCheck] Auto-fixing critical issues:', issues);
 
     for (const issue of issues) {
       try {
@@ -193,13 +190,13 @@ export const useSystemHealthCheck = (
 
   // Temporarily disable periodic health checks to reduce load during startup issues
   useEffect(() => {
-    console.log(
+
       '[HealthCheck] ⚠️ Periodic health checks temporarily disabled for performance debugging'
     );
 
     // Only run initial check after a delay to not interfere with page load
     const timer = setTimeout(() => {
-      console.log('[HealthCheck] Running delayed initial health check...');
+
       performHealthCheck();
     }, 10000); // 10 seconds delay
 

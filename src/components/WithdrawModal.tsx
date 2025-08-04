@@ -55,7 +55,7 @@ const WithdrawModal = ({
     setLoading(true);
     try {
       // Mock withdrawal request since wallet_transactions table doesn't exist
-      console.log('Mock withdrawal request:', {
+
         wallet_id: wallet.id,
         transaction_type: 'withdraw',
         amount: parseInt(amount),

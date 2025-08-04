@@ -70,7 +70,7 @@ export const useOptimizedMatches = () => {
         .limit(5);
 
       if (error) {
-        console.warn('Live matches query failed, using fallback:', error);
+
         setLiveMatches([]);
         return;
       }
@@ -172,10 +172,10 @@ export const useOptimizedMatches = () => {
       const challenges = acceptedChallenges.data || [];
 
       if (scheduledMatches.error) {
-        console.warn('Scheduled matches query failed:', scheduledMatches.error);
+
       }
       if (acceptedChallenges.error) {
-        console.warn(
+
           'Accepted challenges query failed:',
           acceptedChallenges.error
         );
@@ -267,7 +267,7 @@ export const useOptimizedMatches = () => {
         .limit(5);
 
       if (error) {
-        console.warn('Recent results query failed, using fallback:', error);
+
         setRecentResults([]);
         return;
       }

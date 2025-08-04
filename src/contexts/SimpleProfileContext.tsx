@@ -40,17 +40,14 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   const { user } = useAuth();
 
   // Add console logging for debugging real-time events
-  console.log('[SimpleProfileContext] Provider rendered, user:', user?.id);
 
   // Single API call to fetch profile with enhanced logging
   const fetchProfile = useCallback(async () => {
     if (!user) {
-      console.log('[SimpleProfileContext] No user, setting loading to false');
+
       setIsLoading(false);
       return;
     }
-
-    console.log('[SimpleProfileContext] Fetching profile for user:', user.id);
 
     try {
       const { data, error } = await supabase
@@ -66,7 +63,6 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
         throw error;
       }
 
-      console.log('[SimpleProfileContext] Profile fetched successfully:', {
         id: data?.id,
         verified_rank: data?.verified_rank,
         full_name: data?.full_name,
@@ -111,7 +107,6 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (!user) return;
 
-    console.log(
       '[SimpleProfileContext] Setting up real-time subscription for user:',
       user.id
     );
@@ -127,7 +122,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log(
+
             '[SimpleProfileContext] Real-time profile update received:',
             payload
           );
@@ -137,7 +132,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
           const newRank = payload.new?.verified_rank;
 
           if (oldRank !== newRank) {
-            console.log('[SimpleProfileContext] Verified rank changed:', {
+
               old: oldRank,
               new: newRank,
             });
@@ -148,14 +143,14 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       )
       .subscribe(status => {
-        console.log(
+
           '[SimpleProfileContext] Real-time subscription status:',
           status
         );
       });
 
     return () => {
-      console.log('[SimpleProfileContext] Cleaning up real-time subscription');
+
       supabase.removeChannel(channel);
     };
   }, [user, fetchProfile]);
@@ -163,7 +158,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   // Auto-refresh on page focus
   useEffect(() => {
     const handleFocus = () => {
-      console.log('[SimpleProfileContext] Page focused, refreshing profile');
+
       fetchProfile();
     };
 
@@ -176,7 +171,7 @@ export const SimpleProfileProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!user) return;
 
     const interval = setInterval(() => {
-      console.log('[SimpleProfileContext] Background refresh triggered');
+
       fetchProfile();
     }, 30000);
 

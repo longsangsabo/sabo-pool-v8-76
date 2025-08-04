@@ -41,7 +41,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
 
       // If no prize tiers exist, create default ones
       if (!data || data.length === 0) {
-        console.log(
+
           '🔧 No prize tiers found, creating default ones for tournament:',
           tournamentId
         );
@@ -104,7 +104,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
     rewards: TournamentRewards
   ): Omit<TournamentPrizeTier, 'id'>[] => {
     if (!tournamentId || tournamentId.trim() === '') {
-      console.warn('⚠️ Cannot convert to prize tiers without tournamentId');
+
       return [];
     }
 
@@ -127,7 +127,7 @@ export function useTournamentRewardsManager(tournamentId: string) {
     mutationFn: async (rewards: TournamentRewards) => {
       // If no tournamentId, skip database save but return success for UI consistency
       if (!tournamentId || tournamentId.trim() === '') {
-        console.log(
+
           '⏸️ No tournamentId provided, skipping database save for now'
         );
         return rewards;

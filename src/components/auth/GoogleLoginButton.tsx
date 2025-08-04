@@ -11,7 +11,7 @@ export const GoogleLoginButton = () => {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      console.log('Initiating Google login...');
+
       const { error } = await signInWithGoogle();
 
       if (error) {
@@ -36,7 +36,7 @@ export const GoogleLoginButton = () => {
           toast.error(`❌ Lỗi Google Login: ${error.message}`);
         }
       } else {
-        console.log('Google login initiated successfully');
+
       }
     } catch (error) {
       console.error('Google login catch error:', error);

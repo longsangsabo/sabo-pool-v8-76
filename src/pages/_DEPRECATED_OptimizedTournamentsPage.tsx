@@ -345,7 +345,6 @@ const OptimizedTournamentsPage: React.FC = () => {
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       const interval = setInterval(() => {
-        console.log('Tournament Page Performance:', getPerformanceStats());
       }, 10000);
       return () => clearInterval(interval);
     }

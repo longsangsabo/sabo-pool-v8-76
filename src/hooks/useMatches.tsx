@@ -14,7 +14,6 @@ export const useMatches = () => {
 
     try {
       // Mock match creation since the database doesn't have all required fields
-      console.log('Mock creating match:', matchData);
 
       const mockMatch: Match = {
         id: Date.now().toString(),

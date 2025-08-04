@@ -14,7 +14,6 @@ export const useRankNotificationAutomation = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log(
       '[RankNotificationAutomation] Setting up rank approval listener for user:',
       user.id
     );
@@ -31,7 +30,7 @@ export const useRankNotificationAutomation = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log(
+
             '[RankNotificationAutomation] Notification received:',
             payload
           );
@@ -45,7 +44,7 @@ export const useRankNotificationAutomation = () => {
             notification.message?.includes('được duyệt') ||
             notification.message?.includes('approved')
           ) {
-            console.log(
+
               '[RankNotificationAutomation] Rank approval detected, triggering profile refresh'
             );
 
@@ -59,7 +58,7 @@ export const useRankNotificationAutomation = () => {
 
             // Backup refresh after 2 seconds
             setTimeout(() => {
-              console.log(
+
                 '[RankNotificationAutomation] Backup refresh triggered'
               );
               refreshProfile();
@@ -67,7 +66,7 @@ export const useRankNotificationAutomation = () => {
 
             // Final refresh after 5 seconds to ensure consistency
             setTimeout(() => {
-              console.log(
+
                 '[RankNotificationAutomation] Final refresh triggered'
               );
               refreshProfile();
@@ -76,14 +75,14 @@ export const useRankNotificationAutomation = () => {
         }
       )
       .subscribe(status => {
-        console.log(
+
           '[RankNotificationAutomation] Notification subscription status:',
           status
         );
       });
 
     return () => {
-      console.log(
+
         '[RankNotificationAutomation] Cleaning up notification listener'
       );
       supabase.removeChannel(notificationChannel);

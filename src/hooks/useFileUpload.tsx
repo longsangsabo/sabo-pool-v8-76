@@ -75,7 +75,6 @@ export const useFileUpload = () => {
         filePath = `${userId}/${filePath}`;
       }
 
-      console.log(
         `Uploading file to bucket: ${options.bucket}, path: ${filePath}`
       );
 
@@ -92,8 +91,6 @@ export const useFileUpload = () => {
         toast.error(`Lỗi upload: ${error.message}`);
         return { error: error.message };
       }
-
-      console.log('Upload successful:', data);
 
       // Get public URL
       const { data: urlData } = supabase.storage

@@ -319,9 +319,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
             </Button>
           );
         }
-        break;
-
-      case 'pending':
+        
         if (isOpponent && onAction) {
           return (
             <div className='flex gap-2'>

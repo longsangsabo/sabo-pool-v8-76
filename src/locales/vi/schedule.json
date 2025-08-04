@@ -1,0 +1,17 @@
+{
+  "title": "Quản Lý Lịch Trình",
+  "description": "Quản lý sự kiện, giải đấu, cửa sổ bảo trì và lập lịch tự động",
+  "calendar_view": "Xem Lịch",
+  "all_events": "Tất Cả Sự Kiện",
+  "templates": "Mẫu",
+  "automation": "Tự Động",
+  "settings": "Cài Đặt",
+  "tournaments": "Giải Đấu",
+  "maintenance": "Bảo Trì",
+  "recurring": "Lặp Lại",
+  "search_placeholder": "Tìm kiếm sự kiện, giải đấu...",
+  "add_event": "Thêm Sự Kiện",
+  "import_calendar": "Nhập Lịch",
+  "export_schedule": "Xuất Lịch Trình",
+  "upcoming_events": "Sự Kiện Sắp Tới"
+}

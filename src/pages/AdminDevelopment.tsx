@@ -104,8 +104,6 @@ const AdminDevelopment: React.FC = () => {
         throw new Error(error.message || 'Không thể tạo demo users');
       }
 
-      console.log('Demo users created:', data);
-
       toast({
         title: 'Thành công!',
         description: `Đã tạo ${userCount} demo users`,
@@ -150,7 +148,7 @@ const AdminDevelopment: React.FC = () => {
       );
 
       if (functionError) {
-        console.warn('Edge function cleanup warning:', functionError);
+
       }
 
       toast({

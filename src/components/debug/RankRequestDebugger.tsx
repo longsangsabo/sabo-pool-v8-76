@@ -69,14 +69,13 @@ const RankRequestDebugger = () => {
         toast.success(
           `Found ${basicRequests?.length || 0} rank requests (basic query)`
         );
-        console.log('Basic rank requests:', basicRequests);
+
         return;
       }
 
       toast.success(
         `✅ Found ${rankRequests?.length || 0} rank requests for club ${clubProfile.club_name}`
       );
-      console.log('Rank requests with profiles:', rankRequests);
 
       // Test 4: Get user profiles separately if needed
       if (rankRequests && rankRequests.length > 0) {
@@ -86,7 +85,6 @@ const RankRequestDebugger = () => {
           .select('user_id, full_name, display_name, avatar_url')
           .in('user_id', userIds);
 
-        console.log('User profiles:', profiles);
       }
     } catch (error: any) {
       toast.error(`Test failed: ${error.message}`);
@@ -105,7 +103,7 @@ const RankRequestDebugger = () => {
           table: 'rank_requests',
         },
         payload => {
-          console.log('🔥 Realtime update:', payload);
+
           toast.success(`Realtime update: ${payload.eventType}`);
         }
       )

@@ -44,7 +44,6 @@ export const SABODoubleEliminationViewer: React.FC<
   const refreshWithScrollPreservation = useCallback(() => {
     // Save current scroll position
     scrollPositionRef.current = window.scrollY;
-    console.log('🔄 Saving scroll position:', scrollPositionRef.current);
 
     refresh();
 
@@ -52,7 +51,7 @@ export const SABODoubleEliminationViewer: React.FC<
     const restoreScrollPosition = () => {
       const targetPosition = scrollPositionRef.current;
       window.scrollTo({ top: targetPosition, behavior: 'instant' });
-      console.log('📍 Restored scroll position to:', targetPosition);
+
     };
 
     // Immediate restore

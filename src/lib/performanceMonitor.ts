@@ -171,7 +171,7 @@ class PerformanceMonitor {
     this.metrics.push(metric);
 
     // Log for debugging
-    console.log(`[Performance] ${name}:`, value, metadata);
+
   }
 
   public trackAPICall(
@@ -193,7 +193,7 @@ class PerformanceMonitor {
 
     // Log slow API calls
     if (duration > 2000) {
-      console.warn(
+
         `[Performance] Slow API call: ${method} ${endpoint} - ${duration}ms`
       );
     }

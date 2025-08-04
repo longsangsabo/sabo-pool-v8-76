@@ -23,19 +23,19 @@ export const MobileFloatingActionButton: React.FC<
     {
       icon: Swords,
       label: 'Thách đấu',
-      action: () => console.log('Challenge created'),
+
       color: 'bg-orange-500 hover:bg-orange-600',
     },
     {
       icon: Trophy,
       label: 'Tạo giải',
-      action: () => console.log('Tournament created'),
+
       color: 'bg-purple-500 hover:bg-purple-600',
     },
     {
       icon: Camera,
       label: 'Chia sẻ',
-      action: () => console.log('Share content'),
+
       color: 'bg-green-500 hover:bg-green-600',
     },
   ];

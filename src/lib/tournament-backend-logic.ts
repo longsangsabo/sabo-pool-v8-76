@@ -7,7 +7,7 @@ export const executePostBracketSaveLogic = async (
   tournamentId: string,
   bracketData: any
 ) => {
-  console.log(
+
     '🚀 Executing post-bracket save workflow for tournament:',
     tournamentId
   );
@@ -34,7 +34,6 @@ export const executePostBracketSaveLogic = async (
     // Step 7: Update Analytics & Stats
     await updateTournamentAnalytics(tournamentId);
 
-    console.log('✅ Post-bracket save workflow completed successfully');
   } catch (error) {
     console.error('💥 Post-bracket save workflow failed:', error);
     await rollbackTournamentStart(tournamentId);
@@ -47,7 +46,6 @@ const updateTournamentStatus = async (
   tournamentId: string,
   bracketData: any
 ) => {
-  console.log('📊 Updating tournament status and metadata...');
 
   const updateData = {
     status: 'ongoing',
@@ -65,7 +63,6 @@ const updateTournamentStatus = async (
   if (error)
     throw new Error(`Failed to update tournament status: ${error.message}`);
 
-  console.log('✅ Tournament status updated to ongoing');
 };
 
 // ===== 3. PROCESS TOURNAMENT SEEDING =====
@@ -73,7 +70,6 @@ const processTournamentSeeding = async (
   tournamentId: string,
   participants: any[]
 ) => {
-  console.log('🎯 Processing tournament seeding...');
 
   const seedingData = participants.map((participant, index) => ({
     id: crypto.randomUUID(),
@@ -99,15 +95,13 @@ const processTournamentSeeding = async (
     );
 
     if (error)
-      console.warn(`Seeding warning for user ${seed.user_id}:`, error.message);
+
   }
 
-  console.log(`✅ Processed seeding for ${participants.length} participants`);
 };
 
 // ===== 4. INITIALIZE TOURNAMENT WORKFLOW STEPS =====
 const initializeTournamentWorkflowSteps = async (tournamentId: string) => {
-  console.log('📋 Initializing tournament workflow steps...');
 
   // Log workflow initiation in system_logs
   await supabase.from('system_logs').insert({
@@ -127,12 +121,10 @@ const initializeTournamentWorkflowSteps = async (tournamentId: string) => {
     },
   });
 
-  console.log('✅ Tournament workflow steps initialized');
 };
 
 // ===== 5. CREATE MATCH SCHEDULE =====
 const createMatchSchedule = async (tournamentId: string, matches: any[]) => {
-  console.log('🗓️ Creating match schedule...');
 
   const baseTime = new Date();
   const matchDuration = 45 * 60 * 1000; // 45 minutes per match
@@ -164,12 +156,10 @@ const createMatchSchedule = async (tournamentId: string, matches: any[]) => {
   if (error)
     throw new Error(`Failed to create match schedule: ${error.message}`);
 
-  console.log(`✅ Created schedule for ${matches.length} matches`);
 };
 
 // ===== 6. SETUP TOURNAMENT MONITORING =====
 const setupTournamentMonitoring = async (tournamentId: string) => {
-  console.log('📊 Setting up tournament monitoring...');
 
   // Log automation start in system_logs
   const { error: logError } = await supabase.from('system_logs').insert({
@@ -185,14 +175,11 @@ const setupTournamentMonitoring = async (tournamentId: string) => {
   });
 
   if (logError)
-    console.warn('⚠️ Failed to log monitoring setup:', logError.message);
 
-  console.log('✅ Tournament monitoring setup completed');
 };
 
 // ===== 7. SEND TOURNAMENT NOTIFICATIONS =====
 const sendTournamentNotifications = async (tournamentId: string) => {
-  console.log('📢 Sending tournament notifications...');
 
   try {
     // Get tournament and participants
@@ -232,7 +219,6 @@ const sendTournamentNotifications = async (tournamentId: string) => {
 
     if (error) throw error;
 
-    console.log(`✅ Sent notifications to ${participants.length} participants`);
   } catch (error) {
     console.error('❌ Failed to send notifications:', error);
     // Non-critical error, don't throw
@@ -241,7 +227,6 @@ const sendTournamentNotifications = async (tournamentId: string) => {
 
 // ===== 8. UPDATE TOURNAMENT ANALYTICS =====
 const updateTournamentAnalytics = async (tournamentId: string) => {
-  console.log('📈 Updating tournament analytics...');
 
   try {
     const { data: tournament } = await supabase
@@ -275,7 +260,6 @@ const updateTournamentAnalytics = async (tournamentId: string) => {
 
     if (error) throw error;
 
-    console.log('✅ Tournament analytics updated');
   } catch (error) {
     console.error('❌ Failed to update analytics:', error);
     // Non-critical error, don't throw
@@ -284,7 +268,6 @@ const updateTournamentAnalytics = async (tournamentId: string) => {
 
 // ===== 9. ROLLBACK FUNCTION (ERROR RECOVERY) =====
 const rollbackTournamentStart = async (tournamentId: string) => {
-  console.log('🔄 Rolling back tournament start due to error...');
 
   try {
     // Revert tournament status
@@ -321,7 +304,6 @@ const rollbackTournamentStart = async (tournamentId: string) => {
       },
     });
 
-    console.log('✅ Tournament rollback completed');
   } catch (rollbackError) {
     console.error('💥 Rollback failed:', rollbackError);
   }

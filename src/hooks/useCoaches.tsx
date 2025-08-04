@@ -126,8 +126,6 @@ export const useCoaches = () => {
         created_at: new Date().toISOString(),
       };
 
-      console.log('Mock book session:', newSession);
-
       // Refresh sessions
       await fetchMySessions();
       return newSession;

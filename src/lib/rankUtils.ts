@@ -96,7 +96,7 @@ export const extractRankFromProfile = (profile: any): string => {
  * Log rank data for debugging
  */
 export const debugRankData = (context: string, data: any): void => {
-  console.log(`[RankDebug] ${context}:`, {
+
     verified_rank: data?.verified_rank,
     current_rank: data?.current_rank,
     rank: data?.rank,

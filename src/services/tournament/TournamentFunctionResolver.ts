@@ -111,7 +111,6 @@ export async function callTournamentFunction<T = any>(
       error.message?.includes('function') &&
       error.message?.includes('does not exist')
     ) {
-      console.warn(`Function ${functionName} not found, trying fallbacks...`);
 
       for (const fallback of fallbacks) {
         try {
@@ -119,7 +118,7 @@ export async function callTournamentFunction<T = any>(
             await supabase.rpc(fallback as any, params);
 
           if (!fallbackError) {
-            console.info(`Successfully used fallback function: ${fallback}`);
+
             return {
               data: fallbackData as T,
               error: null,
@@ -127,7 +126,7 @@ export async function callTournamentFunction<T = any>(
             };
           }
         } catch (fallbackErr) {
-          console.warn(`Fallback ${fallback} also failed:`, fallbackErr);
+
           continue;
         }
       }
@@ -209,11 +208,10 @@ export async function preloadTournamentFunctions(): Promise<{
     }
   });
 
-  console.info(
     `Tournament Functions Status: ${available.length}/${allFunctions.length} available`
   );
   if (missing.length > 0) {
-    console.warn('Missing functions:', missing);
+
   }
 
   return {

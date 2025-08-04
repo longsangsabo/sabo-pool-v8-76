@@ -23,8 +23,6 @@ export const testTournamentCreation = async () => {
     is_public: true,
   };
 
-  console.log('Testing tournament creation with data:', testData);
-
   try {
     // Mock tournament creation for testing
     const result = {
@@ -36,7 +34,6 @@ export const testTournamentCreation = async () => {
         '3': testData.prize_pool * 0.2,
       },
     };
-    console.log('Tournament created successfully:', result);
 
     // Check if prize_distribution is calculated correctly
     const expectedPrizeDistribution = {
@@ -44,10 +41,6 @@ export const testTournamentCreation = async () => {
       '2': 300000, // 30% of 1M = 300k
       '3': 200000, // 20% of 1M = 200k
     };
-
-    console.log('Expected prize_distribution:', expectedPrizeDistribution);
-    console.log('Actual prize_distribution:', result.prize_distribution);
-    console.log('Actual prize_pool:', result.prize_pool);
 
     return result;
   } catch (error) {

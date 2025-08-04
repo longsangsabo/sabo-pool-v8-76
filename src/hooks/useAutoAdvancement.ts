@@ -29,7 +29,7 @@ export const useAutoAdvancement = () => {
     async (tournamentId: string): Promise<AutoAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Auto advancing to semifinal for tournament:',
           tournamentId
         );
@@ -37,7 +37,7 @@ export const useAutoAdvancement = () => {
         const result = await setupSemifinalsPairings(tournamentId);
 
         if (result.success) {
-          console.log('✅ Semifinal auto advancement successful:', result);
+
           toast.success(
             `Đã thiết lập ${result.matches_processed || 2} trận bán kết!`
           );
@@ -47,7 +47,7 @@ export const useAutoAdvancement = () => {
             semifinal_matches_created: result.matches_processed,
           } as AutoAdvancementResult;
         } else {
-          console.log('ℹ️ Semifinal advancement not needed:', result?.message);
+
           return {
             success: false,
             error: result.error,
@@ -68,7 +68,6 @@ export const useAutoAdvancement = () => {
     async (tournamentId: string): Promise<AutoAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log('🔄 Auto advancing to final for tournament:', tournamentId);
 
         // First try to process semifinals completion
         const semifinalsResult =
@@ -78,7 +77,7 @@ export const useAutoAdvancement = () => {
         const finalResult = await finalizeTournament(tournamentId);
 
         if (finalResult.success) {
-          console.log('✅ Final auto advancement successful:', finalResult);
+
           toast.success('Đã hoàn thiện trận chung kết!');
           return {
             success: true,
@@ -86,7 +85,7 @@ export const useAutoAdvancement = () => {
             final_matches_created: finalResult.matches_processed,
           } as AutoAdvancementResult;
         } else {
-          console.log('ℹ️ Final advancement not needed:', finalResult?.message);
+
           return {
             success: false,
             error: finalResult.error,
@@ -109,7 +108,7 @@ export const useAutoAdvancement = () => {
 
       setIsProcessing(true);
       try {
-        console.log(
+
           '🤖 Processing automatic advancement for tournament:',
           tournamentId
         );

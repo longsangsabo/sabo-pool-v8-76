@@ -20,7 +20,7 @@ export const useServiceWorker = () => {
   // Register service worker
   const registerServiceWorker = async () => {
     if (!state.isSupported) {
-      console.log('Service Workers are not supported');
+
       return;
     }
 
@@ -32,8 +32,6 @@ export const useServiceWorker = () => {
         updateViaCache: 'none', // Always check for updates
       });
 
-      console.log('Service Worker registered:', registration);
-
       setState(prev => ({
         ...prev,
         isRegistered: true,
@@ -43,13 +41,13 @@ export const useServiceWorker = () => {
 
       // Check for updates
       registration.addEventListener('updatefound', () => {
-        console.log('Service Worker update found');
+
         setState(prev => ({ ...prev, updateAvailable: true }));
       });
 
       // Listen for messages from SW
       navigator.serviceWorker.addEventListener('message', event => {
-        console.log('Message from SW:', event.data);
+
       });
 
       return registration;

@@ -42,8 +42,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
       setLoading(true);
       setError(null);
 
-      console.log('🔍 Fetching registrations for tournament:', tournamentId);
-
       // Fetch tournament registrations with enhanced player data
       const { data, error: fetchError } = await supabase
         .from('tournament_registrations')
@@ -76,8 +74,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
         );
         throw fetchError;
       }
-
-      console.log('✅ Fetched registrations:', data?.length || 0);
 
       // Transform the data to match our interface
       const transformedData = (data || []).map(reg => ({
@@ -112,7 +108,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up real-time subscription for registrations:',
       tournamentId
     );
@@ -128,7 +123,6 @@ export const useTournamentRegistrations = (tournamentId: string) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Registration real-time update:', payload);
 
           // Immediately refetch to ensure accuracy with profile data
           fetchRegistrations();
@@ -137,7 +131,7 @@ export const useTournamentRegistrations = (tournamentId: string) => {
       .subscribe();
 
     return () => {
-      console.log('🔄 Cleaning up registration real-time subscription');
+
       supabase.removeChannel(channel);
     };
   }, [tournamentId]);

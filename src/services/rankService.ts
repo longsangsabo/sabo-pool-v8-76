@@ -73,7 +73,7 @@ export const rankService = {
 
 export class RankService {
   static async getRankDefinitions(): Promise<DatabaseRankDefinition[]> {
-    console.log('Mock get rank definitions');
+
     return [
       {
         rank_code: 'K',
@@ -90,27 +90,27 @@ export class RankService {
     rankCode: string,
     data: Partial<DatabaseRankDefinition>
   ) {
-    console.log('Mock update rank definition:', rankCode, data);
+
     return { success: true };
   }
 
   static async createRankDefinition(data: DatabaseRankDefinition) {
-    console.log('Mock create rank definition:', data);
+
     return { success: true, data };
   }
 
   static async deleteRankDefinition(rankCode: string) {
-    console.log('Mock delete rank definition:', rankCode);
+
     return { success: true };
   }
 
   static async getTournamentRewardStructures() {
-    console.log('Mock get tournament reward structures');
+
     return [];
   }
 
   static async calculateRankPromotion(userId: string) {
-    console.log('Mock calculate rank promotion:', userId);
+
     return { promoted: false, newRank: null };
   }
 }

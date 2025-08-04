@@ -17,7 +17,7 @@ export const useSystemMessages = () => {
   ) => {
     try {
       // Mock notification creation since function doesn't exist
-      console.log('Creating notification:', {
+
         target_user_id: targetUserId,
         notification_type: type,
         notification_title: title,
@@ -73,7 +73,7 @@ export const useSystemMessages = () => {
 
       if (notifications && notifications.length > 0) {
         // Mock bulk notification creation since function doesn't exist
-        console.log('Creating bulk notifications:', notifications);
+
       }
     } catch (error) {
       console.error('Error sending maintenance notifications:', error);

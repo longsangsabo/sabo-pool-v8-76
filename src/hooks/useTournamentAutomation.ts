@@ -40,7 +40,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
     setIsFixing(true);
     try {
-      console.log('🔧 Starting enhanced tournament progression fix...');
 
       // First, try the comprehensive fix function
       const { data: fixResult, error: fixError } = await supabase.rpc(
@@ -54,8 +53,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
         console.error('❌ Fix function error:', fixError);
         throw fixError;
       }
-
-      console.log('✅ Fix result:', fixResult);
 
       // Then check for any remaining issues and force advancement
       const { data: matches, error: matchError } = await supabase
@@ -74,7 +71,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
       // Force advancement for each completed match
       if (matches && matches.length > 0) {
-        console.log(
+
           `🎯 Force advancing ${matches.length} completed matches...`
         );
 
@@ -86,18 +83,18 @@ export const useTournamentAutomation = (tournamentId?: string) => {
             });
 
           if (advanceError) {
-            console.warn(
+
               `⚠️ Could not advance tournament ${tournamentId}:`,
               advanceError
             );
           } else {
-            console.log(
+
               `✅ Successfully advanced tournament ${tournamentId}:`,
               advanceResult
             );
           }
         } catch (err) {
-          console.warn(
+
             `⚠️ Exception advancing tournament ${tournamentId}:`,
             err
           );
@@ -132,7 +129,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up real-time double elimination automation monitoring...'
     );
 
@@ -147,7 +143,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         async payload => {
-          console.log('🎯 Tournament match updated:', payload);
 
           const newRecord = payload.new as any;
           const oldRecord = payload.old as any;
@@ -158,7 +153,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
             newRecord.winner_id &&
             (!oldRecord.winner_id || oldRecord.status !== 'completed')
           ) {
-            console.log(
+
               '🏆 Match completed with winner, trigger should auto-advance...'
             );
 
@@ -184,7 +179,6 @@ export const useTournamentAutomation = (tournamentId?: string) => {
 
                 if (automationLogs && automationLogs.length > 0) {
                   const latestLog = automationLogs[0];
-                  console.log('🔍 Found automation log:', latestLog);
 
                   setAutomationStatus(prev => ({
                     ...prev,
@@ -205,7 +199,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
                       '🎯 Double elimination automation processed successfully!'
                     );
                   } else {
-                    console.warn(
+
                       '⚠️ Automation failed, triggering manual fix...'
                     );
                     toast.warning(
@@ -214,7 +208,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
                     await fixTournamentProgression();
                   }
                 } else {
-                  console.warn(
+
                     '⚠️ No automation log found, triggering manual fix...'
                   );
                   toast.warning(
@@ -237,7 +231,7 @@ export const useTournamentAutomation = (tournamentId?: string) => {
       .subscribe();
 
     return () => {
-      console.log('🔌 Cleaning up automation monitoring');
+
       supabase.removeChannel(channel);
     };
   }, [tournamentId, fixTournamentProgression]);

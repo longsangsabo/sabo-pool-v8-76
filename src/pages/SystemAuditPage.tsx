@@ -64,7 +64,7 @@ const SystemAuditPage = () => {
   const { user, session } = useAuth();
 
   const addResult = (result: AuditResult) => {
-    console.log('Audit result:', result);
+
     setAuditResults(prev => [...prev, result]);
   };
 
@@ -77,7 +77,7 @@ const SystemAuditPage = () => {
     setCurrentTest(`${category}: ${testName}`);
 
     try {
-      console.log(`Running test: ${category} - ${testName}`);
+
       const result = await Promise.race([
         testFn(),
         new Promise((_, reject) =>
@@ -113,7 +113,6 @@ const SystemAuditPage = () => {
   };
 
   const checkBasicConnectivity = async () => {
-    console.log('Checking basic connectivity...');
 
     // Check if we can reach the current domain
     const currentDomain = window.location.origin;
@@ -131,7 +130,6 @@ const SystemAuditPage = () => {
   };
 
   const checkSupabaseConnection = async () => {
-    console.log('Checking Supabase connection...');
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -158,7 +156,6 @@ const SystemAuditPage = () => {
   };
 
   const checkAuthentication = async () => {
-    console.log('Checking authentication...');
 
     try {
       const {
@@ -188,7 +185,6 @@ const SystemAuditPage = () => {
   };
 
   const checkEnvironmentVariables = async () => {
-    console.log('Checking environment variables...');
 
     const requiredEnvVars = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY'];
 
@@ -212,7 +208,6 @@ const SystemAuditPage = () => {
   };
 
   const checkApplicationRoutes = async () => {
-    console.log('Checking application routes...');
 
     const routes = [
       '/',
@@ -253,7 +248,6 @@ const SystemAuditPage = () => {
   };
 
   const checkConsoleErrors = async () => {
-    console.log('Checking for console errors...');
 
     // Create a simple test to check if React is working
     const errors = [];
@@ -285,7 +279,6 @@ const SystemAuditPage = () => {
   };
 
   const checkSystemHealth = async () => {
-    console.log('Checking system health...');
 
     // Safely check for performance.memory (Chrome only)
     const extendedPerformance = performance as ExtendedPerformance;
@@ -326,8 +319,6 @@ const SystemAuditPage = () => {
     setAuditResults([]);
     setCurrentTest('Starting comprehensive system audit...');
 
-    console.log('=== STARTING FULL SYSTEM AUDIT ===');
-
     try {
       // 1. Basic Connectivity Tests
       await runTest(
@@ -367,7 +358,7 @@ const SystemAuditPage = () => {
     } finally {
       setIsRunning(false);
       setCurrentTest('');
-      console.log('=== AUDIT COMPLETED ===');
+
     }
   };
 
@@ -401,7 +392,7 @@ const SystemAuditPage = () => {
   }, [auditResults]);
 
   useEffect(() => {
-    console.log('SystemAuditPage mounted, starting initial audit...');
+
     runFullSystemAudit();
   }, []);
 

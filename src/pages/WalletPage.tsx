@@ -93,7 +93,7 @@ const WalletPage: React.FC = () => {
   };
 
   const handlePaymentSuccess = (transactionId: string) => {
-    // ...removed console.log('Payment successful:', transactionId)
+
     // Refresh wallet data
     setShowPaymentModal(false);
   };
@@ -108,7 +108,7 @@ const WalletPage: React.FC = () => {
     amount: number,
     message: string
   ) => {
-    // ...removed console.log('Transfer successful:', { recipientId, amount, message })
+
     // Refresh wallet data
     setShowTransferModal(false);
   };

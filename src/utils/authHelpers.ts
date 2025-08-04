@@ -35,13 +35,13 @@ export const validateJWTToken = async () => {
     }
 
     if (!session?.access_token) {
-      console.warn('No access token found');
+
       return false;
     }
 
     // Check if token is expired
     if (session.expires_at && session.expires_at < Date.now() / 1000) {
-      console.warn('Token expired');
+
       return false;
     }
 

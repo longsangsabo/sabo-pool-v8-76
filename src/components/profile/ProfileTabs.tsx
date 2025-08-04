@@ -16,8 +16,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
 
   // Debug logging
   useEffect(() => {
-    console.log('ProfileTabs rendered with userRole:', userRole);
-    console.log('showClubTab:', showClubTab);
+
   }, [userRole]);
 
   // Check URL parameters on component mount and when URL changes

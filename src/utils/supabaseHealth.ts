@@ -8,7 +8,7 @@ interface HealthCheckResult {
 
 export const checkSupabaseConnection = async (): Promise<HealthCheckResult> => {
   try {
-    console.log('Testing Supabase connection...');
+
     const { data, error } = await supabase
       .from('profiles')
       .select('count')
@@ -19,7 +19,6 @@ export const checkSupabaseConnection = async (): Promise<HealthCheckResult> => {
       return { success: false, error: error.message };
     }
 
-    console.log('Supabase connection successful!', data);
     return { success: true, data };
   } catch (error: any) {
     console.error('Network connectivity error:', error);

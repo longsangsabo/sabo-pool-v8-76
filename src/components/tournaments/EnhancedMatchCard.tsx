@@ -37,7 +37,7 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
     setIsUpdating(true);
 
     try {
-      console.log('🎯 Updating match score:', {
+
         matchId: match.id,
         player1Score,
         player2Score,
@@ -62,7 +62,6 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
         throw new Error(String(data.error));
       }
 
-      console.log('✅ Score updated successfully:', data);
       toast.success('✅ Đã cập nhật tỷ số thành công!');
 
       if (onScoreUpdate) {

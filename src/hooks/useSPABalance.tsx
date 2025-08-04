@@ -16,7 +16,6 @@ export const useSPABalance = () => {
       }
 
       try {
-        console.log('Fetching SPA balance for user:', user.id);
 
         const { data, error } = await supabase
           .from('player_rankings')
@@ -29,7 +28,7 @@ export const useSPABalance = () => {
           setBalance(0);
         } else {
           const newBalance = data?.spa_points || 0;
-          console.log('SPA balance fetched:', newBalance);
+
           setBalance(newBalance);
         }
       } catch (error) {
@@ -54,7 +53,7 @@ export const useSPABalance = () => {
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-          console.log('SPA balance updated via realtime:', payload);
+
           if (payload.new && 'spa_points' in payload.new) {
             setBalance(payload.new.spa_points as number);
           }

@@ -276,7 +276,7 @@ export const usePlayerRanking = (playerId?: string) => {
           filter: `user_id=eq.${currentPlayerId}`,
         },
         () => {
-          console.log('Player ranking updated, reloading...');
+
           loadData();
         }
       )
@@ -289,7 +289,7 @@ export const usePlayerRanking = (playerId?: string) => {
           filter: `user_id=eq.${currentPlayerId}`,
         },
         () => {
-          console.log('SPA points updated, reloading...');
+
           loadData();
         }
       )

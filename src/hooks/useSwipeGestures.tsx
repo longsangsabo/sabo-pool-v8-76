@@ -82,8 +82,6 @@ export const useSwipeGestures = (id: string, callbacks: SwipeCallbacks) => {
     setIsAnimating(true);
     setSwipeDirection(direction);
 
-    // ...removed console.log(`Swiped ${direction}: ${swipeActions[direction]}`)
-
     setTimeout(() => {
       switch (direction) {
         case 'LEFT':

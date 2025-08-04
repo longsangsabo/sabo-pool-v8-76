@@ -130,7 +130,6 @@ export const useMarketplaceItems = () => {
   const incrementViews = async (itemId: string) => {
     try {
       // Mock increment views since marketplace_items table doesn't exist
-      console.log('Mock increment views for item:', itemId);
 
       // Update local state if needed
       setItems(prevItems =>

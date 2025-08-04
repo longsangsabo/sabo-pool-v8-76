@@ -14,11 +14,10 @@ export const useAuthStateMonitor = () => {
     // Check for auth conflicts on mount
     const conflicts = checkAuthConflicts();
     if (conflicts.length > 0) {
-      console.warn('🔍 Auth conflicts detected on mount:', conflicts);
 
       // Auto-cleanup if too many conflicts
       if (conflicts.length > 3) {
-        console.log('🧹 Auto-cleaning due to multiple conflicts');
+
         cleanupAuthState();
       }
     }
@@ -27,7 +26,7 @@ export const useAuthStateMonitor = () => {
   useEffect(() => {
     // Monitor for auth state flipping
     if (lastUserRef.current !== user) {
-      console.log('👤 Auth state changed:', {
+
         from: lastUserRef.current?.id || 'null',
         to: user?.id || 'null',
       });
@@ -42,7 +41,7 @@ export const useAuthStateMonitor = () => {
     if (loading) {
       const timeout = setTimeout(() => {
         errorCountRef.current++;
-        console.warn(
+
           `⏳ Auth loading timeout (attempt ${errorCountRef.current})`
         );
 

@@ -21,13 +21,11 @@ import { Link } from 'react-router-dom';
 import saboClubBg from '@/assets/sabo-club-bg.jpg';
 
 const Index = () => {
-  console.log('[Index] 🏠 Index page rendering...');
 
   React.useEffect(() => {
-    console.log('[Index] ✅ Index page mounted successfully');
 
     return () => {
-      console.log('[Index] 👋 Index page unmounting');
+
     };
   }, []);
 

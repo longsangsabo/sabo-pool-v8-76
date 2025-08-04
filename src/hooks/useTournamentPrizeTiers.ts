@@ -29,8 +29,6 @@ export const useTournamentPrizeTiers = (tournamentId?: string) => {
       setLoading(true);
       setError(null);
 
-      console.log('🏆 Fetching tournament prize tiers for:', tournamentId);
-
       const { data, error: fetchError } = await supabase
         .from('tournament_prize_tiers')
         .select('*')
@@ -41,8 +39,6 @@ export const useTournamentPrizeTiers = (tournamentId?: string) => {
         console.error('❌ Error fetching tournament prize tiers:', fetchError);
         throw fetchError;
       }
-
-      console.log('✅ Tournament prize tiers fetched:', data?.length || 0);
 
       setPrizeTiers(data || []);
     } catch (err: any) {

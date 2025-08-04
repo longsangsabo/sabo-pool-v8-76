@@ -67,7 +67,7 @@ export const useClubDashboard = () => {
               filter: `club_id=eq.${clubId}`,
             },
             () => {
-              console.log('Club challenges updated - refreshing dashboard');
+
               fetchDashboardData();
             }
           )
@@ -85,7 +85,7 @@ export const useClubDashboard = () => {
               filter: `club_id=eq.${clubId}`,
             },
             () => {
-              console.log('Club notifications updated - refreshing dashboard');
+
               fetchDashboardData();
             }
           )
@@ -103,7 +103,7 @@ export const useClubDashboard = () => {
               filter: `club_id=eq.${clubId}`,
             },
             () => {
-              console.log('Club tournaments updated - refreshing dashboard');
+
               fetchDashboardData();
             }
           )
@@ -121,7 +121,7 @@ export const useClubDashboard = () => {
               filter: `club_id=eq.${clubId}`,
             },
             () => {
-              console.log('Rank requests updated - refreshing dashboard');
+
               fetchDashboardData();
             }
           )
@@ -139,7 +139,7 @@ export const useClubDashboard = () => {
               filter: `club_id=eq.${clubId}`,
             },
             () => {
-              console.log('Club accountability updated - refreshing dashboard');
+
               fetchDashboardData();
             }
           )
@@ -196,8 +196,6 @@ export const useClubDashboard = () => {
     try {
       setError(null);
 
-      console.log('Fetching dashboard data for user:', user.id);
-
       // Get club profile
       const { data: clubData, error: clubError } = await supabase
         .from('club_profiles')
@@ -205,13 +203,10 @@ export const useClubDashboard = () => {
         .eq('user_id', user.id)
         .single();
 
-      console.log('Club data:', clubData, 'Error:', clubError);
-
       if (clubError) throw clubError;
       if (!clubData) throw new Error('Club not found');
 
       const clubId = clubData.id;
-      console.log('Club ID:', clubId);
 
       // Use the new database function for stats
       const { data: statsData, error: statsError } = await supabase.rpc(
@@ -254,7 +249,6 @@ export const useClubDashboard = () => {
           .limit(10),
       ]);
 
-      console.log('Dashboard queries results:', {
         verifications: verifications.data?.length,
         notifications: notifications.data?.length,
         statsData,

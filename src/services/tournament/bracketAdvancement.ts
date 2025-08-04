@@ -23,7 +23,6 @@ export async function advanceWinnerToNextRound(
   forceAdvance: boolean = false
 ): Promise<AdvancementResult> {
   try {
-    console.log('🎯 Using new fixed advance function for match:', matchId);
 
     // Get tournament ID first
     const { data: matchData, error: matchError } = await supabase
@@ -56,7 +55,6 @@ export async function advanceWinnerToNextRound(
       };
     }
 
-    console.log('✅ Advancement result:', data);
     return data as unknown as AdvancementResult;
   } catch (error: any) {
     console.error('❌ Exception in advanceWinnerToNextRound:', error);
@@ -104,7 +102,6 @@ export async function fixBracketProgression(
   tournamentId: string
 ): Promise<AdvancementResult> {
   try {
-    console.log('🔧 Fixing bracket progression for tournament:', tournamentId);
 
     // Get all completed matches that need advancement
     const { data: completedMatches, error: matchError } = await supabase
@@ -121,7 +118,6 @@ export async function fixBracketProgression(
       return { success: false, error: matchError.message };
     }
 
-    console.log(
       '🎯 Found completed matches to process:',
       completedMatches?.length || 0
     );
@@ -135,7 +131,7 @@ export async function fixBracketProgression(
         const result = await advanceWinnerToNextRound(match.id, true);
         if (result.success) {
           successCount++;
-          console.log(
+
             `✅ Advanced winner from Round ${match.round_number} Match ${match.match_number}`
           );
         } else {
@@ -151,7 +147,7 @@ export async function fixBracketProgression(
     }
 
     if (errors.length > 0) {
-      console.warn('⚠️ Some advancements failed:', errors);
+
     }
 
     return {
@@ -176,7 +172,7 @@ export async function fixBracketProgression(
 export async function autoAdvanceCompletedMatches(
   tournamentId: string
 ): Promise<void> {
-  console.log(
+
     '🔄 Auto-advancing completed matches for tournament:',
     tournamentId
   );
@@ -184,7 +180,7 @@ export async function autoAdvanceCompletedMatches(
   try {
     const result = await fixBracketProgression(tournamentId);
     if (result.success) {
-      console.log('✅ Auto-advancement completed:', result.message);
+
     } else {
       console.error('❌ Auto-advancement failed:', result.error);
     }

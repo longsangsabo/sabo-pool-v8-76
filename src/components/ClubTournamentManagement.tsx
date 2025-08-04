@@ -72,7 +72,6 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
     >('list');
 
     useEffect(() => {
-      console.log('🏪 ClubTournamentManagement mounting, user:', user?.id);
 
       if (user?.id) {
         loadClubAndTournaments();
@@ -81,17 +80,15 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
 
     const loadClubAndTournaments = async () => {
       try {
-        console.log('🏢 Loading club data for user:', user?.id);
 
         const id = await getClubId();
-        console.log('🔍 Club ID resolved:', id);
 
         setClubId(id);
 
         if (id) {
           await loadTournaments(id);
         } else {
-          console.warn('⚠️ No club ID found for user');
+
         }
       } catch (error) {
         console.error('💥 Error loading club data:', error);
@@ -101,7 +98,7 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
     };
 
     useEffect(() => {
-      console.log('🏆 Club ID changed:', clubId);
+
       if (clubId) {
         fetchTournaments();
         const cleanup = setupRealtimeSubscription();
@@ -128,7 +125,7 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
             filter: `club_id=eq.${clubId}`,
           },
           payload => {
-            console.log('Tournament change detected:', payload);
+
             // Immediate refresh without delay for realtime effect
             fetchTournaments();
           }
@@ -141,7 +138,6 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
     };
 
     const getClubId = async () => {
-      console.log('🔍 Getting club ID for user:', user?.id);
 
       try {
         const { data, error } = await supabase
@@ -155,7 +151,6 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
           return null;
         }
 
-        console.log('✅ Club ID found:', data?.id);
         return data?.id || null;
       } catch (error) {
         console.error('💥 Error fetching club ID:', error);
@@ -167,11 +162,9 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
       const targetClubId = explicitClubId || clubId;
 
       if (!targetClubId) {
-        console.warn('⚠️ No club ID available for tournament loading');
+
         return;
       }
-
-      console.log('🏆 Loading tournaments for club:', targetClubId);
 
       try {
         // Force fresh data by adding timestamp to prevent caching
@@ -187,7 +180,6 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
           .eq('club_id', targetClubId)
           .order('created_at', { ascending: false });
 
-        console.log('📊 Tournament query result:', {
           clubId: targetClubId,
           count: data?.length || 0,
           error: error,
@@ -204,11 +196,10 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
           acc[t.status] = (acc[t.status] || 0) + 1;
           return acc;
         }, {});
-        console.log('📈 Tournament status breakdown:', statusBreakdown);
 
         // Show success message if data loaded
         if (cleanTournaments.length === 0) {
-          console.log(
+
             '✅ No tournaments found for club - this is expected if admin deleted all'
           );
         }
@@ -304,14 +295,14 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
     };
 
     const filteredTournaments = React.useMemo(() => {
-      console.log('🔍 Filtering tournaments:', {
+
         total: tournaments.length,
         activeFilter: activeFilter,
         statusFilter: statusFilters[activeFilter as keyof typeof statusFilters],
       });
 
       if (!statusFilters[activeFilter as keyof typeof statusFilters]) {
-        console.log('📊 Showing all tournaments');
+
         return tournaments;
       }
 
@@ -321,7 +312,6 @@ const ClubTournamentManagement = forwardRef<ClubTournamentManagementRef>(
         )
       );
 
-      console.log('📊 Filtered result:', {
         originalCount: tournaments.length,
         filteredCount: filtered.length,
         statusFilter: statusFilters[activeFilter as keyof typeof statusFilters],
@@ -935,7 +925,7 @@ const TournamentSettingsView = ({ tournament }: { tournament: Tournament }) => {
       }
     } catch (error) {
       // No bracket exists yet
-      console.log('No bracket found, ready to create one');
+
     }
   };
 
@@ -1342,7 +1332,7 @@ const TournamentCard = ({
             <BilliardsTournamentActions
               tournamentId={tournament.id}
               onAction={action => {
-                console.log('Tournament action:', action);
+
                 if (onUpdate) {
                   setTimeout(onUpdate, 500);
                 }

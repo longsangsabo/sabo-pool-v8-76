@@ -9,8 +9,6 @@ export const useRankUpdates = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log('🎯 Setting up rank update notifications for user:', user.id);
-
     // Listen for rank_approved notifications
     const notificationChannel = supabase
       .channel('rank-notifications')
@@ -29,7 +27,6 @@ export const useRankUpdates = () => {
             notification.type === 'rank_approved' ||
             notification.type === 'rank_result'
           ) {
-            console.log('🏆 Rank notification received:', notification);
 
             const metadata = notification.metadata || {};
             const rank = metadata.rank || 'Unknown';
@@ -66,11 +63,11 @@ export const useRankUpdates = () => {
         }
       )
       .subscribe(status => {
-        console.log('🔔 Rank notification subscription status:', status);
+
       });
 
     return () => {
-      console.log('🔕 Cleaning up rank notification subscription');
+
       supabase.removeChannel(notificationChannel);
     };
   }, [user]);

@@ -10,7 +10,7 @@ export const useSocial = () => {
   const followUser = {
     mutate: async (userId: string) => {
       try {
-        console.log('Follow user:', userId);
+
         toast.success('User followed successfully');
       } catch (error) {
         toast.error('Failed to follow user');
@@ -22,7 +22,7 @@ export const useSocial = () => {
   const unfollowUser = {
     mutate: async (userId: string) => {
       try {
-        console.log('Unfollow user:', userId);
+
         toast.success('User unfollowed successfully');
       } catch (error) {
         toast.error('Failed to unfollow user');

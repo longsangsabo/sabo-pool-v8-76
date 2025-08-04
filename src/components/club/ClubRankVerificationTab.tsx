@@ -61,7 +61,7 @@ const ClubRankVerificationTab = () => {
             filter: `club_id=eq.${clubProfile.id}`,
           },
           payload => {
-            console.log('Rank request change:', payload);
+
             // Reload data when there's a change
             loadRankRequests();
           }

@@ -187,7 +187,7 @@ export const useCompletedTournamentTemplates = () => {
       .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
-          console.log('✅ Real-time sync connected for completed tournaments');
+
         }
       });
 

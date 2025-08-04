@@ -87,7 +87,7 @@ export const useUnifiedProfile = () => {
             };
           }
         } catch (newApiError) {
-          console.warn('New API failed, falling back to legacy:', newApiError);
+
         }
 
         // Fallback to legacy data fetching (ORIGINAL WORKING CODE)
@@ -155,7 +155,7 @@ export const useUnifiedProfile = () => {
             clubProfile = clubData;
           }
         } catch (clubFetchError) {
-          console.warn(
+
             'Club profile fetch failed (non-critical):',
             clubFetchError
           );
@@ -222,7 +222,7 @@ export const useUnifiedProfile = () => {
             )
             .slice(0, 10);
         } catch (activitiesError) {
-          console.warn(
+
             'Activities fetch failed (non-critical):',
             activitiesError
           );
@@ -261,7 +261,7 @@ export const useUnifiedProfile = () => {
       const subscription = profileAPI.subscribeToProfileUpdates(
         user.id,
         payload => {
-          console.log('Profile update received:', payload);
+
           // Invalidate and refetch profile data on real-time updates
           queryClient.invalidateQueries({
             queryKey: ['unified-profile', user.id],
@@ -273,7 +273,7 @@ export const useUnifiedProfile = () => {
         profileAPI.unsubscribe(subscription);
       };
     } catch (error) {
-      console.warn('Real-time subscription failed:', error);
+
     }
   }, [user?.id, queryClient, profileData?.statistics]);
 
@@ -300,7 +300,7 @@ export const useUnifiedProfile = () => {
           await profileAPI.refreshProfileStatistics(user.id);
         }
       } catch (error) {
-        console.warn('New API refresh failed:', error);
+
       }
       // Refetch the profile data
       return refetch();

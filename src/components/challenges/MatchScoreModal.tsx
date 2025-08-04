@@ -47,7 +47,7 @@ export function MatchScoreModal({
     }
 
     try {
-      console.log('Submitting scores:', {
+
         challengerScore,
         opponentScore,
         raceTo,

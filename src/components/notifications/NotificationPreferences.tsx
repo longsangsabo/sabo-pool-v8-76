@@ -43,7 +43,7 @@ export const NotificationPreferences = () => {
     queryKey: ['notification-preferences'],
     queryFn: async () => {
       // TODO: Implement when notification_preferences table is created
-      console.log('Loading notification preferences');
+
       const data = null;
       const error = null;
 
@@ -64,7 +64,7 @@ export const NotificationPreferences = () => {
       if (!user) throw new Error('User not authenticated');
 
       // TODO: Implement when notification_preferences table is created
-      console.log('Saving notification preferences:', updates);
+
       const data = { ...updates, user_id: user.id };
       const error = null;
 

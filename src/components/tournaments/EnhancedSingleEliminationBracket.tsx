@@ -76,7 +76,7 @@ export const EnhancedSingleEliminationBracket: React.FC<
 
         if (completedInCurrent.length > 0 && emptyInNext.length > 0) {
           hasProgressionIssues = true;
-          console.log(
+
             `🔧 Round ${currentRound.round} -> ${nextRound.round} needs progression:`,
             {
               completed: completedInCurrent.length,
@@ -93,7 +93,7 @@ export const EnhancedSingleEliminationBracket: React.FC<
   // Auto-fix on component mount if needed
   useEffect(() => {
     if (needsProgression && (isClubOwner || adminMode)) {
-      console.log('🔄 Auto-fixing bracket progression...');
+
       autoAdvanceCompletedMatches(tournamentId);
     }
   }, [needsProgression, tournamentId, isClubOwner, adminMode]);
@@ -113,7 +113,7 @@ export const EnhancedSingleEliminationBracket: React.FC<
   const handleScoreUpdate = async () => {
     setSelectedMatch(null);
     // No need to manually refetch - real-time updates will handle this
-    console.log(
+
       '🎯 Score updated - real-time sync will update bracket automatically'
     );
   };

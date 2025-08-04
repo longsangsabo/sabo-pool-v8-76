@@ -211,7 +211,7 @@ export const useBracketGeneration = () => {
       setIsGenerating(true);
       try {
         // Since reseed_tournament doesn't exist, just regenerate the bracket
-        console.log('Reseeding tournament by regenerating bracket');
+
         const result = await generateBracket(tournamentId, {
           method: seedingMethod,
           forceRegenerate: true,

@@ -30,7 +30,7 @@ const EnhancedChallengesList = () => {
   ) => {
     try {
       // Handle challenge response logic here
-      console.log('Challenge response:', {
+
         challengeId: selectedChallenge?.id,
         status,
       });

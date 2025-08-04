@@ -11,7 +11,7 @@ const SocialLoginButtons = () => {
   const handleGoogleLogin = async () => {
     setSocialLoading('google');
     try {
-      // ...removed console.log('Attempting Google login...')
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -43,7 +43,7 @@ const SocialLoginButtons = () => {
           });
         }
       } else {
-        // ...removed console.log('Google login initiated successfully')
+
       }
     } catch (error) {
       console.error('Google login error:', error);
@@ -62,7 +62,7 @@ const SocialLoginButtons = () => {
   const handleFacebookLogin = async () => {
     setSocialLoading('facebook');
     try {
-      // ...removed console.log('Attempting Facebook login...')
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
@@ -91,7 +91,7 @@ const SocialLoginButtons = () => {
           });
         }
       } else {
-        // ...removed console.log('Facebook login initiated successfully')
+
       }
     } catch (error) {
       console.error('Facebook login error:', error);

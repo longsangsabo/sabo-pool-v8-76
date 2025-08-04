@@ -41,8 +41,6 @@ const ActiveChallengesSection: React.FC<ActiveChallengesSectionProps> = ({
 
   // Enhanced score update handler with proper invalidation
   const handleScoreUpdated = async () => {
-    console.log('🔄 handleScoreUpdated called - starting refresh process...');
-    console.log('Current challenges count:', challenges?.length);
 
     // Invalidate all relevant queries to force UI refresh
     await Promise.all([
@@ -52,29 +50,25 @@ const ActiveChallengesSection: React.FC<ActiveChallengesSectionProps> = ({
       queryClient.invalidateQueries({ queryKey: ['daily-challenge-stats'] }),
     ]);
 
-    console.log('✅ Queries invalidated at:', Date.now());
-
     // Also call the original callback
     onStatsUpdate();
 
-    console.log('🔄 onStatsUpdate called, waiting for refetch...');
-
     // Force a small delay to ensure data is refreshed
     setTimeout(() => {
-      console.log('🔄 Second onStatsUpdate call (delayed)');
+
       onStatsUpdate();
     }, 500);
   };
 
   // Debug challenges changes
   useEffect(() => {
-    console.log(
+
       '🔍 ActiveChallengesSection re-rendered with challenges:',
       challenges?.length
     );
-    console.log('👤 Current user:', user?.id);
+
     challenges?.forEach(challenge => {
-      console.log(`🎯 Challenge ${challenge.id}:`, {
+
         status: challenge.status,
         score_confirmation_status: challenge.score_confirmation_status,
         challenger_id: challenge.challenger_id,
@@ -246,7 +240,7 @@ const ActiveChallengesSection: React.FC<ActiveChallengesSectionProps> = ({
                   <div className='flex items-center gap-2'>
                     {/* Score workflow status badge */}
                     {(() => {
-                      console.log(
+
                         `🏷️ Rendering badge for challenge ${challenge.id}:`,
                         {
                           score_confirmation_status:

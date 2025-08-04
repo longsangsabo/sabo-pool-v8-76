@@ -15,7 +15,6 @@ export const useLoadingMonitor = (componentName: string) => {
       const timestamp = performance.now();
       const duration = timestamp - startTime;
 
-      console.log(
         `[LoadingMonitor] ${componentName} - ${stepName}: ${duration.toFixed(2)}ms`
       );
 
@@ -40,7 +39,7 @@ export const useLoadingMonitor = (componentName: string) => {
 
       // Summary
       const totalTime = performance.now() - startTime;
-      console.log(
+
         `[LoadingMonitor] ${componentName} total lifecycle: ${totalTime.toFixed(2)}ms`
       );
     };
@@ -49,7 +48,7 @@ export const useLoadingMonitor = (componentName: string) => {
   // Warning for slow components
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.warn(
+
         `[LoadingMonitor] ⚠️ ${componentName} has been active for >3s - potential performance issue`
       );
     }, 3000);

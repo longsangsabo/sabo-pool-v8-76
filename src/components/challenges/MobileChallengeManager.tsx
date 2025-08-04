@@ -47,7 +47,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
   });
 
   // Enhanced debug: Check what challenges we have with profile details
-  console.log('🔍 [MobileChallengeManager] Detailed analysis:', {
+
     totalChallenges: challenges.length,
     currentUser: user?.id?.slice(-8),
     challengeBreakdown: {
@@ -106,7 +106,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
       const shouldShow = isOpen && isNotMyChallenge;
 
       if (isOpen && !isNotMyChallenge) {
-        console.log('🔍 Filtering out my own challenge:', {
+
           id: c.id?.slice(-8),
           challenger:
             c.challenger_profile?.display_name ||
@@ -119,7 +119,6 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
     })
     .map(convertToLocalChallenge);
 
-  console.log(
     '✅ [MobileChallengeManager] Open challenges processing result:',
     {
       totalFiltered: openChallenges.length,
@@ -199,7 +198,6 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
     )
     .map(convertToLocalChallenge);
 
-  console.log('📊 [MobileChallengeManager] Tab data breakdown:', {
     ongoingCount: ongoingChallenges.length,
     upcomingCount: upcomingChallenges.length,
     openChallengesCount: openChallenges.length,
@@ -320,7 +318,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
             </div>
             {openChallenges.length > 0 ? (
               openChallenges.map(challenge => {
-                console.log('🎯 Rendering open challenge:', {
+
                   id: challenge.id?.slice(-8),
                   challenger:
                     challenge.challenger_profile?.display_name ||
@@ -448,7 +446,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
               challenges={challenges || []}
               user={user}
               onChallengeClick={challenge => {
-                console.log('Mobile challenge clicked:', challenge);
+
                 // Could navigate to challenge details page or open modal
               }}
             />

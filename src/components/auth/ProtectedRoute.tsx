@@ -25,12 +25,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   // Check for both user and session for stronger authentication
   if (!user || !session) {
-    console.log('🔧 ProtectedRoute: No user or session, redirecting to auth', {
-      hasUser: !!user,
-      hasSession: !!session,
-      path: location.pathname,
-    });
-
     // Clear any corrupted auth data
     if (!session) {
       localStorage.removeItem('supabase.auth.token');

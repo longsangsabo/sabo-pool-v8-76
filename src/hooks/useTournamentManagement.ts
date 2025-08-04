@@ -145,7 +145,6 @@ export function useTournamentManagement(tournamentId: string) {
 
     try {
       setUpdating(true);
-      console.log('Starting tournament with ID:', tournamentId);
 
       const { error } = await supabase
         .from('tournaments')
@@ -160,7 +159,6 @@ export function useTournamentManagement(tournamentId: string) {
         throw error;
       }
 
-      console.log('Tournament status updated successfully');
       await fetchTournament();
 
       toast({
@@ -195,7 +193,7 @@ export function useTournamentManagement(tournamentId: string) {
         setUpdating(true);
 
         // Mock function call since it doesn't exist
-        console.log('Updating tournament management status:', {
+
           p_tournament_id: tournamentId,
           p_new_status: newStatus,
           p_completed_by: user.id,

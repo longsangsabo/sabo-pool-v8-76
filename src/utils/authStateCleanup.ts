@@ -5,13 +5,12 @@ import { supabase } from '@/integrations/supabase/client';
  * Prevents authentication limbo states by clearing all auth-related storage
  */
 export const cleanupAuthState = () => {
-  console.log('🧹 Cleaning up auth state...');
 
   // Clear localStorage
   Object.keys(localStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       localStorage.removeItem(key);
-      console.log(`Removed localStorage key: ${key}`);
+
     }
   });
 
@@ -19,7 +18,7 @@ export const cleanupAuthState = () => {
   Object.keys(sessionStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       sessionStorage.removeItem(key);
-      console.log(`Removed sessionStorage key: ${key}`);
+
     }
   });
 
@@ -37,14 +36,12 @@ export const cleanupAuthState = () => {
     sessionStorage.removeItem(key);
   });
 
-  console.log('✅ Auth state cleanup completed');
 };
 
 /**
  * Robust sign out that prevents limbo states
  */
 export const robustSignOut = async () => {
-  console.log('🚪 Performing robust sign out...');
 
   try {
     // Clean up state first
@@ -52,12 +49,12 @@ export const robustSignOut = async () => {
 
     // Attempt global sign out
     await supabase.auth.signOut({ scope: 'global' });
-    console.log('✅ Global sign out completed');
+
   } catch (error) {
-    console.warn('⚠️ Sign out error (will continue):', error);
+
   } finally {
     // Always force page refresh for clean state
-    console.log('🔄 Forcing page refresh...');
+
     window.location.href = '/auth';
   }
 };
@@ -66,7 +63,6 @@ export const robustSignOut = async () => {
  * Robust sign in that prevents limbo states
  */
 export const robustSignIn = async (signInFunction: () => Promise<any>) => {
-  console.log('🔐 Performing robust sign in...');
 
   try {
     // Clean up existing state first
@@ -76,7 +72,7 @@ export const robustSignIn = async (signInFunction: () => Promise<any>) => {
     try {
       await supabase.auth.signOut({ scope: 'global' });
     } catch (error) {
-      console.warn('⚠️ Pre-signin cleanup error (will continue):', error);
+
     }
 
     // Perform the actual sign in
@@ -87,7 +83,7 @@ export const robustSignIn = async (signInFunction: () => Promise<any>) => {
     }
 
     if (result.data?.user) {
-      console.log('✅ Sign in successful, refreshing page...');
+
       // Force page refresh for clean state
       window.location.href = '/dashboard';
     }
@@ -130,7 +126,7 @@ export const checkAuthConflicts = () => {
   });
 
   if (conflicts.length > 0) {
-    console.warn('⚠️ Auth conflicts detected:', conflicts);
+
     return conflicts;
   }
 

@@ -11,7 +11,7 @@ export const FacebookLoginButton = () => {
   const handleFacebookLogin = async () => {
     setLoading(true);
     try {
-      console.log('Initiating Facebook login...');
+
       const { error } = await signInWithFacebook();
 
       if (error) {
@@ -36,7 +36,7 @@ export const FacebookLoginButton = () => {
           toast.error(`❌ Lỗi Facebook Login: ${error.message}`);
         }
       } else {
-        console.log('Facebook login initiated successfully');
+
       }
     } catch (error) {
       console.error('Facebook login catch error:', error);

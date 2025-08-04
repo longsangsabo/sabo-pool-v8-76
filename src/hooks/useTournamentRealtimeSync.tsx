@@ -10,8 +10,6 @@ export const useTournamentRealtimeSync = (
   useEffect(() => {
     if (!user?.id) return;
 
-    console.log('Setting up real-time listeners for user:', user.id);
-
     // Listen to tournament_registrations changes
     const channel = supabase
       .channel('tournament-registration-changes')
@@ -24,7 +22,6 @@ export const useTournamentRealtimeSync = (
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log('Real-time registration change:', payload);
 
           const tournamentId =
             (payload.new as any)?.tournament_id ||
@@ -49,7 +46,7 @@ export const useTournamentRealtimeSync = (
       .subscribe();
 
     return () => {
-      console.log('Cleaning up real-time listeners');
+
       supabase.removeChannel(channel);
     };
   }, [user?.id, onRegistrationChange]);

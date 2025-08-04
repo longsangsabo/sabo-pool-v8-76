@@ -52,7 +52,6 @@ export function MatchScoreInput({
       } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      console.log('🎯 Updating score using safe method:', {
         matchId,
         player1Score,
         player2Score,
@@ -81,7 +80,6 @@ export function MatchScoreInput({
         return;
       }
 
-      console.log('✅ Score updated successfully:', data);
       const winner = player1Score > player2Score ? player1Name : player2Name;
       toast({
         title: 'Score Submitted!',

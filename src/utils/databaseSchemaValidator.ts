@@ -266,7 +266,7 @@ export function validateColumn(table: string, column: string): boolean {
   const tableSchema =
     SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
-    console.warn(`Table '${table}' not found in schema definitions`);
+
     return false;
   }
 
@@ -291,7 +291,7 @@ export function validateRequiredColumns(
   const tableSchema =
     SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
-    console.warn(`Table '${table}' not found in schema definitions`);
+
     return false;
   }
 
@@ -339,9 +339,9 @@ export function logSchemaMismatch(
   console.error(
     `Attempted to use column '${attemptedColumn}' on table '${table}'`
   );
-  console.log(`Available columns:`, getTableColumns(table));
+
   if (suggestedColumns?.length) {
-    console.log(`Suggested alternatives:`, suggestedColumns);
+
   }
   console.groupEnd();
 }
@@ -351,8 +351,7 @@ export function logSchemaMismatch(
  */
 export function validateSchemaUsage() {
   if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 Schema Validation Active');
-    console.log('Available tables:', Object.keys(SCHEMA_DEFINITIONS));
+
   }
 }
 

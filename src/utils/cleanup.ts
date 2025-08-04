@@ -128,7 +128,7 @@ export const globalCleanup = {
       const listeners = (window as any).__listeners_created || 0;
 
       if (timers > 100) {
-        console.warn(
+
           '🚨 Potential timer leak detected:',
           timers,
           'timers created'
@@ -136,7 +136,7 @@ export const globalCleanup = {
       }
 
       if (listeners > 100) {
-        console.warn(
+
           '🚨 Potential event listener leak detected:',
           listeners,
           'listeners created'
@@ -158,7 +158,7 @@ export const globalCleanup = {
             if (entry.entryType === 'largest-contentful-paint') {
               const lcp = entry.startTime;
               if (lcp > 2500) {
-                console.warn('⚠️ Poor LCP performance:', lcp, 'ms');
+
               }
             }
           }

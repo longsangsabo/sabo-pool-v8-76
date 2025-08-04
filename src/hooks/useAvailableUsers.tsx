@@ -23,7 +23,7 @@ export const useAvailableUsers = () => {
       setIsLoading(true);
 
       try {
-        console.log(
+
           `🎯 Generating ${targetCount} users for tournament ${tournamentId}`
         );
 
@@ -40,7 +40,6 @@ export const useAvailableUsers = () => {
 
         const excludedIds =
           existingRegistrations?.map(reg => reg.user_id) || [];
-        console.log(`📋 Found ${excludedIds.length} users already registered`);
 
         // Get all users (remove is_demo_user filter since column doesn't exist)
         const { data: demoUsers, error: demoError } = await supabase
@@ -65,7 +64,7 @@ export const useAvailableUsers = () => {
         const demoUserIds = demoUsers?.map(u => u.user_id) || [];
 
         if (demoUserIds.length === 0) {
-          console.log('⚠️ No demo users available');
+
           return [];
         }
 
@@ -119,7 +118,6 @@ export const useAvailableUsers = () => {
             .sort((a, b) => b.elo - a.elo)
             .slice(0, targetCount);
 
-          console.log(
             `✅ Selected ${selectedUsers.length} users for tournament`
           );
           return selectedUsers;

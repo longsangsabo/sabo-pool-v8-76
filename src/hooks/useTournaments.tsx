@@ -269,7 +269,6 @@ export const useTournaments = (userId?: string) => {
       try {
         if (!user?.id) throw new Error('Must be logged in');
 
-        console.log(
           'Attempting to cancel registration for tournament:',
           tournamentId,
           'user:',
@@ -282,15 +281,13 @@ export const useTournaments = (userId?: string) => {
           user.id
         );
 
-        console.log('Delete result:', data);
-
         if (!data || data.length === 0) {
-          console.warn(
+
             'No registration found to delete - updating UI state anyway'
           );
           toast.success('Đã hủy đăng ký giải đấu');
         } else {
-          console.log('Successfully deleted registration:', data[0]);
+
           toast.success('Đã hủy đăng ký giải đấu');
         }
 
@@ -385,7 +382,7 @@ export const useTournaments = (userId?: string) => {
           id: Date.now().toString(),
           ...matchData,
         };
-        console.log('Mock creating tournament match:', mockMatch);
+
         return mockMatch;
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to create match');
@@ -404,7 +401,7 @@ export const useTournaments = (userId?: string) => {
 
       try {
         // Mock update match result
-        console.log('Mock updating match result:', { matchId, result });
+
         return { id: matchId, ...result };
       } catch (err) {
         setError(
@@ -429,7 +426,7 @@ export const useTournaments = (userId?: string) => {
           id: Date.now().toString(),
           ...resultData,
         };
-        console.log('Mock creating tournament result:', mockResult);
+
         return mockResult;
       } catch (err) {
         setError(
@@ -507,7 +504,6 @@ export const useTournaments = (userId?: string) => {
 
       try {
         // Mock finalize tournament
-        console.log('Mock finalizing tournament:', { tournamentId, results });
 
         // Update tournament status to completed
         setTournaments(prev =>
@@ -584,7 +580,7 @@ export const useTournaments = (userId?: string) => {
   // Auto-refresh when tournaments change via realtime
   useEffect(() => {
     if (lastUpdate) {
-      console.log('Realtime update detected, refreshing tournaments');
+
       fetchTournaments();
     }
   }, [lastUpdate, fetchTournaments]);

@@ -46,7 +46,7 @@ import { createTestTournamentFlow } from '@/utils/tournamentTestFlow';
 
 // Internal component that uses TournamentState
 const ClubTournamentManagementInternal: React.FC = () => {
-  console.log('🔧 ClubTournamentManagementInternal rendering...');
+
   const [managementActiveTab, setManagementActiveTab] = useState('create');
 
   const tournamentManagementRef = useRef<TournamentManagementHubRef>(null);
@@ -54,7 +54,7 @@ const ClubTournamentManagementInternal: React.FC = () => {
     useTournamentState();
 
   const handleTournamentSuccess = (tournament: any) => {
-    console.log('✅ Tournament created successfully:', tournament);
+
     toast.success('Giải đấu đã được tạo thành công!');
 
     // Always go to tournaments list after creation
@@ -118,14 +118,14 @@ const ClubTournamentManagementInternal: React.FC = () => {
             <ProfileProvider>
               <TournamentProvider>
                 {(() => {
-                  console.log(
+
                     '🎯 About to render EnhancedTournamentForm inside providers'
                   );
                   return (
                     <EnhancedTournamentForm
                       onSuccess={handleTournamentSuccess}
                       onCancel={() => {
-                        console.log('❌ Form canceled');
+
                       }}
                     />
                   );
@@ -266,7 +266,6 @@ interface ClubTournamentManagementProps {
 const ClubTournamentManagement: React.FC<ClubTournamentManagementProps> = ({
   clubId,
 }) => {
-  console.log('🔧 ClubTournamentManagement rendering with clubId:', clubId);
 
   try {
     return (

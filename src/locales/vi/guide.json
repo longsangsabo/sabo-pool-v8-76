@@ -1,0 +1,16 @@
+{
+  "title": "Hướng Dẫn Quản Trị & Trung Tâm Hỗ Trợ",
+  "description": "Tài liệu hướng dẫn toàn diện, hướng dẫn và tài nguyên hỗ trợ cho quản trị viên",
+  "quick_start": "Bắt Đầu Nhanh",
+  "tutorials": "Hướng Dẫn",
+  "documentation": "Tài Liệu",
+  "troubleshooting": "Khắc Phục Sự Cố",
+  "api_reference": "Tham Chiếu API",
+  "faq": "Câu Hỏi Thường Gặp",
+  "support": "Hỗ Trợ",
+  "search_placeholder": "Tìm kiếm hướng dẫn, tài liệu...",
+  "getting_started": "Bắt Đầu",
+  "user_management": "Quản Lý Người Dùng",
+  "tournament_setup": "Thiết Lập Giải Đấu",
+  "payment_configuration": "Cấu Hình Thanh Toán"
+}

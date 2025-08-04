@@ -333,7 +333,7 @@ export const useRankRequests = (clubId?: string) => {
           filter: clubId ? `club_id=eq.${clubId}` : undefined,
         },
         () => {
-          console.log('Rank request changed, refetching...');
+
           fetchRankRequests(); // Refetch on any change
         }
       )

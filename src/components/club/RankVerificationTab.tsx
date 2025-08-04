@@ -63,17 +63,16 @@ const RankVerificationTab = () => {
 
   const loadRankRequests = async () => {
     if (!clubProfile?.id) {
-      console.log('No club profile ID found:', clubProfile);
+
       return;
     }
 
     try {
       setLoading(true);
-      console.log('Loading rank requests for club:', clubProfile.id);
 
       // For now, let's just set empty requests since rank_verifications table doesn't exist
       // This is a placeholder implementation
-      console.log(
+
         'Rank verification feature not implemented - using placeholder'
       );
       setRequests([]);

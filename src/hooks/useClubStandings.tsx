@@ -75,7 +75,7 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-        console.log('Mock verify player at club:', { userId, clubId });
+
         await fetchClubStandings(clubId);
 
         return {
@@ -108,7 +108,7 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-        console.log('Mock remove player from club:', { userId, clubId });
+
         await fetchClubStandings(clubId);
       } catch (err) {
         setError(
@@ -202,7 +202,7 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-        console.log('Mock recalculate rankings for club:', clubId);
+
         await fetchClubStandings(clubId);
       } catch (err) {
         setError(

@@ -84,7 +84,7 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       setPreviousBreakpoint(responsive.breakpoint);
 
       // Log breakpoint transition
-      console.log(
+
         `📊 Breakpoint transition: ${previousBreakpoint} → ${responsive.breakpoint}`
       );
     }
@@ -136,7 +136,6 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
       },
     });
 
-    console.log('📊 Started responsive analytics tracking');
   };
 
   // Stop tracking and generate report
@@ -153,8 +152,6 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
         totalRenders: renderCount,
       };
 
-      console.log('📊 Responsive Analytics Report:', report);
-
       // Send to analytics service (example)
       sendToAnalyticsService(report);
 
@@ -166,7 +163,6 @@ export const ResponsiveAnalyticsTracker: React.FC = () => {
   // Simulate sending data to analytics service
   const sendToAnalyticsService = (data: any) => {
     // Example: Send to Google Analytics, Mixpanel, etc.
-    console.log('📤 Sending to analytics service:', data);
 
     // Example implementation:
     // gtag('event', 'responsive_behavior', {

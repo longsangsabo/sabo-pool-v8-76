@@ -206,17 +206,16 @@ export const translationScanner = new TranslationScanner();
 // Hook for components to use scanner
 export const useTranslationScanner = () => {
   const scanAndTranslate = async () => {
-    console.log('🔍 Scanning codebase for missing translations...');
 
     const result = await translationScanner.scanCodebase();
-    console.log(
+
       `📊 Scan results: ${result.totalTexts} texts found in ${result.totalFiles} files`
     );
 
     if (result.missingKeys.length > 0) {
-      console.log('🚀 Generating translation tasks...');
+
       await translationScanner.generateTranslationTasks();
-      console.log(
+
         `✅ Created translation tasks for ${result.missingKeys.length} missing translations`
       );
     }
