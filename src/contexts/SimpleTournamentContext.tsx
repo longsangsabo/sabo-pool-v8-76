@@ -133,7 +133,7 @@ export const SimpleTournamentProvider: React.FC<{
     (tournamentId: string, rank: RankCode = 'K'): TournamentRewards => {
       const tournament = tournaments.find(t => t.id === tournamentId);
       if (!tournament) {
-        console.warn(
+
           'Tournament not found for rewards calculation:',
           tournamentId
         );
@@ -146,7 +146,7 @@ export const SimpleTournamentProvider: React.FC<{
       }
 
       // Use the TournamentRewardsManager hook to load rewards from tournament_prize_tiers
-      console.log(
+
         '🔄 [SimpleTournamentContext] Loading rewards from tournament_prize_tiers'
       );
 
@@ -193,7 +193,6 @@ export const SimpleTournamentProvider: React.FC<{
       rewards: TournamentRewards
     ): Promise<boolean> => {
       try {
-        console.log('💾 Saving tournament rewards:', { tournamentId, rewards });
 
         // Simple validation
         if (!rewards || typeof rewards !== 'object') {
@@ -201,8 +200,6 @@ export const SimpleTournamentProvider: React.FC<{
           toast.error('Dữ liệu phần thưởng không hợp lệ');
           return false;
         }
-
-        console.log('✅ Rewards validation passed, updating database...');
 
         const { error } = await supabase
           .from('tournaments')
@@ -218,8 +215,6 @@ export const SimpleTournamentProvider: React.FC<{
           throw error;
         }
 
-        console.log('✅ Database updated successfully');
-
         // Update local state
         setTournaments(prevTournaments =>
           prevTournaments.map(tournament =>
@@ -234,7 +229,6 @@ export const SimpleTournamentProvider: React.FC<{
           )
         );
 
-        console.log('✅ Local state updated');
         toast.success('Đã lưu phần thưởng giải đấu');
         return true;
       } catch (error) {

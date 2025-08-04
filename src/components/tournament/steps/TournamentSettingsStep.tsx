@@ -132,10 +132,9 @@ export const TournamentSettingsStep: React.FC<TournamentSettingsStepProps> = ({
             <Select
               value={watchedData.tournament_type}
               onValueChange={value => {
-                console.log('🔥 TOURNAMENT TYPE SELECTED:', value);
-                console.log('🔥 Available formats:', TOURNAMENT_FORMATS);
+
                 setValue('tournament_type', value as any);
-                console.log(
+
                   '🔥 After setValue, form tournament_type:',
                   form.getValues('tournament_type')
                 );

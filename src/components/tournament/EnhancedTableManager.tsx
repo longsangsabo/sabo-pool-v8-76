@@ -288,7 +288,7 @@ const EnhancedTableManager = ({
     }
 
     try {
-      console.log(
+
         '🔍 Fetching pending matches for tournament:',
         selectedTournament
       );
@@ -325,8 +325,6 @@ const EnhancedTableManager = ({
 
       if (error) throw error;
 
-      console.log('📊 Raw matches data:', matches);
-      console.log(
         '📊 Number of unassigned matches found:',
         matches?.length || 0
       );
@@ -387,7 +385,6 @@ const EnhancedTableManager = ({
         })
       );
 
-      console.log('✅ Enhanced matches with players:', enhancedMatches);
       setPendingMatches(enhancedMatches);
     } catch (error) {
       console.error('Error fetching pending matches:', error);
@@ -435,7 +432,6 @@ const EnhancedTableManager = ({
         return;
       }
 
-      console.log('🚀 Starting auto-assignment with:', {
         tournament_id: selectedTournament,
         club_id: clubId,
         pending_matches: pendingMatches.length,
@@ -466,15 +462,12 @@ const EnhancedTableManager = ({
         }
       );
 
-      console.log('📋 Assignment response:', { data, error });
-
       if (error) throw error;
 
       if (data.success) {
         const { assignments_made, total_matches, total_tables, assignments } =
           data;
 
-        console.log('✅ Assignment results:', {
           assignments_made,
           total_matches,
           total_tables,

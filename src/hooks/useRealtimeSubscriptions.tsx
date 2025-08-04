@@ -86,7 +86,6 @@ export const useRealtimeSubscriptions = (
 
     // Handle connection status
     const subscription = channel.subscribe(status => {
-      // ...removed console.log('Real-time subscription status:', status)
 
       if (status === 'SUBSCRIBED') {
         setIsConnected(true);
@@ -111,7 +110,7 @@ export const useRealtimeSubscriptions = (
     // Cleanup function
     return () => {
       if (channelRef.current) {
-        // ...removed console.log('Cleaning up real-time subscriptions')
+
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }
@@ -294,7 +293,6 @@ export const useTournamentSubscription = (
   const channelRef = useRef<RealtimeChannel | null>(null);
 
   useEffect(() => {
-    // ...removed console.log('Setting up tournament real-time subscription')
 
     const channel = supabase.channel(`tournaments-${Date.now()}`);
 
@@ -306,13 +304,12 @@ export const useTournamentSubscription = (
         table: 'tournaments',
       },
       payload => {
-        // ...removed console.log('Tournament update received:', payload)
+
         onUpdate?.(payload);
       }
     );
 
     channel.subscribe(status => {
-      // ...removed console.log('Tournament subscription status:', status)
 
       if (status === 'SUBSCRIBED') {
         setIsConnected(true);
@@ -330,7 +327,7 @@ export const useTournamentSubscription = (
 
     return () => {
       if (channelRef.current) {
-        // ...removed console.log('Cleaning up tournament subscription')
+
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }

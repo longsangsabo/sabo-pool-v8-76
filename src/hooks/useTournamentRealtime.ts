@@ -37,7 +37,6 @@ export const useTournamentRealtime = (tournamentId: string) => {
   // Load initial data
   const loadInitialData = useCallback(async () => {
     try {
-      console.log('🔄 Loading initial tournament data for:', tournamentId);
 
       // Load tournament registrations with user profiles
       const { data: registrations, error } = await supabase
@@ -93,7 +92,6 @@ export const useTournamentRealtime = (tournamentId: string) => {
         last_updated: new Date(),
       });
 
-      console.log('📊 Initial stats loaded:', {
         confirmed,
         pending,
         total: participantList.length,
@@ -108,19 +106,18 @@ export const useTournamentRealtime = (tournamentId: string) => {
 
   // Handle real-time registration changes
   const handleRegistrationChange = useCallback((payload: any) => {
-    console.log('📡 Registration change detected:', payload);
 
     switch (payload.eventType) {
       case 'INSERT':
-        console.log('➕ New registration:', payload.new);
+
         handleNewRegistration(payload.new);
         break;
       case 'UPDATE':
-        console.log('🔄 Registration updated:', payload.new);
+
         handleRegistrationUpdate(payload.new);
         break;
       case 'DELETE':
-        console.log('➖ Registration deleted:', payload.old);
+
         handleRegistrationDelete(payload.old);
         break;
     }
@@ -220,7 +217,6 @@ export const useTournamentRealtime = (tournamentId: string) => {
 
   // Handle tournament stats changes
   const handleTournamentChange = useCallback((payload: any) => {
-    console.log('🏆 Tournament data updated:', payload);
 
     if (payload.eventType === 'UPDATE' && payload.new) {
       setStats(prev => ({
@@ -238,7 +234,6 @@ export const useTournamentRealtime = (tournamentId: string) => {
 
     loadInitialData();
 
-    console.log(
       '🔄 Setting up real-time subscriptions for tournament:',
       tournamentId
     );
@@ -274,7 +269,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
       .subscribe();
 
     return () => {
-      console.log('🛑 Cleaning up real-time subscriptions');
+
       registrationChannel.unsubscribe();
       tournamentChannel.unsubscribe();
     };

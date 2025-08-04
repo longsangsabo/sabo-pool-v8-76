@@ -33,7 +33,6 @@ const TournamentCompletionButton: React.FC<TournamentCompletionButtonProps> = ({
   const handleCompleteTournament = async () => {
     try {
       setIsCompleting(true);
-      console.log(`🎯 Manually completing tournament: ${tournamentId}`);
 
       toast.info('Đang xử lý hoàn thành giải đấu...');
 
@@ -53,8 +52,6 @@ const TournamentCompletionButton: React.FC<TournamentCompletionButtonProps> = ({
         toast.error(`Lỗi hoàn thành giải đấu: ${error.message}`);
         return;
       }
-
-      console.log('✅ Tournament completion response:', data);
 
       if (data?.success) {
         toast.success(

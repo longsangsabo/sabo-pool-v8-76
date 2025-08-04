@@ -68,7 +68,7 @@ const ClubStatsDashboard = () => {
           table: 'challenges',
         },
         () => {
-          console.log('Challenges updated - refreshing stats');
+
           fetchClubStats(clubId);
         }
       )

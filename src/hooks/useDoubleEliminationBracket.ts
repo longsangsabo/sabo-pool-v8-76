@@ -33,7 +33,6 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
   // Create double elimination bracket
   const createBracket = useMutation({
     mutationFn: async ({ tournamentId }: CreateBracketParams) => {
-      console.log('🏗️ Creating double elimination bracket:', tournamentId);
 
       const { data, error } = await supabase.rpc(
         'repair_double_elimination_bracket',
@@ -46,7 +45,6 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
       return data;
     },
     onSuccess: (data, variables) => {
-      console.log('✅ Bracket created successfully:', data);
 
       // Invalidate tournament queries to refresh bracket
       queryClient.invalidateQueries({ queryKey: ['tournament-matches'] });
@@ -80,7 +78,7 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
       player1Score,
       player2Score,
     }: SubmitScoreParams) => {
-      console.log('🎯 Submitting score:', {
+
         matchId,
         player1Score,
         player2Score,
@@ -105,7 +103,6 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
       return data;
     },
     onSuccess: (data, variables) => {
-      console.log('✅ Score submitted successfully:', data);
 
       // Invalidate queries to refresh bracket
       queryClient.invalidateQueries({ queryKey: ['tournament-matches'] });
@@ -135,7 +132,6 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
   // Manual advancement function
   const advanceWinner = useMutation({
     mutationFn: async ({ matchId }: { matchId: string }) => {
-      console.log('🎯 Manually advancing winner for match:', matchId);
 
       const { data, error } = await supabase.rpc(
         'repair_double_elimination_bracket',
@@ -148,7 +144,6 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
       return data;
     },
     onSuccess: data => {
-      console.log('✅ Manual advancement successful:', data);
 
       // Invalidate queries to refresh bracket
       queryClient.invalidateQueries({ queryKey: ['tournament-matches'] });
@@ -222,7 +217,7 @@ export const useDoubleEliminationBracket = (tournamentId: string) => {
     matches as SABOMatch[]
   );
   if (!saboValidation.valid) {
-    console.warn('⚠️ SABO Structure Validation Errors:', saboValidation.errors);
+
   }
 
   // Calculate progress using SABO Logic Core

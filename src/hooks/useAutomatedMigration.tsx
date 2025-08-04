@@ -63,10 +63,9 @@ export const useAutomatedMigration = () => {
 
     try {
       // Capture console logs for real-time feedback
-      const originalLog = console.log;
+
       const originalError = console.error;
 
-      console.log = (...args) => {
         setLogs(prev => [...prev, `[INFO] ${args.join(' ')}`]);
         originalLog(...args);
       };
@@ -85,7 +84,7 @@ export const useAutomatedMigration = () => {
       }));
 
       // Restore original console functions
-      console.log = originalLog;
+
       console.error = originalError;
 
       if (result?.success) {

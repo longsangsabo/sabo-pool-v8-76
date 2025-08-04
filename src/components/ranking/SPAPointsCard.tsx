@@ -78,7 +78,7 @@ export const SPAPointsCard: React.FC<SPAPointsCardProps> = ({
     if (!user?.id) return;
 
     const fetchTransactions = async () => {
-      console.log(
+
         '🔍 [SPAPointsCard] Fetching SPA transactions for user:',
         user.id
       );
@@ -99,7 +99,6 @@ export const SPAPointsCard: React.FC<SPAPointsCardProps> = ({
           throw error;
         }
 
-        console.log(
           '✅ [SPAPointsCard] Fetched',
           data?.length || 0,
           'transactions'
@@ -130,7 +129,7 @@ export const SPAPointsCard: React.FC<SPAPointsCardProps> = ({
     fetchTransactions();
 
     // Set up real-time subscription
-    console.log('🔔 [SPAPointsCard] Setting up real-time subscription');
+
     const subscription = supabase
       .channel('spa-points-card-updates')
       .on(
@@ -142,7 +141,7 @@ export const SPAPointsCard: React.FC<SPAPointsCardProps> = ({
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log(
+
             '🆕 [SPAPointsCard] New SPA transaction received:',
             payload
           );
@@ -162,11 +161,11 @@ export const SPAPointsCard: React.FC<SPAPointsCardProps> = ({
         }
       )
       .subscribe(status => {
-        console.log('📡 [SPAPointsCard] Subscription status:', status);
+
       });
 
     return () => {
-      console.log('🧹 [SPAPointsCard] Cleaning up subscription');
+
       subscription.unsubscribe();
     };
   }, [user?.id, queryClient]);

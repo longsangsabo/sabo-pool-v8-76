@@ -16,7 +16,6 @@ export const AdminForceDesktopLayout: React.FC<
   const { t } = useLanguage();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  console.log('AdminForceDesktopLayout Debug:', {
     user: !!user,
     isAdmin,
     loading,
@@ -32,7 +31,7 @@ export const AdminForceDesktopLayout: React.FC<
   }
 
   if (!user || !isAdmin) {
-    console.log('AdminForceDesktopLayout: No access', {
+
       user: !!user,
       isAdmin,
     });

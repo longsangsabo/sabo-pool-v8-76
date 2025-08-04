@@ -18,7 +18,7 @@ const LiveStreamPage: React.FC = () => {
 
   useEffect(() => {
     // Fetch stream data based on streamId
-    // ...removed console.log('Fetching stream data for:', streamId)
+
   }, [streamId]);
 
   return (

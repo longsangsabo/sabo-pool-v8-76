@@ -43,7 +43,7 @@ export const SimpleRegistrationModal: React.FC<
     setRegistering(true);
 
     try {
-      console.log(
+
         '💵 Processing cash registration for tournament:',
         tournament.id
       );
@@ -96,8 +96,6 @@ export const SimpleRegistrationModal: React.FC<
         }
         throw error;
       }
-
-      console.log('✅ Registration created:', data);
 
       toast.success(
         'Đăng ký thành công! CLB sẽ xác nhận sau khi bạn thanh toán tiền mặt.',

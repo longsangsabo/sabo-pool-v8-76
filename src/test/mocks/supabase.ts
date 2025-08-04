@@ -14,12 +14,11 @@ export const mockSupabase = {
 
 // Mock exports for tests
 export const setupSupabaseMocks = () => {
-  console.log('Setting up Supabase mocks');
+
 };
 
 export const mockToast = {
-  success: (message: string) => console.log('Toast success:', message),
-  error: (message: string) => console.log('Toast error:', message),
+
 };
 
 export const mockTournaments = [

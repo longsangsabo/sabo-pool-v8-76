@@ -165,7 +165,7 @@ const ThreeStepScoreWorkflow: React.FC<ThreeStepScoreWorkflowProps> = ({
           statusColor: 'default',
         };
       default:
-        console.log('🎯 ThreeStepScoreWorkflow Debug:', {
+
           challengeId: challenge.id,
           userId: user?.id,
           status: challenge.score_confirmation_status,
@@ -192,10 +192,6 @@ const ThreeStepScoreWorkflow: React.FC<ThreeStepScoreWorkflowProps> = ({
 
     setIsSubmitting(true);
     try {
-      console.log('🔥 SCORE SUBMISSION DEBUG:');
-      console.log('Challenge ID:', challenge.id);
-      console.log('BEFORE status:', challenge.score_confirmation_status);
-      console.log('Submitting scores:', { challengerScore, opponentScore });
 
       const { error } = await supabase
         .from('challenges')
@@ -206,7 +202,6 @@ const ThreeStepScoreWorkflow: React.FC<ThreeStepScoreWorkflowProps> = ({
         })
         .eq('id', challenge.id);
 
-      console.log('Database update error:', error);
       if (error) throw error;
 
       // Send email notification to the other player
@@ -234,11 +229,9 @@ const ThreeStepScoreWorkflow: React.FC<ThreeStepScoreWorkflowProps> = ({
         });
       }
 
-      console.log('✅ Score submitted successfully. Triggering UI refresh...');
       toast.success('Đã nhập tỷ số thành công! Đang chờ đối thủ xác nhận.');
       setIsOpen(false);
 
-      console.log('🔄 Calling onScoreUpdated at:', Date.now());
       onScoreUpdated();
     } catch (error: any) {
       console.error('Error entering score:', error);
@@ -530,7 +523,7 @@ const ThreeStepScoreWorkflow: React.FC<ThreeStepScoreWorkflowProps> = ({
       }
 
       if (!recipientEmail) {
-        console.log(
+
           'No recipient email found for score confirmation notification'
         );
         return;

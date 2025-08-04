@@ -168,10 +168,7 @@ export function initializeProductionOptimizations() {
       // Disable console logs in production (except errors)
       if (!PRODUCTION_CONFIG.environment.logging.enableConsoleOutput) {
         const noop = () => {};
-        console.log = noop;
-        console.info = noop;
-        console.warn = noop;
-        console.debug = noop;
+
       }
 
       // Initialize performance monitoring
@@ -196,7 +193,7 @@ function initializePerformanceMonitoring() {
     const observer = new PerformanceObserver(list => {
       for (const entry of list.getEntries()) {
         // Track and report performance metrics
-        console.info('Performance metric:', {
+
           name: entry.name,
           value: (entry as any).value || entry.duration || entry.startTime,
           timestamp: entry.startTime,

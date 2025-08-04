@@ -60,7 +60,7 @@ const RankVerificationRequests = () => {
         .single();
 
       if (clubError || !clubData) {
-        console.log('No club profile found for user:', user.id);
+
         setLoading(false);
         return;
       }
@@ -242,7 +242,6 @@ const RankVerificationRequests = () => {
                 },
               });
 
-              console.log('Feed post created for rank verification');
             } catch (postError) {
               console.error('Error creating feed post:', postError);
               // Don't block the main flow, just log the error

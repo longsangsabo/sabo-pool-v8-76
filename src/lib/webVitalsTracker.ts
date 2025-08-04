@@ -50,7 +50,6 @@ class WebVitalsTracker {
     this.metrics.push(webVitalsMetric);
 
     // Log for debugging
-    console.log(`[WebVitals] ${name}:`, webVitalsMetric);
 
     // Send critical metrics immediately
     if (webVitalsMetric.rating === 'poor') {
@@ -116,7 +115,6 @@ class WebVitalsTracker {
 
       await supabase.from('web_vitals_metrics' as any).insert(formattedMetrics);
 
-      console.log(`[WebVitals] Sent ${formattedMetrics.length} metrics`);
     } catch (error) {
       console.error('Failed to send web vitals metrics:', error);
       // Re-add metrics for retry

@@ -110,7 +110,7 @@ export const PerformanceMonitor: React.FC = () => {
       try {
         observer.observe({ entryTypes: ['layout-shift'] });
       } catch (e) {
-        console.warn('Layout shift monitoring not supported');
+
       }
     }
 

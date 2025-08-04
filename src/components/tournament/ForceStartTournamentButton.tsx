@@ -37,7 +37,7 @@ const ForceStartTournamentButton: React.FC<ForceStartTournamentButtonProps> = ({
   );
 
   // Debug log to see why button doesn't show
-  console.log('🔥 ForceStartTournamentButton Debug:', {
+
     tournamentId,
     tournamentName,
     currentStatus,
@@ -46,7 +46,7 @@ const ForceStartTournamentButton: React.FC<ForceStartTournamentButtonProps> = ({
   });
 
   if (!canForceStart) {
-    console.log(
+
       '🔥 ForceStartTournamentButton: Not showing because status is',
       currentStatus
     );

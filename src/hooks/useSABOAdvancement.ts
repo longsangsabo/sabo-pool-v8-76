@@ -17,7 +17,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing Losers R101 completion for tournament:',
           tournamentId
         );
@@ -38,11 +38,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Losers R101 completion successful:', result);
+
           toast.success('Đã xử lý xong vòng Losers R101!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Losers R101 completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -60,7 +60,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing Losers R102 completion for tournament:',
           tournamentId
         );
@@ -81,11 +81,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Losers R102 completion successful:', result);
+
           toast.success('Đã xử lý xong vòng Losers R102!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Losers R102 completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -103,7 +103,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing Losers R103 completion for tournament:',
           tournamentId
         );
@@ -124,11 +124,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Losers R103 completion successful:', result);
+
           toast.success('Đã xử lý xong vòng Losers R103!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Losers R103 completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -146,7 +146,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing Losers R201 completion for tournament:',
           tournamentId
         );
@@ -167,11 +167,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Losers R201 completion successful:', result);
+
           toast.success('Đã xử lý xong vòng Losers R201!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Losers R201 completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -189,7 +189,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing Losers R202 completion for tournament:',
           tournamentId
         );
@@ -210,11 +210,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Losers R202 completion successful:', result);
+
           toast.success('Đã xử lý xong vòng Losers R202!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Losers R202 completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -232,7 +232,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Setting up semifinals pairings for tournament:',
           tournamentId
         );
@@ -253,11 +253,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Semifinals setup successful:', result);
+
           toast.success('Đã thiết lập trận bán kết!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Semifinals setup not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -275,7 +275,7 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log(
+
           '🔄 Processing semifinals completion for tournament:',
           tournamentId
         );
@@ -296,11 +296,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Semifinals completion successful:', result);
+
           toast.success('Đã xử lý xong kết quả bán kết!');
           return result as SABOAdvancementResult;
         } else {
-          console.log('ℹ️ Semifinals completion not needed:', result?.message);
+
           return (result || { success: false }) as SABOAdvancementResult;
         }
       } catch (err: any) {
@@ -318,7 +318,6 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log('🔄 Finalizing tournament:', tournamentId);
 
         // Use proper repair function for tournament advancement
         const { data, error } = await supabase.rpc(
@@ -336,11 +335,11 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Tournament finalization successful:', result);
+
           toast.success('Đã hoàn thiện giải đấu!');
           return result as SABOAdvancementResult;
         } else {
-          console.log(
+
             'ℹ️ Tournament finalization not needed:',
             result?.message
           );
@@ -361,7 +360,6 @@ export const useSABOAdvancement = () => {
     async (tournamentId: string): Promise<SABOAdvancementResult> => {
       setIsProcessing(true);
       try {
-        console.log('🔄 Updating tournament status:', tournamentId);
 
         // Use proper repair function for tournament advancement
         const { data, error } = await supabase.rpc(
@@ -379,10 +377,10 @@ export const useSABOAdvancement = () => {
 
         const result = data as any;
         if (result?.success) {
-          console.log('✅ Tournament status update successful:', result);
+
           return result as SABOAdvancementResult;
         } else {
-          console.log(
+
             'ℹ️ Tournament status update not needed:',
             result?.message
           );
@@ -405,7 +403,7 @@ export const useSABOAdvancement = () => {
 
       setIsProcessing(true);
       try {
-        console.log(
+
           '🤖 Processing comprehensive SABO advancement for tournament:',
           tournamentId
         );

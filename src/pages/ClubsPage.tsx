@@ -8,9 +8,8 @@ import Footer from '@/components/Footer';
 import PageLayout from '@/components/layout/PageLayout';
 
 const ClubsPage = () => {
-  console.log('🏢 [ClubsPage] Component rendering...');
+
   const { clubs, loading, error } = useClubs();
-  console.log('🏢 [ClubsPage] Hook state:', { clubs, loading, error });
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {

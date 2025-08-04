@@ -10,7 +10,7 @@ export const useTournamentRewardSync = () => {
     setError(null);
 
     try {
-      console.log(
+
         '🔄 Syncing tournament rewards...',
         tournamentId ? `for ${tournamentId}` : 'for all tournaments'
       );
@@ -30,7 +30,6 @@ export const useTournamentRewardSync = () => {
         throw error;
       }
 
-      console.log('✅ Sync completed:', data);
       return data;
     } catch (err: any) {
       console.error('❌ Sync failed:', err);

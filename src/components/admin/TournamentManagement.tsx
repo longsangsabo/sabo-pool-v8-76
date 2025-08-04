@@ -93,7 +93,7 @@ const TournamentManagement: React.FC = () => {
       }) as unknown as EnhancedTournament[];
 
       setTournaments(enhancedTournaments);
-      console.log('Fetched tournaments:', enhancedTournaments.length);
+
     } catch (error) {
       console.error('Error fetching tournaments:', error);
       toast.error('Lỗi khi tải danh sách giải đấu');
@@ -197,7 +197,6 @@ const TournamentManagement: React.FC = () => {
       }
 
       const tournamentIds = tournamentsToDelete.map(t => t.id);
-      console.log('Deleting tournaments with IDs:', tournamentIds);
 
       // Bước 2: Xóa tournaments - CASCADE DELETE sẽ tự động xóa tất cả records liên quan
       const { error: tournamentError } = await supabase

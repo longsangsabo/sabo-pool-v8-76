@@ -81,7 +81,6 @@ export const TournamentStateProvider: React.FC<
     selectedTournamentId || ''
   );
 
-  console.log('🏆 [TournamentStateContext] Debug:', {
     clubId,
     totalTournaments: tournaments.length,
     availableTournaments: availableTournaments.length,

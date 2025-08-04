@@ -46,7 +46,7 @@ export const DemoUserManager: React.FC<DemoUserManagerProps> = ({ addLog }) => {
     if (addLog) {
       addLog(message, type);
     } else {
-      console.log(`${type.toUpperCase()}: ${message}`);
+
     }
   };
 

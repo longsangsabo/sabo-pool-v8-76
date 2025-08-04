@@ -22,7 +22,6 @@ export const useSABOScoreSubmission = (
       matchId: string;
       scores: MatchScore;
     }) => {
-      console.log('🎯 Submitting SABO match score:', { matchId, scores });
 
       // Get current user for submitted_by parameter
       const {
@@ -33,7 +32,7 @@ export const useSABOScoreSubmission = (
       }
 
       // Use the new SABO score submission function
-      console.log('🔍 CALLING submit_sabo_match_score with params:', {
+
         p_match_id: matchId,
         p_player1_score: scores.player1,
         p_player2_score: scores.player2,
@@ -47,18 +46,14 @@ export const useSABOScoreSubmission = (
         p_submitted_by: user.id,
       });
 
-      console.log('🔍 RPC Response:', { data, error });
-
       if (error) {
         console.error('❌ SABO score submission failed:', error);
         throw error;
       }
 
-      console.log('✅ SABO score submitted successfully:', data);
       return data;
     },
     onSuccess: (data, variables) => {
-      console.log('✅ SABO score submission successful:', data);
 
       // ✅ AGGRESSIVE CACHE INVALIDATION - Force refresh all tournament data
       queryClient.invalidateQueries({ queryKey: ['tournament-matches'] });
@@ -84,7 +79,7 @@ export const useSABOScoreSubmission = (
       setTimeout(() => {
         // Use provided refresh callback if available (should preserve scroll)
         if (onRefresh) {
-          console.log(
+
             '🔄 Calling provided refresh callback with scroll preservation'
           );
           onRefresh();

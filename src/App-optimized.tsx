@@ -188,7 +188,6 @@ const LazyTermsPage = createLazyComponent(() => import('./pages/TermsPage'));
 import AuthWrapper from './components/AuthWrapper';
 
 const App = () => {
-  console.log('Optimized App component loading...');
 
   return (
     <ErrorBoundary>

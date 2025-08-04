@@ -37,7 +37,7 @@ export const CLSMonitor: React.FC<CLSMonitorProps> = ({
 
           // Log significant layout shifts
           if (shiftValue > threshold) {
-            console.warn('🚨 Significant layout shift detected:', {
+
               value: shiftValue.toFixed(4),
               cumulativeValue: clsValue.toFixed(4),
               sources:
@@ -61,7 +61,7 @@ export const CLSMonitor: React.FC<CLSMonitorProps> = ({
     // Report final CLS on page unload
     const reportCLS = () => {
       if (clsValue > 0) {
-        console.log(`📊 Final CLS Score: ${clsValue.toFixed(4)}`, {
+
           rating:
             clsValue <= 0.1
               ? 'Good'

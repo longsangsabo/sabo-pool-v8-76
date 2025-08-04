@@ -20,7 +20,7 @@ export const useNotificationSound = () => {
 
     // Play sound with error handling
     audioRef.current.play().catch(error => {
-      console.log('Could not play notification sound:', error);
+
     });
   };
 

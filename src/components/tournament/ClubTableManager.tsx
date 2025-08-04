@@ -62,7 +62,7 @@ const ClubTableManager = ({ onTablesInitialized }: ClubTableManagerProps) => {
     setLoading(true);
     try {
       // Temporarily disable table fetching until types are updated
-      console.log(
+
         'Table fetching temporarily disabled until database types are updated'
       );
       setTables([]);

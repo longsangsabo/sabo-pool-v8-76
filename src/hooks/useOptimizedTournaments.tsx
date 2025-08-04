@@ -285,7 +285,7 @@ export const useTournamentPerformanceTracking = () => {
 
     // Log slow queries (>1 second)
     if (executionTime > 1000) {
-      console.warn(
+
         `Slow tournament query detected: ${queryType} took ${executionTime}ms`
       );
     }

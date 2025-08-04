@@ -43,7 +43,7 @@ const ClubManagementPage = () => {
   };
 
   // Debug current club info
-  console.log('🏢 [ClubManagementPage] Debug:', {
+
     user: user?.id,
     isClubOwner,
     clubProfile: clubProfile
@@ -158,7 +158,7 @@ const ClubManagementPage = () => {
 
         <TabsContent value='tournaments'>
           {(() => {
-            console.log(
+
               '🎯 Rendering tournaments tab with clubId:',
               clubProfile?.id
             );

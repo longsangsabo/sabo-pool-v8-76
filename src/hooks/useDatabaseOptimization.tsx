@@ -245,7 +245,7 @@ export const useDatabaseOptimization = () => {
 
         // Log slow operations
         if (duration > 1000) {
-          console.warn(
+
             `Slow DB operation: ${operation} took ${duration.toFixed(2)}ms`
           );
 

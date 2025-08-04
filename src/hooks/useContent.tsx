@@ -108,7 +108,6 @@ export const useContent = () => {
         updated_at: new Date().toISOString(),
       };
 
-      console.log('Mock create post:', newPost);
       return newPost;
     },
     onSuccess: () => {
@@ -124,7 +123,7 @@ export const useContent = () => {
   const incrementViewCount = useMutation({
     mutationFn: async (postId: string) => {
       // Mock increment view count since increment_post_views RPC doesn't exist
-      console.log('Mock increment view count for post:', postId);
+
     },
   });
 

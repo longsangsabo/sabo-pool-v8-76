@@ -16,7 +16,7 @@ const TestCopyTemplate = () => {
 
       if (templates.length > 0) {
         rewardsData = convertTemplatesToRewards(templates);
-        console.log('Using existing templates:', rewardsData);
+
       } else {
         // Create sample rewards data for all 16 positions
         rewardsData = {
@@ -170,14 +170,14 @@ const TestCopyTemplate = () => {
           ],
           specialAwards: [],
         };
-        console.log('Using sample rewards data:', rewardsData);
+
       }
 
       const success = await copyTemplateToTournament(tournamentId, rewardsData);
 
       if (success) {
         toast.success('✅ Đã copy template vào giải test1 thành công!');
-        console.log('Copy template to test1 tournament successful');
+
       } else {
         toast.error('❌ Lỗi khi copy template');
         console.error('Copy template failed');

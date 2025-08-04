@@ -45,19 +45,19 @@ const OpponentCard = ({
 
   const swipeCallbacks = {
     onSwipeLeft: (id: string) => {
-      console.log('Swiped left - Pass');
+
       onSwipeLeft(id);
     },
     onSwipeRight: (id: string) => {
-      console.log('Swiped right - Challenge');
+
       onChallenge(id);
     },
     onSwipeUp: (id: string) => {
-      console.log('Swiped up - Super Like');
+
       onSwipeRight(id); // Treat as interest
     },
     onSwipeDown: (id: string) => {
-      console.log('Swiped down - View Profile');
+
       onViewProfile?.(id);
     },
   };

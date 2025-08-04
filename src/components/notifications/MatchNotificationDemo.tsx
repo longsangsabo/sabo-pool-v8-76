@@ -38,17 +38,17 @@ export const MatchNotificationDemo: React.FC = () => {
   };
 
   const handleJoinMatch = () => {
-    console.log('Joining match...');
+
     setIsPopupOpen(false);
   };
 
   const handleViewBracket = () => {
-    console.log('Viewing bracket...');
+
     setIsPopupOpen(false);
   };
 
   const handlePostpone = () => {
-    console.log('Postponing match...');
+
     setIsPopupOpen(false);
   };
 

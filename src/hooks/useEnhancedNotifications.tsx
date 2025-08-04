@@ -129,8 +129,6 @@ export const useEnhancedNotifications = () => {
   useEffect(() => {
     if (!user?.id) return;
 
-    console.log('Setting up enhanced notification subscription');
-
     // Initial fetch
     fetchNotificationSummary();
 
@@ -146,7 +144,6 @@ export const useEnhancedNotifications = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log('Real-time notification update:', payload);
 
           // Refresh the summary to get accurate counts and latest notifications
           fetchNotificationSummary();
@@ -163,7 +160,7 @@ export const useEnhancedNotifications = () => {
       .subscribe();
 
     return () => {
-      console.log('Cleaning up enhanced notification subscription');
+
       supabase.removeChannel(channel);
     };
   }, [user?.id, fetchNotificationSummary]);

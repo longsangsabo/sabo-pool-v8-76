@@ -84,9 +84,6 @@ export class EmailService {
     try {
       // In production, this would integrate with a real email service
       // For now, we'll use Supabase's built-in email functionality
-      console.log(`Sending email to: ${to}`);
-      console.log(`Subject: ${template.subject}`);
-      console.log(`Content: ${template.text}`);
 
       // Store email log in database for tracking
       await this.logEmail(to, template.subject, 'sent');
@@ -104,7 +101,7 @@ export class EmailService {
   ): Promise<void> {
     try {
       // Log email activity for audit purposes
-      console.log(`Email log: ${to} - ${subject} - ${status}`);
+
     } catch (error) {
       console.error('Failed to log email:', error);
     }

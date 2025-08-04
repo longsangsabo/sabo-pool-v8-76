@@ -73,7 +73,7 @@ export const useImagePreloader = (images: string[]) => {
     Promise.allSettled(preloadPromises).then(results => {
       const failed = results.filter(result => result.status === 'rejected');
       if (failed.length > 0) {
-        console.warn(`Failed to preload ${failed.length} images`);
+
       }
     });
   }, [images]);
@@ -104,7 +104,7 @@ export const useLayoutShiftDetector = (
 
           // Log significant layout shifts
           if ((entry as any).value > 0.1) {
-            console.warn('Significant layout shift detected:', {
+
               value: (entry as any).value,
               sources: (entry as any).sources,
               startTime: entry.startTime,
@@ -119,7 +119,7 @@ export const useLayoutShiftDetector = (
     return () => {
       observer.disconnect();
       if (clsValue > 0.1) {
-        console.warn(`Total CLS score: ${clsValue.toFixed(4)}`);
+
       }
     };
   }, [enabled]);

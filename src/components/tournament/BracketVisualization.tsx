@@ -71,7 +71,7 @@ export const BracketVisualization: React.FC<BracketVisualizationProps> = ({
           table: 'profiles',
         },
         () => {
-          console.log('🔄 Profile updated, refreshing bracket...');
+
           fetchBracketData();
         }
       )
@@ -83,14 +83,14 @@ export const BracketVisualization: React.FC<BracketVisualizationProps> = ({
           table: 'tournament_matches',
         },
         () => {
-          console.log('🔄 Match updated, refreshing bracket...');
+
           fetchBracketData();
         }
       )
       .subscribe();
 
     return () => {
-      console.log('🔌 Unsubscribing from bracket updates');
+
       channel.unsubscribe();
     };
   }, [tournamentId]);
@@ -98,8 +98,6 @@ export const BracketVisualization: React.FC<BracketVisualizationProps> = ({
   const fetchBracketData = async () => {
     try {
       setLoading(true);
-
-      console.log('🔍 Fetching bracket data for tournament:', tournamentId);
 
       // Get tournament data first
       const { data: tournament, error: tournamentError } = await supabase
@@ -232,8 +230,7 @@ export const BracketVisualization: React.FC<BracketVisualizationProps> = ({
       };
 
       setBracketData(bracketInfo);
-      console.log('✅ Bracket data loaded:', bracketInfo);
-      console.log('✅ Matches loaded:', enhancedMatches.length);
+
     } catch (error) {
       console.error('Error fetching bracket data:', error);
     } finally {

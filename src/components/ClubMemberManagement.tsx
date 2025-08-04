@@ -122,7 +122,7 @@ export const useClubMembers = (clubId: string) => {
           table: 'profiles',
         },
         payload => {
-          console.log('Profile updated, refreshing members:', payload);
+
           fetchClubMembers(); // Refresh entire list
         }
       )
@@ -135,7 +135,7 @@ export const useClubMembers = (clubId: string) => {
           filter: `club_id=eq.${clubId}`,
         },
         payload => {
-          console.log('Rank request updated, refreshing members:', payload);
+
           fetchClubMembers(); // Refresh when new approvals happen
         }
       )

@@ -160,11 +160,11 @@ const BracketManagement: React.FC<BracketManagementProps> = ({
         }
 
         // Simulate match update since table doesn't exist
-        console.log('Would update match:', match.id, updateData);
+
       }
 
       // Simulate event logging since table doesn't exist
-      console.log('Would log substitution:', {
+
         old_user_id: substitutionData.oldPlayerId,
         new_user_id: substitutionData.newPlayerId,
         reason: substitutionData.reason,

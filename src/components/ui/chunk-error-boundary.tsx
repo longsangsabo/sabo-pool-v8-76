@@ -87,7 +87,7 @@ export const ChunkErrorBoundary: React.FC<ChunkErrorBoundaryProps> = ({
       }}
       onReset={() => {
         // Clear any cached states that might be causing issues
-        console.log('Resetting chunk error boundary');
+
       }}
     >
       {children}

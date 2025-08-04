@@ -12,7 +12,6 @@ const ForgotPasswordPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password reset attempt:', { email });
 
     if (!email) {
       toast.error('Vui lòng nhập email');

@@ -126,7 +126,7 @@ export const TournamentAutomationStatus: React.FC<
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Real-time match update:', payload);
+
           fetchMatchStatus(); // Refresh data when matches change
 
           if (

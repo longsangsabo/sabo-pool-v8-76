@@ -69,8 +69,6 @@ export const useTournamentUtils = (): TournamentUtils => {
           return null;
         }
 
-        console.log('Double elimination tournament setup:', setupResult);
-
         const result = setupResult as any;
         if (result?.success) {
           toast.success(
@@ -181,7 +179,6 @@ export const useTournamentUtils = (): TournamentUtils => {
         .eq('tournament_id', tournamentId);
 
       // Mock delete tournament seeding since table doesn't exist
-      console.log('Deleting tournament seeding for:', tournamentId);
 
       // Finally delete tournament
       const { error } = await supabase

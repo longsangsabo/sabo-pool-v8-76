@@ -38,7 +38,6 @@ export const WalletBalance: React.FC = () => {
       }
 
       try {
-        console.log('Fetching wallet data for user:', user.id);
 
         // Fetch wallet balance
         const { data: walletData, error: walletError } = await supabase
@@ -81,7 +80,7 @@ export const WalletBalance: React.FC = () => {
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-          console.log('Wallet updated via realtime:', payload);
+
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
             if ('points_balance' in newData) {

@@ -324,7 +324,6 @@ export const SingleEliminationMatchCard: React.FC<
                     '@/integrations/supabase/client'
                   );
 
-                  console.log('🎯 Updating score for match:', {
                     matchId: match.id,
                     score1,
                     score2,
@@ -360,11 +359,10 @@ export const SingleEliminationMatchCard: React.FC<
                     throw new Error(data.error as string);
                   }
 
-                  console.log('✅ Score updated successfully:', data);
                   toast.success('🎯 Đã cập nhật tỷ số thành công!');
 
                   // Don't reload page, let real-time updates handle it
-                  console.log('🔄 Trusting real-time updates to refresh UI');
+
                 } catch (error) {
                   console.error('Error updating score:', error);
                   toast.error('Có lỗi khi cập nhật tỷ số. Vui lòng thử lại.');

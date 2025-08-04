@@ -222,7 +222,7 @@ export const useTournamentRegistrationFlow = () => {
               eligibility.reasons[0] || 'Không đủ điều kiện tham gia';
             toast.error(primaryReason);
             if (eligibility.reasons.length > 1) {
-              console.log('All eligibility reasons:', eligibility.reasons);
+
             }
             setRegistrationStatus(prev => ({
               ...prev,

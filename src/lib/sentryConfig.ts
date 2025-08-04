@@ -19,7 +19,7 @@ export const initSentry = () => {
       beforeSend(event) {
         // Filter out errors in development
         if (import.meta.env.DEV) {
-          console.log('Sentry event:', event);
+
         }
         return event;
       },

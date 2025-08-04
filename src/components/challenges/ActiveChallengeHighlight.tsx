@@ -38,7 +38,7 @@ export const ActiveChallengeHighlight: React.FC<
     : [];
 
   // Debug log
-  console.log('🔍 ActiveChallengeHighlight render:', {
+
     totalChallenges: challenges?.length || 0,
     acceptedChallenges: acceptedChallenges.length,
     userId: user?.id,

@@ -32,7 +32,7 @@ export const AdvancedTournamentFeatures: React.FC<
 
   const handleParticipantUpdate = (participant: any) => {
     // Handle participant updates
-    console.log('Participant updated:', participant);
+
   };
 
   return (

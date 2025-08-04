@@ -155,7 +155,6 @@ export const EditableProfileForm: React.FC<EditableProfileFormProps> = ({
       return;
     }
 
-    console.log('🔄 Starting profile update...', {
       userId: user.id,
       formData,
     });
@@ -175,7 +174,6 @@ export const EditableProfileForm: React.FC<EditableProfileFormProps> = ({
         throw error;
       }
 
-      console.log('✅ Profile updated successfully');
       toast.success('Cập nhật thông tin thành công');
       onProfileUpdate?.();
     } catch (error: any) {

@@ -68,7 +68,7 @@ const RandomBracketGenerator = () => {
           table: 'tournaments',
         },
         payload => {
-          console.log('🔄 Tournament updated:', payload);
+
           // Refresh tournament list
           fetchTournaments();
         }
@@ -76,14 +76,14 @@ const RandomBracketGenerator = () => {
       .subscribe();
 
     return () => {
-      console.log('🔌 Unsubscribing from tournament updates');
+
       channel.unsubscribe();
     };
   }, [user]);
 
   useEffect(() => {
     if (selectedTournament) {
-      console.log('🎯 Selected tournament changed:', selectedTournament);
+
       fetchTournamentParticipants();
 
       // Add Real-time Subscription for tournament registrations
@@ -98,7 +98,7 @@ const RandomBracketGenerator = () => {
             filter: `tournament_id=eq.${selectedTournament}`,
           },
           payload => {
-            console.log('🔄 Tournament registration updated:', payload);
+
             // Refresh participants list
             fetchTournamentParticipants();
           }
@@ -106,7 +106,7 @@ const RandomBracketGenerator = () => {
         .subscribe();
 
       return () => {
-        console.log('🔌 Unsubscribing from registration updates');
+
         regChannel.unsubscribe();
       };
     } else {
@@ -117,7 +117,7 @@ const RandomBracketGenerator = () => {
 
   // Debug logging for component state
   useEffect(() => {
-    console.log('🔍 Component state:', {
+
       tournamentsCount: tournaments?.length,
       selectedTournament: selectedTournament,
       availablePlayersCount: availablePlayers?.length,
@@ -137,15 +137,12 @@ const RandomBracketGenerator = () => {
     if (!user) return;
 
     try {
-      console.log('🔄 Fetching tournaments...');
 
       const { data: clubData } = await supabase
         .from('club_profiles')
         .select('id')
         .eq('user_id', user.id)
         .single();
-
-      console.log('🏢 Club data:', clubData);
 
       if (clubData) {
         const { data: tournaments, error } = await supabase
@@ -154,8 +151,6 @@ const RandomBracketGenerator = () => {
           .eq('club_id', clubData.id)
           .in('status', ['registration_open', 'registration_closed', 'ongoing']) // ← Add ongoing status
           .order('created_at', { ascending: false });
-
-        console.log('📊 Tournaments loaded:', tournaments?.length, tournaments);
 
         if (error) {
           console.error('❌ Error fetching tournaments:', error);
@@ -175,7 +170,7 @@ const RandomBracketGenerator = () => {
     if (!selectedTournament) return;
 
     try {
-      console.log(
+
         '🔄 Fetching tournament participants for:',
         selectedTournament
       );
@@ -199,7 +194,6 @@ const RandomBracketGenerator = () => {
         .eq('tournament_id', selectedTournament)
         .eq('registration_status', 'confirmed');
 
-      console.log('👥 Tournament participants result:', {
         participants,
         error,
       });
@@ -212,8 +206,6 @@ const RandomBracketGenerator = () => {
 
       const formattedPlayers =
         participants?.map(participant => {
-          console.log('🔍 Raw participant data:', participant);
-          console.log('🔍 Participant profiles:', participant.profiles);
 
           const player = {
             id: participant.user_id,
@@ -237,11 +229,9 @@ const RandomBracketGenerator = () => {
               'Chưa xác thực',
           };
 
-          console.log('✅ Formatted player:', player);
           return player;
         }) || [];
 
-      console.log(
         '✅ All formatted tournament participants:',
         formattedPlayers
       );
@@ -291,15 +281,12 @@ const RandomBracketGenerator = () => {
   };
 
   const generateRandomBracket = () => {
-    console.log('🎲 Creating random bracket...');
 
     if (selectedPlayers.length < 2) {
-      console.log('❌ Not enough players:', selectedPlayers.length);
+
       toast.error('Cần ít nhất 2 người chơi để tạo bảng đấu');
       return;
     }
-
-    console.log('👥 Players for bracket:', selectedPlayers?.length);
 
     try {
       // Shuffle players randomly
@@ -314,8 +301,6 @@ const RandomBracketGenerator = () => {
         shuffledPlayers.push(null); // Bye players
       }
 
-      console.log('🔀 Shuffled players count:', shuffledPlayers.length);
-
       // Generate first round matches
       const matches: BracketMatch[] = [];
       for (let i = 0; i < shuffledPlayers.length; i += 2) {
@@ -327,7 +312,6 @@ const RandomBracketGenerator = () => {
         });
       }
 
-      console.log('✅ Generated matches:', matches.length);
       setGeneratedBracket(matches);
       toast.success('Đã tạo bảng đấu ngẫu nhiên thành công!');
     } catch (error) {
@@ -337,20 +321,17 @@ const RandomBracketGenerator = () => {
   };
 
   const generateSeededBracket = () => {
-    console.log('🎯 Creating seeded bracket...');
 
     if (selectedPlayers.length < 2) {
-      console.log('❌ Not enough players for seeding:', selectedPlayers.length);
+
       toast.error('Cần ít nhất 2 người chơi để tạo bảng đấu');
       return;
     }
 
-    console.log('👥 Players for seeded bracket:', selectedPlayers?.length);
-
     try {
       // Sort players by ELO descending
       const sortedPlayers = [...selectedPlayers].sort((a, b) => b.elo - a.elo);
-      console.log(
+
         '📊 Players sorted by ELO:',
         sortedPlayers.map(p => `${p.full_name}: ${p.elo}`)
       );
@@ -362,15 +343,12 @@ const RandomBracketGenerator = () => {
         Math.ceil(Math.log2(sortedPlayers.length))
       );
 
-      console.log('🏆 Tournament bracket size:', totalPlayers);
-
       // Create seeding bracket
       for (let i = 0; i < totalPlayers / 2; i++) {
         seededPlayers.push(sortedPlayers[i] || null);
         seededPlayers.push(sortedPlayers[totalPlayers - 1 - i] || null);
       }
 
-      console.log(
         '🔢 Seeded arrangement:',
         seededPlayers.map(p => p?.full_name || 'BYE')
       );
@@ -386,7 +364,6 @@ const RandomBracketGenerator = () => {
         });
       }
 
-      console.log('✅ Generated seeded matches:', matches.length);
       setGeneratedBracket(matches);
       toast.success('Đã tạo bảng đấu theo seeding thành công!');
     } catch (error) {

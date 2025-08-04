@@ -13,7 +13,6 @@ export const AutomatedProfileRefresh: React.FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    console.log(
       '[AutomatedProfileRefresh] Setting up rank approval listener for user:',
       user.id
     );
@@ -30,7 +29,7 @@ export const AutomatedProfileRefresh: React.FC = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-          console.log(
+
             '[AutomatedProfileRefresh] Notification received:',
             payload
           );
@@ -44,7 +43,6 @@ export const AutomatedProfileRefresh: React.FC = () => {
             notification.message?.includes('được duyệt') ||
             notification.message?.includes('approved')
           ) {
-            console.log('[AutomatedProfileRefresh] Rank approval detected');
 
             // Show immediate feedback
             toast.success('🎉 Hạng của bạn đã được duyệt!', {
@@ -59,14 +57,14 @@ export const AutomatedProfileRefresh: React.FC = () => {
         }
       )
       .subscribe(status => {
-        console.log(
+
           '[AutomatedProfileRefresh] Notification subscription status:',
           status
         );
       });
 
     return () => {
-      console.log(
+
         '[AutomatedProfileRefresh] Cleaning up notification listener'
       );
       supabase.removeChannel(notificationChannel);

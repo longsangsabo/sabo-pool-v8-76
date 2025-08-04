@@ -31,7 +31,6 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
         setError(null);
         if (skipDelay) setLoading(true);
 
-        console.log(
           '🔄 Fetching enhanced matches for tournament:',
           tournamentId
         );
@@ -80,7 +79,7 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
 
         setMatches(matchesWithProfiles);
         setLastUpdateTime(new Date());
-        console.log('✅ Enhanced matches loaded:', matchesWithProfiles.length);
+
       } catch (err: any) {
         console.error('❌ Error in enhanced fetchMatches:', err);
         setError(err.message || 'Failed to fetch matches');
@@ -95,7 +94,6 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up enhanced real-time subscription for:',
       tournamentId
     );
@@ -113,7 +111,6 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Enhanced match update:', payload);
 
           // Instant UI update for better UX
           if (payload.eventType === 'UPDATE' && payload.new) {
@@ -162,7 +159,6 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
         },
         payload => {
           const logData = payload.new as any;
-          console.log('🤖 Automation log update:', logData);
 
           if (
             logData.action_type === 'auto_winner_advancement' &&
@@ -178,14 +174,14 @@ export const useEnhancedTournamentMatches = (tournamentId: string | null) => {
       )
 
       .subscribe(status => {
-        console.log(`🔗 Enhanced subscription status: ${status}`);
+
         if (status === 'SUBSCRIBED') {
-          console.log('✅ Enhanced real-time connected');
+
         }
       });
 
     return () => {
-      console.log('🔌 Cleaning up enhanced subscription');
+
       if (debounceRef.current) clearTimeout(debounceRef.current);
       supabase.removeChannel(channel);
     };

@@ -59,7 +59,6 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
   const loadUsers = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Loading users for quick add...');
 
       // Get all users with ranking data
       const { data: allUsers, error: usersError } = await supabase
@@ -96,7 +95,6 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
         user => !registeredUserIds.has(user.user_id)
       );
 
-      console.log('✅ Available users for adding:', availableUsers.length);
       setUsers(availableUsers);
       setFilteredUsers(availableUsers);
     } catch (error: any) {
@@ -158,14 +156,10 @@ export const QuickAddUserDialog: React.FC<QuickAddUserDialogProps> = ({
         created_at: new Date().toISOString(),
       }));
 
-      console.log('🚀 Bulk adding participants:', registrations);
-
       const { data, error } = await supabase
         .from('tournament_registrations')
         .insert(registrations)
         .select();
-
-      console.log('✅ Bulk insert result:', { data, error });
 
       if (error) {
         console.error('❌ Database error:', error);

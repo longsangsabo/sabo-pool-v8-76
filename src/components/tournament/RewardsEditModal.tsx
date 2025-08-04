@@ -215,8 +215,6 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
       setIsSaving(true);
       const formData = getValues();
 
-      console.log('🔍 RewardsEditModal - Saving data:', formData);
-
       // Validate total prize vs individual prizes
       const totalCashPrizes = formData.positions.reduce(
         (sum, pos) => sum + (pos.cashPrize || 0),
@@ -233,7 +231,6 @@ export const RewardsEditModal: React.FC<RewardsEditModalProps> = ({
       form.reset(formData, { keepValues: true });
       setLocalRewards(formData);
 
-      console.log('🔍 RewardsEditModal - Save successful');
     } catch (error) {
       console.error('Failed to save rewards:', error);
       // Error handled by parent component

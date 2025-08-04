@@ -68,7 +68,6 @@ export const TournamentParticipantManager: React.FC<
   const loadRegistrations = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Loading registrations for tournament:', tournament.id);
 
       const { data, error } = await supabase
         .from('tournament_registrations')
@@ -108,8 +107,6 @@ export const TournamentParticipantManager: React.FC<
         }
       }
 
-      console.log('✅ Loaded registrations:', data);
-
       // Transform data to match our interface
       const transformedData = (data || []).map(reg => {
         const userProfile = profilesData.find(
@@ -148,7 +145,6 @@ export const TournamentParticipantManager: React.FC<
   // Load available users
   const loadUsers = async () => {
     try {
-      console.log('🔄 Loading available users...');
 
       const { data, error } = await supabase
         .from('profiles')
@@ -161,8 +157,6 @@ export const TournamentParticipantManager: React.FC<
         console.error('❌ Error loading users:', error);
         throw error;
       }
-
-      console.log('✅ Loaded users:', data?.length || 0);
 
       // Filter out users already registered
       const registeredUserIds = registrations.map(r => r.user_id);
@@ -186,7 +180,7 @@ export const TournamentParticipantManager: React.FC<
     if (!selectedUserId || !tournament) return;
 
     setIsAdding(true);
-    console.log('🚀 Adding participant:', {
+
       tournament_id: tournament.id,
       user_id: selectedUserId,
       registration_status: 'confirmed',
@@ -203,8 +197,6 @@ export const TournamentParticipantManager: React.FC<
           payment_status: 'paid',
         })
         .select();
-
-      console.log('✅ Insert result:', { data, error });
 
       if (error) {
         console.error('❌ Database error:', error);
@@ -237,7 +229,6 @@ export const TournamentParticipantManager: React.FC<
     playerName: string
   ) => {
     try {
-      console.log('🗑️ Removing participant:', registrationId);
 
       const { error } = await supabase
         .from('tournament_registrations')

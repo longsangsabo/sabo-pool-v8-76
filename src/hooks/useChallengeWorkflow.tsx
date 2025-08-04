@@ -80,7 +80,7 @@ export function useChallengeWorkflow() {
       opponentScore: number;
       isChallenger: boolean;
     }) => {
-      console.log('Submitting challenge score:', {
+
         challengeId,
         challengerScore,
         opponentScore,
@@ -111,7 +111,6 @@ export function useChallengeWorkflow() {
       return data.result;
     },
     onSuccess: result => {
-      console.log('Score submitted successfully:', result);
 
       // Use refetchQueries instead of invalidateQueries to avoid full page reload
       queryClient.refetchQueries({ queryKey: ['challenges'] });

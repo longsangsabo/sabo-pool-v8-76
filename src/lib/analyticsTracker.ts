@@ -140,7 +140,6 @@ class AnalyticsTracker {
     this.events.push(event);
 
     // Log for debugging
-    console.log(`[Analytics] ${name}:`, event);
 
     // Send critical events immediately
     if (
@@ -266,7 +265,6 @@ class AnalyticsTracker {
 
       await supabase.from('analytics_events' as any).insert(formattedEvents);
 
-      console.log(`[Analytics] Sent ${formattedEvents.length} events`);
     } catch (error) {
       console.error('Failed to flush analytics events:', error);
       // Re-add events for retry

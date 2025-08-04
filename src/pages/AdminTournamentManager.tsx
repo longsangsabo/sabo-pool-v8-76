@@ -77,7 +77,7 @@ const AdminTournamentManager: React.FC = () => {
   }, []);
 
   const loadTournaments = async () => {
-    console.log('📊 Loading tournaments...');
+
     try {
       const { data, error } = await supabase
         .from('tournaments')
@@ -109,7 +109,7 @@ const AdminTournamentManager: React.FC = () => {
       );
 
       setTournaments(tournamentsWithCounts);
-      console.log('✅ Loaded tournaments:', tournamentsWithCounts.length);
+
     } catch (error) {
       console.error('❌ Error loading tournaments:', error);
       toast({
@@ -121,7 +121,7 @@ const AdminTournamentManager: React.FC = () => {
   };
 
   const loadUsers = async () => {
-    console.log('👥 Loading users...');
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -134,7 +134,7 @@ const AdminTournamentManager: React.FC = () => {
 
       // Type assertion to handle the data properly
       setUsers((data as any[]) || []);
-      console.log('✅ Loaded users:', data?.length || 0);
+
     } catch (error) {
       console.error('❌ Error loading users:', error);
       toast({
@@ -147,7 +147,6 @@ const AdminTournamentManager: React.FC = () => {
 
   // 👥 USER SELECTION FUNCTIONS
   const selectUsersByTemplate = (template: any) => {
-    console.log('🎯 Selecting users by template:', template);
 
     let filteredUsers: User[] = [];
 
@@ -207,7 +206,6 @@ const AdminTournamentManager: React.FC = () => {
 
     setSelectedUsers(selectedIds);
 
-    console.log(`✅ Selected ${selectedIds.length} users`);
     toast({
       title: 'Đã chọn',
       description: `${selectedIds.length} người dùng được chọn`,
@@ -215,7 +213,7 @@ const AdminTournamentManager: React.FC = () => {
   };
 
   const selectByEloRange = (minElo: number, maxElo: number) => {
-    console.log(`🎯 Selecting users by ELO range: ${minElo}-${maxElo}`);
+
     const filtered = users.filter(
       user =>
         (user.elo || 0) >= minElo &&
@@ -304,8 +302,6 @@ const AdminTournamentManager: React.FC = () => {
         registration_date: new Date().toISOString(),
       }));
 
-      console.log('📤 Inserting registrations:', registrations);
-
       const { error } = await supabase
         .from('tournament_registrations')
         .insert(registrations);
@@ -314,8 +310,6 @@ const AdminTournamentManager: React.FC = () => {
         console.error('❌ Registration error:', error);
         throw error;
       }
-
-      console.log('✅ Users added successfully');
 
       // Update tournament participant count
       const updatedParticipantCount =
@@ -358,8 +352,6 @@ const AdminTournamentManager: React.FC = () => {
   const autoBalanceSkills = () => {
     if (selectedUsers.length === 0) return;
 
-    console.log('⚖️ Auto-balancing skills for selected users');
-
     const selectedUserData = users.filter(u =>
       selectedUsers.includes(u.user_id || u.id)
     );
@@ -382,7 +374,6 @@ const AdminTournamentManager: React.FC = () => {
 
     setSelectedUsers(balanced.map(u => u.user_id || u.id));
 
-    console.log('✅ Skills balanced');
     toast({
       title: 'Đã cân bằng',
       description: 'Thứ tự người chơi đã được tối ưu hóa theo skill',
@@ -644,7 +635,7 @@ const AdminTournamentManager: React.FC = () => {
                       selectedTournament.management_status || 'manual'
                     }
                     onTournamentStarted={() => {
-                      console.log('Tournament started:', selectedTournament.id);
+
                       loadTournaments();
                       setSelectedTournament(null);
                     }}

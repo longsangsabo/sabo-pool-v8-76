@@ -6,7 +6,6 @@ export const useWinnerAdvancementListener = (tournamentId?: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🎯 Setting up winner advancement listener for tournament:',
       tournamentId
     );
@@ -15,7 +14,7 @@ export const useWinnerAdvancementListener = (tournamentId?: string) => {
       try {
         const data = JSON.parse(payload);
         if (data.tournament_id === tournamentId) {
-          console.log('🚀 Auto-advancing winner for match:', data.match_id);
+
           await advanceWinner(data.match_id);
         }
       } catch (err) {
@@ -43,7 +42,7 @@ export const useWinnerAdvancementListener = (tournamentId?: string) => {
             payload.new?.winner_id &&
             !payload.old?.winner_id
           ) {
-            console.log(
+
               '🎯 Winner detected, triggering rules-based advancement:',
               payload.new.id
             );
@@ -54,7 +53,7 @@ export const useWinnerAdvancementListener = (tournamentId?: string) => {
       .subscribe();
 
     return () => {
-      console.log('🔌 Cleaning up winner advancement listener');
+
       supabase.removeChannel(channel);
     };
   }, [tournamentId]);

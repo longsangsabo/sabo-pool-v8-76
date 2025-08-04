@@ -16,7 +16,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
   });
 
   useEffect(() => {
-    console.log(
+
       '🔄 Setting up comprehensive tournament sync for:',
       tournamentId
     );
@@ -35,7 +35,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           ...(tournamentId && { filter: `id=eq.${tournamentId}` }),
         },
         payload => {
-          console.log('🏆 Tournament change detected:', payload);
+
           setLastUpdate(new Date());
 
           if (payload.eventType === 'UPDATE') {
@@ -81,7 +81,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` }),
         },
         payload => {
-          console.log('⚔️ Tournament match updated:', payload);
+
           setLastUpdate(new Date());
 
           const newRecord = payload.new as any;
@@ -119,7 +119,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           ...(tournamentId && { filter: `tournament_id=eq.${tournamentId}` }),
         },
         payload => {
-          console.log('🏆 Tournament results updated:', payload);
+
           setLastUpdate(new Date());
 
           if (payload.eventType === 'INSERT') {
@@ -140,7 +140,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
         payload => {
           const newRecord = payload.new as any;
           if (!tournamentId || newRecord.source_id === tournamentId) {
-            console.log('💎 SPA points awarded:', payload);
+
             setLastUpdate(new Date());
             toast.success(`💎 +${newRecord.points_earned} SPA Points!`);
           }
@@ -157,7 +157,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
           filter: 'type=eq.tournament_completed',
         },
         payload => {
-          console.log('🔔 Tournament notification:', payload);
+
           setLastUpdate(new Date());
         }
       )
@@ -173,7 +173,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
         },
         payload => {
           const logData = payload.new as any;
-          console.log('🤖 Automation log update:', logData);
+
           setLastUpdate(new Date());
 
           if (logData.automation_type === 'auto_winner_advancement') {
@@ -215,7 +215,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
       )
 
       .subscribe(status => {
-        console.log(`🔗 Tournament sync status: ${status}`);
+
         setIsConnected(status === 'SUBSCRIBED');
 
         if (status === 'SUBSCRIBED') {
@@ -226,7 +226,7 @@ export const useRealtimeTournamentSync = (tournamentId?: string) => {
       });
 
     return () => {
-      console.log('🔌 Cleaning up tournament sync');
+
       supabase.removeChannel(channel);
       setIsConnected(false);
     };

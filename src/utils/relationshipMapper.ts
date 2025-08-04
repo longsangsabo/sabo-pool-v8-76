@@ -151,7 +151,7 @@ export function getStandardRelationship(
   const mapping = RELATIONSHIP_MAPPINGS[key];
 
   if (!mapping) {
-    console.warn(
+
       `No standard relationship mapping found for ${table}.${foreignKey}`
     );
     return `${mapping?.referencedTable || 'unknown'}!${foreignKey}`;

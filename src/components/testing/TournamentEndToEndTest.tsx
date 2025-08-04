@@ -257,7 +257,7 @@ export const TournamentEndToEndTest: React.FC = () => {
             'success' in advancementResult &&
             !advancementResult.success
           ) {
-            console.warn(
+
               `Advancement warning for match ${match.id}:`,
               advancementResult
             );

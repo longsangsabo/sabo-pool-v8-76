@@ -27,7 +27,7 @@ export const calculateRewardsFromTiers = async (
   tournament: any,
   prizeTiers?: any[]
 ): Promise<TournamentRewardsCalculation> => {
-  console.log('🔍 calculateRewardsFromTiers input:', {
+
     tournament_id: tournament?.id,
     prize_pool: tournament?.prize_pool,
     prizeTiers: prizeTiers?.length,
@@ -69,7 +69,7 @@ export const calculateRewards = (
   tournament: any,
   playerRank: RankCode = 'K'
 ): TournamentRewardsCalculation => {
-  console.log('🔍 calculateRewards (fallback) input:', {
+
     tournament_id: tournament?.id,
     prize_pool: tournament?.prize_pool,
     entry_fee: tournament?.entry_fee,
@@ -82,16 +82,14 @@ export const calculateRewards = (
 
   if (tournament.prize_pool && tournament.prize_pool > 0) {
     totalPrize = tournament.prize_pool;
-    console.log('✅ [calculateRewards] Using user-set prize_pool:', totalPrize);
+
   } else if (tournament.entry_fee && tournament.max_participants) {
     totalPrize = tournament.entry_fee * tournament.max_participants * 0.75; // ✅ FIXED: Use 75% as fallback calculation
-    console.log(
+
       '✅ [calculateRewards] Calculated from entry_fee (75%):',
       totalPrize
     );
   }
-
-  console.log('🎯 Final totalPrize used:', totalPrize);
 
   // Default ELO points based on position
   const eloPoints = {
@@ -305,6 +303,5 @@ export const calculateRewards = (
     specialAwards: [],
   };
 
-  console.log('calculateRewards result:', result);
   return result;
 };

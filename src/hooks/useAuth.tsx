@@ -71,19 +71,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     let isMounted = true;
-    console.log('🔧 Auth: Initializing authentication system...');
 
     // Set up auth state listener FIRST
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
-
-      console.log(
-        '🔧 Auth: State change event:',
-        event,
-        session?.user?.id || 'no user'
-      );
 
       // Handle authentication state changes
       const newState = {
@@ -98,14 +91,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Handle specific events
       if (event === 'SIGNED_OUT') {
-        console.log('🔧 Auth: User signed out, clearing state');
         // Clear any remaining auth data on sign out
         localStorage.removeItem('supabase.auth.token');
         sessionStorage.clear();
       } else if (event === 'SIGNED_IN' && session?.user) {
-        console.log('🔧 Auth: User signed in:', session.user.id);
+        // User signed in successfully
       } else if (event === 'TOKEN_REFRESHED') {
-        console.log('🔧 Auth: Token refreshed for user:', session?.user?.id);
+        // Token refreshed for user
       }
     });
 
@@ -130,10 +122,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           return;
         }
 
-        console.log(
-          '🔧 Auth: Initial session check:',
-          session?.user?.id || 'no user'
-        );
         setAuthState({
           user: session?.user || null,
           loading: false,
@@ -163,8 +151,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signOut = async (): Promise<void> => {
     try {
-      console.log('🔧 Auth: Starting sign out process...');
-
       // Clear local state first to prevent UI flickering
       setAuthState({
         user: null,
@@ -180,8 +166,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Perform Supabase sign out
       await supabase.auth.signOut({ scope: 'global' });
-
-      console.log('🔧 Auth: Sign out completed successfully');
 
       // Force redirect to auth page
       window.location.href = '/auth';

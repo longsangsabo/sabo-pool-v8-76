@@ -29,15 +29,12 @@ export const useChallenges = () => {
       setLoading(true);
       setError(null);
 
-      console.log('✅ [useChallenges] Fetching challenges for user:', user.id);
-
       // ✅ CRITICAL FIX: Fetch ALL challenges including open ones from other users
       const { data: challengesData, error: fetchError } = await supabase
         .from('challenges')
         .select('*')
         .order('created_at', { ascending: false });
 
-      console.log('📊 [useChallenges] Raw database response:', {
         totalChallenges: challengesData?.length || 0,
         error: fetchError,
         firstFew: challengesData?.slice(0, 3).map(c => ({
@@ -151,7 +148,7 @@ export const useChallenges = () => {
         }) || [];
 
       // ✅ Enhanced logging for debugging
-      console.log('🔍 [useChallenges] Processing enriched challenges:', {
+
         total: enrichedChallenges.length,
         currentUser: user.id.slice(-8),
         byStatus: {
@@ -214,7 +211,6 @@ export const useChallenges = () => {
     try {
       // Daily limit temporarily disabled
       // TODO: Re-enable daily limit when needed
-      console.log('Daily challenge limit temporarily disabled');
 
       /*
       // Check daily limit (2 challenges per day)
@@ -314,7 +310,7 @@ export const useChallenges = () => {
     }
 
     try {
-      console.log(
+
         '🎯 Attempting to accept challenge:',
         challengeId,
         'User:',
@@ -349,7 +345,6 @@ export const useChallenges = () => {
         throw new Error(errorMsg);
       }
 
-      console.log('✅ Challenge accepted successfully:', result);
       toast.success(
         'Tham gia thách đấu thành công! Trận đấu đã được lên lịch.'
       );
@@ -376,7 +371,7 @@ export const useChallenges = () => {
     }
 
     try {
-      console.log(
+
         '🎯 Attempting to accept challenge (old method):',
         challengeId,
         'User:',
@@ -403,14 +398,11 @@ export const useChallenges = () => {
         throw new Error('Thách đấu không tồn tại hoặc đã được xử lý');
       }
 
-      console.log('📋 Challenge data:', challengeData);
-
       // Check if user can accept this challenge
       const isOpenChallenge = !challengeData.opponent_id;
       const isSpecificChallenge = challengeData.opponent_id === user.id;
       const isMyOwnChallenge = challengeData.challenger_id === user.id;
 
-      console.log('🔍 Challenge analysis:', {
         isOpenChallenge,
         isSpecificChallenge,
         isMyOwnChallenge,
@@ -444,8 +436,6 @@ export const useChallenges = () => {
             responded_at: new Date().toISOString(),
           };
 
-      console.log('📤 Updating challenge with data:', updateData);
-
       // ✅ CRITICAL: Use transaction to ensure both challenge update and match creation succeed
       const { data, error } = await supabase
         .from('challenges')
@@ -465,11 +455,8 @@ export const useChallenges = () => {
         throw new Error('Thách đấu đã được người khác tham gia');
       }
 
-      console.log('✅ Challenge accepted successfully:', data);
-
       // ✅ NEW: Create match record automatically when challenge is accepted
-      console.log('🏆 Creating match record for accepted challenge...');
-      console.log('🏆 Match data to insert:', {
+
         player1_id: challengeData.challenger_id,
         player2_id: finalOpponentId,
         challenge_id: challengeId,
@@ -487,8 +474,6 @@ export const useChallenges = () => {
         score_player2: 0,
       };
 
-      console.log('📋 Final match data:', matchData);
-
       const { data: matchRecord, error: matchError } = await supabase
         .from('matches')
         .insert([matchData])
@@ -505,12 +490,12 @@ export const useChallenges = () => {
         });
         // Don't throw error here since challenge was already accepted
         // This is a non-critical failure that can be handled later
-        console.warn('⚠️ Challenge accepted but match record creation failed');
+
         toast.warning(
           'Tham gia thách đấu thành công! (Ghi chú: Cần refresh để xem trận đấu)'
         );
       } else {
-        console.log('✅ Match record created successfully:', matchRecord);
+
         toast.success(
           'Tham gia thách đấu thành công! Trận đấu đã được lên lịch.'
         );
@@ -638,7 +623,7 @@ export const useChallenges = () => {
           filter: `or(challenger_id.eq.${user.id},opponent_id.eq.${user.id})`,
         },
         payload => {
-          console.log(
+
             '🔄 Challenge updated, triggering immediate refresh:',
             payload
           );
@@ -655,7 +640,7 @@ export const useChallenges = () => {
           filter: `opponent_id.is.null`,
         },
         payload => {
-          console.log('🔄 New open challenge created, refreshing:', payload);
+
           // Refresh to show new open challenges
           setTimeout(() => fetchChallenges(), 100);
         }
@@ -668,7 +653,7 @@ export const useChallenges = () => {
           table: 'profiles',
         },
         payload => {
-          console.log(
+
             '🔄 Profile updated, checking if challenge refresh needed:',
             payload
           );
@@ -682,7 +667,7 @@ export const useChallenges = () => {
           );
 
           if (hasRelevantChallenge) {
-            console.log('✅ Profile affects current challenges, refreshing...');
+
             setTimeout(() => fetchChallenges(), 100);
           }
         }
@@ -695,7 +680,7 @@ export const useChallenges = () => {
           table: 'club_profiles',
         },
         payload => {
-          console.log(
+
             '🔄 Club profile updated, checking challenge refresh:',
             payload
           );

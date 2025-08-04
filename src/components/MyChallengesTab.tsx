@@ -178,7 +178,7 @@ const MyChallengesTab = () => {
       if (status === 'accepted') {
         const challenge = incomingChallenges.find(c => c.id === challengeId);
         // Note: Match creation will be handled when match_system table is properly configured
-        console.log('Challenge accepted, would create match for:', challengeId);
+
       }
 
       toast.success(

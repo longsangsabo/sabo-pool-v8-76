@@ -144,15 +144,12 @@ export const OptimizedRewardsSection: React.FC<
 
   const handleSaveRewards = async (updatedRewards: TournamentRewards) => {
     try {
-      console.log('💾 Saving rewards to template:', updatedRewards);
 
       // Always update local state first
       setRewards(updatedRewards);
 
       // Save to template system (this will be the primary storage)
       await saveTemplate(updatedRewards);
-
-      console.log('✅ Template saved successfully');
 
       // Call onRewardsChange if provided
       if (onRewardsChange) {
@@ -551,15 +548,12 @@ export const useOptimizedRewards = (
 
   const handleSaveRewards = async (updatedRewards: TournamentRewards) => {
     try {
-      console.log('💾 Saving rewards to template:', updatedRewards);
 
       // Always update local state first
       setRewards(updatedRewards);
 
       // Save to template system (this will be the primary storage)
       await saveTemplate(updatedRewards);
-
-      console.log('✅ Template saved successfully');
 
       // Call onRewardsChange if provided
       if (onRewardsChange) {

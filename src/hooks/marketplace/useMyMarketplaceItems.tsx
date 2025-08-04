@@ -76,8 +76,6 @@ export const useMyMarketplaceItems = () => {
         updated_at: new Date().toISOString(),
       };
 
-      console.log('Mock create item:', newItem);
-
       // Refresh items
       await fetchMyItems();
       return newItem;
@@ -111,8 +109,6 @@ export const useMyMarketplaceItems = () => {
         id: itemId,
         updated_at: new Date().toISOString(),
       };
-
-      console.log('Mock update item:', updatedItem);
 
       // Refresh items
       await fetchMyItems();

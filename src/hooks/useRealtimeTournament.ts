@@ -61,7 +61,6 @@ export const useRealtimeTournament = ({
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up real-time subscription for tournament:',
       tournamentId
     );
@@ -77,7 +76,6 @@ export const useRealtimeTournament = ({
           filter: `id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Tournament updated via real-time:', payload);
 
           switch (payload.eventType) {
             case 'UPDATE':
@@ -111,7 +109,7 @@ export const useRealtimeTournament = ({
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Tournament registrations updated:', payload);
+
           // Refetch tournament to get updated participant count
           if (tournamentId) {
             fetchTournament(tournamentId);
@@ -121,7 +119,7 @@ export const useRealtimeTournament = ({
       .subscribe();
 
     return () => {
-      console.log(
+
         '🔄 Cleaning up real-time subscription for tournament:',
         tournamentId
       );

@@ -39,7 +39,7 @@ const ForceCompleteTournamentButton: React.FC<
   const [isCompleting, setIsCompleting] = useState(false);
 
   const calculateTournamentResults = async () => {
-    console.log(
+
       '🏆 Starting tournament results calculation for:',
       tournamentId
     );
@@ -58,8 +58,6 @@ const ForceCompleteTournamentButton: React.FC<
         throw error;
       }
 
-      console.log('✅ Tournament results calculated:', data);
-
       // Type cast the response data
       const result = data as TournamentResultsResponse;
 
@@ -71,10 +69,10 @@ const ForceCompleteTournamentButton: React.FC<
         toast.success(
           `🎉 Đã tính toán kết quả cho ${result.results_created} người chơi`
         );
-        console.log(
+
           `🏆 Champion: ${result.champion_id}, Runner-up: ${result.runner_up_id}`
         );
-        console.log(`📊 Tournament multiplier: ${result.multiplier}x`);
+
       } else {
         throw new Error('Unknown error occurred during calculation');
       }
@@ -88,7 +86,6 @@ const ForceCompleteTournamentButton: React.FC<
   const handleCompleteTournament = async () => {
     try {
       setIsCompleting(true);
-      console.log(`🎯 Force completing tournament: ${tournamentId}`);
 
       // The new function handles both result calculation and status update
       await calculateTournamentResults();

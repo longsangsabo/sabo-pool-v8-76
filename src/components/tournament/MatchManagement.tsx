@@ -90,7 +90,6 @@ export const MatchManagement: React.FC<MatchManagementProps> = ({
           ? editingMatch.player1_id
           : editingMatch.player2_id;
 
-      console.log(
         '🏆 [MatchManagement] Updating match with auto-advancement:',
         {
           matchId: editingMatch.id,
@@ -116,7 +115,7 @@ export const MatchManagement: React.FC<MatchManagementProps> = ({
       if (error) throw error;
 
       // The database trigger will automatically advance the winner
-      console.log(
+
         '✅ [MatchManagement] Match updated successfully, auto-advancement triggered by database'
       );
 

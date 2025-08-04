@@ -306,7 +306,7 @@ const ChallengesFeedMobile: React.FC = () => {
           filter: `or(challenger_id.eq.${user.id},opponent_id.eq.${user.id})`,
         },
         payload => {
-          console.log('Challenge change detected:', payload);
+
           fetchChallenges(); // Refresh challenges on any change
         }
       )

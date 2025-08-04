@@ -210,7 +210,6 @@ const ModelManagement: React.FC = () => {
   const saveConfigs = async () => {
     try {
       // TODO: Call API to save configs
-      console.log('Saving configs:', configs);
 
       toast({
         title: 'Cấu hình đã lưu',

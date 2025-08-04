@@ -418,7 +418,7 @@ export const DoubleEliminationMatchCard: React.FC<
                 setIsSubmitting(true);
 
                 try {
-                  console.log(
+
                     '🎯 [DoubleEliminationMatchCard] Submitting DE score:',
                     {
                       matchId: match.id,
@@ -462,7 +462,6 @@ export const DoubleEliminationMatchCard: React.FC<
                     throw error;
                   }
 
-                  console.log(
                     '✅ [DoubleEliminationMatchCard] RPC Response:',
                     data
                   );
@@ -488,7 +487,7 @@ export const DoubleEliminationMatchCard: React.FC<
                     data.advancement
                   ) {
                     const advancement = data.advancement as any;
-                    console.log(
+
                       '🎯 [DoubleEliminationMatchCard] Advancement result:',
                       advancement
                     );
@@ -507,7 +506,7 @@ export const DoubleEliminationMatchCard: React.FC<
 
                   // Force a small delay to allow DB changes to propagate
                   setTimeout(() => {
-                    console.log(
+
                       '🔄 [DoubleEliminationMatchCard] Database should have updated, realtime should refresh'
                     );
                   }, 500);

@@ -77,7 +77,6 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
   // Simplified logic - always show for club owners when both players present
   const canInputScore = isClubOwner && match.player1_id && match.player2_id;
 
-  console.log('🔥 FORCE RENDER - EnhancedMatchCard:', {
     matchId: match.id,
     status: match.status,
     currentUserId,
@@ -432,7 +431,7 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
                 setIsSubmitting(true);
 
                 try {
-                  console.log(
+
                     '🎯 [EnhancedMatchCard] Submitting match score via RPC:',
                     {
                       matchId: match.id,
@@ -463,8 +462,6 @@ export const EnhancedMatchCard: React.FC<EnhancedMatchCardProps> = ({
                     );
                     throw error;
                   }
-
-                  console.log('✅ [EnhancedMatchCard] RPC response:', data);
 
                   if (
                     data &&

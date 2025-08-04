@@ -134,7 +134,7 @@ export const useClubTrustScore = () => {
             table: 'mutual_ratings',
           },
           payload => {
-            console.log(
+
               'New rating submitted, refreshing trust scores:',
               payload
             );
@@ -149,7 +149,7 @@ export const useClubTrustScore = () => {
             table: 'player_rankings',
           },
           payload => {
-            console.log(
+
               'Player ranking updated, refreshing trust scores:',
               payload
             );
@@ -165,7 +165,7 @@ export const useClubTrustScore = () => {
             filter: `id=eq.${clubId}`,
           },
           payload => {
-            console.log(
+
               'Club profile updated, refreshing trust scores:',
               payload
             );

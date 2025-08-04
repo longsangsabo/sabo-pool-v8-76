@@ -58,7 +58,7 @@ export const SABOMatchCard: React.FC<SABOMatchCardProps> = ({
           match.player2_id === currentUserId)));
 
   // Debug logging
-  console.log('🎯 SABOMatchCard Debug:', {
+
     matchId: match.id,
     isClubOwner,
     hasPlayers,

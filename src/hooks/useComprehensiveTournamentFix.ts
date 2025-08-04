@@ -41,7 +41,6 @@ export const useComprehensiveTournamentFix = () => {
   const checkTournamentHealth = async (): Promise<HealthCheckResult | null> => {
     setIsChecking(true);
     try {
-      console.log('🏥 Checking tournament advancement health...');
 
       const { data, error } = await supabase.rpc(
         'check_tournament_advancement_health'
@@ -54,7 +53,6 @@ export const useComprehensiveTournamentFix = () => {
       }
 
       const result = data as unknown as HealthCheckResult;
-      console.log('📊 Health check results:', result);
 
       const { statistics } = result;
       if (statistics.tournaments_with_issues > 0) {
@@ -78,7 +76,7 @@ export const useComprehensiveTournamentFix = () => {
   const fixAllUnadvancedTournaments = async (): Promise<FixResult | null> => {
     setIsFixing(true);
     try {
-      console.log('🔧 Starting comprehensive tournament fix...');
+
       toast.loading('Đang sửa chữa tất cả tournaments có vấn đề...');
 
       const { data, error } = await supabase.rpc(
@@ -92,7 +90,6 @@ export const useComprehensiveTournamentFix = () => {
       }
 
       const result = data as unknown as FixResult;
-      console.log('🎯 Fix results:', result);
 
       if (result.success) {
         const message = `✅ Đã kiểm tra ${result.total_tournaments_checked} tournaments, sửa thành công ${result.tournaments_fixed} tournaments`;
@@ -100,7 +97,7 @@ export const useComprehensiveTournamentFix = () => {
 
         // Show detailed results if any tournaments were fixed
         if (result.tournaments_fixed > 0) {
-          console.log('📝 Fixed tournaments details:', result.details);
+
         }
       } else {
         toast.error(`❌ Sửa chữa thất bại: ${result.message}`);
@@ -117,7 +114,6 @@ export const useComprehensiveTournamentFix = () => {
   };
 
   const runComprehensiveCheck = async () => {
-    console.log('🚀 Running comprehensive tournament check and fix...');
 
     // First check health
     const healthResult = await checkTournamentHealth();

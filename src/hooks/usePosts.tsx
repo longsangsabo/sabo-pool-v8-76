@@ -392,7 +392,6 @@ export const usePostBySlug = (slug: string) => {
       if (!slug) return null;
 
       // Mock post by slug since posts table doesn't exist
-      console.log('Mock getting post by slug:', slug);
 
       const mockPost = {
         id: '1',

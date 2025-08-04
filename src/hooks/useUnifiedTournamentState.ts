@@ -105,9 +105,9 @@ export const useUnifiedTournamentState = (tournamentId?: string) => {
               p_tournament_id: tournamentId,
             }
           );
-          console.log('🔧 Bracket repair result:', repairResult);
+
         } catch (error) {
-          console.warn('Repair attempt failed:', error);
+
         }
 
         // Then process auto advancement

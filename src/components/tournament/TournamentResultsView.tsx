@@ -70,7 +70,7 @@ export function TournamentResultsView({
   const calculateResults = async () => {
     setCalculating(true);
     try {
-      console.log(
+
         '🧮 Starting tournament results calculation for:',
         tournamentId
       );
@@ -84,8 +84,6 @@ export function TournamentResultsView({
       );
 
       if (error) throw error;
-
-      console.log('✅ Tournament results calculated:', data);
 
       const result = data as any;
       if (result?.success) {

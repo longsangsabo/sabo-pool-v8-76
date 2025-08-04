@@ -146,7 +146,7 @@ export const useOpenChallenges = () => {
       });
 
       if (matchError) {
-        console.warn(
+
           'Challenge accepted but match creation failed:',
           matchError
         );
@@ -188,7 +188,7 @@ export const useOpenChallenges = () => {
           filter: 'opponent_id=is.null',
         },
         () => {
-          console.log('New open challenge created, refreshing...');
+
           fetchOpenChallenges();
         }
       )
@@ -201,7 +201,6 @@ export const useOpenChallenges = () => {
           filter: 'opponent_id=is.null',
         },
         payload => {
-          console.log('Open challenge updated:', payload);
 
           // If challenge was accepted (opponent_id is no longer null), remove from list
           if (payload.new.opponent_id !== null) {
@@ -221,7 +220,7 @@ export const useOpenChallenges = () => {
           table: 'challenges',
         },
         payload => {
-          console.log('Challenge deleted:', payload);
+
           setOpenChallenges(prev => prev.filter(c => c.id !== payload.old.id));
         }
       )

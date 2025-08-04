@@ -38,7 +38,6 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  console.log('Header: user:', user?.id, user?.phone);
 
   // Admin check removed for performance - admin functionality separated
 

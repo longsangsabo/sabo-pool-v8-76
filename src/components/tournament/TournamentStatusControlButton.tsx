@@ -68,7 +68,7 @@ const TournamentStatusControlButton: React.FC<
 
     try {
       setIsUpdating(true);
-      console.log(
+
         `🎯 Updating tournament ${tournamentId} status: ${currentStatus} → ${nextAction.newStatus}`
       );
 

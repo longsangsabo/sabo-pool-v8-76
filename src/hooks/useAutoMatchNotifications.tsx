@@ -105,7 +105,6 @@ export const useAutoMatchNotifications = () => {
           },
         });
 
-        console.log('✅ Auto match notification created:', notification);
       } catch (error) {
         console.error('Error in createMatchNotification:', error);
       }
@@ -128,7 +127,6 @@ export const useAutoMatchNotifications = () => {
         },
         payload => {
           const match = payload.new;
-          console.log('🎯 New tournament match detected:', match);
 
           // Auto-create notification for newly scheduled matches
           if (
@@ -149,8 +147,6 @@ export const useAutoMatchNotifications = () => {
         payload => {
           const match = payload.new;
           const oldMatch = payload.old;
-
-          console.log('🔄 Tournament match updated:', match);
 
           // Check for status changes that should trigger notifications
           if (match.player1_id === user.id || match.player2_id === user.id) {

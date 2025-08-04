@@ -199,7 +199,6 @@ export function generateReport(report: ValidationReport): string {
  * CLI command để chạy validation
  */
 export function runValidation() {
-  console.log('🔍 Starting relationship validation...');
 
   // Trong thực tế, đây sẽ scan tất cả files trong project
   // Hiện tại chỉ là mock để demo
@@ -213,8 +212,6 @@ export function runValidation() {
 
   const report = validateProject(mockFiles);
   const reportText = generateReport(report);
-
-  console.log(reportText);
 
   // Exit with error code if có issues
   if (report.summary.errors > 0) {

@@ -130,7 +130,7 @@ export const useLoyalty = () => {
       if (!user) throw new Error('User not authenticated');
 
       // Mock earning points
-      console.log('Mock earn points:', {
+
         user_id: user.id,
         points,
         transaction_type: 'earned',
@@ -171,7 +171,7 @@ export const useLoyalty = () => {
       }
 
       // Mock spending points
-      console.log('Mock spend points:', {
+
         user_id: user.id,
         points,
         transaction_type: 'spent',
@@ -206,7 +206,7 @@ export const useLoyalty = () => {
       }
 
       // Mock redeem reward
-      console.log('Mock redeem reward:', {
+
         user_id: user.id,
         reward_id: rewardId,
         points_spent: reward.points_required,

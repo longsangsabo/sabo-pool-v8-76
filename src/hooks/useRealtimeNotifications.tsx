@@ -62,7 +62,6 @@ export const useRealtimeNotifications = () => {
           filter: `opponent_id=eq.${user.id}`,
         },
         payload => {
-          // ...removed console.log('New challenge received:', payload)
 
           toast.success('Bạn có thách đấu mới! ⚡', {
             description: 'Nhấn để xem chi tiết',
@@ -79,7 +78,6 @@ export const useRealtimeNotifications = () => {
           filter: `challenger_id=eq.${user.id}`,
         },
         payload => {
-          // ...removed console.log('Challenge status updated:', payload)
 
           const challenge = payload.new;
           if (challenge.status === 'accepted') {
@@ -92,7 +90,7 @@ export const useRealtimeNotifications = () => {
       .subscribe(status => {
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
-          // ...removed console.log('Realtime notifications connected')
+
         } else if (status === 'CHANNEL_ERROR') {
           setIsConnected(false);
           console.error('Realtime notifications error');

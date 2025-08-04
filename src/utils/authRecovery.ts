@@ -5,7 +5,6 @@ import { supabase } from '@/integrations/supabase/client';
  * Cleans up corrupted auth state and provides fallback authentication
  */
 export const emergencyAuthRecovery = () => {
-  console.log('🚨 Emergency auth recovery initiated...');
 
   try {
     // Clear all auth-related storage
@@ -18,19 +17,16 @@ export const emergencyAuthRecovery = () => {
 
     authKeys.forEach(key => {
       localStorage.removeItem(key);
-      console.log('🧹 Cleared localStorage key:', key);
+
     });
 
     // Clear session storage
     sessionStorage.clear();
-    console.log('🧹 Cleared sessionStorage');
 
     // Force sign out on Supabase client
     supabase.auth.signOut({ scope: 'global' }).catch(error => {
-      console.warn('⚠️ Emergency signout failed (continuing anyway):', error);
-    });
 
-    console.log('✅ Emergency auth recovery completed');
+    });
 
     // Force redirect to auth page
     setTimeout(() => {
@@ -95,11 +91,10 @@ export const setupAuthMonitoring = () => {
   // Check for conflicts on page load
   const initialConflicts = detectAuthConflicts();
   if (initialConflicts.length > 0) {
-    console.warn('🔍 Auth conflicts detected on load:', initialConflicts);
 
     // Auto-recovery for severe conflicts
     if (initialConflicts.length > 3) {
-      console.log('🔧 Auto-triggering emergency recovery...');
+
       emergencyAuthRecovery();
     }
   }
@@ -116,12 +111,11 @@ export const setupAuthMonitoring = () => {
         message.includes('expired') ||
         message.includes('unauthorized'))
     ) {
-      console.log('🚨 Auth error detected, initiating recovery...');
+
       setTimeout(() => emergencyAuthRecovery(), 1000);
     }
 
     originalError.apply(console, args);
   };
 
-  console.log('🔧 Auth monitoring activated');
 };

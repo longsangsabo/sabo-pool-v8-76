@@ -63,6 +63,3 @@ export const AUTO_EMAIL_CONFIG = {
   },
 };
 
-console.log('✅ Email system configuration loaded');
-console.log('📧 Auto-email triggers:', Object.keys(AUTO_EMAIL_CONFIG));
-console.log('🎯 System ready for Vietnamese Billiards Platform');

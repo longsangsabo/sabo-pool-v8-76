@@ -44,7 +44,6 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     );
   }
 
-  console.log('🎯 Tournament Debug:', {
     id: tournament.id,
     name: tournament.name,
     type: tournament.tournament_type,
@@ -56,7 +55,7 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     user && tournament.club_id && user.id === tournament.created_by;
 
   // Conditional rendering based on tournament type
-  console.log('🎯 Tournament Type Detection:', {
+
     tournamentType: tournament.tournament_type,
     name: tournament.name,
     id: tournament.id,
@@ -67,7 +66,6 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     tournament.tournament_type?.toString?.().toLowerCase() ||
     'single_elimination';
 
-  console.log('🎯 Enhanced Tournament Type Detection:', {
     originalType: tournament.tournament_type,
     normalizedType: tournamentType,
     name: tournament.name,
@@ -78,7 +76,7 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     tournamentType.includes('single') ||
     tournamentType === 'single_elimination'
   ) {
-    console.log(
+
       '✅ Rendering Enhanced Single Elimination Bracket for:',
       tournament.name
     );
@@ -93,7 +91,7 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     tournamentType.includes('double') ||
     tournamentType === 'double_elimination'
   ) {
-    console.log(
+
       '✅ Rendering SABO Double Elimination Bracket for:',
       tournament.name
     );
@@ -106,7 +104,7 @@ export const TournamentBracket: React.FC<TournamentBracketProps> = ({
     );
   } else {
     // Fallback - default to Single Elimination for better compatibility
-    console.log(
+
       '⚠️ Unknown tournament type, defaulting to Single Elimination for:',
       tournament.name
     );

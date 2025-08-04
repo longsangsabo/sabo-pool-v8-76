@@ -32,7 +32,6 @@ export const TournamentDataSyncButton: React.FC<
     setSyncResult(null);
 
     try {
-      console.log(`🔄 Triggering tournament sync for: ${tournamentId}`);
 
       const { data, error } = await supabase.functions.invoke(
         'tournament-data-sync',
@@ -47,8 +46,6 @@ export const TournamentDataSyncButton: React.FC<
       if (error) {
         throw new Error(error.message);
       }
-
-      console.log('✅ Tournament sync response:', data);
 
       setSyncResult(data);
       setLastSync(new Date());

@@ -23,7 +23,6 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up comprehensive real-time sync for tournament:',
       tournamentId
     );
@@ -40,7 +39,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           filter: `id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🏆 Tournament update:', payload);
+
           setLastUpdate(new Date());
           onTournamentUpdate?.(payload.new);
 
@@ -77,7 +76,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('👥 Registration update:', payload);
+
           setLastUpdate(new Date());
           onParticipantUpdate?.(payload.new);
 
@@ -95,7 +94,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🏆 Tournament results update:', payload);
+
           setLastUpdate(new Date());
           onResultsUpdate?.();
 
@@ -115,7 +114,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('⚔️ Tournament match updated:', payload);
+
           setLastUpdate(new Date());
 
           const newRecord = payload.new as any;
@@ -149,18 +148,18 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
         payload => {
           const newRecord = payload.new as any;
           if (!tournamentId || newRecord.source_id === tournamentId) {
-            console.log('💎 SPA points awarded:', payload);
+
             setLastUpdate(new Date());
             toast.success(`💎 +${newRecord.points_earned} SPA Points!`);
           }
         }
       )
       .subscribe(status => {
-        console.log(`🔗 Tournament sync status: ${status}`);
+
         setIsConnected(status === 'SUBSCRIBED');
 
         if (status === 'SUBSCRIBED') {
-          console.log('✅ Real-time sync connected successfully');
+
         } else if (status === 'CHANNEL_ERROR') {
           console.error('❌ Real-time sync connection error');
           toast.error('❌ Lỗi kết nối realtime');
@@ -168,7 +167,7 @@ export const TournamentRealTimeSync: React.FC<TournamentRealTimeSyncProps> = ({
       });
 
     return () => {
-      console.log('🔌 Cleaning up tournament sync');
+
       supabase.removeChannel(tournamentChannel);
     };
   }, [tournamentId, onTournamentUpdate, onParticipantUpdate, onResultsUpdate]);

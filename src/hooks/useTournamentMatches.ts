@@ -57,8 +57,6 @@ export const useTournamentMatches = (tournamentId: string | null) => {
       setLoading(true);
       setError(null);
 
-      console.log('🎯 Fetching matches for tournament:', tournamentId);
-
       // Fetch matches with enhanced schema
       const { data: matchesData, error: matchesError } = await supabase
         .from('tournament_matches')
@@ -73,8 +71,6 @@ export const useTournamentMatches = (tournamentId: string | null) => {
         console.error('❌ Error fetching matches:', matchesError);
         throw matchesError;
       }
-
-      console.log('✅ Fetched matches:', matchesData?.length || 0);
 
       // Collect all unique user IDs
       const userIds = new Set<string>();
@@ -100,7 +96,6 @@ export const useTournamentMatches = (tournamentId: string | null) => {
         player2: match.player2_id ? profileMap[match.player2_id] || null : null,
       }));
 
-      console.log(
         '✅ Matches with cached profiles:',
         matchesWithProfiles.length
       );
@@ -118,7 +113,6 @@ export const useTournamentMatches = (tournamentId: string | null) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up optimized real-time subscription for tournament:',
       tournamentId
     );
@@ -130,7 +124,7 @@ export const useTournamentMatches = (tournamentId: string | null) => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (updateQueue.size > 0) {
-          console.log('🔄 Processing queued updates:', updateQueue.size);
+
           updateQueue.clear();
           fetchMatches();
         }
@@ -148,7 +142,7 @@ export const useTournamentMatches = (tournamentId: string | null) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log(
+
             '🔄 Tournament match real-time update:',
             payload.eventType,
             payload.new
@@ -195,7 +189,7 @@ export const useTournamentMatches = (tournamentId: string | null) => {
         },
         payload => {
           const logData = payload.new as any;
-          console.log(
+
             '🤖 Automation event:',
             logData.automation_type,
             logData.status
@@ -221,7 +215,7 @@ export const useTournamentMatches = (tournamentId: string | null) => {
       .subscribe();
 
     return () => {
-      console.log('🔄 Cleaning up optimized real-time subscription');
+
       clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
     };

@@ -60,7 +60,7 @@ export const DoubleEliminationTemplate: React.FC<
 
   // Load tournament data - either completed or in-progress with bracket data
   useEffect(() => {
-    console.log('🔍 [DoubleEliminationTemplate] Debug info:', {
+
       tournamentId,
       isCompletedTemplate,
       tournamentStatus: tournamentData?.status,
@@ -74,13 +74,13 @@ export const DoubleEliminationTemplate: React.FC<
       (isCompletedTemplate || tournamentData?.status === 'in_progress')
     ) {
       setIsLoading(true);
-      console.log(
+
         '📊 [DoubleEliminationTemplate] Loading bracket data for tournament:',
         tournamentId
       );
       loadTournamentBracketData(tournamentId)
         .then(data => {
-          console.log(
+
             '🏆 [DoubleEliminationTemplate] Loaded tournament data:',
             data
           );
@@ -92,7 +92,7 @@ export const DoubleEliminationTemplate: React.FC<
               );
             }
           } else {
-            console.warn(
+
               '⚠️ [DoubleEliminationTemplate] No bracket data returned'
             );
           }
@@ -106,7 +106,7 @@ export const DoubleEliminationTemplate: React.FC<
           setIsLoading(false);
         });
     } else {
-      console.log('⏭️ [DoubleEliminationTemplate] Skipping bracket data load');
+
     }
   }, [tournamentId, isCompletedTemplate, tournamentData?.status]);
 

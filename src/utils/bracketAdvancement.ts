@@ -49,7 +49,6 @@ export const advanceWinner = async (
       };
     }
 
-    console.log('✅ Successfully advanced winner:', data);
     return {
       success: true,
       data: data,
@@ -67,7 +66,6 @@ export const fixAllTournamentProgression = async (
   tournamentId: string
 ): Promise<AdvancementResult> => {
   try {
-    console.log('🔧 Starting comprehensive tournament fix for:', tournamentId);
 
     const { data, error } = await supabase.rpc(
       'fix_all_tournament_progression',
@@ -92,7 +90,6 @@ export const fixAllTournamentProgression = async (
       };
     }
 
-    console.log('✅ Tournament progression fixed:', data);
     return {
       success: true,
       data: data,
@@ -111,7 +108,6 @@ export const autoFixTournamentProgression = async (
   tournamentId: string
 ): Promise<void> => {
   try {
-    console.log('🔄 Auto-checking tournament progression for:', tournamentId);
 
     // Check if tournament needs fixing by looking for inconsistencies
     const { data: matches, error } = await supabase
@@ -150,7 +146,7 @@ export const autoFixTournamentProgression = async (
 
       if (completedInCurrent.length > 0 && emptyInNext.length > 0) {
         needsFix = true;
-        console.log(
+
           `🔧 Found progression issue: Round ${rounds[i]} -> ${rounds[i + 1]}`
         );
         break;
@@ -158,10 +154,10 @@ export const autoFixTournamentProgression = async (
     }
 
     if (needsFix) {
-      console.log('🔧 Auto-fixing tournament progression...');
+
       await fixAllTournamentProgression(tournamentId);
     } else {
-      console.log('✅ Tournament progression is consistent');
+
     }
   } catch (err) {
     console.error('❌ Error in auto-fix tournament progression:', err);

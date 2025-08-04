@@ -147,7 +147,7 @@ export const CommentModal: React.FC<CommentModalProps> = ({
 
   const handleReportComment = (commentId: string) => {
     // Handle report comment
-    console.log('Report comment:', commentId);
+
   };
 
   const renderComment = (comment: Comment, isReply = false) => (

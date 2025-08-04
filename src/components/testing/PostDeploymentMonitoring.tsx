@@ -145,7 +145,6 @@ export const PostDeploymentMonitoring: React.FC = () => {
       negative: (negative / total) * 100,
     });
 
-    console.log('📝 User feedback submitted:', newFeedback);
   };
 
   const getDeviceIcon = (device: string) => {

@@ -370,7 +370,7 @@ export const UserExperienceValidator: React.FC = () => {
         <div
           ref={touchTestRef}
           className='p-8 border-2 border-dashed border-muted-foreground/50 rounded-lg text-center'
-          onTouchStart={() => console.log('Touch detected')}
+
         >
           <TouchpadIcon className='h-8 w-8 mx-auto mb-2 text-muted-foreground' />
           <p className='text-sm text-muted-foreground'>

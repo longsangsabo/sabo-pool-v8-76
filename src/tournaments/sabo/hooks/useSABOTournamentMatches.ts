@@ -20,8 +20,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
       setIsLoading(true);
       setError(null);
 
-      console.log('🎯 Fetching SABO matches for tournament:', tournamentId);
-
       // Fetch matches with SABO-specific schema - ONLY SABO rounds
       const { data: matchesData, error: matchesError } = await supabase
         .from('tournament_matches')
@@ -35,8 +33,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
         console.error('❌ Error fetching SABO matches:', matchesError);
         throw matchesError;
       }
-
-      console.log('✅ Fetched SABO matches:', matchesData?.length || 0);
 
       // Collect all unique user IDs
       const userIds = new Set<string>();
@@ -77,7 +73,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
         player2: match.player2_id ? profileMap[match.player2_id] || null : null,
       })) as SABOMatch[];
 
-      console.log(
         '✅ SABO matches with cached profiles:',
         matchesWithProfiles.length
       );
@@ -95,7 +90,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up SABO real-time subscription for tournament:',
       tournamentId
     );
@@ -108,7 +102,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
 
       // ✅ CRITICAL FIX: Immediate refresh for urgent updates (score submissions)
       if (isUrgent) {
-        console.log('🚀 URGENT: Immediate SABO refresh triggered');
+
         updateQueue.clear();
         loadMatches();
         return;
@@ -117,7 +111,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
       // Regular debounced refresh for less critical updates
       debounceTimer = setTimeout(() => {
         if (updateQueue.size > 0) {
-          console.log('🔄 Processing SABO queued updates:', updateQueue.size);
+
           updateQueue.clear();
           loadMatches();
         }
@@ -135,7 +129,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log(
+
             '🔄 SABO match real-time update:',
             payload.eventType,
             payload.new
@@ -149,7 +143,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
             ].includes(roundNumber);
 
             if (!isSABORound) {
-              console.log('🚫 Ignoring non-SABO round update:', roundNumber);
+
               return;
             }
           }
@@ -164,7 +158,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
               'status' in payload.new);
 
           if (isScoreUpdate) {
-            console.log(
+
               '🚀 URGENT: Score/status update detected, immediate refresh!'
             );
 
@@ -196,7 +190,6 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
                         : updatedMatches[matchIndex].winner_id,
                   };
 
-                  console.log(
                     '✅ Immediate UI update applied for match:',
                     payload.new.id
                   );
@@ -208,7 +201,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
 
             // Also trigger full refresh after a short delay to get any related updates
             setTimeout(() => {
-              console.log(
+
                 '🔄 Following up with full refresh after score update'
               );
               loadMatches();
@@ -234,7 +227,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
         },
         payload => {
           const logData = payload.new as any;
-          console.log(
+
             '🤖 SABO automation event:',
             logData.automation_type,
             logData.status
@@ -252,7 +245,7 @@ export const useSABOTournamentMatches = (tournamentId: string) => {
       .subscribe();
 
     return () => {
-      console.log('🔄 Cleaning up SABO real-time subscription');
+
       clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
     };

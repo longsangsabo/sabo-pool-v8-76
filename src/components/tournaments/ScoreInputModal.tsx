@@ -53,7 +53,7 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      console.log('🎯 Submitting score for match:', {
+
         matchId: match.id,
         tournamentId: match.tournament_id,
         player1Score,
@@ -93,12 +93,10 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
         return;
       }
 
-      console.log('✅ Score submitted successfully:', scoreResult);
-
       // Check server response for final match status and tournament completion
       const result = scoreResult as any;
       if (result?.tournament_completed && result?.is_final_match) {
-        console.log('🏆 Final match completed!');
+
         toast.success(
           '🏆 Trận chung kết đã hoàn thành! Chúc mừng nhà vô địch!'
         );
@@ -108,7 +106,6 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
         !result?.is_final_match
       ) {
         // For single elimination and non-final matches, advance winner to next round
-        console.log('🎯 Advancing winner to next round...');
 
         const { data: advanceResult, error: advanceError } = await supabase.rpc(
           'advance_winner_safe',
@@ -124,14 +121,13 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
               advanceError.message
           );
         } else {
-          console.log('✅ Winner advanced successfully:', advanceResult);
+
           toast.success(
             '✅ Đã cập nhật tỷ số và chuyển người thắng lên vòng tiếp theo!'
           );
         }
       } else if (tournamentType === 'double_elimination' && result?.winner_id) {
         // For double elimination, use the new corrected advancement
-        console.log('🎯 Advancing with corrected double elimination logic...');
 
         const { data: advanceResult, error: advanceError } = await supabase.rpc(
           'repair_double_elimination_bracket',
@@ -150,7 +146,7 @@ export const ScoreInputModal: React.FC<ScoreInputModalProps> = ({
               advanceError.message
           );
         } else {
-          console.log(
+
             '✅ Enhanced double elimination advancement successful:',
             advanceResult
           );

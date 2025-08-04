@@ -37,7 +37,7 @@ export const RealtimeNotificationBanner: React.FC<
           timestamp: new Date(),
           action: {
             label: 'Xem',
-            onClick: () => {}, // ...removed console.log('View achievement')
+
           },
         },
         {
@@ -48,7 +48,7 @@ export const RealtimeNotificationBanner: React.FC<
           timestamp: new Date(),
           action: {
             label: 'Tham gia',
-            onClick: () => {}, // ...removed console.log('Join tournament')
+
           },
         },
       ];

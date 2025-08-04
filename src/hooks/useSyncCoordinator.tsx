@@ -28,8 +28,6 @@ export const useSyncCoordinator = (): SyncCoordinator => {
         // Simulate sync operation
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        console.log(`Syncing ${type} data:`, { operation, count: data.length });
-
         setLastSyncTime(new Date());
       } catch (error) {
         console.error('Sync failed:', error);

@@ -17,7 +17,6 @@ export const useMonitoring = () => {
 
   const trackEvent = useCallback(
     (name: string, properties?: Record<string, any>) => {
-      console.log(`[Analytics] ${name}:`, properties);
 
       const event: MonitoringEvent = {
         name,
@@ -38,11 +37,10 @@ export const useMonitoring = () => {
   const startTimer = useCallback(
     (name: string) => {
       const startTime = performance.now();
-      console.log(`[Performance] Timer started: ${name}`);
 
       return () => {
         const duration = performance.now() - startTime;
-        console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
+
         trackEvent('performance_timing', { name, duration });
       };
     },
@@ -51,7 +49,7 @@ export const useMonitoring = () => {
 
   const addMetric = useCallback(
     (name: string, value: number, metadata?: Record<string, any>) => {
-      console.log(`[Metrics] ${name}: ${value}`, metadata);
+
       trackEvent('custom_metric', { name, value, metadata });
     },
     [trackEvent]
@@ -62,7 +60,6 @@ export const useMonitoring = () => {
     const interval = setInterval(() => {
       if (events.length === 0) return;
 
-      console.log(`[Analytics] Sent ${events.length} events`);
       setEvents([]); // Clear events after sending
     }, 30000);
 

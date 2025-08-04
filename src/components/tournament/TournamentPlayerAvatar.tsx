@@ -16,11 +16,10 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
   size = 'md',
   showRank = true,
 }) => {
-  console.log('🏆 TournamentPlayerAvatar render for playerId:', playerId);
 
   // Don't render anything if no playerId
   if (!playerId) {
-    console.log('⚠️ No playerId provided');
+
     return (
       <div
         className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center`}
@@ -38,7 +37,6 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
   } = useQuery({
     queryKey: ['tournament-player', playerId],
     queryFn: async () => {
-      console.log('🎾 Fetching player data for:', playerId);
 
       // Fetch user profile data
       const { data: profile, error: profileError } = await supabase
@@ -54,8 +52,6 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
         throw profileError;
       }
 
-      console.log('👤 Profile data:', profile);
-
       // Fetch player ranking data
       const { data: ranking, error: rankingError } = await supabase
         .from('player_rankings')
@@ -64,10 +60,8 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
         .single();
 
       if (rankingError) {
-        console.warn('⚠️ Ranking fetch error (this is OK):', rankingError);
-      }
 
-      console.log('📊 Ranking data:', ranking);
+      }
 
       const result = {
         ...profile,
@@ -76,7 +70,6 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
         ranking_elo: ranking?.elo_points,
       };
 
-      console.log('✅ Final player data:', result);
       return result;
     },
     enabled: !!playerId,
@@ -156,7 +149,7 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
 
   // Loading state
   if (isLoading) {
-    console.log('⏳ Loading player data for:', playerId);
+
     return (
       <div
         className={`${getSizeClasses(size)} bg-muted rounded-full flex items-center justify-center relative`}
@@ -177,8 +170,6 @@ const TournamentPlayerAvatar: React.FC<TournamentPlayerAvatarProps> = ({
       </div>
     );
   }
-
-  console.log('🎨 Rendering avatar for:', playerId, 'data:', playerData);
 
   return (
     <div className='relative inline-block'>

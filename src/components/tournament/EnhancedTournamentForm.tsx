@@ -80,7 +80,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
   onSuccess,
   onCancel,
 }) => {
-  console.log('🎯 EnhancedTournamentForm rendering...');
+
   const navigate = useNavigate();
   const {
     tournament,
@@ -199,15 +199,12 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
     data: TournamentFormData,
     e?: React.FormEvent
   ) => {
-    console.log('🔥 SUBMIT BUTTON CLICKED');
-    console.log('📊 Form State:', {
+
       isSubmitting,
       formSubmitting,
       formValues: form.getValues(),
       formErrors: form.formState.errors,
     });
-    console.log('🎯 handleSubmit called with data:', data);
-    console.log('⏳ Starting form submission...');
 
     // Prevent default form submission
     if (e) {
@@ -217,10 +214,8 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
 
     try {
       setIsSubmitting(true);
-      console.log('🔍 Validating tournament data...');
 
       const validationResult = validateTournament();
-      console.log('🔍 Form validation result:', validationResult);
 
       if (!validationResult) {
         console.error('❌ Validation failed');
@@ -240,20 +235,18 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
         return;
       }
 
-      console.log('🏆 Creating tournament...');
-
       let result;
       if (mode === 'edit' && tournamentId) {
-        console.log('📝 Updating existing tournament:', tournamentId);
+
         result = await updateExistingTournament(tournamentId);
       } else {
-        console.log('🆕 Creating new tournament...');
+
         result = await createTournament();
 
         // 🎯 Create tournament results template after successful creation
         if (result && result.id) {
           try {
-            console.log(
+
               '🏆 Creating tournament results template for:',
               result.id
             );
@@ -270,7 +263,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
               );
               toast.error('Giải đấu đã tạo nhưng có lỗi khi tạo bảng kết quả');
             } else {
-              console.log(
+
                 '✅ Tournament results template created:',
                 templateResult
               );
@@ -284,14 +277,11 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
         }
       }
 
-      console.log('✅ Tournament created successfully:', result);
-
       if (result) {
-        console.log('✅ Tournament created:', result);
 
         // Auto-save default rewards to tournament_prize_tiers
         if (mode === 'create' && tournament?.rewards?.positions?.length > 0) {
-          console.log('🏆 Auto-saving tournament rewards...');
+
           try {
             // Convert rewards to prize tiers format
             const prizeTiers = tournament.rewards.positions.map(position => ({
@@ -317,7 +307,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                 'Giải đấu đã tạo thành công nhưng không thể lưu phần thưởng tự động'
               );
             } else {
-              console.log('✅ Tournament rewards saved successfully');
+
               toast.success('🏆 Phần thưởng đã được lưu tự động!');
             }
           } catch (rewardsError) {
@@ -330,7 +320,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
 
         // 🎯 Auto-generate bracket for tournaments after creation
         if (result && mode === 'create') {
-          console.log(
+
             '🏆 Auto-generating bracket for new tournament...',
             result.tournament_type
           );
@@ -340,7 +330,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
 
             if (result.tournament_type === 'double_elimination') {
               // Use Double1 template cloning system
-              console.log('🎯 Using Double1 template cloning system...');
 
               // Generate dummy player IDs for now (will be replaced with real registrations)
               const dummyPlayerIds = Array.from(
@@ -349,7 +338,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
               );
 
               // Skip template cloning for now
-              console.log('🎯 Template cloning disabled temporarily');
 
               // Template cloning logic removed for now
             } else if (result.tournament_type === 'single_elimination') {
@@ -370,7 +358,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                   'Giải đấu đã tạo thành công nhưng không thể tự động tạo bracket. Hãy tạo thủ công.'
                 );
               } else {
-                console.log(
+
                   '✅ Auto-generated single elimination bracket:',
                   seData
                 );
@@ -415,7 +403,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
       toast.error(`Lỗi: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
-      console.log('🔚 Form submission completed');
+
     }
   };
 
@@ -550,7 +538,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('🔥 Form onSubmit triggered');
+
           form.handleSubmit(data => handleSubmit(data, e))(e);
         }}
         className='space-y-4'
@@ -935,7 +923,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                         size='sm'
                         onClick={() => {
                           // Debug: Log current tournament data
-                          console.log('🔍 Debug - Current tournament data:', {
+
                             max_rank_requirement:
                               tournament?.max_rank_requirement,
                             tier_level: tournament?.tier_level,
@@ -959,11 +947,10 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                             showPrizes: true,
                           };
 
-                          console.log(
                             '🔍 Debug - New rewards calculated with max rank:',
                             newRewards
                           );
-                          console.log(
+
                             '🔍 Debug - Max rank used in calculation:',
                             tournament?.max_rank_requirement
                           );
@@ -998,7 +985,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                     tournamentId={tournamentId}
                     maxRankRequirement={form.getValues().max_rank_requirement}
                     onRewardsUpdated={updatedRewards => {
-                      console.log(
+
                         '🔄 [EnhancedTournamentForm] Rewards updated:',
                         updatedRewards
                       );
@@ -1008,13 +995,13 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                       // Force refresh if it's an existing tournament
                       if (tournamentId) {
                         // The hook will automatically refresh via invalidation
-                        console.log(
+
                           '✅ [EnhancedTournamentForm] Tournament/Draft exists, hook will refresh data'
                         );
                       }
                     }}
                     onUseTemplate={templateRewards => {
-                      console.log(
+
                         '📝 [EnhancedTournamentForm] Template applied:',
                         templateRewards
                       );
@@ -1061,22 +1048,19 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
             <Button
               type='button'
               onClick={async () => {
-                console.log('🚀 TẠO NGAY BUTTON CLICKED');
+
                 const formData = form.getValues();
-                console.log('📊 Form data:', formData);
-                console.log('🔍 DETAILED FORM VALUES:');
-                console.log('- name:', formData.name);
-                console.log(
+
                   '- entry_fee:',
                   formData.entry_fee,
                   typeof formData.entry_fee
                 );
-                console.log(
+
                   '- prize_pool:',
                   formData.prize_pool,
                   typeof formData.prize_pool
                 );
-                console.log(
+
                   '- max_participants:',
                   formData.max_participants,
                   typeof formData.max_participants
@@ -1084,7 +1068,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
 
                 // Debug form state
                 const allFormValues = form.getValues();
-                console.log(
+
                   '🎯 ALL FORM VALUES:',
                   JSON.stringify(allFormValues, null, 2)
                 );
@@ -1113,7 +1097,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                   }
 
                   // Tạo trực tiếp không qua validation phức tạp
-                  console.log(
+
                     '🔍 PRIZE_POOL DEBUG - formData.prize_pool:',
                     formData.prize_pool
                   );
@@ -1157,13 +1141,11 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                     ])
                     .select();
 
-                  console.log('✅ Direct creation result:', { data, error });
-
                   if (error) {
                     console.error('❌ Direct creation error:', error);
                     toast.error('Lỗi tạo giải đấu: ' + error.message);
                   } else {
-                    console.log('🎉 Tournament created successfully:', data);
+
                     toast.success('Thành công! Giải đấu đã được tạo.', {
                       description:
                         'Bạn sẽ được chuyển đến trang giải đấu trong giây lát...',
@@ -1172,7 +1154,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
 
                     // Navigation with delay for better UX
                     setTimeout(() => {
-                      console.log('🔄 Redirecting to /tournaments...');
+
                       navigate('/tournaments');
                     }, 1500);
                   }
@@ -1230,7 +1212,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
           rewards={(() => {
             // ✅ FIXED: Use latest form data instead of stale tournament.rewards
             const currentFormData = form.getValues();
-            console.log(
+
               '🔍 [EnhancedTournamentForm] Current form data for RewardsModal:',
               {
                 entry_fee: currentFormData.entry_fee,
@@ -1258,7 +1240,7 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
           })()}
           onSave={async rewards => {
             try {
-              console.log(
+
                 '💾 [EnhancedTournamentForm] Saving rewards for tournament:',
                 tournamentId,
                 rewards
@@ -1282,7 +1264,6 @@ export const EnhancedTournamentForm: React.FC<EnhancedTournamentFormProps> = ({
                 throw error;
               }
 
-              console.log(
                 '✅ [EnhancedTournamentForm] Rewards saved to database successfully'
               );
               toast.success('Đã cập nhật phần thưởng thành công!');

@@ -106,7 +106,7 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
           filter: `tournament_id=eq.${tournamentId}`,
         },
         () => {
-          console.log('🔄 Bracket updated, reloading...');
+
           loadBracket();
         }
       )
@@ -120,7 +120,6 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
 
   const loadBracket = async () => {
     try {
-      console.log('📊 Loading bracket for tournament:', tournamentId);
 
       // Load bracket data from tournament metadata instead
       const { data: tournamentData, error: bracketError } = await supabase
@@ -141,7 +140,7 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
         .single();
 
       if (bracketQueryError && bracketQueryError.code !== 'PGRST116') {
-        console.warn('Bracket not found:', bracketQueryError);
+
       }
 
       // Combine tournament and bracket data
@@ -162,11 +161,10 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
       setBracket(combinedBracket);
       setMatches([]);
 
-      console.log(
         '✅ Loaded tournament:',
         tournamentData ? 'exists' : 'not found'
       );
-      console.log('✅ Loaded matches:', 0);
+
     } catch (error) {
       console.error('❌ Error loading bracket:', error);
       toast.error('Lỗi tải bảng đấu');
@@ -289,7 +287,6 @@ export const AdminBracketViewer: React.FC<AdminBracketViewerProps> = ({
   const generateBracket = async () => {
     setGenerating(true);
     try {
-      console.log('🏆 Generating bracket for tournament:', tournamentId);
 
       // Use the edge function instead of RPC
       const { data: result, error } = await supabase.functions.invoke(

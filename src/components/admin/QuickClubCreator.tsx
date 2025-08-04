@@ -141,7 +141,7 @@ const QuickClubCreator = () => {
       }
 
       // Quick club creator disabled - club_registrations table doesn't exist
-      console.warn('Quick club creator disabled - missing database tables');
+
       toast.error(
         'Club creator is currently disabled - missing database tables'
       );

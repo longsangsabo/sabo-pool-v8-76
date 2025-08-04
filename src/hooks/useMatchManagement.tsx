@@ -115,7 +115,7 @@ export const useMatchManagement = (tournamentId: string) => {
       winnerId?: string;
       status?: string;
     }) => {
-      console.log('Updating score for match:', matchId, {
+
         player1Score,
         player2Score,
         winnerId,
@@ -148,11 +148,10 @@ export const useMatchManagement = (tournamentId: string) => {
         }, 500);
       }
 
-      console.log('Score updated successfully');
       return match;
     },
     onSuccess: data => {
-      console.log('Score update success:', data);
+
       queryClient.invalidateQueries({
         queryKey: ['tournament-matches', tournamentId],
       });
@@ -171,7 +170,6 @@ export const useMatchManagement = (tournamentId: string) => {
   // Restore match (undo cancel)
   const restoreMatchMutation = useMutation({
     mutationFn: async (matchId: string) => {
-      console.log('Restoring match:', matchId);
 
       const { data, error } = await supabase
         .from('tournament_matches')
@@ -270,7 +268,7 @@ export const useMatchManagement = (tournamentId: string) => {
       newPlayer2Score: number;
       editorId: string;
     }) => {
-      console.log('Editing score for match:', matchId, {
+
         newPlayer1Score,
         newPlayer2Score,
       });
@@ -291,11 +289,10 @@ export const useMatchManagement = (tournamentId: string) => {
         throw new Error(data.error as string);
       }
 
-      console.log('Score edit successful:', data);
       return data;
     },
     onSuccess: (data: any) => {
-      console.log('Score edit success:', data);
+
       queryClient.invalidateQueries({
         queryKey: ['tournament-matches', tournamentId],
       });

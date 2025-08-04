@@ -108,7 +108,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const handleDirectMessage = () => {
     // Handle direct message sharing
-    console.log('Share via direct message');
+
     onClose();
   };
 

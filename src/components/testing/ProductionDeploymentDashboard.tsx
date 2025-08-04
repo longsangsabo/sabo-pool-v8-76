@@ -157,12 +157,12 @@ export const ProductionDeploymentDashboard: React.FC = () => {
 
   const initiateRollout = () => {
     setDeploymentStatus('rolling');
-    console.log('🚀 Starting gradual rollout of responsive system v2');
+
   };
 
   const completeRollout = () => {
     setDeploymentStatus('complete');
-    console.log('✅ Responsive system v2 rollout completed');
+
   };
 
   const emergencyRollback = () => {
@@ -170,7 +170,7 @@ export const ProductionDeploymentDashboard: React.FC = () => {
     // Disable risky features
     disableFlag('experimentalLayouts');
     disableFlag('responsiveAnalytics');
-    console.log('🚨 Emergency rollback initiated');
+
   };
 
   return (

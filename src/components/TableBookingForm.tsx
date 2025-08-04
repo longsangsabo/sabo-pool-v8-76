@@ -77,7 +77,7 @@ const TableBookingForm = ({ club }: TableBookingFormProps) => {
       const endTime = calculateEndTime(selectedTime, duration);
 
       // Mock booking submission since table_bookings table doesn't exist
-      console.log('Mock table booking:', {
+
         club_id: club.id,
         user_id: user.user.id,
         table_number: 1,

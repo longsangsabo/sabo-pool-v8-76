@@ -118,7 +118,7 @@ export const EnhancedAuthFlow: React.FC<EnhancedAuthFlowProps> = ({
         );
 
         // Auto-trigger welcome email (handled by useEmailNotifications hook)
-        console.log(
+
           'New user registered, welcome email will be sent automatically'
         );
       }

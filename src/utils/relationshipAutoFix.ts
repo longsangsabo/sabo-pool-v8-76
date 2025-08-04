@@ -221,14 +221,11 @@ export function applyFixes(
     const report = autoFixProject(files);
 
     // In real implementation, this would write files to disk
-    console.log('🔧 Applying fixes...');
 
     report.results.forEach(result => {
-      console.log(`✅ Fixed ${result.file} (${result.changesApplied} changes)`);
+
       // fs.writeFileSync(result.file, result.fixedContent);
     });
-
-    console.log(`🎉 Successfully fixed ${report.filesFixed} files!`);
 
     resolve(report);
   });
@@ -238,7 +235,6 @@ export function applyFixes(
  * CLI command để chạy auto-fix
  */
 export async function runAutoFix(preview: boolean = false) {
-  console.log('🔧 Starting auto-fix process...');
 
   // Mock files - in real implementation would scan project
   const mockFiles = [
@@ -247,14 +243,14 @@ export async function runAutoFix(preview: boolean = false) {
 
   if (preview) {
     const previewText = previewFixes(mockFiles);
-    console.log(previewText);
+
   } else {
     const report = await applyFixes(mockFiles);
 
     if (report.success) {
-      console.log('✅ Auto-fix completed successfully!');
+
     } else {
-      console.log('❌ Auto-fix failed.');
+
       process.exit(1);
     }
   }

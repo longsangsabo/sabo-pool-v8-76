@@ -21,7 +21,7 @@ export const useBracketRepair = () => {
 
   const repairBracket = useMutation({
     mutationFn: async ({ tournamentId }: RepairBracketParams) => {
-      console.log(
+
         '🔧 Starting simplified bracket repair for tournament:',
         tournamentId
       );
@@ -38,7 +38,6 @@ export const useBracketRepair = () => {
       return data as RepairResult;
     },
     onSuccess: data => {
-      console.log('✅ Bracket repair completed:', data);
 
       if (data?.error) {
         toast.error(`Repair failed: ${data.error}`);

@@ -142,8 +142,6 @@ export const UnifiedTournamentProvider: React.FC<{
 
       setLoading(true);
       try {
-        console.log('🚀 Creating tournament with data:', data);
-        console.log('🔍 User ID:', user.id);
 
         // ✅ FIXED: Only map fields that exist in TournamentFormData
         const tournamentData = {
@@ -175,8 +173,6 @@ export const UnifiedTournamentProvider: React.FC<{
           status: 'upcoming',
         };
 
-        console.log('📤 Sending to database:', tournamentData);
-
         const { data: result, error } = await supabase
           .from('tournaments')
           .insert(tournamentData)
@@ -189,8 +185,6 @@ export const UnifiedTournamentProvider: React.FC<{
           console.error('❌ Error hint:', error.hint);
           throw error;
         }
-
-        console.log('✅ Tournament created successfully:', result);
 
         // Send notification to club members
         try {
@@ -213,7 +207,7 @@ export const UnifiedTournamentProvider: React.FC<{
             );
             // Don't throw - tournament was created successfully
           } else {
-            console.log('📢 Club members notified successfully');
+
           }
         } catch (notificationError) {
           console.error(

@@ -85,7 +85,7 @@ export const ChallengeCompletionPopup: React.FC<
       // Submit opponent rating if provided
       if (ratings.opponentRating.rating > 0) {
         // TODO: Implement rating system when mutual_ratings table is created
-        console.log('Rating submission:', {
+
           rated_user: notification.metadata.opponent_id,
           rating: ratings.opponentRating.rating,
           comment: ratings.opponentRating.comment,
@@ -95,7 +95,7 @@ export const ChallengeCompletionPopup: React.FC<
       // Submit club rating if provided
       if (ratings.clubRating.rating > 0) {
         // TODO: Implement rating system when mutual_ratings table is created
-        console.log('Club rating submission:', {
+
           rated_club: notification.metadata.club_id,
           rating: ratings.clubRating.rating,
           comment: ratings.clubRating.comment,

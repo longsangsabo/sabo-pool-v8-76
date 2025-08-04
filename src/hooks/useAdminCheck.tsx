@@ -9,11 +9,9 @@ export const useAdminCheck = () => {
     queryKey: ['admin-check', user?.id],
     queryFn: async () => {
       if (!user?.id) {
-        console.log('useAdminCheck: No user ID found');
+
         return false;
       }
-
-      console.log('useAdminCheck: Checking admin status for user:', user.id);
 
       // Check if user has admin role in new user_roles table
       const { data: roles, error } = await supabase
@@ -27,7 +25,7 @@ export const useAdminCheck = () => {
       }
 
       const isAdmin = roles?.some(r => r.role === 'admin') || false;
-      console.log('useAdminCheck: Admin status result:', {
+
         user_id: user.id,
         is_admin: isAdmin,
         roles,

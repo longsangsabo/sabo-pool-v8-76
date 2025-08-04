@@ -87,7 +87,7 @@ export const SingleEliminationTemplate: React.FC<
           if (error) throw error;
 
           if (matches && matches.length > 0) {
-            console.log(
+
               '🏆 [SingleEliminationTemplate] Loaded live tournament matches:',
               matches
             );
@@ -115,7 +115,7 @@ export const SingleEliminationTemplate: React.FC<
       loadTournamentBracketData(completedTournamentId)
         .then(data => {
           if (data) {
-            console.log(
+
               '🏆 [SingleEliminationTemplate] Loaded completed tournament data:',
               data
             );
@@ -331,7 +331,7 @@ export const SingleEliminationTemplate: React.FC<
 
     try {
       // Debug logging
-      console.log('🔍 Debug match score submission:', {
+
         matchId,
         scores,
         matchScores: matchScores[matchId],
@@ -360,7 +360,6 @@ export const SingleEliminationTemplate: React.FC<
         throw new Error('Match not found in bracket data');
       }
 
-      console.log('🎯 Using emergency completion function for match:', {
         matchId,
         scores,
         match: { player1_id: match.player1_id, player2_id: match.player2_id },
@@ -386,7 +385,7 @@ export const SingleEliminationTemplate: React.FC<
       const result = data as any;
 
       if (result?.success) {
-        console.log('✅ Match completed successfully:', result);
+
         toast.success(result.message || 'Cập nhật tỷ số thành công!');
 
         if (result.tournament_completed) {

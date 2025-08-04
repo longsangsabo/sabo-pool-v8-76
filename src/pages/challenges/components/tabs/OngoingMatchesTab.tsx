@@ -143,7 +143,6 @@ const OngoingMatchesTab: React.FC<OngoingMatchesTabProps> = ({
         })
       );
 
-      console.log('Fetched ongoing SABO challenges:', challengesWithProfiles);
       setChallenges(challengesWithProfiles);
     } catch (error) {
       console.error('Error fetching ongoing SABO challenges:', error);

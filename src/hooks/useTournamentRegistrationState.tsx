@@ -14,7 +14,7 @@ export const useTournamentRegistrationState = () => {
     if (!user) {
       setRegistrationState({});
       setLoading({});
-      console.log('User logged out - cleared registration state');
+
     }
   }, [user]);
 

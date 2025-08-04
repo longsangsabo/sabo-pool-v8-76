@@ -18,8 +18,6 @@ export const useTournamentResults = (tournamentId?: string) => {
       setLoading(true);
       setError(null);
 
-      console.log('🏆 Fetching tournament results for:', tournamentId);
-
       const { data, error: fetchError } = await supabase
         .from('tournament_results')
         .select(
@@ -41,8 +39,6 @@ export const useTournamentResults = (tournamentId?: string) => {
         console.error('❌ Error fetching tournament results:', fetchError);
         throw fetchError;
       }
-
-      console.log('✅ Tournament results fetched:', data?.length || 0);
 
       // Transform data to match TournamentResultWithPlayer interface
       const transformedResults: TournamentResultWithPlayer[] = (data || []).map(
@@ -88,7 +84,6 @@ export const useTournamentResults = (tournamentId?: string) => {
   useEffect(() => {
     if (!tournamentId) return;
 
-    console.log(
       '🔄 Setting up real-time subscription for tournament results:',
       tournamentId
     );
@@ -104,7 +99,6 @@ export const useTournamentResults = (tournamentId?: string) => {
           filter: `tournament_id=eq.${tournamentId}`,
         },
         payload => {
-          console.log('🔄 Tournament results real-time update:', payload);
 
           // Immediately refetch results to ensure accuracy
           fetchResults();
@@ -113,7 +107,7 @@ export const useTournamentResults = (tournamentId?: string) => {
       .subscribe();
 
     return () => {
-      console.log('🔄 Cleaning up tournament results real-time subscription');
+
       supabase.removeChannel(channel);
     };
   }, [tournamentId]);

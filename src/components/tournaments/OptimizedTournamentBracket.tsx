@@ -94,7 +94,7 @@ export const OptimizedTournamentBracket: React.FC<
   useEffect(() => {
     setNeedsProgression(progressionCheck.hasIssues);
     if (progressionCheck.hasIssues) {
-      console.log('🔧 Progression issues detected:', progressionCheck.details);
+
     }
   }, [progressionCheck]);
 
@@ -106,7 +106,7 @@ export const OptimizedTournamentBracket: React.FC<
 
       // Only auto-fix if not fixed in the last 30 seconds
       if (!lastFix || now - parseInt(lastFix) > 30000) {
-        console.log('🔄 Auto-fixing bracket progression...');
+
         autoAdvanceCompletedMatches(tournamentId);
         localStorage.setItem(`bracket-fix-${tournamentId}`, now.toString());
       }
@@ -115,7 +115,7 @@ export const OptimizedTournamentBracket: React.FC<
 
   const handleScoreUpdate = async () => {
     setSelectedMatch(null);
-    console.log(
+
       '🎯 Score updated - real-time sync will update bracket automatically'
     );
   };

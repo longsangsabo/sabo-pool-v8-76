@@ -185,7 +185,7 @@ const MarketplaceItemCard = ({
               onClick={e => {
                 e.stopPropagation();
                 // Handle contact seller
-                console.log('Contact seller for item:', item.id);
+
               }}
             >
               Liên hệ
@@ -196,7 +196,7 @@ const MarketplaceItemCard = ({
               onClick={e => {
                 e.stopPropagation();
                 // Handle buy now
-                console.log('Buy now item:', item.id);
+
               }}
             >
               Mua ngay

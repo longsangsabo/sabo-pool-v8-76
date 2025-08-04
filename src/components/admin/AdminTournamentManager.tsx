@@ -38,7 +38,6 @@ const AdminTournamentManager = () => {
   const fetchTournaments = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Fetching tournaments for admin...');
 
       const { data, error } = await supabase
         .from('tournaments')
@@ -63,9 +62,6 @@ const AdminTournamentManager = () => {
         });
         return;
       }
-
-      console.log('✅ Fetched tournaments:', data?.length || 0);
-      console.log('📊 Sample tournament:', data?.[0]);
 
       setTournaments(data || []);
     } catch (err) {

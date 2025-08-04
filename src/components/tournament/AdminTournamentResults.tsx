@@ -73,7 +73,6 @@ export const AdminTournamentResults: React.FC = () => {
     setProcessingTournaments(prev => new Set(prev).add(tournamentId));
 
     try {
-      console.log('🧮 Calculating results for tournament:', tournamentId);
 
       const { data, error } = await supabase.rpc(
         'complete_tournament_automatically',

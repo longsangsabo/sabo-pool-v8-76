@@ -742,7 +742,6 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>(
           throw error;
         }
 
-        console.log('🔥 Participants loaded:', participants);
         setTournamentParticipants(participants || []);
         setParticipantsModalOpen(true);
       } catch (error) {
@@ -1219,7 +1218,7 @@ const TournamentManagementHub = forwardRef<TournamentManagementHubRef>(
               className='hover:bg-primary/10'
               onMouseEnter={() => {
                 // Auto-preload tournament details on hover for better UX
-                console.log(
+
                   'Preloading tournament details for:',
                   tournament.id
                 );

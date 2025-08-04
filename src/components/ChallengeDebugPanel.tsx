@@ -15,7 +15,7 @@ export const ChallengeDebugPanel: React.FC<ChallengeDebugPanelProps> = ({
   const { user } = useAuth();
 
   const handleManualRefresh = async () => {
-    console.log('🔄 [DebugPanel] Manual refresh triggered by user');
+
     await onRefresh();
   };
 

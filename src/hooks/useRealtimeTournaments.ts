@@ -77,7 +77,6 @@ export const useRealtimeTournaments = ({
 
   // Real-time subscription
   useEffect(() => {
-    console.log('🔄 Setting up real-time subscription for tournaments list');
 
     const channel = supabase
       .channel('tournaments_list_updates')
@@ -89,7 +88,6 @@ export const useRealtimeTournaments = ({
           table: 'tournaments',
         },
         payload => {
-          console.log('🔄 Tournaments list updated via real-time:', payload);
 
           switch (payload.eventType) {
             case 'INSERT':
@@ -126,7 +124,7 @@ export const useRealtimeTournaments = ({
           table: 'tournament_registrations',
         },
         payload => {
-          console.log('🔄 Tournament registrations updated, refreshing list');
+
           // Refetch tournaments to get updated participant counts
           fetchTournaments();
         }
@@ -134,7 +132,7 @@ export const useRealtimeTournaments = ({
       .subscribe();
 
     return () => {
-      console.log('🔄 Cleaning up real-time subscription for tournaments list');
+
       supabase.removeChannel(channel);
     };
   }, [fetchTournaments]);

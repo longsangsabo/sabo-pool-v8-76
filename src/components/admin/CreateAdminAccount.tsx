@@ -46,7 +46,7 @@ const CreateAdminAccount: React.FC = () => {
     setError(null);
 
     try {
-      console.log('Creating admin account:', {
+
         email: formData.email,
         full_name: formData.full_name,
       });
@@ -77,7 +77,7 @@ const CreateAdminAccount: React.FC = () => {
       }
 
       if (data?.success) {
-        console.log('Admin account created successfully:', data);
+
         setSuccess(true);
         toast.success('🎉 Tài khoản admin đã được tạo thành công!');
 

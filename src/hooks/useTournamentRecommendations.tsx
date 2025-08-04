@@ -68,7 +68,7 @@ export const useTournamentRecommendations = () => {
       };
       setUserLocation(mockLocation);
     } catch (error) {
-      // ...removed console.log('No user location found')
+
     }
   };
 
@@ -278,7 +278,7 @@ export const useTournamentRecommendations = () => {
 
     try {
       // Mock track interaction since user_club_interactions table doesn't exist
-      console.log('Mock tracking interaction:', {
+
         clubId,
         interactionType,
         metadata,

@@ -10,8 +10,6 @@ export const useCompletedChallenges = () => {
     queryFn: async () => {
       if (!user?.id) return [];
 
-      console.log('🔍 Fetching completed challenges for user:', user.id);
-
       const { data, error } = await supabase
         .from('challenges')
         .select(
@@ -44,7 +42,6 @@ export const useCompletedChallenges = () => {
         throw error;
       }
 
-      console.log('✅ Completed challenges fetched:', data?.length || 0);
       return data || [];
     },
     enabled: !!user?.id,
