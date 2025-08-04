@@ -1,0 +1,5381 @@
+{
+  "timestamp": "2025-08-04T05:37:03.450Z",
+  "summary": {
+    "hardcodedStrings": 1073,
+    "missingInVietnamese": 0,
+    "missingInEnglish": 0
+  },
+  "details": {
+    "hardcodedStrings": [
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Total Tests",
+        "line": 194
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Passed",
+        "line": 200
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Failed",
+        "line": 206
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Auth",
+        "line": 277
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Database",
+        "line": 278
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Notifications",
+        "line": 279
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Payments",
+        "line": 280
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Authentication Flow Tests",
+        "line": 290
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Database CRUD Tests",
+        "line": 309
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Notifications CRUD Tests",
+        "line": 328
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Payment Transactions CRUD Tests",
+        "line": 354
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Row Level Security Tests",
+        "line": 380
+      },
+      {
+        "file": "/components/AuthTestingDashboard.tsx",
+        "text": "Foreign Key Constraint Tests",
+        "line": 402
+      },
+      {
+        "file": "/components/BasicProfileForm.tsx",
+        "text": "Basic Profile Form",
+        "line": 29
+      },
+      {
+        "file": "/components/BasicProfileForm.tsx",
+        "text": "Profile form placeholder",
+        "line": 34
+      },
+      {
+        "file": "/components/ChallengeDebugPanel.tsx",
+        "text": "Challenge Debug Panel",
+        "line": 45
+      },
+      {
+        "file": "/components/ClubDashboardOverview.tsx",
+        "text": "Database",
+        "line": 112
+      },
+      {
+        "file": "/components/ClubDashboardOverview.tsx",
+        "text": "Realtime",
+        "line": 130
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "All Ranks",
+        "line": 194
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Rating",
+        "line": 217
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Matches",
+        "line": 218
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Win Rate",
+        "line": 219
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Streak",
+        "line": 220
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Contribution",
+        "line": 221
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Recent Form",
+        "line": 222
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Position",
+        "line": 246
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Player",
+        "line": 247
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Rank",
+        "line": 248
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Rating",
+        "line": 249
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Matches",
+        "line": 250
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Win Rate",
+        "line": 251
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Streak",
+        "line": 252
+      },
+      {
+        "file": "/components/ClubLeaderboard.tsx",
+        "text": "Contribution",
+        "line": 253
+      },
+      {
+        "file": "/components/ClubProfileTab.tsx",
+        "text": "Email",
+        "line": 598
+      },
+      {
+        "file": "/components/DashboardLayout.tsx",
+        "text": "SABO ARENA",
+        "line": 78
+      },
+      {
+        "file": "/components/DashboardLayout.tsx",
+        "text": "Dashboard",
+        "line": 160
+      },
+      {
+        "file": "/components/DatabaseHealthCheck.tsx",
+        "text": "Healthy",
+        "line": 90
+      },
+      {
+        "file": "/components/DatabaseHealthCheck.tsx",
+        "text": "Unhealthy",
+        "line": 92
+      },
+      {
+        "file": "/components/DatabaseHealthCheck.tsx",
+        "text": "Warning",
+        "line": 94
+      },
+      {
+        "file": "/components/DatabaseHealthCheck.tsx",
+        "text": "Database Health Check",
+        "line": 102
+      },
+      {
+        "file": "/components/DatabaseSetupWizard.tsx",
+        "text": "Error",
+        "line": 68
+      },
+      {
+        "file": "/components/DatabaseSetupWizard.tsx",
+        "text": "Tables",
+        "line": 101
+      },
+      {
+        "file": "/components/DatabaseSetupWizard.tsx",
+        "text": "Users",
+        "line": 105
+      },
+      {
+        "file": "/components/DatabaseSetupWizard.tsx",
+        "text": "Database Setup Wizard",
+        "line": 244
+      },
+      {
+        "file": "/components/DebugPanel.tsx",
+        "text": "Quick",
+        "line": 170
+      },
+      {
+        "file": "/components/DebugPanel.tsx",
+        "text": "Detail",
+        "line": 171
+      },
+      {
+        "file": "/components/DepositModal.tsx",
+        "text": "VNPay",
+        "line": 136
+      },
+      {
+        "file": "/components/DepositModal.tsx",
+        "text": "MoMo",
+        "line": 137
+      },
+      {
+        "file": "/components/DepositModal.tsx",
+        "text": "ZaloPay",
+        "line": 138
+      },
+      {
+        "file": "/components/EloCalculator.tsx",
+        "text": "ELO Rating Calculator",
+        "line": 56
+      },
+      {
+        "file": "/components/EloCalculator.tsx",
+        "text": "Calculation Results",
+        "line": 133
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Current Rating",
+        "line": 192
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Recent Form",
+        "line": 205
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Consistency",
+        "line": 228
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "ELO Efficiency",
+        "line": 250
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Analysis",
+        "line": 265
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Progression",
+        "line": 266
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Calculator",
+        "line": 267
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Distribution",
+        "line": 268
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Rating History",
+        "line": 275
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Recent Match Results",
+        "line": 299
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Rank Progression Path",
+        "line": 338
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Current Rank",
+        "line": 344
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "ELO Rating",
+        "line": 351
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Match Outcome Calculator",
+        "line": 407
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Your Rating",
+        "line": 412
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Opponent Rating",
+        "line": 424
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Win Probability",
+        "line": 444
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Loss Probability",
+        "line": 450
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Rank Distribution",
+        "line": 477
+      },
+      {
+        "file": "/components/EloStatistics.tsx",
+        "text": "Player Distribution by Rank",
+        "line": 494
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "All Ranks",
+        "line": 268
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Rating",
+        "line": 291
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Matches",
+        "line": 292
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Win Rate",
+        "line": 293
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Streak",
+        "line": 294
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Recent Form",
+        "line": 295
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Consistency",
+        "line": 296
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Position",
+        "line": 321
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Player",
+        "line": 322
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Rank",
+        "line": 323
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Rating",
+        "line": 324
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Matches",
+        "line": 325
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Win Rate",
+        "line": 326
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Streak",
+        "line": 327
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Form",
+        "line": 328
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Consistency",
+        "line": 329
+      },
+      {
+        "file": "/components/EnhancedLeaderboard.tsx",
+        "text": "Volatility",
+        "line": 330
+      },
+      {
+        "file": "/components/FloatingUserChat.tsx",
+        "text": "AI SABO ARENA",
+        "line": 196
+      },
+      {
+        "file": "/components/GoogleMapsPlacesAutocomplete.tsx",
+        "text": "Google Maps API Key",
+        "line": 149
+      },
+      {
+        "file": "/components/Header.tsx",
+        "text": "SABO ARENA",
+        "line": 84
+      },
+      {
+        "file": "/components/LoginForm.tsx",
+        "text": "Email",
+        "line": 35
+      },
+      {
+        "file": "/components/ModelSelector.tsx",
+        "text": "AI Model",
+        "line": 194
+      },
+      {
+        "file": "/components/Navigation.tsx",
+        "text": "Admin",
+        "line": 214
+      },
+      {
+        "file": "/components/PostCreationModal.tsx",
+        "text": "Thua",
+        "line": 193
+      },
+      {
+        "file": "/components/RankTestComponent.tsx",
+        "text": "Rank Verification Test",
+        "line": 69
+      },
+      {
+        "file": "/components/RankingCalculator.tsx",
+        "text": "Ranking Calculator",
+        "line": 30
+      },
+      {
+        "file": "/components/RankingCalculator.tsx",
+        "text": "ELO Calculator",
+        "line": 35
+      },
+      {
+        "file": "/components/RankingCalculator.tsx",
+        "text": "Match Prediction",
+        "line": 36
+      },
+      {
+        "file": "/components/RankingCalculator.tsx",
+        "text": "Match Prediction",
+        "line": 96
+      },
+      {
+        "file": "/components/SeasonHistoryTab.tsx",
+        "text": "Nickname",
+        "line": 328
+      },
+      {
+        "file": "/components/SwipeCard.tsx",
+        "text": "Thua",
+        "line": 124
+      },
+      {
+        "file": "/components/SystemHealthSummary.tsx",
+        "text": "Quick Health Check",
+        "line": 118
+      },
+      {
+        "file": "/components/TournamentActions.tsx",
+        "text": "Tournament Actions",
+        "line": 25
+      },
+      {
+        "file": "/components/TournamentFeedCard.tsx",
+        "text": "Live",
+        "line": 107
+      },
+      {
+        "file": "/components/TournamentFeedCard.tsx",
+        "text": "Offline",
+        "line": 112
+      },
+      {
+        "file": "/components/admin/AIAdminAssistant.tsx",
+        "text": "AI Assistant Chat",
+        "line": 113
+      },
+      {
+        "file": "/components/admin/AdminBracketViewer.tsx",
+        "text": "Enhanced Double Elimination System",
+        "line": 466
+      },
+      {
+        "file": "/components/admin/AdminDashboard.tsx",
+        "text": "Admin Dashboard",
+        "line": 13
+      },
+      {
+        "file": "/components/admin/AdminDashboard.tsx",
+        "text": "Tournament Management",
+        "line": 43
+      },
+      {
+        "file": "/components/admin/AdminDashboard.tsx",
+        "text": "User Management",
+        "line": 56
+      },
+      {
+        "file": "/components/admin/AdminDashboard.tsx",
+        "text": "System Settings",
+        "line": 69
+      },
+      {
+        "file": "/components/admin/AdminDataSync.tsx",
+        "text": "Total Players",
+        "line": 181
+      },
+      {
+        "file": "/components/admin/AdminDataSync.tsx",
+        "text": "With SPA Points",
+        "line": 187
+      },
+      {
+        "file": "/components/admin/AdminDataSync.tsx",
+        "text": "With Wallets",
+        "line": 193
+      },
+      {
+        "file": "/components/admin/AdminDataSync.tsx",
+        "text": "Sync Status",
+        "line": 199
+      },
+      {
+        "file": "/components/admin/AdminModelSettings.tsx",
+        "text": "Admin Model Settings",
+        "line": 159
+      },
+      {
+        "file": "/components/admin/AdminModelSettings.tsx",
+        "text": "Auto Recommendations",
+        "line": 196
+      },
+      {
+        "file": "/components/admin/AdminModelSettings.tsx",
+        "text": "Performance Tracking",
+        "line": 211
+      },
+      {
+        "file": "/components/admin/AdminModelSettings.tsx",
+        "text": "Fallback Model",
+        "line": 225
+      },
+      {
+        "file": "/components/admin/AdminSPAManager.tsx",
+        "text": "Reset SPA Points",
+        "line": 254
+      },
+      {
+        "file": "/components/admin/AdminSPAManager.tsx",
+        "text": "SPA Points",
+        "line": 339
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Total Alerts",
+        "line": 306
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Active Alerts",
+        "line": 316
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Requiring attention",
+        "line": 322
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "High priority",
+        "line": 336
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Key Insights",
+        "line": 371
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Predicted Issues",
+        "line": 387
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Issue Categories",
+        "line": 418
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "First Seen",
+        "line": 508
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Last Seen",
+        "line": 512
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Occurrences",
+        "line": 516
+      },
+      {
+        "file": "/components/admin/AlertAnalyzer.tsx",
+        "text": "Status",
+        "line": 520
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Queue Status",
+        "line": 129
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Items in queue",
+        "line": 134
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Completion check",
+        "line": 166
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Migration Controls",
+        "line": 174
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Migration Logs",
+        "line": 254
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "No logs available",
+        "line": 262
+      },
+      {
+        "file": "/components/admin/AutomatedMigrationDashboard.tsx",
+        "text": "Migration Target Types",
+        "line": 291
+      },
+      {
+        "file": "/components/admin/AutomationMonitor.tsx",
+        "text": "Job ID",
+        "line": 982
+      },
+      {
+        "file": "/components/admin/AutomationMonitor.tsx",
+        "text": "Database",
+        "line": 1004
+      },
+      {
+        "file": "/components/admin/AutomationMonitor.tsx",
+        "text": "Command",
+        "line": 1012
+      },
+      {
+        "file": "/components/admin/CacheManager.tsx",
+        "text": "Total Queries",
+        "line": 133
+      },
+      {
+        "file": "/components/admin/CacheManager.tsx",
+        "text": "Fresh",
+        "line": 139
+      },
+      {
+        "file": "/components/admin/CacheManager.tsx",
+        "text": "Stale",
+        "line": 145
+      },
+      {
+        "file": "/components/admin/CacheManager.tsx",
+        "text": "Fetching",
+        "line": 151
+      },
+      {
+        "file": "/components/admin/CacheManager.tsx",
+        "text": "Errors",
+        "line": 157
+      },
+      {
+        "file": "/components/admin/CreateAdminAccount.tsx",
+        "text": "Email",
+        "line": 167
+      },
+      {
+        "file": "/components/admin/CreateAdminAccount.tsx",
+        "text": "Password",
+        "line": 178
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Soft Delete Statistics",
+        "line": 267
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Data Migration",
+        "line": 302
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Data Cleanup",
+        "line": 320
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Bulk Operations",
+        "line": 342
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Table",
+        "line": 350
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Tournaments",
+        "line": 357
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Challenges",
+        "line": 358
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Club Profiles",
+        "line": 359
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Events",
+        "line": 360
+      },
+      {
+        "file": "/components/admin/DataIntegrityDashboard.tsx",
+        "text": "Match Results",
+        "line": 361
+      },
+      {
+        "file": "/components/admin/DatabaseResetTools.tsx",
+        "text": "Confirm Database Reset",
+        "line": 266
+      },
+      {
+        "file": "/components/admin/DemoUserManager.tsx",
+        "text": "Demo User Pool",
+        "line": 225
+      },
+      {
+        "file": "/components/admin/DemoUserManager.tsx",
+        "text": "Total Users",
+        "line": 269
+      },
+      {
+        "file": "/components/admin/DemoUserManager.tsx",
+        "text": "Available",
+        "line": 279
+      },
+      {
+        "file": "/components/admin/DemoUserManager.tsx",
+        "text": "In Use",
+        "line": 289
+      },
+      {
+        "file": "/components/admin/DemoUserManager.tsx",
+        "text": "Usage",
+        "line": 298
+      },
+      {
+        "file": "/components/admin/DevelopmentTools.tsx",
+        "text": "Tournament Tools Moved",
+        "line": 108
+      },
+      {
+        "file": "/components/admin/DevelopmentTools.tsx",
+        "text": "Simplified Interface",
+        "line": 109
+      },
+      {
+        "file": "/components/admin/DevelopmentTools.tsx",
+        "text": "Better Organization",
+        "line": 110
+      },
+      {
+        "file": "/components/admin/MasterDataPopulator.tsx",
+        "text": "Master Data Populator",
+        "line": 22
+      },
+      {
+        "file": "/components/admin/MatchInputValidator.tsx",
+        "text": "Enter match scores with validation",
+        "line": 170
+      },
+      {
+        "file": "/components/admin/MigrationControlPanel.tsx",
+        "text": "Complete",
+        "line": 34
+      },
+      {
+        "file": "/components/admin/MigrationControlPanel.tsx",
+        "text": "Running",
+        "line": 37
+      },
+      {
+        "file": "/components/admin/MigrationControlPanel.tsx",
+        "text": "Available",
+        "line": 39
+      },
+      {
+        "file": "/components/admin/MigrationControlPanel.tsx",
+        "text": "System Status",
+        "line": 64
+      },
+      {
+        "file": "/components/admin/MigrationStatusCard.tsx",
+        "text": "In progress",
+        "line": 84
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Model Management",
+        "line": 244
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Admin Settings",
+        "line": 266
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "OpenAI Models",
+        "line": 267
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "AI Assistants",
+        "line": 268
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Test Models",
+        "line": 269
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Enabled",
+        "line": 291
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Requests",
+        "line": 403
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Cost",
+        "line": 407
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Response",
+        "line": 411
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Success",
+        "line": 421
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Requests",
+        "line": 561
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Tokens",
+        "line": 567
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Response",
+        "line": 573
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Users",
+        "line": 577
+      },
+      {
+        "file": "/components/admin/ModelManagement.tsx",
+        "text": "Success",
+        "line": 587
+      },
+      {
+        "file": "/components/admin/ModelTestingDemo.tsx",
+        "text": "Test Data",
+        "line": 255
+      },
+      {
+        "file": "/components/admin/ModelTestingDemo.tsx",
+        "text": "Test Results",
+        "line": 275
+      },
+      {
+        "file": "/components/admin/ModelTestingDemo.tsx",
+        "text": "Response Time",
+        "line": 314
+      },
+      {
+        "file": "/components/admin/OptimizedAdminDashboard.tsx",
+        "text": "Admin Dashboard",
+        "line": 46
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Web Vitals",
+        "line": 385
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Performance Trends",
+        "line": 389
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "First Input Delay",
+        "line": 427
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "FID measures interactivity",
+        "line": 428
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "CLS measures visual stability",
+        "line": 457
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Performance Trends",
+        "line": 515
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Page Load Trend",
+        "line": 524
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "API Response Trend",
+        "line": 531
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Error Rate Trend",
+        "line": 538
+      },
+      {
+        "file": "/components/admin/PerformanceMetrics.tsx",
+        "text": "Recent Optimizations",
+        "line": 547
+      },
+      {
+        "file": "/components/admin/RankingSystemTest.tsx",
+        "text": "Ranking System Test",
+        "line": 32
+      },
+      {
+        "file": "/components/admin/RankingSystemTest.tsx",
+        "text": "Test Ranking Functions",
+        "line": 37
+      },
+      {
+        "file": "/components/admin/RankingSystemTest.tsx",
+        "text": "Trust Score Calculation",
+        "line": 52
+      },
+      {
+        "file": "/components/admin/RankingSystemTest.tsx",
+        "text": "Leaderboard Stats",
+        "line": 53
+      },
+      {
+        "file": "/components/admin/RankingSystemTest.tsx",
+        "text": "Rank Verification",
+        "line": 54
+      },
+      {
+        "file": "/components/admin/RealTimeBracketUpdates.tsx",
+        "text": "Match completions will appear here",
+        "line": 258
+      },
+      {
+        "file": "/components/admin/SABOMigrationManager.tsx",
+        "text": "Tournament Status",
+        "line": 200
+      },
+      {
+        "file": "/components/admin/SystemManagementHub.tsx",
+        "text": "System Management Hub",
+        "line": 32
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Reset Type",
+        "line": 172
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Completed At",
+        "line": 178
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Results",
+        "line": 187
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Select Reset Type",
+        "line": 230
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Reset Progress",
+        "line": 288
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Confirm Reset",
+        "line": 301
+      },
+      {
+        "file": "/components/admin/SystemResetPanel.tsx",
+        "text": "Selected Reset Type",
+        "line": 308
+      },
+      {
+        "file": "/components/admin/TournamentBracketManager.tsx",
+        "text": "Tournament Bracket Manager",
+        "line": 126
+      },
+      {
+        "file": "/components/admin/TournamentRewardsSync.tsx",
+        "text": "Current Tournament",
+        "line": 63
+      },
+      {
+        "file": "/components/admin/TournamentRewardsSync.tsx",
+        "text": "All Tournaments",
+        "line": 86
+      },
+      {
+        "file": "/components/admin/UserFilters.tsx",
+        "text": "Premium",
+        "line": 48
+      },
+      {
+        "file": "/components/admin/UserFilters.tsx",
+        "text": "Free",
+        "line": 49
+      },
+      {
+        "file": "/components/admin/UserFilters.tsx",
+        "text": "Member",
+        "line": 58
+      },
+      {
+        "file": "/components/admin/UserFilters.tsx",
+        "text": "Club Admin",
+        "line": 59
+      },
+      {
+        "file": "/components/admin/UserFilters.tsx",
+        "text": "System Admin",
+        "line": 60
+      },
+      {
+        "file": "/components/admin/UserTestingManager.tsx",
+        "text": "User Testing Manager",
+        "line": 28
+      },
+      {
+        "file": "/components/admin/game-config/DatabaseMigrationRunner.tsx",
+        "text": "Custom SQL Executor",
+        "line": 274
+      },
+      {
+        "file": "/components/admin/game-config/DatabaseMigrationRunner.tsx",
+        "text": "Execution Results",
+        "line": 302
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "ELO Calculation Rules",
+        "line": 129
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Rule Name",
+        "line": 151
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Rule Type",
+        "line": 166
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Base Value",
+        "line": 187
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Multiplier",
+        "line": 202
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Priority",
+        "line": 218
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Value Formula",
+        "line": 233
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Active",
+        "line": 269
+      },
+      {
+        "file": "/components/admin/game-config/EloRulesManager.tsx",
+        "text": "Inactive",
+        "line": 318
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigOverview.tsx",
+        "text": "System Metrics",
+        "line": 155
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigOverview.tsx",
+        "text": "Recent Configuration Changes",
+        "line": 193
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Game Configuration Sync",
+        "line": 73
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Sync Status",
+        "line": 82
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Detected Issues",
+        "line": 112
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Sync Actions",
+        "line": 133
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Update Constants",
+        "line": 143
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Update Database",
+        "line": 158
+      },
+      {
+        "file": "/components/admin/game-config/GameConfigSync.tsx",
+        "text": "Advanced Operations",
+        "line": 171
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Rank Definitions",
+        "line": 125
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Rank Code",
+        "line": 147
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Rank Name",
+        "line": 162
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Order",
+        "line": 177
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "ELO Requirement",
+        "line": 192
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "SPA Requirement",
+        "line": 207
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Match Requirement",
+        "line": 222
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Color",
+        "line": 237
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Description",
+        "line": 266
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Active",
+        "line": 288
+      },
+      {
+        "file": "/components/admin/game-config/RankDefinitionsManager.tsx",
+        "text": "Inactive",
+        "line": 359
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "SPA Rewards Management",
+        "line": 132
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Milestone Name",
+        "line": 156
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Milestone Type",
+        "line": 171
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Requirement Value",
+        "line": 192
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "SPA Reward",
+        "line": 207
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Active",
+        "line": 251
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Repeatable",
+        "line": 262
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Inactive",
+        "line": 313
+      },
+      {
+        "file": "/components/admin/game-config/SPARewardsManager.tsx",
+        "text": "Repeatable",
+        "line": 316
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Tournament Rewards Management",
+        "line": 130
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Position Name",
+        "line": 155
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Tournament Type",
+        "line": 170
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Rank Category",
+        "line": 191
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Bronze",
+        "line": 203
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Silver",
+        "line": 204
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Gold",
+        "line": 205
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Elite",
+        "line": 206
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "SPA Reward",
+        "line": 211
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "ELO Reward",
+        "line": 226
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Active",
+        "line": 270
+      },
+      {
+        "file": "/components/admin/game-config/TournamentRewardsManager.tsx",
+        "text": "Inactive",
+        "line": 320
+      },
+      {
+        "file": "/components/admin/tournament/TournamentAnalyticsDashboard.tsx",
+        "text": "Tournament Analytics",
+        "line": 82
+      },
+      {
+        "file": "/components/admin/tournament/TournamentAnalyticsDashboard.tsx",
+        "text": "Total Participants",
+        "line": 102
+      },
+      {
+        "file": "/components/admin/tournament/TournamentAnalyticsDashboard.tsx",
+        "text": "Prize Pool",
+        "line": 117
+      },
+      {
+        "file": "/components/admin/tournament/TournamentAnalyticsDashboard.tsx",
+        "text": "Average ELO",
+        "line": 132
+      },
+      {
+        "file": "/components/admin/tournament/TournamentAnalyticsDashboard.tsx",
+        "text": "Registration Progress",
+        "line": 147
+      },
+      {
+        "file": "/components/admin/tournament/TournamentBracketGenerator.tsx",
+        "text": "Single Elimination",
+        "line": 318
+      },
+      {
+        "file": "/components/admin/tournament/TournamentBracketGenerator.tsx",
+        "text": "Double Elimination",
+        "line": 319
+      },
+      {
+        "file": "/components/admin/tournament/TournamentBracketGenerator.tsx",
+        "text": "Theo ELO Rating",
+        "line": 344
+      },
+      {
+        "file": "/components/admin/tournament/TournamentBracketGenerator.tsx",
+        "text": "Bracket Tournament",
+        "line": 403
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Prize Management",
+        "line": 171
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Total Prize Pool",
+        "line": 203
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Distributed",
+        "line": 209
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Remaining",
+        "line": 215
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Prize Positions",
+        "line": 221
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Position Title",
+        "line": 251
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Type",
+        "line": 270
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Cash",
+        "line": 276
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Trophy",
+        "line": 277
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Gift",
+        "line": 278
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Sponsor Name",
+        "line": 317
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Type",
+        "line": 336
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Cash",
+        "line": 342
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Product",
+        "line": 343
+      },
+      {
+        "file": "/components/admin/tournament/TournamentPrizeManager.tsx",
+        "text": "Service",
+        "line": 344
+      },
+      {
+        "file": "/components/ai/AIMatchAnalyzer.tsx",
+        "text": "AI Match Analyzer",
+        "line": 150
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Avg Score",
+        "line": 318
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Engagement Trends by Segment",
+        "line": 329
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Individual User Scores",
+        "line": 362
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Detailed Analysis",
+        "line": 463
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Engagement Breakdown",
+        "line": 483
+      },
+      {
+        "file": "/components/ai/EngagementScoring.tsx",
+        "text": "Select a user to view detailed engagement analysis",
+        "line": 575
+      },
+      {
+        "file": "/components/ai/RecommendationEngine.tsx",
+        "text": "High Priority Recommendations",
+        "line": 301
+      },
+      {
+        "file": "/components/ai/RecommendationEngine.tsx",
+        "text": "All Recommendations",
+        "line": 472
+      },
+      {
+        "file": "/components/ai/RecommendationEngine.tsx",
+        "text": "Confidence",
+        "line": 492
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Alert Details",
+        "line": 324
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "AI Analysis",
+        "line": 325
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Ask AI",
+        "line": 326
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Predictions",
+        "line": 327
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Metadata",
+        "line": 353
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Category",
+        "line": 382
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Priority Score",
+        "line": 387
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "AI Summary",
+        "line": 404
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Ask AI Assistant",
+        "line": 464
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Incident Predictions",
+        "line": 501
+      },
+      {
+        "file": "/components/alerts/AlertAnalysisDashboard.tsx",
+        "text": "Recommendations",
+        "line": 541
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Automated Reporting",
+        "line": 220
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Generated Reports",
+        "line": 246
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Report Templates",
+        "line": 247
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Analytics",
+        "line": 248
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "No reports generated yet",
+        "line": 346
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Report Generation Trends",
+        "line": 448
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Report analytics chart would be here",
+        "line": 454
+      },
+      {
+        "file": "/components/alerts/AutomatedReporting.tsx",
+        "text": "Generating AI Report",
+        "line": 471
+      },
+      {
+        "file": "/components/alerts/ConversationalAlerts.tsx",
+        "text": "AI Assistant Online",
+        "line": 386
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Advanced Analytics",
+        "line": 344
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Pick a date",
+        "line": 383
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Overview",
+        "line": 421
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Traffic",
+        "line": 422
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Behavior",
+        "line": 423
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Performance",
+        "line": 424
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Conversions",
+        "line": 425
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Traffic Analysis",
+        "line": 589
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "User Actions",
+        "line": 616
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Session Metrics",
+        "line": 633
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Performance Trends",
+        "line": 658
+      },
+      {
+        "file": "/components/analytics/AdvancedAnalyticsDashboard.tsx",
+        "text": "Conversion Funnel",
+        "line": 684
+      },
+      {
+        "file": "/components/analytics/SPAAnalyticsDashboard.tsx",
+        "text": "SPA Analytics",
+        "line": 59
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "User Behavior Analytics",
+        "line": 286
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Overview",
+        "line": 371
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Devices",
+        "line": 372
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Click Heatmap",
+        "line": 373
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "User Flow",
+        "line": 374
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Session Duration Distribution",
+        "line": 382
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Browser Usage",
+        "line": 399
+      },
+      {
+        "file": "/components/analytics/UserBehaviorAnalytics.tsx",
+        "text": "Device Performance",
+        "line": 474
+      },
+      {
+        "file": "/components/auth/EnhancedAuthFlow.tsx",
+        "text": "Email",
+        "line": 193
+      },
+      {
+        "file": "/components/challenge/SimpleChallengeCreator.tsx",
+        "text": "Create Challenge",
+        "line": 114
+      },
+      {
+        "file": "/components/challenge/SimpleChallengeCreator.tsx",
+        "text": "Opponent",
+        "line": 119
+      },
+      {
+        "file": "/components/challenge/SimpleChallengeCreator.tsx",
+        "text": "Bet Points",
+        "line": 139
+      },
+      {
+        "file": "/components/challenge/SimpleChallengeCreator.tsx",
+        "text": "Scheduled Time",
+        "line": 154
+      },
+      {
+        "file": "/components/challenges/CompletedChallengeCard.tsx",
+        "text": "Challenger",
+        "line": 80
+      },
+      {
+        "file": "/components/challenges/CompletedChallengeCard.tsx",
+        "text": "Opponent",
+        "line": 103
+      },
+      {
+        "file": "/components/challenges/UnifiedChallengeCard.tsx",
+        "text": "Race to",
+        "line": 455
+      },
+      {
+        "file": "/components/chat/ChatWindow.tsx",
+        "text": "Chat",
+        "line": 81
+      },
+      {
+        "file": "/components/cloud/CloudStorageManager.tsx",
+        "text": "Upload files",
+        "line": 361
+      },
+      {
+        "file": "/components/club/testing/ClubManagementAudit.tsx",
+        "text": "Club Management Audit",
+        "line": 175
+      },
+      {
+        "file": "/components/club/testing/ClubManagementAudit.tsx",
+        "text": "Audit Results",
+        "line": 200
+      },
+      {
+        "file": "/components/club/testing/ClubManagementAudit.tsx",
+        "text": "Passed",
+        "line": 236
+      },
+      {
+        "file": "/components/club/testing/ClubManagementAudit.tsx",
+        "text": "Failed",
+        "line": 242
+      },
+      {
+        "file": "/components/club/testing/ClubManagementAudit.tsx",
+        "text": "Warnings",
+        "line": 248
+      },
+      {
+        "file": "/components/club-management/MemberManagementTab.tsx",
+        "text": "Premium",
+        "line": 436
+      },
+      {
+        "file": "/components/dashboard/DashboardStats.tsx",
+        "text": "Amateur",
+        "line": 95
+      },
+      {
+        "file": "/components/dashboard/RecentActivity.tsx",
+        "text": "Tham gia",
+        "line": 57
+      },
+      {
+        "file": "/components/demo/DashboardComparison.tsx",
+        "text": "SABO ARENA Dashboard",
+        "line": 126
+      },
+      {
+        "file": "/components/demo/DashboardComparison.tsx",
+        "text": "Typography System",
+        "line": 262
+      },
+      {
+        "file": "/components/demo/DashboardComparison.tsx",
+        "text": "Color System",
+        "line": 295
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Scroll Distance",
+        "line": 135
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Cards per Screen",
+        "line": 141
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Time to Info",
+        "line": 147
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Touch Accuracy",
+        "line": 151
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Scroll Distance",
+        "line": 168
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Cards per Screen",
+        "line": 174
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Time to Info",
+        "line": 180
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Touch Accuracy",
+        "line": 186
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Visual Hierarchy",
+        "line": 242
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Content Density",
+        "line": 250
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Mobile First",
+        "line": 258
+      },
+      {
+        "file": "/components/demo/ProfileComparison.tsx",
+        "text": "Technical Implementation Notes",
+        "line": 293
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Primary Border",
+        "line": 34
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Secondary Border",
+        "line": 43
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Success Border",
+        "line": 52
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Warning Border",
+        "line": 61
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Premium Border",
+        "line": 70
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SABO Tech Buttons",
+        "line": 110
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Primary Action",
+        "line": 112
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SABO Tech Cards",
+        "line": 121
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Standard Tech Card",
+        "line": 123
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Premium Tech Card",
+        "line": 129
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SABO Tech Inputs",
+        "line": 140
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SABO Tech Avatars",
+        "line": 146
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SABO Champion",
+        "line": 176
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "SPA Points",
+        "line": 182
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Wins",
+        "line": 186
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Win Rate",
+        "line": 190
+      },
+      {
+        "file": "/components/demo/SaboTechBorderDemo.tsx",
+        "text": "Challenge Player",
+        "line": 193
+      },
+      {
+        "file": "/components/desktop/DesktopHeader.tsx",
+        "text": "SABO ARENA",
+        "line": 19
+      },
+      {
+        "file": "/components/desktop/UserDesktopHeader.tsx",
+        "text": "Dashboard",
+        "line": 55
+      },
+      {
+        "file": "/components/desktop/UserDesktopSidebar.tsx",
+        "text": "SABO ARENA",
+        "line": 79
+      },
+      {
+        "file": "/components/elo/ELOSystemInfo.tsx",
+        "text": "Removed",
+        "line": 42
+      },
+      {
+        "file": "/components/error/ResponsiveErrorBoundary.tsx",
+        "text": "Try refreshing the page",
+        "line": 240
+      },
+      {
+        "file": "/components/error/ResponsiveErrorBoundary.tsx",
+        "text": "Disable browser extensions that might interfere",
+        "line": 248
+      },
+      {
+        "file": "/components/membership/ClubMembershipTab.tsx",
+        "text": "CLB Premium",
+        "line": 198
+      },
+      {
+        "file": "/components/membership/ClubMembershipTab.tsx",
+        "text": "Marketing tools",
+        "line": 224
+      },
+      {
+        "file": "/components/membership/IndividualMembershipTab.tsx",
+        "text": "Free Member",
+        "line": 75
+      },
+      {
+        "file": "/components/membership/IndividualMembershipTab.tsx",
+        "text": "VIP Member",
+        "line": 175
+      },
+      {
+        "file": "/components/mobile/SocialPlayerCard.tsx",
+        "text": "Online",
+        "line": 54
+      },
+      {
+        "file": "/components/navigation/TopBar.tsx",
+        "text": "Admin Panel",
+        "line": 193
+      },
+      {
+        "file": "/components/notifications/MatchNotificationDemo.tsx",
+        "text": "Match Notification Demo",
+        "line": 59
+      },
+      {
+        "file": "/components/notifications/NotificationPreferences.tsx",
+        "text": "Email",
+        "line": 150
+      },
+      {
+        "file": "/components/notifications/NotificationPreferences.tsx",
+        "text": "Push notification",
+        "line": 164
+      },
+      {
+        "file": "/components/performance/PerformanceMonitor.tsx",
+        "text": "Performance Monitor",
+        "line": 8
+      },
+      {
+        "file": "/components/performance/PerformanceMonitor.tsx",
+        "text": "CPU Usage",
+        "line": 13
+      },
+      {
+        "file": "/components/performance/PerformanceMonitor.tsx",
+        "text": "Memory Usage",
+        "line": 17
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Churn Risk Distribution",
+        "line": 297
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "High Risk Users",
+        "line": 340
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "User Behavior Predictions",
+        "line": 391
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Churn Risk",
+        "line": 408
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Engagement",
+        "line": 422
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Risk Factors",
+        "line": 484
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Engagement Trend Forecast",
+        "line": 508
+      },
+      {
+        "file": "/components/predictive/PredictiveAnalyticsDashboard.tsx",
+        "text": "Detected Anomalies",
+        "line": 542
+      },
+      {
+        "file": "/components/profile/ArenaProfilePage.tsx",
+        "text": "SPA Points",
+        "line": 62
+      },
+      {
+        "file": "/components/profile/ArenaProfilePage.tsx",
+        "text": "Victories",
+        "line": 66
+      },
+      {
+        "file": "/components/profile/ArenaProfilePage.tsx",
+        "text": "Win Rate",
+        "line": 70
+      },
+      {
+        "file": "/components/profile/EditableProfileForm.tsx",
+        "text": "Email",
+        "line": 320
+      },
+      {
+        "file": "/components/profile/ProfileMatches.tsx",
+        "text": "Thua",
+        "line": 282
+      },
+      {
+        "file": "/components/profile/RankingSPATabs.tsx",
+        "text": "SPA Points",
+        "line": 52
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "Profile Information",
+        "line": 62
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "Full Name",
+        "line": 68
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "Display Name",
+        "line": 78
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "Phone",
+        "line": 89
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "City",
+        "line": 98
+      },
+      {
+        "file": "/components/profile/SimpleProfileForm.tsx",
+        "text": "District",
+        "line": 109
+      },
+      {
+        "file": "/components/profile/UnifiedProfileForm.tsx",
+        "text": "Thua",
+        "line": 244
+      },
+      {
+        "file": "/components/profile/arena/ArenaProfileStats.tsx",
+        "text": "SPA Points",
+        "line": 55
+      },
+      {
+        "file": "/components/profile/unified/ProfileHeader.tsx",
+        "text": "SPA Points",
+        "line": 357
+      },
+      {
+        "file": "/components/ranking/ELOHistoryChart.tsx",
+        "text": "Thua",
+        "line": 398
+      },
+      {
+        "file": "/components/ranking/ELORankingDashboard.tsx",
+        "text": "Consistency Score",
+        "line": 368
+      },
+      {
+        "file": "/components/ranking/ELORankingDashboard.tsx",
+        "text": "Recent Form",
+        "line": 393
+      },
+      {
+        "file": "/components/ranking/ELORankingDashboard.tsx",
+        "text": "Volatility",
+        "line": 418
+      },
+      {
+        "file": "/components/ranking/RankingLeaderboard.tsx",
+        "text": "Theo CLB",
+        "line": 293
+      },
+      {
+        "file": "/components/ranking/RealtimeRankingTracker.tsx",
+        "text": "Live Tracking",
+        "line": 464
+      },
+      {
+        "file": "/components/ranking/SPAPointsCard.tsx",
+        "text": "SPA Points",
+        "line": 242
+      },
+      {
+        "file": "/components/security/SecuritySettings.tsx",
+        "text": "MacBook Pro",
+        "line": 348
+      },
+      {
+        "file": "/components/spa/EnhancedSPALeaderboard.tsx",
+        "text": "Rank",
+        "line": 270
+      },
+      {
+        "file": "/components/spa/EnhancedSPALeaderboard.tsx",
+        "text": "SPA Points",
+        "line": 273
+      },
+      {
+        "file": "/components/tablet/TabletOptimizedComponents.tsx",
+        "text": "Tablet Info",
+        "line": 48
+      },
+      {
+        "file": "/components/tablet/TabletOptimizedComponents.tsx",
+        "text": "Optimized for touch interaction",
+        "line": 55
+      },
+      {
+        "file": "/components/tablet/TabletOptimizedComponents.tsx",
+        "text": "Enhanced spacing and typography",
+        "line": 56
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Admin Testing Dashboard",
+        "line": 88
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Mobile",
+        "line": 236
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Tablet",
+        "line": 241
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Desktop",
+        "line": 246
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Optimize Performance",
+        "line": 468
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Validate User Experience",
+        "line": 480
+      },
+      {
+        "file": "/components/testing/AdminTestingGuide.tsx",
+        "text": "Layout Jumping",
+        "line": 610
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Current Breakpoint",
+        "line": 200
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Screen Size",
+        "line": 209
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Layout Shift",
+        "line": 215
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Passed",
+        "line": 237
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Warnings",
+        "line": 243
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Failed",
+        "line": 247
+      },
+      {
+        "file": "/components/testing/CrossDeviceTestSuite.tsx",
+        "text": "Testing Instructions",
+        "line": 277
+      },
+      {
+        "file": "/components/testing/EloSystemValidator.tsx",
+        "text": "Test Results",
+        "line": 240
+      },
+      {
+        "file": "/components/testing/EloSystemValidator.tsx",
+        "text": "Summary",
+        "line": 275
+      },
+      {
+        "file": "/components/testing/EloSystemValidator.tsx",
+        "text": "Passed",
+        "line": 281
+      },
+      {
+        "file": "/components/testing/EloSystemValidator.tsx",
+        "text": "Warnings",
+        "line": 287
+      },
+      {
+        "file": "/components/testing/EloSystemValidator.tsx",
+        "text": "Failed",
+        "line": 293
+      },
+      {
+        "file": "/components/testing/IntegrationTestSuite.tsx",
+        "text": "Passed",
+        "line": 288
+      },
+      {
+        "file": "/components/testing/IntegrationTestSuite.tsx",
+        "text": "Failed",
+        "line": 294
+      },
+      {
+        "file": "/components/testing/IntegrationTestSuite.tsx",
+        "text": "Total",
+        "line": 298
+      },
+      {
+        "file": "/components/testing/PerformanceMonitor.tsx",
+        "text": "Memory Usage",
+        "line": 220
+      },
+      {
+        "file": "/components/testing/PerformanceMonitor.tsx",
+        "text": "Used Heap",
+        "line": 223
+      },
+      {
+        "file": "/components/testing/PerformanceMonitor.tsx",
+        "text": "Total Heap",
+        "line": 229
+      },
+      {
+        "file": "/components/testing/PerformanceMonitor.tsx",
+        "text": "Heap Limit",
+        "line": 235
+      },
+      {
+        "file": "/components/testing/PerformanceMonitor.tsx",
+        "text": "Layout Stability",
+        "line": 246
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Neutral",
+        "line": 209
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Share Your Experience",
+        "line": 279
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Category",
+        "line": 310
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Your feedback",
+        "line": 330
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Recent User Feedback",
+        "line": 361
+      },
+      {
+        "file": "/components/testing/PostDeploymentMonitoring.tsx",
+        "text": "Optimization Insights",
+        "line": 405
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Production Deployment Dashboard",
+        "line": 181
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Overview",
+        "line": 189
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Feature Flags",
+        "line": 190
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Monitoring",
+        "line": 192
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Emergency",
+        "line": 193
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Rollout Coverage",
+        "line": 203
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Performance Score",
+        "line": 210
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Error Rate",
+        "line": 217
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "User Rating",
+        "line": 224
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Deployment Status",
+        "line": 231
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Control Group",
+        "line": 344
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Treatment Group",
+        "line": 358
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "System Health",
+        "line": 389
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Error Rate",
+        "line": 394
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Performance",
+        "line": 416
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "User Satisfaction",
+        "line": 438
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Rollout Progress",
+        "line": 466
+      },
+      {
+        "file": "/components/testing/ProductionDeploymentDashboard.tsx",
+        "text": "Coverage",
+        "line": 472
+      },
+      {
+        "file": "/components/testing/RankSystemValidator.tsx",
+        "text": "Rank System Validator",
+        "line": 165
+      },
+      {
+        "file": "/components/testing/RankSystemValidator.tsx",
+        "text": "Passed",
+        "line": 186
+      },
+      {
+        "file": "/components/testing/RankSystemValidator.tsx",
+        "text": "Failed",
+        "line": 192
+      },
+      {
+        "file": "/components/testing/RankSystemValidator.tsx",
+        "text": "Warnings",
+        "line": 198
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Responsive Analytics Tracker",
+        "line": 221
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Current Session",
+        "line": 248
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Device",
+        "line": 254
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Time",
+        "line": 262
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Changes",
+        "line": 272
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Renders",
+        "line": 282
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Session Statistics",
+        "line": 303
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Avg Time",
+        "line": 317
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Device Distribution",
+        "line": 332
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Mobile",
+        "line": 338
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Tablet",
+        "line": 358
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Desktop",
+        "line": 378
+      },
+      {
+        "file": "/components/testing/ResponsiveAnalyticsTracker.tsx",
+        "text": "Navigate through the application normally",
+        "line": 412
+      },
+      {
+        "file": "/components/testing/ResponsiveAuditReport.tsx",
+        "text": "Passed",
+        "line": 164
+      },
+      {
+        "file": "/components/testing/ResponsiveAuditReport.tsx",
+        "text": "Warnings",
+        "line": 170
+      },
+      {
+        "file": "/components/testing/ResponsiveAuditReport.tsx",
+        "text": "Errors",
+        "line": 174
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Render Time Trend",
+        "line": 148
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Responsive Performance Optimizer",
+        "line": 206
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Renders",
+        "line": 234
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Avg Time",
+        "line": 244
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Memory",
+        "line": 254
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Status",
+        "line": 264
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Render Performance",
+        "line": 279
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Memory Efficiency",
+        "line": 292
+      },
+      {
+        "file": "/components/testing/ResponsivePerformanceOptimizer.tsx",
+        "text": "Optimization Suggestions",
+        "line": 305
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Responsive System Documentation",
+        "line": 60
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Getting Started",
+        "line": 67
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Components",
+        "line": 68
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Best Practices",
+        "line": 69
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Troubleshooting",
+        "line": 70
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Migration",
+        "line": 71
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Enhanced spacing and touch interactions",
+        "line": 173
+      },
+      {
+        "file": "/components/testing/ResponsiveSystemDocumentation.tsx",
+        "text": "Small Button",
+        "line": 414
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Width",
+        "line": 58
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Height",
+        "line": 62
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Breakpoint",
+        "line": 66
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Renders",
+        "line": 72
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Breakpoint Detection",
+        "line": 79
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Media Query Validation",
+        "line": 95
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Performance Metrics",
+        "line": 126
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Last Render Time",
+        "line": 129
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Last Update",
+        "line": 135
+      },
+      {
+        "file": "/components/testing/ResponsiveTestSuite.tsx",
+        "text": "Breakpoint Configuration",
+        "line": 145
+      },
+      {
+        "file": "/components/testing/TournamentEndToEndTest.tsx",
+        "text": "Progress",
+        "line": 351
+      },
+      {
+        "file": "/components/testing/TournamentIntegrityChecker.tsx",
+        "text": "Tournament Data Integrity Checker",
+        "line": 211
+      },
+      {
+        "file": "/components/testing/TournamentIntegrityChecker.tsx",
+        "text": "Errors",
+        "line": 242
+      },
+      {
+        "file": "/components/testing/TournamentIntegrityChecker.tsx",
+        "text": "Warnings",
+        "line": 248
+      },
+      {
+        "file": "/components/testing/TournamentIntegrityChecker.tsx",
+        "text": "Info",
+        "line": 252
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "User Experience Validator",
+        "line": 226
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "Passed",
+        "line": 257
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "Failed",
+        "line": 261
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "Manual Tests",
+        "line": 267
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "Manual",
+        "line": 322
+      },
+      {
+        "file": "/components/testing/UserExperienceValidator.tsx",
+        "text": "Manual Testing Checklist",
+        "line": 337
+      },
+      {
+        "file": "/components/tournament/AutomationMonitor.tsx",
+        "text": "Automation Monitor",
+        "line": 17
+      },
+      {
+        "file": "/components/tournament/AutomationMonitor.tsx",
+        "text": "Status",
+        "line": 22
+      },
+      {
+        "file": "/components/tournament/AutomationMonitor.tsx",
+        "text": "Active",
+        "line": 23
+      },
+      {
+        "file": "/components/tournament/AutomationMonitor.tsx",
+        "text": "Last Check",
+        "line": 26
+      },
+      {
+        "file": "/components/tournament/AutomationMonitor.tsx",
+        "text": "Just now",
+        "line": 27
+      },
+      {
+        "file": "/components/tournament/BracketGenerator.tsx",
+        "text": "Bye matches",
+        "line": 133
+      },
+      {
+        "file": "/components/tournament/BracketGenerator.tsx",
+        "text": "Single Elimination",
+        "line": 231
+      },
+      {
+        "file": "/components/tournament/EnhancedTableManager.tsx",
+        "text": "Available",
+        "line": 940
+      },
+      {
+        "file": "/components/tournament/EnhancedTableManager.tsx",
+        "text": "Ready for assignment",
+        "line": 941
+      },
+      {
+        "file": "/components/tournament/EnhancedTournamentBracket.tsx",
+        "text": "Bracket",
+        "line": 494
+      },
+      {
+        "file": "/components/tournament/SimplifiedTournamentPreview.tsx",
+        "text": "Tham gia",
+        "line": 274
+      },
+      {
+        "file": "/components/tournament/TournamentBracketFlow.tsx",
+        "text": "Automation",
+        "line": 226
+      },
+      {
+        "file": "/components/tournament/TournamentBroadcasting.tsx",
+        "text": "Tournament Live Broadcast",
+        "line": 206
+      },
+      {
+        "file": "/components/tournament/TournamentBroadcasting.tsx",
+        "text": "Live Stream",
+        "line": 276
+      },
+      {
+        "file": "/components/tournament/TournamentBroadcasting.tsx",
+        "text": "Live match updates",
+        "line": 290
+      },
+      {
+        "file": "/components/tournament/TournamentBroadcasting.tsx",
+        "text": "Tournament Stats",
+        "line": 431
+      },
+      {
+        "file": "/components/tournament/TournamentBroadcasting.tsx",
+        "text": "Status",
+        "line": 452
+      },
+      {
+        "file": "/components/tournament/TournamentControlPanel.tsx",
+        "text": "Matches Done",
+        "line": 182
+      },
+      {
+        "file": "/components/tournament/TournamentControlPanel.tsx",
+        "text": "Ready to Play",
+        "line": 190
+      },
+      {
+        "file": "/components/tournament/TournamentControlPanel.tsx",
+        "text": "Need Players",
+        "line": 200
+      },
+      {
+        "file": "/components/tournament/TournamentControlPanel.tsx",
+        "text": "Progress",
+        "line": 208
+      },
+      {
+        "file": "/components/tournament/TournamentControlPanel.tsx",
+        "text": "Tournament Progress",
+        "line": 216
+      },
+      {
+        "file": "/components/tournament/TournamentLifecycleManager.tsx",
+        "text": "Workflow",
+        "line": 307
+      },
+      {
+        "file": "/components/tournament/TournamentManagementFlow.tsx",
+        "text": "Tournament Status",
+        "line": 178
+      },
+      {
+        "file": "/components/tournament/TournamentManagementFlow.tsx",
+        "text": "Registered",
+        "line": 186
+      },
+      {
+        "file": "/components/tournament/TournamentManagementFlow.tsx",
+        "text": "Tournament Control",
+        "line": 247
+      },
+      {
+        "file": "/components/tournament/TournamentMatchManager.tsx",
+        "text": "Total",
+        "line": 163
+      },
+      {
+        "file": "/components/tournament/TournamentMatchManager.tsx",
+        "text": "Completed",
+        "line": 171
+      },
+      {
+        "file": "/components/tournament/TournamentMatchManager.tsx",
+        "text": "Ready",
+        "line": 179
+      },
+      {
+        "file": "/components/tournament/TournamentMatchManager.tsx",
+        "text": "Live",
+        "line": 199
+      },
+      {
+        "file": "/components/tournament/TournamentMatchManager.tsx",
+        "text": "No matches found with current filters",
+        "line": 367
+      },
+      {
+        "file": "/components/tournament/TournamentResults.tsx",
+        "text": "Thua",
+        "line": 181
+      },
+      {
+        "file": "/components/tournament/TournamentResults.tsx",
+        "text": "SPA Points",
+        "line": 195
+      },
+      {
+        "file": "/components/tournaments/BracketRoundSection.tsx",
+        "text": "No matches in this round",
+        "line": 203
+      },
+      {
+        "file": "/components/tournaments/DoubleBracketVisualization.tsx",
+        "text": "Total Matches",
+        "line": 375
+      },
+      {
+        "file": "/components/tournaments/DoubleBracketVisualization.tsx",
+        "text": "Completed",
+        "line": 381
+      },
+      {
+        "file": "/components/tournaments/SemifinalSection.tsx",
+        "text": "Winners advance to final",
+        "line": 119
+      },
+      {
+        "file": "/components/tournaments/SingleEliminationBracket.tsx",
+        "text": "Completed",
+        "line": 125
+      },
+      {
+        "file": "/components/tournaments/SingleEliminationBracket.tsx",
+        "text": "Ready to Play",
+        "line": 128
+      },
+      {
+        "file": "/components/tournaments/SingleEliminationBracket.tsx",
+        "text": "Pending",
+        "line": 130
+      },
+      {
+        "file": "/components/tournaments/automation/TournamentAutomationDashboard.tsx",
+        "text": "Errors",
+        "line": 61
+      },
+      {
+        "file": "/components/tournaments/automation/TournamentAutomationDashboard.tsx",
+        "text": "Status",
+        "line": 68
+      },
+      {
+        "file": "/components/tournaments/automation/TournamentStateManager.tsx",
+        "text": "Cancel",
+        "line": 259
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "Unable to load system health data",
+        "line": 140
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "System Health Dashboard",
+        "line": 152
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "Success Rate",
+        "line": 188
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "Active Triggers",
+        "line": 237
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "Tournament Automation",
+        "line": 290
+      },
+      {
+        "file": "/components/tournaments/monitoring/SystemHealthDashboard.tsx",
+        "text": "Database Triggers",
+        "line": 310
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "SABO ARENA",
+        "line": 8
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "SABO ARENA",
+        "line": 21
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Tournament Premier League",
+        "line": 33
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Heading Primary",
+        "line": 48
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Heading Secondary",
+        "line": 54
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Heading Tertiary",
+        "line": 60
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Section Title",
+        "line": 66
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Card Title",
+        "line": 72
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Navigation Text",
+        "line": 166
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Label Text",
+        "line": 174
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Responsive XL Text",
+        "line": 184
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Responsive Large Text",
+        "line": 190
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Responsive Medium Text",
+        "line": 196
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Responsive Small Text",
+        "line": 202
+      },
+      {
+        "file": "/components/typography/TypographyShowcase.tsx",
+        "text": "Responsive XS Text",
+        "line": 208
+      },
+      {
+        "file": "/components/ui/breadcrumb.tsx",
+        "text": "More",
+        "line": 102
+      },
+      {
+        "file": "/components/ui/carousel.tsx",
+        "text": "Previous slide",
+        "line": 218
+      },
+      {
+        "file": "/components/ui/carousel.tsx",
+        "text": "Next slide",
+        "line": 247
+      },
+      {
+        "file": "/components/ui/dialog.tsx",
+        "text": "Close",
+        "line": 47
+      },
+      {
+        "file": "/components/ui/pagination.tsx",
+        "text": "Previous",
+        "line": 73
+      },
+      {
+        "file": "/components/ui/pagination.tsx",
+        "text": "Next",
+        "line": 88
+      },
+      {
+        "file": "/components/ui/pagination.tsx",
+        "text": "More pages",
+        "line": 104
+      },
+      {
+        "file": "/components/ui/sheet.tsx",
+        "text": "Close",
+        "line": 68
+      },
+      {
+        "file": "/components/ui/sidebar.tsx",
+        "text": "Toggle Sidebar",
+        "line": 278
+      },
+      {
+        "file": "/components/user/UserOnboardingFlow.tsx",
+        "text": "Nha Trang",
+        "line": 168
+      },
+      {
+        "file": "/pages/AuthPage.tsx",
+        "text": "Email",
+        "line": 324
+      },
+      {
+        "file": "/pages/AuthPage.tsx",
+        "text": "Email",
+        "line": 563
+      },
+      {
+        "file": "/pages/ClubDetailPage.tsx",
+        "text": "Email",
+        "line": 547
+      },
+      {
+        "file": "/pages/ClubRegistrationPage.tsx",
+        "text": "Free",
+        "line": 179
+      },
+      {
+        "file": "/pages/ClubRegistrationPage.tsx",
+        "text": "Free",
+        "line": 184
+      },
+      {
+        "file": "/pages/ClubRegistrationPage.tsx",
+        "text": "Premium",
+        "line": 189
+      },
+      {
+        "file": "/pages/ClubRegistrationPage.tsx",
+        "text": "Premium",
+        "line": 194
+      },
+      {
+        "file": "/pages/ClubRegistrationPage.tsx",
+        "text": "Premium",
+        "line": 199
+      },
+      {
+        "file": "/pages/DiscoveryPage.tsx",
+        "text": "Tham gia",
+        "line": 418
+      },
+      {
+        "file": "/pages/EnhancedLoginPage.tsx",
+        "text": "SABO ARENA",
+        "line": 176
+      },
+      {
+        "file": "/pages/EnhancedRegisterPage.tsx",
+        "text": "SABO ARENA",
+        "line": 201
+      },
+      {
+        "file": "/pages/FeedPage.tsx",
+        "text": "Feed",
+        "line": 137
+      },
+      {
+        "file": "/pages/Index.tsx",
+        "text": "SABO ARENA",
+        "line": 58
+      },
+      {
+        "file": "/pages/Index.tsx",
+        "text": "SABO ARENA",
+        "line": 85
+      },
+      {
+        "file": "/pages/MatchHistoryPage.tsx",
+        "text": "Thua",
+        "line": 307
+      },
+      {
+        "file": "/pages/MatchHistoryPage.tsx",
+        "text": "Thua",
+        "line": 380
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "No Sidebar",
+        "line": 50
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Safe Area Support",
+        "line": 54
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Sidebar Navigation",
+        "line": 74
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "No Bottom Nav",
+        "line": 78
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Collapsible Sections",
+        "line": 82
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "No Bottom Nav",
+        "line": 106
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Hover Effects",
+        "line": 110
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Resize browser window",
+        "line": 263
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Check mobile view",
+        "line": 267
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Check desktop view",
+        "line": 271
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Navigate between pages",
+        "line": 275
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Test user roles",
+        "line": 279
+      },
+      {
+        "file": "/pages/NavigationTestPage.tsx",
+        "text": "Check badges",
+        "line": 283
+      },
+      {
+        "file": "/pages/OptimizedMobileDashboard.tsx",
+        "text": "SPA Points",
+        "line": 220
+      },
+      {
+        "file": "/pages/OptimizedMobileProfile.tsx",
+        "text": "SPA Points",
+        "line": 370
+      },
+      {
+        "file": "/pages/SaboChallengesPage.tsx",
+        "text": "SABO Challenge System",
+        "line": 262
+      },
+      {
+        "file": "/pages/SaboChallengesPage.tsx",
+        "text": "No challenges yet",
+        "line": 295
+      },
+      {
+        "file": "/pages/SimpleClubContactPage.tsx",
+        "text": "Zalo",
+        "line": 244
+      },
+      {
+        "file": "/pages/SimpleClubHomePage.tsx",
+        "text": "Hotline",
+        "line": 131
+      },
+      {
+        "file": "/pages/SimpleDashboard.tsx",
+        "text": "Website CLB",
+        "line": 114
+      },
+      {
+        "file": "/pages/SystemAuditPage.tsx",
+        "text": "Overall Health",
+        "line": 496
+      },
+      {
+        "file": "/pages/SystemAuditPage.tsx",
+        "text": "Tests Passed",
+        "line": 502
+      },
+      {
+        "file": "/pages/SystemAuditPage.tsx",
+        "text": "Critical Issues",
+        "line": 508
+      },
+      {
+        "file": "/pages/SystemAuditPage.tsx",
+        "text": "Warnings",
+        "line": 514
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Error",
+        "line": 140
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "System Health Dashboard",
+        "line": 151
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Overview",
+        "line": 168
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Database",
+        "line": 169
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Performance",
+        "line": 170
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Detailed Tests",
+        "line": 171
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Database",
+        "line": 179
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Connection",
+        "line": 186
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Auth Service",
+        "line": 204
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Storage",
+        "line": 213
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "File Storage",
+        "line": 220
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "WebSocket",
+        "line": 236
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Functions",
+        "line": 245
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Edge Functions",
+        "line": 252
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Config",
+        "line": 270
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Overall System Status",
+        "line": 281
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Uptime",
+        "line": 333
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Failed requests",
+        "line": 359
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Detailed Test Results",
+        "line": 386
+      },
+      {
+        "file": "/pages/SystemHealthPage.tsx",
+        "text": "Test Summary",
+        "line": 410
+      },
+      {
+        "file": "/pages/TournamentDetailRealtime.tsx",
+        "text": "Live Updates",
+        "line": 354
+      },
+      {
+        "file": "/pages/TournamentDetailRealtime.tsx",
+        "text": "Auto Sync",
+        "line": 363
+      },
+      {
+        "file": "/pages/TournamentDetailRealtime.tsx",
+        "text": "Database",
+        "line": 372
+      },
+      {
+        "file": "/pages/TournamentManagement.tsx",
+        "text": "Tournament Not Found",
+        "line": 52
+      },
+      {
+        "file": "/pages/TournamentManagement.tsx",
+        "text": "Tournament Management",
+        "line": 182
+      },
+      {
+        "file": "/pages/TournamentManagement.tsx",
+        "text": "Manual Advancement",
+        "line": 222
+      },
+      {
+        "file": "/pages/UnifiedDashboard.tsx",
+        "text": "Dashboard CLB",
+        "line": 133
+      },
+      {
+        "file": "/pages/_ARCHIVED_Dashboard.tsx",
+        "text": "SABO Pool Arena",
+        "line": 27
+      },
+      {
+        "file": "/pages/_DEPRECATED_Dashboard.tsx",
+        "text": "SABO Pool Arena",
+        "line": 42
+      },
+      {
+        "file": "/pages/_DEPRECATED_LoginPage.tsx",
+        "text": "Email",
+        "line": 278
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Quick Actions",
+        "line": 582
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Automation Tasks",
+        "line": 609
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Success Rate",
+        "line": 639
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Trigger",
+        "line": 646
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Executions",
+        "line": 650
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Last Run",
+        "line": 654
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Next Run",
+        "line": 658
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "AI Models",
+        "line": 766
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Accuracy",
+        "line": 790
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Usage",
+        "line": 796
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Type",
+        "line": 804
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Last Updated",
+        "line": 808
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "AI Assistant Settings",
+        "line": 838
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Configure AI behavior and preferences",
+        "line": 839
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Enable Voice Input",
+        "line": 843
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Proactive Insights",
+        "line": 851
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Response Style",
+        "line": 855
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Concise",
+        "line": 861
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Balanced",
+        "line": 862
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Detailed",
+        "line": 863
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Automation Settings",
+        "line": 872
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Configure automation behavior",
+        "line": 873
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Send Notifications",
+        "line": 881
+      },
+      {
+        "file": "/pages/admin/AdminAIAssistantNew.tsx",
+        "text": "Default Retry Attempts",
+        "line": 885
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Overview",
+        "line": 264
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Users",
+        "line": 265
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Tournaments",
+        "line": 266
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Revenue",
+        "line": 267
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Clubs",
+        "line": 268
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Monthly Target",
+        "line": 376
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Quarterly Target",
+        "line": 387
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Annual Target",
+        "line": 398
+      },
+      {
+        "file": "/pages/admin/AdminAnalyticsNew.tsx",
+        "text": "Monthly revenue",
+        "line": 437
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Automation Rules",
+        "line": 376
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Templates",
+        "line": 377
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Execution History",
+        "line": 378
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Monitoring",
+        "line": 379
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Create New Automation Rule",
+        "line": 388
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Rule Name",
+        "line": 392
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "System Performance",
+        "line": 591
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "CPU Usage",
+        "line": 597
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Memory Usage",
+        "line": 604
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Queue Size",
+        "line": 611
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "Automation Health",
+        "line": 622
+      },
+      {
+        "file": "/pages/admin/AdminAutomationNew.tsx",
+        "text": "All systems operational",
+        "line": 629
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Analytics",
+        "line": 401
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Settings",
+        "line": 402
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "All Challenges",
+        "line": 427
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Open",
+        "line": 428
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Accepted",
+        "line": 429
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "In Progress",
+        "line": 430
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Completed",
+        "line": 431
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Disputed",
+        "line": 432
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Cancelled",
+        "line": 433
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Challenger",
+        "line": 490
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Opponent",
+        "line": 509
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "No challenges found",
+        "line": 593
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Status",
+        "line": 617
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Open",
+        "line": 627
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Accepted",
+        "line": 628
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "In Progress",
+        "line": 629
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Completed",
+        "line": 630
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Cancelled",
+        "line": 631
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Disputed",
+        "line": 632
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Sponsored Status",
+        "line": 639
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Select a Challenge",
+        "line": 738
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Challenge Analytics",
+        "line": 806
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Analytics Dashboard",
+        "line": 811
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "Challenge Settings",
+        "line": 824
+      },
+      {
+        "file": "/pages/admin/AdminChallengesNew.tsx",
+        "text": "System Settings",
+        "line": 829
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Revenue chart would be rendered here",
+        "line": 474
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Integration with chart library needed",
+        "line": 475
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "User growth chart would be rendered here",
+        "line": 492
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Vietnam",
+        "line": 644
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Thailand",
+        "line": 648
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Singapore",
+        "line": 652
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Others",
+        "line": 656
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Average Rating",
+        "line": 673
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Positive Reviews",
+        "line": 677
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Visitors",
+        "line": 695
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Signups",
+        "line": 702
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Active Users",
+        "line": 709
+      },
+      {
+        "file": "/pages/admin/AdminDashboardNew.tsx",
+        "text": "Paying Users",
+        "line": 716
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Query Console",
+        "line": 267
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Tables",
+        "line": 268
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Backups",
+        "line": 269
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Performance",
+        "line": 270
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "SQL Query",
+        "line": 284
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Query History",
+        "line": 316
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Query Performance",
+        "line": 432
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Slow Queries",
+        "line": 438
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Index Usage",
+        "line": 445
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Lock Waits",
+        "line": 452
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Storage Analysis",
+        "line": 463
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Data",
+        "line": 469
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Indexes",
+        "line": 476
+      },
+      {
+        "file": "/pages/admin/AdminDatabaseNew.tsx",
+        "text": "Logs",
+        "line": 483
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "System Metrics",
+        "line": 241
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Auto Refresh",
+        "line": 248
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "System Logs",
+        "line": 297
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "All Levels",
+        "line": 313
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Info",
+        "line": 314
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Warning",
+        "line": 315
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Error",
+        "line": 316
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Debug",
+        "line": 317
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Database Tools",
+        "line": 356
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Quick Queries",
+        "line": 366
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Custom Query",
+        "line": 399
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Execute custom SQL queries",
+        "line": 400
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "SQL Query",
+        "line": 404
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Feature Flags",
+        "line": 432
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Deployments",
+        "line": 474
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Confirm Rollback",
+        "line": 504
+      },
+      {
+        "file": "/pages/admin/AdminDevelopmentNew.tsx",
+        "text": "Cancel",
+        "line": 511
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "EMERGENCY MODE",
+        "line": 701
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Emergency Alert Mode Active",
+        "line": 738
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Active Incidents",
+        "line": 767
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Procedures",
+        "line": 768
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Emergency Contacts",
+        "line": 769
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "History",
+        "line": 770
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Settings",
+        "line": 771
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "All Severity",
+        "line": 796
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Critical",
+        "line": 797
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "High",
+        "line": 798
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Medium",
+        "line": 799
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "All Status",
+        "line": 808
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Open",
+        "line": 809
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Investigating",
+        "line": 810
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Resolving",
+        "line": 811
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Resolved",
+        "line": 812
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Closed",
+        "line": 813
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "All Categories",
+        "line": 821
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Security",
+        "line": 822
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Technical",
+        "line": 823
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Financial",
+        "line": 824
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "User",
+        "line": 825
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Legal",
+        "line": 826
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Other",
+        "line": 827
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "All Clear",
+        "line": 902
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Severity",
+        "line": 964
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Category",
+        "line": 973
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Priority",
+        "line": 982
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Affected Users",
+        "line": 990
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Description",
+        "line": 1001
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Affected Services",
+        "line": 1012
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Actions",
+        "line": 1027
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Timeline",
+        "line": 1059
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Tags",
+        "line": 1086
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Select an Incident",
+        "line": 1111
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Incident History",
+        "line": 1233
+      },
+      {
+        "file": "/pages/admin/AdminEmergencyNew.tsx",
+        "text": "Emergency Settings",
+        "line": 1245
+      },
+      {
+        "file": "/pages/admin/AdminGameConfigNewEnhanced.tsx",
+        "text": "Database Setup",
+        "line": 56
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "All Categories",
+        "line": 501
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Getting Started",
+        "line": 502
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Features",
+        "line": 503
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Advanced",
+        "line": 504
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Troubleshooting",
+        "line": 505
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Best Practices",
+        "line": 507
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "All Levels",
+        "line": 515
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Beginner",
+        "line": 516
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Intermediate",
+        "line": 517
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Advanced",
+        "line": 518
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Video Tutorials",
+        "line": 603
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Version History",
+        "line": 745
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Highlights",
+        "line": 769
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Changes",
+        "line": 782
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Complete API reference and integration guides",
+        "line": 816
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Database structure and relationship documentation",
+        "line": 832
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "System configuration and environment setup",
+        "line": 848
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Join our community for help and discussions",
+        "line": 880
+      },
+      {
+        "file": "/pages/admin/AdminGuideNew.tsx",
+        "text": "Get help from our support team",
+        "line": 896
+      },
+      {
+        "file": "/pages/admin/AdminMigrationDashboard.tsx",
+        "text": "Overall Progress",
+        "line": 147
+      },
+      {
+        "file": "/pages/admin/AdminMigrationDashboard.tsx",
+        "text": "Completed",
+        "line": 154
+      },
+      {
+        "file": "/pages/admin/AdminMigrationDashboard.tsx",
+        "text": "In Progress",
+        "line": 160
+      },
+      {
+        "file": "/pages/admin/AdminMigrationDashboard.tsx",
+        "text": "Pending",
+        "line": 166
+      },
+      {
+        "file": "/pages/admin/AdminMonitoringPage.tsx",
+        "text": "Admin Dashboard",
+        "line": 35
+      },
+      {
+        "file": "/pages/admin/AdminMonitoringPage.tsx",
+        "text": "All Systems Operational",
+        "line": 43
+      },
+      {
+        "file": "/pages/admin/AdminMonitoringPage.tsx",
+        "text": "Recent System Events",
+        "line": 161
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Notifications",
+        "line": 430
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Templates",
+        "line": 431
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Campaigns",
+        "line": 432
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Analytics",
+        "line": 433
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Settings",
+        "line": 434
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "All Status",
+        "line": 459
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Draft",
+        "line": 460
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Scheduled",
+        "line": 461
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Sent",
+        "line": 462
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Failed",
+        "line": 463
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Cancelled",
+        "line": 464
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "All Types",
+        "line": 472
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Info",
+        "line": 473
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Warning",
+        "line": 474
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Success",
+        "line": 475
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Error",
+        "line": 476
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Announcement",
+        "line": 477
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "No Notifications Found",
+        "line": 559
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Status",
+        "line": 621
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Type",
+        "line": 630
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Priority",
+        "line": 638
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Recipients",
+        "line": 646
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Content",
+        "line": 657
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Delivery Channels",
+        "line": 667
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Delivery Statistics",
+        "line": 683
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Sent",
+        "line": 689
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Delivered",
+        "line": 695
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Read",
+        "line": 701
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Clicked",
+        "line": 707
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Failed",
+        "line": 713
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Tags",
+        "line": 723
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Select a Notification",
+        "line": 750
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Inactive",
+        "line": 774
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Title Template",
+        "line": 781
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Content Preview",
+        "line": 786
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Variables",
+        "line": 794
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Campaign Management",
+        "line": 836
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Notification Analytics",
+        "line": 848
+      },
+      {
+        "file": "/pages/admin/AdminNotificationsNew.tsx",
+        "text": "Notification Settings",
+        "line": 860
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Transactions",
+        "line": 528
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Payment Gateways",
+        "line": 529
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Analytics",
+        "line": 530
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Settings",
+        "line": 531
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "All Transactions",
+        "line": 556
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Pending",
+        "line": 557
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Processing",
+        "line": 558
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Completed",
+        "line": 559
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Failed",
+        "line": 560
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Cancelled",
+        "line": 561
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Refunded",
+        "line": 562
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Challenge",
+        "line": 662
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Tournament",
+        "line": 668
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "No transactions found",
+        "line": 692
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Status",
+        "line": 716
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Pending",
+        "line": 726
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Processing",
+        "line": 727
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Completed",
+        "line": 728
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Failed",
+        "line": 729
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Cancelled",
+        "line": 730
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Select a Transaction",
+        "line": 849
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Payment Settings",
+        "line": 994
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Payment Configuration",
+        "line": 999
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Process Refund",
+        "line": 1014
+      },
+      {
+        "file": "/pages/admin/AdminPaymentsNew.tsx",
+        "text": "Reason for Refund",
+        "line": 1031
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "All Requests",
+        "line": 406
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Pending",
+        "line": 407
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Under Review",
+        "line": 408
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Approved",
+        "line": 409
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Rejected",
+        "line": 410
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Verification Score",
+        "line": 468
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "No requests found",
+        "line": 492
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Select a Request",
+        "line": 688
+      },
+      {
+        "file": "/pages/admin/AdminRankVerificationNew.tsx",
+        "text": "Evidence Details",
+        "line": 703
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "All Reports",
+        "line": 653
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Scheduled",
+        "line": 654
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Templates",
+        "line": 655
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Analytics",
+        "line": 656
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Settings",
+        "line": 657
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "All Types",
+        "line": 682
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Financial",
+        "line": 683
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "User",
+        "line": 684
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Tournament",
+        "line": 685
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "System",
+        "line": 686
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Analytics",
+        "line": 687
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Custom",
+        "line": 688
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "All Status",
+        "line": 696
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Draft",
+        "line": 697
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Scheduled",
+        "line": 698
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Generating",
+        "line": 699
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Completed",
+        "line": 700
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Failed",
+        "line": 701
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "All Categories",
+        "line": 709
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Operational",
+        "line": 710
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Business",
+        "line": 711
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Technical",
+        "line": 712
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Compliance",
+        "line": 713
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "No Reports Found",
+        "line": 793
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Status",
+        "line": 867
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Type",
+        "line": 876
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Category",
+        "line": 885
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Format",
+        "line": 893
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Description",
+        "line": 905
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Date Range",
+        "line": 916
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Frequency",
+        "line": 922
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Metrics",
+        "line": 932
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Schedule",
+        "line": 946
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Recipients",
+        "line": 977
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Report Summary",
+        "line": 997
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "File Size",
+        "line": 1027
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Created",
+        "line": 1033
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Created By",
+        "line": 1039
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Tags",
+        "line": 1050
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Select a Report",
+        "line": 1066
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Public",
+        "line": 1149
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Metrics",
+        "line": 1178
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Report Analytics",
+        "line": 1214
+      },
+      {
+        "file": "/pages/admin/AdminReportsNew.tsx",
+        "text": "Report Settings",
+        "line": 1226
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Week",
+        "line": 554
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Month",
+        "line": 555
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "No Upcoming Events",
+        "line": 629
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Status",
+        "line": 699
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Type",
+        "line": 708
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Priority",
+        "line": 717
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Duration",
+        "line": 725
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Description",
+        "line": 736
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Start Time",
+        "line": 747
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "End Time",
+        "line": 754
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Location",
+        "line": 765
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Participants",
+        "line": 776
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Recurrence",
+        "line": 791
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Notifications",
+        "line": 816
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Tags",
+        "line": 837
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Calendar View",
+        "line": 859
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "All Types",
+        "line": 892
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Tournament",
+        "line": 893
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Maintenance",
+        "line": 894
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Meeting",
+        "line": 895
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Deadline",
+        "line": 896
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Notification",
+        "line": 897
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Backup",
+        "line": 898
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "All Status",
+        "line": 906
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Scheduled",
+        "line": 907
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Running",
+        "line": 908
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Completed",
+        "line": 909
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Cancelled",
+        "line": 910
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Failed",
+        "line": 911
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "No Events Found",
+        "line": 979
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Schedule Automation",
+        "line": 1045
+      },
+      {
+        "file": "/pages/admin/AdminScheduleNew.tsx",
+        "text": "Schedule Settings",
+        "line": 1057
+      },
+      {
+        "file": "/pages/admin/AdminSettingsNew.tsx",
+        "text": "Security Notice",
+        "line": 517
+      },
+      {
+        "file": "/pages/admin/AdminSettingsPage.tsx",
+        "text": "Admin Settings Page",
+        "line": 6
+      },
+      {
+        "file": "/pages/admin/AdminSystemReset.tsx",
+        "text": "System Reset",
+        "line": 8
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Access Denied",
+        "line": 38
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Audit",
+        "line": 137
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "ELO System",
+        "line": 138
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "ELO History",
+        "line": 139
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Tests",
+        "line": 140
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Performance",
+        "line": 142
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Deployment",
+        "line": 144
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Monitoring",
+        "line": 145
+      },
+      {
+        "file": "/pages/admin/AdminTestingDashboard.tsx",
+        "text": "Docs",
+        "line": 146
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Swiss",
+        "line": 417
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Straight Pool",
+        "line": 432
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Swiss",
+        "line": 804
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Straight Pool",
+        "line": 819
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Rank",
+        "line": 935
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Email",
+        "line": 1079
+      },
+      {
+        "file": "/pages/admin/AdminTournamentsNewEnhanced.tsx",
+        "text": "Rank",
+        "line": 1080
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Admin",
+        "line": 466
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Moderator",
+        "line": 467
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "User",
+        "line": 468
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Premium",
+        "line": 469
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "User",
+        "line": 635
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Premium",
+        "line": 636
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Moderator",
+        "line": 637
+      },
+      {
+        "file": "/pages/admin/AdminUsersNew.tsx",
+        "text": "Admin",
+        "line": 638
+      },
+      {
+        "file": "/pages/challenges/ChallengesFeedMobile.tsx",
+        "text": "Handicap",
+        "line": 654
+      },
+      {
+        "file": "/pages/challenges/ChallengesFeedMobile.tsx",
+        "text": "Hot Streak",
+        "line": 1013
+      },
+      {
+        "file": "/pages/challenges/ChallengesFeedMobile.tsx",
+        "text": "ELO Rating",
+        "line": 1020
+      },
+      {
+        "file": "/tournaments/sabo/SABODoubleEliminationViewer.tsx",
+        "text": "SABO Structure",
+        "line": 175
+      },
+      {
+        "file": "/tournaments/sabo/SABODoubleEliminationViewer.tsx",
+        "text": "SABO Tournament Structure",
+        "line": 301
+      },
+      {
+        "file": "/tournaments/sabo/components/SABOTournamentProgress.tsx",
+        "text": "Overall Progress",
+        "line": 68
+      }
+    ],
+    "missingKeys": {
+      "missingInVietnamese": [],
+      "missingInEnglish": []
+    }
+  }
+}
