@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import AdminLayout from '@/components/AdminLayout';
+import { AdminResponsiveLayout } from '@/components/layouts/AdminResponsiveLayout';
 import { Loader2 } from 'lucide-react';
 
 // Simple loading fallback
@@ -42,7 +42,7 @@ const AdminGameConfigNewEnhanced = lazy(() => import('@/pages/admin/AdminGameCon
 
 const AdminRouter = () => {
   return (
-    <AdminLayout>
+    <AdminResponsiveLayout>
       <Suspense fallback={<AdminLoadingFallback />}>
         <Routes>
           <Route index element={<AdminDashboardNew />} />
@@ -98,7 +98,7 @@ const AdminRouter = () => {
           <Route path='*' element={<Navigate to='/admin' replace />} />
         </Routes>
       </Suspense>
-    </AdminLayout>
+    </AdminResponsiveLayout>
   );
 };
 

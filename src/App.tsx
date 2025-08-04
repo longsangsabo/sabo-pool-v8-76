@@ -8,8 +8,12 @@ import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { PublicRoute } from '@/components/auth/PublicRoute';
+import { AdminProtectedRoute } from '@/components/auth/AdminProtectedRoute';
 import MainLayout from '@/components/MainLayout';
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
+
+// ✅ Import Admin Router for admin system integration
+import AdminRouter from '@/router/AdminRouter';
 
 // ✅ Import debug utilities for tournament refresh
 import '@/utils/debugTournamentRefresh';
@@ -233,6 +237,16 @@ const AppContentWithHooks = () => {
               <ProtectedRoute>
                 <ClubManagementPage />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Admin routes - protected and require admin privileges */}
+          <Route
+            path='/admin/*'
+            element={
+              <AdminProtectedRoute>
+                <AdminRouter />
+              </AdminProtectedRoute>
             }
           />
 
