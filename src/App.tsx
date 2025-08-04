@@ -8,7 +8,6 @@ import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { PublicRoute } from '@/components/auth/PublicRoute';
-import { AdminRoute } from '@/components/auth/AdminRoute';
 import MainLayout from '@/components/MainLayout';
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 
@@ -26,10 +25,6 @@ const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
 
-// Navigation Test Page
-const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
-const SmartNavigationTestPage = lazy(() => import('@/pages/SmartNavigationTestPage'));
-
 // Public pages that should also be accessible to logged-in users
 const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
 const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
@@ -39,7 +34,6 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
 const CLBManagement = lazy(() => import('@/features/CLB/components/SimpleCLBManagementFixed'));
-const TestCLBPage = lazy(() => import('@/components/test/TestCLBPage'));
 const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(
@@ -51,9 +45,6 @@ const WalletPage = lazy(() => import('@/pages/PaymentPage'));
 const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
 const FeedPage = lazy(() => import('@/pages/FeedPage'));
 const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
-
-// Admin components
-const AdminRouter = lazy(() => import('@/router/AdminRouter'));
 
 // Club components
 const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
@@ -149,7 +140,6 @@ const AppContentWithHooks = () => {
             
             {/* CLB Routes - NOW INSIDE MainLayout for sidebar navigation */}
             <Route path='clb' element={<CLBManagement />} />
-            <Route path='clb-test' element={<TestCLBPage />} />
             
             <Route path='profile' element={<UnifiedProfilePage />} />
             <Route path='challenges' element={<EnhancedChallengesPageV2 />} />
@@ -165,26 +155,12 @@ const AppContentWithHooks = () => {
             <Route path='marketplace' element={<MarketplacePage />} />
             <Route path='auth-test' element={<AuthTestPage />} />
 
-            {/* Navigation Test Page - Development only */}
-            <Route path='navigation-test' element={<NavigationTestPage />} />
-            <Route path='smart-nav-test' element={<SmartNavigationTestPage />} />
-
             {/* Public pages accessible through sidebar when logged in */}
             <Route path='tournaments' element={<TournamentPage />} />
             <Route path='leaderboard' element={<LeaderboardPage />} />
             <Route path='clubs' element={<ClubsPage />} />
             <Route path='clubs/:id' element={<ClubDetailPage />} />
           </Route>
-
-          {/* Admin routes - use wildcard to let AdminRouter handle sub-routes */}
-          <Route
-            path='/admin/*'
-            element={
-              <AdminRoute>
-                <AdminRouter />
-              </AdminRoute>
-            }
-          />
 
           {/* Club management routes - protected and require club owner privileges */}
           <Route
