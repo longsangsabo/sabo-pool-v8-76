@@ -1,2 +1,3 @@
 // User Social Components
-// TODO: Add UserFeed, PostCreation, UserConnections
+export { default as UserFeed } from './UserFeed';
+export { default as UserConnections } from './UserConnections';
