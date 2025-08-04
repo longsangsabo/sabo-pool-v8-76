@@ -25,6 +25,16 @@ import {
   Zap,
   Code,
   Bot,
+  ClipboardCheck,
+  Table,
+  UserCheck,
+  PieChart,
+  Star,
+  Award,
+  Bookmark,
+  ShoppingCart,
+  MessageCircle,
+  TestTube,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -48,6 +58,7 @@ export interface NavigationConfig {
 
 // ===== USER NAVIGATION ITEMS =====
 export const USER_NAV_ITEMS: NavigationItem[] = [
+  // ===== MAIN NAVIGATION =====
   { path: '/dashboard', label: 'Trang chủ', icon: Home, section: 'main' },
   {
     path: '/challenges',
@@ -60,17 +71,131 @@ export const USER_NAV_ITEMS: NavigationItem[] = [
   { path: '/leaderboard', label: 'BXH', icon: BarChart3, section: 'main' },
   { path: '/profile', label: 'Hồ sơ', icon: User, section: 'main' },
 
-  // Secondary items (sidebar only)
-  { path: '/calendar', label: 'Lịch', icon: Calendar, section: 'secondary' },
-  { path: '/wallet', label: 'Ví', icon: Wallet, section: 'secondary' },
+  // ===== CLB SYSTEM (NEW) =====
+  { 
+    path: '/clb', 
+    label: 'CLB Management', 
+    icon: Building, 
+    description: 'Hệ thống CLB mới',
+    section: 'clb' 
+  },
+  { 
+    path: '/clb-test', 
+    label: 'CLB Test Page', 
+    icon: TestTube, 
+    description: 'Trang test CLB',
+    section: 'clb' 
+  },
+
+  // ===== CLUB MANAGEMENT (LEGACY) =====
+  {
+    path: '/club-management',
+    label: 'Club Management',
+    icon: LayoutDashboard,
+    description: 'Hệ thống cũ',
+    section: 'legacy-club',
+  },
+  {
+    path: '/club-management/tournaments',
+    label: 'Club Tournaments',
+    icon: Trophy,
+    description: 'Giải đấu CLB cũ',
+    section: 'legacy-club',
+  },
+  {
+    path: '/club-management/challenges',
+    label: 'Club Challenges',
+    icon: Target,
+    description: 'Thách đấu CLB cũ',
+    section: 'legacy-club',
+  },
+  {
+    path: '/club-management/verification',
+    label: 'Club Verification',
+    icon: UserCheck,
+    description: 'Xác thực CLB cũ',
+    section: 'legacy-club',
+  },
+  {
+    path: '/club-management/members',
+    label: 'Club Members',
+    icon: Users,
+    description: 'Thành viên CLB cũ',
+    section: 'legacy-club',
+  },
+
+  // ===== COMMUNITY & SOCIAL =====
+  { 
+    path: '/community', 
+    label: 'Cộng đồng', 
+    icon: MessageSquare, 
+    section: 'community' 
+  },
+  { 
+    path: '/feed', 
+    label: 'Feed', 
+    icon: MessageCircle, 
+    section: 'community' 
+  },
+  { 
+    path: '/clubs', 
+    label: 'Danh sách CLB', 
+    icon: Building, 
+    section: 'community' 
+  },
+
+  // ===== MARKETPLACE & COMMERCE =====
+  { 
+    path: '/marketplace', 
+    label: 'Marketplace', 
+    icon: ShoppingCart, 
+    section: 'commerce' 
+  },
+  { 
+    path: '/wallet', 
+    label: 'Ví', 
+    icon: Wallet, 
+    section: 'commerce' 
+  },
+
+  // ===== UTILITIES =====
+  { path: '/calendar', label: 'Lịch', icon: Calendar, section: 'utilities' },
   {
     path: '/notifications',
     label: 'Thông báo',
     icon: Bell,
     badge: true,
-    section: 'secondary',
+    section: 'utilities',
   },
-  { path: '/settings', label: 'Cài đặt', icon: Settings, section: 'secondary' },
+  { path: '/settings', label: 'Cài đặt', icon: Settings, section: 'utilities' },
+
+  // ===== REGISTRATION & ADMIN =====
+  {
+    path: '/club-registration',
+    label: 'Đăng ký CLB',
+    icon: ClipboardCheck,
+    section: 'registration',
+  },
+
+  // ===== DEVELOPMENT & TESTING =====
+  { 
+    path: '/auth-test', 
+    label: 'Auth Test', 
+    icon: TestTube, 
+    section: 'dev' 
+  },
+  { 
+    path: '/navigation-test', 
+    label: 'Navigation Test', 
+    icon: TestTube, 
+    section: 'dev' 
+  },
+  { 
+    path: '/smart-nav-test', 
+    label: 'Smart Nav Test', 
+    icon: TestTube, 
+    section: 'dev' 
+  },
 ];
 
 // ===== CLUB OWNER NAVIGATION ITEMS =====
@@ -281,8 +406,14 @@ export const getNavigationConfig = (
 // ===== NAVIGATION SECTIONS FOR SIDEBAR GROUPING =====
 export const NAVIGATION_SECTIONS = {
   user: {
-    main: 'Chính',
-    secondary: 'Tiện ích',
+    main: 'Trang chính',
+    clb: 'CLB System (Mới)',
+    'legacy-club': 'Club Management (Cũ)',
+    community: 'Cộng đồng',
+    commerce: 'Thương mại',
+    utilities: 'Tiện ích',
+    registration: 'Đăng ký',
+    dev: 'Development & Test',
   },
   club: {
     main: 'Quản lý CLB',

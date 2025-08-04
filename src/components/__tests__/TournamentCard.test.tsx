@@ -81,8 +81,8 @@ describe('TournamentCard', () => {
 
     expect(getByText('Test Tournament')).toBeInTheDocument();
     expect(getByText('Test tournament description')).toBeInTheDocument();
-    expect(getByText('1,000,000 VND')).toBeInTheDocument();
-    expect(getByText('32 người')).toBeInTheDocument();
+    expect(getByText('1.0M VND')).toBeInTheDocument();
+    expect(getByText('16 người')).toBeInTheDocument();
   });
 
   test('shows registration open status', () => {
@@ -110,13 +110,16 @@ describe('TournamentCard', () => {
   });
 
   test('displays correct date format', () => {
+    const testDate = new Date('2025-08-05');
     const { getByText } = renderWithRouter(
       <TournamentCard
-        tournament={TournamentAdapter.createMockEnhanced()}
+        tournament={TournamentAdapter.createMockEnhanced({
+          tournament_start: testDate.toISOString()
+        })}
         onView={() => {}}
       />
     );
 
-    expect(getByText(/1\/12\/2024/)).toBeInTheDocument();
+    expect(getByText('5 tháng 8, 2025')).toBeInTheDocument();
   });
 });

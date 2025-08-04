@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { handleAuthError } from '@/utils/authHelpers';
@@ -42,6 +43,9 @@ const AuthPage = () => {
     signUpWithPhone,
     signUpWithEmail,
   } = useAuth();
+
+  // 🎯 Smart Navigation Hook
+  const { navigateAfterLogin, getWelcomeMessage, hasMultipleRoles } = useSmartNavigation();
 
   // Get auth mode from URL params or default to login
   const [mode, setMode] = useState<AuthMode>(() => {
@@ -62,12 +66,13 @@ const AuthPage = () => {
   // Reset password specific state
   const [emailSent, setEmailSent] = useState(false);
 
-  // Redirect if already logged in
+  // Redirect if already logged in with Smart Navigation
   useEffect(() => {
     if (user && !authLoading && mode !== 'reset-password') {
-      navigate('/dashboard');
+      // 🚀 Use Smart Navigation instead of hardcoded /dashboard
+      navigateAfterLogin();
     }
-  }, [user, authLoading, navigate, mode]);
+  }, [user, authLoading, navigate, mode, navigateAfterLogin]);
 
   // Update mode when URL changes
   useEffect(() => {
@@ -147,10 +152,21 @@ const AuthPage = () => {
       if (result.error) {
         handleAuthError(result.error);
       } else {
-        const successMessage =
-          mode === 'login' ? 'Đăng nhập thành công!' : 'Đăng ký thành công!';
-        toast.success(successMessage);
-        navigate('/dashboard');
+        // 🎯 Smart Welcome Message & Navigation
+        const welcomeMessage = getWelcomeMessage();
+        toast.success(welcomeMessage);
+        
+        // Show additional info for multi-role users
+        if (hasMultipleRoles) {
+          setTimeout(() => {
+            toast.info('💡 Bạn có thể chuyển đổi giữa Admin và CLB bất cứ lúc nào!', {
+              duration: 4000
+            });
+          }, 1500);
+        }
+        
+        // 🚀 Smart Navigation
+        navigateAfterLogin();
       }
     } catch (error) {
       console.error('Auth error:', error);

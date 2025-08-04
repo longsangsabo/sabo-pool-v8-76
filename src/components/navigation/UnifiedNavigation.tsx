@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { useClubRole } from '@/hooks/useClubRole';
+import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 import { TopBar } from './TopBar';
 import { SideNavigation } from './SideNavigation';
 import { BottomNavigation } from './BottomNavigation';
@@ -26,6 +27,7 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({
   const { isMobile, isTablet, isDesktop } = useOptimizedResponsive();
   const { isAdmin } = useAdminCheck();
   const { isClubOwner } = useClubRole();
+  const { hasMultipleRoles } = useSmartNavigation();
 
   // Determine user role for navigation config
   const userRole = isAdmin ? 'admin' : isClubOwner ? 'club' : 'user';
@@ -54,6 +56,7 @@ export const UnifiedNavigation: React.FC<UnifiedNavigationProps> = ({
         showSearch={navConfig.showSearch}
         showNotifications={navConfig.showNotifications}
         showUserMenu={true}
+        hasMultipleRoles={hasMultipleRoles}
       />
 
       <div className='flex'>

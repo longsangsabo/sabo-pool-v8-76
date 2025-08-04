@@ -28,6 +28,7 @@ const NewsPage = lazy(() => import('@/pages/BlogPage'));
 
 // Navigation Test Page
 const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
+const SmartNavigationTestPage = lazy(() => import('@/pages/SmartNavigationTestPage'));
 
 // Public pages that should also be accessible to logged-in users
 const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
@@ -37,6 +38,8 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
+const CLBManagement = lazy(() => import('@/features/CLB/components/SimpleCLBManagementFixed'));
+const TestCLBPage = lazy(() => import('@/components/test/TestCLBPage'));
 const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(
@@ -143,6 +146,11 @@ const AppContentWithHooks = () => {
             }
           >
             <Route path='dashboard' element={<UnifiedDashboard />} />
+            
+            {/* CLB Routes - NOW INSIDE MainLayout for sidebar navigation */}
+            <Route path='clb' element={<CLBManagement />} />
+            <Route path='clb-test' element={<TestCLBPage />} />
+            
             <Route path='profile' element={<UnifiedProfilePage />} />
             <Route path='challenges' element={<EnhancedChallengesPageV2 />} />
             <Route path='community' element={<CommunityPage />} />
@@ -159,6 +167,7 @@ const AppContentWithHooks = () => {
 
             {/* Navigation Test Page - Development only */}
             <Route path='navigation-test' element={<NavigationTestPage />} />
+            <Route path='smart-nav-test' element={<SmartNavigationTestPage />} />
 
             {/* Public pages accessible through sidebar when logged in */}
             <Route path='tournaments' element={<TournamentPage />} />
