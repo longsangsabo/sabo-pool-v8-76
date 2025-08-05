@@ -1,5 +1,10 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 
 interface TablesStatusProps {
@@ -49,25 +54,22 @@ export const TablesStatus: React.FC<TablesStatusProps> = ({ clubId }) => {
         <CardTitle>Trạng thái bàn chơi</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-3">
-          {tables.map((table) => (
-            <div
-              key={table.id}
-              className="border rounded-lg p-3 space-y-2"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Bàn {table.id}</span>
+        <div className='grid grid-cols-2 gap-3'>
+          {tables.map(table => (
+            <div key={table.id} className='border rounded-lg p-3 space-y-2'>
+              <div className='flex items-center justify-between'>
+                <span className='font-medium'>Bàn {table.id}</span>
                 <Badge className={`${getStatusColor(table.status)} text-white`}>
                   {getStatusText(table.status)}
                 </Badge>
               </div>
               {table.player && (
-                <div className="text-sm text-muted-foreground">
+                <div className='text-sm text-muted-foreground'>
                   {table.player}
                 </div>
               )}
               {table.startTime && (
-                <div className="text-xs text-muted-foreground">
+                <div className='text-xs text-muted-foreground'>
                   Từ {table.startTime}
                 </div>
               )}

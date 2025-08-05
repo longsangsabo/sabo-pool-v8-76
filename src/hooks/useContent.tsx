@@ -123,7 +123,6 @@ export const useContent = () => {
   const incrementViewCount = useMutation({
     mutationFn: async (postId: string) => {
       // Mock increment view count since increment_post_views RPC doesn't exist
-
     },
   });
 

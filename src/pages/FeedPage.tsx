@@ -12,7 +12,12 @@ import {
 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Card, CardContent } from '@/shared/components/ui/card';
 
 import TournamentFeedCard from '@/components/TournamentFeedCard';

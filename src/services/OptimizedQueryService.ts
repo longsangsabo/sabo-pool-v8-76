@@ -13,7 +13,6 @@ export class OptimizedQueryService {
   static async getBatchedProfiles(
     userIds: string[]
   ): Promise<BatchedProfile[]> {
-
     return userIds.map(id => ({
       user_id: id,
       full_name: 'Mock User',
@@ -25,7 +24,6 @@ export class OptimizedQueryService {
   }
 
   static async getOptimizedTournamentData(tournamentId: string) {
-
     return {
       success: true,
       tournament: { id: tournamentId, name: 'Mock Tournament' },
@@ -35,12 +33,10 @@ export class OptimizedQueryService {
   }
 
   static async getBatchedRankVerifications(limit = 100) {
-
     return [];
   }
 
   static async getOptimizedLeaderboard(options?: any) {
-
     return {
       success: true,
       leaderboard: [],

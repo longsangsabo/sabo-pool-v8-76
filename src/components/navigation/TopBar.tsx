@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import {
   DropdownMenu,
@@ -25,7 +29,7 @@ import {
   Trophy,
   Circle,
   Building2,
-  ChevronDown
+  ChevronDown,
 } from 'lucide-react';
 
 interface TopBarProps {
@@ -115,7 +119,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   ) : (
                     <Building2 className='h-4 w-4' />
                   )}
-                  <span className="hidden sm:inline">
+                  <span className='hidden sm:inline'>
                     {userRole === 'admin' ? 'Admin Mode' : 'CLB Mode'}
                   </span>
                   <ChevronDown className='h-3 w-3' />

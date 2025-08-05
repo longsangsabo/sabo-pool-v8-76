@@ -30,7 +30,9 @@ export interface AdminSidebarProps {
   collapsed?: boolean;
 }
 
-const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) => {
+const AdminSidebarClean: React.FC<AdminSidebarProps> = ({
+  collapsed = false,
+}) => {
   const location = useLocation();
   const { t } = useTranslation();
 
@@ -42,9 +44,9 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: BarChart3,
       href: '/admin/dashboard-new',
       description: 'Enhanced analytics dashboard',
-      group: 'overview'
+      group: 'overview',
     },
-    
+
     // === USER MANAGEMENT ===
     {
       key: 'users',
@@ -52,7 +54,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Users,
       href: '/admin/users-new',
       description: 'Advanced user management',
-      group: 'users'
+      group: 'users',
     },
     {
       key: 'rank_verification',
@@ -60,7 +62,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: UserCheck,
       href: '/admin/rank-verification-new',
       description: 'Advanced rank verification system',
-      group: 'users'
+      group: 'users',
     },
 
     // === GAME MANAGEMENT ===
@@ -70,7 +72,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Trophy,
       href: '/admin/tournaments-new',
       description: 'Advanced tournament management',
-      group: 'game'
+      group: 'game',
     },
     {
       key: 'challenges',
@@ -78,7 +80,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Target,
       href: '/admin/challenges-new',
       description: 'Advanced challenge management',
-      group: 'game'
+      group: 'game',
     },
     {
       key: 'game_config',
@@ -86,7 +88,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Gamepad2,
       href: '/admin/game-config-new',
       description: 'Advanced game configuration',
-      group: 'game'
+      group: 'game',
     },
 
     // === BUSINESS MANAGEMENT ===
@@ -96,7 +98,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Building,
       href: '/admin/clubs-new',
       description: 'Advanced club management',
-      group: 'business'
+      group: 'business',
     },
     {
       key: 'transactions',
@@ -104,7 +106,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Receipt,
       href: '/admin/transactions-new',
       description: 'Advanced transaction management',
-      group: 'business'
+      group: 'business',
     },
     {
       key: 'payments',
@@ -112,7 +114,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: DollarSign,
       href: '/admin/payments-new',
       description: 'Advanced payment management',
-      group: 'business'
+      group: 'business',
     },
 
     // === ANALYTICS & REPORTS ===
@@ -122,7 +124,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: TrendingUp,
       href: '/admin/analytics-new',
       description: 'Advanced analytics & insights',
-      group: 'analytics'
+      group: 'analytics',
     },
     {
       key: 'reports',
@@ -130,7 +132,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: FileText,
       href: '/admin/reports-new',
       description: 'Advanced reporting system',
-      group: 'analytics'
+      group: 'analytics',
     },
 
     // === COMMUNICATION ===
@@ -140,7 +142,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Bell,
       href: '/admin/notifications-new',
       description: 'Advanced notification system',
-      group: 'communication'
+      group: 'communication',
     },
     {
       key: 'schedule',
@@ -148,7 +150,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Calendar,
       href: '/admin/schedule-new',
       description: 'Advanced scheduling system',
-      group: 'communication'
+      group: 'communication',
     },
 
     // === SYSTEM & AUTOMATION ===
@@ -158,7 +160,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Database,
       href: '/admin/database-new',
       description: 'Advanced database management',
-      group: 'system'
+      group: 'system',
     },
     {
       key: 'automation',
@@ -166,7 +168,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Zap,
       href: '/admin/automation-new',
       description: 'Workflow automation center',
-      group: 'system'
+      group: 'system',
     },
     {
       key: 'ai_assistant',
@@ -174,7 +176,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Bot,
       href: '/admin/ai-assistant-new',
       description: 'AI automation & insights',
-      group: 'system'
+      group: 'system',
     },
 
     // === SETTINGS & SUPPORT ===
@@ -184,7 +186,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Settings,
       href: '/admin/settings-new',
       description: 'Advanced system settings',
-      group: 'settings'
+      group: 'settings',
     },
     {
       key: 'guide',
@@ -192,7 +194,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: BookOpen,
       href: '/admin/guide-new',
       description: 'Documentation & help system',
-      group: 'settings'
+      group: 'settings',
     },
 
     // === EMERGENCY & DEVELOPMENT ===
@@ -202,7 +204,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: AlertTriangle,
       href: '/admin/emergency-new',
       description: 'Emergency incident management',
-      group: 'emergency'
+      group: 'emergency',
     },
     {
       key: 'development',
@@ -210,27 +212,65 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       icon: Code,
       href: '/admin/development-new',
       description: 'Development tools & utilities',
-      group: 'emergency'
+      group: 'emergency',
     },
   ];
 
   const groupedMenuItems = [
-    { key: 'overview', title: 'Tổng quan', items: menuItems.filter(item => item.group === 'overview') },
-    { key: 'users', title: 'Quản lý người dùng', items: menuItems.filter(item => item.group === 'users') },
-    { key: 'game', title: 'Quản lý Game', items: menuItems.filter(item => item.group === 'game') },
-    { key: 'business', title: 'Kinh doanh', items: menuItems.filter(item => item.group === 'business') },
-    { key: 'analytics', title: 'Phân tích & Báo cáo', items: menuItems.filter(item => item.group === 'analytics') },
-    { key: 'communication', title: 'Giao tiếp', items: menuItems.filter(item => item.group === 'communication') },
-    { key: 'system', title: 'Hệ thống', items: menuItems.filter(item => item.group === 'system') },
-    { key: 'settings', title: 'Cài đặt & Hỗ trợ', items: menuItems.filter(item => item.group === 'settings') },
-    { key: 'emergency', title: 'Khẩn cấp & Dev', items: menuItems.filter(item => item.group === 'emergency') },
+    {
+      key: 'overview',
+      title: 'Tổng quan',
+      items: menuItems.filter(item => item.group === 'overview'),
+    },
+    {
+      key: 'users',
+      title: 'Quản lý người dùng',
+      items: menuItems.filter(item => item.group === 'users'),
+    },
+    {
+      key: 'game',
+      title: 'Quản lý Game',
+      items: menuItems.filter(item => item.group === 'game'),
+    },
+    {
+      key: 'business',
+      title: 'Kinh doanh',
+      items: menuItems.filter(item => item.group === 'business'),
+    },
+    {
+      key: 'analytics',
+      title: 'Phân tích & Báo cáo',
+      items: menuItems.filter(item => item.group === 'analytics'),
+    },
+    {
+      key: 'communication',
+      title: 'Giao tiếp',
+      items: menuItems.filter(item => item.group === 'communication'),
+    },
+    {
+      key: 'system',
+      title: 'Hệ thống',
+      items: menuItems.filter(item => item.group === 'system'),
+    },
+    {
+      key: 'settings',
+      title: 'Cài đặt & Hỗ trợ',
+      items: menuItems.filter(item => item.group === 'settings'),
+    },
+    {
+      key: 'emergency',
+      title: 'Khẩn cấp & Dev',
+      items: menuItems.filter(item => item.group === 'emergency'),
+    },
   ];
 
   return (
-    <div className={cn(
-      'bg-gradient-to-b from-slate-900 to-slate-800 border-r border-slate-700/50 h-full flex flex-col transition-all duration-300',
-      collapsed ? 'w-16' : 'w-64'
-    )}>
+    <div
+      className={cn(
+        'bg-gradient-to-b from-slate-900 to-slate-800 border-r border-slate-700/50 h-full flex flex-col transition-all duration-300',
+        collapsed ? 'w-16' : 'w-64'
+      )}
+    >
       {/* Header */}
       <div className='p-4 border-b border-slate-700/50'>
         <div className='flex items-center gap-3'>
@@ -239,8 +279,12 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
           </div>
           {!collapsed && (
             <div>
-              <h2 className='font-semibold text-sm truncate text-white'>{t('sidebar.admin_panel')}</h2>
-              <p className='text-xs text-slate-400 truncate'>{t('sidebar.app_name')}</p>
+              <h2 className='font-semibold text-sm truncate text-white'>
+                {t('sidebar.admin_panel')}
+              </h2>
+              <p className='text-xs text-slate-400 truncate'>
+                {t('sidebar.app_name')}
+              </p>
             </div>
           )}
         </div>
@@ -249,7 +293,7 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
       {/* Navigation */}
       <ScrollArea className='flex-1'>
         <div className='p-2'>
-          {groupedMenuItems.map((group) => (
+          {groupedMenuItems.map(group => (
             <div key={group.key} className='mb-4'>
               {!collapsed && (
                 <h3 className='px-3 py-2 text-xs font-medium text-slate-400 uppercase tracking-wider'>
@@ -257,10 +301,10 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
                 </h3>
               )}
               <div className='space-y-1'>
-                {group.items.map((item) => {
+                {group.items.map(item => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.href;
-                  
+
                   return (
                     <NavLink
                       key={item.href}
@@ -273,21 +317,25 @@ const AdminSidebarClean: React.FC<AdminSidebarProps> = ({ collapsed = false }) =
                       )}
                       title={collapsed ? item.title : undefined}
                     >
-                      <Icon className={cn(
-                        'h-4 w-4 flex-shrink-0 transition-colors',
-                        isActive 
-                          ? 'text-blue-400' 
-                          : 'text-slate-400 group-hover:text-slate-300'
-                      )} />
+                      <Icon
+                        className={cn(
+                          'h-4 w-4 flex-shrink-0 transition-colors',
+                          isActive
+                            ? 'text-blue-400'
+                            : 'text-slate-400 group-hover:text-slate-300'
+                        )}
+                      />
                       {!collapsed && (
                         <div className='flex-1 min-w-0'>
                           <span className='truncate'>{item.title}</span>
-                          <p className={cn(
-                            'text-xs truncate mt-0.5',
-                            isActive 
-                              ? 'text-blue-300/70' 
-                              : 'text-slate-500 group-hover:text-slate-400'
-                          )}>
+                          <p
+                            className={cn(
+                              'text-xs truncate mt-0.5',
+                              isActive
+                                ? 'text-blue-300/70'
+                                : 'text-slate-500 group-hover:text-slate-400'
+                            )}
+                          >
                             {item.description}
                           </p>
                         </div>

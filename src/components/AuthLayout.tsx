@@ -36,9 +36,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
             </div>
 
             {/* Tagline */}
-            <h3 className='text-2xl font-semibold'>
-              {t('tagline')}
-            </h3>
+            <h3 className='text-2xl font-semibold'>{t('tagline')}</h3>
 
             {/* Stats */}
             <div className='space-y-4'>

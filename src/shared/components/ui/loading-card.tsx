@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, CardContent } from './card'
+import React from 'react';
+import { Card, CardContent } from './card';
 
 export function LoadingCard() {
   return (
@@ -11,5 +11,5 @@ export function LoadingCard() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

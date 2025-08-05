@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { AlertAnalyzer } from './AlertAnalyzer';
@@ -8,7 +13,12 @@ import { AlertAnalyzer } from './AlertAnalyzer';
 import MobileOptimizedTable from '@/components/mobile/MobileOptimizedTable';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   Dialog,
   DialogContent,

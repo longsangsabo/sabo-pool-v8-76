@@ -15,7 +15,6 @@ export const useRoles = () => {
       }
 
       try {
-
         const { data, error } = await supabase
           .from('user_roles')
           .select('role')

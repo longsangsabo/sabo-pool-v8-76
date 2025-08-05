@@ -1,6 +1,16 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Progress } from '@/shared/components/ui/progress';
@@ -600,7 +610,9 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                 <div className='space-y-3'>
                   <Button
                     className='w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'
-                    onClick={() => (window.location.href = '/rank-registration')}
+                    onClick={() =>
+                      (window.location.href = '/rank-registration')
+                    }
                   >
                     <Award className='w-4 h-4 mr-2' />
                     {profile?.verified_rank
@@ -649,9 +661,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
                         <span className='text-muted-foreground'>
                           Ngày tham gia:
                         </span>
-                        <span>
-                          {profile.club_joined_date || 'Không rõ'}
-                        </span>
+                        <span>{profile.club_joined_date || 'Không rõ'}</span>
                       </div>
                     </div>
                   </div>

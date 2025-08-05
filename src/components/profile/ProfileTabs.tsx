@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { User, Trophy, Gamepad2, Building, Shield } from 'lucide-react';
 
 interface ProfileTabsProps {
@@ -15,9 +20,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
   const [activeTab, setActiveTab] = useState('performance');
 
   // Debug logging
-  useEffect(() => {
-
-  }, [userRole]);
+  useEffect(() => {}, [userRole]);
 
   // Check URL parameters on component mount and when URL changes
   useEffect(() => {

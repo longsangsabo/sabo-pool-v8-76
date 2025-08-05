@@ -142,7 +142,6 @@ export const UnifiedTournamentProvider: React.FC<{
 
       setLoading(true);
       try {
-
         // ✅ FIXED: Only map fields that exist in TournamentFormData
         const tournamentData = {
           name: data.name,
@@ -207,7 +206,6 @@ export const UnifiedTournamentProvider: React.FC<{
             );
             // Don't throw - tournament was created successfully
           } else {
-
           }
         } catch (notificationError) {
           console.error(

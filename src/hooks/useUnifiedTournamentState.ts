@@ -105,10 +105,7 @@ export const useUnifiedTournamentState = (tournamentId?: string) => {
               p_tournament_id: tournamentId,
             }
           );
-
-        } catch (error) {
-
-        }
+        } catch (error) {}
 
         // Then process auto advancement
         processAutomaticAdvancement(effectiveTournamentId);

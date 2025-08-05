@@ -56,7 +56,6 @@ class TranslationService {
   // Detect new pages by monitoring route changes
   detectNewPage(pagePath: string, componentName: string): void {
     if (!this.knownPages.has(pagePath)) {
-
       this.knownPages.add(pagePath);
       this.queuePageForTranslation(pagePath, componentName);
     }
@@ -98,7 +97,6 @@ class TranslationService {
     customKeys?: string[]
   ): Promise<void> {
     try {
-
       // Use custom keys if provided, otherwise generate sample keys
       const translationKeys = customKeys || [
         `${componentName.toLowerCase()}.title`,
@@ -176,7 +174,6 @@ class TranslationService {
         this.tasks[taskIndex].updated_at = new Date().toISOString();
         this.saveTasks();
       }
-
     } catch (error) {
       console.error(`❌ Lỗi khi dịch ${task.page_path}:`, error);
 
@@ -214,7 +211,6 @@ class TranslationService {
         .catch(() => ({ error: 'Network error' }));
 
       if (error) {
-
         return this.generateFallbackTranslations(keys, targetLanguage);
       }
 
@@ -361,13 +357,11 @@ class TranslationService {
     pagePath: string,
     componentName: string
   ): Promise<void> {
-
     await this.queuePageForTranslation(pagePath, componentName);
   }
 
   // Batch translate all untranslated pages
   async batchTranslateAll(): Promise<void> {
-
     await this.processTranslationQueue();
   }
 
@@ -375,7 +369,6 @@ class TranslationService {
   clearAllTasks(): void {
     this.tasks = [];
     this.saveTasks();
-
   }
 }
 

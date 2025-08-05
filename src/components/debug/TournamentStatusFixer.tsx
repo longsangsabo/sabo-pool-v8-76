@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { AlertTriangle, RefreshCw, CheckCircle, Wrench } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -22,7 +27,6 @@ export const TournamentStatusFixer: React.FC<TournamentStatusFixerProps> = ({
     setIsFixing(true);
 
     try {
-
       // Use proper tournament repair function
       const { data, error } = await supabase.rpc(
         'repair_double_elimination_bracket',

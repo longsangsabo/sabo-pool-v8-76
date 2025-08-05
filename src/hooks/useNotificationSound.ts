@@ -19,9 +19,7 @@ export const useNotificationSound = () => {
     audioRef.current.src = soundUrl;
 
     // Play sound with error handling
-    audioRef.current.play().catch(error => {
-
-    });
+    audioRef.current.play().catch(error => {});
   };
 
   return { playNotificationSound };

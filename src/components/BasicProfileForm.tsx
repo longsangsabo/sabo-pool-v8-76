@@ -4,7 +4,12 @@ import {
   UseFormHandleSubmit,
   FieldErrors,
 } from 'react-hook-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 
 export interface BasicProfileFormProps {
   register?: UseFormRegister<any>;

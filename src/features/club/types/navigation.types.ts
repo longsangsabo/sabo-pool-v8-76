@@ -67,7 +67,7 @@ export interface ClubManagementNavigation {
   challenges: ChallengeManagement;
   members: MemberManagement;
   tables: TableManagement;
-  
+
   // Helper method to check permissions
   hasAccess: (path: string) => boolean;
 }

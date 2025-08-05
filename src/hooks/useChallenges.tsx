@@ -35,6 +35,7 @@ export const useChallenges = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
+      console.log('📊 useChallenges Debug:', {
         totalChallenges: challengesData?.length || 0,
         error: fetchError,
         firstFew: challengesData?.slice(0, 3).map(c => ({

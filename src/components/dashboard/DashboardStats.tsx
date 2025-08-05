@@ -6,14 +6,14 @@ interface DashboardStatsProps {
   stats?: any;
 }
 
-export const DashboardStats: React.FC<DashboardStatsProps> = ({ 
-  dashboardType, 
-  stats 
+export const DashboardStats: React.FC<DashboardStatsProps> = ({
+  dashboardType,
+  stats,
 }) => {
   // For now, return a simple placeholder
   // This can be expanded later with type-specific stats
   return (
-    <div className="dashboard-stats">
+    <div className='dashboard-stats'>
       <h3>Dashboard Stats - {dashboardType}</h3>
       {stats && <pre>{JSON.stringify(stats, null, 2)}</pre>}
     </div>

@@ -61,7 +61,8 @@ export const useEloRules = () => {
       console.error('Error creating ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to create ELO rule. Make sure the elo_rules table exists.',
+        description:
+          'Failed to create ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }
@@ -85,7 +86,8 @@ export const useEloRules = () => {
       console.error('Error updating ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update ELO rule. Make sure the elo_rules table exists.',
+        description:
+          'Failed to update ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }
@@ -93,10 +95,7 @@ export const useEloRules = () => {
 
   const deleteRule = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('elo_rules')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('elo_rules').delete().eq('id', id);
 
       if (error) throw error;
 
@@ -109,7 +108,8 @@ export const useEloRules = () => {
       console.error('Error deleting ELO rule:', error);
       toast({
         title: 'Error',
-        description: 'Failed to delete ELO rule. Make sure the elo_rules table exists.',
+        description:
+          'Failed to delete ELO rule. Make sure the elo_rules table exists.',
         variant: 'destructive',
       });
     }

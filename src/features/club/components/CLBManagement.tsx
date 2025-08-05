@@ -1,7 +1,19 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Card } from '@/shared/components/ui/card';
-import { Users, Trophy, Settings, BarChart3, Table, CheckCircle } from 'lucide-react';
+import {
+  Users,
+  Trophy,
+  Settings,
+  BarChart3,
+  Table,
+  CheckCircle,
+} from 'lucide-react';
 import { ClubProvider } from '../contexts/ClubContext';
 import { Dashboard } from './dashboard/Dashboard';
 import { MemberManagement } from './members/MemberManagement';
@@ -17,21 +29,21 @@ const CLBManagementContent = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <p className="ml-4 text-muted-foreground">Đang tải dữ liệu CLB...</p>
+      <div className='flex justify-center items-center min-h-[400px]'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+        <p className='ml-4 text-muted-foreground'>Đang tải dữ liệu CLB...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <Alert variant="destructive">
+      <Alert variant='destructive'>
         <AlertDescription>
           {error}
           {error.includes('tạo CLB mới') && (
-            <div className="mt-2">
-              <a href="/club-registration" className="text-blue-600 underline">
+            <div className='mt-2'>
+              <a href='/club-registration' className='text-blue-600 underline'>
                 Đăng ký CLB mới tại đây
               </a>
             </div>
@@ -54,55 +66,55 @@ const CLBManagementContent = () => {
   const clubId = selectedClub.id;
 
   return (
-    <Tabs defaultValue="dashboard" className="space-y-6">
+    <Tabs defaultValue='dashboard' className='space-y-6'>
       <TabsList>
-        <TabsTrigger value="dashboard" className="flex items-center gap-2">
-          <BarChart3 className="w-4 h-4" />
+        <TabsTrigger value='dashboard' className='flex items-center gap-2'>
+          <BarChart3 className='w-4 h-4' />
           Tổng quan
         </TabsTrigger>
-        <TabsTrigger value="members" className="flex items-center gap-2">
-          <Users className="w-4 h-4" />
+        <TabsTrigger value='members' className='flex items-center gap-2'>
+          <Users className='w-4 h-4' />
           Thành viên
         </TabsTrigger>
-        <TabsTrigger value="tournaments" className="flex items-center gap-2">
-          <Trophy className="w-4 h-4" />
+        <TabsTrigger value='tournaments' className='flex items-center gap-2'>
+          <Trophy className='w-4 h-4' />
           Giải đấu
         </TabsTrigger>
-        <TabsTrigger value="tables" className="flex items-center gap-2">
-          <Table className="w-4 h-4" />
+        <TabsTrigger value='tables' className='flex items-center gap-2'>
+          <Table className='w-4 h-4' />
           Bàn chơi
         </TabsTrigger>
-        <TabsTrigger value="verification" className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4" />
+        <TabsTrigger value='verification' className='flex items-center gap-2'>
+          <CheckCircle className='w-4 h-4' />
           Xác thực
         </TabsTrigger>
-        <TabsTrigger value="settings" className="flex items-center gap-2">
-          <Settings className="w-4 h-4" />
+        <TabsTrigger value='settings' className='flex items-center gap-2'>
+          <Settings className='w-4 h-4' />
           Cài đặt
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="dashboard">
+      <TabsContent value='dashboard'>
         <Dashboard clubId={clubId} />
       </TabsContent>
 
-      <TabsContent value="members">
+      <TabsContent value='members'>
         <MemberManagement clubId={clubId} />
       </TabsContent>
 
-      <TabsContent value="tournaments">
+      <TabsContent value='tournaments'>
         <TournamentManagement clubId={clubId} />
       </TabsContent>
 
-      <TabsContent value="tables">
+      <TabsContent value='tables'>
         <TableManagement clubId={clubId} />
       </TabsContent>
 
-      <TabsContent value="verification">
+      <TabsContent value='verification'>
         <VerificationManagement clubId={clubId} />
       </TabsContent>
 
-      <TabsContent value="settings">
+      <TabsContent value='settings'>
         <CLBSettings clubId={clubId} />
       </TabsContent>
     </Tabs>
@@ -112,7 +124,7 @@ const CLBManagementContent = () => {
 export const CLBManagement = () => {
   return (
     <ClubProvider>
-      <Card className="p-6">
+      <Card className='p-6'>
         <CLBManagementContent />
       </Card>
     </ClubProvider>

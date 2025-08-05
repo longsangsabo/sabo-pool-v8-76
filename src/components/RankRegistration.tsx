@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -74,7 +79,6 @@ const RankRegistration = () => {
 
       // If no approved clubs, try to get all active clubs as fallback
       if (!approvedClubs || approvedClubs.length === 0) {
-
         const { data: allClubs, error: allError } = await supabase
           .from('clubs')
           .select('id, name, address, status')

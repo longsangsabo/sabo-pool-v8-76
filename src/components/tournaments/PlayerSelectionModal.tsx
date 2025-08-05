@@ -6,7 +6,11 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { User, Search } from 'lucide-react';
 import { Input } from '@/shared/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';

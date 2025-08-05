@@ -5,7 +5,6 @@ import { supabase } from '@/integrations/supabase/client';
  * Cleans up corrupted auth state and provides fallback authentication
  */
 export const emergencyAuthRecovery = () => {
-
   try {
     // Clear all auth-related storage
     const authKeys = Object.keys(localStorage).filter(
@@ -17,16 +16,13 @@ export const emergencyAuthRecovery = () => {
 
     authKeys.forEach(key => {
       localStorage.removeItem(key);
-
     });
 
     // Clear session storage
     sessionStorage.clear();
 
     // Force sign out on Supabase client
-    supabase.auth.signOut({ scope: 'global' }).catch(error => {
-
-    });
+    supabase.auth.signOut({ scope: 'global' }).catch(error => {});
 
     // Force redirect to auth page
     setTimeout(() => {
@@ -91,10 +87,8 @@ export const setupAuthMonitoring = () => {
   // Check for conflicts on page load
   const initialConflicts = detectAuthConflicts();
   if (initialConflicts.length > 0) {
-
     // Auto-recovery for severe conflicts
     if (initialConflicts.length > 3) {
-
       emergencyAuthRecovery();
     }
   }
@@ -111,11 +105,9 @@ export const setupAuthMonitoring = () => {
         message.includes('expired') ||
         message.includes('unauthorized'))
     ) {
-
       setTimeout(() => emergencyAuthRecovery(), 1000);
     }
 
     originalError.apply(console, args);
   };
-
 };

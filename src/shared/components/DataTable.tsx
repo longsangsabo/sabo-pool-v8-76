@@ -61,28 +61,30 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {/* Search input (only if searchKey is provided) */}
       {searchKey && (
-        <div className="flex items-center py-4">
+        <div className='flex items-center py-4'>
           <Input
             placeholder={searchPlaceholder}
-            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ''
+            }
+            onChange={event =>
               table.getColumn(searchKey)?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className='max-w-sm'
           />
         </div>
       )}
 
       {/* Table component */}
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -99,21 +101,27 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'
+                >
                   Không có dữ liệu.
                 </TableCell>
               </TableRow>
@@ -124,21 +132,22 @@ export function DataTable<TData, TValue>({
 
       {/* Pagination controls */}
       {showPagination && (
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="text-sm text-muted-foreground">
-            Trang {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
+        <div className='flex items-center justify-end space-x-2 py-4'>
+          <div className='text-sm text-muted-foreground'>
+            Trang {table.getState().pagination.pageIndex + 1} /{' '}
+            {table.getPageCount()}
           </div>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Trước
           </Button>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >

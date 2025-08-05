@@ -52,7 +52,11 @@ export const useTableManagement = () => {
     }
   };
 
-  const startSession = async (tableId: string, playerId?: string, playerName?: string) => {
+  const startSession = async (
+    tableId: string,
+    playerId?: string,
+    playerName?: string
+  ) => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -104,7 +108,10 @@ export const useTableManagement = () => {
     }
   };
 
-  const createBooking = async (tableId: string, booking: Omit<TableBooking, 'id' | 'table_id' | 'status'>) => {
+  const createBooking = async (
+    tableId: string,
+    booking: Omit<TableBooking, 'id' | 'table_id' | 'status'>
+  ) => {
     try {
       setLoading(true);
       const { data, error } = await supabase

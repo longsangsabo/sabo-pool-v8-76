@@ -55,7 +55,9 @@ export function AdminStatusBadge({ status, type }: AdminStatusBadgeProps) {
 }
 
 // Helper function to get all statuses for a type
-export function getStatusOptions(type: 'club' | 'user' | 'tournament' | 'transaction') {
+export function getStatusOptions(
+  type: 'club' | 'user' | 'tournament' | 'transaction'
+) {
   const configs: Record<string, StatusConfig> = {
     club: {
       pending: { label: 'Chờ duyệt', variant: 'secondary' },

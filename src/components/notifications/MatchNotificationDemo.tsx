@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { MatchNotificationPopup } from './MatchNotificationPopup';
 import { Play } from 'lucide-react';
 
@@ -38,17 +43,14 @@ export const MatchNotificationDemo: React.FC = () => {
   };
 
   const handleJoinMatch = () => {
-
     setIsPopupOpen(false);
   };
 
   const handleViewBracket = () => {
-
     setIsPopupOpen(false);
   };
 
   const handlePostpone = () => {
-
     setIsPopupOpen(false);
   };
 

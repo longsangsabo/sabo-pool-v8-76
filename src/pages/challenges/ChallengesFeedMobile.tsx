@@ -22,7 +22,11 @@ import {
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Card } from '@/shared/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -306,7 +310,6 @@ const ChallengesFeedMobile: React.FC = () => {
           filter: `or(challenger_id.eq.${user.id},opponent_id.eq.${user.id})`,
         },
         payload => {
-
           fetchChallenges(); // Refresh challenges on any change
         }
       )

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Progress } from '@/shared/components/ui/progress';
@@ -144,7 +149,6 @@ export const PostDeploymentMonitoring: React.FC = () => {
       neutral: (neutral / total) * 100,
       negative: (negative / total) * 100,
     });
-
   };
 
   const getDeviceIcon = (device: string) => {

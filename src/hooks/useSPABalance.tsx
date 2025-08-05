@@ -16,7 +16,6 @@ export const useSPABalance = () => {
       }
 
       try {
-
         const { data, error } = await supabase
           .from('player_rankings')
           .select('spa_points')
@@ -53,7 +52,6 @@ export const useSPABalance = () => {
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-
           if (payload.new && 'spa_points' in payload.new) {
             setBalance(payload.new.spa_points as number);
           }

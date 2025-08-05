@@ -21,12 +21,8 @@ import { Link } from 'react-router-dom';
 import saboClubBg from '@/assets/sabo-club-bg.jpg';
 
 const Index = () => {
-
   React.useEffect(() => {
-
-    return () => {
-
-    };
+    return () => {};
   }, []);
 
   return (

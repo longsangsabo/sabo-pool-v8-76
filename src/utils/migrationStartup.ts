@@ -1,15 +1,11 @@
 // Simplified migration startup utilities
 export const initializeMigrationSystem = async (): Promise<boolean> => {
-
   return true;
 };
 
-export const cleanupMigrationSystem = (): void => {
-
-};
+export const cleanupMigrationSystem = (): void => {};
 
 export const triggerManualMigration = async (): Promise<boolean> => {
-
   return true;
 };
 

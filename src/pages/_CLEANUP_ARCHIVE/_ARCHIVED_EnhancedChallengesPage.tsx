@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 import EnhancedChallengesList from '@/components/EnhancedChallengesList';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 
 const EnhancedChallengesPage = () => {
   const navigate = useNavigate();

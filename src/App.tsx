@@ -37,7 +37,9 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
-const CLBManagement = lazy(() => import('@/features/club/components/SimpleCLBManagement'));
+const CLBManagement = lazy(
+  () => import('@/features/club/components/SimpleCLBManagement')
+);
 const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(
@@ -141,10 +143,10 @@ const AppContentWithHooks = () => {
             }
           >
             <Route path='dashboard' element={<UnifiedDashboard />} />
-            
+
             {/* CLB Routes - NOW INSIDE MainLayout for sidebar navigation */}
             <Route path='clb' element={<CLBManagement />} />
-            
+
             <Route path='profile' element={<UnifiedProfilePage />} />
             <Route path='challenges' element={<EnhancedChallengesPageV2 />} />
             <Route path='community' element={<CommunityPage />} />

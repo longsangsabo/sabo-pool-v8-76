@@ -114,7 +114,6 @@ class WebVitalsTracker {
       }));
 
       await supabase.from('web_vitals_metrics' as any).insert(formattedMetrics);
-
     } catch (error) {
       console.error('Failed to send web vitals metrics:', error);
       // Re-add metrics for retry

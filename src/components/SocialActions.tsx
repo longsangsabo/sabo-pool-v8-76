@@ -48,7 +48,6 @@ const SocialActions = ({
           if (onComment) {
             onComment(postId);
           } else {
-
           }
         }}
         className='flex items-center space-x-2 text-comment-gray hover:text-share-blue transition-colors'
@@ -93,7 +92,6 @@ const SocialActions = ({
             if (onChallenge) {
               onChallenge(postId);
             } else {
-
             }
           }}
           className='flex items-center space-x-2 text-primary-blue hover:text-primary-blue/80 transition-colors font-semibold'

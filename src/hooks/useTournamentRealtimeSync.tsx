@@ -22,7 +22,6 @@ export const useTournamentRealtimeSync = (
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-
           const tournamentId =
             (payload.new as any)?.tournament_id ||
             (payload.old as any)?.tournament_id;
@@ -46,7 +45,6 @@ export const useTournamentRealtimeSync = (
       .subscribe();
 
     return () => {
-
       supabase.removeChannel(channel);
     };
   }, [user?.id, onRegistrationChange]);

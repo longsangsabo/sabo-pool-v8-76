@@ -1,27 +1,22 @@
 // Simple mock service to avoid TypeScript errors
 export class AutomatedMigrationService {
   static async detectPlayerIdColumns() {
-
     return { columns: [] };
   }
 
   static async detectPlayerIdForeignKeys() {
-
     return { foreignKeys: [] };
   }
 
   static async detectPlayerIdInFunctions() {
-
     return { functions: [] };
   }
 
   static async runMigration(migrationName: string) {
-
     return { success: true };
   }
 
   static async checkMigrationStatus() {
-
     return { completed: true, pending: [] };
   }
 
@@ -30,12 +25,10 @@ export class AutomatedMigrationService {
   }
 
   static async verifyMigrationComplete() {
-
     return { success: true };
   }
 
   static async stop() {
-
     return { success: true };
   }
 }
@@ -44,6 +37,5 @@ export class AutomatedMigrationService {
 export const automatedMigrationService = AutomatedMigrationService;
 
 export async function runAutomatedPlayerIdMigration() {
-
   return { success: true };
 }

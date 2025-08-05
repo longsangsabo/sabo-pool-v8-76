@@ -1,5 +1,10 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { BarChart3, TrendingUp, Star, TestTube } from 'lucide-react';
 import ClubDashboardOverview from '@/components/ClubDashboardOverview';
 import ClubStatsDashboard from '@/components/ClubStatsDashboard';

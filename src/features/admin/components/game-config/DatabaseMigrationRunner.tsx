@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
@@ -26,7 +31,8 @@ interface SQLScript {
 const SQL_SCRIPTS: SQLScript[] = [
   {
     name: 'Create ELO Rules Table',
-    description: 'Creates the elo_rules table with default K-factors and tournament bonuses',
+    description:
+      'Creates the elo_rules table with default K-factors and tournament bonuses',
     category: 'table',
     sql: `-- Create ELO Rules table for Game Configuration
 CREATE TABLE IF NOT EXISTS elo_rules (
@@ -55,11 +61,12 @@ INSERT INTO elo_rules (rule_name, rule_type, base_value, multiplier, priority, i
 ('Expert K-Factor', 'k_factor', 24, 1.0, 3, true),
 ('Tournament Win Bonus', 'tournament_bonus', 50, 1.5, 1, true),
 ('Tournament Runner-up Bonus', 'tournament_bonus', 25, 1.2, 2, true)
-ON CONFLICT (id) DO NOTHING;`
+ON CONFLICT (id) DO NOTHING;`,
   },
   {
     name: 'Create SPA Reward Milestones Table',
-    description: 'Creates the spa_reward_milestones table with achievement-based rewards',
+    description:
+      'Creates the spa_reward_milestones table with achievement-based rewards',
     category: 'table',
     sql: `-- Create SPA Reward Milestones table for Game Configuration
 CREATE TABLE IF NOT EXISTS spa_reward_milestones (
@@ -92,11 +99,12 @@ INSERT INTO spa_reward_milestones (milestone_name, milestone_type, requirement_v
 ('ELO Climber +250', 'elo_gained', 250, 500, true, true),
 ('Tournament Champion', 'tournaments_won', 1, 1000, true, true),
 ('Daily Player', 'consecutive_days', 7, 350, true, true)
-ON CONFLICT (id) DO NOTHING;`
+ON CONFLICT (id) DO NOTHING;`,
   },
   {
     name: 'Create Tournament Prize Templates Table',
-    description: 'Creates the tournament_prize_templates table with prize distribution templates',
+    description:
+      'Creates the tournament_prize_templates table with prize distribution templates',
     category: 'table',
     sql: `-- Create Tournament Prize Templates table for Game Configuration
 CREATE TABLE IF NOT EXISTS tournament_prize_templates (
@@ -132,8 +140,8 @@ INSERT INTO tournament_prize_templates (template_name, tournament_type, particip
   {"position": 4, "position_name": "4th Place", "cash_percentage": 10, "elo_points": 50, "spa_points": 250},
   {"position": 5, "position_name": "5th-8th Place", "cash_percentage": 10, "elo_points": 25, "spa_points": 150}
 ]', true, true)
-ON CONFLICT (id) DO NOTHING;`
-  }
+ON CONFLICT (id) DO NOTHING;`,
+  },
 ];
 
 export const DatabaseMigrationRunner: React.FC = () => {
@@ -145,7 +153,7 @@ export const DatabaseMigrationRunner: React.FC = () => {
   const executeSQL = async (sql: string, scriptName?: string) => {
     try {
       setIsExecuting(true);
-      
+
       // Split SQL into individual statements and execute them
       const statements = sql.split(';').filter(stmt => stmt.trim().length > 0);
       const executionResults = [];
@@ -155,7 +163,7 @@ export const DatabaseMigrationRunner: React.FC = () => {
         if (trimmedStatement) {
           try {
             const { data, error } = await supabase.rpc('exec_sql', {
-              sql_statement: trimmedStatement
+              sql_statement: trimmedStatement,
             });
 
             if (error) {
@@ -167,14 +175,14 @@ export const DatabaseMigrationRunner: React.FC = () => {
               statement: trimmedStatement,
               success: true,
               data: data,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
           } catch (error) {
             executionResults.push({
               statement: trimmedStatement,
               success: false,
               error: error.message,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
           }
         }
@@ -184,9 +192,9 @@ export const DatabaseMigrationRunner: React.FC = () => {
         {
           scriptName: scriptName || 'Custom SQL',
           results: executionResults,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         },
-        ...prev
+        ...prev,
       ]);
 
       const successCount = executionResults.filter(r => r.success).length;
@@ -195,12 +203,15 @@ export const DatabaseMigrationRunner: React.FC = () => {
       if (successCount === totalCount) {
         toast.success(`Successfully executed ${totalCount} SQL statements`);
       } else {
-        toast.error(`Executed ${successCount}/${totalCount} statements successfully`);
+        toast.error(
+          `Executed ${successCount}/${totalCount} statements successfully`
+        );
       }
-
     } catch (error) {
       console.error('Error executing SQL:', error);
-      toast.error('Failed to execute SQL. You may need to run these migrations directly in Supabase dashboard.');
+      toast.error(
+        'Failed to execute SQL. You may need to run these migrations directly in Supabase dashboard.'
+      );
     } finally {
       setIsExecuting(false);
     }
@@ -212,52 +223,54 @@ export const DatabaseMigrationRunner: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Database className="h-5 w-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Database className='h-5 w-5' />
             Database Migration Runner
           </CardTitle>
           <Alert>
-            <AlertTriangle className="h-4 w-4" />
+            <AlertTriangle className='h-4 w-4' />
             <AlertDescription>
-              These migrations create the required database tables for Game Configuration functionality.
-              Run these scripts in your Supabase dashboard if direct execution fails.
+              These migrations create the required database tables for Game
+              Configuration functionality. Run these scripts in your Supabase
+              dashboard if direct execution fails.
             </AlertDescription>
           </Alert>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {/* Predefined Scripts */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {SQL_SCRIPTS.map((script) => (
-              <Card key={script.name} className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-medium">{script.name}</h4>
-                      <Badge variant="outline">
-                        {script.category}
-                      </Badge>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            {SQL_SCRIPTS.map(script => (
+              <Card
+                key={script.name}
+                className='cursor-pointer hover:shadow-md transition-shadow'
+              >
+                <CardContent className='p-4'>
+                  <div className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <h4 className='font-medium'>{script.name}</h4>
+                      <Badge variant='outline'>{script.category}</Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className='text-sm text-muted-foreground'>
                       {script.description}
                     </p>
-                    <div className="flex gap-2">
+                    <div className='flex gap-2'>
                       <Button
-                        size="sm"
+                        size='sm'
                         onClick={() => executeSQL(script.sql, script.name)}
                         disabled={isExecuting}
                       >
-                        <Play className="h-3 w-3 mr-1" />
+                        <Play className='h-3 w-3 mr-1' />
                         Execute
                       </Button>
                       <Button
-                        size="sm"
-                        variant="outline"
+                        size='sm'
+                        variant='outline'
                         onClick={() => copyToClipboard(script.sql)}
                       >
-                        <Copy className="h-3 w-3 mr-1" />
+                        <Copy className='h-3 w-3 mr-1' />
                         Copy
                       </Button>
                     </div>
@@ -270,26 +283,23 @@ export const DatabaseMigrationRunner: React.FC = () => {
           <Separator />
 
           {/* Custom SQL Executor */}
-          <div className="space-y-4">
-            <h4 className="font-medium">Custom SQL Executor</h4>
+          <div className='space-y-4'>
+            <h4 className='font-medium'>Custom SQL Executor</h4>
             <Textarea
-              placeholder="Enter custom SQL statements here..."
+              placeholder='Enter custom SQL statements here...'
               value={customSQL}
-              onChange={(e) => setCustomSQL(e.target.value)}
-              className="min-h-[120px] font-mono text-sm"
+              onChange={e => setCustomSQL(e.target.value)}
+              className='min-h-[120px] font-mono text-sm'
             />
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <Button
                 onClick={() => executeSQL(customSQL)}
                 disabled={!customSQL.trim() || isExecuting}
               >
-                <Play className="h-4 w-4 mr-2" />
+                <Play className='h-4 w-4 mr-2' />
                 Execute Custom SQL
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => setCustomSQL('')}
-              >
+              <Button variant='outline' onClick={() => setCustomSQL('')}>
                 Clear
               </Button>
             </div>
@@ -297,33 +307,38 @@ export const DatabaseMigrationRunner: React.FC = () => {
 
           {/* Execution Results */}
           {results.length > 0 && (
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <Separator />
-              <h4 className="font-medium">Execution Results</h4>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+              <h4 className='font-medium'>Execution Results</h4>
+              <div className='space-y-3 max-h-96 overflow-y-auto'>
                 {results.map((result, index) => (
                   <Card key={index}>
-                    <CardContent className="p-4">
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <h5 className="font-medium">{result.scriptName}</h5>
-                          <span className="text-xs text-muted-foreground">
+                    <CardContent className='p-4'>
+                      <div className='space-y-2'>
+                        <div className='flex items-center justify-between'>
+                          <h5 className='font-medium'>{result.scriptName}</h5>
+                          <span className='text-xs text-muted-foreground'>
                             {new Date(result.timestamp).toLocaleString()}
                           </span>
                         </div>
                         {result.results.map((stmt: any, stmtIndex: number) => (
-                          <div key={stmtIndex} className="flex items-start gap-2">
+                          <div
+                            key={stmtIndex}
+                            className='flex items-start gap-2'
+                          >
                             {stmt.success ? (
-                              <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                              <CheckCircle className='h-4 w-4 text-green-500 mt-0.5' />
                             ) : (
-                              <XCircle className="h-4 w-4 text-red-500 mt-0.5" />
+                              <XCircle className='h-4 w-4 text-red-500 mt-0.5' />
                             )}
-                            <div className="flex-1 text-sm">
-                              <code className="text-xs bg-muted p-1 rounded">
+                            <div className='flex-1 text-sm'>
+                              <code className='text-xs bg-muted p-1 rounded'>
                                 {stmt.statement.substring(0, 100)}...
                               </code>
                               {stmt.error && (
-                                <p className="text-red-500 text-xs mt-1">{stmt.error}</p>
+                                <p className='text-red-500 text-xs mt-1'>
+                                  {stmt.error}
+                                </p>
                               )}
                             </div>
                           </div>

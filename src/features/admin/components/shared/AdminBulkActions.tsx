@@ -16,7 +16,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
-import { ChevronDown, CheckSquare, Square, Trash2, Check, X, Settings } from 'lucide-react';
+import {
+  ChevronDown,
+  CheckSquare,
+  Square,
+  Trash2,
+  Check,
+  X,
+  Settings,
+} from 'lucide-react';
 import { AdminDataTable, type ColumnDef } from './AdminDataTable';
 
 export interface BulkAction {
@@ -43,7 +51,7 @@ export function AdminBulkActions({
   onSelectionChange,
   actions,
   idKey = 'id',
-  className = ''
+  className = '',
 }: AdminBulkActionsProps) {
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -52,13 +60,15 @@ export function AdminBulkActions({
   }>({
     open: false,
     action: null,
-    message: ''
+    message: '',
   });
   const [executing, setExecuting] = useState(false);
 
   const allIds = data.map(item => item[idKey]);
-  const isAllSelected = allIds.length > 0 && selectedIds.length === allIds.length;
-  const isPartiallySelected = selectedIds.length > 0 && selectedIds.length < allIds.length;
+  const isAllSelected =
+    allIds.length > 0 && selectedIds.length === allIds.length;
+  const isPartiallySelected =
+    selectedIds.length > 0 && selectedIds.length < allIds.length;
 
   const handleSelectAll = () => {
     if (isAllSelected) {
@@ -75,7 +85,7 @@ export function AdminBulkActions({
       setConfirmDialog({
         open: true,
         action,
-        message: action.confirmMessage
+        message: action.confirmMessage,
       });
     } else {
       executeAction(action);
@@ -107,30 +117,28 @@ export function AdminBulkActions({
 
   return (
     <>
-      <div className={`flex items-center gap-4 p-4 bg-gray-50 border-b ${className}`}>
+      <div
+        className={`flex items-center gap-4 p-4 bg-gray-50 border-b ${className}`}
+      >
         {/* Select All Checkbox */}
-        <div className="flex items-center gap-2">
-          <Checkbox
-            checked={isAllSelected}
-            onCheckedChange={handleSelectAll}
-          />
-          <span className="text-sm font-medium">
-            {selectedIds.length > 0 
+        <div className='flex items-center gap-2'>
+          <Checkbox checked={isAllSelected} onCheckedChange={handleSelectAll} />
+          <span className='text-sm font-medium'>
+            {selectedIds.length > 0
               ? `Đã chọn ${selectedIds.length}/${data.length}`
-              : 'Chọn tất cả'
-            }
+              : 'Chọn tất cả'}
           </span>
         </div>
 
         {/* Bulk Actions */}
         {selectedIds.length > 0 && (
-          <div className="flex items-center gap-2 ml-auto">
+          <div className='flex items-center gap-2 ml-auto'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" disabled={executing}>
-                  <Settings className="h-4 w-4 mr-2" />
+                <Button variant='outline' size='sm' disabled={executing}>
+                  <Settings className='h-4 w-4 mr-2' />
                   Thao tác hàng loạt
-                  <ChevronDown className="h-4 w-4 ml-2" />
+                  <ChevronDown className='h-4 w-4 ml-2' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -139,9 +147,13 @@ export function AdminBulkActions({
                     <DropdownMenuItem
                       onClick={() => handleActionClick(action)}
                       disabled={executing}
-                      className={action.variant === 'destructive' ? 'text-red-600' : ''}
+                      className={
+                        action.variant === 'destructive' ? 'text-red-600' : ''
+                      }
                     >
-                      {action.icon && <span className="mr-2">{action.icon}</span>}
+                      {action.icon && (
+                        <span className='mr-2'>{action.icon}</span>
+                      )}
                       {action.label}
                     </DropdownMenuItem>
                     {index < actions.length - 1 && <DropdownMenuSeparator />}
@@ -149,10 +161,10 @@ export function AdminBulkActions({
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
+
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => onSelectionChange([])}
               disabled={executing}
             >
@@ -163,25 +175,26 @@ export function AdminBulkActions({
       </div>
 
       {/* Confirmation Dialog */}
-      <Dialog open={confirmDialog.open} onOpenChange={(open) => 
-        setConfirmDialog(prev => ({ ...prev, open }))
-      }>
+      <Dialog
+        open={confirmDialog.open}
+        onOpenChange={open => setConfirmDialog(prev => ({ ...prev, open }))}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Xác nhận thao tác</DialogTitle>
-            <DialogDescription>
-              {confirmDialog.message}
-            </DialogDescription>
+            <DialogDescription>{confirmDialog.message}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setConfirmDialog({ open: false, action: null, message: '' })}
+            <Button
+              variant='outline'
+              onClick={() =>
+                setConfirmDialog({ open: false, action: null, message: '' })
+              }
               disabled={executing}
             >
               Hủy
             </Button>
-            <Button 
+            <Button
               variant={confirmDialog.action?.variant || 'default'}
               onClick={confirmAction}
               disabled={executing}
@@ -224,34 +237,43 @@ export function EnhancedAdminDataTable<T extends Record<string, any>>({
   ...props
 }: EnhancedAdminDataTableProps<T>) {
   const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>([]);
-  
-  const currentSelectedIds = selectedIds.length > 0 ? selectedIds : internalSelectedIds;
+
+  const currentSelectedIds =
+    selectedIds.length > 0 ? selectedIds : internalSelectedIds;
   const currentOnSelectionChange = onSelectionChange || setInternalSelectedIds;
 
   // Add selection column if bulk actions are provided
-  const enhancedColumns = bulkActions.length > 0 ? [
-    {
-      key: '__selection',
-      header: '',
-      width: '40px',
-      render: (_, row: T) => (
-        <Checkbox
-          checked={currentSelectedIds.includes(row[idKey])}
-          onCheckedChange={(checked) => {
-            if (checked) {
-              currentOnSelectionChange([...currentSelectedIds, row[idKey]]);
-            } else {
-              currentOnSelectionChange(currentSelectedIds.filter(id => id !== row[idKey]));
-            }
-          }}
-        />
-      ),
-    },
-    ...props.columns
-  ] : props.columns;
+  const enhancedColumns =
+    bulkActions.length > 0
+      ? [
+          {
+            key: '__selection',
+            header: '',
+            width: '40px',
+            render: (_, row: T) => (
+              <Checkbox
+                checked={currentSelectedIds.includes(row[idKey])}
+                onCheckedChange={checked => {
+                  if (checked) {
+                    currentOnSelectionChange([
+                      ...currentSelectedIds,
+                      row[idKey],
+                    ]);
+                  } else {
+                    currentOnSelectionChange(
+                      currentSelectedIds.filter(id => id !== row[idKey])
+                    );
+                  }
+                }}
+              />
+            ),
+          },
+          ...props.columns,
+        ]
+      : props.columns;
 
   return (
-    <div className="space-y-0">
+    <div className='space-y-0'>
       {bulkActions.length > 0 && (
         <AdminBulkActions
           data={data}
@@ -261,11 +283,7 @@ export function EnhancedAdminDataTable<T extends Record<string, any>>({
           idKey={idKey}
         />
       )}
-      <AdminDataTable
-        {...props}
-        data={data}
-        columns={enhancedColumns}
-      />
+      <AdminDataTable {...props} data={data} columns={enhancedColumns} />
     </div>
   );
 }

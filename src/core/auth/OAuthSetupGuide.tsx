@@ -8,7 +8,12 @@ import {
   CardTitle,
 } from '@/shared/components/ui/card';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Copy, ExternalLink, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -15,7 +15,6 @@ export const useEmailNotifications = () => {
             user.email || '',
             profile.full_name || 'Bạn'
           );
-
         } catch (error) {
           console.error('Failed to send welcome email:', error);
         }

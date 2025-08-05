@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Bell, Check, CheckCheck, X, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import {
   Popover,
   PopoverContent,

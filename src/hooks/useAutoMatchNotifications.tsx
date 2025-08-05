@@ -104,7 +104,6 @@ export const useAutoMatchNotifications = () => {
             onClick: () => (window.location.href = action_url),
           },
         });
-
       } catch (error) {
         console.error('Error in createMatchNotification:', error);
       }

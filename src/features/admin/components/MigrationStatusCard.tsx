@@ -2,7 +2,12 @@ import React from 'react';
 import { useAutomatedMigration } from '@/hooks/useAutomatedMigration';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Progress } from '@/shared/components/ui/progress';
 import { Play, Square, RotateCcw, CheckCircle } from 'lucide-react';
 

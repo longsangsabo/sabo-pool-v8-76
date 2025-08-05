@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
-import { Settings, Trophy, Star, BarChart3, Target, CheckCircle, Shield } from 'lucide-react';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
+import {
+  Settings,
+  Trophy,
+  Star,
+  BarChart3,
+  Target,
+  CheckCircle,
+  Shield,
+} from 'lucide-react';
 import { EloRulesManager } from '@/features/admin/components/game-config/EloRulesManager';
 import { RankDefinitionsManager } from '@/features/admin/components/game-config/RankDefinitionsManager';
 import { SPARewardsManager } from '@/features/admin/components/game-config/SPARewardsManager';
@@ -16,7 +29,7 @@ import { useAdminGameConfig } from '@/hooks/useAdminGameConfig';
 
 function AdminGameConfigContent() {
   const [activeTab, setActiveTab] = useState('overview');
-  
+
   // Admin Game Config Hook
   const {
     stats,
@@ -27,7 +40,7 @@ function AdminGameConfigContent() {
     getAllEloRules,
     getAllRanks,
     getConfigStats,
-    refetchStats
+    refetchStats,
   } = useAdminGameConfig();
 
   // Load data on mount
@@ -35,24 +48,25 @@ function AdminGameConfigContent() {
     const loadData = async () => {
       console.log('AdminGameConfig: Starting to fetch data...');
       try {
-        const [configsData, eloRulesData, ranksData, statsData] = await Promise.all([
-          getAllConfigs(),
-          getAllEloRules(),
-          getAllRanks(),
-          getConfigStats()
-        ]);
-        
+        const [configsData, eloRulesData, ranksData, statsData] =
+          await Promise.all([
+            getAllConfigs(),
+            getAllEloRules(),
+            getAllRanks(),
+            getConfigStats(),
+          ]);
+
         console.log('AdminGameConfig: Data loaded:', {
           configs: configsData.length,
           eloRules: eloRulesData.length,
           ranks: ranksData.length,
-          stats: statsData
+          stats: statsData,
         });
       } catch (error) {
         console.error('AdminGameConfig: Error loading data:', error);
       }
     };
-    
+
     loadData();
   }, [getAllConfigs, getAllEloRules, getAllRanks, getConfigStats]);
 
@@ -69,12 +83,12 @@ function AdminGameConfigContent() {
   }, [stats]);
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Database Test Component */}
       <DatabaseTest />
 
       <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-        <div className="flex-1">
+        <div className='flex-1'>
           {/* Title and description are handled by AdminPageLayout */}
         </div>
         <GameConfigSync />
@@ -112,12 +126,13 @@ function AdminGameConfigContent() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value='overview' className='space-y-6'>
           <GameConfigOverview />
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-medium mb-4">Database Setup</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              If you're seeing empty data or disabled features, run these migrations to create the required database tables:
+          <div className='border-t pt-6'>
+            <h3 className='text-lg font-medium mb-4'>Database Setup</h3>
+            <p className='text-sm text-muted-foreground mb-4'>
+              If you're seeing empty data or disabled features, run these
+              migrations to create the required database tables:
             </p>
             <DatabaseMigrationRunner />
           </div>
@@ -153,9 +168,7 @@ function AdminGameConfigContent() {
 
 export default function AdminGameConfigNewEnhanced() {
   return (
-    <AdminPageLayout 
-      title="Game Configuration"
-    >
+    <AdminPageLayout title='Game Configuration'>
       <AdminGameConfigContent />
     </AdminPageLayout>
   );

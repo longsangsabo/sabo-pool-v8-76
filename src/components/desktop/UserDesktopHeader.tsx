@@ -2,7 +2,11 @@ import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import { Bell, Menu, Search, Settings, User, LogOut } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/ui/theme-toggle';

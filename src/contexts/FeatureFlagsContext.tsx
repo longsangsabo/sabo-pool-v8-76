@@ -128,7 +128,6 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
     if (environment === 'production') {
       localStorage.setItem('featureFlags', JSON.stringify(newFlags));
     }
-
   };
 
   const disableFlag = (flag: keyof FeatureFlags) => {
@@ -138,7 +137,6 @@ export const FeatureFlagsProvider: React.FC<FeatureFlagsProviderProps> = ({
     if (environment === 'production') {
       localStorage.setItem('featureFlags', JSON.stringify(newFlags));
     }
-
   };
 
   const contextValue: FeatureFlagsContextType = {
@@ -188,7 +186,6 @@ export const useABTest = (testName: string) => {
     // Track A/B test exposure
     if (environment === 'production') {
       // Send to analytics
-
     }
   }, [testName, userGroup, environment]);
 

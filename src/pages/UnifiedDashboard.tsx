@@ -200,7 +200,10 @@ const UnifiedDashboard = () => {
   }
 
   // New unified dashboard for admin/club management
-  if (dashboard.dashboardType === 'user' || dashboard.dashboardType === 'admin') {
+  if (
+    dashboard.dashboardType === 'user' ||
+    dashboard.dashboardType === 'admin'
+  ) {
     return (
       <>
         <Helmet>

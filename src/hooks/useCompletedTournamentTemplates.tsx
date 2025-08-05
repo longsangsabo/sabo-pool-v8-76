@@ -187,7 +187,6 @@ export const useCompletedTournamentTemplates = () => {
       .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
-
         }
       });
 

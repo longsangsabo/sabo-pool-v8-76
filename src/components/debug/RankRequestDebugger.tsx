@@ -1,6 +1,11 @@
 import React from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { RefreshCw, CheckCircle, Database } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -84,7 +89,6 @@ const RankRequestDebugger = () => {
           .from('profiles')
           .select('user_id, full_name, display_name, avatar_url')
           .in('user_id', userIds);
-
       }
     } catch (error: any) {
       toast.error(`Test failed: ${error.message}`);
@@ -103,7 +107,6 @@ const RankRequestDebugger = () => {
           table: 'rank_requests',
         },
         payload => {
-
           toast.success(`Realtime update: ${payload.eventType}`);
         }
       )

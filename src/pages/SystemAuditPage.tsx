@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   CheckCircle,
   XCircle,
@@ -64,7 +74,6 @@ const SystemAuditPage = () => {
   const { user, session } = useAuth();
 
   const addResult = (result: AuditResult) => {
-
     setAuditResults(prev => [...prev, result]);
   };
 
@@ -77,7 +86,6 @@ const SystemAuditPage = () => {
     setCurrentTest(`${category}: ${testName}`);
 
     try {
-
       const result = await Promise.race([
         testFn(),
         new Promise((_, reject) =>
@@ -113,7 +121,6 @@ const SystemAuditPage = () => {
   };
 
   const checkBasicConnectivity = async () => {
-
     // Check if we can reach the current domain
     const currentDomain = window.location.origin;
     const response = await fetch(currentDomain, { method: 'HEAD' });
@@ -130,7 +137,6 @@ const SystemAuditPage = () => {
   };
 
   const checkSupabaseConnection = async () => {
-
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -156,7 +162,6 @@ const SystemAuditPage = () => {
   };
 
   const checkAuthentication = async () => {
-
     try {
       const {
         data: { session },
@@ -185,7 +190,6 @@ const SystemAuditPage = () => {
   };
 
   const checkEnvironmentVariables = async () => {
-
     const requiredEnvVars = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY'];
 
     const missing = [];
@@ -208,7 +212,6 @@ const SystemAuditPage = () => {
   };
 
   const checkApplicationRoutes = async () => {
-
     const routes = [
       '/',
       '/login',
@@ -248,7 +251,6 @@ const SystemAuditPage = () => {
   };
 
   const checkConsoleErrors = async () => {
-
     // Create a simple test to check if React is working
     const errors = [];
     const warnings = [];
@@ -279,7 +281,6 @@ const SystemAuditPage = () => {
   };
 
   const checkSystemHealth = async () => {
-
     // Safely check for performance.memory (Chrome only)
     const extendedPerformance = performance as ExtendedPerformance;
     const memoryInfo = extendedPerformance.memory
@@ -358,7 +359,6 @@ const SystemAuditPage = () => {
     } finally {
       setIsRunning(false);
       setCurrentTest('');
-
     }
   };
 
@@ -392,7 +392,6 @@ const SystemAuditPage = () => {
   }, [auditResults]);
 
   useEffect(() => {
-
     runFullSystemAudit();
   }, []);
 

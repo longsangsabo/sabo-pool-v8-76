@@ -1,6 +1,16 @@
-export type TournamentType = 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss';
+export type TournamentType =
+  | 'single_elimination'
+  | 'double_elimination'
+  | 'round_robin'
+  | 'swiss';
 export type GameFormat = '8_ball' | '9_ball' | '10_ball' | 'straight_pool';
-export type TournamentStatus = 'draft' | 'registration_open' | 'registration_closed' | 'in_progress' | 'completed' | 'cancelled';
+export type TournamentStatus =
+  | 'draft'
+  | 'registration_open'
+  | 'registration_closed'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled';
 
 export interface Tournament {
   id: string;

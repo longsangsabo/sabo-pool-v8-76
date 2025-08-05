@@ -18,7 +18,7 @@ export const useTournamentRealtime = (tournamentId: string) => {
           table: 'tournament_matches',
           filter: `tournament_id=eq.${tournamentId}`,
         },
-        (payload) => {
+        payload => {
           console.log('Change received!', payload);
           // Handle the update based on the payload
         }

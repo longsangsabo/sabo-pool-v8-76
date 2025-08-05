@@ -19,7 +19,12 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Badge } from '@/shared/components/ui/badge';
@@ -344,8 +349,7 @@ const OptimizedTournamentsPage: React.FC = () => {
   // Display performance stats in development
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
-      const interval = setInterval(() => {
-      }, 10000);
+      const interval = setInterval(() => {}, 10000);
       return () => clearInterval(interval);
     }
   }, [getPerformanceStats]);

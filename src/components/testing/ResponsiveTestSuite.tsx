@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { BREAKPOINTS, MEDIA_QUERIES } from '@/constants/breakpoints';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 

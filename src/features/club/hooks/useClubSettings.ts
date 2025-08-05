@@ -35,7 +35,9 @@ export const useClubSettings = (clubId: string) => {
       if (error) throw error;
       setSettings(data);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Lỗi khi tải cài đặt CLB');
+      setError(
+        error instanceof Error ? error.message : 'Lỗi khi tải cài đặt CLB'
+      );
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ export const useClubSettings = (clubId: string) => {
         .from('club_profiles')
         .update({
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', clubId)
         .select()
@@ -58,7 +60,9 @@ export const useClubSettings = (clubId: string) => {
       setSettings(data);
       return data;
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Lỗi khi cập nhật cài đặt');
+      setError(
+        error instanceof Error ? error.message : 'Lỗi khi cập nhật cài đặt'
+      );
       throw error;
     } finally {
       setLoading(false);
@@ -69,7 +73,7 @@ export const useClubSettings = (clubId: string) => {
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${clubId}/${Date.now()}.${fileExt}`;
-      
+
       const { data, error } = await supabase.storage
         .from('club-photos')
         .upload(fileName, file);
@@ -77,13 +81,15 @@ export const useClubSettings = (clubId: string) => {
       if (error) throw error;
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('club-photos')
-        .getPublicUrl(fileName);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('club-photos').getPublicUrl(fileName);
 
       return publicUrl;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Lỗi khi upload ảnh');
+      throw new Error(
+        error instanceof Error ? error.message : 'Lỗi khi upload ảnh'
+      );
     }
   };
 
@@ -100,7 +106,9 @@ export const useClubSettings = (clubId: string) => {
 
       if (error) throw error;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Lỗi khi xóa ảnh');
+      throw new Error(
+        error instanceof Error ? error.message : 'Lỗi khi xóa ảnh'
+      );
     }
   };
 
@@ -117,6 +125,6 @@ export const useClubSettings = (clubId: string) => {
     updateSettings,
     uploadPhoto,
     deletePhoto,
-    refetch: fetchSettings
+    refetch: fetchSettings,
   };
 };

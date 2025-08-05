@@ -26,21 +26,25 @@ export const useRankVerification = (clubId: string) => {
       setLoading(true);
       const { data, error } = await supabase
         .from('rank_verifications')
-        .select(`
+        .select(
+          `
           *,
           profiles:player_id (
             full_name,
             display_name,
             avatar_url
           )
-        `)
+        `
+        )
         .eq('club_id', clubId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       setVerifications(data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch verifications');
+      setError(
+        err instanceof Error ? err.message : 'Failed to fetch verifications'
+      );
     } finally {
       setLoading(false);
     }
@@ -57,7 +61,7 @@ export const useRankVerification = (clubId: string) => {
         .update({
           status,
           notes,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', verificationId);
 
@@ -65,7 +69,9 @@ export const useRankVerification = (clubId: string) => {
       await fetchVerifications();
       return true;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update verification');
+      setError(
+        err instanceof Error ? err.message : 'Failed to update verification'
+      );
       return false;
     }
   };
@@ -75,6 +81,6 @@ export const useRankVerification = (clubId: string) => {
     loading,
     error,
     fetchVerifications,
-    handleVerification
+    handleVerification,
   };
 };

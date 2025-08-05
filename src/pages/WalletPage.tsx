@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import {
@@ -93,7 +103,6 @@ const WalletPage: React.FC = () => {
   };
 
   const handlePaymentSuccess = (transactionId: string) => {
-
     // Refresh wallet data
     setShowPaymentModal(false);
   };
@@ -108,7 +117,6 @@ const WalletPage: React.FC = () => {
     amount: number,
     message: string
   ) => {
-
     // Refresh wallet data
     setShowTransferModal(false);
   };
