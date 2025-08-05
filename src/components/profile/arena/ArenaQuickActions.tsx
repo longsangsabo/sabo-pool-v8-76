@@ -1,8 +1,8 @@
 import React from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Edit, Settings, Trophy, Users, Shield, Building } from 'lucide-react';
 
 interface ArenaQuickActionsProps {

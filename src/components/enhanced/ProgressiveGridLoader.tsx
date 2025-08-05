@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProgressiveLoading } from '@/hooks/useProgressiveLoading';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 
 interface ProgressiveGridLoaderProps<T> {

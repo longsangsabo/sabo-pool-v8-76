@@ -1,15 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Skeleton } from '@/shared/components/ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useUnifiedDashboard } from '@/hooks/useUnifiedDashboard';
-import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
-import { UnifiedDashboard as NewUnifiedDashboard } from '@/components/dashboard/UnifiedDashboard';
 
 // Import existing dashboard content for specific roles
-import { AdminDashboard } from '@/features/admin/components/AdminDashboard';
+import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import MobileStoryReel from '@/components/mobile/cards/MobileStoryReel';
 import MobileFeedCard from '@/components/mobile/cards/MobileFeedCard';
 import MobileFloatingActionButton from '@/components/mobile/common/MobileFloatingActionButton';
@@ -195,19 +193,6 @@ const UnifiedDashboard = () => {
 
           <MobileFloatingActionButton primaryAction={() => {}} />
         </div>
-      </>
-    );
-  }
-
-  // New unified dashboard for admin/club management
-  if (dashboard.dashboardType === 'user' || dashboard.dashboardType === 'admin') {
-    return (
-      <>
-        <Helmet>
-          <title>Dashboard - SABO Pool Arena</title>
-          <meta name='description' content='Dashboard quản lý tổng hợp' />
-        </Helmet>
-        <NewUnifiedDashboard />
       </>
     );
   }

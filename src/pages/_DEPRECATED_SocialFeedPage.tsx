@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Plus, RefreshCw } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { useRealtimeFeed } from '@/hooks/useRealtimeFeed';
 import SocialFeedCard from '@/components/SocialFeedCard';
 import CreatePostModal from '@/components/CreatePostModal';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 
 const SocialFeedPage = () => {

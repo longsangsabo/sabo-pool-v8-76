@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Clock, User, MapPin, Trophy, Bell } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import UserAvatar from './UserAvatar';
 import ChallengeResponseModal from './ChallengeResponseModal';
 import { Challenge } from '@/types/common';

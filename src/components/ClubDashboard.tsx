@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building, Trophy, Users, Settings, GitBranch } from 'lucide-react';
 import ClubProfileTab from './ClubProfileTab';
 import RankRequestsTab from './RankRequestsTab';

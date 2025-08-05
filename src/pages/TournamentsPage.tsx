@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import OptimizedTournamentCard from '@/features/tournament/components/OptimizedTournamentCard';
-import { EnhancedTournamentDetailsModal } from '@/features/tournament/components/EnhancedTournamentDetailsModal';
-import { SimpleRegistrationModal } from '@/features/tournament/components/SimpleRegistrationModal';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
+import OptimizedTournamentCard from '@/components/tournament/OptimizedTournamentCard';
+import { EnhancedTournamentDetailsModal } from '@/components/tournament/EnhancedTournamentDetailsModal';
+import { SimpleRegistrationModal } from '@/components/tournament/SimpleRegistrationModal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
+} from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Tournament } from '@/types/tournament';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';

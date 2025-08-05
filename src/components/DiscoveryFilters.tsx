@@ -1,10 +1,10 @@
 import React from 'react';
 import { X, Sliders, MapPin, Trophy, Zap } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Slider } from '@/shared/components/ui/slider';
-import { Label } from '@/shared/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 
 interface DiscoveryFiltersProps {
   isOpen: boolean;

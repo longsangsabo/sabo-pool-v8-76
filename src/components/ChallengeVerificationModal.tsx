@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
-import { Textarea } from '@/shared/components/ui/textarea';
-import { Label } from '@/shared/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -11,15 +11,15 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from '@/shared/components/ui/dialog';
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select';
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/components/ui/avatar';
+} from '@/components/ui/select';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Challenge } from '@/types/challenge';
 
 interface ChallengeVerificationModalProps {

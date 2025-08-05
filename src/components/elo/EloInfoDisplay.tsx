@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Trophy, TrendingUp, Target } from 'lucide-react';
 import { eloToSaboRank, saboRankToElo } from '@/utils/eloToSaboRank';
 import { RANK_ELO } from '@/utils/eloConstants';

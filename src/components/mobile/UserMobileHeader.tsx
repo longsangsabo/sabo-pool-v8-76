@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { Bell, Search, Menu, User, Settings, LogOut } from 'lucide-react';
 
 interface UserMobileHeaderProps {

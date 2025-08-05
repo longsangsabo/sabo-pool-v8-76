@@ -2,12 +2,12 @@ import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useTournamentResults } from '@/hooks/useTournamentResults';
 import { useTournament } from '@/hooks/useTournament';
-import { TournamentResults } from '@/features/tournament/components/TournamentResults';
-import { TournamentRewardsSync } from '@/features/admin/components/TournamentRewardsSync';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
+import { TournamentResults } from '@/components/tournament/TournamentResults';
+import { TournamentRewardsSync } from '@/components/admin/TournamentRewardsSync';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ArrowLeft, Trophy, Calendar, Users, MapPin } from 'lucide-react';
-import { Badge } from '@/shared/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 export const TournamentResultsPage: React.FC = () => {
   const { tournamentId } = useParams<{ tournamentId: string }>();

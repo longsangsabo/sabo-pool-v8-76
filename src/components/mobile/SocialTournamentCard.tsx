@@ -1,8 +1,8 @@
 import React from 'react';
 import { Calendar, Users, Trophy, Star, Clock, MapPin } from 'lucide-react';
-import { Card } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface TournamentCardProps {
   id: string;

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useClubRole } from '@/hooks/useClubRole';
-import { ClubMobileHeader } from '@/features/club/components/ClubMobileHeader';
-import { ClubMobileNavigation } from '@/features/club/components/ClubMobileNavigation';
-import { ClubMobileDrawer } from '@/features/club/components/ClubMobileDrawer';
+import { ClubMobileHeader } from '@/components/club/ClubMobileHeader';
+import { ClubMobileNavigation } from '@/components/club/ClubMobileNavigation';
+import { ClubMobileDrawer } from '@/components/club/ClubMobileDrawer';
 
 interface ClubMobileLayoutProps {
   children?: React.ReactNode;

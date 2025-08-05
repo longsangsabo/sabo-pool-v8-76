@@ -1,6 +1,6 @@
 import React from 'react';
-import { Progress } from '@/shared/components/ui/progress';
-import { Badge } from '@/shared/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 import { CheckCircle, AlertCircle, Target } from 'lucide-react';
 
 interface ProfileCompletionBadgeProps {

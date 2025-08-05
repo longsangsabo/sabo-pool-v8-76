@@ -9,10 +9,10 @@ import { ArenaProfileContent } from './arena/ArenaProfileContent';
 import { ArenaQuickActions } from './arena/ArenaQuickActions';
 import { ArenaActivities } from './arena/ArenaActivities';
 import ProfileErrorBoundary from './ProfileErrorBoundary';
-import { ThemeToggle } from '@/shared/components/ui/theme-toggle';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Loader2, RefreshCw } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 const HybridArenaProfile: React.FC = () => {
   const { isMobile } = useOptimizedResponsive();

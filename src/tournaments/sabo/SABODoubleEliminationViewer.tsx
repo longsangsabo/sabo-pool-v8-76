@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Trophy, Users, Target, Zap, RefreshCw, Wrench } from 'lucide-react';
 import { SABOLogicCore } from './SABOLogicCore';
 import { useSABOTournamentMatches } from './hooks/useSABOTournamentMatches';

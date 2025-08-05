@@ -5,8 +5,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Trophy, Calculator, Star, Info } from 'lucide-react';
 import { RANK_ELO, TOURNAMENT_ELO_REWARDS } from '@/utils/eloConstants';
 import { formatRankDisplay, getRankColor } from '@/utils/rankUtils';

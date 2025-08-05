@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, Radio, Zap } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface TournamentSectionHeaderProps {
   title?: string;

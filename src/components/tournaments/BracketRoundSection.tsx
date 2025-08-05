@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { SingleEliminationMatchCard } from '@/features/tournament/components/SingleEliminationMatchCard';
-import { DoubleEliminationMatchCard } from '@/features/tournament/components/DoubleEliminationMatchCard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { SingleEliminationMatchCard } from '@/components/tournament/SingleEliminationMatchCard';
+import { DoubleEliminationMatchCard } from '@/components/tournament/DoubleEliminationMatchCard';
 import { Trophy, Crown, Medal, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

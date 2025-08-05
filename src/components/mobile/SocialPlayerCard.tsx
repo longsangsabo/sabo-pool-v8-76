@@ -1,8 +1,8 @@
 import React from 'react';
 import { Trophy, TrendingUp, TrendingDown, Medal, Zap } from 'lucide-react';
-import { Card } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface PlayerCardProps {
   id: string;

@@ -2,18 +2,15 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
-import { Toaster } from '@/shared/components/ui/sonner';
+import { Toaster } from '@/components/ui/sonner';
 import { CombinedProviders } from '@/contexts/CombinedProviders';
 import { AppErrorBoundary } from '@/components/error/AppErrorBoundary';
 import { AppLoadingFallback } from '@/components/loading/AppLoadingFallback';
-import { ProtectedRoute } from '@/core/auth/ProtectedRoute';
-import { PublicRoute } from '@/core/auth/PublicRoute';
-import { AdminProtectedRoute } from '@/core/auth/AdminProtectedRoute';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { PublicRoute } from '@/components/auth/PublicRoute';
+import { AdminRoute } from '@/components/auth/AdminRoute';
 import MainLayout from '@/components/MainLayout';
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
-
-// ✅ Import Admin Router for admin system integration
-import AdminRouter from '@/router/AdminRouter';
 
 // ✅ Import debug utilities for tournament refresh
 import '@/utils/debugTournamentRefresh';
@@ -29,6 +26,9 @@ const TermsOfServicePage = lazy(() => import('@/pages/TermsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 const NewsPage = lazy(() => import('@/pages/BlogPage'));
 
+// Navigation Test Page
+const NavigationTestPage = lazy(() => import('@/pages/NavigationTestPage'));
+
 // Public pages that should also be accessible to logged-in users
 const ClubsPage = lazy(() => import('@/pages/ClubsPage'));
 const ClubDetailPage = lazy(() => import('@/pages/ClubDetailPage'));
@@ -37,7 +37,6 @@ const TournamentPage = lazy(() => import('@/pages/TournamentsPage'));
 
 // Protected pages - User dashboard and features
 const UnifiedDashboard = lazy(() => import('@/pages/UnifiedDashboard'));
-const CLBManagement = lazy(() => import('@/features/club/components/SimpleCLBManagement'));
 const UnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfilePage'));
 const CommunityPage = lazy(() => import('@/pages/CommunityPage'));
 const EnhancedChallengesPageV2 = lazy(
@@ -49,6 +48,9 @@ const WalletPage = lazy(() => import('@/pages/PaymentPage'));
 const ClubRegistrationPage = lazy(() => import('@/pages/ClubRegistrationPage'));
 const FeedPage = lazy(() => import('@/pages/FeedPage'));
 const MarketplacePage = lazy(() => import('@/pages/EnhancedMarketplacePage'));
+
+// Admin components
+const AdminRouter = lazy(() => import('@/router/AdminRouter'));
 
 // Club components
 const ClubManagementPage = lazy(() => import('@/pages/ClubManagementPage'));
@@ -141,10 +143,6 @@ const AppContentWithHooks = () => {
             }
           >
             <Route path='dashboard' element={<UnifiedDashboard />} />
-            
-            {/* CLB Routes - NOW INSIDE MainLayout for sidebar navigation */}
-            <Route path='clb' element={<CLBManagement />} />
-            
             <Route path='profile' element={<UnifiedProfilePage />} />
             <Route path='challenges' element={<EnhancedChallengesPageV2 />} />
             <Route path='community' element={<CommunityPage />} />
@@ -159,12 +157,25 @@ const AppContentWithHooks = () => {
             <Route path='marketplace' element={<MarketplacePage />} />
             <Route path='auth-test' element={<AuthTestPage />} />
 
+            {/* Navigation Test Page - Development only */}
+            <Route path='navigation-test' element={<NavigationTestPage />} />
+
             {/* Public pages accessible through sidebar when logged in */}
             <Route path='tournaments' element={<TournamentPage />} />
             <Route path='leaderboard' element={<LeaderboardPage />} />
             <Route path='clubs' element={<ClubsPage />} />
             <Route path='clubs/:id' element={<ClubDetailPage />} />
           </Route>
+
+          {/* Admin routes - use wildcard to let AdminRouter handle sub-routes */}
+          <Route
+            path='/admin/*'
+            element={
+              <AdminRoute>
+                <AdminRouter />
+              </AdminRoute>
+            }
+          />
 
           {/* Club management routes - protected and require club owner privileges */}
           <Route
@@ -237,16 +248,6 @@ const AppContentWithHooks = () => {
               <ProtectedRoute>
                 <ClubManagementPage />
               </ProtectedRoute>
-            }
-          />
-
-          {/* Admin routes - protected and require admin privileges */}
-          <Route
-            path='/admin/*'
-            element={
-              <AdminProtectedRoute>
-                <AdminRouter />
-              </AdminProtectedRoute>
             }
           />
 

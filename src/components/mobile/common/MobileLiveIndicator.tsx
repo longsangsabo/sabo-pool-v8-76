@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, Users } from 'lucide-react';
-import { Badge } from '@/shared/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 interface MobileLiveIndicatorProps {
   type: 'live_match' | 'live_tournament' | 'live_challenge';

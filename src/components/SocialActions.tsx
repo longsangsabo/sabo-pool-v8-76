@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, MessageCircle, Share2, Zap } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 interface SocialActionsProps {
   postId?: string;

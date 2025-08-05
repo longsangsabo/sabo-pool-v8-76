@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-} from '@/shared/components/ui/card';
+} from '@/components/ui/card';
 
 interface CardProps {
   children: React.ReactNode;

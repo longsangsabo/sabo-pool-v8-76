@@ -1,12 +1,12 @@
-import { Toaster } from '@/shared/components/ui/toaster';
-import { Toaster as Sonner } from '@/shared/components/ui/sonner';
-import { TooltipProvider } from '@/shared/components/ui/tooltip';
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from 'next-themes';
 import { Suspense } from 'react';
-import ErrorBoundary from '@/shared/components/ui/error-boundary';
+import ErrorBoundary from '@/components/ui/error-boundary';
 import { AuthProvider } from '@/hooks/useAuth';
 import { AvatarProvider } from '@/contexts/AvatarContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
@@ -16,7 +16,7 @@ import RealtimeNotificationSystem from '@/components/RealtimeNotificationSystem'
 import {
   createLazyComponent,
   PageLoadingFallback,
-} from '@/shared/components/ui/lazy-components';
+} from '@/components/ui/lazy-components';
 
 // Optimized Query Client with enhanced caching strategy
 const queryClient = new QueryClient({

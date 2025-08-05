@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Play, Trophy, Users, Target } from 'lucide-react';
 

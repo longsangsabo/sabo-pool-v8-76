@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, X, Crown } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 interface Membership {
   id: string;

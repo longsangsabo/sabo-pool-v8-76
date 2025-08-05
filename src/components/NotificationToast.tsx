@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bell, Trophy, Users, Calendar, Zap } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface NotificationToastProps {
   title: string;

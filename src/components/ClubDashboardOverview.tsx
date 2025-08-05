@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Users,
   Trophy,
@@ -13,12 +13,8 @@ import {
   Database,
   Wifi,
   RefreshCw,
-  Target,
-  Table2,
 } from 'lucide-react';
 import { useClubDashboard } from '@/hooks/useClubDashboard';
-import { ClubDashboard } from '@/features/club/components/dashboard/ClubDashboard';
-import { LoadingCard } from '@/shared/components/ui/loading-card';
 
 const ClubDashboardOverview = () => {
   const { data, loading, error, refreshData } = useClubDashboard();
@@ -28,7 +24,14 @@ const ClubDashboardOverview = () => {
       <div className='space-y-6'>
         <div className='grid grid-cols-1 md:grid-cols-4 gap-6'>
           {[1, 2, 3, 4].map(i => (
-            <LoadingCard key={i} />
+            <Card key={i}>
+              <CardContent className='pt-6'>
+                <div className='animate-pulse'>
+                  <div className='h-4 bg-gray-200 rounded w-3/4 mb-2'></div>
+                  <div className='h-8 bg-gray-200 rounded w-1/2'></div>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

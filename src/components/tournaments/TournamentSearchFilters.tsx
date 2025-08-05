@@ -1,8 +1,8 @@
 import React from 'react';
 import { Search, Filter, Sliders } from 'lucide-react';
-import { Input } from '@/shared/components/ui/input';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface TournamentSearchFiltersProps {
   searchQuery: string;

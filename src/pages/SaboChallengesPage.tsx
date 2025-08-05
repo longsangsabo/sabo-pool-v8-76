@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Plus, Trophy } from 'lucide-react';
 import UnifiedChallengeCard from '@/components/challenges/UnifiedChallengeCard';
 import type { SaboChallenge } from '@/types/sabo-challenge';

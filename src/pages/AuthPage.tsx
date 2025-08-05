@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
-import { Label } from '@/shared/components/ui/label';
-import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Eye,
   EyeOff,
@@ -25,9 +25,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { useSmartNavigation } from '@/hooks/useSmartNavigation';
-import { FacebookLoginButton } from '@/core/auth/FacebookLoginButton';
-import { GoogleLoginButton } from '@/core/auth/GoogleLoginButton';
+import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
+import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { handleAuthError } from '@/utils/authHelpers';
 
 type AuthMode = 'login' | 'register' | 'forgot-password' | 'reset-password';
@@ -43,9 +42,6 @@ const AuthPage = () => {
     signUpWithPhone,
     signUpWithEmail,
   } = useAuth();
-
-  // 🎯 Smart Navigation Hook
-  const { navigateAfterLogin, getWelcomeMessage, hasMultipleRoles } = useSmartNavigation();
 
   // Get auth mode from URL params or default to login
   const [mode, setMode] = useState<AuthMode>(() => {
@@ -66,13 +62,12 @@ const AuthPage = () => {
   // Reset password specific state
   const [emailSent, setEmailSent] = useState(false);
 
-  // Redirect if already logged in with Smart Navigation
+  // Redirect if already logged in
   useEffect(() => {
     if (user && !authLoading && mode !== 'reset-password') {
-      // 🚀 Use Smart Navigation instead of hardcoded /dashboard
-      navigateAfterLogin();
+      navigate('/dashboard');
     }
-  }, [user, authLoading, navigate, mode, navigateAfterLogin]);
+  }, [user, authLoading, navigate, mode]);
 
   // Update mode when URL changes
   useEffect(() => {
@@ -152,21 +147,10 @@ const AuthPage = () => {
       if (result.error) {
         handleAuthError(result.error);
       } else {
-        // 🎯 Smart Welcome Message & Navigation
-        const welcomeMessage = getWelcomeMessage();
-        toast.success(welcomeMessage);
-        
-        // Show additional info for multi-role users
-        if (hasMultipleRoles) {
-          setTimeout(() => {
-            toast.info('💡 Bạn có thể chuyển đổi giữa Admin và CLB bất cứ lúc nào!', {
-              duration: 4000
-            });
-          }, 1500);
-        }
-        
-        // 🚀 Smart Navigation
-        navigateAfterLogin();
+        const successMessage =
+          mode === 'login' ? 'Đăng nhập thành công!' : 'Đăng ký thành công!';
+        toast.success(successMessage);
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Auth error:', error);

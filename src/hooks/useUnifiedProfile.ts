@@ -155,7 +155,7 @@ export const useUnifiedProfile = () => {
             clubProfile = clubData;
           }
         } catch (clubFetchError) {
-          console.log(
+
             'Club profile fetch failed (non-critical):',
             clubFetchError
           );
@@ -222,7 +222,7 @@ export const useUnifiedProfile = () => {
             )
             .slice(0, 10);
         } catch (activitiesError) {
-          console.log(
+
             'Activities fetch failed (non-critical):',
             activitiesError
           );

@@ -1,12 +1,12 @@
 import React, { Component, ReactNode } from 'react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
+} from '@/components/ui/card';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 

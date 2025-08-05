@@ -1,7 +1,7 @@
 import React from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
-import { Card, CardContent } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Trophy, Target, TrendingUp, Award } from 'lucide-react';
 
 interface ArenaProfileStatsProps {

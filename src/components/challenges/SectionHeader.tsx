@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge } from '@/shared/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 interface SectionHeaderProps {
   icon: string;

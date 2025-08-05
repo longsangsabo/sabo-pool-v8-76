@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge } from '@/shared/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { Coins } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSPABalance } from '@/hooks/useSPABalance';

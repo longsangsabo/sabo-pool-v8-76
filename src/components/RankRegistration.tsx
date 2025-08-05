@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select';
-import { Label } from '@/shared/components/ui/label';
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { AlertCircle, Upload, X } from 'lucide-react';
-import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';

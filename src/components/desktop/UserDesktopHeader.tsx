@@ -1,12 +1,12 @@
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
-import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Bell, Menu, Search, Settings, User, LogOut } from 'lucide-react';
-import { ThemeToggle } from '@/shared/components/ui/theme-toggle';
-import { ClubRoleSwitch } from '@/features/club/components/ClubRoleSwitch';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { ClubRoleSwitch } from '@/components/club/ClubRoleSwitch';
 import NotificationBadge from '@/components/NotificationBadge';
 import {
   DropdownMenu,
@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface UserDesktopHeaderProps {

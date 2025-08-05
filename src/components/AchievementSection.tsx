@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Trophy, Star, Flame, Target, Award, Crown } from 'lucide-react';
-import { Card, CardContent } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface Achievement {
   id: string;

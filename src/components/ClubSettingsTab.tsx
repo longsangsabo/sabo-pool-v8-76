@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Building, Settings } from 'lucide-react';
 import ClubProfileForm from '@/components/ClubProfileForm';
 import ClubSettings from '@/components/ClubSettings';

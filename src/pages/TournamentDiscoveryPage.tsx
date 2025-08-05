@@ -1,3 +1,3 @@
-import TournamentDiscoverySimple from '@/features/tournament/components/TournamentDiscoverySimple';
+import TournamentDiscoverySimple from '@/components/tournament/TournamentDiscoverySimple';
 
 export default TournamentDiscoverySimple;

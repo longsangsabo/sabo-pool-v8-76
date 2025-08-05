@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as ShadcnButton } from '@/shared/components/ui/button';
+import { Button as ShadcnButton } from '@/components/ui/button';
 
 interface ButtonProps {
   children: React.ReactNode;

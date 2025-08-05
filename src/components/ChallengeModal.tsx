@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { X, Send } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
-import { Textarea } from '@/shared/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog';
+} from '@/components/ui/dialog';
 import UserAvatar from './UserAvatar';
 import { ChallengeStatusBanner } from './ranking/ChallengeStatusBanner';
 

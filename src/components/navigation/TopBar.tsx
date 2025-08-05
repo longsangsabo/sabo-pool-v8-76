@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
-import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu';
-import { ThemeToggle } from '@/shared/components/ui/theme-toggle';
+} from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
-import { useSmartNavigation } from '@/hooks/useSmartNavigation';
 import {
   Search,
   Bell,
@@ -24,8 +23,6 @@ import {
   Shield,
   Trophy,
   Circle,
-  Building2,
-  ChevronDown
 } from 'lucide-react';
 
 interface TopBarProps {
@@ -34,7 +31,6 @@ interface TopBarProps {
   showNotifications?: boolean;
   showUserMenu?: boolean;
   showAuthButtons?: boolean;
-  hasMultipleRoles?: boolean;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -43,11 +39,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   showNotifications = false,
   showUserMenu = false,
   showAuthButtons = false,
-  hasMultipleRoles = false,
 }) => {
   const { user, signOut } = useAuth();
   const { getUnreadCount } = useNotifications();
-  const { hasMultipleRoles: isMultiRole } = useSmartNavigation();
   const navigate = useNavigate();
 
   const unreadCount = getUnreadCount();
@@ -105,41 +99,6 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         {/* Right: Actions */}
         <div className='flex items-center space-x-3'>
-          {/* Role Switcher - For Multi-Role Users */}
-          {(hasMultipleRoles || isMultiRole) && user && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline' size='sm' className='gap-2'>
-                  {userRole === 'admin' ? (
-                    <Shield className='h-4 w-4' />
-                  ) : (
-                    <Building2 className='h-4 w-4' />
-                  )}
-                  <span className="hidden sm:inline">
-                    {userRole === 'admin' ? 'Admin Mode' : 'CLB Mode'}
-                  </span>
-                  <ChevronDown className='h-3 w-3' />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align='end' className='w-56'>
-                <DropdownMenuLabel>Chuyển đổi vai trò</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                  <Trophy className='mr-2 h-4 w-4' />
-                  <span>Dashboard Tổng hợp</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/admin')}>
-                  <Shield className='mr-2 h-4 w-4' />
-                  <span>Admin Panel</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/clb')}>
-                  <Building2 className='mr-2 h-4 w-4' />
-                  <span>Quản lý CLB</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-
           {/* Mobile Search Button */}
           {showSearch && (
             <Button variant='ghost' size='sm' className='md:hidden'>

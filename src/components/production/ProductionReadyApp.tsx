@@ -5,8 +5,8 @@ import {
 } from '@/contexts/FeatureFlagsContext';
 import ResponsiveErrorBoundary from '@/components/error/ResponsiveErrorBoundary';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
-import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import { Badge } from '@/shared/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Info, Rocket } from 'lucide-react';
 
 interface ProductionReadyAppProps {

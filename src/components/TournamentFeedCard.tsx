@@ -8,9 +8,9 @@ import {
   Wifi,
   WifiOff,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import UserAvatar from './UserAvatar';
 
 interface TournamentFeedCardProps {

@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
-import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import {
   EnhancedAuthTabs,
   PhoneTabContent,
   EmailTabContent,
-} from '@/core/auth/EnhancedAuthTabs';
-import { OtpVerification } from '@/core/auth/OtpVerification';
-import { FacebookLoginButton } from '@/core/auth/FacebookLoginButton';
-import { GoogleLoginButton } from '@/core/auth/GoogleLoginButton';
-import { AuthDivider } from '@/core/auth/AuthDivider';
-import { TermsCheckbox } from '@/core/auth/TermsCheckbox';
-import { OAuthSetupGuide } from '@/core/auth/OAuthSetupGuide';
+} from '@/components/auth/EnhancedAuthTabs';
+import { OtpVerification } from '@/components/auth/OtpVerification';
+import { FacebookLoginButton } from '@/components/auth/FacebookLoginButton';
+import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
+import { AuthDivider } from '@/components/auth/AuthDivider';
+import { TermsCheckbox } from '@/components/auth/TermsCheckbox';
+import { OAuthSetupGuide } from '@/components/auth/OAuthSetupGuide';
 import { handleAuthError } from '@/utils/authHelpers';
 import { Gift } from 'lucide-react';
 

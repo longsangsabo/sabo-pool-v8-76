@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Plus, Grid3X3, List } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { useMarketplace } from '@/hooks/marketplace/useMarketplace';
 import MarketplaceItemCard from '@/components/marketplace/MarketplaceItemCard';
 import MarketplaceFilters from '@/components/marketplace/MarketplaceFilters';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 
 const EnhancedMarketplacePage = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useClubRole } from '@/hooks/useClubRole';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   BarChart3,
   Trophy,
@@ -12,14 +12,14 @@ import {
   Swords,
   AlertCircle,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import ClubOverviewTab from '@/features/club/components/ClubOverviewTab';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ClubOverviewTab from '@/components/ClubOverviewTab';
 import ClubSettingsTab from '@/components/ClubSettingsTab';
-import ClubRankVerificationTab from '@/features/club/components/ClubRankVerificationTab';
+import ClubRankVerificationTab from '@/components/club/ClubRankVerificationTab';
 import ClubChallengesTab from '@/pages/challenges/components/tabs/ClubChallengesTab';
-import ClubTournamentManagement from '@/features/club/components/ClubTournamentManagement';
-import ClubMembersAndNotifications from '@/features/club/components/optimized/ClubMembersAndNotifications';
-import ClubManagementAudit from '@/features/club/components/testing/ClubManagementAudit';
+import ClubTournamentManagement from '@/components/club/ClubTournamentManagement';
+import ClubMembersAndNotifications from '@/components/club/optimized/ClubMembersAndNotifications';
+import ClubManagementAudit from '@/components/club/testing/ClubManagementAudit';
 import { ClubDesktopLayout } from '@/components/layouts/ClubDesktopLayout';
 import { useRankUpdates } from '@/hooks/useRankUpdates';
 import { AppProviders } from '@/contexts/AppProviders';
@@ -43,7 +43,7 @@ const ClubManagementPage = () => {
   };
 
   // Debug current club info
-  console.log('ClubManagementPage Debug:', {
+
     user: user?.id,
     isClubOwner,
     clubProfile: clubProfile
@@ -158,7 +158,7 @@ const ClubManagementPage = () => {
 
         <TabsContent value='tournaments'>
           {(() => {
-            console.log(
+
               '🎯 Rendering tournaments tab with clubId:',
               clubProfile?.id
             );

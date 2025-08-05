@@ -1,103 +1,99 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { 
-  MessageSquare, 
-  Trophy, 
-  UserCheck, 
-  CircleDollarSign, 
-  Calendar,
-  Clock
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';
+import { Trophy, Users, Target, Calendar } from 'lucide-react';
 
-type ActivityType = 'message' | 'tournament' | 'rank' | 'payment' | 'booking';
-
-interface Activity {
+interface RecentActivity {
   id: string;
-  type: ActivityType;
-  title: string;
+  type: string;
   description: string;
-  time: string;
+  created_at: string;
+  user_id?: string;
+  metadata?: any;
 }
 
-export const RecentActivity: React.FC = () => {
-  const activities: Activity[] = [
-    {
-      id: '1',
-      type: 'tournament',
-      title: 'Tournament Registration',
-      description: 'You registered for "Weekend 9-Ball Open"',
-      time: '2 hours ago'
-    },
-    {
-      id: '2',
-      type: 'rank',
-      title: 'Rank Changed',
-      description: 'Your ELO rating increased by 23 points',
-      time: '5 hours ago'
-    },
-    {
-      id: '3',
-      type: 'booking',
-      title: 'Table Reserved',
-      description: 'Table #3 reserved for tomorrow at 7:00 PM',
-      time: '1 day ago'
-    },
-    {
-      id: '4',
-      type: 'message',
-      title: 'New Challenge',
-      description: 'John invited you to a friendly match',
-      time: '2 days ago'
-    },
-    {
-      id: '5',
-      type: 'payment',
-      title: 'Club Membership',
-      description: 'Monthly membership payment processed',
-      time: '1 week ago'
-    }
-  ];
+interface RecentActivityProps {
+  dashboardType: 'admin' | 'club' | 'player';
+  activities: RecentActivity[];
+}
 
-  const getIcon = (type: ActivityType) => {
+export const RecentActivity: React.FC<RecentActivityProps> = ({
+  dashboardType,
+  activities,
+}) => {
+  const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'message': return <MessageSquare className="h-4 w-4" />;
-      case 'tournament': return <Trophy className="h-4 w-4" />;
-      case 'rank': return <UserCheck className="h-4 w-4" />;
-      case 'payment': return <CircleDollarSign className="h-4 w-4" />;
-      case 'booking': return <Calendar className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
+      case 'user_registration':
+        return <Users className='h-4 w-4 text-blue-500' />;
+      case 'tournament_created':
+        return <Trophy className='h-4 w-4 text-yellow-500' />;
+      case 'club_registration':
+        return <Users className='h-4 w-4 text-green-500' />;
+      case 'match_created':
+        return <Target className='h-4 w-4 text-purple-500' />;
+      case 'challenge_accepted':
+        return <Target className='h-4 w-4 text-orange-500' />;
+      case 'tournament_joined':
+        return <Trophy className='h-4 w-4 text-blue-500' />;
+      default:
+        return <Calendar className='h-4 w-4 text-gray-500' />;
     }
   };
 
-  const getIconClass = (type: ActivityType) => {
+  const getActivityBadge = (type: string) => {
     switch (type) {
-      case 'message': return 'bg-blue-100 text-blue-600';
-      case 'tournament': return 'bg-amber-100 text-amber-600';
-      case 'rank': return 'bg-green-100 text-green-600';
-      case 'payment': return 'bg-purple-100 text-purple-600';
-      case 'booking': return 'bg-red-100 text-red-600';
-      default: return 'bg-gray-100 text-gray-600';
+      case 'user_registration':
+        return <Badge variant='secondary'>Người dùng mới</Badge>;
+      case 'tournament_created':
+        return <Badge variant='default'>Giải đấu</Badge>;
+      case 'club_registration':
+        return <Badge variant='outline'>CLB mới</Badge>;
+      case 'match_created':
+        return <Badge variant='secondary'>Trận đấu</Badge>;
+      case 'challenge_accepted':
+        return <Badge variant='default'>Thách đấu</Badge>;
+      case 'tournament_joined':
+        return <Badge variant='outline'>Tham gia</Badge>;
+      default:
+        return <Badge variant='secondary'>Hoạt động</Badge>;
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
+        <CardTitle>Hoạt động gần đây</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {activities.map(activity => (
-          <div key={activity.id} className="flex items-start gap-4 py-2">
-            <div className={`p-2 rounded-full ${getIconClass(activity.type)}`}>
-              {getIcon(activity.type)}
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-medium">{activity.title}</h4>
-              <p className="text-sm text-muted-foreground">{activity.description}</p>
-              <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
-            </div>
-          </div>
-        ))}
+      <CardContent>
+        <div className='space-y-4'>
+          {activities.length === 0 ? (
+            <p className='text-sm text-muted-foreground'>
+              Chưa có hoạt động nào
+            </p>
+          ) : (
+            activities.map(activity => (
+              <div
+                key={activity.id}
+                className='flex items-center gap-3 p-3 rounded-lg border'
+              >
+                {getActivityIcon(activity.type)}
+                <div className='flex-1 min-w-0'>
+                  <p className='text-sm font-medium truncate'>
+                    {activity.description}
+                  </p>
+                  <p className='text-xs text-muted-foreground'>
+                    {formatDistanceToNow(new Date(activity.created_at), {
+                      addSuffix: true,
+                      locale: vi,
+                    })}
+                  </p>
+                </div>
+                {getActivityBadge(activity.type)}
+              </div>
+            ))
+          )}
+        </div>
       </CardContent>
     </Card>
   );

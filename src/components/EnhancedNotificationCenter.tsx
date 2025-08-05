@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Bell, Check, CheckCheck, X, Wifi, WifiOff } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/shared/components/ui/popover';
-import { ScrollArea } from '@/shared/components/ui/scroll-area';
+} from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEnhancedNotifications } from '@/hooks/useEnhancedNotifications';
 import { useEnhancedChallenges } from '@/hooks/useEnhancedChallenges';
 import EnhancedNotificationCard from './EnhancedNotificationCard';

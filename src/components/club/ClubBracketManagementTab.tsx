@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trophy, Settings, Users } from 'lucide-react';
-import { AdminBracketViewer } from '@/features/admin/components/AdminBracketViewer';
-import TournamentManagementFlow from '@/features/tournament/components/TournamentManagementFlow';
+import { AdminBracketViewer } from '@/components/admin/AdminBracketViewer';
+import TournamentManagementFlow from '@/components/tournament/TournamentManagementFlow';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 

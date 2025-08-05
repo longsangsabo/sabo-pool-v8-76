@@ -17,8 +17,8 @@ import ProfileErrorBoundary from '@/components/profile/ProfileErrorBoundary';
 
 // UI Components
 import { Loader2, RefreshCw, ArrowUp } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 /**
  * Unified Profile Page

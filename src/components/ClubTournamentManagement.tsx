@@ -4,10 +4,10 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Plus,
   Trophy,
@@ -31,10 +31,10 @@ import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 import { useBracketGeneration } from '@/hooks/useBracketGeneration';
-import { TournamentBracketFlow } from '@/features/tournament/components/TournamentBracketFlow';
-import BilliardsTournamentActions from '@/features/tournament/components/BilliardsTournamentActions';
-import ForceStartTournamentButton from '@/features/tournament/components/ForceStartTournamentButton';
-import ForceCompleteTournamentButton from '@/features/tournament/components/ForceCompleteTournamentButton';
+import { TournamentBracketFlow } from '@/components/tournament/TournamentBracketFlow';
+import BilliardsTournamentActions from '@/components/tournament/BilliardsTournamentActions';
+import ForceStartTournamentButton from '@/components/tournament/ForceStartTournamentButton';
+import ForceCompleteTournamentButton from '@/components/tournament/ForceCompleteTournamentButton';
 
 interface Tournament {
   id: string;
