@@ -5,12 +5,10 @@ import { supabase } from '@/integrations/supabase/client';
  * Prevents authentication limbo states by clearing all auth-related storage
  */
 export const cleanupAuthState = () => {
-
   // Clear localStorage
   Object.keys(localStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       localStorage.removeItem(key);
-
     }
   });
 
@@ -18,7 +16,6 @@ export const cleanupAuthState = () => {
   Object.keys(sessionStorage).forEach(key => {
     if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
       sessionStorage.removeItem(key);
-
     }
   });
 
@@ -35,23 +32,19 @@ export const cleanupAuthState = () => {
     localStorage.removeItem(key);
     sessionStorage.removeItem(key);
   });
-
 };
 
 /**
  * Robust sign out that prevents limbo states
  */
 export const robustSignOut = async () => {
-
   try {
     // Clean up state first
     cleanupAuthState();
 
     // Attempt global sign out
     await supabase.auth.signOut({ scope: 'global' });
-
   } catch (error) {
-
   } finally {
     // Always force page refresh for clean state
 
@@ -63,7 +56,6 @@ export const robustSignOut = async () => {
  * Robust sign in that prevents limbo states
  */
 export const robustSignIn = async (signInFunction: () => Promise<any>) => {
-
   try {
     // Clean up existing state first
     cleanupAuthState();
@@ -71,9 +63,7 @@ export const robustSignIn = async (signInFunction: () => Promise<any>) => {
     // Attempt sign out to clear any existing session
     try {
       await supabase.auth.signOut({ scope: 'global' });
-    } catch (error) {
-
-    }
+    } catch (error) {}
 
     // Perform the actual sign in
     const result = await signInFunction();
@@ -83,7 +73,6 @@ export const robustSignIn = async (signInFunction: () => Promise<any>) => {
     }
 
     if (result.data?.user) {
-
       // Force page refresh for clean state
       window.location.href = '/dashboard';
     }
@@ -126,7 +115,6 @@ export const checkAuthConflicts = () => {
   });
 
   if (conflicts.length > 0) {
-
     return conflicts;
   }
 

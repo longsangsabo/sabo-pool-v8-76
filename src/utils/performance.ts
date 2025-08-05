@@ -15,7 +15,6 @@ export const performanceMonitor = {
     const end = performance.now();
 
     if (process.env.NODE_ENV === 'development') {
-
     }
 
     return result;
@@ -25,7 +24,6 @@ export const performanceMonitor = {
   trackWebVitals: (metric: any) => {
     if (typeof window !== 'undefined') {
       // Send to analytics service
-
     }
   },
 
@@ -52,14 +50,12 @@ export const bundleMonitor = {
     loadTime?: number
   ) => {
     if (process.env.NODE_ENV === 'development') {
-
     }
   },
 
   // Monitor chunk load times
   trackChunkLoad: (chunkName: string, loadTime: number) => {
     if (process.env.NODE_ENV === 'development') {
-
     }
   },
 };

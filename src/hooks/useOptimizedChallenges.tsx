@@ -330,7 +330,9 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
 
         if (matchError) {
           console.error('❌ Error creating match record:', matchError);
-          console.warn('⚠️ Challenge accepted but match record creation failed');
+          console.warn(
+            '⚠️ Challenge accepted but match record creation failed'
+          );
         } else {
           console.log('✅ Challenge accepted and match record created');
         }
@@ -338,7 +340,6 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         // ✅ Send notification to challenger when someone joins their open challenge
         if (isOpenChallenge) {
           try {
-
             // Get participant profile for notification metadata
             const { data: participantProfile } = await supabase
               .from('profiles')
@@ -381,7 +382,6 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
                 notificationError
               );
             } else {
-
             }
           } catch (notificationErr) {
             console.error('❌ Failed to send notification:', notificationErr);
@@ -472,7 +472,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
     }) => {
       if (!user) throw new Error('User not authenticated');
 
-      console.log("Submitting scores:", { challengerScore, opponentScore });
+      console.log('Submitting scores:', { challengerScore, opponentScore });
 
       // Get challenge details
       const challenge = challenges.find(c => c.id === challengeId);
@@ -536,10 +536,10 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
         );
 
         if (spaError) {
-          console.error("Error crediting SPA points:", spaError);
+          console.error('Error crediting SPA points:', spaError);
         }
       } catch (error) {
-        console.error("Exception crediting SPA points:", error);
+        console.error('Exception crediting SPA points:', error);
       }
 
       // Send notification to opponent
@@ -564,7 +564,7 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
             },
           });
         } catch (error) {
-          console.error("Error sending notification:", error);
+          console.error('Error sending notification:', error);
         }
       }
 
@@ -601,7 +601,6 @@ export const useOptimizedChallenges = (): UseOptimizedChallengesReturn => {
           table: 'challenges',
         },
         payload => {
-
           // Debounced refresh
           setTimeout(() => fetchChallenges(), 200);
         }

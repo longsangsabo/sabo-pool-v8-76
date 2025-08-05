@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Coins, TrendingUp, Clock, ArrowUpRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,7 +43,6 @@ export const WalletBalance: React.FC = () => {
       }
 
       try {
-
         // Fetch wallet balance
         const { data: walletData, error: walletError } = await supabase
           .from('wallets')
@@ -80,7 +84,6 @@ export const WalletBalance: React.FC = () => {
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
             if ('points_balance' in newData) {

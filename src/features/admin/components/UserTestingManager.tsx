@@ -6,7 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Users, UserPlus } from 'lucide-react';
 import { LoadingState } from '@/shared/components/ui/loading-state';
 import { DemoUserManager } from './DemoUserManager';

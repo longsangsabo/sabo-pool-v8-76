@@ -17,7 +17,6 @@ export const useMonitoring = () => {
 
   const trackEvent = useCallback(
     (name: string, properties?: Record<string, any>) => {
-
       const event: MonitoringEvent = {
         name,
         properties,
@@ -49,7 +48,6 @@ export const useMonitoring = () => {
 
   const addMetric = useCallback(
     (name: string, value: number, metadata?: Record<string, any>) => {
-
       trackEvent('custom_metric', { name, value, metadata });
     },
     [trackEvent]

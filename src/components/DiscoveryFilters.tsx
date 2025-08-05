@@ -1,7 +1,12 @@
 import React from 'react';
 import { X, Sliders, MapPin, Trophy, Zap } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Slider } from '@/shared/components/ui/slider';
 import { Label } from '@/shared/components/ui/label';

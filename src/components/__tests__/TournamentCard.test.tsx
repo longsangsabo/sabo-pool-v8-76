@@ -114,7 +114,7 @@ describe('TournamentCard', () => {
     const { getByText } = renderWithRouter(
       <TournamentCard
         tournament={TournamentAdapter.createMockEnhanced({
-          tournament_start: testDate.toISOString()
+          tournament_start: testDate.toISOString(),
         })}
         onView={() => {}}
       />

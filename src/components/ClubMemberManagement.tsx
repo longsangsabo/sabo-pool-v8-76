@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
@@ -122,7 +127,6 @@ export const useClubMembers = (clubId: string) => {
           table: 'profiles',
         },
         payload => {
-
           fetchClubMembers(); // Refresh entire list
         }
       )
@@ -135,7 +139,6 @@ export const useClubMembers = (clubId: string) => {
           filter: `club_id=eq.${clubId}`,
         },
         payload => {
-
           fetchClubMembers(); // Refresh when new approvals happen
         }
       )

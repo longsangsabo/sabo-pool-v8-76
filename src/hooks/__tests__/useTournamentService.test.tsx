@@ -9,15 +9,15 @@ jest.mock('../useTournamentService', () => ({
     loading: false,
     error: null,
     createTournament: jest.fn(),
-    isFinalizing: false
-  })
+    isFinalizing: false,
+  }),
 }));
 
 // Mock TournamentRepository
 jest.mock('@/repositories/tournamentRepository', () => ({
   TournamentRepository: {
-    getTournaments: jest.fn().mockResolvedValue([])
-  }
+    getTournaments: jest.fn().mockResolvedValue([]),
+  },
 }));
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
@@ -28,7 +28,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
       },
     },
   });
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 };
 
 describe('useTournamentService', () => {

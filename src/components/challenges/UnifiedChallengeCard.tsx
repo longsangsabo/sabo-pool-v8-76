@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import {
   Users,
   Clock,
@@ -319,7 +323,7 @@ const UnifiedChallengeCard: React.FC<UnifiedChallengeCardProps> = ({
             </Button>
           );
         }
-        
+
         if (isOpponent && onAction) {
           return (
             <div className='flex gap-2'>

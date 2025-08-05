@@ -2,7 +2,11 @@ import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 
 // Define the data type
 export type RankVerification = {
@@ -24,14 +28,18 @@ export const columns: ColumnDef<RankVerification>[] = [
     cell: ({ row }) => {
       const data = row.original;
       return (
-        <div className="flex items-center gap-3">
+        <div className='flex items-center gap-3'>
           <Avatar>
             <AvatarImage src={data.user_avatar} />
-            <AvatarFallback>{data.user_name.substring(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>
+              {data.user_name.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{data.user_name}</p>
-            <p className="text-xs text-muted-foreground">ID: {data.user_id.substring(0, 8)}</p>
+            <p className='font-medium'>{data.user_name}</p>
+            <p className='text-xs text-muted-foreground'>
+              ID: {data.user_id.substring(0, 8)}
+            </p>
           </div>
         </div>
       );
@@ -49,11 +57,7 @@ export const columns: ColumnDef<RankVerification>[] = [
       if (level >= 10) badgeClass = 'bg-blue-200 text-blue-800';
       if (level >= 13) badgeClass = 'bg-purple-200 text-purple-800';
 
-      return (
-        <Badge className={badgeClass}>
-          {name}
-        </Badge>
-      );
+      return <Badge className={badgeClass}>{name}</Badge>;
     },
   },
   {
@@ -62,19 +66,19 @@ export const columns: ColumnDef<RankVerification>[] = [
     cell: ({ row }) => {
       const evidence = row.original.evidence_urls || [];
       return (
-        <div className="flex gap-2">
+        <div className='flex gap-2'>
           {evidence.map((url, index) => (
-            <Button 
-              key={index} 
-              size="sm" 
-              variant="outline"
+            <Button
+              key={index}
+              size='sm'
+              variant='outline'
               onClick={() => window.open(url, '_blank')}
             >
               Xem #{index + 1}
             </Button>
           ))}
           {evidence.length === 0 && (
-            <span className="text-sm text-muted-foreground">Không có</span>
+            <span className='text-sm text-muted-foreground'>Không có</span>
           )}
         </div>
       );
@@ -93,20 +97,20 @@ export const columns: ColumnDef<RankVerification>[] = [
     header: 'Hành động',
     cell: ({ row }) => {
       return (
-        <div className="flex gap-2">
-          <Button 
-            size="sm"
-            variant="default"
-            className="bg-green-600 hover:bg-green-700"
+        <div className='flex gap-2'>
+          <Button
+            size='sm'
+            variant='default'
+            className='bg-green-600 hover:bg-green-700'
             // In a real implementation, this would call approveRankClaim
             onClick={() => console.log('Approve rank claim', row.original.id)}
           >
             Xác nhận
           </Button>
-          <Button 
-            size="sm"
-            variant="outline" 
-            className="text-red-600 border-red-600 hover:bg-red-50"
+          <Button
+            size='sm'
+            variant='outline'
+            className='text-red-600 border-red-600 hover:bg-red-50'
             // In a real implementation, this would call rejectRankClaim
             onClick={() => console.log('Reject rank claim', row.original.id)}
           >

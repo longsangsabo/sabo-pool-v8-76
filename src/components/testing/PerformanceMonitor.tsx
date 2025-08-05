@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
@@ -109,9 +114,7 @@ export const PerformanceMonitor: React.FC = () => {
 
       try {
         observer.observe({ entryTypes: ['layout-shift'] });
-      } catch (e) {
-
-      }
+      } catch (e) {}
     }
 
     return () => {

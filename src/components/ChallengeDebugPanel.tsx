@@ -15,7 +15,6 @@ export const ChallengeDebugPanel: React.FC<ChallengeDebugPanelProps> = ({
   const { user } = useAuth();
 
   const handleManualRefresh = async () => {
-
     await onRefresh();
   };
 

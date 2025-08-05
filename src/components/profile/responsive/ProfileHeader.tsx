@@ -1,7 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { TechCard, TechHeader } from '@/shared/components/ui/sabo-tech-global';
 import { Badge } from '@/shared/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Star, Shield, Trophy, Users, Camera, Upload } from 'lucide-react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
 import { useDropzone } from 'react-dropzone';

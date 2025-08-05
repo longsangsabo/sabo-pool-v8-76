@@ -188,7 +188,6 @@ const LazyTermsPage = createLazyComponent(() => import('./pages/TermsPage'));
 import AuthWrapper from './components/AuthWrapper';
 
 const App = () => {
-
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

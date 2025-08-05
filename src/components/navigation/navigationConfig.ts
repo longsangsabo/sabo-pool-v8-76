@@ -72,19 +72,19 @@ export const USER_NAV_ITEMS: NavigationItem[] = [
   { path: '/profile', label: 'Hồ sơ', icon: User, section: 'main' },
 
   // ===== CLB SYSTEM (NEW) =====
-  { 
-    path: '/clb', 
-    label: 'CLB Management', 
-    icon: Building, 
+  {
+    path: '/clb',
+    label: 'CLB Management',
+    icon: Building,
     description: 'Hệ thống CLB mới',
-    section: 'clb' 
+    section: 'clb',
   },
-  { 
-    path: '/clb-test', 
-    label: 'CLB Test Page', 
-    icon: TestTube, 
+  {
+    path: '/clb-test',
+    label: 'CLB Test Page',
+    icon: TestTube,
     description: 'Trang test CLB',
-    section: 'clb' 
+    section: 'clb',
   },
 
   // ===== CLUB MANAGEMENT (LEGACY) =====
@@ -125,37 +125,37 @@ export const USER_NAV_ITEMS: NavigationItem[] = [
   },
 
   // ===== COMMUNITY & SOCIAL =====
-  { 
-    path: '/community', 
-    label: 'Cộng đồng', 
-    icon: MessageSquare, 
-    section: 'community' 
+  {
+    path: '/community',
+    label: 'Cộng đồng',
+    icon: MessageSquare,
+    section: 'community',
   },
-  { 
-    path: '/feed', 
-    label: 'Feed', 
-    icon: MessageCircle, 
-    section: 'community' 
+  {
+    path: '/feed',
+    label: 'Feed',
+    icon: MessageCircle,
+    section: 'community',
   },
-  { 
-    path: '/clubs', 
-    label: 'Danh sách CLB', 
-    icon: Building, 
-    section: 'community' 
+  {
+    path: '/clubs',
+    label: 'Danh sách CLB',
+    icon: Building,
+    section: 'community',
   },
 
   // ===== MARKETPLACE & COMMERCE =====
-  { 
-    path: '/marketplace', 
-    label: 'Marketplace', 
-    icon: ShoppingCart, 
-    section: 'commerce' 
+  {
+    path: '/marketplace',
+    label: 'Marketplace',
+    icon: ShoppingCart,
+    section: 'commerce',
   },
-  { 
-    path: '/wallet', 
-    label: 'Ví', 
-    icon: Wallet, 
-    section: 'commerce' 
+  {
+    path: '/wallet',
+    label: 'Ví',
+    icon: Wallet,
+    section: 'commerce',
   },
 
   // ===== UTILITIES =====
@@ -178,23 +178,23 @@ export const USER_NAV_ITEMS: NavigationItem[] = [
   },
 
   // ===== DEVELOPMENT & TESTING =====
-  { 
-    path: '/auth-test', 
-    label: 'Auth Test', 
-    icon: TestTube, 
-    section: 'dev' 
+  {
+    path: '/auth-test',
+    label: 'Auth Test',
+    icon: TestTube,
+    section: 'dev',
   },
-  { 
-    path: '/navigation-test', 
-    label: 'Navigation Test', 
-    icon: TestTube, 
-    section: 'dev' 
+  {
+    path: '/navigation-test',
+    label: 'Navigation Test',
+    icon: TestTube,
+    section: 'dev',
   },
-  { 
-    path: '/smart-nav-test', 
-    label: 'Smart Nav Test', 
-    icon: TestTube, 
-    section: 'dev' 
+  {
+    path: '/smart-nav-test',
+    label: 'Smart Nav Test',
+    icon: TestTube,
+    section: 'dev',
   },
 ];
 

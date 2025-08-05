@@ -276,7 +276,6 @@ export const usePlayerRanking = (playerId?: string) => {
           filter: `user_id=eq.${currentPlayerId}`,
         },
         () => {
-
           loadData();
         }
       )
@@ -289,7 +288,6 @@ export const usePlayerRanking = (playerId?: string) => {
           filter: `user_id=eq.${currentPlayerId}`,
         },
         () => {
-
           loadData();
         }
       )

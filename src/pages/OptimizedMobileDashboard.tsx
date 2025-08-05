@@ -1,7 +1,12 @@
 import React, { Suspense } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import {
   User,
   Trophy,
@@ -25,7 +30,11 @@ import { DashboardSkeleton } from '@/components/skeleton/DashboardSkeleton';
 import { EnhancedWalletBalance } from '@/components/enhanced/EnhancedWalletBalance';
 import { Link } from 'react-router-dom';
 import { useTheme } from 'next-themes';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 
 const OptimizedMobileDashboard = () => {

@@ -83,7 +83,9 @@ export const useSPARewards = () => {
     fetchSPARewards();
   }, []);
 
-  const createReward = async (rewardData: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>) => {
+  const createReward = async (
+    rewardData: Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>
+  ) => {
     try {
       const { data, error } = await supabase
         .from('spa_reward_milestones')
@@ -97,11 +99,16 @@ export const useSPARewards = () => {
       toast.success('SPA reward created successfully');
     } catch (error) {
       console.error('Error creating SPA reward:', error);
-      toast.error('Failed to create SPA reward. Make sure the spa_reward_milestones table exists.');
+      toast.error(
+        'Failed to create SPA reward. Make sure the spa_reward_milestones table exists.'
+      );
     }
   };
 
-  const updateReward = async (id: string, rewardData: Partial<Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>>) => {
+  const updateReward = async (
+    id: string,
+    rewardData: Partial<Omit<SPAReward, 'id' | 'created_at' | 'updated_at'>>
+  ) => {
     try {
       const { error } = await supabase
         .from('spa_reward_milestones')
@@ -114,7 +121,9 @@ export const useSPARewards = () => {
       toast.success('SPA reward updated successfully');
     } catch (error) {
       console.error('Error updating SPA reward:', error);
-      toast.error('Failed to update SPA reward. Make sure the spa_reward_milestones table exists.');
+      toast.error(
+        'Failed to update SPA reward. Make sure the spa_reward_milestones table exists.'
+      );
     }
   };
 
@@ -131,7 +140,9 @@ export const useSPARewards = () => {
       toast.success('SPA reward deleted successfully');
     } catch (error) {
       console.error('Error deleting SPA reward:', error);
-      toast.error('Failed to delete SPA reward. Make sure the spa_reward_milestones table exists.');
+      toast.error(
+        'Failed to delete SPA reward. Make sure the spa_reward_milestones table exists.'
+      );
     }
   };
 

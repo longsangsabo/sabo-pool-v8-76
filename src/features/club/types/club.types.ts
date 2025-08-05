@@ -63,12 +63,7 @@ export interface ClubStaff {
   status: 'active' | 'inactive';
 }
 
-export type ClubStaffRole = 
-  | 'owner'
-  | 'manager'
-  | 'staff'
-  | 'coach'
-  | 'referee';
+export type ClubStaffRole = 'owner' | 'manager' | 'staff' | 'coach' | 'referee';
 
 export interface ClubMember {
   id: string;
@@ -117,11 +112,7 @@ export interface Achievement {
   details?: any;
 }
 
-export type MembershipStatus = 
-  | 'active'
-  | 'inactive'
-  | 'suspended'
-  | 'expired';
+export type MembershipStatus = 'active' | 'inactive' | 'suspended' | 'expired';
 
 export interface ClubStats {
   id: string;

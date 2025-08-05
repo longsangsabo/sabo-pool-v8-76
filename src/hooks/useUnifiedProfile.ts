@@ -86,9 +86,7 @@ export const useUnifiedProfile = () => {
               spa_points: newData.total_spa_points || 0,
             };
           }
-        } catch (newApiError) {
-
-        }
+        } catch (newApiError) {}
 
         // Fallback to legacy data fetching (ORIGINAL WORKING CODE)
         let profile = null;
@@ -261,7 +259,6 @@ export const useUnifiedProfile = () => {
       const subscription = profileAPI.subscribeToProfileUpdates(
         user.id,
         payload => {
-
           // Invalidate and refetch profile data on real-time updates
           queryClient.invalidateQueries({
             queryKey: ['unified-profile', user.id],
@@ -272,9 +269,7 @@ export const useUnifiedProfile = () => {
       return () => {
         profileAPI.unsubscribe(subscription);
       };
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }, [user?.id, queryClient, profileData?.statistics]);
 
   // Combine profile data with dashboard stats
@@ -299,9 +294,7 @@ export const useUnifiedProfile = () => {
         if (profileData?.statistics) {
           await profileAPI.refreshProfileStatistics(user.id);
         }
-      } catch (error) {
-
-      }
+      } catch (error) {}
       // Refetch the profile data
       return refetch();
     }

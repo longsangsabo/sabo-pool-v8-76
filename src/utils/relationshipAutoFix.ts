@@ -223,7 +223,6 @@ export function applyFixes(
     // In real implementation, this would write files to disk
 
     report.results.forEach(result => {
-
       // fs.writeFileSync(result.file, result.fixedContent);
     });
 
@@ -235,7 +234,6 @@ export function applyFixes(
  * CLI command để chạy auto-fix
  */
 export async function runAutoFix(preview: boolean = false) {
-
   // Mock files - in real implementation would scan project
   const mockFiles = [
     { path: 'src/hooks/useChallenges.tsx', content: '/* mock content */' },
@@ -243,14 +241,11 @@ export async function runAutoFix(preview: boolean = false) {
 
   if (preview) {
     const previewText = previewFixes(mockFiles);
-
   } else {
     const report = await applyFixes(mockFiles);
 
     if (report.success) {
-
     } else {
-
       process.exit(1);
     }
   }

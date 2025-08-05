@@ -1,5 +1,10 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { SingleEliminationMatchCard } from '@/features/tournament/components/SingleEliminationMatchCard';
 import { DoubleEliminationMatchCard } from '@/features/tournament/components/DoubleEliminationMatchCard';

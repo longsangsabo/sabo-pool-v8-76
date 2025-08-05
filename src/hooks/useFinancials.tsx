@@ -72,7 +72,6 @@ export const useFinancials = () => {
       } else {
         setTransactions(transactionData || []);
       }
-
     } catch (error) {
       console.error('Error fetching financial data:', error);
       toast({
@@ -93,7 +92,7 @@ export const useFinancials = () => {
         .from('user_wallets')
         .insert({
           user_id: user.id,
-          balance: 0
+          balance: 0,
         })
         .select()
         .single();
@@ -108,7 +107,12 @@ export const useFinancials = () => {
     }
   };
 
-  const updateBalance = async (amount: number, type: string, description: string, referenceId?: string) => {
+  const updateBalance = async (
+    amount: number,
+    type: string,
+    description: string,
+    referenceId?: string
+  ) => {
     if (!user || !wallet) return false;
 
     try {
@@ -126,9 +130,9 @@ export const useFinancials = () => {
       // Update wallet balance
       const { error: walletError } = await supabase
         .from('user_wallets')
-        .update({ 
+        .update({
           balance: newBalance,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('user_id', user.id);
 
@@ -145,7 +149,7 @@ export const useFinancials = () => {
           amount,
           transaction_type: type,
           description,
-          reference_id: referenceId
+          reference_id: referenceId,
         });
 
       if (transactionError) {
@@ -153,8 +157,8 @@ export const useFinancials = () => {
       }
 
       // Update local state
-      setWallet(prev => prev ? { ...prev, balance: newBalance } : null);
-      
+      setWallet(prev => (prev ? { ...prev, balance: newBalance } : null));
+
       toast({
         title: 'Thành công',
         description: amount > 0 ? 'Đã nạp tiền' : 'Đã trừ tiền',
@@ -175,16 +179,17 @@ export const useFinancials = () => {
   const subscribeToUpdates = () => {
     if (!user) return;
 
-    const channel = supabase.channel('financial_updates')
+    const channel = supabase
+      .channel('financial_updates')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'user_wallets',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           if (payload.new) {
             setWallet(payload.new as Wallet);
           }
@@ -196,9 +201,9 @@ export const useFinancials = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'transactions',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
+        payload => {
           if (payload.new) {
             setTransactions(prev => [payload.new as Transaction, ...prev]);
           }
@@ -216,6 +221,6 @@ export const useFinancials = () => {
     transactions,
     loading,
     updateBalance,
-    refreshData: fetchFinancialData
+    refreshData: fetchFinancialData,
   };
 };

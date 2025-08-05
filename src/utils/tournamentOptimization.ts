@@ -49,7 +49,6 @@ export const cleanupTournamentData = (tournamentId: string) => {
   Array.from(operationTimestamps.keys())
     .filter(key => key.includes(tournamentId))
     .forEach(key => operationTimestamps.delete(key));
-
 };
 
 // Debounced function utility
@@ -75,7 +74,6 @@ export const trackTournamentPerformance = (
 
   // Log slow operations
   if (duration > 2000) {
-
   }
 };
 

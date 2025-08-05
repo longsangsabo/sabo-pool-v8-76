@@ -1,7 +1,6 @@
 import React from 'react';
 
 const TestPage = () => {
-
   return (
     <div className='min-h-screen bg-green-900 text-white flex items-center justify-center'>
       <div className='text-center'>

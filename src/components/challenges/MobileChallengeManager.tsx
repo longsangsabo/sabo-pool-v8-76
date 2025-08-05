@@ -47,7 +47,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
   });
 
   // Enhanced debug: Check what challenges we have with profile details
-
+  console.log('📱 MobileChallengeManager Debug:', {
     totalChallenges: challenges.length,
     currentUser: user?.id?.slice(-8),
     challengeBreakdown: {
@@ -106,7 +106,7 @@ const MobileChallengeManager: React.FC<MobileChallengeManagerProps> = ({
       const shouldShow = isOpen && isNotMyChallenge;
 
       if (isOpen && !isNotMyChallenge) {
-
+        console.log('🔍 Found my own open challenge:', {
           id: c.id?.slice(-8),
           challenger:
             c.challenger_profile?.display_name ||

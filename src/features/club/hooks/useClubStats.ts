@@ -23,16 +23,20 @@ export const useClubStats = () => {
       // Process data for charts
       return {
         labels: data.map(item => item.date),
-        datasets: [{
-          label: 'Doanh thu',
-          data: data.map(item => item.amount),
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgb(75, 192, 192)',
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: 'Doanh thu',
+            data: data.map(item => item.amount),
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 1,
+          },
+        ],
       };
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load revenue data');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load revenue data'
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -52,15 +56,19 @@ export const useClubStats = () => {
 
       return {
         labels: data.map(item => item.date),
-        datasets: [{
-          label: 'Thành viên hoạt động',
-          data: data.map(item => item.active_members),
-          borderColor: 'rgb(54, 162, 235)',
-          tension: 0.1
-        }]
+        datasets: [
+          {
+            label: 'Thành viên hoạt động',
+            data: data.map(item => item.active_members),
+            borderColor: 'rgb(54, 162, 235)',
+            tension: 0.1,
+          },
+        ],
       };
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load membership data');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load membership data'
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -80,16 +88,22 @@ export const useClubStats = () => {
 
       return {
         labels: data.map(item => `${item.hour}:00`),
-        datasets: [{
-          label: 'Tỷ lệ sử dụng (%)',
-          data: data.map(item => item.utilization_rate),
-          backgroundColor: 'rgba(153, 102, 255, 0.2)',
-          borderColor: 'rgb(153, 102, 255)',
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: 'Tỷ lệ sử dụng (%)',
+            data: data.map(item => item.utilization_rate),
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgb(153, 102, 255)',
+            borderWidth: 1,
+          },
+        ],
       };
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load table utilization data');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Failed to load table utilization data'
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -102,6 +116,6 @@ export const useClubStats = () => {
     stats,
     getRevenueData,
     getMembershipData,
-    getTableUtilization
+    getTableUtilization,
   };
 };

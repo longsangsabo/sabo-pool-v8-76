@@ -40,7 +40,9 @@ export const useChallengeBetting = () => {
   const { toast } = useToast();
   const { updateBalance, refreshData: refreshFinancials } = useFinancials();
   const [userBets, setUserBets] = useState<ChallengeBet[]>([]);
-  const [bettableChallenges, setBettableChallenges] = useState<BettableChallenge[]>([]);
+  const [bettableChallenges, setBettableChallenges] = useState<
+    BettableChallenge[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,7 +61,8 @@ export const useChallengeBetting = () => {
       // Fetch active challenges available for betting
       const { data: challengeData, error: challengeError } = await supabase
         .from('challenges')
-        .select(`
+        .select(
+          `
           id,
           challenge_type,
           bet_amount,
@@ -67,7 +70,8 @@ export const useChallengeBetting = () => {
           created_at,
           challenger:profiles!challenges_challenger_id_fkey(id, username, avatar_url),
           opponent:profiles!challenges_opponent_id_fkey(id, username, avatar_url)
-        `)
+        `
+        )
         .in('status', ['active', 'in_progress'])
         .order('created_at', { ascending: false });
 
@@ -80,7 +84,8 @@ export const useChallengeBetting = () => {
       // Fetch user's betting history
       const { data: betData, error: betError } = await supabase
         .from('challenge_bets')
-        .select(`
+        .select(
+          `
           *,
           challenge:challenges(
             id,
@@ -89,7 +94,8 @@ export const useChallengeBetting = () => {
             challenger:profiles!challenges_challenger_id_fkey(username),
             opponent:profiles!challenges_opponent_id_fkey(username)
           )
-        `)
+        `
+        )
         .eq('bettor_id', user.id)
         .order('created_at', { ascending: false });
 
@@ -98,7 +104,6 @@ export const useChallengeBetting = () => {
       } else {
         setUserBets(betData || []);
       }
-
     } catch (error) {
       console.error('Error fetching betting data:', error);
       toast({
@@ -112,8 +117,8 @@ export const useChallengeBetting = () => {
   };
 
   const placeBet = async (
-    challengeId: string, 
-    betOnUserId: string, 
+    challengeId: string,
+    betOnUserId: string,
     betAmount: number
   ): Promise<boolean> => {
     if (!user) return false;
@@ -130,19 +135,17 @@ export const useChallengeBetting = () => {
       if (!success) return false;
 
       // Place the bet
-      const { error: betError } = await supabase
-        .from('challenge_bets')
-        .insert({
-          challenge_id: challengeId,
-          bettor_id: user.id,
-          bet_amount: betAmount,
-          bet_on_user_id: betOnUserId,
-          status: 'active'
-        });
+      const { error: betError } = await supabase.from('challenge_bets').insert({
+        challenge_id: challengeId,
+        bettor_id: user.id,
+        bet_amount: betAmount,
+        bet_on_user_id: betOnUserId,
+        status: 'active',
+      });
 
       if (betError) {
         console.error('Error placing bet:', betError);
-        
+
         // Refund if bet placement failed
         await updateBalance(
           betAmount,
@@ -259,15 +262,19 @@ export const useChallengeBetting = () => {
     const activeBets = userBets.filter(bet => bet.status === 'active');
     const wonBets = userBets.filter(bet => bet.status === 'won');
     const lostBets = userBets.filter(bet => bet.status === 'lost');
-    
-    const totalBetAmount = userBets.reduce((sum, bet) => sum + bet.bet_amount, 0);
+
+    const totalBetAmount = userBets.reduce(
+      (sum, bet) => sum + bet.bet_amount,
+      0
+    );
     const totalWinnings = wonBets.reduce((sum, bet) => sum + bet.payout, 0);
     const totalLosses = lostBets.reduce((sum, bet) => sum + bet.bet_amount, 0);
     const netProfit = totalWinnings - totalLosses;
-    
-    const winRate = userBets.length > 0 
-      ? (wonBets.length / (wonBets.length + lostBets.length)) * 100 
-      : 0;
+
+    const winRate =
+      userBets.length > 0
+        ? (wonBets.length / (wonBets.length + lostBets.length)) * 100
+        : 0;
 
     return {
       activeBets: activeBets.length,
@@ -276,21 +283,22 @@ export const useChallengeBetting = () => {
       totalBetAmount,
       totalWinnings,
       totalLosses,
-      netProfit
+      netProfit,
     };
   };
 
   const subscribeToBettingUpdates = () => {
     if (!user) return;
 
-    const channel = supabase.channel('betting_updates')
+    const channel = supabase
+      .channel('betting_updates')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'challenge_bets',
-          filter: `bettor_id=eq.${user.id}`
+          filter: `bettor_id=eq.${user.id}`,
         },
         () => {
           fetchBettingData();
@@ -301,7 +309,7 @@ export const useChallengeBetting = () => {
         {
           event: '*',
           schema: 'public',
-          table: 'challenges'
+          table: 'challenges',
         },
         () => {
           fetchBettingData();
@@ -321,6 +329,6 @@ export const useChallengeBetting = () => {
     placeBet,
     cancelBet,
     getBettingStats,
-    refreshData: fetchBettingData
+    refreshData: fetchBettingData,
   };
 };

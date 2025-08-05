@@ -8,7 +8,9 @@ interface AdminProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) => {
+export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({
+  children,
+}) => {
   const { user, loading: authLoading, session } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useAdminCheck();
   const location = useLocation();

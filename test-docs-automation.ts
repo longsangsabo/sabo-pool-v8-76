@@ -14,22 +14,22 @@ const path = require('path');
 export interface UserProfile {
   /** Unique user identifier */
   id: string;
-  
+
   /** User's display name */
   name: string;
-  
+
   /** User's email address */
   email: string;
-  
+
   /** User's role in the system */
   role: 'admin' | 'moderator' | 'user';
-  
+
   /** User creation timestamp */
   createdAt: Date;
-  
+
   /** Last login timestamp */
   lastLogin?: Date;
-  
+
   /** User preferences and settings */
   preferences: UserPreferences;
 }
@@ -42,17 +42,17 @@ export interface UserProfile {
 export interface UserPreferences {
   /** Preferred theme */
   theme: 'light' | 'dark' | 'auto';
-  
+
   /** Language preference */
   language: string;
-  
+
   /** Email notification settings */
   notifications: {
     email: boolean;
     push: boolean;
     digest: boolean;
   };
-  
+
   /** Dashboard layout preferences */
   dashboard: {
     layout: 'grid' | 'list';
@@ -90,18 +90,18 @@ export async function createUserProfile(userData: {
       notifications: {
         email: true,
         push: true,
-        digest: false
+        digest: false,
       },
       dashboard: {
         layout: 'grid',
-        itemsPerPage: 20
-      }
-    }
+        itemsPerPage: 20,
+      },
+    },
   };
-  
+
   // Save to database
   await saveUserProfile(profile);
-  
+
   return profile;
 }
 
@@ -112,23 +112,23 @@ export async function createUserProfile(userData: {
  * @returns Promise resolving to updated UserProfile
  */
 export async function updateUserPreferences(
-  userId: string, 
+  userId: string,
   preferences: Partial<UserPreferences>
 ): Promise<UserProfile> {
   const user = await getUserProfile(userId);
-  
+
   if (!user) {
     throw new Error(`User with ID ${userId} not found`);
   }
-  
+
   // Merge preferences
   user.preferences = {
     ...user.preferences,
-    ...preferences
+    ...preferences,
   };
-  
+
   await saveUserProfile(user);
-  
+
   return user;
 }
 

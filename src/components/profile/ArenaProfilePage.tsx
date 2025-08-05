@@ -6,7 +6,6 @@ import { ArenaNavigation } from './arena/ArenaNavigation';
 import { Loader2 } from 'lucide-react';
 
 const ArenaProfilePage: React.FC = () => {
-
   const { data: profile, isLoading, error } = useUnifiedProfile();
 
   if (isLoading) {

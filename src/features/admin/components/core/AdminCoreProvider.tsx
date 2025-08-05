@@ -25,7 +25,7 @@ export function AdminCoreProvider({ children }: AdminCoreProviderProps) {
     permissions,
     notifications,
     actions,
-    user: permissions.user
+    user: permissions.user,
   };
 
   return (

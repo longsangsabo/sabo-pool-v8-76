@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Switch } from '@/shared/components/ui/switch';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Badge } from '@/shared/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Separator } from '@/shared/components/ui/separator';
-import { 
-  Settings, 
-  Shield, 
-  Bell, 
-  Globe, 
+import {
+  Settings,
+  Shield,
+  Bell,
+  Globe,
   Database,
   Save,
   RefreshCw,
@@ -30,7 +40,7 @@ import {
   Unlock,
   Key,
   Server,
-  Zap
+  Zap,
 } from 'lucide-react';
 import { AdminCoreProvider } from '@/features/admin/components/core/AdminCoreProvider';
 import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
@@ -59,7 +69,9 @@ const AdminSettingsNew = () => {
   const { t } = useTranslation();
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [showSensitive, setShowSensitive] = useState<Record<string, boolean>>({});
+  const [showSensitive, setShowSensitive] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // Mock settings data - would come from API in real app
   const [settingSections, setSettingSections] = useState<SettingSection[]>([
@@ -75,21 +87,21 @@ const AdminSettingsNew = () => {
           description: 'The name displayed throughout the application',
           type: 'text',
           value: 'Sabo Pool Arena Hub',
-          required: true
+          required: true,
         },
         {
           key: 'maintenance_mode',
           label: 'Maintenance Mode',
           description: 'Enable to put the application in maintenance mode',
           type: 'boolean',
-          value: false
+          value: false,
         },
         {
           key: 'max_tournaments_per_user',
           label: 'Max Tournaments per User',
           description: 'Maximum number of active tournaments per user',
           type: 'number',
-          value: 5
+          value: 5,
         },
         {
           key: 'default_language',
@@ -100,10 +112,10 @@ const AdminSettingsNew = () => {
           options: [
             { label: 'Vietnamese', value: 'vi' },
             { label: 'English', value: 'en' },
-            { label: 'Japanese', value: 'ja' }
-          ]
-        }
-      ]
+            { label: 'Japanese', value: 'ja' },
+          ],
+        },
+      ],
     },
     {
       id: 'security',
@@ -118,37 +130,37 @@ const AdminSettingsNew = () => {
           type: 'text',
           value: '*********************',
           sensitive: true,
-          required: true
+          required: true,
         },
         {
           key: 'session_timeout',
           label: 'Session Timeout (minutes)',
           description: 'Automatic logout time for inactive sessions',
           type: 'number',
-          value: 60
+          value: 60,
         },
         {
           key: 'password_min_length',
           label: 'Minimum Password Length',
           description: 'Minimum required password length',
           type: 'number',
-          value: 8
+          value: 8,
         },
         {
           key: 'two_factor_required',
           label: 'Require Two-Factor Authentication',
           description: 'Force all users to enable 2FA',
           type: 'boolean',
-          value: false
+          value: false,
         },
         {
           key: 'allowed_login_attempts',
           label: 'Max Login Attempts',
           description: 'Maximum failed login attempts before account lock',
           type: 'number',
-          value: 5
-        }
-      ]
+          value: 5,
+        },
+      ],
     },
     {
       id: 'notifications',
@@ -161,28 +173,28 @@ const AdminSettingsNew = () => {
           label: 'Email Notifications',
           description: 'Enable system email notifications',
           type: 'boolean',
-          value: true
+          value: true,
         },
         {
           key: 'smtp_host',
           label: 'SMTP Host',
           description: 'Email server hostname',
           type: 'text',
-          value: 'smtp.gmail.com'
+          value: 'smtp.gmail.com',
         },
         {
           key: 'smtp_port',
           label: 'SMTP Port',
           description: 'Email server port',
           type: 'number',
-          value: 587
+          value: 587,
         },
         {
           key: 'smtp_username',
           label: 'SMTP Username',
           description: 'Email server username',
           type: 'text',
-          value: 'admin@sabopool.com'
+          value: 'admin@sabopool.com',
         },
         {
           key: 'smtp_password',
@@ -190,16 +202,16 @@ const AdminSettingsNew = () => {
           description: 'Email server password',
           type: 'text',
           value: '*********************',
-          sensitive: true
+          sensitive: true,
         },
         {
           key: 'push_notifications',
           label: 'Push Notifications',
           description: 'Enable mobile push notifications',
           type: 'boolean',
-          value: true
-        }
-      ]
+          value: true,
+        },
+      ],
     },
     {
       id: 'database',
@@ -212,7 +224,7 @@ const AdminSettingsNew = () => {
           label: 'Automatic Backups',
           description: 'Enable automatic database backups',
           type: 'boolean',
-          value: true
+          value: true,
         },
         {
           key: 'db_backup_frequency',
@@ -224,24 +236,24 @@ const AdminSettingsNew = () => {
             { label: 'Every 6 hours', value: '6h' },
             { label: 'Daily', value: 'daily' },
             { label: 'Weekly', value: 'weekly' },
-            { label: 'Monthly', value: 'monthly' }
-          ]
+            { label: 'Monthly', value: 'monthly' },
+          ],
         },
         {
           key: 'db_connection_pool_size',
           label: 'Connection Pool Size',
           description: 'Maximum database connections',
           type: 'number',
-          value: 20
+          value: 20,
         },
         {
           key: 'db_query_timeout',
           label: 'Query Timeout (seconds)',
           description: 'Maximum time for database queries',
           type: 'number',
-          value: 30
-        }
-      ]
+          value: 30,
+        },
+      ],
     },
     {
       id: 'api',
@@ -254,21 +266,21 @@ const AdminSettingsNew = () => {
           label: 'API Rate Limit (requests/minute)',
           description: 'Maximum API requests per minute per user',
           type: 'number',
-          value: 100
+          value: 100,
         },
         {
           key: 'api_key_required',
           label: 'Require API Key',
           description: 'Require API key for external access',
           type: 'boolean',
-          value: true
+          value: true,
         },
         {
           key: 'cors_enabled',
           label: 'Enable CORS',
           description: 'Allow cross-origin requests',
           type: 'boolean',
-          value: true
+          value: true,
         },
         {
           key: 'api_version',
@@ -279,24 +291,22 @@ const AdminSettingsNew = () => {
           options: [
             { label: 'Version 1.0', value: 'v1' },
             { label: 'Version 2.0', value: 'v2' },
-            { label: 'Version 3.0 (Beta)', value: 'v3' }
-          ]
-        }
-      ]
-    }
+            { label: 'Version 3.0 (Beta)', value: 'v3' },
+          ],
+        },
+      ],
+    },
   ]);
 
   const updateSetting = (sectionId: string, settingKey: string, value: any) => {
-    setSettingSections(prev => 
-      prev.map(section => 
-        section.id === sectionId 
+    setSettingSections(prev =>
+      prev.map(section =>
+        section.id === sectionId
           ? {
               ...section,
               settings: section.settings.map(setting =>
-                setting.key === settingKey 
-                  ? { ...setting, value }
-                  : setting
-              )
+                setting.key === settingKey ? { ...setting, value } : setting
+              ),
             }
           : section
       )
@@ -306,7 +316,7 @@ const AdminSettingsNew = () => {
   const toggleSensitiveVisibility = (key: string) => {
     setShowSensitive(prev => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: !prev[key],
     }));
   };
 
@@ -325,15 +335,23 @@ const AdminSettingsNew = () => {
   };
 
   const handleExportSettings = () => {
-    const exportData = settingSections.reduce((acc, section) => {
-      acc[section.id] = section.settings.reduce((settings, setting) => {
-        settings[setting.key] = setting.value;
-        return settings;
-      }, {} as Record<string, any>);
-      return acc;
-    }, {} as Record<string, any>);
+    const exportData = settingSections.reduce(
+      (acc, section) => {
+        acc[section.id] = section.settings.reduce(
+          (settings, setting) => {
+            settings[setting.key] = setting.value;
+            return settings;
+          },
+          {} as Record<string, any>
+        );
+        return acc;
+      },
+      {} as Record<string, any>
+    );
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -345,30 +363,36 @@ const AdminSettingsNew = () => {
 
   const renderSetting = (setting: Setting, sectionId: string) => {
     const isVisible = showSensitive[setting.key];
-    
+
     switch (setting.type) {
       case 'boolean':
         return (
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <Label className="text-sm font-medium">{setting.label}</Label>
-              <p className="text-xs text-muted-foreground">{setting.description}</p>
+          <div className='flex items-center justify-between'>
+            <div className='space-y-1'>
+              <Label className='text-sm font-medium'>{setting.label}</Label>
+              <p className='text-xs text-muted-foreground'>
+                {setting.description}
+              </p>
             </div>
             <Switch
               checked={setting.value}
-              onCheckedChange={(checked) => updateSetting(sectionId, setting.key, checked)}
+              onCheckedChange={checked =>
+                updateSetting(sectionId, setting.key, checked)
+              }
             />
           </div>
         );
 
       case 'select':
         return (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">{setting.label}</Label>
+          <div className='space-y-2'>
+            <Label className='text-sm font-medium'>{setting.label}</Label>
             <select
               value={setting.value}
-              onChange={(e) => updateSetting(sectionId, setting.key, e.target.value)}
-              className="w-full px-3 py-2 border rounded-md text-sm"
+              onChange={e =>
+                updateSetting(sectionId, setting.key, e.target.value)
+              }
+              className='w-full px-3 py-2 border rounded-md text-sm'
             >
               {setting.options?.map(option => (
                 <option key={option.value} value={option.value}>
@@ -376,76 +400,92 @@ const AdminSettingsNew = () => {
                 </option>
               ))}
             </select>
-            <p className="text-xs text-muted-foreground">{setting.description}</p>
+            <p className='text-xs text-muted-foreground'>
+              {setting.description}
+            </p>
           </div>
         );
 
       case 'textarea':
         return (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">{setting.label}</Label>
+          <div className='space-y-2'>
+            <Label className='text-sm font-medium'>{setting.label}</Label>
             <Textarea
               value={setting.value}
-              onChange={(e) => updateSetting(sectionId, setting.key, e.target.value)}
+              onChange={e =>
+                updateSetting(sectionId, setting.key, e.target.value)
+              }
               placeholder={setting.description}
               rows={3}
             />
-            <p className="text-xs text-muted-foreground">{setting.description}</p>
+            <p className='text-xs text-muted-foreground'>
+              {setting.description}
+            </p>
           </div>
         );
 
       default: // text, number
         return (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">
+          <div className='space-y-2'>
+            <Label className='text-sm font-medium'>
               {setting.label}
-              {setting.required && <span className="text-red-500 ml-1">*</span>}
+              {setting.required && <span className='text-red-500 ml-1'>*</span>}
             </Label>
-            <div className="relative">
+            <div className='relative'>
               <Input
-                type={setting.sensitive && !isVisible ? 'password' : setting.type === 'number' ? 'number' : 'text'}
+                type={
+                  setting.sensitive && !isVisible
+                    ? 'password'
+                    : setting.type === 'number'
+                      ? 'number'
+                      : 'text'
+                }
                 value={setting.value}
-                onChange={(e) => updateSetting(sectionId, setting.key, e.target.value)}
+                onChange={e =>
+                  updateSetting(sectionId, setting.key, e.target.value)
+                }
                 placeholder={setting.description}
-                className="pr-10"
+                className='pr-10'
               />
               {setting.sensitive && (
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3"
+                  type='button'
+                  variant='ghost'
+                  size='sm'
+                  className='absolute right-0 top-0 h-full px-3'
                   onClick={() => toggleSensitiveVisibility(setting.key)}
                 >
-                  {isVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {isVisible ? (
+                    <EyeOff className='h-4 w-4' />
+                  ) : (
+                    <Eye className='h-4 w-4' />
+                  )}
                 </Button>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">{setting.description}</p>
+            <p className='text-xs text-muted-foreground'>
+              {setting.description}
+            </p>
           </div>
         );
     }
   };
 
   const pageActions = (
-    <div className="flex items-center gap-2">
-      <Button variant="outline" size="sm" onClick={handleExportSettings}>
-        <Download className="h-4 w-4 mr-2" />
+    <div className='flex items-center gap-2'>
+      <Button variant='outline' size='sm' onClick={handleExportSettings}>
+        <Download className='h-4 w-4 mr-2' />
         Export
       </Button>
-      <Button variant="outline" size="sm">
-        <Upload className="h-4 w-4 mr-2" />
+      <Button variant='outline' size='sm'>
+        <Upload className='h-4 w-4 mr-2' />
         Import
       </Button>
-      <Button 
-        onClick={handleSave} 
-        disabled={saving}
-        size="sm"
-      >
+      <Button onClick={handleSave} disabled={saving} size='sm'>
         {saving ? (
-          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+          <RefreshCw className='h-4 w-4 mr-2 animate-spin' />
         ) : (
-          <Save className="h-4 w-4 mr-2" />
+          <Save className='h-4 w-4 mr-2' />
         )}
         {saving ? 'Saving...' : 'Save Changes'}
       </Button>
@@ -454,20 +494,21 @@ const AdminSettingsNew = () => {
 
   return (
     <AdminCoreProvider>
-            <AdminPageLayout
+      <AdminPageLayout
         title={t('settings.title')}
         description={t('settings.description')}
         actions={pageActions}
       >
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Save Status */}
           {lastSaved && (
-            <Card className="border-green-200 bg-green-50">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 text-green-700">
-                  <CheckCircle className="h-4 w-4" />
-                  <span className="text-sm font-medium">
-                    Settings saved successfully at {lastSaved.toLocaleTimeString()}
+            <Card className='border-green-200 bg-green-50'>
+              <CardContent className='p-4'>
+                <div className='flex items-center gap-2 text-green-700'>
+                  <CheckCircle className='h-4 w-4' />
+                  <span className='text-sm font-medium'>
+                    Settings saved successfully at{' '}
+                    {lastSaved.toLocaleTimeString()}
                   </span>
                 </div>
               </CardContent>
@@ -475,31 +516,43 @@ const AdminSettingsNew = () => {
           )}
 
           {/* Settings Tabs */}
-          <Tabs defaultValue={settingSections[0]?.id} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
-              {settingSections.map((section) => (
-                <TabsTrigger key={section.id} value={section.id} className="flex items-center gap-2">
-                  <section.icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{section.title}</span>
+          <Tabs defaultValue={settingSections[0]?.id} className='space-y-6'>
+            <TabsList className='grid w-full grid-cols-5'>
+              {settingSections.map(section => (
+                <TabsTrigger
+                  key={section.id}
+                  value={section.id}
+                  className='flex items-center gap-2'
+                >
+                  <section.icon className='h-4 w-4' />
+                  <span className='hidden sm:inline'>{section.title}</span>
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            {settingSections.map((section) => (
-              <TabsContent key={section.id} value={section.id} className="space-y-6">
+            {settingSections.map(section => (
+              <TabsContent
+                key={section.id}
+                value={section.id}
+                className='space-y-6'
+              >
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <section.icon className="h-5 w-5" />
+                    <CardTitle className='flex items-center gap-2'>
+                      <section.icon className='h-5 w-5' />
                       {section.title}
                     </CardTitle>
-                    <p className="text-sm text-muted-foreground">{section.description}</p>
+                    <p className='text-sm text-muted-foreground'>
+                      {section.description}
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-6">
+                  <CardContent className='space-y-6'>
                     {section.settings.map((setting, index) => (
                       <div key={setting.key}>
                         {renderSetting(setting, section.id)}
-                        {index < section.settings.length - 1 && <Separator className="my-4" />}
+                        {index < section.settings.length - 1 && (
+                          <Separator className='my-4' />
+                        )}
                       </div>
                     ))}
                   </CardContent>
@@ -509,15 +562,16 @@ const AdminSettingsNew = () => {
           </Tabs>
 
           {/* Security Warning */}
-          <Card className="border-yellow-200 bg-yellow-50">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                <div className="text-yellow-800">
-                  <p className="font-medium text-sm">Security Notice</p>
-                  <p className="text-xs mt-1">
-                    Changes to security settings may affect user access and system functionality. 
-                    Please review all changes carefully before saving.
+          <Card className='border-yellow-200 bg-yellow-50'>
+            <CardContent className='p-4'>
+              <div className='flex items-start gap-3'>
+                <AlertTriangle className='h-5 w-5 text-yellow-600 mt-0.5' />
+                <div className='text-yellow-800'>
+                  <p className='font-medium text-sm'>Security Notice</p>
+                  <p className='text-xs mt-1'>
+                    Changes to security settings may affect user access and
+                    system functionality. Please review all changes carefully
+                    before saving.
                   </p>
                 </div>
               </div>

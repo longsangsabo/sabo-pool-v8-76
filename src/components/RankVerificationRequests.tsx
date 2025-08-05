@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Badge } from '@/shared/components/ui/badge';
@@ -60,7 +65,6 @@ const RankVerificationRequests = () => {
         .single();
 
       if (clubError || !clubData) {
-
         setLoading(false);
         return;
       }
@@ -241,7 +245,6 @@ const RankVerificationRequests = () => {
                   verified_by: user?.id,
                 },
               });
-
             } catch (postError) {
               console.error('Error creating feed post:', postError);
               // Don't block the main flow, just log the error

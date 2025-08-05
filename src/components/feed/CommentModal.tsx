@@ -7,7 +7,11 @@ import {
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { Send, X, Heart, Reply, Flag } from 'lucide-react';
@@ -147,7 +151,6 @@ export const CommentModal: React.FC<CommentModalProps> = ({
 
   const handleReportComment = (commentId: string) => {
     // Handle report comment
-
   };
 
   const renderComment = (comment: Comment, isReply = false) => (

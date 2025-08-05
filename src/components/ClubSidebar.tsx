@@ -144,7 +144,10 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
                   }
                 >
                   <item.icon
-                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                    className={cn(
+                      'shrink-0',
+                      collapsed ? 'w-5 h-5' : 'w-4 h-4'
+                    )}
                   />
                   {!collapsed && (
                     <div className='flex-1 min-w-0'>
@@ -192,7 +195,10 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
                   }
                 >
                   <item.icon
-                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                    className={cn(
+                      'shrink-0',
+                      collapsed ? 'w-5 h-5' : 'w-4 h-4'
+                    )}
                   />
                   {!collapsed && (
                     <div className='flex-1 min-w-0'>
@@ -230,7 +236,10 @@ const ClubSidebar: React.FC<ClubSidebarProps> = ({
                   }
                 >
                   <item.icon
-                    className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')}
+                    className={cn(
+                      'shrink-0',
+                      collapsed ? 'w-5 h-5' : 'w-4 h-4'
+                    )}
                   />
                   {!collapsed && (
                     <div className='flex-1 min-w-0'>

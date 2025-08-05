@@ -1,5 +1,10 @@
 import React, { useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Trophy, Users, Target, Zap, RefreshCw, Wrench } from 'lucide-react';
@@ -51,7 +56,6 @@ export const SABODoubleEliminationViewer: React.FC<
     const restoreScrollPosition = () => {
       const targetPosition = scrollPositionRef.current;
       window.scrollTo({ top: targetPosition, behavior: 'instant' });
-
     };
 
     // Immediate restore

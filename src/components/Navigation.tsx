@@ -24,7 +24,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { checkUserAdminStatus } from '@/utils/adminHelpers';
 import { supabase } from '@/integrations/supabase/client';
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from '@/shared/components/ui/avatar';
 import { Badge } from '@/shared/components/ui/badge';
 import {
   DropdownMenu,
@@ -99,7 +103,6 @@ const Navigation = () => {
 
     // Add timeout to prevent hanging
     const timeoutId = setTimeout(() => {
-
       setIsClubOwner(false);
       setIsAdmin(false);
     }, 5000); // 5 second timeout

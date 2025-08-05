@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { Users, Bell } from 'lucide-react';
 import ClubMembersTab from '@/components/ClubMembersTab';
 import ClubNotifications from '@/components/ClubNotifications';

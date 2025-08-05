@@ -2,24 +2,20 @@
 // This can be called from browser console if UI doesn't update
 
 export const debugTournamentRefresh = () => {
-
   // Method 1: Clear React Query cache
   if ((window as any).queryClient) {
-
     (window as any).queryClient.invalidateQueries();
     (window as any).queryClient.refetchQueries();
   }
 
   // Method 2: Clear Supabase channels and reconnect
   if ((window as any).supabase) {
-
     const supabase = (window as any).supabase;
     supabase.removeAllChannels();
   }
 
   // Method 3: Force page reload
   setTimeout(() => {
-
     window.location.reload();
   }, 1000);
 };
@@ -47,7 +43,6 @@ export const logTournamentState = async () => {
       .limit(1);
 
     if (!tournaments || tournaments.length === 0) {
-
       return;
     }
 
@@ -61,15 +56,15 @@ export const logTournamentState = async () => {
       .order('round_number')
       .order('match_number');
 
-      matches?.map(m => ({
-        Round: m.round_number,
-        Match: m.match_number,
-        Status: m.status,
-        Score: `${m.score_player1 || 0} - ${m.score_player2 || 0}`,
-        Winner: m.winner_id ? 'Yes' : 'No',
-        Player1: m.player1_id ? 'Assigned' : 'TBD',
-        Player2: m.player2_id ? 'Assigned' : 'TBD',
-      }));
+    matches?.map(m => ({
+      Round: m.round_number,
+      Match: m.match_number,
+      Status: m.status,
+      Score: `${m.score_player1 || 0} - ${m.score_player2 || 0}`,
+      Winner: m.winner_id ? 'Yes' : 'No',
+      Player1: m.player1_id ? 'Assigned' : 'TBD',
+      Player2: m.player2_id ? 'Assigned' : 'TBD',
+    }));
   } catch (error) {
     console.error('❌ Error fetching tournament state:', error);
   }

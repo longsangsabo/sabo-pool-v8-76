@@ -27,7 +27,6 @@ export const useRankUpdates = () => {
             notification.type === 'rank_approved' ||
             notification.type === 'rank_result'
           ) {
-
             const metadata = notification.metadata || {};
             const rank = metadata.rank || 'Unknown';
             const spaReward = metadata.spa_reward || 0;
@@ -62,12 +61,9 @@ export const useRankUpdates = () => {
           }
         }
       )
-      .subscribe(status => {
-
-      });
+      .subscribe(status => {});
 
     return () => {
-
       supabase.removeChannel(notificationChannel);
     };
   }, [user]);

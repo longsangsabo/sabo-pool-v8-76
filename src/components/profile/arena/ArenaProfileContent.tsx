@@ -1,6 +1,11 @@
 import React from 'react';
 import { useOptimizedResponsive } from '@/hooks/useOptimizedResponsive';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import ActivitiesTab from '../ActivitiesTab';
 import EditableProfileForm from '../EditableProfileForm';
 import RankVerificationForm from '@/components/RankVerificationForm';

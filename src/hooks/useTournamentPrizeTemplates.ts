@@ -42,7 +42,12 @@ export const useTournamentPrizeTemplates = () => {
     fetchTemplates();
   }, []);
 
-  const createTemplate = async (templateData: Omit<TournamentPrizeTemplate, 'id' | 'created_at' | 'updated_at'>) => {
+  const createTemplate = async (
+    templateData: Omit<
+      TournamentPrizeTemplate,
+      'id' | 'created_at' | 'updated_at'
+    >
+  ) => {
     try {
       const { data, error } = await supabase
         .from('tournament_prize_templates')
@@ -56,11 +61,18 @@ export const useTournamentPrizeTemplates = () => {
       toast.success('Tournament prize template created successfully');
     } catch (error) {
       console.error('Error creating tournament prize template:', error);
-      toast.error('Failed to create tournament prize template. Make sure the tournament_prize_templates table exists.');
+      toast.error(
+        'Failed to create tournament prize template. Make sure the tournament_prize_templates table exists.'
+      );
     }
   };
 
-  const updateTemplate = async (id: string, templateData: Partial<Omit<TournamentPrizeTemplate, 'id' | 'created_at' | 'updated_at'>>) => {
+  const updateTemplate = async (
+    id: string,
+    templateData: Partial<
+      Omit<TournamentPrizeTemplate, 'id' | 'created_at' | 'updated_at'>
+    >
+  ) => {
     try {
       const { error } = await supabase
         .from('tournament_prize_templates')
@@ -73,7 +85,9 @@ export const useTournamentPrizeTemplates = () => {
       toast.success('Tournament prize template updated successfully');
     } catch (error) {
       console.error('Error updating tournament prize template:', error);
-      toast.error('Failed to update tournament prize template. Make sure the tournament_prize_templates table exists.');
+      toast.error(
+        'Failed to update tournament prize template. Make sure the tournament_prize_templates table exists.'
+      );
     }
   };
 
@@ -90,7 +104,9 @@ export const useTournamentPrizeTemplates = () => {
       toast.success('Tournament prize template deleted successfully');
     } catch (error) {
       console.error('Error deleting tournament prize template:', error);
-      toast.error('Failed to delete tournament prize template. Make sure the tournament_prize_templates table exists.');
+      toast.error(
+        'Failed to delete tournament prize template. Make sure the tournament_prize_templates table exists.'
+      );
     }
   };
 

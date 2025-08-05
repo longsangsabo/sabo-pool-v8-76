@@ -264,7 +264,6 @@ class AnalyticsTracker {
       }));
 
       await supabase.from('analytics_events' as any).insert(formattedEvents);
-
     } catch (error) {
       console.error('Failed to flush analytics events:', error);
       // Re-add events for retry

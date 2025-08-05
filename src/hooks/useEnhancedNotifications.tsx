@@ -144,7 +144,6 @@ export const useEnhancedNotifications = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-
           // Refresh the summary to get accurate counts and latest notifications
           fetchNotificationSummary();
 
@@ -160,7 +159,6 @@ export const useEnhancedNotifications = () => {
       .subscribe();
 
     return () => {
-
       supabase.removeChannel(channel);
     };
   }, [user?.id, fetchNotificationSummary]);

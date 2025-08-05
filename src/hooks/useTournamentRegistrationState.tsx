@@ -14,7 +14,6 @@ export const useTournamentRegistrationState = () => {
     if (!user) {
       setRegistrationState({});
       setLoading({});
-
     }
   }, [user]);
 

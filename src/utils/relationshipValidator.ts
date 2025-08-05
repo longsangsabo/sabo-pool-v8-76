@@ -199,7 +199,6 @@ export function generateReport(report: ValidationReport): string {
  * CLI command để chạy validation
  */
 export function runValidation() {
-
   // Trong thực tế, đây sẽ scan tất cả files trong project
   // Hiện tại chỉ là mock để demo
   const mockFiles = [

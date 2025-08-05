@@ -1,7 +1,12 @@
 import { usePlayerRanking } from '@/hooks/usePlayerRanking';
 import { RankProgressBar } from './RankProgressBar';
 import { SPAPointsTracker } from './SPAPointsTracker';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { RefreshCw, History, Info } from 'lucide-react';

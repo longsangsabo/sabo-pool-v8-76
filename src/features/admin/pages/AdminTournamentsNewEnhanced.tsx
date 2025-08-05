@@ -2,22 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageLayout } from '@/features/admin/components/shared/AdminPageLayout';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/shared/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Users, 
-  Trophy, 
-  DollarSign, 
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Users,
+  Trophy,
+  DollarSign,
   Calendar,
   MapPin,
   Play,
@@ -28,14 +55,25 @@ import {
   Eye,
   Settings,
   MoreHorizontal,
-  Download
+  Download,
 } from 'lucide-react';
-import { useAdminTournaments, AdminTournamentData, TournamentStats, TournamentRegistration } from '@/hooks/useAdminTournaments';
+import {
+  useAdminTournaments,
+  AdminTournamentData,
+  TournamentStats,
+  TournamentRegistration,
+} from '@/hooks/useAdminTournaments';
 import { useAdminUsers, AdminUser } from '@/hooks/useAdminUsers';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/shared/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 
 const AdminTournamentsNew = () => {
   const { t } = useTranslation();
@@ -49,7 +87,7 @@ const AdminTournamentsNew = () => {
     updateTournamentStatus,
     getTournamentStats,
     getTournamentRegistrations,
-    cancelRegistration
+    cancelRegistration,
   } = useAdminTournaments();
 
   const { users, isLoading: usersLoading } = useAdminUsers();
@@ -62,16 +100,19 @@ const AdminTournamentsNew = () => {
     cancelled: 0,
     total_participants: 0,
     total_revenue: 0,
-    avg_participants_per_tournament: 0
+    avg_participants_per_tournament: 0,
   });
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isParticipantsDialogOpen, setIsParticipantsDialogOpen] = useState(false);
+  const [isParticipantsDialogOpen, setIsParticipantsDialogOpen] =
+    useState(false);
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
   const [editingTournament, setEditingTournament] = useState<any>(null);
   const [selectedTournament, setSelectedTournament] = useState<any>(null);
-  const [tournamentRegistrations, setTournamentRegistrations] = useState<TournamentRegistration[]>([]);
+  const [tournamentRegistrations, setTournamentRegistrations] = useState<
+    TournamentRegistration[]
+  >([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [formData, setFormData] = useState<AdminTournamentData>({
@@ -92,7 +133,7 @@ const AdminTournamentsNew = () => {
     venue_address: '',
     city: '',
     district: '',
-    club_id: ''
+    club_id: '',
   });
 
   // Load statistics
@@ -130,7 +171,7 @@ const AdminTournamentsNew = () => {
       venue_address: '',
       city: '',
       district: '',
-      club_id: ''
+      club_id: '',
     });
   };
 
@@ -195,7 +236,7 @@ const AdminTournamentsNew = () => {
       venue_address: tournament.venue_address || '',
       city: '',
       district: '',
-      club_id: tournament.club_id || ''
+      club_id: tournament.club_id || '',
     });
     setIsEditDialogOpen(true);
   };
@@ -214,7 +255,10 @@ const AdminTournamentsNew = () => {
   };
 
   // Quick status change function
-  const handleQuickStatusChange = async (tournamentId: string, newStatus: string) => {
+  const handleQuickStatusChange = async (
+    tournamentId: string,
+    newStatus: string
+  ) => {
     try {
       await updateTournamentStatus(tournamentId, newStatus as any);
     } catch (error) {
@@ -236,7 +280,7 @@ const AdminTournamentsNew = () => {
         user_id: userId,
         status: 'confirmed',
         payment_status: 'pending',
-        registration_date: new Date().toISOString()
+        registration_date: new Date().toISOString(),
       }));
 
       const { error } = await supabase
@@ -246,11 +290,13 @@ const AdminTournamentsNew = () => {
       if (error) throw error;
 
       toast.success(`Đã thêm ${selectedUsers.length} người chơi vào giải đấu`);
-      
+
       // Refresh participants list
-      const updatedRegistrations = await getTournamentRegistrations(selectedTournament.id);
+      const updatedRegistrations = await getTournamentRegistrations(
+        selectedTournament.id
+      );
       setTournamentRegistrations(updatedRegistrations);
-      
+
       // Reset form
       setSelectedUsers([]);
       setUserSearchQuery('');
@@ -263,17 +309,16 @@ const AdminTournamentsNew = () => {
 
   // Open add user dialog
   const openAddUserDialog = () => {
-    
     if (usersLoading) {
       toast.error('Đang tải danh sách người dùng, vui lòng chờ...');
       return;
     }
-    
+
     if (users.length === 0) {
       toast.error('Không có dữ liệu người dùng để thêm');
       return;
     }
-    
+
     setIsAddUserDialogOpen(true);
     setSelectedUsers([]);
     setUserSearchQuery('');
@@ -281,8 +326,8 @@ const AdminTournamentsNew = () => {
 
   // Add missing function for user selection
   const toggleUserSelection = (userId: string) => {
-    setSelectedUsers(prev => 
-      prev.includes(userId) 
+    setSelectedUsers(prev =>
+      prev.includes(userId)
         ? prev.filter(id => id !== userId)
         : [...prev, userId]
     );
@@ -291,30 +336,55 @@ const AdminTournamentsNew = () => {
   // Filter users for search
   const filteredUsers = users.filter(user => {
     const searchLower = userSearchQuery.toLowerCase();
-    const alreadyRegistered = tournamentRegistrations.some(reg => reg.user_id === user.user_id);
-    
-    return !alreadyRegistered && (
-      user.full_name?.toLowerCase().includes(searchLower) ||
-      user.phone?.includes(userSearchQuery) ||
-      user.email?.toLowerCase().includes(searchLower)
+    const alreadyRegistered = tournamentRegistrations.some(
+      reg => reg.user_id === user.user_id
+    );
+
+    return (
+      !alreadyRegistered &&
+      (user.full_name?.toLowerCase().includes(searchLower) ||
+        user.phone?.includes(userSearchQuery) ||
+        user.email?.toLowerCase().includes(searchLower))
     );
   });
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      'registration_open': { variant: 'default' as const, label: 'Đang mở đăng ký', icon: Play },
-      'registration_closed': { variant: 'secondary' as const, label: 'Đóng đăng ký', icon: Pause },
-      'ongoing': { variant: 'default' as const, label: 'Đang diễn ra', icon: Play },
-      'completed': { variant: 'outline' as const, label: 'Hoàn thành', icon: CheckCircle },
-      'cancelled': { variant: 'destructive' as const, label: 'Đã hủy', icon: Square }
+      registration_open: {
+        variant: 'default' as const,
+        label: 'Đang mở đăng ký',
+        icon: Play,
+      },
+      registration_closed: {
+        variant: 'secondary' as const,
+        label: 'Đóng đăng ký',
+        icon: Pause,
+      },
+      ongoing: {
+        variant: 'default' as const,
+        label: 'Đang diễn ra',
+        icon: Play,
+      },
+      completed: {
+        variant: 'outline' as const,
+        label: 'Hoàn thành',
+        icon: CheckCircle,
+      },
+      cancelled: {
+        variant: 'destructive' as const,
+        label: 'Đã hủy',
+        icon: Square,
+      },
     };
 
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.registration_open;
+    const config =
+      statusConfig[status as keyof typeof statusConfig] ||
+      statusConfig.registration_open;
     const Icon = config.icon;
 
     return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="h-3 w-3" />
+      <Badge variant={config.variant} className='flex items-center gap-1'>
+        <Icon className='h-3 w-3' />
         {config.label}
       </Badge>
     );
@@ -323,7 +393,7 @@ const AdminTournamentsNew = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'VND',
     }).format(amount);
   };
 
@@ -338,11 +408,11 @@ const AdminTournamentsNew = () => {
 
   if (error) {
     return (
-      <AdminPageLayout title="Quản lý Giải đấu">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <p className="text-red-500 mb-2">Có lỗi xảy ra khi tải dữ liệu</p>
-            <p className="text-sm text-muted-foreground">{error}</p>
+      <AdminPageLayout title='Quản lý Giải đấu'>
+        <div className='flex items-center justify-center h-64'>
+          <div className='text-center'>
+            <p className='text-red-500 mb-2'>Có lỗi xảy ra khi tải dữ liệu</p>
+            <p className='text-sm text-muted-foreground'>{error}</p>
           </div>
         </div>
       </AdminPageLayout>
@@ -350,206 +420,278 @@ const AdminTournamentsNew = () => {
   }
 
   return (
-    <AdminPageLayout title={t('tournaments.title')}
+    <AdminPageLayout
+      title={t('tournaments.title')}
       description={t('tournaments.description')}
     >
-      <div className="space-y-6">
+      <div className='space-y-6'>
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className='flex justify-between items-center'>
           <div>
             {/* Remove title and description since they're in AdminPageLayout */}
           </div>
-          
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button onClick={resetForm}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className='h-4 w-4 mr-2' />
                 {t('tournaments.create_tournament')}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto'>
               <DialogHeader>
                 <DialogTitle>Tạo giải đấu mới</DialogTitle>
                 <DialogDescription>
                   Điền thông tin để tạo giải đấu mới
                 </DialogDescription>
               </DialogHeader>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <Label htmlFor="name">Tên giải đấu *</Label>
+
+              <div className='grid grid-cols-2 gap-4'>
+                <div className='col-span-2'>
+                  <Label htmlFor='name'>Tên giải đấu *</Label>
                   <Input
-                    id="name"
+                    id='name'
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Nhập tên giải đấu"
+                    onChange={e =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    placeholder='Nhập tên giải đấu'
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="name">{t('tournaments.tournament_name')} *</Label>
+                  <Label htmlFor='name'>
+                    {t('tournaments.tournament_name')} *
+                  </Label>
                   <Input
-                    id="name"
+                    id='name'
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onChange={e =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     placeholder={t('tournaments.tournament_name_placeholder')}
                   />
                 </div>
-                
-                <div className="col-span-2">
-                  <Label htmlFor="description">{t('tournaments.tournament_description')}</Label>
+                <div className='col-span-2'>
+                  <Label htmlFor='description'>
+                    {t('tournaments.tournament_description')}
+                  </Label>
                   <Textarea
-                    id="description"
+                    id='description'
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder={t('tournaments.tournament_description_placeholder')}
+                    onChange={e =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    placeholder={t(
+                      'tournaments.tournament_description_placeholder'
+                    )}
                   />
-                </div>                <div>
-                  <Label htmlFor="tournament_type">Loại giải đấu</Label>
-                  <Select value={formData.tournament_type} onValueChange={(value: any) => setFormData({...formData, tournament_type: value})}>
+                </div>{' '}
+                <div>
+                  <Label htmlFor='tournament_type'>Loại giải đấu</Label>
+                  <Select
+                    value={formData.tournament_type}
+                    onValueChange={(value: any) =>
+                      setFormData({ ...formData, tournament_type: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="single_elimination">Loại trực tiếp</SelectItem>
-                      <SelectItem value="double_elimination">Loại kép</SelectItem>
-                      <SelectItem value="round_robin">Vòng tròn</SelectItem>
-                      <SelectItem value="swiss">Swiss</SelectItem>
+                      <SelectItem value='single_elimination'>
+                        Loại trực tiếp
+                      </SelectItem>
+                      <SelectItem value='double_elimination'>
+                        Loại kép
+                      </SelectItem>
+                      <SelectItem value='round_robin'>Vòng tròn</SelectItem>
+                      <SelectItem value='swiss'>Swiss</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                
                 <div>
-                  <Label htmlFor="game_format">Thể thức</Label>
-                  <Select value={formData.game_format} onValueChange={(value: any) => setFormData({...formData, game_format: value})}>
+                  <Label htmlFor='game_format'>Thể thức</Label>
+                  <Select
+                    value={formData.game_format}
+                    onValueChange={(value: any) =>
+                      setFormData({ ...formData, game_format: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="8_ball">8-Ball</SelectItem>
-                      <SelectItem value="9_ball">9-Ball</SelectItem>
-                      <SelectItem value="10_ball">10-Ball</SelectItem>
-                      <SelectItem value="straight_pool">Straight Pool</SelectItem>
+                      <SelectItem value='8_ball'>8-Ball</SelectItem>
+                      <SelectItem value='9_ball'>9-Ball</SelectItem>
+                      <SelectItem value='10_ball'>10-Ball</SelectItem>
+                      <SelectItem value='straight_pool'>
+                        Straight Pool
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                
                 <div>
-                  <Label htmlFor="max_participants">{t('tournaments.max_participants')}</Label>
+                  <Label htmlFor='max_participants'>
+                    {t('tournaments.max_participants')}
+                  </Label>
                   <Input
-                    id="max_participants"
-                    type="number"
+                    id='max_participants'
+                    type='number'
                     value={formData.max_participants}
-                    onChange={(e) => setFormData({...formData, max_participants: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        max_participants: parseInt(e.target.value) || 0,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="entry_fee">{t('tournaments.entry_fee')}</Label>
+                  <Label htmlFor='entry_fee'>
+                    {t('tournaments.entry_fee')}
+                  </Label>
                   <Input
-                    id="entry_fee"
-                    type="number"
+                    id='entry_fee'
+                    type='number'
                     value={formData.entry_fee}
-                    onChange={(e) => setFormData({...formData, entry_fee: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        entry_fee: parseInt(e.target.value) || 0,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="prize_pool">Tổng giải thưởng (VND)</Label>
+                  <Label htmlFor='prize_pool'>Tổng giải thưởng (VND)</Label>
                   <Input
-                    id="prize_pool"
-                    type="number"
+                    id='prize_pool'
+                    type='number'
                     value={formData.prize_pool}
-                    onChange={(e) => setFormData({...formData, prize_pool: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        prize_pool: parseInt(e.target.value) || 0,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="first_prize">Giải nhất (VND)</Label>
+                  <Label htmlFor='first_prize'>Giải nhất (VND)</Label>
                   <Input
-                    id="first_prize"
-                    type="number"
+                    id='first_prize'
+                    type='number'
                     value={formData.first_prize}
-                    onChange={(e) => setFormData({...formData, first_prize: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        first_prize: parseInt(e.target.value) || 0,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="registration_start">Bắt đầu đăng ký</Label>
+                  <Label htmlFor='registration_start'>Bắt đầu đăng ký</Label>
                   <Input
-                    id="registration_start"
-                    type="datetime-local"
+                    id='registration_start'
+                    type='datetime-local'
                     value={formData.registration_start}
-                    onChange={(e) => setFormData({...formData, registration_start: e.target.value})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        registration_start: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="registration_end">Kết thúc đăng ký</Label>
+                  <Label htmlFor='registration_end'>Kết thúc đăng ký</Label>
                   <Input
-                    id="registration_end"
-                    type="datetime-local"
+                    id='registration_end'
+                    type='datetime-local'
                     value={formData.registration_end}
-                    onChange={(e) => setFormData({...formData, registration_end: e.target.value})}
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        registration_end: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="start_date">Ngày bắt đầu giải</Label>
+                  <Label htmlFor='start_date'>Ngày bắt đầu giải</Label>
                   <Input
-                    id="start_date"
-                    type="datetime-local"
+                    id='start_date'
+                    type='datetime-local'
                     value={formData.start_date}
-                    onChange={(e) => setFormData({...formData, start_date: e.target.value})}
+                    onChange={e =>
+                      setFormData({ ...formData, start_date: e.target.value })
+                    }
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="end_date">Ngày kết thúc giải</Label>
+                  <Label htmlFor='end_date'>Ngày kết thúc giải</Label>
                   <Input
-                    id="end_date"
-                    type="datetime-local"
+                    id='end_date'
+                    type='datetime-local'
                     value={formData.end_date}
-                    onChange={(e) => setFormData({...formData, end_date: e.target.value})}
+                    onChange={e =>
+                      setFormData({ ...formData, end_date: e.target.value })
+                    }
                   />
                 </div>
-                
-                <div className="col-span-2">
-                  <Label htmlFor="venue_address">Địa chỉ tổ chức</Label>
+                <div className='col-span-2'>
+                  <Label htmlFor='venue_address'>Địa chỉ tổ chức</Label>
                   <Input
-                    id="venue_address"
+                    id='venue_address'
                     value={formData.venue_address}
-                    onChange={(e) => setFormData({...formData, venue_address: e.target.value})}
-                    placeholder="Địa chỉ chi tiết"
+                    onChange={e =>
+                      setFormData({
+                        ...formData,
+                        venue_address: e.target.value,
+                      })
+                    }
+                    placeholder='Địa chỉ chi tiết'
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="city">Thành phố</Label>
+                  <Label htmlFor='city'>Thành phố</Label>
                   <Input
-                    id="city"
+                    id='city'
                     value={formData.city}
-                    onChange={(e) => setFormData({...formData, city: e.target.value})}
-                    placeholder="Thành phố"
+                    onChange={e =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                    placeholder='Thành phố'
                   />
                 </div>
-                
                 <div>
-                  <Label htmlFor="district">Quận/Huyện</Label>
+                  <Label htmlFor='district'>Quận/Huyện</Label>
                   <Input
-                    id="district"
+                    id='district'
                     value={formData.district}
-                    onChange={(e) => setFormData({...formData, district: e.target.value})}
-                    placeholder="Quận/Huyện"
+                    onChange={e =>
+                      setFormData({ ...formData, district: e.target.value })
+                    }
+                    placeholder='Quận/Huyện'
                   />
                 </div>
               </div>
-              
+
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                <Button
+                  variant='outline'
+                  onClick={() => setIsCreateDialogOpen(false)}
+                >
                   Hủy
                 </Button>
-                <Button onClick={handleCreateTournament} disabled={!formData.name.trim()}>
+                <Button
+                  onClick={handleCreateTournament}
+                  disabled={!formData.name.trim()}
+                >
                   Tạo giải đấu
                 </Button>
               </DialogFooter>
@@ -558,56 +700,66 @@ const AdminTournamentsNew = () => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tổng giải đấu</CardTitle>
-              <Trophy className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Tổng giải đấu
+              </CardTitle>
+              <Trophy className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className='text-2xl font-bold'>{stats.total}</div>
+              <p className='text-xs text-muted-foreground'>
                 +{stats.upcoming} sắp diễn ra
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Đang hoạt động</CardTitle>
-              <Play className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Đang hoạt động
+              </CardTitle>
+              <Play className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.active}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className='text-2xl font-bold'>{stats.active}</div>
+              <p className='text-xs text-muted-foreground'>
                 Đang mở đăng ký hoặc thi đấu
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tổng người tham gia</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Tổng người tham gia
+              </CardTitle>
+              <Users className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total_participants}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className='text-2xl font-bold'>
+                {stats.total_participants}
+              </div>
+              <p className='text-xs text-muted-foreground'>
                 TB: {stats.avg_participants_per_tournament}/giải
               </p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tổng doanh thu</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Tổng doanh thu
+              </CardTitle>
+              <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className='text-2xl font-bold'>
                 {formatCurrency(stats.total_revenue)}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className='text-xs text-muted-foreground'>
                 Từ lệ phí tham gia
               </p>
             </CardContent>
@@ -624,10 +776,12 @@ const AdminTournamentsNew = () => {
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
-                  <p className="text-sm text-muted-foreground mt-2">Đang tải...</p>
+              <div className='flex items-center justify-center h-32'>
+                <div className='text-center'>
+                  <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto'></div>
+                  <p className='text-sm text-muted-foreground mt-2'>
+                    Đang tải...
+                  </p>
                 </div>
               </div>
             ) : (
@@ -641,100 +795,138 @@ const AdminTournamentsNew = () => {
                     <TableHead>Lệ phí</TableHead>
                     <TableHead>Thời gian</TableHead>
                     <TableHead>Địa điểm</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
+                    <TableHead className='text-right'>Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {tournaments.map((tournament) => (
+                  {tournaments.map(tournament => (
                     <TableRow key={tournament.id}>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{tournament.name}</div>
+                          <div className='font-medium'>{tournament.name}</div>
                           {tournament.description && (
-                            <div className="text-sm text-muted-foreground truncate max-w-[200px]">
+                            <div className='text-sm text-muted-foreground truncate max-w-[200px]'>
                               {tournament.description}
                             </div>
                           )}
                         </div>
                       </TableCell>
+                      <TableCell>{getStatusBadge(tournament.status)}</TableCell>
                       <TableCell>
-                        {getStatusBadge(tournament.status)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          <div>{tournament.game_format?.replace('_', '-').toUpperCase()}</div>
-                          <div className="text-muted-foreground">
+                        <div className='text-sm'>
+                          <div>
+                            {tournament.game_format
+                              ?.replace('_', '-')
+                              .toUpperCase()}
+                          </div>
+                          <div className='text-muted-foreground'>
                             {tournament.tournament_type?.replace('_', ' ')}
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Users className="h-4 w-4" />
-                          <span>{tournament.current_participants || 0}/{tournament.max_participants}</span>
+                        <div className='flex items-center gap-1'>
+                          <Users className='h-4 w-4' />
+                          <span>
+                            {tournament.current_participants || 0}/
+                            {tournament.max_participants}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
                         {formatCurrency(tournament.entry_fee || 0)}
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
+                        <div className='text-sm'>
+                          <div className='flex items-center gap-1'>
+                            <Calendar className='h-3 w-3' />
                             {formatDate(tournament.tournament_start)}
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          <span className="text-sm">
+                        <div className='flex items-center gap-1'>
+                          <MapPin className='h-3 w-3' />
+                          <span className='text-sm'>
                             {tournament.venue_address || 'N/A'}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                      <TableCell className='text-right'>
+                        <div className='flex justify-end gap-2'>
                           <Button
-                            variant="outline"
-                            size="sm"
+                            variant='outline'
+                            size='sm'
                             onClick={() => openParticipantsDialog(tournament)}
                           >
-                            <Users className="h-4 w-4" />
+                            <Users className='h-4 w-4' />
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
+                            variant='outline'
+                            size='sm'
                             onClick={() => openEditDialog(tournament)}
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className='h-4 w-4' />
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="sm">
-                                <MoreHorizontal className="h-4 w-4" />
+                              <Button variant='outline' size='sm'>
+                                <MoreHorizontal className='h-4 w-4' />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleQuickStatusChange(tournament.id, 'registration_open')}>
-                                <Play className="h-4 w-4 mr-2" />
+                            <DropdownMenuContent align='end'>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleQuickStatusChange(
+                                    tournament.id,
+                                    'registration_open'
+                                  )
+                                }
+                              >
+                                <Play className='h-4 w-4 mr-2' />
                                 Mở đăng ký
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleQuickStatusChange(tournament.id, 'registration_closed')}>
-                                <Pause className="h-4 w-4 mr-2" />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleQuickStatusChange(
+                                    tournament.id,
+                                    'registration_closed'
+                                  )
+                                }
+                              >
+                                <Pause className='h-4 w-4 mr-2' />
                                 Đóng đăng ký
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleQuickStatusChange(tournament.id, 'ongoing')}>
-                                <Play className="h-4 w-4 mr-2" />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleQuickStatusChange(
+                                    tournament.id,
+                                    'ongoing'
+                                  )
+                                }
+                              >
+                                <Play className='h-4 w-4 mr-2' />
                                 Bắt đầu giải
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleQuickStatusChange(tournament.id, 'completed')}>
-                                <CheckCircle className="h-4 w-4 mr-2" />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleQuickStatusChange(
+                                    tournament.id,
+                                    'completed'
+                                  )
+                                }
+                              >
+                                <CheckCircle className='h-4 w-4 mr-2' />
                                 Hoàn thành
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem onClick={() => handleDeleteTournament(tournament.id)} className="text-red-600">
-                                <Trash2 className="h-4 w-4 mr-2" />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleDeleteTournament(tournament.id)
+                                }
+                                className='text-red-600'
+                              >
+                                <Trash2 className='h-4 w-4 mr-2' />
                                 Xóa giải đấu
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -745,11 +937,13 @@ const AdminTournamentsNew = () => {
                   ))}
                   {tournaments.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center py-8">
-                        <div className="text-muted-foreground">
-                          <Trophy className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <TableCell colSpan={8} className='text-center py-8'>
+                        <div className='text-muted-foreground'>
+                          <Trophy className='h-8 w-8 mx-auto mb-2 opacity-50' />
                           <p>Chưa có giải đấu nào</p>
-                          <p className="text-sm">Tạo giải đấu đầu tiên của bạn</p>
+                          <p className='text-sm'>
+                            Tạo giải đấu đầu tiên của bạn
+                          </p>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -762,91 +956,121 @@ const AdminTournamentsNew = () => {
 
         {/* Edit Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto'>
             <DialogHeader>
               <DialogTitle>Chỉnh sửa giải đấu</DialogTitle>
-              <DialogDescription>
-                Cập nhật thông tin giải đấu
-              </DialogDescription>
+              <DialogDescription>Cập nhật thông tin giải đấu</DialogDescription>
             </DialogHeader>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <Label htmlFor="edit_name">Tên giải đấu *</Label>
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='col-span-2'>
+                <Label htmlFor='edit_name'>Tên giải đấu *</Label>
                 <Input
-                  id="edit_name"
+                  id='edit_name'
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="Nhập tên giải đấu"
+                  onChange={e =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  placeholder='Nhập tên giải đấu'
                 />
               </div>
-              
-              <div className="col-span-2">
-                <Label htmlFor="edit_description">Mô tả</Label>
+
+              <div className='col-span-2'>
+                <Label htmlFor='edit_description'>Mô tả</Label>
                 <Textarea
-                  id="edit_description"
+                  id='edit_description'
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="Mô tả về giải đấu"
+                  onChange={e =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder='Mô tả về giải đấu'
                 />
               </div>
-              
+
               <div>
-                <Label htmlFor="edit_tournament_type">Loại giải đấu</Label>
-                <Select value={formData.tournament_type} onValueChange={(value: any) => setFormData({...formData, tournament_type: value})}>
+                <Label htmlFor='edit_tournament_type'>Loại giải đấu</Label>
+                <Select
+                  value={formData.tournament_type}
+                  onValueChange={(value: any) =>
+                    setFormData({ ...formData, tournament_type: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="single_elimination">Loại trực tiếp</SelectItem>
-                    <SelectItem value="double_elimination">Loại kép</SelectItem>
-                    <SelectItem value="round_robin">Vòng tròn</SelectItem>
-                    <SelectItem value="swiss">Swiss</SelectItem>
+                    <SelectItem value='single_elimination'>
+                      Loại trực tiếp
+                    </SelectItem>
+                    <SelectItem value='double_elimination'>Loại kép</SelectItem>
+                    <SelectItem value='round_robin'>Vòng tròn</SelectItem>
+                    <SelectItem value='swiss'>Swiss</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
-                <Label htmlFor="edit_game_format">Thể thức</Label>
-                <Select value={formData.game_format} onValueChange={(value: any) => setFormData({...formData, game_format: value})}>
+                <Label htmlFor='edit_game_format'>Thể thức</Label>
+                <Select
+                  value={formData.game_format}
+                  onValueChange={(value: any) =>
+                    setFormData({ ...formData, game_format: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="8_ball">8-Ball</SelectItem>
-                    <SelectItem value="9_ball">9-Ball</SelectItem>
-                    <SelectItem value="10_ball">10-Ball</SelectItem>
-                    <SelectItem value="straight_pool">Straight Pool</SelectItem>
+                    <SelectItem value='8_ball'>8-Ball</SelectItem>
+                    <SelectItem value='9_ball'>9-Ball</SelectItem>
+                    <SelectItem value='10_ball'>10-Ball</SelectItem>
+                    <SelectItem value='straight_pool'>Straight Pool</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
-                <Label htmlFor="edit_max_participants">Số người tối đa</Label>
+                <Label htmlFor='edit_max_participants'>Số người tối đa</Label>
                 <Input
-                  id="edit_max_participants"
-                  type="number"
+                  id='edit_max_participants'
+                  type='number'
                   value={formData.max_participants}
-                  onChange={(e) => setFormData({...formData, max_participants: parseInt(e.target.value) || 0})}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      max_participants: parseInt(e.target.value) || 0,
+                    })
+                  }
                 />
               </div>
-              
+
               <div>
-                <Label htmlFor="edit_entry_fee">Lệ phí tham gia (VND)</Label>
+                <Label htmlFor='edit_entry_fee'>Lệ phí tham gia (VND)</Label>
                 <Input
-                  id="edit_entry_fee"
-                  type="number"
+                  id='edit_entry_fee'
+                  type='number'
                   value={formData.entry_fee}
-                  onChange={(e) => setFormData({...formData, entry_fee: parseInt(e.target.value) || 0})}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      entry_fee: parseInt(e.target.value) || 0,
+                    })
+                  }
                 />
               </div>
             </div>
-            
+
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              <Button
+                variant='outline'
+                onClick={() => setIsEditDialogOpen(false)}
+              >
                 Hủy
               </Button>
-              <Button onClick={handleEditTournament} disabled={!formData.name.trim()}>
+              <Button
+                onClick={handleEditTournament}
+                disabled={!formData.name.trim()}
+              >
                 Cập nhật
               </Button>
             </DialogFooter>
@@ -854,79 +1078,104 @@ const AdminTournamentsNew = () => {
         </Dialog>
 
         {/* Participants Dialog */}
-        <Dialog open={isParticipantsDialogOpen} onOpenChange={setIsParticipantsDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <Dialog
+          open={isParticipantsDialogOpen}
+          onOpenChange={setIsParticipantsDialogOpen}
+        >
+          <DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+              <DialogTitle className='flex items-center gap-2'>
+                <Users className='h-5 w-5' />
                 Người tham gia: {selectedTournament?.name}
               </DialogTitle>
               <DialogDescription>
                 Quản lý danh sách người tham gia giải đấu
               </DialogDescription>
             </DialogHeader>
-            
-            <div className="space-y-4">
+
+            <div className='space-y-4'>
               {/* Participants Stats */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className='grid grid-cols-3 gap-4'>
                 <Card>
-                  <CardContent className="p-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">
-                        {tournamentRegistrations.filter(r => r.status === 'confirmed').length}
+                  <CardContent className='p-4'>
+                    <div className='text-center'>
+                      <div className='text-2xl font-bold text-green-600'>
+                        {
+                          tournamentRegistrations.filter(
+                            r => r.status === 'confirmed'
+                          ).length
+                        }
                       </div>
-                      <div className="text-sm text-muted-foreground">Đã xác nhận</div>
+                      <div className='text-sm text-muted-foreground'>
+                        Đã xác nhận
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardContent className="p-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-yellow-600">
-                        {tournamentRegistrations.filter(r => r.status === 'pending' || r.status === 'registered').length}
+                  <CardContent className='p-4'>
+                    <div className='text-center'>
+                      <div className='text-2xl font-bold text-yellow-600'>
+                        {
+                          tournamentRegistrations.filter(
+                            r =>
+                              r.status === 'pending' ||
+                              r.status === 'registered'
+                          ).length
+                        }
                       </div>
-                      <div className="text-sm text-muted-foreground">Chờ xử lý</div>
+                      <div className='text-sm text-muted-foreground'>
+                        Chờ xử lý
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardContent className="p-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold">
-                        {selectedTournament?.max_participants - tournamentRegistrations.filter(r => r.status === 'confirmed').length}
+                  <CardContent className='p-4'>
+                    <div className='text-center'>
+                      <div className='text-2xl font-bold'>
+                        {selectedTournament?.max_participants -
+                          tournamentRegistrations.filter(
+                            r => r.status === 'confirmed'
+                          ).length}
                       </div>
-                      <div className="text-sm text-muted-foreground">Còn lại</div>
+                      <div className='text-sm text-muted-foreground'>
+                        Còn lại
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
               {/* Add User Button */}
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Danh sách người tham gia</h3>
-                <div className="flex gap-2">
-                  <Button 
-                    variant="outline"
+              <div className='flex justify-between items-center'>
+                <h3 className='text-lg font-semibold'>
+                  Danh sách người tham gia
+                </h3>
+                <div className='flex gap-2'>
+                  <Button
+                    variant='outline'
                     onClick={() => {
                       setIsAddUserDialogOpen(true);
                     }}
                   >
                     Test Dialog
                   </Button>
-                  <Button 
+                  <Button
                     onClick={() => {
                       openAddUserDialog();
                     }}
                     disabled={usersLoading}
                   >
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    {usersLoading ? 'Đang tải...' : 'Thêm người chơi'} {isAddUserDialogOpen && '(OPEN)'}
+                    <UserPlus className='h-4 w-4 mr-2' />
+                    {usersLoading ? 'Đang tải...' : 'Thêm người chơi'}{' '}
+                    {isAddUserDialogOpen && '(OPEN)'}
                   </Button>
                 </div>
               </div>
 
               {/* Participants Table */}
-              <div className="border rounded-lg">
+              <div className='border rounded-lg'>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -936,42 +1185,57 @@ const AdminTournamentsNew = () => {
                       <TableHead>ELO</TableHead>
                       <TableHead>Trạng thái</TableHead>
                       <TableHead>Ngày đăng ký</TableHead>
-                      <TableHead className="text-right">Thao tác</TableHead>
+                      <TableHead className='text-right'>Thao tác</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {tournamentRegistrations.map((registration) => (
+                    {tournamentRegistrations.map(registration => (
                       <TableRow key={registration.id}>
-                        <TableCell className="font-medium">
+                        <TableCell className='font-medium'>
                           {registration.user?.full_name || 'N/A'}
                         </TableCell>
-                        <TableCell>{registration.user?.phone || 'N/A'}</TableCell>
                         <TableCell>
-                          <Badge variant="outline">
-                            {registration.user?.verified_rank || 'Chưa xác định'}
+                          {registration.user?.phone || 'N/A'}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant='outline'>
+                            {registration.user?.verified_rank ||
+                              'Chưa xác định'}
                           </Badge>
                         </TableCell>
                         <TableCell>{registration.user?.elo || 'N/A'}</TableCell>
                         <TableCell>
-                          <Badge 
-                            variant={registration.status === 'confirmed' ? 'default' : 
-                                   registration.status === 'cancelled' ? 'destructive' : 'secondary'}
+                          <Badge
+                            variant={
+                              registration.status === 'confirmed'
+                                ? 'default'
+                                : registration.status === 'cancelled'
+                                  ? 'destructive'
+                                  : 'secondary'
+                            }
                           >
-                            {registration.status === 'confirmed' ? 'Đã xác nhận' :
-                             registration.status === 'cancelled' ? 'Đã hủy' :
-                             registration.status === 'pending' ? 'Chờ xử lý' : 'Đã đăng ký'}
+                            {registration.status === 'confirmed'
+                              ? 'Đã xác nhận'
+                              : registration.status === 'cancelled'
+                                ? 'Đã hủy'
+                                : registration.status === 'pending'
+                                  ? 'Chờ xử lý'
+                                  : 'Đã đăng ký'}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          {registration.registration_date ? 
-                            formatDate(registration.registration_date) : 'N/A'}
+                          {registration.registration_date
+                            ? formatDate(registration.registration_date)
+                            : 'N/A'}
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className='text-right'>
                           {registration.status !== 'cancelled' && (
                             <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => cancelRegistration(registration.id)}
+                              variant='outline'
+                              size='sm'
+                              onClick={() =>
+                                cancelRegistration(registration.id)
+                              }
                             >
                               Hủy
                             </Button>
@@ -981,11 +1245,11 @@ const AdminTournamentsNew = () => {
                     ))}
                     {tournamentRegistrations.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center py-8">
-                          <div className="text-muted-foreground">
-                            <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <TableCell colSpan={7} className='text-center py-8'>
+                          <div className='text-muted-foreground'>
+                            <Users className='h-8 w-8 mx-auto mb-2 opacity-50' />
                             <p>Chưa có người tham gia</p>
-                            <p className="text-sm">Thêm người chơi đầu tiên</p>
+                            <p className='text-sm'>Thêm người chơi đầu tiên</p>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -994,13 +1258,16 @@ const AdminTournamentsNew = () => {
                 </Table>
               </div>
             </div>
-            
+
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsParticipantsDialogOpen(false)}>
+              <Button
+                variant='outline'
+                onClick={() => setIsParticipantsDialogOpen(false)}
+              >
                 Đóng
               </Button>
               <Button>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className='h-4 w-4 mr-2' />
                 Xuất danh sách
               </Button>
             </DialogFooter>
@@ -1008,46 +1275,50 @@ const AdminTournamentsNew = () => {
         </Dialog>
 
         {/* Add User to Tournament Dialog */}
-        <Dialog 
-          open={isAddUserDialogOpen} 
-          onOpenChange={(open) => {
+        <Dialog
+          open={isAddUserDialogOpen}
+          onOpenChange={open => {
             setIsAddUserDialogOpen(open);
           }}
         >
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <UserPlus className="h-5 w-5" />
+              <DialogTitle className='flex items-center gap-2'>
+                <UserPlus className='h-5 w-5' />
                 Thêm người chơi vào: {selectedTournament?.name}
               </DialogTitle>
               <DialogDescription>
                 Chọn người chơi để thêm vào giải đấu
               </DialogDescription>
             </DialogHeader>
-            
-            <div className="space-y-4">
+
+            <div className='space-y-4'>
               {/* Search Box */}
               <div>
-                <Label htmlFor="user_search">Tìm kiếm người chơi</Label>
+                <Label htmlFor='user_search'>Tìm kiếm người chơi</Label>
                 <Input
-                  id="user_search"
-                  placeholder="Tìm theo tên, số điện thoại hoặc email..."
+                  id='user_search'
+                  placeholder='Tìm theo tên, số điện thoại hoặc email...'
                   value={userSearchQuery}
-                  onChange={(e) => setUserSearchQuery(e.target.value)}
+                  onChange={e => setUserSearchQuery(e.target.value)}
                 />
               </div>
 
               {/* Selected Users Summary */}
               {selectedUsers.length > 0 && (
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="text-sm font-medium text-blue-800">
+                <div className='bg-blue-50 p-3 rounded-lg'>
+                  <p className='text-sm font-medium text-blue-800'>
                     Đã chọn {selectedUsers.length} người chơi
                   </p>
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className='flex flex-wrap gap-1 mt-2'>
                     {selectedUsers.map(userId => {
                       const user = users.find(u => u.user_id === userId);
                       return (
-                        <Badge key={userId} variant="secondary" className="text-xs">
+                        <Badge
+                          key={userId}
+                          variant='secondary'
+                          className='text-xs'
+                        >
                           {user?.full_name || 'N/A'}
                         </Badge>
                       );
@@ -1057,17 +1328,22 @@ const AdminTournamentsNew = () => {
               )}
 
               {/* Available Users Table */}
-              <div className="border rounded-lg max-h-96 overflow-y-auto">
+              <div className='border rounded-lg max-h-96 overflow-y-auto'>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-12">
+                      <TableHead className='w-12'>
                         <input
-                          type="checkbox"
-                          checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
-                          onChange={(e) => {
+                          type='checkbox'
+                          checked={
+                            selectedUsers.length === filteredUsers.length &&
+                            filteredUsers.length > 0
+                          }
+                          onChange={e => {
                             if (e.target.checked) {
-                              setSelectedUsers(filteredUsers.map(u => u.user_id));
+                              setSelectedUsers(
+                                filteredUsers.map(u => u.user_id)
+                              );
                             } else {
                               setSelectedUsers([]);
                             }
@@ -1084,41 +1360,49 @@ const AdminTournamentsNew = () => {
                   <TableBody>
                     {usersLoading ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
-                          <p className="text-sm text-muted-foreground mt-2">Đang tải...</p>
+                        <TableCell colSpan={6} className='text-center py-8'>
+                          <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto'></div>
+                          <p className='text-sm text-muted-foreground mt-2'>
+                            Đang tải...
+                          </p>
                         </TableCell>
                       </TableRow>
                     ) : filteredUsers.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
-                          <div className="text-muted-foreground">
-                            <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <TableCell colSpan={6} className='text-center py-8'>
+                          <div className='text-muted-foreground'>
+                            <Users className='h-8 w-8 mx-auto mb-2 opacity-50' />
                             <p>Không tìm thấy người chơi</p>
-                            <p className="text-sm">Thử thay đổi từ khóa tìm kiếm</p>
+                            <p className='text-sm'>
+                              Thử thay đổi từ khóa tìm kiếm
+                            </p>
                           </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      filteredUsers.slice(0, 50).map((user) => (
-                        <TableRow 
+                      filteredUsers.slice(0, 50).map(user => (
+                        <TableRow
                           key={user.user_id}
-                          className={selectedUsers.includes(user.user_id) ? 'bg-blue-50' : ''}
+                          className={
+                            selectedUsers.includes(user.user_id)
+                              ? 'bg-blue-50'
+                              : ''
+                          }
                         >
                           <TableCell>
                             <input
-                              type="checkbox"
+                              type='checkbox'
                               checked={selectedUsers.includes(user.user_id)}
                               onChange={() => toggleUserSelection(user.user_id)}
                             />
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className='font-medium'>
                             {user.full_name || 'N/A'}
                           </TableCell>
                           <TableCell>{user.phone || 'N/A'}</TableCell>
                           <TableCell>{user.email || 'N/A'}</TableCell>
                           <TableCell>
-                            <Badge variant="outline">
+                            <Badge variant='outline'>
                               {user.verified_rank || 'Chưa xác định'}
                             </Badge>
                           </TableCell>
@@ -1132,18 +1416,22 @@ const AdminTournamentsNew = () => {
 
               {/* Pagination note */}
               {filteredUsers.length > 50 && (
-                <p className="text-sm text-muted-foreground text-center">
-                  Hiển thị 50 kết quả đầu tiên. Sử dụng tìm kiếm để thu hẹp danh sách.
+                <p className='text-sm text-muted-foreground text-center'>
+                  Hiển thị 50 kết quả đầu tiên. Sử dụng tìm kiếm để thu hẹp danh
+                  sách.
                 </p>
               )}
             </div>
-            
+
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddUserDialogOpen(false)}>
+              <Button
+                variant='outline'
+                onClick={() => setIsAddUserDialogOpen(false)}
+              >
                 Hủy
               </Button>
-              <Button 
-                onClick={handleAddUsersToTournament} 
+              <Button
+                onClick={handleAddUsersToTournament}
                 disabled={selectedUsers.length === 0}
               >
                 Thêm {selectedUsers.length} người chơi

@@ -200,7 +200,7 @@ class DocFixer {
   async fixCodeReferences(content, filePath) {
     const fixes = [];
     const issues = [];
-    let updatedContent = content;
+    const updatedContent = content;
     
     // Find import statements in code blocks
     const importRegex = /```(?:typescript|javascript|tsx|jsx)\n([\s\S]*?)\n```/g;
@@ -282,7 +282,7 @@ class DocFixer {
   async fixFileReferences(content, filePath) {
     const fixes = [];
     const issues = [];
-    let updatedContent = content;
+    const updatedContent = content;
     
     // Find file references in backticks
     const fileRefRegex = /`([^`]+\.(ts|tsx|js|jsx|md))`/g;

@@ -266,7 +266,6 @@ export function validateColumn(table: string, column: string): boolean {
   const tableSchema =
     SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
-
     return false;
   }
 
@@ -291,7 +290,6 @@ export function validateRequiredColumns(
   const tableSchema =
     SCHEMA_DEFINITIONS[table as keyof typeof SCHEMA_DEFINITIONS];
   if (!tableSchema) {
-
     return false;
   }
 
@@ -341,7 +339,6 @@ export function logSchemaMismatch(
   );
 
   if (suggestedColumns?.length) {
-
   }
   console.groupEnd();
 }
@@ -351,7 +348,6 @@ export function logSchemaMismatch(
  */
 export function validateSchemaUsage() {
   if (process.env.NODE_ENV === 'development') {
-
   }
 }
 

@@ -14,8 +14,8 @@ export const useQuickActions = () => {
         .insert([
           {
             club_id: selectedClub?.id,
-            ...memberData
-          }
+            ...memberData,
+          },
         ])
         .select();
 
@@ -32,15 +32,13 @@ export const useQuickActions = () => {
   const checkInMember = async (memberId: string) => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('member_visits')
-        .insert([
-          {
-            member_id: memberId,
-            club_id: selectedClub?.id,
-            check_in_time: new Date().toISOString()
-          }
-        ]);
+      const { data, error } = await supabase.from('member_visits').insert([
+        {
+          member_id: memberId,
+          club_id: selectedClub?.id,
+          check_in_time: new Date().toISOString(),
+        },
+      ]);
 
       if (error) throw error;
       return data;
@@ -60,8 +58,8 @@ export const useQuickActions = () => {
         .insert([
           {
             club_id: selectedClub?.id,
-            ...tournamentData
-          }
+            ...tournamentData,
+          },
         ])
         .select();
 
@@ -83,8 +81,8 @@ export const useQuickActions = () => {
         .insert([
           {
             club_id: selectedClub?.id,
-            ...tableBookingData
-          }
+            ...tableBookingData,
+          },
         ])
         .select();
 
@@ -103,6 +101,6 @@ export const useQuickActions = () => {
     addNewMember,
     checkInMember,
     createQuickTournament,
-    bookTable
+    bookTable,
   };
 };

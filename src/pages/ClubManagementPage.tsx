@@ -2,7 +2,12 @@ import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useClubRole } from '@/hooks/useClubRole';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   BarChart3,
   Trophy,
@@ -12,7 +17,12 @@ import {
   Swords,
   AlertCircle,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import ClubOverviewTab from '@/features/club/components/ClubOverviewTab';
 import ClubSettingsTab from '@/components/ClubSettingsTab';
 import ClubRankVerificationTab from '@/features/club/components/ClubRankVerificationTab';

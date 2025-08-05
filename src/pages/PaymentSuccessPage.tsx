@@ -50,7 +50,6 @@ const PaymentSuccessPage = () => {
 
       if (user.user) {
         // In a real app, we would update the membership here
-
       }
 
       setPaymentInfo(mockTransaction);

@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useFeatureFlags, useABTest } from '@/contexts/FeatureFlagsContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Switch } from '@/shared/components/ui/switch';
 import { Progress } from '@/shared/components/ui/progress';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   Flag,
   Users,
@@ -157,12 +167,10 @@ export const ProductionDeploymentDashboard: React.FC = () => {
 
   const initiateRollout = () => {
     setDeploymentStatus('rolling');
-
   };
 
   const completeRollout = () => {
     setDeploymentStatus('complete');
-
   };
 
   const emergencyRollback = () => {
@@ -170,7 +178,6 @@ export const ProductionDeploymentDashboard: React.FC = () => {
     // Disable risky features
     disableFlag('experimentalLayouts');
     disableFlag('responsiveAnalytics');
-
   };
 
   return (

@@ -1,7 +1,11 @@
 import { useState, ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,

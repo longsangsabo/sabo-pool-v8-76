@@ -39,51 +39,70 @@ export const useClubTournaments = (clubId: string) => {
       const tournamentsWithCount = (data || []).map(tournament => ({
         ...tournament,
         status: tournament.status as ClubTournament['status'],
-        tournament_type: tournament.tournament_type as ClubTournament['tournament_type'],
-        participants_count: 0 // Will be updated by separate query if needed
+        tournament_type:
+          tournament.tournament_type as ClubTournament['tournament_type'],
+        participants_count: 0, // Will be updated by separate query if needed
       })) as ClubTournament[];
 
       setTournaments(tournamentsWithCount);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Lỗi khi tải danh sách giải đấu');
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'Lỗi khi tải danh sách giải đấu'
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const createTournament = async (tournamentData: Omit<ClubTournament, 'id' | 'created_at' | 'updated_at' | 'participants_count'>) => {
+  const createTournament = async (
+    tournamentData: Omit<
+      ClubTournament,
+      'id' | 'created_at' | 'updated_at' | 'participants_count'
+    >
+  ) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('Vui lòng đăng nhập');
 
       const { data, error } = await supabase
         .from('tournaments')
-        .insert([{
-          ...tournamentData,
-          created_by: user.id,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }])
+        .insert([
+          {
+            ...tournamentData,
+            created_by: user.id,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ])
         .select()
         .single();
 
       if (error) throw error;
-      
+
       // Refresh tournaments list
       await fetchTournaments();
       return data;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Lỗi khi tạo giải đấu');
+      throw new Error(
+        error instanceof Error ? error.message : 'Lỗi khi tạo giải đấu'
+      );
     }
   };
 
-  const updateTournament = async (tournamentId: string, updates: Partial<ClubTournament>) => {
+  const updateTournament = async (
+    tournamentId: string,
+    updates: Partial<ClubTournament>
+  ) => {
     try {
       const { data, error } = await supabase
         .from('tournaments')
         .update({
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', tournamentId)
         .eq('club_id', clubId)
@@ -91,11 +110,13 @@ export const useClubTournaments = (clubId: string) => {
         .single();
 
       if (error) throw error;
-      
+
       await fetchTournaments();
       return data;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Lỗi khi cập nhật giải đấu');
+      throw new Error(
+        error instanceof Error ? error.message : 'Lỗi khi cập nhật giải đấu'
+      );
     }
   };
 
@@ -108,10 +129,12 @@ export const useClubTournaments = (clubId: string) => {
         .eq('club_id', clubId);
 
       if (error) throw error;
-      
+
       await fetchTournaments();
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Lỗi khi xóa giải đấu');
+      throw new Error(
+        error instanceof Error ? error.message : 'Lỗi khi xóa giải đấu'
+      );
     }
   };
 
@@ -126,11 +149,23 @@ export const useClubTournaments = (clubId: string) => {
   };
 
   const getTournamentStats = () => {
-    const upcomingTournaments = tournaments.filter(t => t.status === 'upcoming').length;
-    const activeTournaments = tournaments.filter(t => t.status === 'active').length;
-    const completedTournaments = tournaments.filter(t => t.status === 'completed').length;
-    const totalPrizePool = tournaments.reduce((sum, t) => sum + (t.prize_pool || 0), 0);
-    const totalParticipants = tournaments.reduce((sum, t) => sum + (t.participants_count || 0), 0);
+    const upcomingTournaments = tournaments.filter(
+      t => t.status === 'upcoming'
+    ).length;
+    const activeTournaments = tournaments.filter(
+      t => t.status === 'active'
+    ).length;
+    const completedTournaments = tournaments.filter(
+      t => t.status === 'completed'
+    ).length;
+    const totalPrizePool = tournaments.reduce(
+      (sum, t) => sum + (t.prize_pool || 0),
+      0
+    );
+    const totalParticipants = tournaments.reduce(
+      (sum, t) => sum + (t.participants_count || 0),
+      0
+    );
 
     return {
       totalTournaments: tournaments.length,
@@ -138,7 +173,7 @@ export const useClubTournaments = (clubId: string) => {
       activeTournaments,
       completedTournaments,
       totalPrizePool,
-      totalParticipants
+      totalParticipants,
     };
   };
 
@@ -158,6 +193,6 @@ export const useClubTournaments = (clubId: string) => {
     joinTournament,
     leaveTournament,
     getTournamentStats,
-    refetch: fetchTournaments
+    refetch: fetchTournaments,
   };
 };

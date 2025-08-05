@@ -73,7 +73,6 @@ export const rankService = {
 
 export class RankService {
   static async getRankDefinitions(): Promise<DatabaseRankDefinition[]> {
-
     return [
       {
         rank_code: 'K',
@@ -90,27 +89,22 @@ export class RankService {
     rankCode: string,
     data: Partial<DatabaseRankDefinition>
   ) {
-
     return { success: true };
   }
 
   static async createRankDefinition(data: DatabaseRankDefinition) {
-
     return { success: true, data };
   }
 
   static async deleteRankDefinition(rankCode: string) {
-
     return { success: true };
   }
 
   static async getTournamentRewardStructures() {
-
     return [];
   }
 
   static async calculateRankPromotion(userId: string) {
-
     return { promoted: false, newRank: null };
   }
 }

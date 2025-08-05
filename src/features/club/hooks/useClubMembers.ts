@@ -13,10 +13,11 @@ export const useClubMembers = (clubId: string) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const { data: clubMembers, error } = await supabase
         .from('club_members')
-        .select(`
+        .select(
+          `
           *,
           profiles:user_id (
             full_name,
@@ -25,7 +26,8 @@ export const useClubMembers = (clubId: string) => {
             avatar_url,
             display_name
           )
-        `)
+        `
+        )
         .eq('club_id', clubId)
         .order('created_at', { ascending: false });
 
@@ -33,7 +35,8 @@ export const useClubMembers = (clubId: string) => {
 
       setMembers(clubMembers || []);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch club members';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch club members';
       setError(errorMessage);
       console.error('Club members fetch error:', err);
     } finally {
@@ -49,14 +52,16 @@ export const useClubMembers = (clubId: string) => {
     try {
       const { data, error } = await supabase
         .from('club_members')
-        .insert([{
-          club_id: clubId,
-          user_id: userData.user_id,
-          membership_type: userData.membership_type || 'regular',
-          membership_fee: userData.membership_fee,
-          status: 'active',
-          join_date: new Date().toISOString(),
-        }])
+        .insert([
+          {
+            club_id: clubId,
+            user_id: userData.user_id,
+            membership_type: userData.membership_type || 'regular',
+            membership_fee: userData.membership_fee,
+            status: 'active',
+            join_date: new Date().toISOString(),
+          },
+        ])
         .select()
         .single();
 
@@ -70,7 +75,10 @@ export const useClubMembers = (clubId: string) => {
     }
   };
 
-  const updateMember = async (memberId: string, updates: Partial<ClubMember>) => {
+  const updateMember = async (
+    memberId: string,
+    updates: Partial<ClubMember>
+  ) => {
     try {
       const { data, error } = await supabase
         .from('club_members')
@@ -112,15 +120,21 @@ export const useClubMembers = (clubId: string) => {
     const totalMembers = members.length;
     const activeMembers = members.filter(m => m.status === 'active').length;
     const vipMembers = members.filter(m => m.membership_type === 'vip').length;
-    const totalRevenue = members.reduce((sum, m) => sum + (m.membership_fee || 0), 0);
-    const totalHours = members.reduce((sum, m) => sum + (m.total_hours_played || 0), 0);
+    const totalRevenue = members.reduce(
+      (sum, m) => sum + (m.membership_fee || 0),
+      0
+    );
+    const totalHours = members.reduce(
+      (sum, m) => sum + (m.total_hours_played || 0),
+      0
+    );
 
     return {
       totalMembers,
       activeMembers,
       vipMembers,
       totalRevenue,
-      totalHours
+      totalHours,
     };
   };
 
@@ -130,14 +144,18 @@ export const useClubMembers = (clubId: string) => {
     // Real-time subscription
     const subscription = supabase
       .channel(`club_members_${clubId}`)
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public',
-        table: 'club_members',
-        filter: `club_id=eq.${clubId}`
-      }, () => {
-        fetchClubMembers();
-      })
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'club_members',
+          filter: `club_id=eq.${clubId}`,
+        },
+        () => {
+          fetchClubMembers();
+        }
+      )
       .subscribe();
 
     return () => {
@@ -153,6 +171,6 @@ export const useClubMembers = (clubId: string) => {
     updateMember,
     removeMember,
     getMemberStats,
-    refetch: fetchClubMembers
+    refetch: fetchClubMembers,
   };
 };

@@ -12,7 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   Eye,
   EyeOff,
@@ -45,7 +50,8 @@ const AuthPage = () => {
   } = useAuth();
 
   // 🎯 Smart Navigation Hook
-  const { navigateAfterLogin, getWelcomeMessage, hasMultipleRoles } = useSmartNavigation();
+  const { navigateAfterLogin, getWelcomeMessage, hasMultipleRoles } =
+    useSmartNavigation();
 
   // Get auth mode from URL params or default to login
   const [mode, setMode] = useState<AuthMode>(() => {
@@ -155,16 +161,19 @@ const AuthPage = () => {
         // 🎯 Smart Welcome Message & Navigation
         const welcomeMessage = getWelcomeMessage();
         toast.success(welcomeMessage);
-        
+
         // Show additional info for multi-role users
         if (hasMultipleRoles) {
           setTimeout(() => {
-            toast.info('💡 Bạn có thể chuyển đổi giữa Admin và CLB bất cứ lúc nào!', {
-              duration: 4000
-            });
+            toast.info(
+              '💡 Bạn có thể chuyển đổi giữa Admin và CLB bất cứ lúc nào!',
+              {
+                duration: 4000,
+              }
+            );
           }, 1500);
         }
-        
+
         // 🚀 Smart Navigation
         navigateAfterLogin();
       }

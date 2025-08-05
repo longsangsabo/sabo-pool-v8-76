@@ -3,7 +3,11 @@ import { Heart, Eye, MapPin, Clock, Star } from 'lucide-react';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { MarketplaceItem } from '@/hooks/marketplace/types';
 
 interface MarketplaceItemCardProps {
@@ -185,7 +189,6 @@ const MarketplaceItemCard = ({
               onClick={e => {
                 e.stopPropagation();
                 // Handle contact seller
-
               }}
             >
               Liên hệ
@@ -196,7 +199,6 @@ const MarketplaceItemCard = ({
               onClick={e => {
                 e.stopPropagation();
                 // Handle buy now
-
               }}
             >
               Mua ngay

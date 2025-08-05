@@ -62,4 +62,3 @@ export const AUTO_EMAIL_CONFIG = {
     template: EMAIL_TEMPLATES.RANKING_UPDATE,
   },
 };
-

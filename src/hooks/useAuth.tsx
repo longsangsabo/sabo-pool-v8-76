@@ -26,9 +26,7 @@ interface AuthContextType extends AuthState {
   ) => Promise<{ data?: any; error?: any }>;
   signInWithGoogle: () => Promise<{ data?: any; error?: any }>;
   signInWithFacebook: () => Promise<{ data?: any; error?: any }>;
-  signInWithPhone: (
-    phone: string
-  ) => Promise<{ data?: any; error?: any }>;
+  signInWithPhone: (phone: string) => Promise<{ data?: any; error?: any }>;
   signInWithEmail: (
     email: string,
     password: string
@@ -301,7 +299,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return { error };
     }
   };
-  
+
   const signInWithEmail = signIn;
 
   const signUpWithEmail = async (

@@ -261,7 +261,6 @@ export const UnifiedProfileProvider: React.FC<{
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
             const updatedProfile: ProfileData = {
@@ -302,7 +301,6 @@ export const UnifiedProfileProvider: React.FC<{
           filter: `user_id=eq.${user?.id}`,
         },
         payload => {
-
           if (payload.new && typeof payload.new === 'object') {
             const newData = payload.new as any;
             const updatedStats: ProfileStats = {

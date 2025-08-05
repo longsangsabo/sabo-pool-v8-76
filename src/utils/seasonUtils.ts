@@ -1,6 +1,5 @@
 // Simplified season utilities
 export const resetSeason = async () => {
-
   return { success: true };
 };
 

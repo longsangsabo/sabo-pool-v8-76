@@ -3,7 +3,12 @@ import { useTournamentManagement } from '@/hooks/useTournamentManagement';
 import { TournamentBracketGenerator } from '@/components/tournaments/TournamentBracketGenerator';
 import { SingleEliminationBracket } from '@/components/tournaments/SingleEliminationBracket';
 import { DoubleBracketVisualization } from '@/components/tournaments/DoubleBracketVisualization';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Separator } from '@/shared/components/ui/separator';

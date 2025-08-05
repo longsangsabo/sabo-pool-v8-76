@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
-import { 
-  Clock, 
-  User, 
+import {
+  Clock,
+  User,
   Calendar,
   Play,
   Pause,
   Square,
-  Settings
+  Settings,
 } from 'lucide-react';
 
 interface TableStatus {
@@ -80,31 +85,46 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available': return 'bg-green-500';
-      case 'occupied': return 'bg-red-500';
-      case 'reserved': return 'bg-yellow-500';
-      case 'maintenance': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+      case 'available':
+        return 'bg-green-500';
+      case 'occupied':
+        return 'bg-red-500';
+      case 'reserved':
+        return 'bg-yellow-500';
+      case 'maintenance':
+        return 'bg-gray-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'available': return 'Trống';
-      case 'occupied': return 'Đang sử dụng';
-      case 'reserved': return 'Đã đặt';
-      case 'maintenance': return 'Bảo trì';
-      default: return 'Không xác định';
+      case 'available':
+        return 'Trống';
+      case 'occupied':
+        return 'Đang sử dụng';
+      case 'reserved':
+        return 'Đã đặt';
+      case 'maintenance':
+        return 'Bảo trì';
+      default:
+        return 'Không xác định';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'available': return <Play className="h-4 w-4" />;
-      case 'occupied': return <Pause className="h-4 w-4" />;
-      case 'reserved': return <Clock className="h-4 w-4" />;
-      case 'maintenance': return <Settings className="h-4 w-4" />;
-      default: return <Square className="h-4 w-4" />;
+      case 'available':
+        return <Play className='h-4 w-4' />;
+      case 'occupied':
+        return <Pause className='h-4 w-4' />;
+      case 'reserved':
+        return <Clock className='h-4 w-4' />;
+      case 'maintenance':
+        return <Settings className='h-4 w-4' />;
+      default:
+        return <Square className='h-4 w-4' />;
     }
   };
 
@@ -128,41 +148,49 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
     available: tables.filter(t => t.status === 'available').length,
     occupied: tables.filter(t => t.status === 'occupied').length,
     reserved: tables.filter(t => t.status === 'reserved').length,
-    utilization: Math.round((tables.filter(t => t.status === 'occupied').length / tables.length) * 100),
+    utilization: Math.round(
+      (tables.filter(t => t.status === 'occupied').length / tables.length) * 100
+    ),
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className='grid grid-cols-2 md:grid-cols-5 gap-4'>
         <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <div className="text-sm text-muted-foreground">Tổng bàn</div>
+          <CardContent className='p-4 text-center'>
+            <div className='text-2xl font-bold'>{stats.total}</div>
+            <div className='text-sm text-muted-foreground'>Tổng bàn</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{stats.available}</div>
-            <div className="text-sm text-muted-foreground">Trống</div>
+          <CardContent className='p-4 text-center'>
+            <div className='text-2xl font-bold text-green-600'>
+              {stats.available}
+            </div>
+            <div className='text-sm text-muted-foreground'>Trống</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-red-600">{stats.occupied}</div>
-            <div className="text-sm text-muted-foreground">Đang sử dụng</div>
+          <CardContent className='p-4 text-center'>
+            <div className='text-2xl font-bold text-red-600'>
+              {stats.occupied}
+            </div>
+            <div className='text-sm text-muted-foreground'>Đang sử dụng</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-yellow-600">{stats.reserved}</div>
-            <div className="text-sm text-muted-foreground">Đã đặt</div>
+          <CardContent className='p-4 text-center'>
+            <div className='text-2xl font-bold text-yellow-600'>
+              {stats.reserved}
+            </div>
+            <div className='text-sm text-muted-foreground'>Đã đặt</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{stats.utilization}%</div>
-            <div className="text-sm text-muted-foreground">Tỷ lệ sử dụng</div>
+          <CardContent className='p-4 text-center'>
+            <div className='text-2xl font-bold'>{stats.utilization}%</div>
+            <div className='text-sm text-muted-foreground'>Tỷ lệ sử dụng</div>
           </CardContent>
         </Card>
       </div>
@@ -173,39 +201,41 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
           <CardTitle>Trạng thái bàn chơi</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {tables.map((table) => (
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+            {tables.map(table => (
               <div
                 key={table.id}
-                className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                className='border rounded-lg p-4 hover:shadow-md transition-shadow'
               >
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold">Bàn {table.id}</h3>
-                  <Badge className={`${getStatusColor(table.status)} text-white`}>
+                <div className='flex items-center justify-between mb-3'>
+                  <h3 className='font-semibold'>Bàn {table.id}</h3>
+                  <Badge
+                    className={`${getStatusColor(table.status)} text-white`}
+                  >
                     {getStatusIcon(table.status)}
-                    <span className="ml-1">{getStatusText(table.status)}</span>
+                    <span className='ml-1'>{getStatusText(table.status)}</span>
                   </Badge>
                 </div>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
+                <div className='space-y-2 text-sm'>
+                  <div className='flex justify-between'>
                     <span>Giá:</span>
-                    <span className="font-medium">
+                    <span className='font-medium'>
                       {table.hourlyRate.toLocaleString()}đ/h
                     </span>
                   </div>
 
                   {table.status === 'occupied' && (
                     <>
-                      <div className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
+                      <div className='flex items-center gap-1'>
+                        <User className='h-3 w-3' />
                         <span>{table.currentPlayer}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
+                      <div className='flex items-center gap-1'>
+                        <Clock className='h-3 w-3' />
                         <span>Từ {table.startTime}</span>
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className='text-xs text-muted-foreground'>
                         Thời gian: {getCurrentDuration(table.startTime)}
                       </div>
                     </>
@@ -213,23 +243,23 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
 
                   {table.status === 'reserved' && (
                     <>
-                      <div className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
+                      <div className='flex items-center gap-1'>
+                        <User className='h-3 w-3' />
                         <span>{table.reservedBy}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
+                      <div className='flex items-center gap-1'>
+                        <Calendar className='h-3 w-3' />
                         <span>Lúc {table.reservedTime}</span>
                       </div>
                     </>
                   )}
                 </div>
 
-                <div className="mt-4 space-y-2">
+                <div className='mt-4 space-y-2'>
                   {table.status === 'available' && (
                     <Button
-                      size="sm"
-                      className="w-full"
+                      size='sm'
+                      className='w-full'
                       onClick={() => handleTableAction(table.id, 'start')}
                     >
                       Bắt đầu chơi
@@ -238,9 +268,9 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
 
                   {table.status === 'occupied' && (
                     <Button
-                      size="sm"
-                      variant="destructive"
-                      className="w-full"
+                      size='sm'
+                      variant='destructive'
+                      className='w-full'
                       onClick={() => handleTableAction(table.id, 'stop')}
                     >
                       Kết thúc
@@ -248,16 +278,16 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
                   )}
 
                   {table.status === 'reserved' && (
-                    <div className="grid grid-cols-2 gap-1">
+                    <div className='grid grid-cols-2 gap-1'>
                       <Button
-                        size="sm"
+                        size='sm'
                         onClick={() => handleTableAction(table.id, 'start')}
                       >
                         Bắt đầu
                       </Button>
                       <Button
-                        size="sm"
-                        variant="outline"
+                        size='sm'
+                        variant='outline'
                         onClick={() => handleTableAction(table.id, 'cancel')}
                       >
                         Hủy
@@ -267,9 +297,9 @@ export const TableManagement: React.FC<TableManagementProps> = ({ clubId }) => {
 
                   {table.status === 'available' && (
                     <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full"
+                      size='sm'
+                      variant='outline'
+                      className='w-full'
                       onClick={() => handleTableAction(table.id, 'reserve')}
                     >
                       Đặt bàn

@@ -80,7 +80,7 @@ const EnhancedLoginPage = () => {
     setLoading(true);
     try {
       const { error } = await verifyOtp(phone, token, 'sms');
-      
+
       if (error) {
         handleAuthError(error);
       } else {
@@ -102,7 +102,7 @@ const EnhancedLoginPage = () => {
     setLoading(true);
     try {
       const { error } = await signInWithPhone(phone);
-      
+
       if (error) {
         handleAuthError(error);
       } else {
@@ -187,43 +187,43 @@ const EnhancedLoginPage = () => {
           <AuthDivider />
           <div className='space-y-4'>
             <form onSubmit={handleEmailSubmit} className='space-y-4'>
-                <div>
-                  <label className='block text-gray-700 text-sm font-medium mb-2'>
-                    Email
-                  </label>
-                  <Input
-                    type='email'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder='example@email.com'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
-                    disabled={loading}
-                  />
-                </div>
-
-                <div>
-                  <label className='block text-gray-700 text-sm font-medium mb-2'>
-                    Mật khẩu
-                  </label>
-                  <Input
-                    type='password'
-                    value={emailPassword}
-                    onChange={e => setEmailPassword(e.target.value)}
-                    placeholder='Nhập mật khẩu'
-                    className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                    required
-                    disabled={loading}
-                  />
-                </div>
-
-                <Button
-                  type='submit'
+              <div>
+                <label className='block text-gray-700 text-sm font-medium mb-2'>
+                  Email
+                </label>
+                <Input
+                  type='email'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder='example@email.com'
+                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                  required
                   disabled={loading}
-                  className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                >
-                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                </Button>
+                />
+              </div>
+
+              <div>
+                <label className='block text-gray-700 text-sm font-medium mb-2'>
+                  Mật khẩu
+                </label>
+                <Input
+                  type='password'
+                  value={emailPassword}
+                  onChange={e => setEmailPassword(e.target.value)}
+                  placeholder='Nhập mật khẩu'
+                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <Button
+                type='submit'
+                disabled={loading}
+                className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
+              >
+                {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              </Button>
             </form>
           </div>
 

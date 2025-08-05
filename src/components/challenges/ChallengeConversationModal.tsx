@@ -7,7 +7,11 @@ import {
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/components/ui/avatar';
 import { Send } from 'lucide-react';
 import { useChallengeWorkflow } from '@/hooks/useChallengeWorkflow';
 import { useAuth } from '@/hooks/useAuth';

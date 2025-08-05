@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { MapPin, Phone, Users, Star, DollarSign } from 'lucide-react';
@@ -8,7 +13,6 @@ import Footer from '@/components/Footer';
 import PageLayout from '@/components/layout/PageLayout';
 
 const ClubsPage = () => {
-
   const { clubs, loading, error } = useClubs();
 
   const formatPrice = (price: number) => {

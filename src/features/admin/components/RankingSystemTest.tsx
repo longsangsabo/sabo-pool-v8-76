@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';

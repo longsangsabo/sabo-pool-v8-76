@@ -37,7 +37,6 @@ export const RealtimeNotificationBanner: React.FC<
           timestamp: new Date(),
           action: {
             label: 'Xem',
-
           },
         },
         {
@@ -48,7 +47,6 @@ export const RealtimeNotificationBanner: React.FC<
           timestamp: new Date(),
           action: {
             label: 'Tham gia',
-
           },
         },
       ];

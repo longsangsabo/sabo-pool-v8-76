@@ -1,5 +1,10 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import { SPAAnalyticsDashboard } from '@/components/analytics/SPAAnalyticsDashboard';
 import { RealtimeSPAFeed } from '@/components/spa/RealtimeSPAFeed';
 import { AdminSPAManager } from '@/features/admin/components/AdminSPAManager';

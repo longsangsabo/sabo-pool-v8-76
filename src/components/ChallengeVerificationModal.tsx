@@ -19,7 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/components/ui/avatar';
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from '@/shared/components/ui/avatar';
 import { Challenge } from '@/types/challenge';
 
 interface ChallengeVerificationModalProps {

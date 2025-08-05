@@ -2,7 +2,12 @@ import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 
 interface ChunkErrorFallbackProps {
   error: Error;
@@ -87,7 +92,6 @@ export const ChunkErrorBoundary: React.FC<ChunkErrorBoundaryProps> = ({
       }}
       onReset={() => {
         // Clear any cached states that might be causing issues
-
       }}
     >
       {children}

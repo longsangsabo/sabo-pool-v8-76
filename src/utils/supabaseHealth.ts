@@ -8,7 +8,6 @@ interface HealthCheckResult {
 
 export const checkSupabaseConnection = async (): Promise<HealthCheckResult> => {
   try {
-
     const { data, error } = await supabase
       .from('profiles')
       .select('count')

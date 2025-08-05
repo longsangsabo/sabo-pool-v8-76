@@ -101,7 +101,6 @@ export class EmailService {
   ): Promise<void> {
     try {
       // Log email activity for audit purposes
-
     } catch (error) {
       console.error('Failed to log email:', error);
     }

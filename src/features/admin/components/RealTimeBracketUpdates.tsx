@@ -91,7 +91,6 @@ export const RealTimeBracketUpdates: React.FC<RealTimeBracketUpdatesProps> = ({
       .subscribe(status => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
-
         }
       });
 

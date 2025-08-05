@@ -86,7 +86,7 @@ const EnhancedRegisterPage = () => {
     setLoading(true);
     try {
       const { error } = await verifyOtp(phone, token, 'sms');
-      
+
       if (error) {
         handleAuthError(error);
       } else {
@@ -116,7 +116,7 @@ const EnhancedRegisterPage = () => {
         phoneFullName,
         referralCode
       );
-      
+
       if (error) {
         handleAuthError(error);
       } else {
@@ -222,56 +222,56 @@ const EnhancedRegisterPage = () => {
 
           {/* Email Only */}
           <div className='space-y-4'>
-              <form onSubmit={handleEmailSubmit} className='space-y-4'>
-                <Input
-                  type='text'
-                  value={emailFullName}
-                  onChange={e => setEmailFullName(e.target.value)}
-                  placeholder='Họ và tên'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <Input
-                  type='email'
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder='Email'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <Input
-                  type='password'
-                  value={emailPassword}
-                  onChange={e => setEmailPassword(e.target.value)}
-                  placeholder='Mật khẩu (ít nhất 6 ký tự)'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <Input
-                  type='password'
-                  value={emailConfirmPassword}
-                  onChange={e => setEmailConfirmPassword(e.target.value)}
-                  placeholder='Xác nhận mật khẩu'
-                  className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
-                  required
-                  disabled={loading}
-                />
-                <TermsCheckbox
-                  checked={emailTermsAccepted}
-                  onCheckedChange={setEmailTermsAccepted}
-                  disabled={loading}
-                />
-                <Button
-                  type='submit'
-                  disabled={loading || !emailTermsAccepted}
-                  className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
-                >
-                  {loading ? 'Đang đăng ký...' : 'Đăng ký'}
-                </Button>
-              </form>
+            <form onSubmit={handleEmailSubmit} className='space-y-4'>
+              <Input
+                type='text'
+                value={emailFullName}
+                onChange={e => setEmailFullName(e.target.value)}
+                placeholder='Họ và tên'
+                className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                required
+                disabled={loading}
+              />
+              <Input
+                type='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder='Email'
+                className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                required
+                disabled={loading}
+              />
+              <Input
+                type='password'
+                value={emailPassword}
+                onChange={e => setEmailPassword(e.target.value)}
+                placeholder='Mật khẩu (ít nhất 6 ký tự)'
+                className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                required
+                disabled={loading}
+              />
+              <Input
+                type='password'
+                value={emailConfirmPassword}
+                onChange={e => setEmailConfirmPassword(e.target.value)}
+                placeholder='Xác nhận mật khẩu'
+                className='w-full h-12 text-lg border-2 border-gray-300 focus:border-blue-500 rounded-xl'
+                required
+                disabled={loading}
+              />
+              <TermsCheckbox
+                checked={emailTermsAccepted}
+                onCheckedChange={setEmailTermsAccepted}
+                disabled={loading}
+              />
+              <Button
+                type='submit'
+                disabled={loading || !emailTermsAccepted}
+                className='w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-semibold'
+              >
+                {loading ? 'Đang đăng ký...' : 'Đăng ký'}
+              </Button>
+            </form>
           </div>
 
           <div className='text-center mt-6 space-y-4'>

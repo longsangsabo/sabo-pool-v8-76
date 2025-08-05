@@ -22,7 +22,6 @@ const UserProfileHeader = () => {
 
     setLoading(true);
     try {
-
       // Get profile, rankings, and wallet data in parallel
       const [profileResult, rankingsResult, walletResult] = await Promise.all([
         supabase
@@ -77,7 +76,6 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-
           setProfile(payload.new);
         }
       )
@@ -90,7 +88,6 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-
           setRankings(payload.new);
         }
       )
@@ -103,16 +100,12 @@ const UserProfileHeader = () => {
           filter: `user_id=eq.${user.id}`,
         },
         payload => {
-
           setWallet(payload.new);
         }
       )
-      .subscribe(status => {
-
-      });
+      .subscribe(status => {});
 
     return () => {
-
       supabase.removeChannel(profileChannel);
     };
   }, [user]);

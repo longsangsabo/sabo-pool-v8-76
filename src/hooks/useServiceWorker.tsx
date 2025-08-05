@@ -20,7 +20,6 @@ export const useServiceWorker = () => {
   // Register service worker
   const registerServiceWorker = async () => {
     if (!state.isSupported) {
-
       return;
     }
 
@@ -41,14 +40,11 @@ export const useServiceWorker = () => {
 
       // Check for updates
       registration.addEventListener('updatefound', () => {
-
         setState(prev => ({ ...prev, updateAvailable: true }));
       });
 
       // Listen for messages from SW
-      navigator.serviceWorker.addEventListener('message', event => {
-
-      });
+      navigator.serviceWorker.addEventListener('message', event => {});
 
       return registration;
     } catch (error) {

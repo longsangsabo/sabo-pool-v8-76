@@ -75,7 +75,6 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-
         await fetchClubStandings(clubId);
 
         return {
@@ -108,7 +107,6 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-
         await fetchClubStandings(clubId);
       } catch (err) {
         setError(
@@ -202,7 +200,6 @@ export const useClubStandings = () => {
       setError(null);
 
       try {
-
         await fetchClubStandings(clubId);
       } catch (err) {
         setError(

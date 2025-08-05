@@ -1,6 +1,11 @@
 import React from 'react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 import { UserPlus, Users, Trophy, Calendar } from 'lucide-react';
 
 export const QuickActions: React.FC = () => {
@@ -12,7 +17,7 @@ export const QuickActions: React.FC = () => {
       action: () => {
         // TODO: Implement add member logic
         console.log('Add member');
-      }
+      },
     },
     {
       icon: Users,
@@ -21,7 +26,7 @@ export const QuickActions: React.FC = () => {
       action: () => {
         // TODO: Implement check-in logic
         console.log('Check-in');
-      }
+      },
     },
     {
       icon: Trophy,
@@ -30,7 +35,7 @@ export const QuickActions: React.FC = () => {
       action: () => {
         // TODO: Implement tournament creation
         console.log('Create tournament');
-      }
+      },
     },
     {
       icon: Calendar,
@@ -39,8 +44,8 @@ export const QuickActions: React.FC = () => {
       action: () => {
         // TODO: Implement table booking
         console.log('Book table');
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -49,16 +54,16 @@ export const QuickActions: React.FC = () => {
         <CardTitle>Thao tác nhanh</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
           {actions.map((action, index) => (
             <Button
               key={index}
-              variant="outline"
+              variant='outline'
               className={`h-20 flex-col space-y-2 ${action.color} text-white border-0`}
               onClick={action.action}
             >
-              <action.icon className="h-6 w-6" />
-              <span className="text-xs font-medium">{action.label}</span>
+              <action.icon className='h-6 w-6' />
+              <span className='text-xs font-medium'>{action.label}</span>
             </Button>
           ))}
         </div>

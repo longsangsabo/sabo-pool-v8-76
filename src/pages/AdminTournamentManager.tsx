@@ -14,7 +14,12 @@ import {
 } from '@/shared/components/ui/select';
 import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Badge } from '@/shared/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
 
 import { useToast } from '@/hooks/use-toast';
 import { Users, Scale } from 'lucide-react';
@@ -77,7 +82,6 @@ const AdminTournamentManager: React.FC = () => {
   }, []);
 
   const loadTournaments = async () => {
-
     try {
       const { data, error } = await supabase
         .from('tournaments')
@@ -109,7 +113,6 @@ const AdminTournamentManager: React.FC = () => {
       );
 
       setTournaments(tournamentsWithCounts);
-
     } catch (error) {
       console.error('❌ Error loading tournaments:', error);
       toast({
@@ -121,7 +124,6 @@ const AdminTournamentManager: React.FC = () => {
   };
 
   const loadUsers = async () => {
-
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -134,7 +136,6 @@ const AdminTournamentManager: React.FC = () => {
 
       // Type assertion to handle the data properly
       setUsers((data as any[]) || []);
-
     } catch (error) {
       console.error('❌ Error loading users:', error);
       toast({
@@ -147,7 +148,6 @@ const AdminTournamentManager: React.FC = () => {
 
   // 👥 USER SELECTION FUNCTIONS
   const selectUsersByTemplate = (template: any) => {
-
     let filteredUsers: User[] = [];
 
     switch (template.filter) {
@@ -213,7 +213,6 @@ const AdminTournamentManager: React.FC = () => {
   };
 
   const selectByEloRange = (minElo: number, maxElo: number) => {
-
     const filtered = users.filter(
       user =>
         (user.elo || 0) >= minElo &&
@@ -635,7 +634,6 @@ const AdminTournamentManager: React.FC = () => {
                       selectedTournament.management_status || 'manual'
                     }
                     onTournamentStarted={() => {
-
                       loadTournaments();
                       setSelectedTournament(null);
                     }}

@@ -79,7 +79,10 @@ export const useAdminUsers = () => {
   // ===== FETCH USERS =====
   const fetchUsers = useCallback(async (searchQuery = '', limit = 50) => {
     try {
-      console.log('useAdminUsers: Starting fetchUsers with query:', searchQuery);
+      console.log(
+        'useAdminUsers: Starting fetchUsers with query:',
+        searchQuery
+      );
       setLoading(true);
       setError(null);
 
@@ -92,16 +95,20 @@ export const useAdminUsers = () => {
       // Use direct profiles query since admin_search_users might not exist
       let query = supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           user_id, full_name, display_name, phone, email, role, skill_level, 
           verified_rank, city, district, bio, is_admin, ban_status, ban_reason, 
           ban_expires_at, created_at, updated_at
-        `)
+        `
+        )
         .order('created_at', { ascending: false })
         .limit(limit);
 
       if (searchQuery) {
-        query = query.or(`full_name.ilike.%${searchQuery}%,display_name.ilike.%${searchQuery}%,phone.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+        query = query.or(
+          `full_name.ilike.%${searchQuery}%,display_name.ilike.%${searchQuery}%,phone.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`
+        );
       }
 
       console.log('useAdminUsers: Executing query...');
@@ -112,7 +119,11 @@ export const useAdminUsers = () => {
         throw error;
       }
 
-      console.log('useAdminUsers: Raw data from DB:', data?.length || 0, 'users');
+      console.log(
+        'useAdminUsers: Raw data from DB:',
+        data?.length || 0,
+        'users'
+      );
 
       // Transform data to match AdminUser interface
       const transformedUsers: AdminUser[] = (data || []).map((user: any) => ({
@@ -139,7 +150,7 @@ export const useAdminUsers = () => {
         total_matches: 0,
         wins: 0,
         losses: 0,
-        last_activity: user.updated_at
+        last_activity: user.updated_at,
       }));
 
       console.log('useAdminUsers: Transformed users:', transformedUsers.length);
@@ -157,155 +168,174 @@ export const useAdminUsers = () => {
   }, []);
 
   // ===== CREATE USER =====
-  const createUser = useCallback(async (userData: AdminUserData) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const createUser = useCallback(
+    async (userData: AdminUserData) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Use create-admin-user function
-      const { data, error } = await supabase.functions.invoke('create-admin-user', {
-        body: {
-          email: userData.email || `demo_${Date.now()}@example.com`,
-          password: 'demo123456',
-          full_name: userData.full_name,
-          phone: userData.phone,
-          current_rank: userData.verified_rank || 'K',
-          elo: 1000,
-          skill_level: userData.skill_level || 'beginner',
-          bio: userData.bio,
-          is_demo_user: false
-        }
-      });
+        // Use create-admin-user function
+        const { data, error } = await supabase.functions.invoke(
+          'create-admin-user',
+          {
+            body: {
+              email: userData.email || `demo_${Date.now()}@example.com`,
+              password: 'demo123456',
+              full_name: userData.full_name,
+              phone: userData.phone,
+              current_rank: userData.verified_rank || 'K',
+              elo: 1000,
+              skill_level: userData.skill_level || 'beginner',
+              bio: userData.bio,
+              is_demo_user: false,
+            },
+          }
+        );
 
-      if (error) throw error;
+        if (error) throw error;
 
-      await fetchUsers(); // Refresh list
-      toast.success('Tạo người dùng thành công');
-      return data;
-    } catch (err: any) {
-      console.error('Error creating user:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      toast.error(`Lỗi khi tạo người dùng: ${errorMessage}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchUsers]);
+        await fetchUsers(); // Refresh list
+        toast.success('Tạo người dùng thành công');
+        return data;
+      } catch (err: any) {
+        console.error('Error creating user:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        toast.error(`Lỗi khi tạo người dùng: ${errorMessage}`);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchUsers]
+  );
 
   // ===== UPDATE USER =====
-  const updateUser = useCallback(async (userId: string, updates: Partial<AdminUserData>) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const updateUser = useCallback(
+    async (userId: string, updates: Partial<AdminUserData>) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', userId)
-        .select()
-        .single();
+        const { data, error } = await supabase
+          .from('profiles')
+          .update({
+            ...updates,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', userId)
+          .select()
+          .single();
 
-      if (error) throw error;
+        if (error) throw error;
 
-      await fetchUsers(); // Refresh list
-      toast.success('Cập nhật người dùng thành công');
-      return data;
-    } catch (err: any) {
-      console.error('Error updating user:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      toast.error(`Lỗi khi cập nhật người dùng: ${errorMessage}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchUsers]);
+        await fetchUsers(); // Refresh list
+        toast.success('Cập nhật người dùng thành công');
+        return data;
+      } catch (err: any) {
+        console.error('Error updating user:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        toast.error(`Lỗi khi cập nhật người dùng: ${errorMessage}`);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchUsers]
+  );
 
   // ===== BAN/UNBAN USER =====
-  const toggleUserBan = useCallback(async (userId: string, banReason?: string) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const toggleUserBan = useCallback(
+    async (userId: string, banReason?: string) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Get current user status
-      const { data: currentUserData, error: fetchError } = await supabase
-        .from('profiles')
-        .select('ban_status')
-        .eq('user_id', userId)
-        .single();
+        // Get current user status
+        const { data: currentUserData, error: fetchError } = await supabase
+          .from('profiles')
+          .select('ban_status')
+          .eq('user_id', userId)
+          .single();
 
-      if (fetchError) throw fetchError;
+        if (fetchError) throw fetchError;
 
-      const isBanned = currentUserData?.ban_status === 'banned';
-      const newStatus = isBanned ? 'active' : 'banned';
+        const isBanned = currentUserData?.ban_status === 'banned';
+        const newStatus = isBanned ? 'active' : 'banned';
 
-      const updateData: any = {
-        ban_status: newStatus,
-        updated_at: new Date().toISOString()
-      };
+        const updateData: any = {
+          ban_status: newStatus,
+          updated_at: new Date().toISOString(),
+        };
 
-      if (!isBanned) {
-        updateData.ban_reason = banReason || 'Vi phạm quy định';
-        updateData.ban_expires_at = null; // Permanent ban
-      } else {
-        updateData.ban_reason = null;
-        updateData.ban_expires_at = null;
+        if (!isBanned) {
+          updateData.ban_reason = banReason || 'Vi phạm quy định';
+          updateData.ban_expires_at = null; // Permanent ban
+        } else {
+          updateData.ban_reason = null;
+          updateData.ban_expires_at = null;
+        }
+
+        const { error } = await supabase
+          .from('profiles')
+          .update(updateData)
+          .eq('user_id', userId);
+
+        if (error) throw error;
+
+        await fetchUsers(); // Refresh list
+        toast.success(
+          isBanned ? 'Đã bỏ khóa người dùng' : 'Đã khóa người dùng'
+        );
+      } catch (err: any) {
+        console.error('Error toggling user ban:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        toast.error(
+          `Lỗi khi ${err.message.includes('ban') ? 'khóa' : 'bỏ khóa'} người dùng: ${errorMessage}`
+        );
+        throw err;
+      } finally {
+        setLoading(false);
       }
-
-      const { error } = await supabase
-        .from('profiles')
-        .update(updateData)
-        .eq('user_id', userId);
-
-      if (error) throw error;
-
-      await fetchUsers(); // Refresh list
-      toast.success(isBanned ? 'Đã bỏ khóa người dùng' : 'Đã khóa người dùng');
-    } catch (err: any) {
-      console.error('Error toggling user ban:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      toast.error(`Lỗi khi ${err.message.includes('ban') ? 'khóa' : 'bỏ khóa'} người dùng: ${errorMessage}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchUsers]);
+    },
+    [fetchUsers]
+  );
 
   // ===== DELETE USER =====
-  const deleteUser = useCallback(async (userId: string) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const deleteUser = useCallback(
+    async (userId: string) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Soft delete by updating ban status to permanently banned
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          ban_status: 'banned',
-          ban_reason: 'Tài khoản đã bị xóa bởi admin',
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', userId);
+        // Soft delete by updating ban status to permanently banned
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            ban_status: 'banned',
+            ban_reason: 'Tài khoản đã bị xóa bởi admin',
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', userId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      await fetchUsers(); // Refresh list
-      toast.success('Đã xóa người dùng');
-    } catch (err: any) {
-      console.error('Error deleting user:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      toast.error(`Lỗi khi xóa người dùng: ${errorMessage}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchUsers]);
+        await fetchUsers(); // Refresh list
+        toast.success('Đã xóa người dùng');
+      } catch (err: any) {
+        console.error('Error deleting user:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        toast.error(`Lỗi khi xóa người dùng: ${errorMessage}`);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchUsers]
+  );
 
   // ===== GET USER STATISTICS =====
   const getUserStats = useCallback(async (): Promise<UserStats> => {
@@ -322,17 +352,21 @@ export const useAdminUsers = () => {
       if (totalError) throw totalError;
 
       const total = totalUsers?.length || 0;
-      const active = totalUsers?.filter(u => u.ban_status === 'active').length || 0;
-      const banned = totalUsers?.filter(u => u.ban_status === 'banned').length || 0;
+      const active =
+        totalUsers?.filter(u => u.ban_status === 'active').length || 0;
+      const banned =
+        totalUsers?.filter(u => u.ban_status === 'banned').length || 0;
       const admins = totalUsers?.filter(u => u.is_admin === true).length || 0;
-      const club_owners = totalUsers?.filter(u => u.role === 'club_owner' || u.role === 'both').length || 0;
+      const club_owners =
+        totalUsers?.filter(u => u.role === 'club_owner' || u.role === 'both')
+          .length || 0;
 
       // Calculate new users this month
       const thisMonth = new Date();
       thisMonth.setDate(1);
-      const new_this_month = totalUsers?.filter(u => 
-        new Date(u.created_at) >= thisMonth
-      ).length || 0;
+      const new_this_month =
+        totalUsers?.filter(u => new Date(u.created_at) >= thisMonth).length ||
+        0;
 
       // Get SPA points stats
       const { data: spaStats, error: spaError } = await supabase
@@ -340,8 +374,10 @@ export const useAdminUsers = () => {
         .select('spa_points')
         .not('spa_points', 'is', null);
 
-      const total_spa_points = spaStats?.reduce((sum, p) => sum + (p.spa_points || 0), 0) || 0;
-      const avg_spa_per_user = total > 0 ? Math.round(total_spa_points / total) : 0;
+      const total_spa_points =
+        spaStats?.reduce((sum, p) => sum + (p.spa_points || 0), 0) || 0;
+      const avg_spa_per_user =
+        total > 0 ? Math.round(total_spa_points / total) : 0;
 
       const stats: UserStats = {
         total,
@@ -351,7 +387,7 @@ export const useAdminUsers = () => {
         club_owners,
         new_this_month,
         total_spa_points,
-        avg_spa_per_user
+        avg_spa_per_user,
       };
 
       return stats;
@@ -366,87 +402,98 @@ export const useAdminUsers = () => {
   }, []);
 
   // ===== GET USER ACTIVITIES =====
-  const getUserActivities = useCallback(async (userId: string, limit = 20): Promise<UserActivity[]> => {
-    try {
-      setLoading(true);
-      setError(null);
+  const getUserActivities = useCallback(
+    async (userId: string, limit = 20): Promise<UserActivity[]> => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Use challenges table as activity source since user_activities might not exist
-      const { data: challenges, error: challengesError } = await supabase
-        .from('challenges')
-        .select('id, challenger_id, opponent_id, status, created_at')
-        .or(`challenger_id.eq.${userId},opponent_id.eq.${userId}`)
-        .order('created_at', { ascending: false })
-        .limit(limit);
+        // Use challenges table as activity source since user_activities might not exist
+        const { data: challenges, error: challengesError } = await supabase
+          .from('challenges')
+          .select('id, challenger_id, opponent_id, status, created_at')
+          .or(`challenger_id.eq.${userId},opponent_id.eq.${userId}`)
+          .order('created_at', { ascending: false })
+          .limit(limit);
 
-      if (challengesError) throw challengesError;
+        if (challengesError) throw challengesError;
 
-      // Transform to UserActivity format
-      const activities: UserActivity[] = (challenges || []).map((challenge: any) => ({
-        id: challenge.id,
-        user_id: userId,
-        activity_type: 'challenge',
-        title: challenge.status === 'pending' ? 'Thách đấu đang chờ' : 'Trận đấu hoàn thành',
-        description: `Trạng thái: ${challenge.status}`,
-        created_at: challenge.created_at,
-        metadata: { challenge_id: challenge.id }
-      }));
+        // Transform to UserActivity format
+        const activities: UserActivity[] = (challenges || []).map(
+          (challenge: any) => ({
+            id: challenge.id,
+            user_id: userId,
+            activity_type: 'challenge',
+            title:
+              challenge.status === 'pending'
+                ? 'Thách đấu đang chờ'
+                : 'Trận đấu hoàn thành',
+            description: `Trạng thái: ${challenge.status}`,
+            created_at: challenge.created_at,
+            metadata: { challenge_id: challenge.id },
+          })
+        );
 
-      return activities;
-    } catch (err: any) {
-      console.error('Error getting user activities:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        return activities;
+      } catch (err: any) {
+        console.error('Error getting user activities:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   // ===== GRANT SPA POINTS =====
-  const grantSpaPoints = useCallback(async (userId: string, amount: number, reason: string) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const grantSpaPoints = useCallback(
+    async (userId: string, amount: number, reason: string) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      const { data: currentUser } = await supabase.auth.getUser();
-      if (!currentUser.user) {
-        throw new Error('Not authenticated');
+        const { data: currentUser } = await supabase.auth.getUser();
+        if (!currentUser.user) {
+          throw new Error('Not authenticated');
+        }
+
+        // Update player_rankings table directly since admin_grant_spa_credits might not exist
+        const { data: currentRanking, error: fetchError } = await supabase
+          .from('player_rankings')
+          .select('spa_points')
+          .eq('user_id', userId)
+          .single();
+
+        const currentPoints = currentRanking?.spa_points || 0;
+        const newPoints = currentPoints + amount;
+
+        const { error: updateError } = await supabase
+          .from('player_rankings')
+          .upsert({
+            user_id: userId,
+            spa_points: newPoints,
+            updated_at: new Date().toISOString(),
+          });
+
+        if (updateError) throw updateError;
+
+        await fetchUsers(); // Refresh list
+        toast.success(`Đã cấp ${amount} điểm SPA`);
+        return { success: true };
+      } catch (err: any) {
+        console.error('Error granting SPA points:', err);
+        const errorMessage = err.message || 'Lỗi không xác định';
+        setError(errorMessage);
+        toast.error(`Lỗi khi cấp điểm SPA: ${errorMessage}`);
+        throw err;
+      } finally {
+        setLoading(false);
       }
-
-      // Update player_rankings table directly since admin_grant_spa_credits might not exist
-      const { data: currentRanking, error: fetchError } = await supabase
-        .from('player_rankings')
-        .select('spa_points')
-        .eq('user_id', userId)
-        .single();
-
-      const currentPoints = currentRanking?.spa_points || 0;
-      const newPoints = currentPoints + amount;
-
-      const { error: updateError } = await supabase
-        .from('player_rankings')
-        .upsert({
-          user_id: userId,
-          spa_points: newPoints,
-          updated_at: new Date().toISOString()
-        });
-
-      if (updateError) throw updateError;
-
-      await fetchUsers(); // Refresh list
-      toast.success(`Đã cấp ${amount} điểm SPA`);
-      return { success: true };
-    } catch (err: any) {
-      console.error('Error granting SPA points:', err);
-      const errorMessage = err.message || 'Lỗi không xác định';
-      setError(errorMessage);
-      toast.error(`Lỗi khi cấp điểm SPA: ${errorMessage}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchUsers]);
+    },
+    [fetchUsers]
+  );
 
   // ===== RETURN HOOK INTERFACE =====
   return {
@@ -468,6 +515,6 @@ export const useAdminUsers = () => {
     getUserActivities,
 
     // Utilities
-    refetch: fetchUsers
+    refetch: fetchUsers,
   };
 };

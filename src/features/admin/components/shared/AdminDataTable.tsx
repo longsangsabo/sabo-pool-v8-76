@@ -53,11 +53,11 @@ export function AdminDataTable<T extends Record<string, any>>({
   columns,
   loading = false,
   searchable = true,
-  searchPlaceholder = "Tìm kiếm...",
+  searchPlaceholder = 'Tìm kiếm...',
   actions = [],
   onRowClick,
-  emptyMessage = "Không có dữ liệu",
-  className = ""
+  emptyMessage = 'Không có dữ liệu',
+  className = '',
 }: AdminDataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{
@@ -83,7 +83,7 @@ export function AdminDataTable<T extends Record<string, any>>({
       result.sort((a, b) => {
         const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
-        
+
         if (aValue < bValue) {
           return sortConfig.direction === 'asc' ? -1 : 1;
         }
@@ -100,61 +100,68 @@ export function AdminDataTable<T extends Record<string, any>>({
   const handleSort = (key: string) => {
     setSortConfig(current => ({
       key,
-      direction: current?.key === key && current.direction === 'asc' ? 'desc' : 'asc'
+      direction:
+        current?.key === key && current.direction === 'asc' ? 'desc' : 'asc',
     }));
   };
 
   const renderCellValue = (column: ColumnDef<T>, row: T) => {
     const value = row[column.key as keyof T];
-    
+
     if (column.render) {
       return column.render(value, row);
     }
-    
+
     return value;
   };
 
   return (
     <Card className={className}>
       {searchable && (
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
+        <CardContent className='pt-6'>
+          <div className='flex items-center space-x-2'>
+            <Search className='h-4 w-4 text-muted-foreground' />
             <Input
               placeholder={searchPlaceholder}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
+              onChange={e => setSearchTerm(e.target.value)}
+              className='max-w-sm'
             />
           </div>
         </CardContent>
       )}
-      
-      <CardContent className={searchable ? "pt-0" : "pt-6"}>
+
+      <CardContent className={searchable ? 'pt-0' : 'pt-6'}>
         {loading ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className='flex items-center justify-center py-8'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
           </div>
         ) : filteredAndSortedData.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className='text-center py-8 text-muted-foreground'>
             {emptyMessage}
           </div>
         ) : (
-          <div className="rounded-md border">
+          <div className='rounded-md border'>
             <Table>
               <TableHeader>
                 <TableRow>
                   {columns.map((column, index) => (
-                    <TableHead 
+                    <TableHead
                       key={index}
-                      className={column.sortable ? "cursor-pointer hover:bg-muted/50" : ""}
+                      className={
+                        column.sortable
+                          ? 'cursor-pointer hover:bg-muted/50'
+                          : ''
+                      }
                       style={{ width: column.width }}
-                      onClick={() => column.sortable && handleSort(column.key as string)}
+                      onClick={() =>
+                        column.sortable && handleSort(column.key as string)
+                      }
                     >
-                      <div className="flex items-center space-x-1">
+                      <div className='flex items-center space-x-1'>
                         <span>{column.header}</span>
                         {column.sortable && sortConfig?.key === column.key && (
-                          <span className="text-xs">
+                          <span className='text-xs'>
                             {sortConfig.direction === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
@@ -162,15 +169,17 @@ export function AdminDataTable<T extends Record<string, any>>({
                     </TableHead>
                   ))}
                   {actions.length > 0 && (
-                    <TableHead className="w-[50px]">Thao tác</TableHead>
+                    <TableHead className='w-[50px]'>Thao tác</TableHead>
                   )}
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredAndSortedData.map((row, rowIndex) => (
-                  <TableRow 
+                  <TableRow
                     key={rowIndex}
-                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    className={
+                      onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''
+                    }
                     onClick={() => onRowClick?.(row)}
                   >
                     {columns.map((column, colIndex) => (
@@ -182,22 +191,27 @@ export function AdminDataTable<T extends Record<string, any>>({
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
+                            <Button variant='ghost' className='h-8 w-8 p-0'>
+                              <MoreHorizontal className='h-4 w-4' />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align='end'>
                             {actions
-                              .filter(action => !action.condition || action.condition(row))
+                              .filter(
+                                action =>
+                                  !action.condition || action.condition(row)
+                              )
                               .map((action, actionIndex) => (
                                 <DropdownMenuItem
                                   key={actionIndex}
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     e.stopPropagation();
                                     action.onClick(row);
                                   }}
                                 >
-                                  {action.icon && <span className="mr-2">{action.icon}</span>}
+                                  {action.icon && (
+                                    <span className='mr-2'>{action.icon}</span>
+                                  )}
                                   {action.label}
                                 </DropdownMenuItem>
                               ))}
