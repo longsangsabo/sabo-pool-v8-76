@@ -1,28 +1,21 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import { RoleBasedLayout } from './layouts/RoleBasedLayout';
 
-const MainLayout = () => {
-  const location = useLocation();
+interface MainLayoutProps {
+  children: React.ReactNode;
+}
 
-  // Hide navigation on specific pages
-  const hideNavPages = [
-    '/login',
-    '/register',
-    '/forgot-password',
-    '/reset-password',
-    '/auth/callback',
-  ];
-  const shouldHideNav = hideNavPages.includes(location.pathname);
-
-  if (shouldHideNav) {
-    return <Outlet />;
-  }
-
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <RoleBasedLayout>
-      <Outlet />
-    </RoleBasedLayout>
+    <div className="min-h-screen bg-background">
+      <header className="border-b">
+        <div className="container mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold">SABO Pool Arena</h1>
+        </div>
+      </header>
+      <main className="container mx-auto px-4 py-6">
+        {children}
+      </main>
+    </div>
   );
 };
 

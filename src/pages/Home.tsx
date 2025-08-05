@@ -1,23 +1,16 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 
 const Home = () => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">SABO Pool Arena</h1>
+        <p className="text-lg text-muted-foreground">
+          Hệ thống quản lý giải đấu Billiards chuyên nghiệp
+        </p>
       </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to='/auth' replace />;
-  }
-
-  return <Navigate to='/dashboard' replace />;
+    </div>
+  );
 };
 
 export default Home;
